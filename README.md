@@ -1,8 +1,551 @@
 # TensorflowKeras 常用命令
 Study Notes of Yuting
-最近因敲代码，视力显著下降，故断更。。有空再继续。。
+时常断更。。有空再继续。。
 
 # Section 1 - Packages
+
+## tensorflow_datasets
+
+```python
+tfds.disable_progress_bar()
+
+# SVHN
+svhn_train, svhn_test = tfds.load(
+    "svhn_cropped", split=["train", "test"], as_supervised=True
+)
+```
+
+## tensorflow_docs
+### tensorflow_docs.vis
+embed
+一个简单的python库，可以从中获取任何url并返回最有意义的数据
+
+```python
+fake_images *= 255.0
+converted_images = fake_images.astype(np.uint8)
+converted_images = tf.image.resize(converted_images, (96, 96)).numpy().astype(np.uint8)
+imageio.mimsave("animation.gif", converted_images, fps=1)
+embed.embed_file("animation.gif")
+```
+
+```python
+def to_gif(images):
+    converted_images = images.astype(np.uint8)
+    imageio.mimsave("animation.gif", converted_images, fps=10)
+    return embed.embed_file("animation.gif")
+```
+## tensorflow_hub
+```python
+def create_text_encoder(
+    num_projection_layers, projection_dims, dropout_rate, trainable=False
+):
+    # Load the BERT preprocessing module.
+    preprocess = hub.KerasLayer(
+        "https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/2",
+        name="text_preprocessing",
+    )
+    # Load the pre-trained BERT model to be used as the base encoder.
+    bert = hub.KerasLayer(
+        "https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-512_A-8/1",
+        "bert",
+    )
+    # Set the trainability of the base encoder.
+    bert.trainable = trainable
+    # Receive the text as inputs.
+    inputs = layers.Input(shape=(), dtype=tf.string, name="text_input")
+    # Preprocess the text.
+    bert_inputs = preprocess(inputs)
+    # Generate embeddings for the preprocessed text using the BERT model.
+    embeddings = bert(bert_inputs)["pooled_output"]
+    # Project the embeddings produced by the model.
+    outputs = project_embeddings(
+        embeddings, num_projection_layers, projection_dims, dropout_rate
+    )
+    # Create the text encoder model.
+    return keras.Model(inputs, outputs, name="text_encoder")
+```
+
+## tensorflow_cloud
+
+install via：
+
+```shell
+pip install tensorflow-cloud
+```
+TensorFlow Cloud takes all the code from its local execution environment (this
+notebook), wraps it up, and sends it to Google Cloud for execution. (That's why
+the `if` and `if not` `tfc.remote` wrappers are important.)
+
+```python
+import tensorflow_cloud as tfc
+if not tfc.remote():
+if tfc.remote():
+```
+
+
+```python
+# If you are using a custom image you can install modules via requirements 
+# txt file.
+# 如果您使用的是自定义映像，则可以通过requirements txt文件安装模块。
+with open("requirements.txt", "w") as f:
+    f.write("tensorflow-cloud\n")
+
+# Optional: Some recommended base images. If you provide none the system
+# will choose one for you.
+# Optional: 一些推荐的基本图像。如果您没有提供，系统将为您选择一个。
+TF_GPU_IMAGE = "gcr.io/deeplearning-platform-release/tf2-cpu.2-5"
+TF_CPU_IMAGE = "gcr.io/deeplearning-platform-release/tf2-gpu.2-5"
+
+# Submit a single node training job using GPU.
+# 使用GPU提交单节点培训作业。
+tfc.run(
+    distribution_strategy="auto",
+    requirements_txt="requirements.txt",
+    docker_config=tfc.DockerConfig(
+        parent_image=TF_GPU_IMAGE, image_build_bucket=GCS_BUCKET
+    ),
+    chief_config=tfc.COMMON_MACHINE_CONFIGS["K80_1X"],
+    job_labels={"job": JOB_NAME},
+```
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    entry_point="train_model.py",
+    requirements="requirements.txt"
+)
+```
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    chief_config=tfc.COMMON_MACHINE_CONFIGS['CPU'],
+    worker_count=2,
+    worker_config=tfc.COMMON_MACHINE_CONFIGS['T4_4X']
+)
+```
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    chief_config=tfc.COMMON_MACHINE_CONFIGS["CPU"],
+    worker_count=1,
+    worker_config=tfc.COMMON_MACHINE_CONFIGS["TPU"]
+)
+```
+
+```python
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+ 
+mirrored_strategy = tf.distribute.MirroredStrategy()
+with mirrored_strategy.scope():
+  model = create_model()
+ 
+if tfc.remote():
+    epochs = 100
+    batch_size = 128
+else:
+    epochs = 10
+    batch_size = 64
+    callbacks = None
+ 
+model.fit(
+    x_train, y_train, epochs=epochs, callbacks=callbacks, batch_size=batch_size
+)
+ 
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    chief_config=tfc.COMMON_MACHINE_CONFIGS['CPU'],
+    worker_count=2,
+    worker_config=tfc.COMMON_MACHINE_CONFIGS['T4_4X'],
+    distribution_strategy=None
+)
+```
+
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    base_docker_image="tensorflow/tensorflow:2.1.0-gpu"
+)
+```
+
+```python
+job_labels = {"job": "mnist-example", "team": "keras-io", "user": "jonah"}
+ 
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    job_labels=job_labels,
+    stream_logs=True
+)
+```
+
+```python
+if tfc.remote():
+    epochs = 100
+    callbacks = callbacks
+    batch_size = 128
+else:
+    epochs = 5
+    batch_size = 64
+    callbacks = None
+
+model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks, batch_size=batch_size)
+
+save_path = os.path.join("gs://", gcp_bucket, "mnist_example")
+
+if tfc.remote():
+    model.save(save_path)
+
+# docs_infra: no_execute
+tfc.run(docker_image_bucket_name=gcp_bucket)
+```
+
+
+
+## tensorflow_probability
+```python
+# Define the prior weight distribution as Normal of mean=0 and stddev=1.
+# Note that, in this example, the we prior distribution is not trainable,
+# as we fix its parameters.
+def prior(kernel_size, bias_size, dtype=None):
+    n = kernel_size + bias_size
+    prior_model = keras.Sequential(
+        [
+            tfp.layers.DistributionLambda(
+                lambda t: tfp.distributions.MultivariateNormalDiag(
+                    loc=tf.zeros(n), scale_diag=tf.ones(n)
+                )
+            )
+        ]
+    )
+    return prior_model
+
+# Define variational posterior weight distribution as multivariate Gaussian.
+# Note that the learnable parameters for this distribution are the means,
+# variances, and covariances.
+def posterior(kernel_size, bias_size, dtype=None):
+    n = kernel_size + bias_size
+    posterior_model = keras.Sequential(
+        [
+            tfp.layers.VariableLayer(
+                tfp.layers.MultivariateNormalTriL.params_size(n), dtype=dtype
+            ),
+            tfp.layers.MultivariateNormalTriL(n),
+        ]
+    )
+    return posterior_model
+
+
+def create_bnn_model(train_size):
+    inputs = create_model_inputs()
+    features = keras.layers.concatenate(list(inputs.values()))
+    features = layers.BatchNormalization()(features)
+
+    # Create hidden layers with weight uncertainty using the DenseVariational layer.
+    for units in hidden_units:
+        features = tfp.layers.DenseVariational(
+            units=units,
+            make_prior_fn=prior,
+            make_posterior_fn=posterior,
+            kl_weight=1 / train_size,
+            activation="sigmoid",
+        )(features)
+
+    # The output is deterministic: a single point estimate.
+    outputs = layers.Dense(units=1)(features)
+    model = keras.Model(inputs=inputs, outputs=outputs)
+    return model
+
+def create_probablistic_bnn_model(train_size):
+    inputs = create_model_inputs()
+    features = keras.layers.concatenate(list(inputs.values()))
+    features = layers.BatchNormalization()(features)
+
+    # Create hidden layers with weight uncertainty using the DenseVariational layer.
+    for units in hidden_units:
+        features = tfp.layers.DenseVariational(
+            units=units,
+            make_prior_fn=prior,
+            make_posterior_fn=posterior,
+            kl_weight=1 / train_size,
+            activation="sigmoid",
+        )(features)
+
+    # Create a probabilisticå output (Normal distribution), and use the `Dense` layer
+    # to produce the parameters of the distribution.
+    # We set units=2 to learn both the mean and the variance of the Normal distribution.
+    distribution_params = layers.Dense(units=2)(features)
+    outputs = tfp.layers.IndependentNormal(1)(distribution_params)
+
+    model = keras.Model(inputs=inputs, outputs=outputs)
+    return model
+```
+
+
+## tensorflow_addons
+### tfa.layers.InstanceNormaliztion
+### tfa.layers.GELU
+### tfa.optimizers.AdamW
+### tfa.optimizers.SWA
+### tfa.optimizers.LAMB
+### tfa.losses.npairs_loss
+```python
+# Define the callbacks.
+reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(patience=3)
+early_stopping = tf.keras.callbacks.EarlyStopping(
+    patience=10, restore_best_weights=True
+)
+
+# Initialize SWA from tf-hub.
+SWA = tfa.optimizers.SWA
+
+# Compile and train the teacher model.
+teacher_model = get_training_model()
+teacher_model.load_weights("initial_teacher_model.h5")
+teacher_model.compile(
+    # Notice that we are wrapping our optimizer within SWA
+    optimizer=SWA(tf.keras.optimizers.Adam()),
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=["accuracy"],
+)
+history = teacher_model.fit(
+    train_clean_ds,
+    epochs=EPOCHS,
+    validation_data=validation_ds,
+    callbacks=[reduce_lr, early_stopping],
+)
+
+# Evaluate the teacher model on the test set.
+_, acc = teacher_model.evaluate(test_ds, verbose=0)
+print(f"Test accuracy: {acc*100}%")
+```
+
+```python
+def run_experiment(model):
+    optimizer = tfa.optimizers.AdamW(learning_rate=0.001, weight_decay=0.0001)
+
+    model.compile(
+        optimizer=optimizer,
+        loss=keras.losses.CategoricalCrossentropy(
+            from_logits=True, label_smoothing=0.1
+        ),
+        metrics=[
+            keras.metrics.CategoricalAccuracy(name="accuracy"),
+            keras.metrics.TopKCategoricalAccuracy(5, name="top-5-accuracy"),
+        ],
+    )
+
+    checkpoint_filepath = "/tmp/checkpoint"
+    checkpoint_callback = keras.callbacks.ModelCheckpoint(
+        checkpoint_filepath,
+        monitor="val_accuracy",
+        save_best_only=True,
+        save_weights_only=True,
+    )
+
+    history = model.fit(
+        x=x_train,
+        y=y_train,
+        batch_size=batch_size,
+        epochs=num_epochs,
+        validation_split=0.1,
+        callbacks=[checkpoint_callback],
+    )
+
+    model.load_weights(checkpoint_filepath)
+    _, accuracy, top_5_accuracy = model.evaluate(x_test, y_test)
+    print(f"Test accuracy: {round(accuracy * 100, 2)}%")
+    print(f"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%")
+
+    return history
+
+
+cct_model = create_cct_model()
+history = run_experiment(cct_model)
+```
+
+
+
+
+## tensorflow_model_optimization
+### tfmot.clustering.keras.cluster_weights
+### tfmot.clustering.keras.cluster_scope
+### tfmot.clustering.keras.CentroidInitialization
+### tfmot.clustering.keras.strip_clustering
+### tfmot.quantization.keras.quantize_model
+### tfmot.quantization.keras.quantize_annotate_model
+### tfmot.quantization.keras.quantize_annotate_layer
+### tfmot.quantization.keras.quantize_apply
+### tfmot.quantization.keras.quantize_scope
+### tfmot.quantization.keras.QuantizeConfig
+### tfmot.sparsity.keras.PolynominalDecay
+### tfmot.sparsity.keras.prune_low_magnitude
+### tfmot.sparsity.keras.ConstantSparsity
+### tfmot.sparsity.keras.UpdatePruningStep
+### tfmot.sparsity.keras.strip_pruning
+### tfmot.sparsity.keras.PruningSummeries
+### tfmot.sparsity.keras.PolynominalDecay
+
+```python
+# Define the model.
+base_model = setup_model()
+base_model.load_weights(pretrained_weights) # optional but recommended for model accuracy
+model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model)
+
+log_dir = tempfile.mkdtemp()
+callbacks = [
+    tfmot.sparsity.keras.UpdatePruningStep(),
+    # Log sparsity and other metrics in Tensorboard.
+    tfmot.sparsity.keras.PruningSummaries(log_dir=log_dir)
+]
+
+model_for_pruning.compile(
+      loss=tf.keras.losses.categorical_crossentropy,
+      optimizer='adam',
+      metrics=['accuracy']
+)
+
+model_for_pruning.fit(
+    x_train,
+    y_train,
+    callbacks=callbacks,
+    epochs=2,
+)
+
+#docs_infra: no_execute
+%tensorboard --logdir={log_dir}
+```
+
+```python
+base_model = setup_model()
+base_model.load_weights(pretrained_weights) # optional but recommended.
+
+model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model)
+
+model_for_pruning.summary()
+```
+```python
+# Define the model.
+base_model = setup_model()
+base_model.load_weights(pretrained_weights) # optional but recommended for model accuracy
+model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model)
+
+# Typically you train the model here.
+
+model_for_export = tfmot.sparsity.keras.strip_pruning(model_for_pruning)
+
+print("final model")
+model_for_export.summary()
+
+print("\n")
+print("Size of gzipped pruned model without stripping: %.2f bytes" % (get_gzipped_model_size(model_for_pruning)))
+print("Size of gzipped pruned model with stripping: %.2f bytes" % (get_gzipped_model_size(model_for_export)))
+```
+```python
+base_model = setup_model()
+
+# For using intrinsics on a CPU with 128-bit registers, together with 8-bit
+# quantized weights, a 1x16 block size is nice because the block perfectly
+# fits into the register.
+pruning_params = {'block_size': [1, 16]}
+model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model, **pruning_params)
+
+model_for_pruning.summary()
+```
+
+```python
+cluster_weights = tfmot.clustering.keras.cluster_weights
+CentroidInitialization = tfmot.clustering.keras.CentroidInitialization
+
+clustering_params = {
+  'number_of_clusters': 3,
+  'cluster_centroids_init': CentroidInitialization.DENSITY_BASED
+}
+
+model = setup_model()
+model.load_weights(pretrained_weights)
+
+clustered_model = cluster_weights(model, **clustering_params)
+
+clustered_model.summary()
+
+#----------------------------------------------------------------------
+#----------------------------------------------------------------------
+
+# Define the model.
+base_model = setup_model()
+base_model.load_weights(pretrained_weights)
+clustered_model = cluster_weights(base_model, **clustering_params)
+
+# Save or checkpoint the model.
+_, keras_model_file = tempfile.mkstemp('.h5')
+clustered_model.save(keras_model_file, include_optimizer=True)
+
+# `cluster_scope` is needed for deserializing HDF5 models.
+with tfmot.clustering.keras.cluster_scope():
+  loaded_model = tf.keras.models.load_model(keras_model_file)
+
+loaded_model.summary()
+
+#----------------------------------------------------------------------
+#----------------------------------------------------------------------
+
+model = setup_model()
+clustered_model = cluster_weights(model, **clustering_params)
+
+clustered_model.compile(
+    loss=tf.keras.losses.categorical_crossentropy,
+    optimizer='adam',
+    metrics=['accuracy']
+)
+
+clustered_model.fit(
+    x_train,
+    y_train
+)
+
+final_model = tfmot.clustering.keras.strip_clustering(clustered_model)
+
+print("final model")
+final_model.summary()
+```
+
+## official.vision.image_classification.augment
+RandAugment
+```python
+# Initialize `RandAugment` object with 2 layers of
+# augmentation transforms and strength of 9.
+augmenter = RandAugment(num_layers=2, magnitude=9)
+```
+
+```python
+# Initialize `RandAugment` object with 2 layers of
+# augmentation transforms and strength of 5.
+augmenter = RandAugment(num_layers=2, magnitude=5)
+
+
+def weak_augment(image, source=True):
+    if image.dtype != tf.float32:
+        image = tf.cast(image, tf.float32)
+
+    # MNIST images are grayscale, this is why we first convert them to
+    # RGB images.
+    if source:
+        image = tf.image.resize_with_pad(image, RESIZE_TO, RESIZE_TO)
+        image = tf.tile(image, [1, 1, 3])
+    image = tf.image.random_flip_left_right(image)
+    image = tf.image.random_crop(image, (RESIZE_TO, RESIZE_TO, 3))
+    return image
+
+
+def strong_augment(image, source=True):
+    if image.dtype != tf.float32:
+        image = tf.cast(image, tf.float32)
+
+    if source:
+        image = tf.image.resize_with_pad(image, RESIZE_TO, RESIZE_TO)
+        image = tf.tile(image, [1, 1, 3])
+    image = augmenter.distort(image)
+    return image
+```
+
 
 ## tf.keras.applications
 ### tf.keras.applications.resnet
@@ -151,6 +694,19 @@ Study Notes of Yuting
 ### tf.keras.layers.experimental.preprocessing.Normalization
 ### tf.keras.layers.experimental.preprocessing.CenterCrop
 ### tf.keras.layers.experimental.preprocessing.Rescaling
+```python
+input = layers.Input(shape=(28, 28, 1))
+
+# Encoder
+x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(input)
+x = layers.MaxPooling2D((2, 2), padding="same")(x)
+x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(x)
+x = layers.MaxPooling2D((2, 2), padding="same")(x)
+
+# Decoder
+x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
+x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
+x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
 
 
 
@@ -452,36 +1008,9 @@ resnet
 inception_v3
 vgg19
 
-## resnet50
-ResNet50
 
-## resnet_cifar10_v2
-#### tensorflow.keras.metrics
-#### tensorflow.keras.
 
-#### tensorflow.keras.models
-Model
-load_model
-Sequential
-```python
-input = layers.Input(shape=(28, 28, 1))
 
-# Encoder
-x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(input)
-x = layers.MaxPooling2D((2, 2), padding="same")(x)
-x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(x)
-x = layers.MaxPooling2D((2, 2), padding="same")(x)
-
-# Decoder
-x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
-x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
-x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
-
-# Autoencoder
-autoencoder = Model(input, x)
-autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
-autoencoder.summary()
-```
 
 ```python
 trained_model = tf.keras.models.load_model(SAVED_MODEL_DIR)
@@ -1534,538 +2063,6 @@ best_model = tuner.get_best_models()[0]
 
 
 
-
-## keras.engine
-### keras.engine.get_source_inputs
-
-
-#### keras.utils.layer_utils
-get_source_inputs
-
-#### keras.utils.data_utils
-get_file
-
-#### keras.utils.conv_utils
-
-#### keras.preprocessing.image
-load_img
-img_to_array
-array_to_img
-image_dataset_from_directory
-
-
-### keras.applications
-MobileNetV2
-keras_modules_injection
-
-#### keras.applications.resnet50
-preprocess_input
-
-#### keras.layers.experimental
-RandomFourierFeatures
-
-## deeplab
-DeepLabV3Plus
-
-## deeplabv3plus
-
-### deeplabv3plus.datasets
-GenericDataLoader
-
-### deeplabv3plus.model
-DeeplabV3Plus
-
-### deeplabv3plus.train
-Trainer
-
-### deeplabv3plus.inference
-read_image
-infer
-
-### deeplabv3plus.utils
-
-## tensorflow_datasets
-
-```python
-tfds.disable_progress_bar()
-
-# SVHN
-svhn_train, svhn_test = tfds.load(
-    "svhn_cropped", split=["train", "test"], as_supervised=True
-)
-```
-
-## tensorflow_docs
-## tensorflow_hub
-## tensorflow_text
-## tensorflow_cloud
-
-install via：
-
-```shell
-pip install tensorflow-cloud
-```
-TensorFlow Cloud takes all the code from its local execution environment (this
-notebook), wraps it up, and sends it to Google Cloud for execution. (That's why
-the `if` and `if not` `tfc.remote` wrappers are important.)
-
-```python
-import tensorflow_cloud as tfc
-if not tfc.remote():
-if tfc.remote():
-```
-
-
-```python
-# If you are using a custom image you can install modules via requirements 
-# txt file.
-# 如果您使用的是自定义映像，则可以通过requirements txt文件安装模块。
-with open("requirements.txt", "w") as f:
-    f.write("tensorflow-cloud\n")
-
-# Optional: Some recommended base images. If you provide none the system
-# will choose one for you.
-# Optional: 一些推荐的基本图像。如果您没有提供，系统将为您选择一个。
-TF_GPU_IMAGE = "gcr.io/deeplearning-platform-release/tf2-cpu.2-5"
-TF_CPU_IMAGE = "gcr.io/deeplearning-platform-release/tf2-gpu.2-5"
-
-# Submit a single node training job using GPU.
-# 使用GPU提交单节点培训作业。
-tfc.run(
-    distribution_strategy="auto",
-    requirements_txt="requirements.txt",
-    docker_config=tfc.DockerConfig(
-        parent_image=TF_GPU_IMAGE, image_build_bucket=GCS_BUCKET
-    ),
-    chief_config=tfc.COMMON_MACHINE_CONFIGS["K80_1X"],
-    job_labels={"job": JOB_NAME},
-```
-```python
-tfc.run(
-    docker_image_bucket_name=gcp_bucket,
-    entry_point="train_model.py",
-    requirements="requirements.txt"
-)
-```
-```python
-tfc.run(
-    docker_image_bucket_name=gcp_bucket,
-    chief_config=tfc.COMMON_MACHINE_CONFIGS['CPU'],
-    worker_count=2,
-    worker_config=tfc.COMMON_MACHINE_CONFIGS['T4_4X']
-)
-```
-```python
-tfc.run(
-    docker_image_bucket_name=gcp_bucket,
-    chief_config=tfc.COMMON_MACHINE_CONFIGS["CPU"],
-    worker_count=1,
-    worker_config=tfc.COMMON_MACHINE_CONFIGS["TPU"]
-)
-```
-
-```python
-(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
- 
-mirrored_strategy = tf.distribute.MirroredStrategy()
-with mirrored_strategy.scope():
-  model = create_model()
- 
-if tfc.remote():
-    epochs = 100
-    batch_size = 128
-else:
-    epochs = 10
-    batch_size = 64
-    callbacks = None
- 
-model.fit(
-    x_train, y_train, epochs=epochs, callbacks=callbacks, batch_size=batch_size
-)
- 
-tfc.run(
-    docker_image_bucket_name=gcp_bucket,
-    chief_config=tfc.COMMON_MACHINE_CONFIGS['CPU'],
-    worker_count=2,
-    worker_config=tfc.COMMON_MACHINE_CONFIGS['T4_4X'],
-    distribution_strategy=None
-)
-```
-
-```python
-tfc.run(
-    docker_image_bucket_name=gcp_bucket,
-    base_docker_image="tensorflow/tensorflow:2.1.0-gpu"
-)
-```
-
-```python
-job_labels = {"job": "mnist-example", "team": "keras-io", "user": "jonah"}
- 
-tfc.run(
-    docker_image_bucket_name=gcp_bucket,
-    job_labels=job_labels,
-    stream_logs=True
-)
-```
-
-```python
-if tfc.remote():
-    epochs = 100
-    callbacks = callbacks
-    batch_size = 128
-else:
-    epochs = 5
-    batch_size = 64
-    callbacks = None
-
-model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks, batch_size=batch_size)
-
-save_path = os.path.join("gs://", gcp_bucket, "mnist_example")
-
-if tfc.remote():
-    model.save(save_path)
-
-# docs_infra: no_execute
-tfc.run(docker_image_bucket_name=gcp_bucket)
-```
-
-### tensorflow_docs.vis
-embed
-一个简单的python库，可以从中获取任何url并返回最有意义的数据
-```python
-fake_images *= 255.0
-converted_images = fake_images.astype(np.uint8)
-converted_images = tf.image.resize(converted_images, (96, 96)).numpy().astype(np.uint8)
-imageio.mimsave("animation.gif", converted_images, fps=1)
-embed.embed_file("animation.gif")
-```
-
-## tensorflow_probability
-```python
-# Define the prior weight distribution as Normal of mean=0 and stddev=1.
-# Note that, in this example, the we prior distribution is not trainable,
-# as we fix its parameters.
-def prior(kernel_size, bias_size, dtype=None):
-    n = kernel_size + bias_size
-    prior_model = keras.Sequential(
-        [
-            tfp.layers.DistributionLambda(
-                lambda t: tfp.distributions.MultivariateNormalDiag(
-                    loc=tf.zeros(n), scale_diag=tf.ones(n)
-                )
-            )
-        ]
-    )
-    return prior_model
-
-# Define variational posterior weight distribution as multivariate Gaussian.
-# Note that the learnable parameters for this distribution are the means,
-# variances, and covariances.
-def posterior(kernel_size, bias_size, dtype=None):
-    n = kernel_size + bias_size
-    posterior_model = keras.Sequential(
-        [
-            tfp.layers.VariableLayer(
-                tfp.layers.MultivariateNormalTriL.params_size(n), dtype=dtype
-            ),
-            tfp.layers.MultivariateNormalTriL(n),
-        ]
-    )
-    return posterior_model
-
-
-def create_bnn_model(train_size):
-    inputs = create_model_inputs()
-    features = keras.layers.concatenate(list(inputs.values()))
-    features = layers.BatchNormalization()(features)
-
-    # Create hidden layers with weight uncertainty using the DenseVariational layer.
-    for units in hidden_units:
-        features = tfp.layers.DenseVariational(
-            units=units,
-            make_prior_fn=prior,
-            make_posterior_fn=posterior,
-            kl_weight=1 / train_size,
-            activation="sigmoid",
-        )(features)
-
-    # The output is deterministic: a single point estimate.
-    outputs = layers.Dense(units=1)(features)
-    model = keras.Model(inputs=inputs, outputs=outputs)
-    return model
-
-def create_probablistic_bnn_model(train_size):
-    inputs = create_model_inputs()
-    features = keras.layers.concatenate(list(inputs.values()))
-    features = layers.BatchNormalization()(features)
-
-    # Create hidden layers with weight uncertainty using the DenseVariational layer.
-    for units in hidden_units:
-        features = tfp.layers.DenseVariational(
-            units=units,
-            make_prior_fn=prior,
-            make_posterior_fn=posterior,
-            kl_weight=1 / train_size,
-            activation="sigmoid",
-        )(features)
-
-    # Create a probabilisticå output (Normal distribution), and use the `Dense` layer
-    # to produce the parameters of the distribution.
-    # We set units=2 to learn both the mean and the variance of the Normal distribution.
-    distribution_params = layers.Dense(units=2)(features)
-    outputs = tfp.layers.IndependentNormal(1)(distribution_params)
-
-    model = keras.Model(inputs=inputs, outputs=outputs)
-    return model
-```
-
-
-## tensorflow_addons
-```python
-# Define the callbacks.
-reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(patience=3)
-early_stopping = tf.keras.callbacks.EarlyStopping(
-    patience=10, restore_best_weights=True
-)
-
-# Initialize SWA from tf-hub.
-SWA = tfa.optimizers.SWA
-
-# Compile and train the teacher model.
-teacher_model = get_training_model()
-teacher_model.load_weights("initial_teacher_model.h5")
-teacher_model.compile(
-    # Notice that we are wrapping our optimizer within SWA
-    optimizer=SWA(tf.keras.optimizers.Adam()),
-    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-    metrics=["accuracy"],
-)
-history = teacher_model.fit(
-    train_clean_ds,
-    epochs=EPOCHS,
-    validation_data=validation_ds,
-    callbacks=[reduce_lr, early_stopping],
-)
-
-# Evaluate the teacher model on the test set.
-_, acc = teacher_model.evaluate(test_ds, verbose=0)
-print(f"Test accuracy: {acc*100}%")
-```
-
-```python
-def run_experiment(model):
-    optimizer = tfa.optimizers.AdamW(learning_rate=0.001, weight_decay=0.0001)
-
-    model.compile(
-        optimizer=optimizer,
-        loss=keras.losses.CategoricalCrossentropy(
-            from_logits=True, label_smoothing=0.1
-        ),
-        metrics=[
-            keras.metrics.CategoricalAccuracy(name="accuracy"),
-            keras.metrics.TopKCategoricalAccuracy(5, name="top-5-accuracy"),
-        ],
-    )
-
-    checkpoint_filepath = "/tmp/checkpoint"
-    checkpoint_callback = keras.callbacks.ModelCheckpoint(
-        checkpoint_filepath,
-        monitor="val_accuracy",
-        save_best_only=True,
-        save_weights_only=True,
-    )
-
-    history = model.fit(
-        x=x_train,
-        y=y_train,
-        batch_size=batch_size,
-        epochs=num_epochs,
-        validation_split=0.1,
-        callbacks=[checkpoint_callback],
-    )
-
-    model.load_weights(checkpoint_filepath)
-    _, accuracy, top_5_accuracy = model.evaluate(x_test, y_test)
-    print(f"Test accuracy: {round(accuracy * 100, 2)}%")
-    print(f"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%")
-
-    return history
-
-
-cct_model = create_cct_model()
-history = run_experiment(cct_model)
-```
-
-### tensorflow_addons.layers
-InstanceNormaliztion
-
-### tensorflow.experimental.numpy
-
-## tensorflow_model_optimization
-```python
-# Define the model.
-base_model = setup_model()
-base_model.load_weights(pretrained_weights) # optional but recommended for model accuracy
-model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model)
-
-log_dir = tempfile.mkdtemp()
-callbacks = [
-    tfmot.sparsity.keras.UpdatePruningStep(),
-    # Log sparsity and other metrics in Tensorboard.
-    tfmot.sparsity.keras.PruningSummaries(log_dir=log_dir)
-]
-
-model_for_pruning.compile(
-      loss=tf.keras.losses.categorical_crossentropy,
-      optimizer='adam',
-      metrics=['accuracy']
-)
-
-model_for_pruning.fit(
-    x_train,
-    y_train,
-    callbacks=callbacks,
-    epochs=2,
-)
-
-#docs_infra: no_execute
-%tensorboard --logdir={log_dir}
-```
-
-```python
-base_model = setup_model()
-base_model.load_weights(pretrained_weights) # optional but recommended.
-
-model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model)
-
-model_for_pruning.summary()
-```
-```python
-# Define the model.
-base_model = setup_model()
-base_model.load_weights(pretrained_weights) # optional but recommended for model accuracy
-model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model)
-
-# Typically you train the model here.
-
-model_for_export = tfmot.sparsity.keras.strip_pruning(model_for_pruning)
-
-print("final model")
-model_for_export.summary()
-
-print("\n")
-print("Size of gzipped pruned model without stripping: %.2f bytes" % (get_gzipped_model_size(model_for_pruning)))
-print("Size of gzipped pruned model with stripping: %.2f bytes" % (get_gzipped_model_size(model_for_export)))
-```
-```python
-base_model = setup_model()
-
-# For using intrinsics on a CPU with 128-bit registers, together with 8-bit
-# quantized weights, a 1x16 block size is nice because the block perfectly
-# fits into the register.
-pruning_params = {'block_size': [1, 16]}
-model_for_pruning = tfmot.sparsity.keras.prune_low_magnitude(base_model, **pruning_params)
-
-model_for_pruning.summary()
-```
-
-```python
-cluster_weights = tfmot.clustering.keras.cluster_weights
-CentroidInitialization = tfmot.clustering.keras.CentroidInitialization
-
-clustering_params = {
-  'number_of_clusters': 3,
-  'cluster_centroids_init': CentroidInitialization.DENSITY_BASED
-}
-
-model = setup_model()
-model.load_weights(pretrained_weights)
-
-clustered_model = cluster_weights(model, **clustering_params)
-
-clustered_model.summary()
-
-#----------------------------------------------------------------------
-#----------------------------------------------------------------------
-
-# Define the model.
-base_model = setup_model()
-base_model.load_weights(pretrained_weights)
-clustered_model = cluster_weights(base_model, **clustering_params)
-
-# Save or checkpoint the model.
-_, keras_model_file = tempfile.mkstemp('.h5')
-clustered_model.save(keras_model_file, include_optimizer=True)
-
-# `cluster_scope` is needed for deserializing HDF5 models.
-with tfmot.clustering.keras.cluster_scope():
-  loaded_model = tf.keras.models.load_model(keras_model_file)
-
-loaded_model.summary()
-
-#----------------------------------------------------------------------
-#----------------------------------------------------------------------
-
-model = setup_model()
-clustered_model = cluster_weights(model, **clustering_params)
-
-clustered_model.compile(
-    loss=tf.keras.losses.categorical_crossentropy,
-    optimizer='adam',
-    metrics=['accuracy']
-)
-
-clustered_model.fit(
-    x_train,
-    y_train
-)
-
-final_model = tfmot.clustering.keras.strip_clustering(clustered_model)
-
-print("final model")
-final_model.summary()
-```
-
-## official.vision.image_classification.augment
-RandAugment
-```python
-# Initialize `RandAugment` object with 2 layers of
-# augmentation transforms and strength of 9.
-augmenter = RandAugment(num_layers=2, magnitude=9)
-```
-
-```python
-# Initialize `RandAugment` object with 2 layers of
-# augmentation transforms and strength of 5.
-augmenter = RandAugment(num_layers=2, magnitude=5)
-
-
-def weak_augment(image, source=True):
-    if image.dtype != tf.float32:
-        image = tf.cast(image, tf.float32)
-
-    # MNIST images are grayscale, this is why we first convert them to
-    # RGB images.
-    if source:
-        image = tf.image.resize_with_pad(image, RESIZE_TO, RESIZE_TO)
-        image = tf.tile(image, [1, 1, 3])
-    image = tf.image.random_flip_left_right(image)
-    image = tf.image.random_crop(image, (RESIZE_TO, RESIZE_TO, 3))
-    return image
-
-
-def strong_augment(image, source=True):
-    if image.dtype != tf.float32:
-        image = tf.cast(image, tf.float32)
-
-    if source:
-        image = tf.image.resize_with_pad(image, RESIZE_TO, RESIZE_TO)
-        image = tf.tile(image, [1, 1, 3])
-    image = augmenter.distort(image)
-    return image
-```
-
 ## tf.math
 ### tf.math.divide_no_nan
 ### tf.math.argmax
@@ -2096,125 +2093,6 @@ def strong_augment(image, source=True):
 ### tf.math.square
 ### tf.math.top_k
 ### tf.math.unsorted_segment_sum
-
-## tensorflow
-
-
-
-
-
-
-
-```python
-tf.random.set_seed(42)
-```
-
-```python
-AUTO = tf.data.AUTOTUNE
-```
-
-
-```python
-(
-    (mnist_x_train, mnist_y_train),
-    (mnist_x_test, mnist_y_test),
-) = keras.datasets.mnist.load_data()
-
-# Add a channel dimension
-mnist_x_train = tf.expand_dims(mnist_x_train, -1)
-mnist_x_test = tf.expand_dims(mnist_x_test, -1)
-
-# Convert the labels to one-hot encoded vectors
-mnist_y_train = tf.one_hot(mnist_y_train, 10).numpy()
-```
-
-### tensorflow.data.Dataset
-```python
-#  Utility function for preprocessing the source test set.
-def prepare_test_ds_source(image, label):
-    image = tf.image.resize_with_pad(image, RESIZE_TO, RESIZE_TO)
-    image = tf.tile(image, [1, 1, 3])
-    return image, label
-
-
-source_test_ds = tf.data.Dataset.from_tensor_slices((mnist_x_test, mnist_y_test))
-source_test_ds = (
-    source_test_ds.map(prepare_test_ds_source, num_parallel_calls=AUTO)
-    .batch(TARGET_BATCH_SIZE)
-    .prefetch(AUTO)
-)
-
-# Evaluation on the source test set.
-_, accuracy = adamatch_trained_model.evaluate(source_test_ds)
-print(f"Accuracy on source test set: {accuracy * 100:.2f}%")
-```
-
-```python
-# Define data loaders.
-train_loader = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-validation_loader = tf.data.Dataset.from_tensor_slices((x_val, y_val))
-
-batch_size = 2
-# Augment the on the fly during training.
-train_dataset = (
-    train_loader.shuffle(len(x_train))
-    .map(train_preprocessing)
-    .batch(batch_size)
-    .prefetch(2)
-)
-# Only rescale.
-validation_dataset = (
-    validation_loader.shuffle(len(x_val))
-    .map(validation_preprocessing)
-    .batch(batch_size)
-    .prefetch(2)
-)
-```
-
-```python
-def create_individual_ds(ds, aug_func, source=True):
-    if source:
-        batch_size = SOURCE_BATCH_SIZE
-    else:
-        # During training 3x more target unlabeled samples are shown
-        # to the model in AdaMatch (Section 3.2 of the paper).
-        batch_size = TARGET_BATCH_SIZE
-    ds = ds.shuffle(batch_size * 10, seed=42)
-
-    if source:
-        ds = ds.map(lambda x, y: (aug_func(x), y), num_parallel_calls=AUTO)
-    else:
-        ds = ds.map(lambda x, y: (aug_func(x, False), y), num_parallel_calls=AUTO)
-
-    ds = ds.batch(batch_size).prefetch(AUTO)
-    return ds
-
-source_ds = tf.data.Dataset.from_tensor_slices((mnist_x_train, mnist_y_train))
-source_ds_w = create_individual_ds(source_ds, weak_augment)
-source_ds_s = create_individual_ds(source_ds, strong_augment)
-final_source_ds = tf.data.Dataset.zip((source_ds_w, source_ds_s))
-
-target_ds_w = create_individual_ds(svhn_train, weak_augment, source=False)
-target_ds_s = create_individual_ds(svhn_train, strong_augment, source=False)
-final_target_ds = tf.data.Dataset.zip((target_ds_w, target_ds_s))
-```
-
-```python
-# Compile the AdaMatch model to yield accuracy.
-adamatch_trained_model = adamatch_trainer.model
-adamatch_trained_model.compile(metrics=keras.metrics.SparseCategoricalAccuracy())
-
-# Score on the target test set.
-svhn_test = svhn_test.batch(TARGET_BATCH_SIZE).prefetch(AUTO)
-_, accuracy = adamatch_trained_model.evaluate(svhn_test)
-print(f"Accuracy on target test set: {accuracy * 100:.2f}%")
-```
-
-
-
-### tensorflow.util.tf_export
-keras_export
-
 
 
 ## nibabel
@@ -2636,19 +2514,76 @@ BertWordPieceTokenizer
 ## functools
 partial
 
-## csv
+```python
+
+def load_dataset(filenames, labeled=True):
+    ignore_order = tf.data.Options()
+    ignore_order.experimental_deterministic = False  # disable order, increase speed
+    dataset = tf.data.TFRecordDataset(
+        filenames
+    )  # automatically interleaves reads from multiple files
+    dataset = dataset.with_options(
+        ignore_order
+    )  # uses data as soon as it streams in, rather than in its original order
+    dataset = dataset.map(
+        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE
+    )
+    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False
+    return dataset
+```
 
 ### skimage.io
 imread
+imsave
 
 ### skimage.transform
+resize
+
 ## re
+### re.escape
+### re.compile
+### re.UNICODE
+### re.sub
+### re.search
+### re.match
 
-## enum
-Enum
 
-### classification.augment
-RndAugment
 
-## imgaug
-augmenters
+## enum.Enum
+```python
+class StateAggregationMode(enum.Enum):
+  """Enum of available modes of aggregation for state.
+
+  This enum serves as a declaration of how the `state_update_tensors` returned
+  by the `encode` method of `StatefulEncodingStageInterface` should be
+  aggregated, before being passed to the `update_state` method.
+
+  This is primarily relevant for the setting where the encoding happens in
+  multiple locations, and a function of the encoded objects needs to be computed
+  at a central node. The implementation of these modes can differ depending on
+  the context. For instance, aggregation of these values in a star topology will
+  look differently from a multi-tier aggregation, which needs to know how some
+  intermediary representations is to be merged.
+
+  List of available values:
+  * `SUM`: Summation.
+  * `MIN`: Minimum.
+  * `MAX`: Maximum.
+  * `STACK`: Stacking along a new dimentsion. This can necessary for computing
+    arbitrary function of a collection of those values, such as a percentile.
+  """
+  SUM = 1
+  MIN = 2
+  MAX = 3
+  STACK = 4
+```
+
+
+## imgaug.augmenters
+### iaa.Sequential
+### iaa.Resize
+### iaa.Fliplr
+### iaa.Sometimes
+### iaa.RandAugment
+### iaa.Affine
+
