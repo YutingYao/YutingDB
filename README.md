@@ -1,7 +1,753 @@
-# TensorflowKeras
+# TensorflowKeras 常用命令
 Study Notes of Yuting
+最近因敲代码，视力显著下降，故断更。。有空再继续。。
 
 # Section 1 - Packages
+
+## tf.keras.applications
+### tf.keras.applications.resnet
+### tf.keras.applications.ResNet50
+### tf.keras.applications.ResNet50V2
+### tf.keras.applications.ResNet101
+### tf.keras.applications.ResNet101V2
+### tf.keras.applications.ResNet152
+### tf.keras.applications.ResNet152V2
+### tf.keras.applications.MobileNet
+### tf.keras.applications.MobileNetV2
+### tf.keras.applications.imagenet_utils
+### tf.keras.applications.inceptionV3
+### tf.keras.applications.inceptionResNetV2
+### tf.keras.applications.vgg19
+### tf.keras.applications.vgg16
+### tf.keras.applications.efficientNet
+### tf.keras.applications.EfficientNetB0
+### tf.keras.applications.EfficientNetB1
+### tf.keras.applications.EfficientNetB2
+### tf.keras.applications.EfficientNetB3
+### tf.keras.applications.EfficientNetB4
+### tf.keras.applications.EfficientNetB5
+### tf.keras.applications.EfficientNetB6
+### tf.keras.applications.EfficientNetB7
+### tf.keras.applications.Xception
+### tf.keras.applications.DenseNet201
+### tf.keras.applications.DenseNet169
+### tf.keras.applications.DenseNet121
+
+## tf.keras.activations
+### tf.keras.activations.relu
+### tf.keras.activations.sigmoid
+### tf.keras.activations.softmax
+### tf.keras.activations.softplus
+### tf.keras.activations.softsign
+### tf.keras.activations.tanh
+### tf.keras.activations.selu
+### tf.keras.activations.elu
+### tf.keras.activations.exponential
+### tf.keras.activations.serialize
+### tf.keras.activations.deserialize
+### tf.keras.activations.get
+
+
+## tf.keras.backend
+### tf.keras.backend.int_shape
+### tf.keras.backend.clear_session
+### tf.keras.backend.random_normal
+### tf.keras.backend.epsilon
+### tf.keras.backend.get_value
+### tf.keras.backend.set_value
+### tf.keras.backend.clip
+### tf.keras.backend.batch_get_value
+### tf.keras.backend.image_data_format
+### tf.keras.backend.learning_phase
+### tf.keras.backend.depthwise_conv2d
+### tf.keras.backend.bias_add
+
+## tf.keras.callbacks
+### tf.keras.callbacks.TensorBoard
+### tf.keras.callbacks.ModelCheckpoint
+### tf.keras.callbacks.EarlyStopping
+### tf.keras.callbacks.LearningRateScheduler
+### tf.keras.callbacks.History
+### tf.keras.callbacks.ReduceLROnPlateau
+
+## tf.keras.datasets
+### tf.keras.datasets.boston_housing
+### tf.keras.datasets.mnist
+### tf.keras.datasets.cifar10
+### tf.keras.datasets.cifar100
+### tf.keras.datasets.fashion_mnist
+
+
+## tf.keras.experimental
+### tf.keras.experimental.CosineDecay
+### tf.keras.experimental.cluster
+### tf.keras.experimental.PeepholeLSTMCell
+### tf.keras.experimental.export_saved_model
+### tf.keras.experimental.load_from_saved_model
+
+## tf.keras.initializers
+### tf.keras.initializers.RandomNormal
+### tf.keras.initializers.RandomUniform
+### tf.keras.initializers.TruncatedNormal
+### tf.keras.initializers.Zeros
+### tf.keras.initializers.Ones
+### tf.keras.initializers.GlorotNormal
+### tf.keras.initializers.GlorotUniform
+### tf.keras.initializers.VarianceScaling
+### tf.keras.initializers.Orthogonal
+### tf.keras.initializers.Identity
+### tf.keras.initializers.HeUniform
+### tf.keras.initializers.HeNormal
+### tf.keras.initializers.Constant
+
+## tf.keras.Input
+
+
+## tf.keras.layers
+### tf.keras.layers.Conv2D
+### tf.keras.layers.DepthwiseConv2D
+### tf.keras.layers.Conv2DTranspose
+### tf.keras.layers.BatchNormalization
+### tf.keras.layers.ReLU
+### tf.keras.layers.AveragePooling2D
+### tf.keras.layers.GlobalAveragePooling2D
+### tf.keras.layers.GlobalAveragePooling1D
+### tf.keras.layers.GlobalMaxPooling1D
+### tf.keras.layers.UpSamling2D
+### tf.keras.layers.Concatenate
+### tf.keras.layers.Input
+### tf.keras.layers.InputSpec
+### tf.keras.layers.Lambda
+### tf.keras.layers.Activation
+### tf.keras.layers.Reshape
+### tf.keras.layers.ZeroPadding2D
+### tf.keras.layers.Add
+### tf.keras.layers.Dropout
+### tf.keras.layers.BatchNormalization
+### tf.keras.layers.Embedding
+### tf.keras.layers.Masking
+### tf.keras.layers.Conv1D
+### tf.keras.layers.Dense
+### tf.keras.layers.Bidirectional
+### tf.keras.layers.LSTM
+### tf.keras.layers.serialize
+### tf.keras.layers.Flatten
+### tf.keras.layers.Layer.get_weights
+### tf.keras.layers.Layer.set_weights
+### tf.keras.layers.Layer.weights
+### tf.keras.layers.Layer.trainable_weights
+### tf.keras.layers.Layer.non_trainable_weights
+### tf.keras.layers.Layer.trainable
+### tf.keras.layers.Layer.add_loss
+### tf.keras.layers.Layer.add_metric
+### tf.keras.layers.Layer.losses
+### tf.keras.layers.Layer.metrics
+### tf.keras.layers.Layer.dynamic
+### tf.keras.layers.experimental.preprocessing.Resizing
+### tf.keras.layers.experimental.preprocessing.RandomFourierFeatures
+### tf.keras.layers.experimental.preprocessing.StringLookup
+### tf.keras.layers.experimental.preprocessing.TextVectorization
+### tf.keras.layers.experimental.preprocessing.InterLookup
+### tf.keras.layers.experimental.preprocessing.Normalization
+### tf.keras.layers.experimental.preprocessing.CenterCrop
+### tf.keras.layers.experimental.preprocessing.Rescaling
+
+
+
+## tf.keras.losses
+### tf.keras.losses.categorical_crossentropy
+### tf.keras.losses.SparseCategoticalCrossentropy
+### tf.keras.losses.MeanSquareError
+### tf.keras.losses.kl_divergence
+
+## tf.keras.models
+### tf.keras.models.load_model
+### tf.keras.models.save_model
+### tf.keras.models.Sequential
+### tf.keras.models.clone_model
+### tf.keras.models.model_from_json
+### tf.keras.models.model_from_config
+### tf.keras.models.model_to_json
+
+## tf.keras.metrics
+### tf.keras.metrics.AUC
+### tf.keras.metrics.SparseCategoticalAccuracy
+### tf.keras.metrics.Mean
+### tf.keras.metrics.BinaryAccuracy
+### tf.keras.metrics.Pricision
+### tf.keras.metrics.Recall
+### tf.keras.metrics.PricisionAtRecall
+### tf.keras.metrics.CategoticalAccuracy
+
+## tf.keras.optimizers
+### tf.keras.optimizers.Adam
+### tf.keras.optimizers.schedules.ExponentialDecay
+### tf.keras.optimizers.RMSprop
+### tf.keras.optimizers.SGD
+### tf.keras.optimizers.Adadelta
+
+## tf.keras.preprocessing
+### tf.keras.preprocessing.image.array_to_img
+### tf.keras.preprocessing.image.img_to array
+### tf.keras.preprocessing.image.load_img
+### tf.keras.preprocessing.text_dataset_from_dictionary
+### tf.keras.preprocessing.image_dataset_from_dictionary
+### tf.keras.preprocessing.sequence.pad_sequences
+
+## tf.keras.regularizers
+### tf.keras.regularizers.L1
+### tf.keras.regularizers.L2
+
+## tf.keras.Sequential
+
+## tf.keras.utils
+### tf.keras.utils.layer_utils.get_source_inputs
+### tf.keras.utils.data_utils.get_file
+### tf.keras.utils.to_categorical
+### tf.keras.utils.Sequence
+### tf.keras.utils.get_file
+### tf.keras.utils.CustomObjectScope
+### tf.keras.utils.deserialize_keras_object
+### tf.keras.utils.serialize_keras_object
+
+```python
+
+class AdaMatch(keras.Model):
+    def __init__(self, model, total_steps, tau=0.9):
+        super(AdaMatch, self).__init__()
+        self.model = model
+        self.tau = tau  # Denotes the confidence threshold
+        self.loss_tracker = tf.keras.metrics.Mean(name="loss")
+        self.total_steps = total_steps
+        self.current_step = tf.Variable(0, dtype="int64")
+
+    @property
+    def metrics(self):
+        return [self.loss_tracker]
+
+    # This is a warmup schedule to update the weight of the
+    # loss contributed by the target unlabeled samples. More
+    # on this in the text.
+    def compute_mu(self):
+        pi = tf.constant(np.pi, dtype="float32")
+        step = tf.cast(self.current_step, dtype="float32")
+        return 0.5 - tf.cos(tf.math.minimum(pi, (2 * pi * step) / self.total_steps)) / 2
+
+    def train_step(self, data):
+        ## Unpack and organize the data ##
+        source_ds, target_ds = data
+        (source_w, source_labels), (source_s, _) = source_ds
+        (
+            (target_w, _),
+            (target_s, _),
+        ) = target_ds  # Notice that we are NOT using any labels here.
+
+        combined_images = tf.concat([source_w, source_s, target_w, target_s], 0)
+        combined_source = tf.concat([source_w, source_s], 0)
+
+        total_source = tf.shape(combined_source)[0]
+        total_target = tf.shape(tf.concat([target_w, target_s], 0))[0]
+
+        with tf.GradientTape() as tape:
+            ## Forward passes ##
+            combined_logits = self.model(combined_images, training=True)
+            z_d_prime_source = self.model(
+                combined_source, training=False
+            )  # No BatchNorm update.
+            z_prime_source = combined_logits[:total_source]
+
+            ## 1. Random logit interpolation for the source images ##
+            lambd = tf.random.uniform((total_source, 10), 0, 1)
+            final_source_logits = (lambd * z_prime_source) + (
+                (1 - lambd) * z_d_prime_source
+            )
+
+            ## 2. Distribution alignment (only consider weakly augmented images) ##
+            # Compute softmax for logits of the WEAKLY augmented SOURCE images.
+            y_hat_source_w = tf.nn.softmax(final_source_logits[: tf.shape(source_w)[0]])
+
+            # Extract logits for the WEAKLY augmented TARGET images and compute softmax.
+            logits_target = combined_logits[total_source:]
+            logits_target_w = logits_target[: tf.shape(target_w)[0]]
+            y_hat_target_w = tf.nn.softmax(logits_target_w)
+
+            # Align the target label distribution to that of the source.
+            expectation_ratio = tf.reduce_mean(y_hat_source_w) / tf.reduce_mean(
+                y_hat_target_w
+            )
+            y_tilde_target_w = tf.math.l2_normalize(
+                y_hat_target_w * expectation_ratio, 1
+            )
+
+            ## 3. Relative confidence thresholding ##
+            row_wise_max = tf.reduce_max(y_hat_source_w, axis=-1)
+            final_sum = tf.reduce_mean(row_wise_max, 0)
+            c_tau = self.tau * final_sum
+            mask = tf.reduce_max(y_tilde_target_w, axis=-1) >= c_tau
+
+            ## Compute losses (pay attention to the indexing) ##
+            source_loss = compute_loss_source(
+                source_labels,
+                final_source_logits[: tf.shape(source_w)[0]],
+                final_source_logits[tf.shape(source_w)[0] :],
+            )
+            target_loss = compute_loss_target(
+                y_tilde_target_w, logits_target[tf.shape(target_w)[0] :], mask
+            )
+
+            t = self.compute_mu()  # Compute weight for the target loss
+            total_loss = source_loss + (t * target_loss)
+            self.current_step.assign_add(
+                1
+            )  # Update current training step for the scheduler
+
+        gradients = tape.gradient(total_loss, self.model.trainable_variables)
+        self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
+
+        self.loss_tracker.update_state(total_loss)
+        return {"loss": self.loss_tracker.result()}
+```
+```python
+def wide_basic(x, n_input_plane, n_output_plane, stride):
+    conv_params = [[3, 3, stride, "same"], [3, 3, (1, 1), "same"]]
+
+    n_bottleneck_plane = n_output_plane
+
+    # Residual block
+    for i, v in enumerate(conv_params):
+        if i == 0:
+            if n_input_plane != n_output_plane:
+                x = layers.BatchNormalization()(x)
+                x = layers.Activation("relu")(x)
+                convs = x
+            else:
+                convs = layers.BatchNormalization()(x)
+                convs = layers.Activation("relu")(convs)
+            convs = layers.Conv2D(
+                n_bottleneck_plane,
+                (v[0], v[1]),
+                strides=v[2],
+                padding=v[3],
+                kernel_initializer=INIT,
+                kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
+                use_bias=False,
+            )(convs)
+        else:
+            convs = layers.BatchNormalization()(convs)
+            convs = layers.Activation("relu")(convs)
+            convs = layers.Conv2D(
+                n_bottleneck_plane,
+                (v[0], v[1]),
+                strides=v[2],
+                padding=v[3],
+                kernel_initializer=INIT,
+                kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
+                use_bias=False,
+            )(convs)
+
+    # Shortcut connection: identity function or 1x1
+    # convolutional
+    #  (depends on difference between input & output shape - this
+    #   corresponds to whether we are using the first block in
+    #   each
+    #   group; see `block_series()`).
+    if n_input_plane != n_output_plane:
+        shortcut = layers.Conv2D(
+            n_output_plane,
+            (1, 1),
+            strides=stride,
+            padding="same",
+            kernel_initializer=INIT,
+            kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
+            use_bias=False,
+        )(x)
+    else:
+        shortcut = x
+
+    return layers.Add()([convs, shortcut])
+
+
+# Stacking residual units on the same stage
+def block_series(x, n_input_plane, n_output_plane, count, stride):
+    x = wide_basic(x, n_input_plane, n_output_plane, stride)
+    for i in range(2, int(count + 1)):
+        x = wide_basic(x, n_output_plane, n_output_plane, stride=1)
+    return x
+
+
+def get_network(image_size=32, num_classes=10):
+    n = (DEPTH - 4) / 6
+    n_stages = [16, 16 * WIDTH_MULT, 32 * WIDTH_MULT, 64 * WIDTH_MULT]
+
+    inputs = keras.Input(shape=(image_size, image_size, 3))
+    x = layers.experimental.preprocessing.Rescaling(scale=1.0 / 255)(inputs)
+
+    conv1 = layers.Conv2D(
+        n_stages[0],
+        (3, 3),
+        strides=1,
+        padding="same",
+        kernel_initializer=INIT,
+        kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
+        use_bias=False,
+    )(x)
+
+    ## Add wide residual blocks ##
+
+    conv2 = block_series(
+        conv1,
+        n_input_plane=n_stages[0],
+        n_output_plane=n_stages[1],
+        count=n,
+        stride=(1, 1),
+    )  # Stage 1
+
+    conv3 = block_series(
+        conv2,
+        n_input_plane=n_stages[1],
+        n_output_plane=n_stages[2],
+        count=n,
+        stride=(2, 2),
+    )  # Stage 2
+
+    conv4 = block_series(
+        conv3,
+        n_input_plane=n_stages[2],
+        n_output_plane=n_stages[3],
+        count=n,
+        stride=(2, 2),
+    )  # Stage 3
+
+    batch_norm = layers.BatchNormalization()(conv4)
+    relu = layers.Activation("relu")(batch_norm)
+
+    # Classifier
+    trunk_outputs = layers.GlobalAveragePooling2D()(relu)
+    outputs = layers.Dense(
+        num_classes, kernel_regularizer=regularizers.l2(WEIGHT_DECAY)
+    )(trunk_outputs)
+
+    return keras.Model(inputs, outputs)
+```
+```python
+reduce_lr = keras.experimental.CosineDecay(LEARNING_RATE, TOTAL_STEPS, 0.25)
+optimizer = keras.optimizers.Adam(reduce_lr)
+
+adamatch_trainer = AdaMatch(model=wrn_model, total_steps=TOTAL_STEPS)
+adamatch_trainer.compile(optimizer=optimizer)
+
+total_ds = tf.data.Dataset.zip((final_source_ds, final_target_ds))
+adamatch_trainer.fit(total_ds, epochs=EPOCHS)
+```
+
+#### tensorflow.keras.backend
+#### tensorflow.keras.regularizers
+
+#### tensorflow.keras.activations
+relu
+
+#### tensorflow.keras.applications
+imagenet_utils.preprocess_input
+resnet
+inception_v3
+vgg19
+
+## resnet50
+ResNet50
+
+## resnet_cifar10_v2
+#### tensorflow.keras.metrics
+#### tensorflow.keras.
+
+#### tensorflow.keras.models
+Model
+load_model
+Sequential
+```python
+input = layers.Input(shape=(28, 28, 1))
+
+# Encoder
+x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(input)
+x = layers.MaxPooling2D((2, 2), padding="same")(x)
+x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(x)
+x = layers.MaxPooling2D((2, 2), padding="same")(x)
+
+# Decoder
+x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
+x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
+x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
+
+# Autoencoder
+autoencoder = Model(input, x)
+autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+autoencoder.summary()
+```
+
+```python
+trained_model = tf.keras.models.load_model(SAVED_MODEL_DIR)
+trained_model.summary()
+```
+
+```python
+# docs_infra: no_execute
+model = keras.models.load_model(save_path)
+```
+
+#### tensorflow.keras.callbacks
+Callback
+TensorBoard
+ModelCheckpoint
+EarlyStopping
+LearningRateScheduler
+
+```python
+# Define callbacks.
+checkpoint_cb = keras.callbacks.ModelCheckpoint(
+    "3d_image_classification.h5", save_best_only=True
+)
+early_stopping_cb = keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
+```
+
+```python
+model.fit(x=x_train[:100], y=y_train[:100], validation_split=0.2, epochs=1)
+```
+
+```python
+callbacks = [
+      tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOGS_DIR),
+      tf.keras.callbacks.ModelCheckpoint(MODEL_CHECKPOINT_DIR, save_best_only=True),
+      tf.keras.callbacks.EarlyStopping(monitor="loss", min_delta=0.001, patience=3),
+]
+
+model.fit(
+      x=x_train, y=y_train, epochs=100, validation_split=0.2, callbacks=callbacks,
+)
+
+model.save(SAVED_MODEL_DIR)
+```
+
+```python
+callbacks = [
+    # TensorBoard will store logs for each epoch and graph performance for us.
+    keras.callbacks.TensorBoard(log_dir=tensorboard_path, histogram_freq=1),
+    # ModelCheckpoint will save models after each epoch for retrieval later.
+    keras.callbacks.ModelCheckpoint(checkpoint_path),
+    # EarlyStopping will terminate training when val_loss ceases to improve.
+    keras.callbacks.EarlyStopping(monitor="val_loss", patience=3),
+]
+
+```
+
+```python
+%load_ext tensorboard
+%tensorboard --logdir $TENSORBOARD_LOGS_DIR
+```
+
+```python
+!#docs_infra: no_execute
+!tensorboard dev upload --logdir "gs://keras-examples-jonah/logs/fit" --name "Guide MNIST"
+```
+
+#### tensorflow.keras.datasets
+
+mnist
+
+```python
+
+(x_train, y_train), (_, _) = tf.keras.datasets.mnist.load_data()
+x_train = x_train.reshape((60000, 28 * 28))
+x_train = x_train.astype("float32") / 255
+
+```
+
+
+
+#### tensorflow.keras.utils
+multi_gpu_model
+Sequence
+to_categorical
+conv_utils
+```python
+    if input_tensor is not None:
+        inputs = get_source_inputs(input_tensor)
+    else:
+        inputs = img_input
+```
+```python
+# Download url of normal CT scans.
+url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-0.zip"
+filename = os.path.join(os.getcwd(), "CT-0.zip")
+keras.utils.get_file(filename, url)
+
+# Download url of abnormal CT scans.
+url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-23.zip"
+filename = os.path.join(os.getcwd(), "CT-23.zip")
+keras.utils.get_file(filename, url)
+```
+
+
+#### tensorflow.keras.losses
+sparse_categorical_crossentropy
+categorical_crossentropy
+
+```python
+def compute_loss_source(source_labels, logits_source_w, logits_source_s):
+    loss_func = keras.losses.CategoricalCrossentropy(from_logits=True)
+    # First compute the losses between original source labels and
+    # predictions made on the weakly and strongly augmented versions
+    # of the same images.
+    w_loss = loss_func(source_labels, logits_source_w)
+    s_loss = loss_func(source_labels, logits_source_s)
+    return w_loss + s_loss
+
+
+def compute_loss_target(target_pseudo_labels_w, logits_target_s, mask):
+    loss_func = keras.losses.CategoricalCrossentropy(from_logits=True, reduction="none")
+    target_pseudo_labels_w = tf.stop_gradient(target_pseudo_labels_w)
+    # For calculating loss for the target samples, we treat the pseudo labels
+    # as the ground-truth. These are not considered during backpropagation
+    # which is a standard SSL practice.
+    target_loss = loss_func(target_pseudo_labels_w, logits_target_s)
+
+    # More on `mask` later.
+    mask = tf.cast(mask, target_loss.dtype)
+    target_loss *= mask
+    return tf.reduce_mean(target_loss, 0)
+```
+
+#### tensorflow.keras.layers 
+Input
+Lambda
+Activation
+Concatenate
+Add
+Dropout
+BatchNormalization
+Conv2D
+DepthwiseConv2D
+ZeroPadding2D
+GlobalAveragePooling2D
+Reshape
+Embedding
+```python
+def get_model(width=128, height=128, depth=64):
+    """Build a 3D convolutional neural network model."""
+
+    inputs = keras.Input((width, height, depth, 1))
+
+    x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(inputs)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(x)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Conv3D(filters=128, kernel_size=3, activation="relu")(x)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Conv3D(filters=256, kernel_size=3, activation="relu")(x)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.GlobalAveragePooling3D()(x)
+    x = layers.Dense(units=512, activation="relu")(x)
+    x = layers.Dropout(0.3)(x)
+
+    outputs = layers.Dense(units=1, activation="sigmoid")(x)
+
+    # Define the model.
+    model = keras.Model(inputs, outputs, name="3dcnn")
+    return model
+model = get_model(width=128, height=128, depth=64)
+model.summary()
+
+# Compile model.
+initial_learning_rate = 0.0001
+lr_schedule = keras.optimizers.schedules.ExponentialDecay(
+    initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
+)
+model.compile(
+    loss="binary_crossentropy",
+    optimizer=keras.optimizers.Adam(learning_rate=lr_schedule),
+    metrics=["acc"],
+)
+
+# Define callbacks.
+checkpoint_cb = keras.callbacks.ModelCheckpoint(
+    "3d_image_classification.h5", save_best_only=True
+)
+early_stopping_cb = keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
+
+# Train the model, doing validation at the end of each epoch
+epochs = 100
+model.fit(
+    train_dataset,
+    validation_data=validation_dataset,
+    epochs=epochs,
+    shuffle=True,
+    verbose=2,
+    callbacks=[checkpoint_cb, early_stopping_cb],
+)
+
+# Load best weights.
+model.load_weights("3d_image_classification.h5")
+prediction = model.predict(np.expand_dims(x_val[0], axis=0))[0]
+
+```
+
+```python
+
+model = tf.keras.Sequential(
+    [
+        tf.keras.layers.Dense(512, activation="relu", input_shape=(28 * 28,)),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.Dense(10, activation="softmax"),
+    ]
+)
+
+model.compile(
+    loss="sparse_categorical_crossentropy",
+    optimizer=tf.keras.optimizers.Adam(),
+    metrics=["accuracy"],
+)
+```
+
+```python
+def create_model():
+    model = keras.Sequential(
+        [
+            keras.Input(shape=(28, 28)),
+            layers.experimental.preprocessing.Rescaling(1.0 / 255),
+            layers.Reshape(target_shape=(28, 28, 1)),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.MaxPooling2D(2),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.MaxPooling2D(2),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.Flatten(),
+            layers.Dense(128, activation="relu"),
+            layers.Dense(10),
+        ]
+    )
+
+    model.compile(
+        optimizer=keras.optimizers.Adam(),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=keras.metrics.SparseCategoricalAccuracy(),
+    )
+    return model
+
+model = create_model()
+ 
+model.fit(x_train, y_train, epochs=20, batch_size=128, validation_split=0.1)
+```
+
+#### tensorflow.keras.utils
+layer_utils.get_source_inputs
+data_utils.get_file
+
 ## os
 ### os.path.sep
 ```python
@@ -787,14 +1533,11 @@ best_model = tuner.get_best_models()[0]
 
 
 
-## keras
 
-### keras.engine
-Layer
-InputSpec
 
-### keras.engine.topology
-get_source_inputs
+## keras.engine
+### keras.engine.get_source_inputs
+
 
 #### keras.utils.layer_utils
 get_source_inputs
@@ -1472,562 +2215,7 @@ print(f"Accuracy on target test set: {accuracy * 100:.2f}%")
 ### tensorflow.util.tf_export
 keras_export
 
-### tensorflow.keras 
-The figure below presents the overall workflow of AdaMatch (taken from the
-[original paper](https://arxiv.org/abs/2106.04732)):
 
-![](https://i.imgur.com/1QsEm2M.png)
-
-Here's a brief step-by-step breakdown of the workflow:
-
-1. We first retrieve the weakly and strongly augmented pairs of images from the source and
-target datasets.
-2. We prepare two concatenated copies:
-    i. One where both pairs are concatenated.
-    ii. One where only the source data image pair is concatenated.
-3. We run two forward passes through the model:
-    i. The first forward pass uses the concatenated copy obtained from **2.i**. In
-this forward pass, the [Batch Normalization](https://arxiv.org/abs/1502.03167) statistics
-are updated.
-    ii. In the second forward pass, we only use the concatenated copy obtained from **2.ii**.
-    Batch Normalization layers are run in inference mode.
-4. The respective logits are computed for both the forward passes.
-5. The logits go through a series of transformations, introduced in the paper (which
-we will discuss shortly).
-6. We compute the loss and update the gradients of the underlying model.
-
-```python
-
-class AdaMatch(keras.Model):
-    def __init__(self, model, total_steps, tau=0.9):
-        super(AdaMatch, self).__init__()
-        self.model = model
-        self.tau = tau  # Denotes the confidence threshold
-        self.loss_tracker = tf.keras.metrics.Mean(name="loss")
-        self.total_steps = total_steps
-        self.current_step = tf.Variable(0, dtype="int64")
-
-    @property
-    def metrics(self):
-        return [self.loss_tracker]
-
-    # This is a warmup schedule to update the weight of the
-    # loss contributed by the target unlabeled samples. More
-    # on this in the text.
-    def compute_mu(self):
-        pi = tf.constant(np.pi, dtype="float32")
-        step = tf.cast(self.current_step, dtype="float32")
-        return 0.5 - tf.cos(tf.math.minimum(pi, (2 * pi * step) / self.total_steps)) / 2
-
-    def train_step(self, data):
-        ## Unpack and organize the data ##
-        source_ds, target_ds = data
-        (source_w, source_labels), (source_s, _) = source_ds
-        (
-            (target_w, _),
-            (target_s, _),
-        ) = target_ds  # Notice that we are NOT using any labels here.
-
-        combined_images = tf.concat([source_w, source_s, target_w, target_s], 0)
-        combined_source = tf.concat([source_w, source_s], 0)
-
-        total_source = tf.shape(combined_source)[0]
-        total_target = tf.shape(tf.concat([target_w, target_s], 0))[0]
-
-        with tf.GradientTape() as tape:
-            ## Forward passes ##
-            combined_logits = self.model(combined_images, training=True)
-            z_d_prime_source = self.model(
-                combined_source, training=False
-            )  # No BatchNorm update.
-            z_prime_source = combined_logits[:total_source]
-
-            ## 1. Random logit interpolation for the source images ##
-            lambd = tf.random.uniform((total_source, 10), 0, 1)
-            final_source_logits = (lambd * z_prime_source) + (
-                (1 - lambd) * z_d_prime_source
-            )
-
-            ## 2. Distribution alignment (only consider weakly augmented images) ##
-            # Compute softmax for logits of the WEAKLY augmented SOURCE images.
-            y_hat_source_w = tf.nn.softmax(final_source_logits[: tf.shape(source_w)[0]])
-
-            # Extract logits for the WEAKLY augmented TARGET images and compute softmax.
-            logits_target = combined_logits[total_source:]
-            logits_target_w = logits_target[: tf.shape(target_w)[0]]
-            y_hat_target_w = tf.nn.softmax(logits_target_w)
-
-            # Align the target label distribution to that of the source.
-            expectation_ratio = tf.reduce_mean(y_hat_source_w) / tf.reduce_mean(
-                y_hat_target_w
-            )
-            y_tilde_target_w = tf.math.l2_normalize(
-                y_hat_target_w * expectation_ratio, 1
-            )
-
-            ## 3. Relative confidence thresholding ##
-            row_wise_max = tf.reduce_max(y_hat_source_w, axis=-1)
-            final_sum = tf.reduce_mean(row_wise_max, 0)
-            c_tau = self.tau * final_sum
-            mask = tf.reduce_max(y_tilde_target_w, axis=-1) >= c_tau
-
-            ## Compute losses (pay attention to the indexing) ##
-            source_loss = compute_loss_source(
-                source_labels,
-                final_source_logits[: tf.shape(source_w)[0]],
-                final_source_logits[tf.shape(source_w)[0] :],
-            )
-            target_loss = compute_loss_target(
-                y_tilde_target_w, logits_target[tf.shape(target_w)[0] :], mask
-            )
-
-            t = self.compute_mu()  # Compute weight for the target loss
-            total_loss = source_loss + (t * target_loss)
-            self.current_step.assign_add(
-                1
-            )  # Update current training step for the scheduler
-
-        gradients = tape.gradient(total_loss, self.model.trainable_variables)
-        self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
-
-        self.loss_tracker.update_state(total_loss)
-        return {"loss": self.loss_tracker.result()}
-```
-```python
-def wide_basic(x, n_input_plane, n_output_plane, stride):
-    conv_params = [[3, 3, stride, "same"], [3, 3, (1, 1), "same"]]
-
-    n_bottleneck_plane = n_output_plane
-
-    # Residual block
-    for i, v in enumerate(conv_params):
-        if i == 0:
-            if n_input_plane != n_output_plane:
-                x = layers.BatchNormalization()(x)
-                x = layers.Activation("relu")(x)
-                convs = x
-            else:
-                convs = layers.BatchNormalization()(x)
-                convs = layers.Activation("relu")(convs)
-            convs = layers.Conv2D(
-                n_bottleneck_plane,
-                (v[0], v[1]),
-                strides=v[2],
-                padding=v[3],
-                kernel_initializer=INIT,
-                kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
-                use_bias=False,
-            )(convs)
-        else:
-            convs = layers.BatchNormalization()(convs)
-            convs = layers.Activation("relu")(convs)
-            convs = layers.Conv2D(
-                n_bottleneck_plane,
-                (v[0], v[1]),
-                strides=v[2],
-                padding=v[3],
-                kernel_initializer=INIT,
-                kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
-                use_bias=False,
-            )(convs)
-
-    # Shortcut connection: identity function or 1x1
-    # convolutional
-    #  (depends on difference between input & output shape - this
-    #   corresponds to whether we are using the first block in
-    #   each
-    #   group; see `block_series()`).
-    if n_input_plane != n_output_plane:
-        shortcut = layers.Conv2D(
-            n_output_plane,
-            (1, 1),
-            strides=stride,
-            padding="same",
-            kernel_initializer=INIT,
-            kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
-            use_bias=False,
-        )(x)
-    else:
-        shortcut = x
-
-    return layers.Add()([convs, shortcut])
-
-
-# Stacking residual units on the same stage
-def block_series(x, n_input_plane, n_output_plane, count, stride):
-    x = wide_basic(x, n_input_plane, n_output_plane, stride)
-    for i in range(2, int(count + 1)):
-        x = wide_basic(x, n_output_plane, n_output_plane, stride=1)
-    return x
-
-
-def get_network(image_size=32, num_classes=10):
-    n = (DEPTH - 4) / 6
-    n_stages = [16, 16 * WIDTH_MULT, 32 * WIDTH_MULT, 64 * WIDTH_MULT]
-
-    inputs = keras.Input(shape=(image_size, image_size, 3))
-    x = layers.experimental.preprocessing.Rescaling(scale=1.0 / 255)(inputs)
-
-    conv1 = layers.Conv2D(
-        n_stages[0],
-        (3, 3),
-        strides=1,
-        padding="same",
-        kernel_initializer=INIT,
-        kernel_regularizer=regularizers.l2(WEIGHT_DECAY),
-        use_bias=False,
-    )(x)
-
-    ## Add wide residual blocks ##
-
-    conv2 = block_series(
-        conv1,
-        n_input_plane=n_stages[0],
-        n_output_plane=n_stages[1],
-        count=n,
-        stride=(1, 1),
-    )  # Stage 1
-
-    conv3 = block_series(
-        conv2,
-        n_input_plane=n_stages[1],
-        n_output_plane=n_stages[2],
-        count=n,
-        stride=(2, 2),
-    )  # Stage 2
-
-    conv4 = block_series(
-        conv3,
-        n_input_plane=n_stages[2],
-        n_output_plane=n_stages[3],
-        count=n,
-        stride=(2, 2),
-    )  # Stage 3
-
-    batch_norm = layers.BatchNormalization()(conv4)
-    relu = layers.Activation("relu")(batch_norm)
-
-    # Classifier
-    trunk_outputs = layers.GlobalAveragePooling2D()(relu)
-    outputs = layers.Dense(
-        num_classes, kernel_regularizer=regularizers.l2(WEIGHT_DECAY)
-    )(trunk_outputs)
-
-    return keras.Model(inputs, outputs)
-```
-```python
-reduce_lr = keras.experimental.CosineDecay(LEARNING_RATE, TOTAL_STEPS, 0.25)
-optimizer = keras.optimizers.Adam(reduce_lr)
-
-adamatch_trainer = AdaMatch(model=wrn_model, total_steps=TOTAL_STEPS)
-adamatch_trainer.compile(optimizer=optimizer)
-
-total_ds = tf.data.Dataset.zip((final_source_ds, final_target_ds))
-adamatch_trainer.fit(total_ds, epochs=EPOCHS)
-```
-
-#### tensorflow.keras.backend
-#### tensorflow.keras.regularizers
-
-#### tensorflow.keras.activations
-relu
-
-#### tensorflow.keras.applications
-imagenet_utils.preprocess_input
-resnet
-inception_v3
-vgg19
-
-## resnet50
-ResNet50
-
-## resnet_cifar10_v2
-#### tensorflow.keras.metrics
-#### tensorflow.keras.
-
-#### tensorflow.keras.models
-Model
-load_model
-Sequential
-```python
-input = layers.Input(shape=(28, 28, 1))
-
-# Encoder
-x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(input)
-x = layers.MaxPooling2D((2, 2), padding="same")(x)
-x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(x)
-x = layers.MaxPooling2D((2, 2), padding="same")(x)
-
-# Decoder
-x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
-x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
-x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
-
-# Autoencoder
-autoencoder = Model(input, x)
-autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
-autoencoder.summary()
-```
-
-```python
-trained_model = tf.keras.models.load_model(SAVED_MODEL_DIR)
-trained_model.summary()
-```
-
-```python
-# docs_infra: no_execute
-model = keras.models.load_model(save_path)
-```
-
-#### tensorflow.keras.callbacks
-Callback
-TensorBoard
-ModelCheckpoint
-EarlyStopping
-LearningRateScheduler
-
-```python
-# Define callbacks.
-checkpoint_cb = keras.callbacks.ModelCheckpoint(
-    "3d_image_classification.h5", save_best_only=True
-)
-early_stopping_cb = keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
-```
-
-```python
-model.fit(x=x_train[:100], y=y_train[:100], validation_split=0.2, epochs=1)
-```
-
-```python
-callbacks = [
-      tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOGS_DIR),
-      tf.keras.callbacks.ModelCheckpoint(MODEL_CHECKPOINT_DIR, save_best_only=True),
-      tf.keras.callbacks.EarlyStopping(monitor="loss", min_delta=0.001, patience=3),
-]
-
-model.fit(
-      x=x_train, y=y_train, epochs=100, validation_split=0.2, callbacks=callbacks,
-)
-
-model.save(SAVED_MODEL_DIR)
-```
-
-```python
-callbacks = [
-    # TensorBoard will store logs for each epoch and graph performance for us.
-    keras.callbacks.TensorBoard(log_dir=tensorboard_path, histogram_freq=1),
-    # ModelCheckpoint will save models after each epoch for retrieval later.
-    keras.callbacks.ModelCheckpoint(checkpoint_path),
-    # EarlyStopping will terminate training when val_loss ceases to improve.
-    keras.callbacks.EarlyStopping(monitor="val_loss", patience=3),
-]
-
-```
-
-```python
-%load_ext tensorboard
-%tensorboard --logdir $TENSORBOARD_LOGS_DIR
-```
-
-```python
-!#docs_infra: no_execute
-!tensorboard dev upload --logdir "gs://keras-examples-jonah/logs/fit" --name "Guide MNIST"
-```
-
-#### tensorflow.keras.datasets
-
-mnist
-
-```python
-
-(x_train, y_train), (_, _) = tf.keras.datasets.mnist.load_data()
-x_train = x_train.reshape((60000, 28 * 28))
-x_train = x_train.astype("float32") / 255
-
-```
-
-
-
-#### tensorflow.keras.utils
-multi_gpu_model
-Sequence
-to_categorical
-conv_utils
-
-```python
-# Download url of normal CT scans.
-url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-0.zip"
-filename = os.path.join(os.getcwd(), "CT-0.zip")
-keras.utils.get_file(filename, url)
-
-# Download url of abnormal CT scans.
-url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-23.zip"
-filename = os.path.join(os.getcwd(), "CT-23.zip")
-keras.utils.get_file(filename, url)
-```
-
-
-#### tensorflow.keras.losses
-sparse_categorical_crossentropy
-categorical_crossentropy
-
-```python
-def compute_loss_source(source_labels, logits_source_w, logits_source_s):
-    loss_func = keras.losses.CategoricalCrossentropy(from_logits=True)
-    # First compute the losses between original source labels and
-    # predictions made on the weakly and strongly augmented versions
-    # of the same images.
-    w_loss = loss_func(source_labels, logits_source_w)
-    s_loss = loss_func(source_labels, logits_source_s)
-    return w_loss + s_loss
-
-
-def compute_loss_target(target_pseudo_labels_w, logits_target_s, mask):
-    loss_func = keras.losses.CategoricalCrossentropy(from_logits=True, reduction="none")
-    target_pseudo_labels_w = tf.stop_gradient(target_pseudo_labels_w)
-    # For calculating loss for the target samples, we treat the pseudo labels
-    # as the ground-truth. These are not considered during backpropagation
-    # which is a standard SSL practice.
-    target_loss = loss_func(target_pseudo_labels_w, logits_target_s)
-
-    # More on `mask` later.
-    mask = tf.cast(mask, target_loss.dtype)
-    target_loss *= mask
-    return tf.reduce_mean(target_loss, 0)
-```
-
-#### tensorflow.keras.layers 
-Input
-Lambda
-Activation
-Concatenate
-Add
-Dropout
-BatchNormalization
-Conv2D
-DepthwiseConv2D
-ZeroPadding2D
-GlobalAveragePooling2D
-Reshape
-Embedding
-```python
-def get_model(width=128, height=128, depth=64):
-    """Build a 3D convolutional neural network model."""
-
-    inputs = keras.Input((width, height, depth, 1))
-
-    x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(inputs)
-    x = layers.MaxPool3D(pool_size=2)(x)
-    x = layers.BatchNormalization()(x)
-
-    x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(x)
-    x = layers.MaxPool3D(pool_size=2)(x)
-    x = layers.BatchNormalization()(x)
-
-    x = layers.Conv3D(filters=128, kernel_size=3, activation="relu")(x)
-    x = layers.MaxPool3D(pool_size=2)(x)
-    x = layers.BatchNormalization()(x)
-
-    x = layers.Conv3D(filters=256, kernel_size=3, activation="relu")(x)
-    x = layers.MaxPool3D(pool_size=2)(x)
-    x = layers.BatchNormalization()(x)
-
-    x = layers.GlobalAveragePooling3D()(x)
-    x = layers.Dense(units=512, activation="relu")(x)
-    x = layers.Dropout(0.3)(x)
-
-    outputs = layers.Dense(units=1, activation="sigmoid")(x)
-
-    # Define the model.
-    model = keras.Model(inputs, outputs, name="3dcnn")
-    return model
-model = get_model(width=128, height=128, depth=64)
-model.summary()
-
-# Compile model.
-initial_learning_rate = 0.0001
-lr_schedule = keras.optimizers.schedules.ExponentialDecay(
-    initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
-)
-model.compile(
-    loss="binary_crossentropy",
-    optimizer=keras.optimizers.Adam(learning_rate=lr_schedule),
-    metrics=["acc"],
-)
-
-# Define callbacks.
-checkpoint_cb = keras.callbacks.ModelCheckpoint(
-    "3d_image_classification.h5", save_best_only=True
-)
-early_stopping_cb = keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
-
-# Train the model, doing validation at the end of each epoch
-epochs = 100
-model.fit(
-    train_dataset,
-    validation_data=validation_dataset,
-    epochs=epochs,
-    shuffle=True,
-    verbose=2,
-    callbacks=[checkpoint_cb, early_stopping_cb],
-)
-
-# Load best weights.
-model.load_weights("3d_image_classification.h5")
-prediction = model.predict(np.expand_dims(x_val[0], axis=0))[0]
-
-```
-
-```python
-
-model = tf.keras.Sequential(
-    [
-        tf.keras.layers.Dense(512, activation="relu", input_shape=(28 * 28,)),
-        tf.keras.layers.Dropout(0.2),
-        tf.keras.layers.Dense(10, activation="softmax"),
-    ]
-)
-
-model.compile(
-    loss="sparse_categorical_crossentropy",
-    optimizer=tf.keras.optimizers.Adam(),
-    metrics=["accuracy"],
-)
-```
-
-```python
-def create_model():
-    model = keras.Sequential(
-        [
-            keras.Input(shape=(28, 28)),
-            layers.experimental.preprocessing.Rescaling(1.0 / 255),
-            layers.Reshape(target_shape=(28, 28, 1)),
-            layers.Conv2D(32, 3, activation="relu"),
-            layers.MaxPooling2D(2),
-            layers.Conv2D(32, 3, activation="relu"),
-            layers.MaxPooling2D(2),
-            layers.Conv2D(32, 3, activation="relu"),
-            layers.Flatten(),
-            layers.Dense(128, activation="relu"),
-            layers.Dense(10),
-        ]
-    )
-
-    model.compile(
-        optimizer=keras.optimizers.Adam(),
-        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=keras.metrics.SparseCategoricalAccuracy(),
-    )
-    return model
-
-model = create_model()
- 
-model.fit(x_train, y_train, epochs=20, batch_size=128, validation_split=0.1)
-```
-
-#### tensorflow.keras.utils
-layer_utils.get_source_inputs
-data_utils.get_file
 
 ## nibabel
 ```python
