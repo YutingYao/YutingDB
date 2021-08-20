@@ -14,6 +14,17 @@ SAVED_MODEL_DIR = os.path.join(GCS_BASE_PATH, "saved_model")
 ## math
 ## time
 ## datetime
+
+```python
+gcp_bucket = "keras-examples"
+
+checkpoint_path = os.path.join("gs://", gcp_bucket, "mnist_example", "save_at_{epoch}")
+
+tensorboard_path = os.path.join(  # Timestamp included to enable timeseries graphs
+    "gs://", gcp_bucket, "logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+)
+```
+
 ## pandas
 
 ## keras_tuner
@@ -126,9 +137,95 @@ tfc.run(
     job_labels={"job": JOB_NAME},
 ```
 ```python
-%load_ext tensorboard
-%tensorboard --logdir $TENSORBOARD_LOGS_DIR
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    entry_point="train_model.py",
+    requirements="requirements.txt"
+)
 ```
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    chief_config=tfc.COMMON_MACHINE_CONFIGS['CPU'],
+    worker_count=2,
+    worker_config=tfc.COMMON_MACHINE_CONFIGS['T4_4X']
+)
+```
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    chief_config=tfc.COMMON_MACHINE_CONFIGS["CPU"],
+    worker_count=1,
+    worker_config=tfc.COMMON_MACHINE_CONFIGS["TPU"]
+)
+```
+
+```python
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+ 
+mirrored_strategy = tf.distribute.MirroredStrategy()
+with mirrored_strategy.scope():
+  model = create_model()
+ 
+if tfc.remote():
+    epochs = 100
+    batch_size = 128
+else:
+    epochs = 10
+    batch_size = 64
+    callbacks = None
+ 
+model.fit(
+    x_train, y_train, epochs=epochs, callbacks=callbacks, batch_size=batch_size
+)
+ 
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    chief_config=tfc.COMMON_MACHINE_CONFIGS['CPU'],
+    worker_count=2,
+    worker_config=tfc.COMMON_MACHINE_CONFIGS['T4_4X'],
+    distribution_strategy=None
+)
+```
+
+```python
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    base_docker_image="tensorflow/tensorflow:2.1.0-gpu"
+)
+```
+
+```python
+job_labels = {"job": "mnist-example", "team": "keras-io", "user": "jonah"}
+ 
+tfc.run(
+    docker_image_bucket_name=gcp_bucket,
+    job_labels=job_labels,
+    stream_logs=True
+)
+```
+
+```python
+if tfc.remote():
+    epochs = 100
+    callbacks = callbacks
+    batch_size = 128
+else:
+    epochs = 5
+    batch_size = 64
+    callbacks = None
+
+model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks, batch_size=batch_size)
+
+save_path = os.path.join("gs://", gcp_bucket, "mnist_example")
+
+if tfc.remote():
+    model.save(save_path)
+
+# docs_infra: no_execute
+tfc.run(docker_image_bucket_name=gcp_bucket)
+```
+
 ### tensorflow_docs.vis
 embed
 
@@ -180,6 +277,11 @@ trained_model = tf.keras.models.load_model(SAVED_MODEL_DIR)
 trained_model.summary()
 ```
 
+```python
+# docs_infra: no_execute
+model = keras.models.load_model(save_path)
+```
+
 #### tensorflow.keras.callbacks
 Callback
 TensorBoard
@@ -203,6 +305,28 @@ model.fit(
 )
 
 model.save(SAVED_MODEL_DIR)
+```
+
+```python
+callbacks = [
+    # TensorBoard will store logs for each epoch and graph performance for us.
+    keras.callbacks.TensorBoard(log_dir=tensorboard_path, histogram_freq=1),
+    # ModelCheckpoint will save models after each epoch for retrieval later.
+    keras.callbacks.ModelCheckpoint(checkpoint_path),
+    # EarlyStopping will terminate training when val_loss ceases to improve.
+    keras.callbacks.EarlyStopping(monitor="val_loss", patience=3),
+]
+
+```
+
+```python
+%load_ext tensorboard
+%tensorboard --logdir $TENSORBOARD_LOGS_DIR
+```
+
+```python
+!#docs_infra: no_execute
+!tensorboard dev upload --logdir "gs://keras-examples-jonah/logs/fit" --name "Guide MNIST"
 ```
 
 #### tensorflow.keras.datasets
@@ -262,6 +386,35 @@ model.compile(
 )
 ```
 
+```python
+def create_model():
+    model = keras.Sequential(
+        [
+            keras.Input(shape=(28, 28)),
+            layers.experimental.preprocessing.Rescaling(1.0 / 255),
+            layers.Reshape(target_shape=(28, 28, 1)),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.MaxPooling2D(2),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.MaxPooling2D(2),
+            layers.Conv2D(32, 3, activation="relu"),
+            layers.Flatten(),
+            layers.Dense(128, activation="relu"),
+            layers.Dense(10),
+        ]
+    )
+
+    model.compile(
+        optimizer=keras.optimizers.Adam(),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=keras.metrics.SparseCategoricalAccuracy(),
+    )
+    return model
+
+model = create_model()
+ 
+model.fit(x_train, y_train, epochs=20, batch_size=128, validation_split=0.1)
+```
 
 #### tensorflow.keras.utils
 layer_utils.get_source_inputs
