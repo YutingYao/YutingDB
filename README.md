@@ -2467,15 +2467,101 @@ pprint.pprint(annotations[60])
 WandbCallback
 
 ## pickle
+pickle模块实现了数据序列和反序列化。
+pickle模块使用的数据格式是python专用的,能够把Python对象直接保存到文件，而不须要把他们转化为字符串，也不用底层的文件访问操作把它们写入到一个二进制文件中。
 
+### pickle.dumps(obj[, protocol])
+函数的功能：将obj对象序列化为string形式，而不是存入文件中。
+```python
+def save_my_plans(self):
+    with open(self.plans_fname, 'wb') as f:
+        pickle.dump(self.plans, f)
+```
+```python
+def save_properties_of_cropped(self, case_identifier, properties):
+    with open(join(self.folder_with_cropped_data, "%s.pkl" % case_identifier), 'wb') as f:
+        pickle.dump(properties, f)
+```
+```python
+with open(pkl_file, 'wb') as f:
+    pickle.dump(props, f)
+```
+
+### pickle.loads(string)
+函数的功能：从string中读出序列化前的obj对象。
+
+
+```python
+def load_properties_of_cropped(self, case_identifier):
+    with open(join(self.folder_with_cropped_data, "%s.pkl" % case_identifier), 'rb') as f:
+        properties = pickle.load(f)
+    return properties
+```
+```python
+with open(pk, 'rb') as f:
+    props = pickle.load(f)
+```
+```python
+with open(os.path.join(p, "plans.pkl"), 'rb') as f:
+    plans = pickle.load(f)
+```
 ## moviepy.editor
-VideoFileClip
-ImageSequenceClip
+### moviepy.editor.VideoFileClip
+
+[VideoFileClip类](https://www.cnblogs.com/LaoYuanPython/p/13643477.html)是VideoClip的直接子类，是从一个视频文件创建一个剪辑类，除了从父类继承的特性和方法外，VideoFileClip实现了自己的构造方法和close方法，另外VideoFileClip有1个自己独的属性filename。VideoFileClip加载视频文件时，可以调整剪辑对应分辨率大小，可以根据应用要求设定是否加载音频。VideoFileClip加载视频文件时，会调用FFMPEG_VideoReader来加载视频文件，加载时会对视频文件进行加锁处理。
+
+
+### moviepy.editor.ImageSequenceClip
+
+在《moviepy音视频剪辑：视频剪辑基类VideoClip的属性及方法详解》介绍了write_images_sequence方法，write_images_sequence方法用于将剪辑输出到一系列图像文件中，而[ImageSequenceClip](https://www.cnblogs.com/LaoYuanPython/p/13643477.html)则基本上与write_images_sequence过程可逆，用于将一系列图像生成剪辑。
+ImageSequenceClip是VideoClip的直接子类，该类自身只有构造方法，其他方法和属性都是继承自父类
+
+```python
+clip = ImageSequenceClip(
+    sorted(glob(f'outputs/{image_dir}/*')), fps=18, load_images=True)
+```
 
 ## shutil
+[shutil模块](https://www.cnblogs.com/dianel/p/10776981.html)对文件和文件集合提供了许多高级操作，特别是提供了支持文件复制和删除的函数。
+### shutil.move
+### shutil.rmtree
+### shutil.copyfile
+### shutil.copytree
+
+
 ## gdown
+
+[gdown](https://pypi.org/project/gdown/)用于从谷歌驱动器下载一个大文件。
+
+如果您使用curl/wget，它会因为谷歌Drive的安全警告而导致大文件失败。
+
+```python
+os.makedirs("celeba_gan")
+
+url = "https://drive.google.com/uc?id=1O7m1010EJjLE5QxLZiM9Fpjs7Oj6e684"
+output = "celeba_gan/data.zip"
+gdown.download(url, output, quiet=True)
+```
+```python
+!gdown --id 1jvkbTr_giSP3Ru8OwGNCg6B4PvVbcO34
+!gdown --id 1EzBZUb_mh_Dp_FKD0P4XiYYSd0QBH5zW
+!unzip -oq left.zip -d $cache_dir
+!unzip -oq right.zip -d $cache_dir
+```
+
 ## networkx
+[NetworkX](https://blog.csdn.net/your_answer/article/details/79189660)是一个用Python语言开发的图论与复杂网络建模工具，内置了常用的图与复杂网络分析算法，可以方便的进行复杂网络数据分析、仿真建模等工作。[networkx](https://www.cnblogs.com/ljhdo/p/10662902.html)支持创建简单无向图、有向图和多重图（multigraph）；内置许多标准的图论算法，节点可为任意数据；支持任意的边值维度，功能丰富，简单易用。
+```python
+cora_graph = nx.from_pandas_edgelist(citations.sample(n=1500))
+nx.draw_spring(cora_graph, node_size=15, node_color=subjects)
+```
+```python
+movies_graph = nx.Graph()
+```
+
+
 ## rdkit
+[RDkit](https://blog.csdn.net/qq_41987033/article/details/95323814)著名的开源化学信息学工具之一,基于BSD协议,核心数据结构与算法由C++编写。支持Python2与Python3,支持KNIME,支持机器学习方面的分子描述符的产生。
 ### rdkit.Chem
 
 #### rdkit.Chem.Draw
@@ -2484,35 +2570,200 @@ MolsToGridImage
 
 ### rdkit.RDLogger
 
-## re
+
 ## string
+[string模块](https://www.cnblogs.com/lyy135146/p/11655105.html)主要包含关于字符串的处理函数
+
+### string.punctuation
+```python
+strip_chars = string.punctuation + "¿"
+```
+```python
+def custom_standardization(input_string):
+    """ Remove html line-break tags and handle punctuation """
+    lowercased = tf.strings.lower(input_string)
+    stripped_html = tf.strings.regex_replace(lowercased, "<br />", " ")
+    return tf.strings.regex_replace(stripped_html, f"([{string.punctuation}])", r" \1")
+```
+```python
+def custom_standardization(input_data):
+    lowercase = tf.strings.lower(input_data)
+    stripped_html = tf.strings.regex_replace(lowercase, "<br />", " ")
+    return tf.strings.regex_replace(
+        stripped_html, "[%s]" % re.escape(string.punctuation), ""
+    )
+```
+```python
+def normalize_text(text):
+    text = text.lower()
+
+    # Remove punctuations
+    exclude = set(string.punctuation)
+    text = "".join(ch for ch in text if ch not in exclude)
+
+    # Remove articles
+    regex = re.compile(r"\b(a|an|the)\b", re.UNICODE)
+    text = re.sub(regex, " ", text)
+
+    # Remove extra white space
+    text = " ".join(text.split())
+    return text
+```
+```python
+def turn_title_into_id(title):
+    title = title.lower()
+    title = title.replace("&amp", "amp")
+    title = title.replace("&", "amp")
+    title = title.replace("<code>", "")
+    title = title.replace("</code>", "")
+    title = title.translate(str.maketrans("", "", string.punctuation))
+    title = title.replace(" ", "-")
+    return title
+```
+
+
+
+## imgaug
+
+我们经常会遇到训练模型时数据不够的情况，而且很多时候无法再收集到更多的数据，只能通过做一些数据增强或者其它的方法来合成一些数据。常用的数据增强方式有裁剪、旋转、缩放、亮度对比度色度饱和度变换，[这篇文章](https://xiulian.blog.csdn.net/article/details/105547204)我们来介绍一个更方便更多方式的数据增强，我们将会通过imgaug库来实现。
+
+```python
+from imgaug.augmentables.kps import KeypointsOnImage
+from imgaug.augmentables.kps import Keypoint
+import imgaug.augmenters as iaa
+
+
+
+class KeyPointsDataset(keras.utils.Sequence):
+    def __init__(self, image_keys, aug, batch_size=BATCH_SIZE, train=True):
+        self.image_keys = image_keys
+        self.aug = aug
+        self.batch_size = batch_size
+        self.train = train
+        self.on_epoch_end()
+
+    def __len__(self):
+        return len(self.image_keys) // self.batch_size
+
+    def on_epoch_end(self):
+        self.indexes = np.arange(len(self.image_keys))
+        if self.train:
+            np.random.shuffle(self.indexes)
+
+    def __getitem__(self, index):
+        indexes = self.indexes[index * self.batch_size : (index + 1) * self.batch_size]
+        image_keys_temp = [self.image_keys[k] for k in indexes]
+        (images, keypoints) = self.__data_generation(image_keys_temp)
+
+        return (images, keypoints)
+
+    def __data_generation(self, image_keys_temp):
+        batch_images = np.empty((self.batch_size, IMG_SIZE, IMG_SIZE, 3), dtype="int")
+        batch_keypoints = np.empty(
+            (self.batch_size, 1, 1, NUM_KEYPOINTS), dtype="float32"
+        )
+
+        for i, key in enumerate(image_keys_temp):
+            data = get_dog(key)
+            current_keypoint = np.array(data["joints"])[:, :2]
+            kps = []
+
+            # To apply our data augmentation pipeline, we first need to
+            # form Keypoint objects with the original coordinates.
+            for j in range(0, len(current_keypoint)):
+                kps.append(Keypoint(x=current_keypoint[j][0], y=current_keypoint[j][1]))
+
+            # We then project the original image and its keypoint coordinates.
+            current_image = data["img_data"]
+            kps_obj = KeypointsOnImage(kps, shape=current_image.shape)
+
+            # Apply the augmentation pipeline.
+            (new_image, new_kps_obj) = self.aug(image=current_image, keypoints=kps_obj)
+            batch_images[i,] = new_image
+
+            # Parse the coordinates from the new keypoint object.
+            kp_temp = []
+            for keypoint in new_kps_obj:
+                kp_temp.append(np.nan_to_num(keypoint.x))
+                kp_temp.append(np.nan_to_num(keypoint.y))
+
+            # More on why this reshaping later.
+            batch_keypoints[i,] = np.array(kp_temp).reshape(1, 1, 24 * 2)
+
+        # Scale the coordinates to [0, 1] range.
+        batch_keypoints = batch_keypoints / IMG_SIZE
+
+        return (batch_images, batch_keypoints)
+
+## Define augmentation transforms
+train_aug = iaa.Sequential(
+    [
+        iaa.Resize(IMG_SIZE, interpolation="linear"),
+        iaa.Fliplr(0.3),
+        # `Sometimes()` applies a function randomly to the inputs with
+        # a given probability (0.3, in this case).
+        iaa.Sometimes(0.3, iaa.Affine(rotate=10, scale=(0.5, 0.7))),
+    ]
+)
+
+test_aug = iaa.Sequential([iaa.Resize(IMG_SIZE, interpolation="linear")])
+
+```
+
+
+## kaggle_secrets
+Kaggle是由联合创始人、首席执行官安东尼·高德布卢姆（Anthony Goldbloom）2010年在墨尔本创立的，主要为开发商和数据科学家提供举办机器学习竞赛、托管数据库、编写和分享代码的平台。该平台已经吸引了80万名数据科学家的关注，这些用户资源或许正是吸引谷歌的主要因素。
+
+[UserSecretsClient](https://www.kaggle.com/docs/tpu)
+
+```python
+if not tfc.remote():
+
+    # Authentication for Kaggle Notebooks
+    if "kaggle_secrets" in sys.modules:
+        from kaggle_secrets import UserSecretsClient
+
+        UserSecretsClient().set_gcloud_credentials(project=GCP_PROJECT_ID)
+
+    # Authentication for Colab Notebooks
+    if "google.colab" in sys.modules:
+        from google.colab import auth
+
+        auth.authenticate_user()
+        os.environ["GOOGLE_CLOUD_PROJECT"] = GCP_PROJECT_ID
+```
+
+## tokenizers
+
+[Tokenizer](https://blog.csdn.net/wcy23580/article/details/84885734)是一个用于向量化文本，或将文本转换为序列（即单个字词以及对应下标构成的列表，从1算起）的类。是用来文本预处理的第一步：分词。结合简单形象的例子会更加好理解些。
+
+BertWordPieceTokenizer
 
 ## transformers
 BertTokenizer
 TFBertModel
 BertConfig
 
-## imgaug
+```python
+# Load our BERT Tokenizer to encode the text.
+# We will use base-base-uncased pretrained model.
+self.tokenizer = transformers.BertTokenizer.from_pretrained(
+    "bert-base-uncased", do_lower_case=True
+    )
 
-### google.colab
-auth
+# Loading pretrained BERT model.
+bert_model = transformers.TFBertModel.from_pretrained("bert-base-uncased")
+```
 
+### tokenizers.functools
 
+functools，用于高阶函数：指那些作用于函数或者返回其它函数的函数，通常只要是可以被当做函数调用的对象就是这个模块的目标。
 
-## kaggle_secrets
-UserSecretsClient
+### functools.partial
 
-## enperimental.preprocessing
-InterLookup
-Normalization
-StringLookup
-TextVectorization
+functools.partial(func, *args, **keywords)，函数装饰器，返回一个新的partial对象。调用partial对象和调用被修饰的函数func相同，只不过调用partial对象时传入的参数个数通常要少于调用func时传入的参数个数。当一个函数func可以接收很多参数，而某一次使用只需要更改其中的一部分参数，其他的参数都保持不变时，partial对象就可以将这些不变的对象冻结起来，这样调用partial对象时传入未冻结的参数，partial对象调用func时连同已经被冻结的参数一同传给func函数，从而可以简化调用过程。
 
-## tokenizers
-BertWordPieceTokenizer
-
-## functools
-partial
+如果调用partial对象时提供了更多的参数，那么他们会被添加到args的后面，如果提供了更多的关键字参数，那么它们将扩展或者覆盖已经冻结的关键字参数。
 
 ```python
 
@@ -2531,6 +2782,8 @@ def load_dataset(filenames, labeled=True):
     # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False
     return dataset
 ```
+## skimage
+[skimage](https://blog.csdn.net/lusics/article/details/89019453)全称是scikit-image SciKit (toolkit for SciPy) ，它对scipy.ndimage进行了扩展，提供了更多的图片处理功能。scikit-image是基于scipy的一款图像处理包，它将图片作为numpy数组进行处理，正好与matlab一样。
 
 ### skimage.io
 imread
@@ -2540,6 +2793,13 @@ imsave
 resize
 
 ## re
+[re模块](https://www.cnblogs.com/shenjianping/p/11647473.html)是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的，而正则表达式是对字符串进行模糊匹配，提取自己需要的字符串部分，他对所有的语言都通用。注意：
+
+re模块是python独有的
+正则表达式所有编程语言都可以使用
+re模块、正则表达式是对字符串进行操作
+因为，re模块中的方法大都借助于正则表达式，故先学习正则表达式。
+
 ### re.escape
 ### re.compile
 ### re.UNICODE
