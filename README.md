@@ -2428,16 +2428,206 @@ evaluate
 
 ## tabulate
 ## warnings
+
 ## gym
+Gym是用于开发和比较强化学习算法的python包，但是我们也完全可以使用它来作为我们自己程序的应用背景，并提供可视化。简单的说，就是我们使用自己写的小程序，而不是强化学习算法，来尝试完成其中的任务，并把完成任务的过程可视化。
+
+它的具体的训练场景 包括了从文字游戏，电子游戏，物理引擎（box2D）或专业物理引擎（MuJoCo）中的控制训练，而且还支持自定义训练场景。
+
+训练参数的基本平台openai的[Gym](https://blog.csdn.net/woshi_caibi/article/details/82344436)，与tensorflow无缝连接，仅支持python，本质是一组微分方程，简单的模型手动推导，复杂的模型需要用一些强大的物理引擎，如ODE, Bullet, Havok, Physx等，Gym在搭建机器人仿真环境用的是mujoco，ROS里面的物理引擎是gazebo。
+
+```python
+env = gym.make("CartPole-v0")  # Create the environment
+env.seed(seed)
+```
+
+```python
+"""
+We use [OpenAIGym](http://gym.openai.com/docs) to create the environment.
+We will use the `upper_bound` parameter to scale our actions later.
+"""
+
+problem = "Pendulum-v0"
+env = gym.make(problem)
+
+num_states = env.observation_space.shape[0]
+print("Size of State Space ->  {}".format(num_states))
+num_actions = env.action_space.shape[0]
+print("Size of Action Space ->  {}".format(num_actions))
+
+upper_bound = env.action_space.high[0]
+lower_bound = env.action_space.low[0]
+```
+
+```python
+# Initialize the environment and get the dimensionality of the
+# observation space and the number of possible actions
+env = gym.make("CartPole-v0")
+observation_dimensions = env.observation_space.shape[0]
+num_actions = env.action_space.n
+```
+
 
 ## pathlib
-Path
+
+在Python 3.4之前和路径相关操作函数都放在os模块里面，尤其是os.path这个子模块，可以说os.path模块非常常用。而在Python 3.4，标准库添加了新的模块 - pathlib，它使用面向对象的编程方式来表示文件系统路径。
+一直用os.path模块处理与文件路径有关的操作，python从3.4开始提供了pathlib，是一种用OO方式处理pathname的新机制。os.path是比较low-level的接口，用string处理pathname。
+
+[pathlib](https://docs.python.org/zh-cn/3/library/pathlib.html)中主要有两个class，PurePath和Path，后者继承前者。PurePath用来支持对纯粹的pathname的各种操作，不会接触到filesystem。而Path则实现了调用filesystem接口。
+
+### pathlib.Path
+
+```python
+"""
+## Downloading the data
+
+We'll be working with an English-to-Spanish translation dataset
+provided by [Anki](https://www.manythings.org/anki/). Let's download it:
+"""
+
+text_file = keras.utils.get_file(
+    fname="spa-eng.zip",
+    origin="http://storage.googleapis.com/download.tensorflow.org/data/spa-eng.zip",
+    extract=True,
+)
+text_file = pathlib.Path(text_file).parent / "spa-eng" / "spa.txt"
+```
+
+```python
+subdir_path = Path(DATASET_NOISE_PATH) / subdir
+dir_path = Path(DATASET_AUDIO_PATH) / name
+```
+
+```python
+keras_datasets_path = Path(movielens_zipped_file).parents[0]
+```
 
 ## collections
-Counter
-defaultdict
+[collections模块](https://www.cnblogs.com/luminousjj/p/9342161.html)包含了除list、dict、和tuple之外的容器数据类型，如counter、defaultdict、deque、namedtuple、orderdict，下面将一一介绍。
+
+[collections的常用类型](https://blog.csdn.net/songfreeman/article/details/50502194)有：
+
+计数器(Counter)
+
+双向队列(deque)
+
+默认字典(defaultdict)
+
+有序字典(OrderedDict)
+
+可命名元组(namedtuple)
+
+使用以上类型时需要导入模块 from collections import *
+
+### collections.Counter
+```python
+"""
+Get a list of all tokens in the training dataset. This will be used to create the
+vocabulary.
+"""
+
+all_tokens = sum(conll_data["train"]["tokens"], [])
+all_tokens_array = np.array(list(map(str.lower, all_tokens)))
+
+counter = Counter(all_tokens_array)
+print(len(counter))
+```
+
+### collections.defaultdict
+
+```python
+image_path_to_caption = collections.defaultdict(list)
+```
+### collections.namedtuple
+```python
+# A utility for tests testing commutation with sum works as expected.
+commutation_test_data = collections.namedtuple(
+    'comm_test_data',
+    ['x', 'encoded_x', 'decoded_x_before_sum', 'decoded_x_after_sum'])
+
+TestData = collections.namedtuple('TestData', [
+    'x',
+    'encoded_x',
+    'part_decoded_x',
+    'summed_part_decoded_x',
+    'decoded_x',
+    'initial_state',
+    'updated_state',
+])
+
+
+# Named tuple containing the values summarizing the results for a single
+# evaluation of an EncodingStageInterface or an AdaptiveEncodingStageInterface.
+TestData = collections.namedtuple(
+    'TestData',
+    [
+        'x',  # The input provided to encoding.
+        'encoded_x',  # A dictionary of values representing the encoded input x.
+        'decoded_x',  # Decoded value. Has the same shape as x.
+        # The fields below are only relevant for AdaptiveEncodingStageInterface,
+        # and will not be populated while testing an EncodingStageInterface.
+        'initial_state',  # Initial state used for encoding.
+        'state_update_tensors',  # State update tensors created by encoding.
+        'updated_state',  # Updated state after encoding.
+    ])
+# Set the dafault values to be None, to enable use of TestData while testing
+# EncodingStageInterface, without needing to be aware of the other fields.
+TestData.__new__.__defaults__ = (None,) * len(TestData._fields)
+
+Foo = collections.namedtuple('Foo', ['a', 'b'])
+Bar = collections.namedtuple('Bar', ['c', 'd'])
+```
+
+### collections.OrderedDict
+
+```python
+def _get_weights(bn_layer_node):
+  """Returns weight values for fused layer, including copying original values in unfused version."""
+
+  return collections.OrderedDict(
+      list(bn_layer_node.input_layers[0].weights.items())
+      + list(bn_layer_node.weights.items()))
+
+
+    sepconv2d_weights = collections.OrderedDict()
+```
+```python
+def _get_keras_layer_weights(self, keras_layer):
+"""Returns a map of weight name, weight matrix. Keeps keras ordering."""
+weights_map = collections.OrderedDict()
+for weight_tensor, weight_numpy in \
+    zip(keras_layer.weights, keras_layer.get_weights()):
+    weights_map[self._weight_name(weight_tensor.name)] = weight_numpy
+
+if len(weights_map) != len(keras_layer.weights):
+    # The case that variable identifier is not unique. It's a fallback that
+    # uses weight list instead of the weights map.
+    return None
+
+return weights_map
+```
+```python
+def set_labels(self, labels):
+    """Set the labels.
+    :param labels= may be a dictionary (int->str), a set (of ints), a tuple (of ints) or a list (of ints). Labels
+    will only have names if you pass a dictionary"""
+
+if isinstance(labels, dict):
+    self.labels = collections.OrderedDict(labels)
+elif isinstance(labels, set):
+    self.labels = list(labels)
+elif isinstance(labels, np.ndarray):
+    self.labels = [i for i in labels]
+elif isinstance(labels, (list, tuple)):
+    self.labels = labels
+else:
+    raise TypeError("Can only handle dict, list, tuple, set & numpy array, but input is of type {}".format(type(labels)))
+```
 
 ## imageio
+[imageio](https://pypi.org/project/imageio/),  这个第三方库可以导入很多格式类型的照片，然后又可以将其导出成各种格式的照片，非常好用。
+它提供了一个简单的接口来读写各种图像数据，包括动画图像、容量数据和科学格式。它是跨平台的，在Python 3.5+上运行，并且易于安装。
+
 ```python
 imageio.mimsave("animation.gif", converted_images, fps=1)
 ```
@@ -2455,16 +2645,165 @@ annotation_file = os.path.join(annotations_dir, "instances_val2017.json")
 ```
 
 ## pprint
+ [print()和pprint()](https://blog.csdn.net/qq_24185239/article/details/80977556)都是python的打印模块，功能基本一样，唯一的区别就是pprint()模块打印出来的数据结构更加完整，每行为一个数据结构，更加方便阅读打印输出结果。特别是对于特别长的数据打印，print()输出结果都在一行，不方便查看，而pprint()采用分行打印输出，所以对于数据结构比较复杂、数据长度较长的数据，适合采用pprint()打印方式。当然，一般情况多数采用print()。
+
 ```python
 pprint.pprint(annotations[60])
 ```
+```python
+```
 ## glob
-## argparse
-### RawTextHelpFormatter
-## wandb
+[glob](https://blog.csdn.net/u010472607/article/details/76857493/)是python自己带的一个文件操作相关模块，用它可以查找符合自己目的的文件，类似于Windows下的文件搜索，支持通配符操作，,?,[]这三个通配符，代表0个或多个字符，?代表一个字符，[]匹配指定范围内的字符，如[0-9]匹配数字。两个主要方法如下。
 
-## wandb.keras
-WandbCallback
+```python
+def get_data_from_text_files(folder_name):
+
+    pos_files = glob.glob("aclImdb/" + folder_name + "/pos/*.txt")
+    pos_texts = get_text_list_from_files(pos_files)
+    neg_files = glob.glob("aclImdb/" + folder_name + "/neg/*.txt")
+    neg_texts = get_text_list_from_files(neg_files)
+    df = pd.DataFrame(
+        {
+            "review": pos_texts + neg_texts,
+            "sentiment": [0] * len(pos_texts) + [1] * len(neg_texts),
+        }
+    )
+    df = df.sample(len(df)).reset_index(drop=True)
+    return df
+```
+
+```python
+"""
+To generate a `tf.data.Dataset()` we need to first parse through the ModelNet data
+folders. Each mesh is loaded and sampled into a point cloud before being added to a
+standard python list and converted to a `numpy` array. We also store the current
+enumerate index value as the object label and use a dictionary to recall this later.
+"""
+
+
+def parse_dataset(num_points=2048):
+
+    train_points = []
+    train_labels = []
+    test_points = []
+    test_labels = []
+    class_map = {}
+    folders = glob.glob(os.path.join(DATA_DIR, "[!README]*"))
+
+    for i, folder in enumerate(folders):
+        print("processing class: {}".format(os.path.basename(folder)))
+        # store folder name with ID so we can retrieve later
+        class_map[i] = folder.split("/")[-1]
+        # gather all files
+        train_files = glob.glob(os.path.join(folder, "train/*"))
+        test_files = glob.glob(os.path.join(folder, "test/*"))
+
+        for f in train_files:
+            train_points.append(trimesh.load(f).sample(num_points))
+            train_labels.append(i)
+
+        for f in test_files:
+            test_points.append(trimesh.load(f).sample(num_points))
+            test_labels.append(i)
+
+    return (
+        np.array(train_points),
+        np.array(test_points),
+        np.array(train_labels),
+        np.array(test_labels),
+        class_map,
+    )
+```
+
+## argparse
+[argparse 模块](https://docs.python.org/zh-cn/3/library/argparse.html)可以让人轻松编写用户友好的命令行接口。程序定义它需要的参数，然后 argparse 将弄清如何从 sys.argv 解析出那些参数。 argparse 模块还会自动生成帮助和使用手册，并在用户给程序传入无效参数时报出错误信息。
+
+### argparse.RawTextHelpFormatter
+RawTextHelpFormatter 保留所有种类文字的空格，包括参数的描述。然而，多重的新行会被替换成一行。如果你想保留多重的空白行，可以在新行之间加空格。
+
+```python
+if __name__ == "__main__":
+    REGISTERED_CONFIG_KEYS = "".join(map(lambda s: f"  {s}\n", CONFIG_MAP.keys()))
+
+    PARSER = argparse.ArgumentParser(
+        description=f"""
+Runs DeeplabV3+ trainer with the given config setting.
+
+Registered config_key values:
+{REGISTERED_CONFIG_KEYS}""",
+        formatter_class=RawTextHelpFormatter
+    )
+    PARSER.add_argument('config_key', help="Key to use while looking up "
+                        "configuration from the CONFIG_MAP dictionary.")
+    PARSER.add_argument("--wandb_api_key",
+                        help="""Wandb API Key for logging run on Wandb.
+If provided, checkpoint_dir is set to wandb://
+(Model checkpoints are saved to wandb.)""",
+                        default=None)
+    ARGS = PARSER.parse_args()
+
+    CONFIG = CONFIG_MAP[ARGS.config_key]
+    if ARGS.wandb_api_key is not None:
+        CONFIG['wandb_api_key'] = ARGS.wandb_api_key
+        CONFIG['checkpoint_dir'] = "wandb://"
+
+    TRAINER = Trainer(CONFIG_MAP[ARGS.config_key])
+    HISTORY = TRAINER.train()
+```
+
+## wandb
+如果说到深度学习中训练数据的记录工具，最先想到应该是TensorBoard(或者TensorBoardX）。不过，相比较TensorBoard而言，[Wandb](https://zhuanlan.zhihu.com/p/342300434)更加的强大，主要体现在以下的几个方面：
+
+**复现模型**：Wandb更有利于**复现模型**。
+这是因为Wandb不仅记录指标，还会记录**超参数**和**代码版本**。
+自动**上传云端**：
+如果你把项目交给同事或者要去度假，Wandb可以让你便捷地查看你制作的所有模型，你就不必花费大量时间来重新运行旧实验。
+快速、灵活的集成：
+只需5分钟即可把Wandb加到自己的项目。
+下载Wandb免费的开源Python包，然后在代码中插入几行，以后你每次运行模型都会得到记录完备的指标和记录。
+集中式指示板：
+Wandb提供同样的**集中式指示板**。不管在哪里训练模型，不管是在本地机器、实验室集群还是在云端实例；
+这样就不必花时间从别的机器上复制TensorBoard文件。
+强大的表格：
+对不同模型的结果进行搜索、筛选、分类和分组。
+可以轻而易举地查看成千上万个模型版本，并找到不同任务的最佳模型。
+而**TensorBoard本身不适合大型项目**。
+
+```python
+def connect_wandb(self):
+    """Connects Trainer to wandb.
+
+    Runs wandb.init() with the given wandb_api_key, project_name and
+    experiment_name.
+    """
+    if 'wandb_api_key' not in self.config:
+        return
+
+    os.environ['WANDB_API_KEY'] = self.config['wandb_api_key']
+    wandb.init(
+        project=self.config['project_name'],
+        name=self.config['experiment_name']
+    )
+    self._wandb_initialized = True
+```
+
+## wandb.keras.WandbCallback
+
+
+```python
+def _get_logger_callback(self):
+    if 'wandb_api_key' not in self.config:
+        return tf.keras.callbacks.TensorBoard()
+
+    try:
+        return WandbCallback(save_weights_only=True, save_model=False)
+    except wandb.Error as error:
+        if 'wandb_api_key' in self.config:
+            raise error  # rethrow
+
+        print("[-] Defaulting to TensorBoard logging...")
+        return tf.keras.callbacks.TensorBoard()
+```
 
 ## pickle
 pickle模块实现了数据序列和反序列化。
