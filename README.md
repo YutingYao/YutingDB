@@ -2370,11 +2370,78 @@ urlretrive
 
 ## cv2
 ## tqdm
+[Tqdm](https://blog.csdn.net/qq_33472765/article/details/82940843)是一个快速，可扩展的Python进度条，可以在 Python 长循环中添加一个进度提示信息，用户只需要封装任意的迭代器 tqdm(iterator)。
+
+总之，它是用来显示进度条的，很漂亮，使用很直观（在循环体里边加个tqdm），而且基本不影响原程序效率。名副其实的“太强太美”了！这样在写运行时间很长的程序时，是该多么舒服啊！
+
+```python
+for image_dir in ['stuttgart_00', 'stuttgart_01', 'stuttgart_02']:
+    os.mkdir(f'outputs/{image_dir}')
+    image_list = os.listdir(image_dir)
+    image_list.sort()
+    print(f'{len(image_list)} frames found')
+    for i in tqdm(range(len(image_list))):
+        try:
+            test = load_img(f'{image_dir}/{image_list[i]}')
+            test = img_to_array(test)
+            segmap = pipeline(test, video=False,
+                              fname=f'{image_list[i]}', folder=image_dir)
+            if segmap == False:
+                break
+        except Exception as e:
+            print(str(e))
+    clip = ImageSequenceClip(
+        sorted(glob(f'outputs/{image_dir}/*')), fps=18, load_images=True)
+    clip.write_videofile(f'{image_dir}.mp4')
+```
+
+```python
+for backbone in ['mobilenetv2', 'xception']:
+    print('Instantiating an empty Deeplabv3+ model...')
+    model = Deeplabv3(input_shape=(512, 512, 3),
+                      classes=21, backbone=backbone, weights=None)
+
+    WEIGHTS_DIR = 'weights/' + backbone
+    print('Loading weights from', WEIGHTS_DIR)
+    for layer in tqdm(model.layers):
+        if layer.weights:
+            weights = []
+            for w in layer.weights:
+                weight_name = os.path.basename(w.name).replace(':0', '')
+                weight_file = layer.name + '_' + weight_name + '.npy'
+                weight_arr = np.load(os.path.join(WEIGHTS_DIR, weight_file))
+                weights.append(weight_arr)
+            layer.set_weights(weights)
+
+    print('Saving model weights...')
+    OUTPUT_WEIGHT_FILENAME = 'deeplabv3_' + \
+        backbone + '_tf_dim_ordering_tf_kernels.h5'
+    if not os.path.exists(MODEL_DIR):
+        os.makedirs(MODEL_DIR)
+    model.save_weights(os.path.join(MODEL_DIR, OUTPUT_WEIGHT_FILENAME))
+```
+
+```python
+# Iterate over the pixels because generation has to be done sequentially pixel by pixel.
+for row in tqdm(range(rows)):
+    for col in range(cols):
+        for channel in range(channels):
+            # Feed the whole array and retrieving the pixel value probabilities for the next
+            # pixel.
+            probs = pixel_cnn.predict(pixels)[:, row, col, channel]
+            # Use the probabilities to pick pixel values and append the values to the image
+            # frame.
+            pixels[:, row, col, channel] = tf.math.ceil(
+                probs - tf.random.uniform(probs.shape)
+            )
+```
+
+
 ## IPython
 
 ### IPython.display
-Image
-Audio
+### IPython.Image
+### IPython.Audio
 display
 
 ```python
@@ -2392,10 +2459,22 @@ for i in range(0, len(predicted_videos), 2):
 ```
 
 ## Ipywidgets
-widgets
-Layout
-HBox
-
+## Ipywidgets.widgets
+```python
+# Display the videos.
+print(" Truth\tPrediction")
+for i in range(0, len(predicted_videos), 2):
+    # Construct and display an `HBox` with the ground truth and prediction.
+    box = HBox(
+        [
+            widgets.Image(value=predicted_videos[i]),
+            widgets.Image(value=predicted_videos[i + 1]),
+        ]
+    )
+    display(box)
+```
+## Ipywidgets.Layout
+## Ipywidgets.HBox
 
 ```python
 # Display the videos.
@@ -2410,24 +2489,123 @@ for i in range(0, len(predicted_videos), 2):
     )
     display(box)
 ```
-
-#### sklearn.metrics.confusion_matrix
-#### sklearn.datasets.make_moons
+## sklearn
+### sklearn.model_selection.KFold
+```python
+kf = KFold(5, True, 12345)
+kfold = KFold(n_splits=5, shuffle=True, random_state=12345)
+```
+### sklearn.metrics.ConfusionMatrixDisplay
+```python
+disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix, display_labels=labels)
+disp.plot(include_values=True, cmap="viridis", ax=None, xticks_rotation="vertical")
+plt.show()
+```
+### sklearn.datasets.make_moons
+```python
+data = make_moons(3000, noise=0.05)[0].astype("float32")
+```
 
 ## datasets
-load_dataset
+scikit-learn 的 [datasets 模块](https://blog.csdn.net/qq_32951553/article/details/80662525)包含测试数据相关函数，主要包括三类：
+
+**datasets.load_*()**：获取小规模数据集。数据包含在 datasets 里
+**datasets.fetch_*()**：获取大规模数据集。需要从网络上下载，函数的第一个参数是 data_home，表示数据集下载的目录，默认是 ~/scikit_learn_data/。要修改默认目录，可以修改环境变量SCIKIT_LEARN_DATA。数据集目录可以通过datasets.get_data_home()获取。clear_data_home(data_home=None)删除所有下载数据。
+**datasets.make_*()**：本地生成数据集。
+
+
+### datasets.load_dataset
+
+[本文](https://vimsky.com/zh-tw/examples/detail/python-method-datasets.load_dataset.html)整理匯總了Python中datasets.load_dataset方法的典型用法代碼示例。
+
+
+```python
+conll_data = load_dataset("conll2003")
+```
 
 ## dataclasses
-dataclass
+[Dataclasses](https://blog.csdn.net/weixin_43116910/article/details/88652707)是一些适合于存储**数据对象（data object）**的Python类。你可能会问，什么是**数据对象**？下面是一个并不详尽的用于定义**数据对象**的特征列表：
 
-## collections
-Counter
+他们存储并表示特定的数据类型。例如：一个数字。对于那些熟悉**对象关系映射**（**Object Relational Mapping，简称 ORM**）的人来说，一个模型实例就是一个数据对象。它表示了一种特定类型的实体。它存储了用于定义或表示那种实体的属性。
+
+他们能够被用于和同类型的其他对象进行比较。例如，一个数字可能大于，小于或等于另一个数字。
+
+当然数据对象还有更多的特征，但上述内容足以帮助你理解关键部分。
+
+为了理解Dataclases，我们将实现一个简单的类。它能够存储一个数字，并允许我们执行上面提到的各种运算。
+
+首先，我们将使用普通的类，然后我们使用 **Dataclasses** 来实现相同的结果。
+
+但是在我们开始之前，还是要提一下Dataclasses的用法。
+
+Python3.7 提供了一个装饰器dataclass，用以把一个类转化为 dataclass。
+
+### dataclasses.dataclass
+```python
+@dataclass
+class Config:
+    MAX_LEN = 256
+    BATCH_SIZE = 32
+    LR = 0.001
+    VOCAB_SIZE = 30000
+    EMBED_DIM = 128
+    NUM_HEAD = 8  # used in bert model
+    FF_DIM = 128  # used in bert model
+    NUM_LAYERS = 1
+```
+
+```python
+@dataclasses.dataclass
+class WeightRepr:
+  args: Any = None
+  kwargs: Any = None
+```
 
 ## conlleval
-evaluate
+### conlleval.evaluate
+conlleval的python版本，用于序列模型性能评估，如命名实体识别等。
 
-## tabulate
+```python
+evaluate(real_tags, predicted_tags)
+```
+
 ## warnings
+Python 通过调用 [warnings 模块](https://blog.konghy.cn/2017/12/16/python-warnings/)中定义的 warn() 函数来发出警告。警告消息通常用于提示用户一些错误或者过时的用法，当这些情况发生时我们不希望抛出异常或者直接退出程序。警告消息通常写入 sys.stderr，对警告的处理方式可以灵活的更改，例如忽略或者转变为为异常。警告的处理可以根据警告类别，警告消息的文本和发出警告消息的源位置而变化。对相同源位置的特定警告的重复通常被抑制。
+
+```python
+warnings.warn(
+    'This model usually expects 1 or 3 input channels. '
+    'However, it was passed an input_shape with ' +
+    str(input_shape[0]) + ' input channels.')
+```
+
+```python
+warnings.warn('The output shape of `ResNet50(include_top=False)` '
+                'has been changed since Keras 2.2.0.')
+```
+
+```python
+warnings.warn(
+    f"function {function} has no module. "
+    f"It will not be included in the signature."
+)
+```
+
+```python
+warnings.filterwarnings('ignore')
+```
+
+```python
+warnings.warn('You are using the TensorFlow backend, yet you '
+                'are using the Theano '
+                'image data format convention '
+                '(`image_data_format="channels_first"`). '
+                'For best performance, set '
+                '`image_data_format="channels_last"` in '
+                'your Keras config '
+                'at ~/.keras/keras.json.')
+```
+
 
 ## gym
 Gym是用于开发和比较强化学习算法的python包，但是我们也完全可以使用它来作为我们自己程序的应用背景，并提供可视化。简单的说，就是我们使用自己写的小程序，而不是强化学习算法，来尝试完成其中的任务，并把完成任务的过程可视化。
