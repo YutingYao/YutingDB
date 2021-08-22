@@ -1740,6 +1740,7 @@ tensorboard_path = os.path.join(  # Timestamp included to enable timeseries grap
 ```
 
 ## pandas
+在Python中，[pandas](https://www.jianshu.com/p/840ba135df30)是基于NumPy数组构建的，使数据预处理、清洗、分析工作变得更快更简单。pandas是专门为处理表格和混杂数据设计的，而NumPy更适合处理统一的数值数组数据。
 
 ### pd.read_csv
 ```python
@@ -1805,6 +1806,8 @@ features.head()
 ```
 
 ## keras_tuner
+
+kerastuner开发环境配置。tf2.0的推出极大地降低了人工智能开发的门槛，而[kerastuner库](https://blog.csdn.net/m0_38052500/article/details/109647800)的推出极大的方便了我们对[神经网络参数的调整](https://my.oschina.net/u/4593030/blog/4418849)
 
 ### keras_tuner.applications.HyperResNet
 
@@ -2111,6 +2114,8 @@ def read_nifti_file(filepath):
 
 ## scipy
 ### scipy.ndimage 
+Python图像处理模块[ndimage用法](https://www.jb51.net/article/169382.htm)
+
 ```python
 def resize_volume(img):
     """Resize across z-axis"""
@@ -2156,10 +2161,19 @@ def rotate(volume):
     return augmented_volume
 ```
 
-### scipy.io
-loadmat
+### scipy.io.loadmat
+Python使用Scipy库中的[io.loadmat读取.mat文件](https://blog.csdn.net/qq_43524683/article/details/105674621)，并获取数据部分。
+读取方法很简单，只需要使用scipy.io库即可
+```python
+colormap=loadmat(color_map_file)['colormap']
+```
 
 ### scipy.signal
+```python
+def discounted_cumulative_sums(x, discount):
+    # Discounted cumulative sums of vectors for computing rewards-to-go and advantage estimates
+    return scipy.signal.lfilter([1], [1, float(-discount)], x[::-1], axis=0)[::-1]
+```
 
 ## random
 ```python
@@ -2183,6 +2197,15 @@ def rotate(volume):
 ```
 
 ## random.shuffle
+
+```python
+x_train = np.load(os.path.join(config.DATA_DIR, "BRATS2013_Syn_Flair_Train_X.npy"))
+y_train = np.load(os.path.join(config.DATA_DIR, "BRATS2013_Syn_Flair_Train_S.npy"))
+nb_cases = x_train.shape[0]
+ind_list = [i for i in range(nb_cases)]
+shuffle(ind_list)
+```
+
 ## matplotlib
 ### matplotlib.pyplot 
 ```python
@@ -2221,8 +2244,37 @@ for i, metric in enumerate(["acc", "loss"]):
 ### matplotlib.cm
 
 ## io
-### io.BytesIO ★
-## tarfile ★
+### io.BytesIO 
+[StringIO](https://blog.csdn.net/python_lqx/article/details/89763587)操作的只能是str，如果要操作二进制数据，就需要使用BytesIO。
+
+BytesIO实现了在内存中读写bytes，我们创建一个BytesIO，然后写入一些bytes
+
+```python
+def make_image(tensor):
+    from PIL import Image
+    height, width, channel = tensor.shape
+    image = Image.fromarray(np.uint8(tensor))
+    import io
+    output = io.BytesIO()
+    image.save(output, format='PNG')
+    image_string = output.getvalue()
+    output.close()
+    return tf.Summary.Image(height=height,
+                            width=width,
+                            colorspace=channel,
+                            encoded_image_string=image_string)
+```
+
+```python
+# Construct a GIF from the frames.
+with io.BytesIO() as gif:
+    imageio.mimsave(gif, current_frames, "GIF", fps=5)
+    predicted_videos.append(gif.getvalue())
+```
+
+## tarfile 
+[Python标准库系列之tarfile模块](https://www.jianshu.com/p/5609d67d8ab2)
+
 ## tempfile 
 ```python
 def setup_pretrained_weights():
@@ -2359,16 +2411,89 @@ print("Size of gzipped clustered and quantized TFlite model: %.2f bytes" % (get_
 
 ## six.moves
 ### six.moves.urllib ★
+[six.moves.urllib](https://www.jianshu.com/p/820592f718f8) six是为了解决Python2 和 Python3 代码兼容性而产生的，众所周知 Python 2 和 Python 3 版本的分裂给 Python 开发者们带来了很大的烦恼，为了使代码同时兼容两个版本，往往要增加大量的代码，典型的就有urllib部分方法不兼容。
 
-### urlib.request
-urlretrive
+所以，当编写代码考虑Python2 和 Python3 代码兼容性问题时，用：
 
-## pathlib
+import six.moves.urllib as urllib
+
+不考虑兼容性问题时，直接用
+
+import urllib
+
+顺便说一下，six这个名字来源于 6 = 2 x 3，为什么不用‘Five’呢？5 = 2+3，一是因为乘法更有力量(more powerful)，另外是因为five这个名字已经被Zope Five项目先占了^O^
+
+
+
 ## PIL
+[PIL：Python Imaging Library](https://www.liaoxuefeng.com/wiki/897692888725344/966759628285152)，已经是Python平台事实上的图像处理标准库了。PIL功能非常强大，但API却非常简单易用。
+PIL可以做很多和图像处理相关的事情: 
+- **图像归档(Image Archives)**。PIL非常适合于图像归档以及图像的批处理任务。你可以使用PIL创建缩略图，转换图像格式，打印图像等等。 
+- **图像展示(Image Display)**。PIL较新的版本支持包括Tk PhotoImage，BitmapImage还有Windows DIB等接口。PIL支持众多的GUI框架接口，可以用于图像展示。 
+- **图像处理(Image Processing)**。PIL包括了基础的图像处理函数，包括对点的处理，使用众多的卷积核(convolution kernels)做过滤(filter),还有颜色空间的转换。PIL库同样支持图像的大小转换，图像旋转，以及任意的仿射变换。PIL还有一些直方图的方法，允许你展示图像的一些统计特性。这个可以用来实现图像的自动对比度增强，还有全局的统计分析等。
 ### PIL.Image
+
+```python
+def make_image(tensor):
+    from PIL import Image
+    height, width, channel = tensor.shape
+    image = Image.fromarray(np.uint8(tensor))
+    import io
+    output = io.BytesIO()
+    image.save(output, format='PNG')
+    image_string = output.getvalue()
+    output.close()
+    return tf.Summary.Image(height=height,
+                            width=width,
+                            colorspace=channel,
+                            encoded_image_string=image_string)
+```
+
+```python
+# Utility for reading an image and for getting its annotations.
+def get_dog(name):
+    data = json_dict[name]
+    img_data = plt.imread(os.path.join(IMG_DIR, data["img_path"]))
+    # If the image is RGBA convert it to RGB.
+    if img_data.shape[-1] == 4:
+        img_data = img_data.astype(np.uint8)
+        img_data = Image.fromarray(img_data)
+        img_data = np.array(img_data.convert("RGB"))
+    data["img_data"] = img_data
+
+    return data
+```
+
 ### PIL.ImageOps
 
+```python
+# Display auto-contrast version of corresponding target (per-pixel categories)
+img = PIL.ImageOps.autocontrast(load_img(target_img_paths[9]))
+display(img)
+```
+```python
+def display_mask(i):
+    """Quick utility to display a model's prediction."""
+    mask = np.argmax(val_preds[i], axis=-1)
+    mask = np.expand_dims(mask, axis=-1)
+    img = PIL.ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
+    display(img)
+```
+```python
+# Display ground-truth target mask
+img = PIL.ImageOps.autocontrast(load_img(val_target_img_paths[i]))
+display(img)
+```
+
 ## cv2
+[Python-OpenCV基本操作cv2](https://www.cnblogs.com/zlel/p/9267629.html)
+### cv2.addWeighted
+### cv2.resize
+### cv2.imwrite
+### cv2.cvtColor
+### cv2.COLOR_RGB2BGR
+### cv2.VideoCapture
+
 ## tqdm
 [Tqdm](https://blog.csdn.net/qq_33472765/article/details/82940843)是一个快速，可扩展的Python进度条，可以在 Python 长循环中添加一个进度提示信息，用户只需要封装任意的迭代器 tqdm(iterator)。
 
