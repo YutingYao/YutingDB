@@ -196,8 +196,10 @@ if tfc.remote():
 # docs_infra: no_execute
 tfc.run(docker_image_bucket_name=gcp_bucket)
 ```
-
-
+```python
+# 运行1个历元和一小部分数据的训练，以验证设置
+model.fit(x=x_train[:100], y=y_train[:100], validation_split=0.2, epochs=1)
+```
 
 ## tensorflow_probability
 ```python
@@ -409,8 +411,6 @@ model_for_pruning.fit(
     epochs=2,
 )
 
-#docs_infra: no_execute
-%tensorboard --logdir={log_dir}
 ```
 
 ```python
@@ -607,6 +607,21 @@ def strong_augment(image, source=True):
 
 ## tf.keras.callbacks
 ### tf.keras.callbacks.TensorBoard
+```python
+#docs_infra: no_execute
+%tensorboard --logdir={log_dir}
+```
+
+
+```python
+%load_ext tensorboard
+%tensorboard --logdir $TENSORBOARD_LOGS_DIR
+```
+
+```python
+!#docs_infra: no_execute
+!tensorboard dev upload --logdir "gs://keras-examples-jonah/logs/fit" --name "Guide MNIST"
+```
 ### tf.keras.callbacks.ModelCheckpoint
 ### tf.keras.callbacks.EarlyStopping
 ### tf.keras.callbacks.LearningRateScheduler
@@ -616,6 +631,14 @@ def strong_augment(image, source=True):
 ## tf.keras.datasets
 ### tf.keras.datasets.boston_housing
 ### tf.keras.datasets.mnist
+
+```python
+
+(x_train, y_train), (_, _) = tf.keras.datasets.mnist.load_data()
+x_train = x_train.reshape((60000, 28 * 28))
+x_train = x_train.astype("float32") / 255
+
+```
 ### tf.keras.datasets.cifar10
 ### tf.keras.datasets.cifar100
 ### tf.keras.datasets.fashion_mnist
@@ -647,7 +670,64 @@ def strong_augment(image, source=True):
 
 
 ## tf.keras.layers
+### tf.keras.layers.Conv3D
+[利用三维CNN处理CT扫描以预测结核病的均匀化技术](https://arxiv.org/abs/2007.13224)
+```python
+# 3D CNN
+def get_model(width=128, height=128, depth=64):
+    """Build a 3D convolutional neural network model."""
+
+    inputs = keras.Input((width, height, depth, 1))
+
+    x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(inputs)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(x)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Conv3D(filters=128, kernel_size=3, activation="relu")(x)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Conv3D(filters=256, kernel_size=3, activation="relu")(x)
+    x = layers.MaxPool3D(pool_size=2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.GlobalAveragePooling3D()(x)
+    x = layers.Dense(units=512, activation="relu")(x)
+    x = layers.Dropout(0.3)(x)
+
+    outputs = layers.Dense(units=1, activation="sigmoid")(x)
+
+    # Define the model.
+    model = keras.Model(inputs, outputs, name="3dcnn")
+    return model
+
+
+# Build model.
+model = get_model(width=128, height=128, depth=64)
+model.summary()
+```
+
+
+
 ### tf.keras.layers.Conv2D
+```python
+input = layers.Input(shape=(28, 28, 1))
+
+# Encoder
+x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(input)
+x = layers.MaxPooling2D((2, 2), padding="same")(x)
+x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(x)
+x = layers.MaxPooling2D((2, 2), padding="same")(x)
+
+# Decoder
+x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
+x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
+x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
+```
 ### tf.keras.layers.DepthwiseConv2D
 ### tf.keras.layers.Conv2DTranspose
 ### tf.keras.layers.BatchNormalization
@@ -675,6 +755,8 @@ def strong_augment(image, source=True):
 ### tf.keras.layers.LSTM
 ### tf.keras.layers.serialize
 ### tf.keras.layers.Flatten
+
+
 ### tf.keras.layers.Layer.get_weights
 ### tf.keras.layers.Layer.set_weights
 ### tf.keras.layers.Layer.weights
@@ -695,18 +777,10 @@ def strong_augment(image, source=True):
 ### tf.keras.layers.experimental.preprocessing.CenterCrop
 ### tf.keras.layers.experimental.preprocessing.Rescaling
 ```python
-input = layers.Input(shape=(28, 28, 1))
+# Use a Rescaling layer to make sure input values are in the [0, 1] range.
+layers.experimental.preprocessing.Rescaling(1.0 / 255),
+```
 
-# Encoder
-x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(input)
-x = layers.MaxPooling2D((2, 2), padding="same")(x)
-x = layers.Conv2D(32, (3, 3), activation="relu", padding="same")(x)
-x = layers.MaxPooling2D((2, 2), padding="same")(x)
-
-# Decoder
-x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
-x = layers.Conv2DTranspose(32, (3, 3), strides=2, activation="relu", padding="same")(x)
-x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
 
 
 
@@ -718,7 +792,27 @@ x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
 
 ## tf.keras.models
 ### tf.keras.models.load_model
+
+```python
+trained_model = tf.keras.models.load_model(SAVED_MODEL_DIR)
+trained_model.summary()
+```
+
+```python
+# docs_infra: no_execute
+model = keras.models.load_model(save_path)
+```
+
+
+
 ### tf.keras.models.save_model
+
+```python
+_, keras_file = tempfile.mkstemp('.h5')
+print('Saving model to: ', keras_file)
+tf.keras.models.save_model(model, keras_file, include_optimizer=False)
+```
+
 ### tf.keras.models.Sequential
 ### tf.keras.models.clone_model
 ### tf.keras.models.model_from_json
@@ -738,6 +832,35 @@ x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
 ## tf.keras.optimizers
 ### tf.keras.optimizers.Adam
 ### tf.keras.optimizers.schedules.ExponentialDecay
+```python
+# Compile model.
+initial_learning_rate = 0.0001
+lr_schedule = keras.optimizers.schedules.ExponentialDecay(
+    initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
+)
+model.compile(
+    loss="binary_crossentropy",
+    optimizer=keras.optimizers.Adam(learning_rate=lr_schedule),
+    metrics=["acc"],
+)
+
+# Define callbacks.
+checkpoint_cb = keras.callbacks.ModelCheckpoint(
+    "3d_image_classification.h5", save_best_only=True
+)
+early_stopping_cb = keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
+
+# Train the model, doing validation at the end of each epoch
+epochs = 100
+model.fit(
+    train_dataset,
+    validation_data=validation_dataset,
+    epochs=epochs,
+    shuffle=True,
+    verbose=2,
+    callbacks=[checkpoint_cb, early_stopping_cb],
+)
+```
 ### tf.keras.optimizers.RMSprop
 ### tf.keras.optimizers.SGD
 ### tf.keras.optimizers.Adadelta
@@ -762,6 +885,76 @@ x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
 ### tf.keras.utils.to_categorical
 ### tf.keras.utils.Sequence
 ### tf.keras.utils.get_file
+```python
+url = "https://github.com/soon-yau/stylegan_keras/releases/download/keras_example_v1.0/stylegan_128x128.ckpt.zip"
+
+weights_path = keras.utils.get_file(
+    "stylegan_128x128.ckpt.zip",
+    url,
+    extract=True,
+    cache_dir=os.path.abspath("."),
+    cache_subdir="pretrained",
+)
+```
+
+```python
+# Download url of normal CT scans.
+url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-0.zip"
+filename = os.path.join(os.getcwd(), "CT-0.zip")
+keras.utils.get_file(filename, url)
+
+# Download url of abnormal CT scans.
+url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-23.zip"
+filename = os.path.join(os.getcwd(), "CT-23.zip")
+keras.utils.get_file(filename, url)
+```
+
+```python
+zip_file = keras.utils.get_file(
+    fname="cora.tgz",
+    origin="https://linqs-data.soe.ucsc.edu/public/lbc/cora.tgz",
+    extract=True,
+)
+data_dir = os.path.join(os.path.dirname(zip_file), "cora")
+```
+
+
+```python
+# Download image files
+if not os.path.exists(images_dir):
+    image_zip = tf.keras.utils.get_file(
+        "images.zip", cache_dir=os.path.abspath("."), origin=images_url, extract=True,
+    )
+    os.remove(image_zip)
+
+# Download caption annotation files
+if not os.path.exists(annotations_dir):
+    annotation_zip = tf.keras.utils.get_file(
+        "captions.zip",
+        cache_dir=os.path.abspath("."),
+        origin=annotations_url,
+        extract=True,
+    )
+    os.remove(annotation_zip)
+```
+
+```python
+"""
+## Downloading the data
+
+We'll be working with an English-to-Spanish translation dataset
+provided by [Anki](https://www.manythings.org/anki/). Let's download it:
+"""
+
+text_file = keras.utils.get_file(
+    fname="spa-eng.zip",
+    origin="http://storage.googleapis.com/download.tensorflow.org/data/spa-eng.zip",
+    extract=True,
+)
+text_file = pathlib.Path(text_file).parent / "spa-eng" / "spa.txt"
+```
+
+
 ### tf.keras.utils.CustomObjectScope
 ### tf.keras.utils.deserialize_keras_object
 ### tf.keras.utils.serialize_keras_object
@@ -996,38 +1189,11 @@ total_ds = tf.data.Dataset.zip((final_source_ds, final_target_ds))
 adamatch_trainer.fit(total_ds, epochs=EPOCHS)
 ```
 
-#### tensorflow.keras.backend
-#### tensorflow.keras.regularizers
-
-#### tensorflow.keras.activations
-relu
-
-#### tensorflow.keras.applications
-imagenet_utils.preprocess_input
-resnet
-inception_v3
-vgg19
 
 
 
 
 
-```python
-trained_model = tf.keras.models.load_model(SAVED_MODEL_DIR)
-trained_model.summary()
-```
-
-```python
-# docs_infra: no_execute
-model = keras.models.load_model(save_path)
-```
-
-#### tensorflow.keras.callbacks
-Callback
-TensorBoard
-ModelCheckpoint
-EarlyStopping
-LearningRateScheduler
 
 ```python
 # Define callbacks.
@@ -1067,52 +1233,18 @@ callbacks = [
 
 ```
 
-```python
-%load_ext tensorboard
-%tensorboard --logdir $TENSORBOARD_LOGS_DIR
-```
-
-```python
-!#docs_infra: no_execute
-!tensorboard dev upload --logdir "gs://keras-examples-jonah/logs/fit" --name "Guide MNIST"
-```
-
-#### tensorflow.keras.datasets
-
-mnist
-
-```python
-
-(x_train, y_train), (_, _) = tf.keras.datasets.mnist.load_data()
-x_train = x_train.reshape((60000, 28 * 28))
-x_train = x_train.astype("float32") / 255
-
-```
 
 
 
-#### tensorflow.keras.utils
-multi_gpu_model
-Sequence
-to_categorical
-conv_utils
+
+
 ```python
     if input_tensor is not None:
         inputs = get_source_inputs(input_tensor)
     else:
         inputs = img_input
 ```
-```python
-# Download url of normal CT scans.
-url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-0.zip"
-filename = os.path.join(os.getcwd(), "CT-0.zip")
-keras.utils.get_file(filename, url)
 
-# Download url of abnormal CT scans.
-url = "https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-23.zip"
-filename = os.path.join(os.getcwd(), "CT-23.zip")
-keras.utils.get_file(filename, url)
-```
 
 
 #### tensorflow.keras.losses
@@ -1273,9 +1405,7 @@ model = create_model()
 model.fit(x_train, y_train, epochs=20, batch_size=128, validation_split=0.1)
 ```
 
-#### tensorflow.keras.utils
-layer_utils.get_source_inputs
-data_utils.get_file
+
 
 ## os
 ### os.path.sep
@@ -1317,8 +1447,8 @@ if not os.path.exists(checkpoint_dir):
 
 
 def make_or_restore_model():
-    # Either restore the latest model, or create a fresh one
-    # if there is no checkpoint available.
+    # Either restore the latest model, or create a fresh one if there is no checkpoint available.
+    # 如果没有可用的检查点，可以恢复最新的模型，或者创建一个新的模型。
     checkpoints = [checkpoint_dir + "/" + name for name in os.listdir(checkpoint_dir)]
     if checkpoints:
         latest_checkpoint = max(checkpoints, key=os.path.getctime)
@@ -1341,6 +1471,8 @@ weights_path = keras.utils.get_file(
 )
 ```
 
+
+
 ### os.path.join
 ```python
 train_size = 30000
@@ -1360,7 +1492,7 @@ valid_files_prefix = os.path.join(tfrecords_dir, "valid")
 ```python
 train_dataset = get_dataset(os.path.join(tfrecords_dir, "train-*.tfrecord"), batch_size)
 valid_dataset = get_dataset(os.path.join(tfrecords_dir, "valid-*.tfrecord"), batch_size)
-```Z
+```
 
 
 ```python
@@ -1499,6 +1631,7 @@ os.system(command)
 ```
 
 ### os.makedirs
+
 ```python
 os.makedirs("celeba_gan")
 
@@ -1527,6 +1660,11 @@ def make_or_restore_model():
         return keras.models.load_model(latest_checkpoint)
     print("Creating a new model")
     return get_compiled_model()
+```
+
+### os.getcwd
+```python
+filename = os.path.join(os.getcwd(), "CT-23.zip")
 ```
 
 ### os.listdir
@@ -1559,6 +1697,90 @@ for input_path, target_path in zip(input_img_paths[:10], target_img_paths[:10]):
 ```
 
 
+
+```python
+# Prepare a directory to store all the checkpoints.
+checkpoint_dir = "./ckpt"
+if not os.path.exists(checkpoint_dir):
+    os.makedirs(checkpoint_dir)
+
+
+def make_or_restore_model():
+    # Either restore the latest model, or create a fresh one
+    # if there is no checkpoint available.
+    checkpoints = [checkpoint_dir + "/" + name for name in os.listdir(checkpoint_dir)]
+    if checkpoints:
+        latest_checkpoint = max(checkpoints, key=os.path.getctime)
+        print("Restoring from", latest_checkpoint)
+        return keras.models.load_model(latest_checkpoint)
+    print("Creating a new model")
+    return get_compiled_model()
+```
+
+```python
+
+# 从类目录中读取CT扫描路径。
+
+# Folder "CT-0" consist of CT scans having normal lung tissue,
+# no CT-signs of viral pneumonia.
+# 没有病毒性肺炎的CT征象
+normal_scan_paths = [
+    os.path.join(os.getcwd(), "MosMedData/CT-0", x)
+    for x in os.listdir("MosMedData/CT-0")
+]
+# Folder "CT-23" consist of CT scans having several ground-glass opacifications,
+# involvement of lung parenchyma.
+# 肺实质受累。
+abnormal_scan_paths = [
+    os.path.join(os.getcwd(), "MosMedData/CT-23", x)
+    for x in os.listdir("MosMedData/CT-23")
+]
+
+print("CT scans with normal lung tissue: " + str(len(normal_scan_paths)))
+print("CT scans with abnormal lung tissue: " + str(len(abnormal_scan_paths)))
+```
+
+
+```python
+# Get the list of all noise files
+noise_paths = []
+for subdir in os.listdir(DATASET_NOISE_PATH):
+    subdir_path = Path(DATASET_NOISE_PATH) / subdir
+    if os.path.isdir(subdir_path):
+        noise_paths += [
+            os.path.join(subdir_path, filepath)
+            for filepath in os.listdir(subdir_path)
+            if filepath.endswith(".wav")
+        ]
+
+print(
+    "Found {} files belonging to {} directories".format(
+        len(noise_paths), len(os.listdir(DATASET_NOISE_PATH))
+    )
+)
+```
+
+```python
+for image_dir in ['stuttgart_00', 'stuttgart_01', 'stuttgart_02']:
+    os.mkdir(f'outputs/{image_dir}')
+    image_list = os.listdir(image_dir)
+    image_list.sort()
+    print(f'{len(image_list)} frames found')
+    for i in tqdm(range(len(image_list))):
+        try:
+            test = load_img(f'{image_dir}/{image_list[i]}')
+            test = img_to_array(test)
+            segmap = pipeline(test, video=False,
+                              fname=f'{image_list[i]}', folder=image_dir)
+            if segmap == False:
+                break
+        except Exception as e:
+            print(str(e))
+    clip = ImageSequenceClip(
+        sorted(glob(f'outputs/{image_dir}/*')), fps=18, load_images=True)
+    clip.write_videofile(f'{image_dir}.mp4')
+```
+
 ## zipfile
 ```python
 # Unzip data in the newly created directory.
@@ -1577,7 +1799,119 @@ with zipfile.ZipFile("CT-23.zip", "r") as z_fp:
   return os.path.getsize(zipped_file)
 ```
 
+```python
+# 如果您使用的是自定义映像，则可以通过requirements txt文件安装模块。
+with open("requirements.txt", "w") as f:
+    f.write("tensorflow-cloud\n")
+```
+
 ## numpy 
+在Pytorch和Tensorflow中，.numpy（）方法都非常简单。它将张量对象转换为numpy.ndarray对象。这意味着转换后的张量现在将在CPU上处理。.numpy（）方法显式地将张量转换为numpy数组。
+
+```python
+import numpy as np
+
+ndarray = np.ones([3, 3])
+
+print("TensorFlow operations convert numpy arrays to Tensors automatically")
+tensor = tf.multiply(ndarray, 42)
+print(tensor)
+
+
+print("And NumPy operations convert Tensors to numpy arrays automatically")
+print(np.add(tensor, 1))
+
+print("The .numpy() method explicitly converts a Tensor to a numpy array")
+print(tensor.numpy())
+```
+TensorFlow operations convert numpy arrays to Tensors automatically
+tf.Tensor(
+[[42. 42. 42.]
+ [42. 42. 42.]
+ [42. 42. 42.]], shape=(3, 3), dtype=float64)
+And NumPy operations convert Tensors to numpy arrays automatically
+[[43. 43. 43.]
+ [43. 43. 43.]
+ [43. 43. 43.]]
+The .numpy() method explicitly converts a Tensor to a numpy array
+[[42. 42. 42.]
+ [42. 42. 42.]
+ [42. 42. 42.]]
+
+```python
+for audios, labels in test_ds.take(1):
+    # Get the signal FFT
+    ffts = audio_to_fft(audios)
+    # Predict
+    y_pred = model.predict(ffts)
+    # Take random samples
+    rnd = np.random.randint(0, BATCH_SIZE, SAMPLES_TO_DISPLAY)
+    audios = audios.numpy()[rnd, :, :]
+    labels = labels.numpy()[rnd]
+    y_pred = np.argmax(y_pred, axis=-1)[rnd]
+```
+
+```python
+    for index in range(SAMPLES_TO_DISPLAY):
+        # For every sample, print the true and predicted label
+        # as well as run the voice with the noise
+        print(
+            "Speaker:\33{} {}\33[0m\tPredicted:\33{} {}\33[0m".format(
+                "[92m" if labels[index] == y_pred[index] else "[91m",
+                class_names[labels[index]],
+                "[92m" if labels[index] == y_pred[index] else "[91m",
+                class_names[y_pred[index]],
+            )
+        )
+        display(Audio(audios[index, :, :].squeeze(), rate=SAMPLING_RATE))
+```
+
+```python
+    def on_epoch_end(self, epoch, logs=None):
+        if epoch % 5 != 0:
+            return
+        source = self.batch["source"]
+        target = self.batch["target"].numpy()
+        bs = tf.shape(source)[0]
+        preds = self.model.generate(source, self.target_start_token_idx)
+        preds = preds.numpy()
+        for i in range(bs):
+            target_text = "".join([self.idx_to_char[_] for _ in target[i, :]])
+            prediction = ""
+            for idx in preds[i, :]:
+                prediction += self.idx_to_char[idx]
+                if idx == self.target_end_token_idx:
+                    break
+            print(f"target:     {target_text.replace('-','')}")
+            print(f"prediction: {prediction}\n")
+```
+
+```python
+fake_images *= 255.0
+converted_images = fake_images.astype(np.uint8)
+converted_images = tf.image.resize(converted_images, (96, 96)).numpy().astype(np.uint8)
+imageio.mimsave("animation.gif", converted_images, fps=1)
+embed.embed_file("animation.gif")
+```
+
+```python
+_, ax = plt.subplots(4, 2, figsize=(10, 15))
+for i, samples in enumerate(zip(train_horses.take(4), train_zebras.take(4))):
+    horse = (((samples[0][0] * 127.5) + 127.5).numpy()).astype(np.uint8)
+    zebra = (((samples[1][0] * 127.5) + 127.5).numpy()).astype(np.uint8)
+    ax[i, 0].imshow(horse)
+    ax[i, 1].imshow(zebra)
+plt.show()
+```
+
+```python
+for x in dataset:
+    plt.axis("off")
+    plt.imshow((x.numpy() * 255).astype("int32")[0])
+    break
+```
+
+
 ### np.array
 ```python
 # Read and process the scans.
@@ -1597,7 +1931,18 @@ normal_labels = np.array([0 for _ in range(len(normal_scans))])
 ### np.clip
 ### np.concatenate
 ```python
+# Read and process the scans.
+# 用process_scan对每个扫描都，跨高度、宽度和深度调整大小并重新缩放。
+abnormal_scans = np.array([process_scan(path) for path in abnormal_scan_paths])
+normal_scans = np.array([process_scan(path) for path in normal_scan_paths])
+
+# For the CT scans having presence of viral pneumonia assign 1, for the normal ones assign 0.
+# 对于存在病毒性肺炎的CT扫描，分配1，对于正常的CT扫描，分配0。
+abnormal_labels = np.array([1 for _ in range(len(abnormal_scans))])
+normal_labels = np.array([0 for _ in range(len(normal_scans))])
+
 # Split data in the ratio 70-30 for training and validation.
+# 以70-30的比例分割数据，用于培训和验证。
 x_train = np.concatenate((abnormal_scans[:70], normal_scans[:70]), axis=0)
 y_train = np.concatenate((abnormal_labels[:70], normal_labels[:70]), axis=0)
 x_val = np.concatenate((abnormal_scans[70:], normal_scans[70:]), axis=0)
@@ -1614,6 +1959,57 @@ print(
 ### np.count_nonzero
 ### np.concolve
 ### np.expand_dims
+
+
+
+```python
+x_train = np.expand_dims(x_train, -1)
+```
+
+```python
+x_test = np.expand_dims(x_test, -1)
+```
+
+```python
+img = np.expand_dims(img, axis=0)
+```
+
+```python
+y[j] = np.expand_dims(img, 2)
+```
+
+```python
+mask = np.expand_dims(mask, axis=-1)
+```
+
+```python
+mnist_digits = np.expand_dims(mnist_digits, -1).astype("float32") / 255
+```
+
+```python
+predicted_frame = np.expand_dims(new_prediction[-1, ...], axis=0)
+```
+
+```python
+new_prediction = model.predict(np.expand_dims(frames, axis=0))
+```
+
+```python
+prediction = model.predict(np.expand_dims(x_val[0], axis=0))[0]
+```
+
+```python
+predictions = model.predict(np.expand_dims((image_tensor), axis=0))
+```
+
+```python
+res = new_deeplab_model.predict(np.expand_dims(resized2,0))
+```
+
+```python
+res_old = old_deeplab_model.predict(np.expand_dims(resized2,0))
+```
+
 ### np.eye
 ### np.empty
 ### np.exp
@@ -1666,6 +2062,10 @@ data = np.reshape(data, (num_rows, num_columns, width, height))
 ### np.sum
 ### np.std
 ### np.squeeze
+```python
+# 从数组的形状中删除单维条目，即把shape中为1的维度去掉
+plt.imshow(np.squeeze(image[:, :, 30]), cmap="gray")
+```
 ### np.swapaxes
 ### np.sqrt
 ### np.sign
@@ -1904,6 +2304,10 @@ print(best_hps.values)
 
 best_model = tuner.get_best_models()[0]
 ```
+
+
+
+
 ### kt.Objective
 ```python
 tuner = MyTuner(
@@ -2063,7 +2467,158 @@ print(best_hps.values)
 best_model = tuner.get_best_models()[0]
 ```
 
+## tf.data.Dataset.from_tensor_slices
+这里记录下使用[ tf.data.Dataset.from_tensor_slices](https://blog.csdn.net/rainweic/article/details/95737315) 进行加载数据集.
+使用tf2做mnist（kaggle）的代码
 
+思路
+Step0: 准备要加载的numpy数据
+Step1: 使用 tf.data.Dataset.from_tensor_slices() 函数进行加载
+Step2: 使用 shuffle() 打乱数据
+Step3: 使用 map() 函数进行预处理
+Step4: 使用 batch() 函数设置 batch size 值
+Step5: 根据需要 使用 repeat() 设置是否循环迭代数据集
+
+```python
+import tensorflow as tf
+from tensorflow import keras
+
+def load_dataset():
+	# Step0 准备数据集, 可以是自己动手丰衣足食, 也可以从 tf.keras.datasets 加载需要的数据集(获取到的是numpy数据) 
+	# 这里以 mnist 为例
+	(x, y), (x_test, y_test) = keras.datasets.mnist.load_data()
+	
+	# Step1 使用 tf.data.Dataset.from_tensor_slices 进行加载
+	db_train = tf.data.Dataset.from_tensor_slices((x, y)）
+	db_test = tf.data.Dataset.from_tensor_slices((x_test, y_test))
+	
+	# Step2 打乱数据
+	db_train.shuffle(1000)
+	db_test.shuffle(1000)
+	
+	# Step3 预处理 (预处理函数在下面)
+	db_train.map(preprocess)
+	db_test.map(preprocess)
+
+	# Step4 设置 batch size 一次喂入64个数据
+	db_train.batch(64)
+	db_test.batch(64)
+
+	# Step5 设置迭代次数(迭代2次) test数据集不需要emmm
+	db_train.repeat(2)
+
+	return db_train, db_test
+
+def preprocess(labels, images):
+	'''
+	最简单的预处理函数:
+		转numpy为Tensor、分类问题需要处理label为one_hot编码、处理训练数据
+	'''
+	# 把numpy数据转为Tensor
+	labels = tf.cast(labels, dtype=tf.int32)
+	# labels 转为one_hot编码
+	labels = tf.one_hot(labels, depth=10)
+	# 顺手归一化
+	images = tf.cast(images, dtype=tf.float32) / 255
+	return labels, images
+```
+
+```python
+# Define data loaders.
+train_loader = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+validation_loader = tf.data.Dataset.from_tensor_slices((x_val, y_val))
+
+batch_size = 2
+# Augment the on the fly during training.
+train_dataset = (
+    train_loader.shuffle(len(x_train))
+    .map(train_preprocessing)
+    .batch(batch_size)
+    .prefetch(2)
+)
+# Only rescale.
+validation_dataset = (
+    validation_loader.shuffle(len(x_val))
+    .map(validation_preprocessing)
+    .batch(batch_size)
+    .prefetch(2)
+)
+```
+
+```python
+    def get_dataset(self):
+        dataset = tf.data.Dataset.from_tensor_slices(
+            (self.configs['images'], self.configs['labels'])
+        )
+        dataset = dataset.map(self._map_function, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        dataset = dataset.batch(self.configs['batch_size'], drop_remainder=True)
+        dataset = dataset.repeat()
+        dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
+        return dataset
+```
+
+```python
+train_dataset = tf.data.Dataset.from_tensor_slices((image_list,
+                                                    mask_list))
+train_dataset = train_dataset.shuffle(buffer_size=128)
+train_dataset = train_dataset.apply(
+    tf.data.experimental.map_and_batch(map_func=load_data,
+                                       batch_size=batch_size,
+                                       num_parallel_calls=tf.data.experimental.AUTOTUNE,
+                                       drop_remainder=True))
+train_dataset = train_dataset.repeat()
+train_dataset = train_dataset.prefetch(tf.data.experimental.AUTOTUNE)
+print(train_dataset)
+
+val_dataset = tf.data.Dataset.from_tensor_slices((val_image_list,
+                                                  val_mask_list))
+val_dataset = val_dataset.apply(
+    tf.data.experimental.map_and_batch(map_func=load_data,
+                                       batch_size=batch_size,
+                                       num_parallel_calls=tf.data.experimental.AUTOTUNE,
+                                       drop_remainder=True))
+val_dataset = val_dataset.repeat()
+val_dataset = val_dataset.prefetch(tf.data.experimental.AUTOTUNE)
+```
+
+## tf.expand_dims
+tf.expand_dims(
+    input,
+    axis=None,
+    name=None,
+    dim=None
+)
+
+
+```python
+b4 = tf.expand_dims(tf.expand_dims(b4, 1),1) # from (b_size, channels)->(b_size, 1, 1, channels)
+```
+
+```python
+tf.expand_dims()
+```
+
+```python
+new = tf.expand_dims(tf.expand_dims(new, 1),1)
+```
+
+```python
+prop = tf.repeat(tf.expand_dims(prop, axis=1), tf.shape(audio)[1], axis=1)
+```
+
+```python
+fft = tf.expand_dims(fft, axis=-1)
+```
+
+```python
+mult = tf.concat(
+    [tf.expand_dims(batch_size, -1), tf.constant([1, 1], dtype=tf.int32)], 0
+)
+```
+
+```python
+last_logit = tf.expand_dims(logits[:, -1], axis=-1)
+```
 
 
 ## tf.math
@@ -2099,10 +2654,25 @@ best_model = tuner.get_best_models()[0]
 
 
 ## nibabel
-```python
-import nibabel as nib
-# NiBabel包是可以对常见的医学和神经影像文件格式进行读写
+这些文件以**Nifti格式**提供，扩展名为**.nii**。为了读取扫描，我们使用**nibabel包**。你可以通过pip install nibabel安装这个包。CT扫描以Hounsfield单位(HU)存储原始**voxel intensity 体素灰度**。在这个数据集中，它们的范围从-1024到2000以上。**400以上**是不同辐射强度的骨头，所以这是一个更高的界限。在-1000和400之间的阈值通常用于CT扫描的归一化。
 
+为了处理数据，我们做以下工作:
+
+我们首先将这些体积旋转90度，所以方向是固定的
+
+我们将HU值缩放到0到1之间。
+
+我们调整宽度，高度和深度。
+
+在这里，我们定义了几个辅助函数来处理数据。这些函数将在构建训练和验证数据集时使用:
+
+```python
+
+import nibabel as nib
+
+from scipy import ndimage
+
+# 读取
 def read_nifti_file(filepath):
     """Read and load volume"""
     # Read file
@@ -2110,6 +2680,53 @@ def read_nifti_file(filepath):
     # Get raw data
     scan = scan.get_fdata()
     return scan
+
+# 归一化
+def normalize(volume):
+    """Normalize the volume"""
+    min = -1000
+    max = 400
+    volume[volume < min] = min
+    volume[volume > max] = max
+    volume = (volume - min) / (max - min)
+    volume = volume.astype("float32")
+    return volume
+
+# 调整尺寸
+def resize_volume(img):
+    """Resize across z-axis"""
+    # Set the desired depth
+    desired_depth = 64
+    desired_width = 128
+    desired_height = 128
+    # Get current depth
+    current_depth = img.shape[-1]
+    current_width = img.shape[0]
+    current_height = img.shape[1]
+    # Compute depth factor
+    depth = current_depth / desired_depth
+    width = current_width / desired_width
+    height = current_height / desired_height
+    depth_factor = 1 / depth
+    width_factor = 1 / width
+    height_factor = 1 / height
+    # Rotate
+    img = ndimage.rotate(img, 90, reshape=False)
+    # Resize across z-axis
+    img = ndimage.zoom(img, (width_factor, height_factor, depth_factor), order=1)
+    return img
+
+
+def process_scan(path):
+    """Read and resize volume"""
+    # 读取
+    volume = read_nifti_file(path)
+    # 归一化
+    volume = normalize(volume)
+    # 调整尺寸
+    volume = resize_volume(volume)
+    return volume
+
 ```
 
 ## scipy
@@ -2239,6 +2856,39 @@ for i, metric in enumerate(["acc", "loss"]):
     ax[i].set_ylabel(metric)
     ax[i].legend(["train", "val"])
 ```
+
+```python
+def plot_slices(num_rows, num_columns, width, height, data):
+    """Plot a montage of 20 CT slices"""
+    data = np.rot90(np.array(data))
+    data = np.transpose(data)
+    data = np.reshape(data, (num_rows, num_columns, width, height))
+    rows_data, columns_data = data.shape[0], data.shape[1]
+    heights = [slc[0].shape[0] for slc in data]
+    widths = [slc.shape[1] for slc in data[0]]
+    fig_width = 12.0
+    fig_height = fig_width * sum(heights) / sum(widths)
+    f, axarr = plt.subplots(
+        rows_data,
+        columns_data,
+        figsize=(fig_width, fig_height),
+        gridspec_kw={"height_ratios": heights},
+    )
+    for i in range(rows_data):
+        for j in range(columns_data):
+            axarr[i, j].imshow(data[i][j], cmap="gray")
+            axarr[i, j].axis("off")
+    plt.subplots_adjust(wspace=0, hspace=0, left=0, right=1, bottom=0, top=1)
+    plt.show()
+
+
+# Visualize montage of slices.
+# 4 rows and 10 columns for 100 slices of the CT scan.
+plot_slices(4, 10, 128, 128, image[:, :, :40])
+```
+
+
+
 ### matplotlib.gridspec ★
 ### matplotlib.image
 ### matplotlib.cm
@@ -2321,9 +2971,10 @@ model_for_pruning.fit(
     epochs=2,
 )
 
-#docs_infra: no_execute
-%tensorboard --logdir={log_dir}
+
 ```
+
+
 
 ```python
 # Define the model.
@@ -2360,8 +3011,6 @@ for _ in range(epochs):
 
   step_callback.on_epoch_end(batch=unused_arg) # run pruning callback
 
-#docs_infra: no_execute
-%tensorboard --logdir={log_dir}
 ```
 
 ```python
@@ -2388,11 +3037,7 @@ _, keras_model_file = tempfile.mkstemp('.h5')
 clustered_model.save(keras_model_file, include_optimizer=True)
 ```
 
-```python
-_, keras_file = tempfile.mkstemp('.h5')
-print('Saving model to: ', keras_file)
-tf.keras.models.save_model(model, keras_file, include_optimizer=False)
-```
+
 
 ```python
 converter = tf.lite.TFLiteConverter.from_keras_model(final_model)
@@ -3178,7 +3823,8 @@ clip = ImageSequenceClip(
 如果您使用curl/wget，它会因为谷歌Drive的安全警告而导致大文件失败。
 
 ```python
-os.makedirs("celeba_gan")
+if not os.path.exists("celeba_gan"):
+    os.makedirs("celeba_gan")
 
 url = "https://drive.google.com/uc?id=1O7m1010EJjLE5QxLZiM9Fpjs7Oj6e684"
 output = "celeba_gan/data.zip"
