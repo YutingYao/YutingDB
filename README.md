@@ -3735,8 +3735,24 @@ def connect_wandb(self):
     self._wandb_initialized = True
 ```
 
-## wandb.keras.WandbCallback
+### wandb.keras.WandbCallback
+```python
+!pip install wandb
+import wandb
+!wandb login
+```
 
+```python
+%%capture
+!pip install wandb
+```
+
+```python
+import wandb
+from wandb.keras import WandbCallback
+
+wandb.login()
+```
 
 ```python
 def _get_logger_callback(self):
@@ -3751,6 +3767,497 @@ def _get_logger_callback(self):
 
         print("[-] Defaulting to TensorBoard logging...")
         return tf.keras.callbacks.TensorBoard()
+```
+
+### wandb.watch
+
+```python
+def train(model, loader, criterion, optimizer, config):
+    # tell wandb to watch what the model gets up to: gradients, weights, and more!
+    wandb.watch(model, criterion, log="all", log_freq=10)
+
+    # Run training and track with wandb
+    total_batches = len(loader) * config.epochs
+    example_ct = 0  # number of examples seen
+    batch_ct = 0
+    for epoch in tqdm(range(config.epochs)):
+        for _, (images, labels) in enumerate(loader):
+
+            loss = train_batch(images, labels, model, optimizer, criterion)
+            example_ct +=  len(images)
+            batch_ct += 1
+
+            # Report metrics every 25th batch
+            if ((batch_ct + 1) % 25) == 0:
+                train_log(loss, example_ct, epoch)
+```
+```python
+def train(model, training, validation, config):
+    """
+    ## Train the model
+    """
+    model.compile(loss="categorical_crossentropy",
+                  optimizer=config.optimizer, metrics=["accuracy"])
+
+    callback = wandb.keras.WandbCallback(
+        validation_data=(validation.x[:32], validation.y[:32]),
+        input_type="images", labels=[str(i) for i in range(10)],
+        **config["callback_config"])
+
+    model.fit(training.x, training.y,
+            validation_data=(validation.x, validation.y),
+            batch_size=config.batch_size, epochs=config.epochs,
+            callbacks=[callback])
+```
+### wandb.Artifact
+
+```python
+def train_and_log(config):
+
+    with wandb.init(project="artifacts-example", job_type="train", config=config) as run:
+        config = wandb.config
+
+        data = run.use_artifact('mnist-preprocess:latest')
+        data_dir = data.download()
+        training_dataset =  read(data_dir, "training")
+        validation_dataset = read(data_dir, "validation")
+        
+        model_artifact = run.use_artifact("convnet:latest")
+        model_dir = model_artifact.download()
+        model_path = os.path.join(model_dir, "initialized_model.keras")
+        model = keras.models.load_model(model_path)
+
+        model_config = model_artifact.metadata
+
+        config.update(model_config)
+ 
+        train(model, training_dataset, validation_dataset, config)
+
+        model_artifact = wandb.Artifact(
+            "trained-model", type="model",
+            description="NN model trained with model.fit",
+            metadata=dict(config))
+
+        model.save("trained_model.keras")
+        model_artifact.add_file("trained_model.keras")
+        wandb.save("trained_model.keras")
+
+        run.log_artifact(model_artifact)
+
+    return model
+
+    
+def evaluate_and_log(config=None):
+    
+    with wandb.init(project="artifacts-example", job_type="report", config=config) as run:
+        data = run.use_artifact('mnist-preprocess:latest')
+        data_dir = data.download()
+        test_dataset = read(data_dir, "test")
+
+        model_artifact = run.use_artifact("trained-model:latest")
+        model_dir = model_artifact.download()
+        model_path = os.path.join(model_dir, "trained_model.keras")
+        model = keras.models.load_model(model_path)
+
+        loss, accuracy, highest_losses, hardest_examples, true_labels, preds = evaluate(model, test_dataset)
+
+        run.summary.update({"loss": loss, "accuracy": accuracy})
+
+        wandb.log({"high-loss-examples":
+            [wandb.Image(hard_example, caption=str(pred) + "," +  str(label))
+             for hard_example, pred, label in zip(hardest_examples, preds, true_labels)]})    
+```
+
+```python
+def load_and_log():
+
+    # 🚀 start a run, with a type to label it and a project it can call home
+    with wandb.init(project="artifacts-example", job_type="load-data") as run:
+        
+        datasets = load()  # separate code for loading the datasets
+        names = ["training", "validation", "test"]
+
+        # 🏺 create our Artifact
+        raw_data = wandb.Artifact(
+            "mnist-raw", type="dataset",
+            description="Raw MNIST dataset, split into train/val/test",
+            metadata={"source": "keras.datasets.mnist",
+                      "sizes": [len(dataset.x) for dataset in datasets]})
+
+        for name, data in zip(names, datasets):
+            # 🐣 Store a new file in the artifact, and write something into its contents.
+            with raw_data.new_file(name + ".npz", mode="wb") as file:
+                np.savez(file, x=data.x, y=data.y)
+
+        # ✍️ Save the artifact to W&B.
+        run.log_artifact(raw_data)
+
+load_and_log()
+```
+
+```python
+def preprocess_and_log(steps):
+
+    with wandb.init(project="artifacts-example", job_type="preprocess-data") as run:
+
+        processed_data = wandb.Artifact(
+            "mnist-preprocess", type="dataset",
+            description="Preprocessed MNIST dataset",
+            metadata=steps)
+         
+        # ✔️ declare which artifact we'll be using
+        raw_data_artifact = run.use_artifact('mnist-raw:latest')
+
+        # 📥 if need be, download the artifact
+        raw_dataset = raw_data_artifact.download()
+        
+        for split in ["training", "validation", "test"]:
+            raw_split = read(raw_dataset, split)
+            processed_dataset = preprocess(raw_split, **steps)
+
+            with processed_data.new_file(split + ".npz", mode="wb") as file:
+                np.savez(file, x=processed_dataset.x, y=processed_dataset.y)
+
+        run.log_artifact(processed_data)
+```
+
+```python
+def build_model_and_log(config):
+    with wandb.init(project="artifacts-example", job_type="initialize", config=config) as run:
+        config = wandb.config
+        
+        model = build_model(**config)
+
+        model_artifact = wandb.Artifact(
+            "convnet", type="model",
+            description="Simple AlexNet style CNN",
+            metadata=dict(config))
+
+        model.save("initialized_model.keras")
+        # ➕ another way to add a file to an Artifact
+        model_artifact.add_file("initialized_model.keras")
+        wandb.save("initialized_model.keras")
+
+        run.log_artifact(model_artifact)
+
+model_config = {"hidden_layer_sizes": [32, 64],
+                "kernel_sizes": [(3, 3)],
+                "activation": "relu",
+                "pool_sizes": [(2, 2)],
+                "dropout": 0.5,
+                "num_classes": 10,
+                "input_shape": (28, 28, 1)}
+
+build_model_and_log(model_config)
+```
+
+### wandb.log
+
+```python
+  # load data and split into predictors and targets
+  dataset = loadtxt("pima-indians-diabetes.data.csv", delimiter=",")
+  X, Y = dataset[:, :8], dataset[:, 8]
+
+  # split data into train and test sets
+  X_train, X_test, y_train, y_test = train_test_split(X, Y,
+                                                      test_size=config.test_size,
+                                                      random_state=config.seed)
+
+  # fit model on train
+  model = XGBClassifier(booster=config.booster, max_depth=config.max_depth,
+                        learning_rate=config.learning_rate, subsample=config.subsample)
+  model.fit(X_train, y_train)
+
+  # make predictions on test
+  y_pred = model.predict(X_test)
+  predictions = [round(value) for value in y_pred]
+
+  # evaluate predictions
+  accuracy = accuracy_score(y_test, predictions)
+  print(f"Accuracy: {int(accuracy * 100.)}%")
+  wandb.log({"accuracy": accuracy})
+```
+
+```python
+def train_log(loss, example_ct, epoch):
+    loss = float(loss)
+
+    # where the magic happens
+    wandb.log({"epoch": epoch, "loss": loss}, step=example_ct)
+    print(f"Loss after " + str(example_ct).zfill(5) + f" examples: {loss:.3f}")
+```
+```python
+def test(model, test_loader):
+    model.eval()
+
+    # Run the model on some test examples
+    with torch.no_grad():
+        correct, total = 0, 0
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        print(f"Accuracy of the model on the {total} " +
+              f"test images: {100 * correct / total}%")
+        
+        wandb.log({"test_accuracy": correct / total})
+```
+
+```python
+def train(train_dataset,
+          val_dataset, 
+          model,
+          optimizer,
+          loss_fn,
+          train_acc_metric,
+          val_acc_metric,
+          epochs=10, 
+          log_step=200, 
+          val_log_step=50):
+  
+    for epoch in range(epochs):
+        print("\nStart of epoch %d" % (epoch,))
+
+        train_loss = []   
+        val_loss = []
+
+        # Iterate over the batches of the dataset
+        for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):
+            loss_value = train_step(x_batch_train, y_batch_train, 
+                                    model, optimizer, 
+                                    loss_fn, train_acc_metric)
+            train_loss.append(float(loss_value))
+
+        # Run a validation loop at the end of each epoch
+        for step, (x_batch_val, y_batch_val) in enumerate(val_dataset):
+            val_loss_value = test_step(x_batch_val, y_batch_val, 
+                                       model, loss_fn, 
+                                       val_acc_metric)
+            val_loss.append(float(val_loss_value))
+            
+        # Display metrics at the end of each epoch
+        train_acc = train_acc_metric.result()
+        print("Training acc over epoch: %.4f" % (float(train_acc),))
+
+        val_acc = val_acc_metric.result()
+        print("Validation acc: %.4f" % (float(val_acc),))
+
+        # Reset metrics at the end of each epoch
+        train_acc_metric.reset_states()
+        val_acc_metric.reset_states()
+
+        # log metrics using wandb.log
+        wandb.log({'epochs': epoch,
+                   'loss': np.mean(train_loss),
+                   'acc': float(train_acc), 
+                   'val_loss': np.mean(val_loss),
+                   'val_acc':float(val_acc)})
+```                   
+### wandb.config
+```python
+wandb.init(project="alphafold") # feel free to change the project name
+
+# optional: set this to "" if using your own custom sequence, and save
+# any metadata, like the species or a reference url, in wandb.config
+S = SEQUENCES[SEQ_ID]
+sequence_tag = ""
+species = ""
+if S:
+  species = S["species"]
+  sequence_tag = S["name"]
+  wandb.config.update({"species" : species, "desc" : S["desc"], "url" : S["url"]})
+
+wandb.config.update({"seq" : logs["seq"], "length" : len(logs["seq"])})
+
+# convert search + inference timing to a more readable string
+def time_units(t):
+  hours, rem = divmod(t, 3600)
+  minutes, seconds = divmod(rem, 60)
+  return "{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds)
+
+search_time_str = time_units(logs["search_time"])
+infer_time_str = time_units(logs["inference_time"])
+
+# log match results, inference time, and plots
+wandb.log({"matches/uniref90" : logs["uniref90"], "matches/smallbfd" : logs["smallbfd"],
+           "matches/mgnify" : logs["mgnify"], "matches/total" : logs["total_seq"],
+           "search_time" : logs["search_time"], "infer_time" : logs["inference_time"],
+           "search_time_str" : search_time_str, "infer_time_str" : infer_time_str}
+          )
+
+# optional: log a molecule view outside of the Table
+wandb.log({"view_3D" : wandb.Molecule(pred_output_path)})
+
+# create a Table and log corresponding fields
+t = wandb.Table(columns=["tag", "species", "sequence", "molecule", "msa", "error plots"])
+t.add_data(sequence_tag, species, logs["seq"], wandb.Molecule(pred_output_path), wandb.Image(logs["msa"]), wandb.Image(logs["pae"]))
+wandb.run.log({"predicted_molecules": t})
+
+wandb.run.finish()
+```
+
+```python
+# load data
+def train():
+  config_defaults = {
+    "booster": "gbtree",
+    "max_depth": 3,
+    "learning_rate": 0.1,
+    "subsample": 1,
+    "seed": 117,
+    "test_size": 0.33,
+  }
+
+  wandb.init(config=config_defaults)  # defaults are over-ridden during the sweep
+  config = wandb.config
+```
+
+```python
+# initialize wandb with your project name and optionally with configutations.
+# play around with the config values and see the result on your wandb dashboard.
+configs = {
+              "learning_rate": 0.001,
+              "epochs": 10,
+              "batch_size": 64,
+              "log_step": 200,
+              "val_log_step": 50,
+              "architecture": "CNN",
+              "dataset": "CIFAR-10"
+           }
+
+run = wandb.init(project='my-tf-integration', config=configs)
+config = wandb.config
+
+# Initialize model.
+model = Model()
+
+# Instantiate an optimizer to train the model.
+optimizer = keras.optimizers.SGD(learning_rate=config.learning_rate)
+# Instantiate a loss function.
+loss_fn = keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+
+# Prepare the metrics.
+train_acc_metric = keras.metrics.SparseCategoricalAccuracy()
+val_acc_metric = keras.metrics.SparseCategoricalAccuracy()
+
+train(train_dataset,
+      val_dataset, 
+      model,
+      optimizer,
+      train_acc_metric,
+      val_acc_metric,
+      epochs=config.epochs, 
+      log_step=config.log_step, 
+      val_log_step=config.val_log_step)
+
+run.finish()  # In Jupyter/Colab, let us know you're finished!
+```
+```python
+def sweep_train():
+    # Specify the hyperparameter to be tuned along with
+    # an initial value
+    config_defaults = {
+        'batch_size': 8,
+        'learning_rate': 0.01
+    }
+
+    # Initialize wandb with a sample project name
+    wandb.init(config=config_defaults)
+
+    # Specify the other hyperparameters to the configuration, if any
+    wandb.config.epochs = 7
+    wandb.config.log_step = 200
+    wandb.config.val_log_step = 50
+    wandb.config.architecture_name = "CNN"
+    wandb.config.dataset_name = "CIFAR-10"
+
+    # build input pipeline using tf.data
+    train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+    train_dataset = train_dataset.shuffle(buffer_size=1024).batch(wandb.config.batch_size)
+
+    val_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test))
+    val_dataset = val_dataset.batch(wandb.config.batch_size)
+
+    # initialize model
+    model = Model()
+
+    # Instantiate an optimizer to train the model.
+    optimizer = keras.optimizers.SGD(learning_rate=wandb.config.learning_rate)
+    # Instantiate a loss function.
+    loss_fn = keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+
+    # Prepare the metrics.
+    train_acc_metric = keras.metrics.SparseCategoricalAccuracy()
+    val_acc_metric = keras.metrics.SparseCategoricalAccuracy()
+
+    train(train_dataset,
+          val_dataset, 
+          model,
+          optimizer,
+          loss_fn,
+          train_acc_metric,
+          val_acc_metric,
+          epochs=wandb.config.epochs, 
+          log_step=wandb.config.log_step, 
+          val_log_step=wandb.config.val_log_step)
+```
+
+### wandb.sweep
+
+```python
+sweep_id = wandb.sweep(sweep_config, project="my-tf-integration")
+```
+
+```python
+sweep_config = {
+    "method": "random", # try grid or random
+    "metric": {
+      "name": "accuracy",
+      "goal": "maximize"   
+    },
+    "parameters": {
+        "booster": {
+            "values": ["gbtree","gblinear"]
+        },
+        "max_depth": {
+            "values": [3, 6, 9, 12]
+        },
+        "learning_rate": {
+            "values": [0.1, 0.05, 0.2]
+        },
+        "subsample": {
+            "values": [1, 0.5, 0.3]
+        }
+    }
+}
+
+sweep_id = wandb.sweep(sweep_config, project="XGBoost-sweeps")
+```
+
+### wandb.agent
+```python
+wandb.agent(sweep_id, function=sweep_train)
+```
+```python
+wandb.agent(sweep_id, train, count=25)
+```
+
+### wandb.save
+
+```python
+    # Save the model in the exchangeable ONNX format
+    torch.onnx.export(model, images, "model.onnx")
+    wandb.save("model.onnx")
+```
+
+### wandb-artifact://{crashed_run_path}
+
+```python
+crashed_run_path = "entity/project/run-id"  # your path here
+!python train.py --resume wandb-artifact://{crashed_run_path}
 ```
 
 ## pickle
