@@ -4,6 +4,62 @@ Study Notes of Yuting
 
 # Section 1 - Packages
 
+## tensorflow
+
+tf.cast()函数的作用是执行 tensorflow 中张量数据类型转换,比如读入的图片如果是int8类型的,一般在要在训练前把图像的数据格式转换为float32。
+
+### tf.cast
+```python
+text_ds = tf.data.TextLineDataset(path_to_file).filter(lambda x: tf.cast(tf.strings.length(x), bool))
+```
+```python
+image = tf.cast(image, tf.float32)
+```
+
+```python
+batch_len = tf.cast(tf.shape(y_true)[0], dtype="int64")
+input_length = tf.cast(tf.shape(y_pred)[1], dtype="int64")
+label_length = tf.cast(tf.shape(y_true)[1], dtype="int64")
+```
+
+```python
+features[feature_name] = tf.cast(features[feature_name], tf.dtypes.string)
+```
+
+```python
+cut_w = IMG_SIZE * cut_rat  # rw
+cut_w = tf.cast(cut_w, tf.int32)
+
+cut_h = IMG_SIZE * cut_rat  # rh
+cut_h = tf.cast(cut_h, tf.int32)
+```
+
+```python
+padding_mask = tf.cast(mask[:, :, tf.newaxis], dtype=tf.int32)
+combined_mask = tf.cast(mask[:, tf.newaxis, :], dtype=tf.int32)
+combined_mask = tf.minimum(combined_mask, causal_mask)
+```
+
+```python
+loss = self.loss(y_true, y_pred)
+mask = tf.cast(mask, dtype=loss.dtype)
+```
+
+```python
+x = tf.cast(
+    tf.signal.fft2d(tf.cast(inputs, dtype=tf.dtypes.complex64)),
+    dtype=tf.dtypes.float32,
+)
+
+images = tf.cast(images, tf.uint8)
+```
+
+```python      
+fft = tf.signal.fft(
+    tf.cast(tf.complex(real=audio, imag=tf.zeros_like(audio)), tf.complex64)
+) 
+```
+                            
 ## tensorflow_datasets
 
 ```python
@@ -748,6 +804,182 @@ x = layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")(x)
 ### tf.keras.layers.Dropout
 ### tf.keras.layers.BatchNormalization
 ### tf.keras.layers.Embedding
+
+[将正整数（索引）转换为固定大小的向量](https://mtyjkh.blog.csdn.net/article/details/115796173)，例如[[4], [20]] -> [[0.25, 0.1], [0.6, -0.2]]。
+
+Embedding层只能用作模型中的第一层.
+
+input_dim：大或等于0的整数，字典长度，即输入数据最大下标+1
+
+output_dim：大于0的整数，代表全连接嵌入的维度
+
+embeddings_initializer: 嵌入矩阵的初始化方法，为预定义初始化方法名的字符串，或用于初始化权重的初始化器。
+
+embeddings_regularizer: 嵌入矩阵的正则项，为Regularizer对象
+
+embeddings_constraint: 嵌入矩阵的约束项，为Constraints对象
+
+mask_zero：布尔值，确定是否将输入中的‘0’看作是应该被忽略的“填充”（padding）值，该参数在使用递归层处理变长输入时有用。设置为True的话，模型中后续的层必须都支持masking，否则会抛出异常。如果该值为True，则下标0在字典中不可用，input_dim应设置为|vocabulary| + 1。
+
+input_length：当输入序列的长度固定时，该值为其长度。如果要在该层后接Flatten层，然后接Dense层，则必须指定该参数，否则Dense层的输出维度无法自动推断。
+
+
+```python
+def create_model(vocabulary_size, embedding_dim):
+
+    inputs = {
+        "target": layers.Input(name="target", shape=(), dtype="int32"),
+        "context": layers.Input(name="context", shape=(), dtype="int32"),
+    }
+    # Initialize item embeddings.
+    # 初始化项目嵌入。
+    embed_item = layers.Embedding(
+        input_dim=vocabulary_size,
+        output_dim=embedding_dim,
+        embeddings_initializer="he_normal",
+        embeddings_regularizer=keras.regularizers.l2(1e-6),
+        name="item_embeddings",
+    )
+    # Lookup embeddings for target.
+    # 查找嵌入目标。
+    target_embeddings = embed_item(inputs["target"])
+    # Lookup embeddings for context.
+    # 上下文的查找嵌入。
+    context_embeddings = embed_item(inputs["context"])
+    # Compute dot similarity between target and context embeddings.
+    # 计算目标和上下文嵌入之间的点相似性。
+    logits = layers.Dot(axes=1, normalize=False, name="dot_similarity")(
+        [target_embeddings, context_embeddings]
+    )
+    # Create the model.
+    model = keras.Model(inputs=inputs, outputs=logits)
+    return model
+```
+```python
+class Word2Vec(tf.keras.Model):
+  def __init__(self, vocab_size, embedding_dim):
+    super(Word2Vec, self).__init__()
+    self.target_embedding = layers.Embedding(vocab_size,
+                                      embedding_dim,
+                                      input_length=1,
+                                      name="w2v_embedding")
+    self.context_embedding = layers.Embedding(vocab_size,
+                                       embedding_dim,
+                                       input_length=num_ns+1)
+
+  def call(self, pair):
+    target, context = pair
+    # target: (batch, dummy?)  # The dummy axis doesn't exist in TF2.7+
+    # context: (batch, context)
+    if len(target.shape) == 2:
+      target = tf.squeeze(target, axis=1)
+    # target: (batch,)
+    word_emb = self.target_embedding(target)
+    # word_emb: (batch, embed)
+    context_emb = self.context_embedding(context)
+    # context_emb: (batch, context, embed)
+    dots = tf.einsum('be,bce->bc', word_emb, context_emb)
+    # dots: (batch, context)
+    return dots
+```
+```python
+# Input for variable-length sequences of integers
+inputs = keras.Input(shape=(None,), dtype="int32")
+# Embed each integer in a 128-dimensional vector
+x = layers.Embedding(max_features, 128)(inputs)
+# Add 2 bidirectional LSTMs
+x = layers.Bidirectional(layers.LSTM(64, return_sequences=True))(x)
+x = layers.Bidirectional(layers.LSTM(64))(x)
+# Add a classifier
+outputs = layers.Dense(1, activation="sigmoid")(x)
+model = keras.Model(inputs, outputs)
+model.summary()
+```
+
+```python
+    def positional_embedding(self, image_size):
+        # Positional embeddings are optional in CCT. Here, we calculate
+        # the number of sequences and initialize an `Embedding` layer to
+        # compute the positional embeddings later.
+        if self.positional_emb:
+            dummy_inputs = tf.ones((1, image_size, image_size, 3))
+            dummy_outputs = self.call(dummy_inputs)
+            sequence_length = tf.shape(dummy_outputs)[1]
+            projection_dim = tf.shape(dummy_outputs)[-1]
+
+            embed_layer = layers.Embedding(
+                input_dim=sequence_length, output_dim=projection_dim
+            )
+            return embed_layer, sequence_length
+        else:
+            return None
+```
+```python
+def encode_inputs(inputs, encoding_size):
+    encoded_features = []
+    for feature_name in inputs:
+        if feature_name in CATEGORICAL_FEATURES_WITH_VOCABULARY:
+            vocabulary = CATEGORICAL_FEATURES_WITH_VOCABULARY[feature_name]
+            # Create a lookup to convert a string values to an integer indices.
+            # Since we are not using a mask token nor expecting any out of vocabulary
+            # (oov) token, we set mask_token to None and  num_oov_indices to 0.
+            index = StringLookup(
+                vocabulary=vocabulary, mask_token=None, num_oov_indices=0
+            )
+            # Convert the string input values into integer indices.
+            value_index = index(inputs[feature_name])
+            # Create an embedding layer with the specified dimensions
+            embedding_ecoder = layers.Embedding(
+                input_dim=len(vocabulary), output_dim=encoding_size
+            )
+            # Convert the index values to embedding representations.
+            encoded_feature = embedding_ecoder(value_index)
+        else:
+            # Project the numeric feature to encoding_size using linear transformation.
+            encoded_feature = tf.expand_dims(inputs[feature_name], -1)
+            encoded_feature = layers.Dense(units=encoding_size)(encoded_feature)
+        encoded_features.append(encoded_feature)
+    return encoded_features
+```
+```python
+class RecommenderNet(keras.Model):
+    def __init__(self, num_users, num_movies, embedding_size, **kwargs):
+        super(RecommenderNet, self).__init__(**kwargs)
+        self.num_users = num_users
+        self.num_movies = num_movies
+        self.embedding_size = embedding_size
+        self.user_embedding = layers.Embedding(
+            num_users,
+            embedding_size,
+            embeddings_initializer="he_normal",
+            embeddings_regularizer=keras.regularizers.l2(1e-6),
+        )
+        self.user_bias = layers.Embedding(num_users, 1)
+        self.movie_embedding = layers.Embedding(
+            num_movies,
+            embedding_size,
+            embeddings_initializer="he_normal",
+            embeddings_regularizer=keras.regularizers.l2(1e-6),
+        )
+        self.movie_bias = layers.Embedding(num_movies, 1)
+
+    def call(self, inputs):
+        user_vector = self.user_embedding(inputs[:, 0])
+        user_bias = self.user_bias(inputs[:, 0])
+        movie_vector = self.movie_embedding(inputs[:, 1])
+        movie_bias = self.movie_bias(inputs[:, 1])
+        dot_user_movie = tf.tensordot(user_vector, movie_vector, 2)
+        # Add all the components (including bias)
+        x = dot_user_movie + user_bias + movie_bias
+        # The sigmoid activation forces the rating to between 0 and 1
+        return tf.nn.sigmoid(x)
+
+
+model = RecommenderNet(num_users, num_movies, EMBEDDING_SIZE)
+model.compile(
+    loss=tf.keras.losses.BinaryCrossentropy(), optimizer=keras.optimizers.Adam(lr=0.001)
+)
+```
 ### tf.keras.layers.Masking
 ### tf.keras.layers.Conv1D
 ### tf.keras.layers.Dense
