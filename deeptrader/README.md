@@ -71,6 +71,9 @@
 ## sec fillings 美国证监会文件
 ## trading performance
 ## vertical bull spread 垂直看涨买卖权
+``TRADE SHARES``
+``TRADE VERTICAL BULL SPREAD``
+``TRADE VERTICAL BEAR SPREAD`` 
 ## horizontal spreads 水平套利
 ## straddle 套利
 ## butterfly spread 蝶式套利
