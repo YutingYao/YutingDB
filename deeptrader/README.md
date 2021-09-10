@@ -54,9 +54,136 @@
 ## plotly 可视化
 ## seaborn 可视化
 
+sns.set_style('whitegrid')
+iex.close.plot(figsize=(14, 5))
+sns.despine()
+
 ## spylunking 查看日志的沙箱
 ## colourized logger
 ## colourlovers 配色方案
+
+## pandas_datareader.data
+Pandas库提供了专门从财经网站获取金融数据的API接口，可作为量化交易股票数据获取的另一种途径，该接口在urllib3库基础上实现了以客户端身份访问网站的股票数据。
+
+查看Pandas的操作文档可以发现:
+
+第一个参数为股票代码，苹果公司的代码为"AAPL"，国内股市采用的输入方式“股票代码”+“对应股市”，上证股票在股票代码后面加上“.SS”，深圳股票在股票代码后面加上“.SZ”。
+DataReader可从多个金融网站获取到股票数据，如“Yahoo! Finance” 、“Google Finance”等，这里以Yahoo为例。第三、四个参数为股票数据的起始时间断。返回的数据格式为DataFrame。
+
+```python
+import pandas_datareader.data as web
+
+start = datetime.datetime(2017,1,1)#获取数据的时间段-起始时间
+end = datetime.date.today()#获取数据的时间段-结束时间
+stock = web.DataReader("600797.SS", "yahoo", start, end)#获取浙大网新2017年1月1日至今的股票数据
+```
+
+```python
+import pandas_datareader.data as web
+
+start = datetime.datetime(2017,1,1)#获取数据的时间段-起始时间
+end = datetime.date.today()#获取数据的时间段-结束时间
+yahoo= web.DataReader('FB', 'yahoo', start=start, end=end)
+```
+
+```python
+start = '2014'
+end = datetime(2017, 5, 24)
+
+yahoo= web.DataReader('FB', 'yahoo', start=start, end=end)
+yahoo.info()
+```
+
+```python
+import pandas_datareader.data as web
+
+start = datetime(2015, 2, 9)
+# end = datetime(2017, 5, 24)
+iex = web.DataReader('FB', 'iex', start)
+
+
+iex.info()
+iex.tail()
+```
+
+```python
+symbol = 'FB.US'
+quandl = web.DataReader(symbol, 'quandl', '2015-01-01')
+quandl.info()
+```
+
+```python
+start = datetime(2010, 1, 1)
+end = datetime(2013, 1, 27)
+gdp = web.DataReader('GDP', 'fred', start, end)
+
+gdp.info()
+```
+
+```python
+inflation = web.DataReader(['CPIAUCSL', 'CPILFESL'], 'fred', start, end)
+inflation.info()
+```
+
+```python
+from pandas_datareader.famafrench import get_available_datasets
+get_available_datasets()
+
+ds = web.DataReader('5_Industry_Portfolios', 'famafrench')
+print(ds['DESCR'])
+```
+
+```python
+from pandas_datareader.nasdaq_trader import get_nasdaq_symbols
+symbols = get_nasdaq_symbols()
+symbols.info()
+```
+
+```python
+df = web.get_data_tiingo('GOOG', api_key=os.getenv('TIINGO_API_KEY'))
+df.info()
+```
+
+```python
+book = web.get_iex_book('AAPL')
+list(book.keys())
+
+orders = pd.concat([pd.DataFrame(book[side]).assign(side=side) for side in ['bids', 'asks']])
+orders.head()
+
+for key in book.keys():
+    try:
+        print(f'\n{key}')
+        print(pd.DataFrame(book[key]))
+    except:
+        print(book[key])
+
+pd.DataFrame(book['trades']).head()
+```
+
+```python
+from pandas_datareader import wb
+gdp_variables = wb.search('gdp.*capita.*const')
+gdp_variables.head()
+
+wb_data = wb.download(indicator='NY.GDP.PCAP.KD', 
+                      country=['US', 'CA', 'MX'], 
+                      start=1990, 
+                      end=2019)
+wb_data.head()
+```
+
+## mplfinance
+安装mplfinance库要求pandas和matplotlib
+
+```python
+import mplfinance as mpf
+mpf.plot(yahoo.drop('Adj Close', axis=1), type='candle')
+plt.tight_layout()
+```
+
+## sklearn.datasets.fetch_openml
+from sklearn.datasets import fetch_openml
 
 ## yahoo
 ## investopedia
@@ -68,7 +195,7 @@
 ## AGSI python的web服务网关接口
 ## Django web框架
 ## spearmanr 相关系数
-## sec fillings 美国证监会文件
+## sec filings 美国证监会文件
 ## trading performance
 ## vertical bull spread 垂直看涨买卖权
 ``TRADE SHARES``
