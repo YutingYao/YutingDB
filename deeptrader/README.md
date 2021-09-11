@@ -208,6 +208,112 @@ from sklearn.datasets import fetch_openml
 ## pytz 时区
 ## strftime 根据区域格式化本地时间
 ## ACF 时间序列前后的相关性
+## statsmodels
+statsmodels是一个Python模块,它提供对许多不同统计模型估计的类和函数,并且可以进行统计测试和统计数据的探索。
+
+```python
+import statsmodels.api as sm
+```
+
+所谓分解就是将时序数据分离成不同的成分，分解有：长期趋势Trend、季节性seasonality和随机残差residuals
+
+statsmodels使用的X-11分解过程，它主要将时序数据分离成长期趋势、季节趋势和随机成分。 
+
+
+```python
+statsmodels.tsa.seasonal.seasonal_decompose（x，model = 'additive'，filt = None，period = None，two_side = True，extrapolate_trend = 0）
+```
+
+参数：
+
+**x**：array_like，被分解的数据
+
+**model**：{“**additive**”, “**multiplicative**”}, optional，"additive"（加法模型）和"multiplicative"（乘法模型）
+
+**filt**：array_like, optional，用于滤除季节性成分的滤除系数。滤波中使用的具体移动平均法由two_side确定
+
+**period**：int, optional，系列的时期。如果x不是pandas对象或x的索引没有频率，则必须使用。如果x是具有时间序列索引的pandas对象，则覆盖x的默认周期性。
+
+**two_sided**：bool, optional，滤波中使用的移动平均法。如果为True（默认），则使用filt计算居中的移动平均线。如果为False，则滤波器系数仅用于过去的值
+
+**extrapolate_trend**：int or ‘freq’, optional，如果设置为> 0，则考虑到许多（+1）最接近的点，由卷积产生的趋势将在两端外推线性最小二乘法（如果two_side为False，则为单一个最小二乘）。如果设置为“频率”，请使用频率最近点。设置此参数将导致趋势或残油成分中没有NaN值。
+
+
+```python
+res = sm.tsa.seasonal_decompose(s)
+plt.plot(res.trend)
+```
+
+**X-13-ARIMA-SEAT**是由USCensus发布的一个**季节性调整程序**。其基础是X-11，X-11是一系列的**中心化移动平均**。由于是中心化的移动平均，因此X-11在处理**序列两端的数据**存在困难。X-13-ARIMA-SEAT，引入带有**回归自变量**的ARIMA（regARIMA）来对序列进行**预测扩展**，从而部分解决了**最新数据的移动平均**。另外，regARIMA还可以**识别异常值**、日历效应、移动假期等。
+
+因此，在使用X-13-ARIMA-SEAT的时候，一般是四个步骤：
+
+1、**熟悉**了解要研究的**时间序列**；
+
+2、选择合适的自变量，**拟合**回归方程；
+
+3、对残差拟合ARIMA模型，对样本区间进行预测扩展；
+
+4、使用X-11进行移动平均的季节性调整，提取季节性成分。
+
+
+```python
+res = sm.tsa.x13_arima_analysis(s,maxorder=(4, 2), maxdiff=(2, 0))
+res.plot()
+```
+
+```python
+from statsmodels.stats.stattools import jarque_bera
+
+pd.DataFrame({'Jarque-Bera p-value':fx_returns.apply(lambda x: jarque_bera(x)[1])})
+```
+![image](https://raw.githubusercontent.com/YutingYao/image-hosting/master/deeptrader/image.3rb4mxzqct00.png)
+
+```python
+from statsmodels.tsa.stattools import acf, pacf, adfuller
+
+
+```
+
+```python
+from statsmodels.graphics.tsaplots import plot_acf,plot_pacf
+```
+
+```python
+from statsmodels.graphics.gofplots import qqplot
+```
+
+
+
+```python
+from statsmodels.tsa.arima_model import ARIMA
+```
+
+
+## chi2
+from scipy.stats import chi2
+
+## pmdarima.pm
+import pmdarima as pm
+
+## arch.arch_model
+from arch import arch_model
+
+## scipy.stats.ttest_1samp
+
+```python
+from scipy.stats import ttest_1samp
+from statsmodels.stats.diagnostic import acorr_ljungbox
+from statsmodels.stats.stattools import jarque_bera
+
+pd.DataFrame({'T-test p-value':fx_weekly_returns.apply(lambda x: ttest_1samp(x,0)[1])})
+pd.DataFrame({'LJung-Box p-value':fx_weekly_returns.apply(lambda x: acorr_ljungbox(x,lags=1)[1][0])})
+pd.DataFrame({'Jarque-Bera p-value':fx_weekly_returns.apply(lambda x: jarque_bera(x)[1])})
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/image-hosting/master/deeptrader/image.3rb4mxzqct00.png)
+
+
 ## minute
 ## intraday
 ## expire
