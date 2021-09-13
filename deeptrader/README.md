@@ -12,6 +12,8 @@
 
 ★momentum★[pymc4](https://github.com/YutingYao/pymc4)
 
+高频交易策略发展的深度学习框架 [PyStrategies](https://github.com/YutingYao/PyStrategies)
+
 # Books
 
 ★★book★momentum★iex-datareader★[Hands-On-Machine-Learning-for-Algorithmic-Trading-sample](https://github.com/YutingYao/Hands-On-Machine-Learning-for-Algorithmic-Trading-sample)
@@ -29,6 +31,14 @@
 ## arviz 贝叶斯
 ## pytest 自动化测试框架
 ## pytest.fixture
+## testfixtures
+
+[testfixture](https://github.com/gdlg/testfixtures)是一组在用Python编写自动化测试时非常有用的助手和模拟对象。
+
+## PyLimitBook
+
+[PyLimitBook](https://github.com/danielktaylor/PyLimitBook)是Python实现的快速限价订单簿。
+
 ## unittest python测试
 ## mock.patch
 ## celery task 异步任务
