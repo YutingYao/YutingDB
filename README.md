@@ -2,6 +2,16 @@
 Study Notes of Yuting
 时常断更。。有空再继续。。
 
+# Section 0 - LeetCode
+
+[Python](https://github.com/HuberTRoy/leetCode)
+
+[Javascript](https://github.com/YutingYao/leetcode-1)
+
+[Jupyter notobook](https://github.com/YutingYao/Interview/tree/master/docs/Algorithm/Leetcode/Python)
+
+
+
 # Section 1 - Packages
 
 ## tensorflow
