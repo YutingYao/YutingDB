@@ -21,3 +21,15 @@
 [SQLite](https://colab.research.google.com/github/royalosyin/Practice-SQL-with-SQLite-and-Jupyter-Notebook/blob/master/ex13-Using%20SQLite%20as%20a%20Time%20Series%20Database.ipynb)
 
 [ceres robot](https://github.com/uos/ceres_robot) ros driver and tools
+
+[A Sensor Fusion Algorithm](https://github.com/YutingYao/Kalman-Filter-for-Sensor-Fusion) that can predict a State Estimate and Update if it is uncertain
+
+Sensor Data Fusion ([camera + Lidar](https://github.com/AyoubHAMD/3D-Reconstruction)) for 3D reconstruction
+
+Implementation of the Multi-Task Multi-Sensor Fusion for 3D Object Detection paper by [Uber](https://github.com/abcSup/NotEnoughSleepAI)
+
+My work from the [Udacity Sensor Fusion Nanodegree Program](https://github.com/rayryeng/Udacity_Sensor_Fusion_Nanodegree)
+
+This is a [robot](https://github.com/stevensmiley1989/MrRobot) I designed in Fusion 360 and 3D printed with my FlashForge Creator Pro in PLA
+
+[Sensor Fusion](https://github.com/YahyaAlaaMassoud/Sensor-Fusion) for 3D Object Detection for Driverless Cars
