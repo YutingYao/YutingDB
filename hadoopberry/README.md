@@ -7,3 +7,35 @@ Repo for instructions on setting up a micro compute cluster with the [NVidia Jet
 Setting up a [K3s Kubernetes](https://github.com/YutingYao/jetsonnano-k3s-gpu) cluster on my Nvidia Jetson Nano
 
 Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoCluster)
+
+## hadoop
+## ssh
+## apark
+## setup
+## hdfs
+## node
+## yarn
+## conf
+## bashrc
+## host
+## mapreduce
+## ip
+## pip
+## pyspark
+## java
+## xml
+## reboot
+## server
+## folder
+## jupyter
+## dir
+## installed
+## master
+## password
+## rsa
+## distributed
+## pdsh
+## mb
+## tar
+## keys
+## dir
