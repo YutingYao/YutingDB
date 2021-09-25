@@ -17,8 +17,8 @@ class Solution(object):
     
 if __name__ == "__main__":
 
-    list = [11,15,2,9,7]
+    numlist = [11,15,2,9,7]
     target = 9
     so = Solution()
-    n = so.twoSum(list, target)
+    n = so.twoSum(numlist, target)
     print("结果: ", n)
