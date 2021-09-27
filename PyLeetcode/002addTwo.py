@@ -1,3 +1,5 @@
+# medium, 但我认为hard
+
 class ListNode:
     def __init__(self, val = None, next = None):
         self.val = val
@@ -32,32 +34,34 @@ class Solution(object):
             l3.next = self.addTwoNumbers(l1.next, self.addTwoNumbers(l2.next ,tmp))
         return l3
  
+    
+if __name__ == "__main__":
 
-la = ListNode(2)
-la.next = ListNode(4)
-la.next.next = ListNode(3)
+    la = ListNode(2)
+    la.next = ListNode(4)
+    la.next.next = ListNode(3)
 
-lb = ListNode(5)
-lb.next = ListNode(6)
-lb.next.next = ListNode(4)
+    lb = ListNode(5)
+    lb.next = ListNode(6)
+    lb.next.next = ListNode(4)
 
-def printList(node):
-    while node:
-        print(node)
-        node = node.next
-        
+    def printList(node):
+        while node:
+            print(node)
+            node = node.next
+            
 
 
-s = Solution()
-ss = s.addTwoNumbers(la, lb)
+    s = Solution()
+    ss = s.addTwoNumbers(la, lb)
 
-print(ListNode("la"))
-printList(la)
-print(ListNode("lb"))
-printList(lb)
+    print(ListNode("la"))
+    printList(la)
+    print(ListNode("lb"))
+    printList(lb)
 
-print("addTwoNumbers")
-print(ss.val)
-print(ss.next.val)
-print(ss.next.next.val)
-print(ss.next.next.next)
+    print("addTwoNumbers")
+    print(ss.val)
+    print(ss.next.val)
+    print(ss.next.next.val)
+    print(ss.next.next.next)
