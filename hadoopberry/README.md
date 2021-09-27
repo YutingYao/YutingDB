@@ -10,6 +10,8 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 ## hadoop
 
+[树莓派的Hadoop 3集群上的分布式TensorFlow](https://oliver-hu.medium.com/distributed-tensorflow-on-raspberry-pis-hadoop-3-cluster-603a164bb896)
+
 在每个节点上安装 Java 8，使其成为每个节点的默认 Java。
 
 ```sh
@@ -485,6 +487,120 @@ pi@pi1:~$ start-dfs.sh && start-yarn.sh
 
 
 
+```sh
+```
+
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
 
 ```sh
 ```
@@ -518,9 +634,117 @@ pi@pi1:~$ start-dfs.sh && start-yarn.sh
 ```sh
 ```
 
-## apark
+## spark
+
+[Spark SQL](https://spark.apache.org/sql/)是Apache Spark的模块，用于处理结构化数据。
+[MLlib](https://spark.apache.org/mllib/)是Apache Spark的可扩展机器学习库。
+[Spark Streaming](https://spark.apache.org/streaming/)使构建可伸缩的容错流应用程序变得容易。
+[GraphX](https://spark.apache.org/graphx/)是Apache Spark用于图形和图形并行计算的API。
+[Apache Spark示例](https://spark.apache.org/examples.html)
+
+Apache Spark on [Google Colaboratory](https://mikestaszel.com/2018/03/07/apache-spark-on-google-colaboratory/)
+使用 [Google Colaboratory](https://medium.com/@chiayinchen/%E4%BD%BF%E7%94%A8-google-colaboratory-%E8%B7%91-pyspark-625a07c75000) 跑 PySpark
+如何在3分钟内安装PySpark和[Jupyter笔记本](https://www.sicara.ai/blog/2017-05-02-get-started-pyspark-jupyter-notebook-3-minutes)
+使用[spark submit](https://spark.apache.org/docs/latest/submitting-applications.html)启动应用程序
+[spark 案例](https://github.com/YutingYao/spark)
+
+
+下载Spark，解包并授予pi所有权。
+
 ```sh
+pi@pi1:~$ cd && wget https://www-us.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoop-2.7.tgz
+pi@pi1:~$ sudo tar -xvf spark-2.4.4-bin-hadoop-2.7.tgz -C /opt/
+pi@pi1:~$ rm spark-2.4.4-bin-hadoop-2.7.tgz && cd /opt
+pi@pi1:~$ sudo mv spark-2.4.4-bin-hadoop-2.7 spark
+pi@pi1:~$ sudo chown pi:pi -R /opt/spark
 ```
+
+配置Spark环境变量。
+
+```sh
+pi@pi1:~$ sudo mousepad ~/.bashrc
+```
+
+添加（在文件顶部插入）：
+
+```sh
+export SPARK_HOME=/opt/spark
+export PATH=$PATH:$SPARK_HOME/bin
+```
+
+验证Spark安装。
+
+```sh
+pi@pi1:~$ source ~/.bashrc
+pi@pi1:~$ spark-shell --version
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.4.4
+      /_/
+                       
+Using Scala version 2.11.12, OpenJDK Client VM, 1.8.0_212
+Branch
+Compiled by user  on 2019-08-27T21:21:38Z
+Revision
+Url
+Type --help for more information.
+```
+
+配置Spark作业监控。
+
+与Hadoop类似，Spark还提供监视您部署的作业的功能。但是，使用Spark，我们必须手动配置监控选项。
+
+生成并修改Spark默认配置文件：
+
+```sh
+pi@pi1:~$ cd $SPARK_HOME/conf
+pi@pi1:/opt/spark/conf$ sudo mv spark-defaults.conf.template spark-defaults.conf
+pi@pi1:/opt/spark/conf$ mousepad spark-defaults.conf
+```
+
+Add the following lines:
+
+```c
+spark.master                       yarn
+spark.executor.instances           4
+spark.driver.memory                1024m
+spark.yarn.am.memory               1024m
+spark.executor.memory              1024m
+spark.executor.cores               4
+
+spark.eventLog.enabled             true
+spark.eventLog.dir                 hdfs://pi1:9000/spark-logs
+spark.history.provider             org.apache.spark.deploy.history.FsHistoryProvider
+spark.history.fs.logDirectory      hdfs://pi1:9000/spark-logs
+spark.history.fs.update.interval   10s
+spark.history.ui.port              18080
+```
+
+在HDFS上创建日志目录。
+
+```sh
+pi@pi1:/opt/spark/conf$ cd
+pi@pi1:~$ hdfs dfs -mkdir /spark-logs
+```
+
+启动Spark历史服务器。
+
+```sh
+pi@pi1:~$ $SPARK_HOME/sbin/start-history-server.sh
+```
+
+Spark历史服务器界面可以通过 http://pi1:18080 访问
+
+![spark历史服务器](https://github.com/YutingYao/pi-cluster/blob/master/pictures/spark-history-ui.png)
+
+运行示例作业（计算pi）
+
+```sh
+pi@pi1:~$ spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.11-2.4.4.jar 7
+```
+
 
 ## setup
 ```sh
