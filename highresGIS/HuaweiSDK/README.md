@@ -1,0 +1,59 @@
+
+
+请复制以下代码片段到 </body> 标记的底部。
+
+```js
+var agConnectConfig = 
+{
+ "agcgw":{
+  "backurl":"connect-drcn.dbankcloud.cn",
+  "url":"connect-drcn.hispace.hicloud.com",
+  "websocketbackurl":"connect-ws-drcn.hispace.dbankcloud.cn",
+  "websocketurl":"connect-ws-drcn.hispace.dbankcloud.com"
+ },
+ "agcgw_all":{
+  "CN":"connect-drcn.hispace.hicloud.com",
+  "CN_back":"connect-drcn.dbankcloud.cn",
+  "DE":"connect-dre.hispace.hicloud.com",
+  "DE_back":"connect-dre.dbankcloud.cn",
+  "RU":"connect-drru.hispace.hicloud.com",
+  "RU_back":"connect-drru.dbankcloud.cn",
+  "SG":"connect-dra.hispace.hicloud.com",
+  "SG_back":"connect-dra.dbankcloud.cn"
+ },
+ "client":{
+  "cp_id":"2850086000480633417",
+  "product_id":"737518067793601272",
+  "client_id":"730151380232193088",
+  "client_secret":"A485A372EC903076998C9B9C5EB2A91BF0651FA029E8AE6031830DFA94E0BA08",
+  "project_id":"737518067793601272",
+  "app_id":"322780611176071227",
+  "api_key":"CwEAAAAAAlw+u2/y0wPSL77J06iwmCjpj722P5/3mcK2D7WU130ApngFQpw3N8JHwDp8/yAJLKxQWDEtTtmUbtBy3EpUZ1ekgXU="
+ },
+ "oauth_client":{
+  "client_id":"104799477",
+  "client_type":7
+ },
+ "app_info":{
+  "app_id":"322780611176071227"
+ },
+ "service":{
+  "analytics":{
+   "collector_url":"datacollector-drcn.dt.hicloud.com,datacollector-drcn.dt.dbankcloud.cn",
+   "resource_id":"p1",
+   "channel_id":""
+  },
+  "search":{
+   "url":"https://search-drcn.cloud.huawei.com"
+  },
+  "cloudstorage":{
+   "storage_url":"https://agc-storage-drcn.platform.dbankcloud.cn"
+  },
+  "ml":{
+   "mlservice_url":"ml-api-drcn.ai.dbankcloud.com,ml-api-drcn.ai.dbankcloud.cn"
+  }
+ },
+ "region":"CN",
+ "configuration_version":"3.0"
+};
+```
