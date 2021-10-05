@@ -14,6 +14,7 @@ class Solution:
             for j in range(1,n):
                 dp[j] += dp[j-1]
         return dp[n-1]
-    
-s = Solution()
-print(s.uniquePaths(7,3))
+
+if __name__ == "__main__":      
+	s = Solution()
+	print(s.uniquePaths(7,3))
