@@ -157,14 +157,14 @@ def main():
     with open("result_new.json", "w") as writejson_main, open("record_new.txt", "w") as record_main:
         urlsource = get_data(adcode="中国", level="country") # 是从url读取数据
         districts = get_districts(urlsource['districts'][0]['districts'], 100000)
-        countmain = 1 # 我补充的，防止算太久
+        countmain = 1 # 我补充的，防止算太久，但是还存在问题
         for district_main in districts:
             get_geojson(district_main, writejson_main, record_main) 
             #  get_geojson -> get_districts -> get_data
             time.sleep(2)
-            countmain += 1 # 我补充的，防止算太久
-            if countmain > 600: # 我补充的，防止算太久
-                break # 我补充的，防止算太久
+            countmain += 1 # 我补充的，防止算太久，但是还存在问题
+            if countmain > 600: # 我补充的，防止算太久，但是还存在问题
+                break # 我补充的，防止算太久，但是还存在问题
 
 
 if __name__ == '__main__':
