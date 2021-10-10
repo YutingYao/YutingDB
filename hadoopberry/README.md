@@ -13,9 +13,9 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 ubuntu镜像使用桌面版本
 
-安装[拼音输入法](https://pinyin.sogou.com/linux/?r=pinyin)
+安装输入法ibus 需要反复重启
 
-安装远程控制
+安装远程控制（但这一步没有成功）
 
 ```sh
 sudo apt-get install tightvncserver
@@ -46,9 +46,6 @@ sudo apt-get update
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 ```
 
-curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -
-
-sudo apt-key fingerprint 0EBFCD88
 
 使用以下命令设置稳定存储库。要添加夜间或测试存储库，在下面的命令中的单词后添加单词或（或两者兼有）。
 nightly test stable
@@ -56,13 +53,14 @@ nightly test stable
 ```sh
  echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null、
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
 更新apt包索引，安装Docker Engine和container最新版本，或者继续下一步安装特定版本:
+
 ```sh
 sudo apt-get update
- sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
 通过运行hello-world镜像来验证Docker引擎是否正确安装。
@@ -73,6 +71,8 @@ sudo docker run hello-world
 
 ## 2.1 zeppelin
 [带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
+
+[Build from source](https://zeppelin.apache.org/docs/latest/setup/basics/how_to_build.html#build-requirements)
 
 Supported Interpreters:
 * [Spark](https://www.apache.org/dyn/closer.lua/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz)
