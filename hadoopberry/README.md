@@ -8,6 +8,53 @@ Setting up a [K3s Kubernetes](https://github.com/YutingYao/jetsonnano-k3s-gpu) c
 
 Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoCluster)
 
+# 1.烧录系统
+三步走：下载树莓派ubuntu镜像-[Ubuntu Desktop 21.04](https://ubuntu.com/download/raspberry-pi/thank-you?version=21.04&architecture=desktop-arm64+raspi)、[SD卡格式化](https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/)和[烧录系统](https://www.balena.io/etcher/)
+
+ubuntu镜像使用桌面版本
+
+# 2.安装必
+
+## 2.1 zeppelin
+[带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
+
+Supported Interpreters:
+* [Spark](https://www.apache.org/dyn/closer.lua/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz)
+* [Hive](http://www.apache.org/dyn/closer.cgi/hive/)
+* JDBC
+* Python
+* HDFS
+* [Hbase](https://hbase.apache.org/downloads.html)
+* Elasticsearch
+* Markdown
+* Shell
+* Flink
+* Geode 
+* [PostgreSQL](https://www.postgresql.org/download/linux/ubuntu/)
+  
+  Ubuntu默认包含PostgreSQL。要在Ubuntu上安装PostgreSQL，请使用apt get（或其他apt驱动）命令：
+
+  ```s
+  apt-get install postgresql-12
+  ```
+
+
+
+使用此命令在容器中启动Apache Zeppelin。
+
+```s
+docker run -p 8080:8080 --rm --name zeppelin apache/zeppelin:0.10.0
+```
+
+要持久保存日志和笔记本目录，请使用docker容器的卷选项。您还可以将体积用于Spark和Flink二进制分布。
+
+```s
+docker run -u $(id -u) -p 8080:8080 --rm -v $PWD/logs:/logs -v $PWD/notebook:/notebook \
+  -v /usr/lib/spark-2.4.7:/opt/spark -v /usr/lib/flink-1.12.2:/opt/flink \
+  -e FLINK_HOME=/opt/flink -e SPARK_HOME=/opt/spark \
+  -e ZEPPELIN_LOG_DIR='/logs' -e ZEPPELIN_NOTEBOOK_DIR='/notebook' --name zeppelin apache/zeppelin:0.10.0
+```
+
 ## hadoop
 
 [树莓派的Hadoop 3集群上的分布式TensorFlow](https://oliver-hu.medium.com/distributed-tensorflow-on-raspberry-pis-hadoop-3-cluster-603a164bb896)
