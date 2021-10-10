@@ -9,18 +9,64 @@ Setting up a [K3s Kubernetes](https://github.com/YutingYao/jetsonnano-k3s-gpu) c
 Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoCluster)
 
 # 1.烧录系统
-三步走：下载树莓派ubuntu镜像-[Ubuntu Desktop 21.04](https://ubuntu.com/download/raspberry-pi/thank-you?version=21.04&architecture=desktop-arm64+raspi)、[SD卡格式化](https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/)和[烧录系统](https://www.balena.io/etcher/)
 
-ubuntu镜像使用桌面版本
+## 三步走：
 
-安装输入法ibus 需要反复重启
+1. 下载树莓派ubuntu镜像-[Ubuntu Desktop 21.04](https://ubuntu.com/download/raspberry-pi/thank-you?version=21.04&architecture=desktop-arm64+raspi)，ubuntu镜像使用desktop版本
+2. [SD卡格式化](https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/)
+3. [烧录系统](https://www.balena.io/etcher/)
 
-安装远程控制（但这一步没有成功）
+
+
+## 安装输入法ibus 需要重启
+
+```sh
+#ctrl+alt+t进入终端，输入ibus
+ibus                              #检测iubs
+sudo apt-get install ibus-pinyin  #安装输入法
+ibus-setup     #添加输入法（pinyin）
+ibus restart   #重启ibus
+```
+
+## 安装远程控制（但这一步,目前没有成功）
 
 ```sh
 sudo apt-get install tightvncserver
 sudo tightvncserver
+
+sudo apt install vino
+sudo apt-get install dconf-editor
 ```
+
+
+
+开机自启
+
+```sh
+mkdir -p ~/.config/autostart
+cp /usr/share/applications/vino-server.desktop ~/.config/autostart/.
+cd /usr/lib/systemd/user/graphical-session.target.wants
+sudo ln -s ../vino-server.service ./.
+```
+
+配置服务器
+
+```sh
+gsettings set org.gnome.Vino prompt-enabled false
+gsettings set org.gnome.Vino require-encryption false
+Set a password to access the VNC server
+```
+
+设置登录密码
+
+```sh
+gsettings set org.gnome.Vino authentication-methods "['vnc']"
+gsettings set org.gnome.Vino vnc-password $(echo -n 'thepassword'|base64)
+Reboot the system so that the settings take effect
+sudo reboot
+```
+
+
 
 # 2.安装大数据分析软件
 
@@ -48,7 +94,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 
 
 使用以下命令设置稳定存储库。要添加夜间或测试存储库，在下面的命令中的单词后添加单词或（或两者兼有）。
-nightly test stable
+
 
 ```sh
  echo \
@@ -70,7 +116,41 @@ sudo docker run hello-world
 ```
 
 ## 2.1 zeppelin
-[带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
+下载[带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
+
+```sh
+sudo su
+# 安装到/opt目录下
+tar -zxf zeppelin-0.10.0-bin-all.tgz -C /opt
+chown -R root:root /opt/zeppelin-0.10.0-bin-all
+
+cd /opt/zeppelin-0.10.0-bin-all/conf
+cp zeppelin-env.sh.template zeppelin-env.sh
+cp shiro.ini.template shiro.ini
+ 
+# 修改默认端口，在zeppelin-env.sh中找到ZEPPELIN_PORT配置，修改成自己想要的
+vim zeppelin-env.sh
+export ZEPPELIN_PORT=18080         # port number to listen (default 8080)
+ 
+# 配置简单登录认证，在shiro.ini中找到[users]配置，修改成自己想要的
+vim shiro.ini
+[users]
+# List of users with their password allowed to access Zeppelin.
+# To use a different strategy (LDAP / Database / ...) check the shiro doc at http://shiro.apache.org/configuration.html#Configuration-INISections
+# To enable admin user, uncomment the following line and set an appropriate password.
+admin = yyt123456, yaoyuting
+#user1 = password2, role1, role2
+#user2 = password3, role3
+#user3 = password4, role2
+ 
+# 重启Zeppelin
+cd /opt/zeppelin-0.9.0-bin-all/bin
+./zeppelin-daemon.sh restart
+ 
+# 浏览器访问
+http://localhost:18080
+使用yaoyuting/yyt123456登录
+```
 
 [Build from source](https://zeppelin.apache.org/docs/latest/setup/basics/how_to_build.html#build-requirements)
 
