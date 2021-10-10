@@ -13,7 +13,63 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 ubuntu镜像使用桌面版本
 
-# 2.安装必
+安装[拼音输入法](https://pinyin.sogou.com/linux/?r=pinyin)
+
+安装远程控制
+
+```sh
+sudo apt-get install tightvncserver
+sudo tightvncserver
+```
+
+# 2.安装大数据分析软件
+
+## 2.0 docker环境
+
+安装docker
+
+更新包索引并安装封装，以便在 HTTPS 上使用存储库
+
+```sh
+sudo apt-get update
+ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+```
+
+添加多克的官方 GPG 密钥：
+
+```sh
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+
+curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -
+
+sudo apt-key fingerprint 0EBFCD88
+
+使用以下命令设置稳定存储库。要添加夜间或测试存储库，在下面的命令中的单词后添加单词或（或两者兼有）。
+nightly test stable
+
+```sh
+ echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null、
+```
+
+更新apt包索引，安装Docker Engine和container最新版本，或者继续下一步安装特定版本:
+```sh
+sudo apt-get update
+ sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+通过运行hello-world镜像来验证Docker引擎是否正确安装。
+
+```sh
+sudo docker run hello-world
+```
 
 ## 2.1 zeppelin
 [带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
