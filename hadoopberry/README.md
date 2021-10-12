@@ -74,15 +74,48 @@ sudo reboot
 
 ## 1.4 ubuntu免密SSH登录
 
+准备工作：关闭防火墙
+
+```sh
+systemctl statusfirewalld.service
+```
+
+```sh
+systemctl stopfirewalld.service
+```
+
+```sh
+systemctl disablefirewalld.service
+```
+
+配置主机名
+
+为了方便，经常使用主机名替代IP机制，因此需要配置主机名和IP地址的对应关系。运行命令vi /etc/hosts，进行编辑配置，在文件末尾添加如下一行文字即可。
+
+```sh
+sudo vim /etc/hosts
+```
+
+```sh
+192.168.31.219 node01
+192.168.31.6 node02
+```
+
+```sh
+sudo apt install net-tools
+```
+
+```sh
+ifconfig
+```
+
 ### 1.4.1 打开ssh服务端
 
-```bash
-sudo apt-get update
-```
 
 A、B分别安装ssh：
 
-★
+这一步可能不需要。
+
 
 ```sh
 sudo apt-get install ssh
@@ -125,6 +158,9 @@ A、B分别生成公钥和私钥，输入命令，提示直接按enter即可：
 生成自己的公钥私钥
 
 ★
+```bash
+sudo su
+```
 
 ```bash
 ssh-keygen -t rsa
@@ -156,7 +192,7 @@ ll
 
 * know_hosts : 已知的主机公钥清单
 
-有机器A(192.168.1.155)，B(192.168.1.181)。现想A通过ssh免密码登录到B。
+
 
 ### 1.4.3 设置允许root远程登录
 
@@ -166,7 +202,7 @@ ssh在没有密钥登录的情况下，禁用了密码登录，
 
 所以会出现无法拷贝文件，我们需要打开密码登录。
 
-将/etc/ssh/sshd_config文件中的PermitRootLogin prohibit-password 改为yes。
+将/etc/ssh/sshd_config文件中。
 
 在slave1和slave2上设置允许root远程登录：
 
@@ -180,9 +216,10 @@ vim /etc/ssh/sshd_config
 
 在公钥上传之后，我们现在可以禁用通过密码登陆SSH的方式了。为此，我们需要通过以下命令用文本编辑器打开/etc/ssh/ssh_config。
 
-主要找到下面的三行，修改成下面的样子:
+主要找到下面的几行，修改成下面的样子:
 
 ```s
+PermitRootLogin prohibit-password 改为yes。
 RSAAuthentication yes #这个貌似没找到
 PubkeyAuthentication yes
 AuthorizedKeysFile %h/.ssh/authorized_keys
@@ -208,19 +245,84 @@ sudo /etc/init.d/ssh restart
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 chmod 644 ~/.ssh/authorized_keys 
 ```
-
-然后测试：ssh localhost 无需密码即可登录则成功。
-
-
 id_rsa.pub是公钥，id_rsa是私钥
 
-之后scp传输到其他机器上
+然后测试：
 
-scp ./id_rsa.pub zkx@master:/home/zkx
+```bash
+ssh localhost 
+```
 
-在master机器上将id_rsa.pub的内容写入.ssh目录下的authorized_keys
+先要输入yes，再来一遍：
 
-cat ./id_rsa.pub >> ./.ssh/authorized_keys
+```bash
+ssh localhost 
+```
+
+无需密码即可登录则成功。
+
+
+
+
+
+
+
+### 1.4.5 scp传输到其他机器上
+
+在安装好的三台Linux操作系统上，依次运行如下两条命令，关闭这三台Linux操作系统的防火墙
+
+systemctl stop firewalld.service
+
+systemctl disablefirewalld.service
+
+在三台Linux操作系统上，运行命令vi /etc/hosts，为三台Linux操作系统配置主机名和IP地址的映射（三台配置一样）
+
+192.168.12.222 hadoop222
+
+192.168.12.223 hadoop223
+
+
+192.168.12.224 hadoop224
+
+在三台Linux系统之间，两两配置免密码登录
+
+在主机hadoop222上进行配置：
+
+ssh-keygen -t rsa
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop222
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop223
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop224
+
+在主机hadoop223上进行配置：
+
+ssh-keygen -t rsa
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop222
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop223
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop224
+
+在主机hadoop224上进行配置：
+
+ssh-keygen -t rsa
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop222
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop223
+
+ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop224
+
+在node02节点
+
+scp ./id_rsa.pub root@node01:/home/pi
+
+在node01机器上将id_rsa.pub的内容写入.ssh目录下的authorized_keys
+
+cat /home/pi/id_rsa.pub >> ./.ssh/authorized_keys
 
 之后删除id_rsa.pub
 
