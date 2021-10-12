@@ -10,15 +10,17 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 # 1.烧录系统
 
-## 三步走：
+## 1.1 三步走：
 
 1. 下载树莓派ubuntu镜像-[Ubuntu Desktop 21.04](https://ubuntu.com/download/raspberry-pi/thank-you?version=21.04&architecture=desktop-arm64+raspi)，ubuntu镜像使用desktop版本
 2. [SD卡格式化](https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/)
 3. [烧录系统](https://www.balena.io/etcher/)
 
+设置language
 
+将terminal和text放到桌面上
 
-## 安装输入法ibus 需要重启
+## 1.2 安装输入法ibus 需要重启（但这一步,貌似不需要）
 
 ```sh
 #ctrl+alt+t进入终端，输入ibus
@@ -28,7 +30,7 @@ ibus-setup     #添加输入法（pinyin）
 ibus restart   #重启ibus
 ```
 
-## 安装远程控制（但这一步,目前没有成功）
+## 1.3 安装远程控制（但这一步,目前没有成功）
 
 ```sh
 sudo apt-get install tightvncserver
@@ -66,6 +68,325 @@ Reboot the system so that the settings take effect
 sudo reboot
 ```
 
+## 1.4 ubuntu免密SSH登录
+
+### 1.4.1 打开ssh服务端
+
+```bash
+sudo apt-get update
+```
+
+A、B分别安装ssh：
+
+★
+
+```sh
+sudo apt-get install ssh
+```
+
+```bash
+sudo apt-get install openssh-server
+```
+
+Ubuntu默认安装SSH Client，这一步可能不需要。
+
+```bash
+sudo apt-get install openssh-client
+```
+
+打开"终端窗口"，输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动
+
+开启Openssh服务：
+
+```bash
+sudo service ssh start
+```
+
+查看SSH服务运行状态：
+
+```bash
+service ssh status
+```
+
+### 1.4.2 免密登录-配置密钥对
+
+A、B分别生成公钥和私钥，输入命令，提示直接按enter即可：
+
+配置本机SSH无密码登录：
+
+每台主机上执行 ssh-keygen -t rsa
+
+生成自己的公钥私钥
+
+★
+
+```bash
+ssh-keygen -t rsa
+```
+
+在运行完以上命令了以后，我们需要回答一系列的问题。首先选择保存密钥的路径，按回车将会选择默认路径即家目录的一个隐藏的.ssh文件夹。下一个提示是请输入口令提醒。我个人将此留空（直接回车）。之后密钥对就会创建，大功告成。
+
+生成之后会在用户的根目录生成一个 “.ssh”的文件夹
+
+查看私钥id_rsa 和公钥id_rsa.pub：
+
+★
+
+```bash
+cd ~/.ssh
+```
+
+```bash
+ll
+```
+
+进入“.ssh”会生成以下几个文件:
+
+* authorized_keys:存放远程免密登录的公钥,主要通过这个文件记录多台机器的公钥
+
+* id_rsa : 生成的私钥文件
+
+* id_rsa.pub ： 生成的公钥文件
+
+* know_hosts : 已知的主机公钥清单
+
+有机器A(192.168.1.155)，B(192.168.1.181)。现想A通过ssh免密码登录到B。
+
+### 1.4.3 设置允许root远程登录
+
+因为scp是基于ssh的拷贝服务，
+
+ssh在没有密钥登录的情况下，禁用了密码登录，
+
+所以会出现无法拷贝文件，我们需要打开密码登录。
+
+将/etc/ssh/sshd_config文件中的PermitRootLogin prohibit-password 改为yes。
+
+在slave1和slave2上设置允许root远程登录：
+
+```bash
+vim /etc/ssh/sshd_config
+```
+
+设置PermitRootLogin为yes
+
+可选操作:禁用密码登陆
+
+在公钥上传之后，我们现在可以禁用通过密码登陆SSH的方式了。为此，我们需要通过以下命令用文本编辑器打开/etc/ssh/ssh_config。
+
+主要找到下面的三行，修改成下面的样子:
+
+```s
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile %h/.ssh/authorized_keys
+```
+
+配置完成后重启： 
+
+```sh
+ sudo service ssh restart
+```
+
+或
+
+```bash
+sudo /etc/init.d/ssh restart
+```
+
+### 1.4.4 本地主机认证
+
+将公钥添加到本地主机认证中，执行下面的命令：
+
+```bash
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 644 ~/.ssh/authorized_keys 
+```
+
+然后测试：ssh localhost 无需密码即可登录则成功。
+
+
+id_rsa.pub是公钥，id_rsa是私钥
+
+之后scp传输到其他机器上
+
+scp ./id_rsa.pub zkx@master:/home/zkx
+
+在master机器上将id_rsa.pub的内容写入.ssh目录下的authorized_keys
+
+cat ./id_rsa.pub >> ./.ssh/authorized_keys
+
+之后删除id_rsa.pub
+
+
+
+1，把A机下的id_rsa.pub复制到B机下，在B机的.ssh/authorized_keys文件里，我用scp复制。
+
+```bash
+ scp .ssh/id_rsa.pub chenlb@192.168.1.181:/home/chenlb/id_rsa.pub
+```
+
+B机把从A机复制的id_rsa.pub添加到.ssh/authorzied_keys文件里。
+
+```bash
+cat id_rsa.pub >> .ssh/authorized_keys
+```
+
+　　authorized_keys的权限要是600。
+
+```bash
+ chmod 600 .ssh/authorized_keys
+```
+
+小结：登录的机子可有私钥，被登录的机子要有登录机子的公钥。这个公钥/私钥对一般在私钥宿主机产生。上面是用rsa算法的公钥/私钥对，当然也可以用dsa(对应的文件是id_dsa，id_dsa.pub)
+
+想让A，B机无密码互登录，那B机以上面同样的方式配置即可。
+
+
+
+```bash
+ssh-keygen
+```
+
+（2）在node1上执行 cat ~/.ssh/id_rsa.pub >>~/.ssh/authorized_keys
+
+将自己公钥加入授权文件
+
+按四次回车
+
+```bash
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+```
+
+
+配置ssh免密登录。进入当前用户（最好不要用root）的home目录，生成本机秘钥。命令：
+
+```bash
+cd ;ssh-keygen -t rsa -P
+```
+
+上面的命令需要在master，slave1和slave2上执行，在不同节点上执行时，需要修改ssh命令后的xx@xx.xx为其他的两个节点。
+修改完之后，在master上使用下面的命令测试是否配置成功
+
+```bash
+ssh ambari_slave2
+```
+
+然后一路回车就可以.
+
+将公钥追加到 authorized_keys 文件中。命令：
+
+```bash
+ll
+```
+
+如果在ssh目录下：
+
+```bash
+cat ./id_rsa.pub >> ./authorized_keys
+```
+
+如果不在SSH目录下：
+
+```bash
+cat .ssh/id_rsa.pub >> .ssh/authorized_keys  
+```
+
+然后赋予authorized_keys 文件权限。命令：
+
+```bash
+chmod 600 .ssh/authorized_keys
+```
+
+输入命令 ssh localhost查看ssh是否配置成功。此时因为是第一次使用ssh登录本机，所以需要输入yes确认.
+配置完成后，验证本机SSH无密码登录：
+
+```bash
+ ssh localhost
+```
+
+输入命令 exit 退出ssh当前登录，再输入命令 ssh localhost 发现不用命令也可以使用ssh登录本机了，大功告成
+
+```bash
+exit
+```
+
+配置两台主机之间SSH无密码登录 
+
+在两台主机完成ssh server安装和本地ssh无密码登录之后，
+
+以Master Host（heron01：192.168.201.136）
+
+和Slave Host（heron02：192.168.201.135）为例，
+
+
+可能需要自己修改文件的路径
+
+```bash
+chmod 700 ~/.ssh/ chmod 640 ~/.ssh/authorized_keys
+```
+
+（3）分别将node2和node3上id_rsa.pub内容拷贝至node1的authorized_keys文件中
+
+（4）将node1的authorized_keys分别拷贝至node2和node3对应位置
+
+完成免密登录
+
+```bash
+ssh root@ambari_slave1 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+```
+
+```bash
+ssh root@ambari_slave2 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+```
+
+```bash
+ssh root@ambari_slave1 'chmod 600 .ssh/authorized_keys'
+```
+
+```bash
+ssh root@ambari_slave2 'chmod 600 .ssh/authorized_keys'
+```
+
+使用yitian用户，并完成配置完成两台主机之间的ssh无密码登录。
+
+Master（heron01）无密码登陆Slave（heron02）：
+
+在运行完以上命令了以后，我们需要回答一系列的问题。首先选择保存密钥的路径，按回车将会选择默认路径即家目录的一个隐藏的.ssh文件夹。下一个提示是请输入口令提醒。我个人将此留空（直接回车）。之后密钥对就会创建，大功告成。
+
+
+
+
+```bash
+ssh-copy-id user@ip_address #user换成自己的用户名，ip_address换成对应的主机ip地址
+```
+
+```bash
+ssh-copy-id yitian@heron02
+```
+
+```bash
+ssh heron02
+```
+
+```bash
+ exit
+```
+
+Slave（heron02）无密码登陆Master（heron01）步骤同上：
+
+
+```bash
+ssh-copy-id yitian@heron01
+```
+
+```bash
+ssh heron01
+```
+
+```bash
+exit
+```
 
 
 # 2.安装大数据分析软件
@@ -143,7 +464,7 @@ admin = yyt123456, yaoyuting
 #user2 = password3, role3
 #user3 = password4, role2
  
-# 重启Zeppelin
+# 重启Zeppelin 
 cd /opt/zeppelin-0.9.0-bin-all/bin
 ./zeppelin-daemon.sh restart
  
