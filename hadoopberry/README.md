@@ -20,6 +20,10 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 将terminal和text放到桌面上
 
+```sh
+sudo apt install vim
+```
+
 ## 1.2 安装输入法ibus 需要重启（但这一步,貌似不需要）
 
 ```sh
@@ -83,6 +87,8 @@ A、B分别安装ssh：
 ```sh
 sudo apt-get install ssh
 ```
+
+Ubuntu默认安装SSH server，这一步可能不需要。
 
 ```bash
 sudo apt-get install openssh-server
@@ -177,7 +183,7 @@ vim /etc/ssh/sshd_config
 主要找到下面的三行，修改成下面的样子:
 
 ```s
-RSAAuthentication yes
+RSAAuthentication yes #这个貌似没找到
 PubkeyAuthentication yes
 AuthorizedKeysFile %h/.ssh/authorized_keys
 ```
