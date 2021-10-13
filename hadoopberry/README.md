@@ -1525,17 +1525,17 @@ Apache Spark on [Google Colaboratory](https://mikestaszel.com/2018/03/07/apache-
 下载Spark，解包并授予pi所有权。
 
 ```sh
-pi@pi1:~$ cd && wget https://www-us.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoop-2.7.tgz
-pi@pi1:~$ sudo tar -xvf spark-2.4.4-bin-hadoop-2.7.tgz -C /opt/
-pi@pi1:~$ rm spark-2.4.4-bin-hadoop-2.7.tgz && cd /opt
-pi@pi1:~$ sudo mv spark-2.4.4-bin-hadoop-2.7 spark
-pi@pi1:~$ sudo chown pi:pi -R /opt/spark
+cd && wget https://www-us.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoop-2.7.tgz
+sudo tar -xvf spark-2.4.4-bin-hadoop-2.7.tgz -C /opt/
+rm spark-2.4.4-bin-hadoop-2.7.tgz && cd /opt
+sudo mv spark-2.4.4-bin-hadoop-2.7 spark
+sudo chown pi:pi -R /opt/spark
 ```
 
 配置Spark环境变量。
 
 ```sh
-pi@pi1:~$ sudo mousepad ~/.bashrc
+sudo vim ~/.bashrc
 ```
 
 添加（在文件顶部插入）：
@@ -1548,21 +1548,8 @@ export PATH=$PATH:$SPARK_HOME/bin
 验证Spark安装。
 
 ```sh
-pi@pi1:~$ source ~/.bashrc
-pi@pi1:~$ spark-shell --version
-Welcome to
-      ____              __
-     / __/__  ___ _____/ /__
-    _\ \/ _ \/ _ `/ __/  '_/
-   /___/ .__/\_,_/_/ /_/\_\   version 2.4.4
-      /_/
-                       
-Using Scala version 2.11.12, OpenJDK Client VM, 1.8.0_212
-Branch
-Compiled by user  on 2019-08-27T21:21:38Z
-Revision
-Url
-Type --help for more information.
+source ~/.bashrc
+spark-shell --version
 ```
 
 配置Spark作业监控。
@@ -1572,9 +1559,9 @@ Type --help for more information.
 生成并修改Spark默认配置文件：
 
 ```sh
-pi@pi1:~$ cd $SPARK_HOME/conf
-pi@pi1:/opt/spark/conf$ sudo mv spark-defaults.conf.template spark-defaults.conf
-pi@pi1:/opt/spark/conf$ mousepad spark-defaults.conf
+cd $SPARK_HOME/conf
+sudo mv spark-defaults.conf.template spark-defaults.conf
+vim spark-defaults.conf
 ```
 
 Add the following lines:
@@ -1598,14 +1585,14 @@ spark.history.ui.port              18080
 在HDFS上创建日志目录。
 
 ```sh
-pi@pi1:/opt/spark/conf$ cd
-pi@pi1:~$ hdfs dfs -mkdir /spark-logs
+/opt/spark/conf$ cd
+hdfs dfs -mkdir /spark-logs
 ```
 
 启动Spark历史服务器。
 
 ```sh
-pi@pi1:~$ $SPARK_HOME/sbin/start-history-server.sh
+$SPARK_HOME/sbin/start-history-server.sh
 ```
 
 Spark历史服务器界面可以通过 http://pi1:18080 访问
@@ -1615,119 +1602,74 @@ Spark历史服务器界面可以通过 http://pi1:18080 访问
 运行示例作业（计算pi）
 
 ```sh
-pi@pi1:~$ spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.11-2.4.4.jar 7
-```
-
-
-## setup
-```sh
-```
-
-## hdfs
-```sh
-```
-
-## node
-```sh
-```
-
-## yarn
-```sh
-```
-
-## conf
-```sh
-```
-
-## bashrc
-```sh
-```
-
-## host
-```sh
-```
-
-## mapreduce
-```sh
-```
-
-## ip
-```sh
-```
-
-## pip
-```sh
+spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.11-2.4.4.jar 7
 ```
 
 ## pyspark
+
 ```sh
 ```
 
-## java
+## flink
+
 ```sh
 ```
 
-## xml
+## postgresql
+
 ```sh
 ```
 
-## reboot
-```sh
-```
+# zeppelin常用命令：
 
-## server
-```sh
-```
+sudo vim conf/zeppelin-site.xml
+bin/zeppelin-daemon.sh restart
+cat logs/zeppelin-xxxxx-Pro.local.log
 
-## folder
-```sh
-```
+## 在local模式下运行：
 
-## jupyter
-```sh
-```
+tar -xvf flink-1.10.0-bin-scala_2.11.tgz
+minicluster 的端口为 8081
 
-## dir
-```sh
-```
+查看log
+cd ../zeppelin-0.9.0-SNAPSHOT
+cat logs/zeppelin-自动补全？
 
-## installed
-```sh
-```
+## 在remote模式下运行：
 
-## master
-```sh
-```
+## yarn模式下的运行：
 
-## password
-```sh
-```
+ 确保hadoop已经安装
 
-## rsa
-```sh
-```
+hadoop classpath
+获得hadoop的所有jar
 
-## distributed
-```sh
-```
+echo $HADOOP_CONF_DIR
 
-## pdsh
-```sh
-```
 
-## mb
-```sh
-```
+FLINK_HOME设置为/Users/xxx/xxx/flink-1.10.0
+flink.excution.mode设置为yarn
+flink.excution.remote.host设置为localhost
+flink.excution.remote.port设置为8081
+flink.jm.memory设置为1024
+flink.tm.memory设置为1024
+flink.tm.slot设置为2
+local.number-taskmanager设置为4
+flink.yarn.appName设置为Zeppelin Flink Session
+flink.yarn.queue设置为default
+zeppelin.flink.maxResult设置为1000
+zeppelin.pyflink.python设置为/Users/xxx/anaconda3/bin/python
 
-## tar
-```sh
-```
 
-## keys
-```sh
-```
+ps aux | grep RemoteInterpreterServer
+flink的classpath
 
-## dir
-```sh
-```
+## hive：
 
+## SQL
+
+## Streaming
+
+## kafka
+
+## python
