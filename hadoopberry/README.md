@@ -74,7 +74,7 @@ sudo reboot
 
 ## 1.4 ubuntu免密SSH登录
 
-准备工作：关闭防火墙
+准备工作：关闭防火墙（但这一步,貌似不需要）
 
 ```sh
 systemctl statusfirewalld.service
@@ -96,10 +96,14 @@ systemctl disablefirewalld.service
 sudo vim /etc/hosts
 ```
 
+据说，这一步需要ipv6 的字段删除
+
 ```sh
 192.168.31.219 node01
 192.168.31.6 node02
 ```
+
+Debian貌似不需要net-tools，ubuntu需要net-tools
 
 ```sh
 sudo apt install net-tools
@@ -109,12 +113,10 @@ sudo apt install net-tools
 ifconfig
 ```
 
-### 1.4.1 打开ssh服务端
+### 1.4.1 打开ssh服务端（每一台计算机都需要）
 
 
-A、B分别安装ssh：
-
-这一步可能不需要。
+A、B分别安装ssh：这一步可能不需要。
 
 
 ```sh
@@ -133,7 +135,7 @@ Ubuntu默认安装SSH Client，这一步可能不需要。
 sudo apt-get install openssh-client
 ```
 
-打开"终端窗口"，输入"sudo ps -e |grep ssh"-->回车-->有sshd,说明ssh服务已经启动，如果没有启动，输入"sudo service ssh start"-->回车-->ssh服务就会启动
+
 
 开启Openssh服务：
 
@@ -141,19 +143,16 @@ sudo apt-get install openssh-client
 sudo service ssh start
 ```
 
-查看SSH服务运行状态：
+查看SSH服务运行状态：（也可以不查看）
 
 ```bash
 service ssh status
 ```
 
-### 1.4.2 免密登录-配置密钥对
+### 1.4.2 免密登录-配置密钥对（每一条计算机都需要）
 
 A、B分别生成公钥和私钥，输入命令，提示直接按enter即可：
 
-配置本机SSH无密码登录：
-
-每台主机上执行 ssh-keygen -t rsa
 
 生成自己的公钥私钥
 
@@ -166,7 +165,6 @@ sudo su
 ssh-keygen -t rsa
 ```
 
-在运行完以上命令了以后，我们需要回答一系列的问题。首先选择保存密钥的路径，按回车将会选择默认路径即家目录的一个隐藏的.ssh文件夹。下一个提示是请输入口令提醒。我个人将此留空（直接回车）。之后密钥对就会创建，大功告成。
 
 生成之后会在用户的根目录生成一个 “.ssh”的文件夹
 
@@ -178,11 +176,8 @@ ssh-keygen -t rsa
 cd ~/.ssh
 ```
 
-```bash
-ll
-```
 
-进入“.ssh”会生成以下几个文件:
+生成以下几个文件:
 
 * authorized_keys:存放远程免密登录的公钥,主要通过这个文件记录多台机器的公钥
 
@@ -194,7 +189,7 @@ ll
 
 
 
-### 1.4.3 设置允许root远程登录
+### 1.4.3 设置允许root远程登录（每一台计算机都需要）
 
 因为scp是基于ssh的拷贝服务，
 
@@ -206,8 +201,9 @@ ssh在没有密钥登录的情况下，禁用了密码登录，
 
 在slave1和slave2上设置允许root远程登录：
 
+
 ```bash
-vim /etc/ssh/sshd_config
+sudo vim /etc/ssh/sshd_config
 ```
 
 设置PermitRootLogin为yes
@@ -237,7 +233,17 @@ AuthorizedKeysFile %h/.ssh/authorized_keys
 sudo /etc/init.d/ssh restart
 ```
 
-### 1.4.4 本地主机认证
+由于本人多次操作失败，所以还修改了如下文件：
+
+```sh
+sudo find / -name ssh*config
+sudo vim /etc/ssh/sshd_config
+sudo vim /etc/ssh/ssh_config
+sudo vim /usr/share/openssh/sshd_config
+```
+
+
+### 1.4.4 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）
 
 将公钥添加到本地主机认证中，执行下面的命令：
 
@@ -262,239 +268,207 @@ ssh localhost
 无需密码即可登录则成功。
 
 
+输入命令 exit 可退出ssh当前登录
+
+```bash
+exit
+```
 
 
 
 
 
-### 1.4.5 scp传输到其他机器上
-
-在安装好的三台Linux操作系统上，依次运行如下两条命令，关闭这三台Linux操作系统的防火墙
-
-systemctl stop firewalld.service
-
-systemctl disablefirewalld.service
-
-在三台Linux操作系统上，运行命令vi /etc/hosts，为三台Linux操作系统配置主机名和IP地址的映射（三台配置一样）
-
-192.168.12.222 hadoop222
-
-192.168.12.223 hadoop223
+### 1.4.5 scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）
 
 
-192.168.12.224 hadoop224
+**在 node01 上进行配置：ssh-copy-id**
 
-在三台Linux系统之间，两两配置免密码登录
+```bash
+sudo su
+```
 
-在主机hadoop222上进行配置：
-
+```bash
 ssh-keygen -t rsa
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop222
+```bash
+ssh-copy-id -i node01 # 对自己也做一次
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop223
+```bash
+ssh-copy-id -i node02
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop224
+```bash
+ssh-copy-id -i node03
+```
 
-在主机hadoop223上进行配置：
+```bash
+ssh-copy-id -i node04
+```
 
+
+**在 node02 上进行配置：ssh-copy-id**
+
+```bash
+sudo su
+```
+
+```bash
 ssh-keygen -t rsa
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop222
+```bash
+ssh-copy-id -i node01 # 对自己也做一次
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop223
+```bash
+ssh-copy-id -i node02
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop224
+```bash
+ssh-copy-id -i node03
+```
 
-在主机hadoop224上进行配置：
+```bash
+ssh-copy-id -i node04
+```
 
+
+**在 node03 上进行配置：ssh-copy-id**
+
+```bash
+sudo su
+```
+
+```bash
 ssh-keygen -t rsa
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop222
+```bash
+ssh-copy-id -i node01 # 对自己也做一次
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop223
+```bash
+ssh-copy-id -i node02
+```
 
-ssh-copy-id -i /root/.ssh/id_rsa.pubroot@hadoop224
+```bash
+ssh-copy-id -i node03
+```
 
-在node02节点
+```bash
+ssh-copy-id -i node04
+```
 
+
+**在 node04 上进行配置：ssh-copy-id**
+
+```bash
+sudo su
+```
+
+```bash
+ssh-keygen -t rsa
+```
+
+```bash
+ssh-copy-id -i node01 # 对自己也做一次
+```
+
+```bash
+ssh-copy-id -i node02
+```
+
+```bash
+ssh-copy-id -i node03
+```
+
+```bash
+ssh-copy-id -i node04
+```
+
+**貌似SCP也可以：**
+
+scp到合适的位置：
+
+./就是当前目录下的意思，去掉也是可以的
+
+```bash
 scp ./id_rsa.pub root@node01:/home/pi
-
-在node01机器上将id_rsa.pub的内容写入.ssh目录下的authorized_keys
-
-cat /home/pi/id_rsa.pub >> ./.ssh/authorized_keys
-
-之后删除id_rsa.pub
-
-
-
-1，把A机下的id_rsa.pub复制到B机下，在B机的.ssh/authorized_keys文件里，我用scp复制。
-
-```bash
- scp .ssh/id_rsa.pub chenlb@192.168.1.181:/home/chenlb/id_rsa.pub
 ```
 
-B机把从A机复制的id_rsa.pub添加到.ssh/authorzied_keys文件里。
-
 ```bash
-cat id_rsa.pub >> .ssh/authorized_keys
+scp .ssh/id_rsa.pub chenlb@192.168.1.181:/home/chenlb/id_rsa.pub
 ```
-
-　　authorized_keys的权限要是600。
-
-```bash
- chmod 600 .ssh/authorized_keys
-```
-
-小结：登录的机子可有私钥，被登录的机子要有登录机子的公钥。这个公钥/私钥对一般在私钥宿主机产生。上面是用rsa算法的公钥/私钥对，当然也可以用dsa(对应的文件是id_dsa，id_dsa.pub)
-
-想让A，B机无密码互登录，那B机以上面同样的方式配置即可。
-
-
-
-```bash
-ssh-keygen
-```
-
-（2）在node1上执行 cat ~/.ssh/id_rsa.pub >>~/.ssh/authorized_keys
-
-将自己公钥加入授权文件
-
-按四次回车
 
 ```bash
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 ```
 
 
-配置ssh免密登录。进入当前用户（最好不要用root）的home目录，生成本机秘钥。命令：
+**分别将node2和node3上id_rsa.pub内容拷贝至node1的authorized_keys文件中（这个还没试过）**
 
-```bash
-cd ;ssh-keygen -t rsa -P
-```
-
-上面的命令需要在master，slave1和slave2上执行，在不同节点上执行时，需要修改ssh命令后的xx@xx.xx为其他的两个节点。
-修改完之后，在master上使用下面的命令测试是否配置成功
-
-```bash
-ssh ambari_slave2
-```
-
-然后一路回车就可以.
-
-将公钥追加到 authorized_keys 文件中。命令：
-
-```bash
-ll
-```
-
-如果在ssh目录下：
-
-```bash
-cat ./id_rsa.pub >> ./authorized_keys
-```
-
-如果不在SSH目录下：
-
-```bash
-cat .ssh/id_rsa.pub >> .ssh/authorized_keys  
-```
-
-然后赋予authorized_keys 文件权限。命令：
-
-```bash
-chmod 600 .ssh/authorized_keys
-```
-
-输入命令 ssh localhost查看ssh是否配置成功。此时因为是第一次使用ssh登录本机，所以需要输入yes确认.
-配置完成后，验证本机SSH无密码登录：
-
-```bash
- ssh localhost
-```
-
-输入命令 exit 退出ssh当前登录，再输入命令 ssh localhost 发现不用命令也可以使用ssh登录本机了，大功告成
-
-```bash
-exit
-```
-
-配置两台主机之间SSH无密码登录 
-
-在两台主机完成ssh server安装和本地ssh无密码登录之后，
-
-以Master Host（heron01：192.168.201.136）
-
-和Slave Host（heron02：192.168.201.135）为例，
-
-
-可能需要自己修改文件的路径
-
-```bash
-chmod 700 ~/.ssh/ chmod 640 ~/.ssh/authorized_keys
-```
-
-（3）分别将node2和node3上id_rsa.pub内容拷贝至node1的authorized_keys文件中
-
-（4）将node1的authorized_keys分别拷贝至node2和node3对应位置
-
-完成免密登录
-
-```bash
-ssh root@ambari_slave1 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-```
-
-```bash
-ssh root@ambari_slave2 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-```
-
-```bash
-ssh root@ambari_slave1 'chmod 600 .ssh/authorized_keys'
-```
-
-```bash
-ssh root@ambari_slave2 'chmod 600 .ssh/authorized_keys'
-```
-
-使用yitian用户，并完成配置完成两台主机之间的ssh无密码登录。
-
-Master（heron01）无密码登陆Slave（heron02）：
-
-在运行完以上命令了以后，我们需要回答一系列的问题。首先选择保存密钥的路径，按回车将会选择默认路径即家目录的一个隐藏的.ssh文件夹。下一个提示是请输入口令提醒。我个人将此留空（直接回车）。之后密钥对就会创建，大功告成。
-
+将node1的authorized_keys分别拷贝至node2和node3对应位置
 
 
 
 ```bash
-ssh-copy-id user@ip_address #user换成自己的用户名，ip_address换成对应的主机ip地址
+ssh root@node01 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
 ```
 
 ```bash
-ssh-copy-id yitian@heron02
+ssh root@node02 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
 ```
 
 ```bash
-ssh heron02
+ssh root@node01 'chmod 600 .ssh/authorized_keys'
 ```
 
 ```bash
- exit
+ssh root@node02 'chmod 600 .ssh/authorized_keys'
 ```
 
-Slave（heron02）无密码登陆Master（heron01）步骤同上：
+
+**authorized_keys的权限要是600。**
+
+```bash
+ chmod 600 .ssh/authorized_keys
+```
 
 
 ```bash
-ssh-copy-id yitian@heron01
+chmod 700 ~/.ssh/ 
+chmod 640 ~/.ssh/authorized_keys
 ```
 
 ```bash
-ssh heron01
+chmod 644 ~/.ssh/authorized_keys 
+```
+
+也就是是说，700更加高级耶
+-rw------- (600)    只有拥有者有读写权限。
+-rw-r--r-- (644)    只有拥有者有读写权限；而属组用户和其他用户只有读权限。
+-rwx------ (700)    只有拥有者有读、写、执行权限。
+
+**然后，就可以随意ssh啦~~~~**
+
+```bash
+ssh node01
 ```
 
 ```bash
-exit
+ssh node02
 ```
+
+```bash
+ssh node03
+```
+
+```bash
+ssh node04
+```
+
 
 
 # 2.安装大数据分析软件
@@ -620,33 +594,69 @@ docker run -u $(id -u) -p 8080:8080 --rm -v $PWD/logs:/logs -v $PWD/notebook:/no
   -e ZEPPELIN_LOG_DIR='/logs' -e ZEPPELIN_NOTEBOOK_DIR='/notebook' --name zeppelin apache/zeppelin:0.10.0
 ```
 
-## hadoop
+## 2.2 hadoop
 
 [树莓派的Hadoop 3集群上的分布式TensorFlow](https://oliver-hu.medium.com/distributed-tensorflow-on-raspberry-pis-hadoop-3-cluster-603a164bb896)
 
-在每个节点上安装 Java 8，使其成为每个节点的默认 Java。
+### 2.2.1 在每个节点上安装 Java 8，使其成为每个节点的默认 Java。
 
 ```sh
-pi@piX:~$ sudo apt-get install openjdk-8-jdk
-pi@piX:~$ sudo update-alternatives --config java    // Select number corresponding to Java 8
-pi@piX:~$ sudo update-alternatives --config javac   // Select number corresponding to Java 8
+sudo apt-get install openjdk-8-jdk
+sudo update-alternatives --config java    // Select number corresponding to Java 8
+sudo update-alternatives --config javac   // Select number corresponding to Java 8
 ```
 
-下载 Hadoop，解压并授予 pi 所有权。
+### 2.2.2 下载 Hadoop，解压并授予 pi 所有权。
+
+下载：
 
 ```sh
-pi@pi1:~$ cd && wget https://www-us.apache.org/dist/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz
-pi@pi1:~$ sudo tar -xvf hadoop-3.2.1.tar.gz -C /opt/
-pi@pi1:~$ rm hadoop-3.2.1.tar.gz && cd /opt
-pi@pi1:/opt$ sudo mv hadoop-3.2.1 hadoop
-pi@pi1:/opt$ sudo chown pi:pi -R /opt/hadoop
+cd && wget https://www-us.apache.org/dist/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz
 ```
 
-配置 Hadoop 环境变量。
+解压：
 
 ```sh
-pi@pi1:~$ sudo mousepad ~/.bashrc
+sudo tar -zxvf hadoop-2.7.3.tar.gz -C /root/training/
 ```
+
+```sh
+sudo tar -zxvf hadoop-3.1.4.tar.gz -C module/hadoop/
+```
+
+```sh
+sudo tar -xvf hadoop-3.2.1.tar.gz -C /opt/
+```
+
+```sh
+rm hadoop-3.2.1.tar.gz && cd /opt
+```
+
+mv是移动目录的意思：
+
+```sh
+sudo mv hadoop-3.2.1 hadoop
+```
+
+chown是change own的缩写：
+
+```sh
+sudo chown pi:pi -R /opt/hadoop 
+```
+
+x : 从 tar 包中把文件提取出来
+z : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解压
+v : 显示详细信息
+f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
+
+### 2.2.3 配置 Hadoop 环境变量-bash
+
+版本一：
+
+```sh
+sudo vim ~/.bashrc
+```
+
 
 *添加（在文件顶部插入）：
 
@@ -658,33 +668,125 @@ export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
 ```
 
-为 Hadoop 环境初始化 JAVA_HOME。
+版本二：
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hadoop-env.sh
+sudo vim /root/.bash_profile
+```
+
+
+*添加（在文件顶部插入）：
+
+
+```sh
+#设置Hadoop的家目录
+HADOOP_HOME=/root/training/hadoop-2.7.3
+export HADOOP_HOME
+
+#将Hadoop的家目录添加到环境变量中
+PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+export PATH
+```
+
+保存退出后，运行命令
+
+```sh
+source /root/.bash_profile
+```
+
+使配置的环境变量生效。
+
+
+### 为 Hadoop 环境初始化 JAVA_HOME
+
+```sh
+sudo vim /opt/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
 *添加（在文件顶部插入）：
+
+版本一：
 
 ```sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-armhf/
 ```
 
-验证 Hadoop 安装。
+版本二：
 
 ```sh
-pi@pi1:~$ source ~/.bashrc
-pi@pi1:~$ cd && hadoop version | grep Hadoop
+export JAVA_HOME=/root/training/jdk1.8.0_144
+```
+
+版本三：
+
+```sh
+export JAVA_HOME=/usr/java/jdk1.8.0_13
+```
+
+版本四：
+
+```sh
+export  JAVA_HOME=/usr/java/jdk1.8.0_281/
+```
+
+
+**此外，可能还需要修改**
+
+```sh
+sudo vim yarn-env.sh
+```
+
+JAVA_HOME=/usr/java/jdk1.8.0_131
+
+JAVA_HOME=/usr/java/jdk1.8.0_231
+
+在Master节点的workers文件中指定Slave节点，也就是node02
+
+```sh
+sudo vim slaves
+```
+
+chenc02
+chenc03
+
+```sh
+sudo vim workers 
+```
+
+node02
+
+### 验证 Hadoop 安装。
+
+```sh
+source ~/.bashrc
+cd && hadoop version | grep Hadoop
 Hadoop 3.2.1
 ```
 
 设置 Hadoop 集群
+hadoop-env.sh           # java的环境变量
+yarn-env.sh             # 制定yarn框架的Java运行环境
+slaves                  # 指定datanode数据存储服务器
+core-site.xml           # hadoop-web界面路径
+hdfs-site.xml           # 文件系统的配置文件
+mapred-site.xml         # mapreducer 任务配置文件
+yarn-site.xml           # yarn框架配置，主要一些任务的启动位置
+
+
+### core-site.xml文件的配置
+
+这个是hadoop的核心配置，这里需要配置两属性， 
+
+fs.default.name 配置hadoop的HDFS系统命令，位置为主机的9000端口， 
+
+hadoop.tmp.dir 配置haddop的tmp目录的根位置。
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/core-site.xml
+sudo vim /opt/hadoop/etc/hadoop/core-site.xml
 ```
 
 修改文件结尾为：
+版本一：
 
 ```xml
 <configuration>
@@ -695,11 +797,63 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/core-site.xml
 </configuration>
 ```
 
+版本二：
+
+配置NameNode的地址，9000是进行RPC通信的端口号
+
+```xml
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://hadoop222:9000</value>
+</property>
+```
+
+注意：该参数一定要进行配置，Linux的tmp目录是临时目录，当系统重启后数据会丢失
+
+HDFS数据保存在Linux的哪个目录，默认路径是Linux的tmp目录
+```xml
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/root/training/hadoop-2.7.3/tmp</value>
+</property>
+```
+
+版本三：
+
+
+```xml
+<configuration>
+<property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://chenc01:9000</value>
+</property>
+
+<property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
+</property>
+
+<property>
+        <name>hadoop.tmp.dir</name>
+        <value>file:/home/hadoop/tmp</value>
+        <description>Abase for other tmporary directries.</description>
+</property>
+</configuration>
+```
+
+### hdfs-site.xml文件的配置
+
+HDFS主要的配置文件， dfs.http.address配置了hdfs的http的访问位置；
+
+dfs.replication 配置文件的副本，一般不大于从机个数。
+
 ```sh
 pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
 ```
 
 修改文件结尾为：
+
+版本一：
 
 ```xml
 <configuration>
@@ -718,11 +872,97 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
 </configuration> 
 ```
 
+版本二：
+
+注意：dfs.replication参数配置的原则，
+
+一般情况下，数据块的冗余度跟数据节点（DataNode）的个数保持一致，最大不超过3
+
+数据块的冗余度，默认为3，伪分布模式仅有一台机器，就只能设置为1
+
+```xml
+<property>
+<name>dfs.replication</name>
+<value>3</value>
+</property>
+```
+
+是否开启HDFS的权限检查，默认为true
+
+```xml
+<property>
+<name>dfs.permissions</name>
+<value>false</value>
+</property>
+```
+
+版本三：
+
+```xml
+<configuration>
+<property>
+<configuration>
+<property>
+        <name>dfs.namenode.secondary.http-address</name>
+        <value>chenc01:9000</value>
+</property>
+
+<property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:/home/hadoop/dfs/name</value>
+</property>
+
+<property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:/home/hadoop/dfs/data</value>
+</property>
+
+<property>
+        <name>dfs.replication</name>
+        <value>2</value>
+</property>
+
+<property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+</property>
+</configuration>
+```
+
+### mapred-site.xml文件的配置：
+
+这个是mapreduce任务配置文件，
+
+mapreduce.framework.name 属性下配置yarn,
+
+mapred.map.tasks和mapred.reduce.tasks 分别为map和reduce 的任务数。
+
+同时指定hadoop历史服务器hsitoryserver
+
+我们可以通过historyserver查看mapreduce的作业记录，
+
+比如用了多少个map,用了多少个reduce，
+
+作业启动时间，作业完成时间。
+
+默认清空下，hadoop历史服务器是没有启动的，我们需要通过命令来启动:
+
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/mapred-site.xml
+/home/hadoop/hadoop-3.1.3/sbin/mr-jobhistory-daemon.sh  start historyserver
+```
+
+
+注意：默认情况下是没有mapred-site.xml文件的，
+但有mapred-site.xml.template文件，
+运行命令cp mapred-site.xml.templatemapred-site.xml拷贝一份即可。
+
+```sh
+sudo vim /opt/hadoop/etc/hadoop/mapred-site.xml
 ```
 
 修改文件结尾为：
+
+版本一：
 
 ```xml
 <configuration>
@@ -733,11 +973,49 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/mapred-site.xml
 </configuration>
 ```
 
+版本二：
+
+MapReduce程序运行使用的框架
+
+```xml
+<property>
+<name>mapreduce.framework.name</name>
+<value>yarn</value>
+</property>
+```
+
+版本三：
+
+```xml
+<configuration>
+<property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+</property>
+
+<property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>chenc01:10020</value>
+</property>
+
+<property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>chenc01:19888</value>
+</property>
+</configuration>
+```
+
+### yarn-site.xml文件的配置：
+
+yarn框架的配置，主要是一些任务的启动位置
+
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/yarn-site.xml
+sudo vim /opt/hadoop/etc/hadoop/yarn-site.xml
 ```
 
 修改文件结尾为：
+
+版本一：
 
 ```xml
 <configuration>
@@ -752,50 +1030,180 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/yarn-site.xml
 </configuration> 
 ```
 
-创建 Datanode 和 Namenode 目录。
+版本二：
 
-```sh
-pi@pi1:~$ sudo mkdir -p /opt/hadoop_tmp/hdfs/datanode
-pi@pi1:~$ sudo mkdir -p /opt/hadoop_tmp/hdfs/namenode
-pi@pi1:~$ sudo chown pi:pi -R /opt/hadoop_tmp
+Yarn的主节点ResourceManager的位置
+
+MapReduce程序的运行方式：shuffle洗牌
+```xml
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
 ```
 
-格式化HDFS。
-
-```sh
-pi@pi1:~$ hdfs namenode -format -force
+```xml
+<property>
+<name>yarn.resourcemanager.hostname</name>
+<value>hadoop221</value>
+</property>
 ```
 
-启动HDFS，验证功能。
+版本三：
 
-```sh
-pi@pi1:~$ start-dfs && start-yarn.sh
+```xml
+<configuration>
+<!-- Site specific YARN configuration properties -->
+<proetry>
+        <name>yarn.nodemanager.aux-service</name>
+        <value>mapreduce_shuffle</value>
+</proetry>
+
+<proetry>
+        <name>yarn.nodemanager.uax-service.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapreduced.ShuffleHandle</value>
+</proetry>
+<proetry>
+        <name>yarn.resoucemanager.address</name>
+        <value>chenc01:8032</value>
+</proetry>
+<proetry>
+        <name>yarn.resourcemanager.shceduler.address</name>
+        <value>chenc01:8030</value>
+</proetry>
+<proetry>
+        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <value>chenc01:8031</value>
+</proetry>
+
+<proetry>
+        <name>yarn.resourcemanager.admin.address</name>
+        <value>chenc01:8033</value>
+</proetry>
+
+<proetry>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>chenc01:8088</value>
+</proetry>
+</configuration>
 ```
 
-使用jps命令验证设置。
+
+### 创建 Datanode 和 Namenode 目录。
 
 ```sh
-pi@pi1:~$ jps
+sudo mkdir -p /opt/hadoop_tmp/hdfs/datanode
+sudo mkdir -p /opt/hadoop_tmp/hdfs/namenode
+sudo chown pi:pi -R /opt/hadoop_tmp
+```
+
+
+### 格式化NameNode-格式化HDFS
+
+配置完成后，运行命令，一般第一次的时候需要初始化，之后就不需要了
+
+版本一：
+
+```sh
+hdfs namenode –format
+hdfs namenode -format
+```
+
+可能出现创建文件夹失败的问题，这个权限问题，
+
+使用 root 账号使用命令sudo chmod -R a+w /绝对路径。
+
+初始化HDFS失败都要把之前创建的文件夹给删除。
+
+版本二：
+
+```sh
+hdfs namenode -format -force
+```
+
+版本三：
+
+```sh
+cd /home/hadoop/hadoop-3.1.3/bin/
+./hdfs namenode -format
+# 查看是否生成相应的内容
+
+cd /home/hadoop/dfs/
+ls
+tree
+```
+
+### 把主节点上配置好的hadoop目录复制到从节点上：
+
+版本一：
+
+```sh
+scp -r hadoop-2.7.3/ root@hadoop223:/root/training
+```
+
+```sh
+scp -r hadoop-2.7.3/ root@hadoop224:/root/training
+```
+
+版本三：
+
+```sh
+scp -r /home/hadoop/hadoop-3.13 hadoop@chenc02:~/
+scp -r /home/hadoop/hadoop-3.13 hadoop@chenc03:~/
+```
+
+### 最后，在主节点hadoop222上运行命令
+
+直接执行start-all.sh，启动 Hadoop。
+
+此时 node02上的相关服务也会被启动：
+
+```sh
+start-all.sh
+```
+
+
+### 启动HDFS，验证功能。
+
+```sh
+start-dfs && start-yarn.sh
+```
+
+使用jps命令验证设置。在每台服务器上使用 jps 命令查看服务进程，
+
+```sh
+jps
 ```
 
 创建临时目录以测试文件系统：
 
 ```sh
-pi@pi1:~$ hadoop fs -mkdir /tmp
-pi@pi1:~$ hadoop fs -ls /
+hadoop fs -mkdir /tmp
+hadoop fs -ls /
 ```
 
 使用以下命令停止单节点群集：
 
 ```sh
-pi@pi1:~$ stop-dfs && stop-yarn.sh
+stop-dfs && stop-yarn.sh
 ```
 
-静默警告（由于使用了32位Hadoop构建和64位操作系统）
+### Web查看集群状态
+
+或直接进入 Web-UI 界面进行查看，端口为 9870。可以看到此时有一个可用的 Datanode：
+
+接着可以查看 Yarn 的情况，端口号为 8088 ：
+
+浏览器输入http://10.0.0.61:8088/cluster
+
+至此，Hadoop分布式集群搭建成功。
+
+### 静默警告（由于使用了32位Hadoop构建和64位操作系统）
+
 修改Hadoop环境配置:
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hadoop-env.sh
+sudo vim /opt/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
 把这个：
@@ -813,7 +1221,7 @@ export HADOOP_OPTS="-XX:-PrintWarnings –Djava.net.preferIPv4Stack=true"
 现在在~/.bashrc中，添加到底部：
 
 ```sh
-pi@pi1:~$ sudo mousepad ~/.bashrc
+sudo vim ~/.bashrc
 ```
 
 ```sh
@@ -824,34 +1232,34 @@ export HADOOP_ROOT_LOGGER="WARN,DRFA"
 来源~/.bashrc：
 
 ```sh
-pi@pi1:~$ source ~/.bashrc
+source ~/.bashrc
 ```
 
 将.bashrc复制到群集中的其他节点：
 
 ```sh
-pi@pi1:~$ clusterscp ~/.bashrc
+clusterscp ~/.bashrc
 ```
 
 创建Hadoop群集目录（多节点设置）。
 
 ```sh
-pi@pi1:~$ clustercmd sudo mkdir -p /opt/hadoop_tmp/hdfs
-pi@pi1:~$ clustercmd sudo chown pi:pi –R /opt/hadoop_tmp
-pi@pi1:~$ clustercmd sudo mkdir -p /opt/hadoop
-pi@pi1:~$ clustercmd sudo chown pi:pi /opt/hadoop
+clustercmd sudo mkdir -p /opt/hadoop_tmp/hdfs
+clustercmd sudo chown pi:pi –R /opt/hadoop_tmp
+clustercmd sudo mkdir -p /opt/hadoop
+clustercmd sudo chown pi:pi /opt/hadoop
 ```
 
 将Hadoop文件复制到其他节点。
 
 ```sh
-pi@pi1:~$ for pi in $(otherpis); do rsync -avxP $HADOOP_HOME $pi:/opt; done
+for pi in $(otherpis); do rsync -avxP $HADOOP_HOME $pi:/opt; done
 ```
 
 验证是否在其他节点上安装：
 
 ```sh
-pi@pi1:~$ clustercmd hadoop version | grep Hadoop
+clustercmd hadoop version | grep Hadoop
 Hadoop 3.2.1
 Hadoop 3.2.1
 Hadoop 3.2.1
@@ -861,7 +1269,7 @@ Hadoop 3.2.1
 修改用于群集设置的Hadoop配置文件。
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/core-site.xml
+sudo vim /opt/hadoop/etc/hadoop/core-site.xml
 ```
 
 
@@ -885,7 +1293,7 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/core-site.xml
 ```
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
+sudo vim /opt/hadoop/etc/hadoop/hdfs-site.xml
 ```
 
 修改文件结尾为：
@@ -924,7 +1332,7 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
 ```
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/mapred-site.xml
+sudo vim /opt/hadoop/etc/hadoop/mapred-site.xml
 ```
 
 修改文件结尾为：
@@ -971,7 +1379,7 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/mapred-site.xml
 ```
 
 ```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/yarn-site.xml
+sudo vim /opt/hadoop/etc/hadoop/yarn-site.xml
 ```
 
 修改文件结尾为：
@@ -1024,15 +1432,15 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/yarn-site.xml
 清理datanode和namenode目录。
 
 ```sh
-pi@pi1:~$ clustercmd rm -rf /opt/hadoop_tmp/hdfs/datanode/*
-pi@pi1:~$ clustercmd rm -rf /opt/hadoop_tmp/hdfs/namenode/*
+clustercmd rm -rf /opt/hadoop_tmp/hdfs/datanode/*
+clustercmd rm -rf /opt/hadoop_tmp/hdfs/namenode/*
 ```
 
 创建/编辑 master amd worker files.
 
 ```sh
-pi@pi1:~$ cd $HADOOP_HOME/etc/hadoop
-pi@pi1:/opt/hadoop/etc/hadoop$ mousepad master
+cd $HADOOP_HOME/etc/hadoop
+vim master
 ```
 
 在文件中添加一行:
@@ -1042,7 +1450,7 @@ pi1
 ```
 
 ```sh
-pi@pi1:/opt/hadoop/etc/hadoop$ mousepad workers
+vim workers
 ```
 
 将其他pi主机名添加到文件：
@@ -1056,7 +1464,7 @@ pi4
 编辑主机文件。
 
 ```sh
-pi@pi1:~$ sudo mousepad /etc/hosts
+sudo vim /etc/hosts
 ```
 
 删除该行（所有节点将具有相同的主机配置）：
@@ -1068,20 +1476,20 @@ pi@pi1:~$ sudo mousepad /etc/hosts
 将更新后的文件复制到其他集群节点:
 
 ```sh
-pi@pi1:~$ clusterscp /etc/hosts
+clusterscp /etc/hosts
 ```
 
 现在重新启动集群:
 
 ```sh
-pi@pi1:~$ clusterreboot
+clusterreboot
 ```
 
 格式化并启动多节点集群。
 
 ```sh
-pi@pi1:~$ hdfs namenode -format -force
-pi@pi1:~$ start-dfs.sh && start-yarn.sh
+hdfs namenode -format -force
+start-dfs.sh && start-yarn.sh
 ```
 
 现在，由于我们已经在多节点集群上配置了Hadoop，所以当我们在主节点（pi1）上使用jps时，将只运行以下进程：
@@ -1098,153 +1506,6 @@ pi@pi1:~$ start-dfs.sh && start-yarn.sh
 3. jps
 
 
-
-```sh
-```
-
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-```sh
-```
-
-
-## ssh
-```sh
-```
 
 ## spark
 
