@@ -1637,6 +1637,10 @@ cat logs/zeppelin-自动补全？
 
 ## 在remote模式下运行：
 
+flink.excution.mode设置为remote
+flink.excution.remote.host设置为localhost
+flink.excution.remote.port设置为8081
+
 ## yarn模式下的运行：
 
  确保hadoop已经安装
@@ -1664,9 +1668,47 @@ zeppelin.pyflink.python设置为/Users/xxx/anaconda3/bin/python
 ps aux | grep RemoteInterpreterServer
 flink的classpath
 
+## inline configuration
+
+一定要在进程起来前跑
+
+%flink.conf
+flink.execution.mode yarn
+
 ## hive：
 
+
+常用命令：
+bin/hive 开启进程
+show tables 
+quit 退出
+
+先要copy一些jar(不同版本，要copy的jar不同)
+cp ~/flink-connector-hive-2.11-1.10.0.jar ~/Flink_Videos/flink-1.10.0/lin
+cp lib/hive-exec-2.3.4.jar  ~/Flink_Videos/flink-1.10.0/lin
+
+cd conf
+pwd
+把目录copy下来
+
+%flink.bsql
+show tables;
+
+select * from bank;
+
 ## SQL
+
+%flink.bsql
+show tables;
+--this is a comment
+showfunctions
+
+%flink.ssql
+show tables;
+--this is a comment
+showfunctions
+
+
 
 ## Streaming
 
