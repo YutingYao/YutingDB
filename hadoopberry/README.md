@@ -1822,16 +1822,34 @@ scala -version
 
 ## 2.4 spark
 
+我们可以使用Spark SQL来执行常规分析， 
+
+Spark Streaming 来来做流数据处理， 
+
+以及用Mlib来执行机器学习等。
+
+Java，python，scala及R语言的支持也是其通用性的表现之一。
+
+官方的数据表明：它可以比传统的MapReduce快上100倍。
+
 [Spark SQL](https://spark.apache.org/sql/)是Apache Spark的模块，用于处理结构化数据。
+
 [MLlib](https://spark.apache.org/mllib/)是Apache Spark的可扩展机器学习库。
+
 [Spark Streaming](https://spark.apache.org/streaming/)使构建可伸缩的容错流应用程序变得容易。
+
 [GraphX](https://spark.apache.org/graphx/)是Apache Spark用于图形和图形并行计算的API。
+
 [Apache Spark示例](https://spark.apache.org/examples.html)
 
 Apache Spark on [Google Colaboratory](https://mikestaszel.com/2018/03/07/apache-spark-on-google-colaboratory/)
+
 使用 [Google Colaboratory](https://medium.com/@chiayinchen/%E4%BD%BF%E7%94%A8-google-colaboratory-%E8%B7%91-pyspark-625a07c75000) 跑 PySpark
+
 如何在3分钟内安装PySpark和[Jupyter笔记本](https://www.sicara.ai/blog/2017-05-02-get-started-pyspark-jupyter-notebook-3-minutes)
+
 使用[spark submit](https://spark.apache.org/docs/latest/submitting-applications.html)启动应用程序
+
 [spark 案例](https://github.com/YutingYao/spark)
 
 
@@ -2862,6 +2880,224 @@ Time: 2017-12-12 10:57:47
 
 ```sh
 ```
+
+## MongoDB
+
+**HDFS vs. MongoDB**
+
+都是基于廉价**x86服务器**的横向扩展架构，
+
+都能支持到**TB到PB级**的数据量。数据会在**多节点自动备份**，来保证数据的**高可用和冗余**。两者都支持**非结构化数据的存储**，等等。
+
+**但是，HDFS和MongoDB更多的是差异点：**
+
+* 如在存储方式上 HDFS的存储是以文件为单位，每个文件64MB到128MB不等。而MongoDB则是**细颗粒化的、以文档为单位**的存储。
+
+* HDFS不支持索引的概念，对数据的操作局限于扫描性质的读，MongoDB则支持基于**二级索引的快速检索**。
+
+* MongoDB可以支持常见的**增删改查场景**，而HDFS一般只是一次写入后就很难进行修改。
+
+* 从响应时间上来说，HDFS一般是分钟级别而MongoDB对手请求的响应时间通常以**毫秒作为单位**。
+
+如果有一天你的经理告诉你：
+
+他想知道网站上每天有多少404错误在发生，
+
+这个时候如果你用HDFS，就还是需要通过全量扫描所有行，
+
+而MongoDB则可以通过索引，很快地找到所有的404日志，可能花数秒钟就可以解答你经理的问题。
+
+又比如说，如果你希望对每个日志项加一个自定义的属性，
+
+在进行一些预处理后，MongoDB就会比较容地支持到。而一般来说，HDFS是不支持更新类型操作的。
+
+### Mongo Spark Connector 连接器
+
+
+在这里我们在介绍下MongoDB官方提供的Mongo Spark连接器。
+
+目前有3个连接器可用，包括社区第三方开发的和之前Mongo Hadoop连接器等，
+
+这个Mong Spark是最新的，也是我们推荐的连接方案。
+
+这个连接器是专门为Spark打造的，支持**双向数据**，读出和写入。
+
+但是最关键的是 **条件下推**，也就是说：
+
+如果你在**Spark端**指定了查询或者限制条件的情况下，这个**条件会被下推到MongoDB**去执行，
+
+这样可以保证从MongoDB取出来、经过网络传输到Spark计算节点的数据确实都是用得着的。
+
+没有**下推支持**的话，每次操作很可能**需要从MongoDB读取全量的数据，性能体验将会很糟糕**。
+
+拿刚才的日志例子来说，如果我们只想对**404错误日志**进行分析，看那些错误都是哪些页面，以及每天错误页面数量的变化，
+
+如果有条件下推，那么我们可以给**MongoDB一个限定条件：错误代码=404**， 
+
+这个条件会在MongoDB服务器端执行，
+
+这样我们只需要通过**网络传输可能只是全部日志的0.1%的数据**，而不是没有**条件下推**情况下的全部数据。
+
+另外，这个最新的连接器还支持和Spark计算节点**Co-Lo 部署**。
+
+就是说在同一个节点上同时部署**Spark实例**和**MongoDB实例**。
+
+这样做可以减少数据在网络上的传输带来的资源消耗及时延。
+
+当然，这种部署方式需要注意**内存资源和CPU资源**的隔离。隔离的方式可以通过Linux的**cgroups**。
+
+#### 案例
+
+1. 法国航空是法国最大的航空公司：
+
+为了提高客户体验，在最近施行的**360度客户视图**中，使用Spark对**已经收集在MongoDB里面的客户数据**进行分类及行为分析，并把结果（如客户的类别、标签等信息）**写回到MongoDB内每一个客户的文档结构**里。
+
+2. Stratio是美国硅谷一家著名的金融大数据公司：
+
+他们最近在一家在**31个国家有分支机构的跨国银行**实施了一个**实时监控平台**。该银行希望通过**对日志的监控和分析**来保证客户服务的响应时间以及**实时监测一些可能的违规或者金融欺诈行为**。在这个应用内， 他们使用了：
+
+* Apache Flume 来**收集log**
+
+* Spark来**处理实时的log**
+
+* MongoDB来**存储收集的log**以及**Spark分析的结果**，如**Key Performance Indicators**等
+
+3. 东方航空的挑战：
+
+顾客在网站上订购机票，平均资料库查询200次就会下单订购机票，但是现在平均要查询1.2万次才会发生一次订购行为，
+
+**同样的订单量，查询量却成长百倍。**
+
+按照50%直销率这个目标计算，东航的运价系统要支持每天16亿的运价请求。
+
+思路：空间换时间
+
+当前的运价是通过**实时计算**的，
+
+按照现在的计算能力，需要对已有系统进行100多倍的扩容。
+
+另一个常用的思路，就是采用**空间换时间**的方式。
+
+与其对每一次的运价请求进行耗时300ms的运算，不如事先**把所有可能的票价查询组合穷举出来并进行批量计算**，然后把结果**存入MongoDB**里面。
+
+当需要**查询运价**时，直接按照 **出发+目的地+日期的方式** 做一个快速的DB查询，响应时间应该可以做到几十毫秒。
+
+那为什么要用MongoDB？因为我们要处理的数据量庞大无比。按照1000多个航班，365天，26个仓位，100多渠道以及数个不同的航程类型，
+
+我们要实时存取的运价记录有数十亿条之多。这个已经远远超出**常规RDBMS**可以承受的范围。
+
+MongoDB基于**内存缓存的数据管理方式**决定了对**并发读写的响应**可以做到**很低延迟**，
+
+**水平扩展**的方式可以通过**多台节点同时并发处理海量请求**。
+
+事实上，全球最大的航空分销商，管理者全世界95%航空库存的Amadeus也正是使用MongoDB作为其1000多亿**运价缓存的存储方案**。
+
+
+#### 运价系统的架构图
+
+左边是发起航班查询请求的客户端，
+
+首先会有**API服务器**进行**预处理**：一般航班请求会分为**库存查询**和**运价查询**。**库存查询**会直接到东航已有的**库存系统（Seat Inventory）**，同样是实现在MongoDB上面的。在确定库存后根据**库存结果**再从**Fare Cache系统**内查询相应的运价。
+
+**Spark集群**则是另外一套计算集群，通过**Spark MongoDB连接套件**和**MongoDB Fare Cache集群**连接。
+
+Spark 计算任务会**定期触发（如每天一次或者每4小时一次）**，这个任务会对所有的可能的**运价组合进行全量计算**，然后存入**MongoDB**，以供查询使用。
+
+右半边则把原来**实时运算的集群换成了Spark+MongoDB**。Spark负责**批量计算一年内所有航班所有仓位的所有价格**，并以**高并发**的形式存储到MongoDB里面。
+
+每秒钟处理的运价可以达到数万条。
+
+当来自客户端的运价查询达到服务端以后，**服务端**直接就向MongoDB发出按照**日期**，**出发**，**到达机场**为条件的mongo查询。
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6uytn281yhc0.png)
+
+需要计算的任务，也就是所有**日期、航班、仓位**的组合，事先已经存放到**MongoDB**里面。
+
+任务递交到**master**，然后**预先加载所需参考数据**，
+
+**broadcast**就是把这些在内存里的数据复制到每一个**Spark计算节点的JVM**，
+
+然后所有计算节点**多线程并发执行**，
+
+从Mongodb里取出需要计算的仓位，调用东航自己的**运价逻辑**，得出结果以后，并保存回MongoDB。
+
+### Spark 任务入口程序
+
+Spark和MongoDB的连接使用非常简单，下面就是一个代码示例：
+
+```java
+// initialization dependencies including base prices, pricing rules and some reference data
+Map dependencies = MyDependencyManager.loadDependencies();
+// broadcasting dependencies
+javaSparkContext.broadcast(dependencies);
+
+// create job rdd
+cabinsRDD = MongoSpark.load(javaSparkContext).withPipeline(pipeline)
+
+// for each cabin, date, airport pair, calculate the price
+cabinsRDD.map(function calc_price);
+
+// collect the result, which will cause the data to be stored into MongoDB
+cabinsRDD.collect()
+cabinsRDD.saveToMongo()
+```
+
+
+### Spark ＋ MongoDB演示
+
+安装 Spark（略）
+
+测试连接器
+
+```sql
+# cd ～／spark
+# ./bin/spark-shell \
+--conf "spark.mongodb.input.uri=mongodb://127.0.0.1/flights.av" \
+--conf "spark.mongodb.output.uri=mongodb://127.0.0.1/flights.output" \
+--packages org.mongodb.spark:mongo-spark-connector_2.10:1.0.0
+
+import com.mongodb.spark._
+import org.bson.Document
+
+MongoSpark.load(sc).take(10).foreach(println)
+```
+
+简单分组统计
+数据： 365天，所有航班库存信息，500万文档
+任务： 按航班统计一年内所有余票量
+
+```sql
+MongoSpark.load(sc)
+     .map(doc=>(doc.getString("flight") ,doc.getLong("seats")))
+     .reduceByKey((x,y)=>(x+y))
+      .take(10)
+     .foreach(println)
+```
+
+简单分组统计加条件过滤
+数据： 365天，所有航班库存信息，500万文档
+任务： 按航班统计一年内所有库存，但是只处理昆明出发的航班
+
+```sql
+import org.bson.Document
+
+MongoSpark.load(sc)
+          .withPipeline(Seq(Document.parse("{ $match: { orig :  'KMG'  } }")))
+    .map(doc=>(doc.getString("flight") ,doc.getLong("seats")))
+    .reduceByKey((x,y)=>(x+y))
+    .take(10)
+    .foreach(println)
+```
+
+性能优化事项: 
+
+* 使用合适的**chunksize (MB)**
+* Total data size / chunksize = chunks = RDD partitions = spark tasks
+* 不要将**所有CPU核**分配给Spark
+* 预留**1-2个core**给**操作系统**及**其他管理进程**
+* 同机部署，适当情况可以**同机部署Spark+MongoDB**，利用**本地IO**提高性能
+
+
 
 # 3. zeppelin常用命令：
 
