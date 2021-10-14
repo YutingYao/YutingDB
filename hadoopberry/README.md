@@ -2530,29 +2530,836 @@ res3: String = # Apache Spark
 
 可以在浏览器中输入地址进行查看(http://master:8088/cluster) 
 
-```sh
+## geospark
+
+[系列教程](https://www.jianshu.com/nb/37398936)
+
+GeoSpark是基于Spark之上的分布式群集计算系统。
+
+GeoSpark扩展了Spark Core和SparkSQL并提出了空间弹性分布式数据集（Spatial Resilient Distributed Datasets (SRDDs)）同时提供了可视化组件。
+
+简而言之就是可以利用它在Spark上做空间运算。
+
+能够基于经纬度等信息创建
+
+* 点（Point）
+* 线(LineString）
+* 面(Polygon)。
+
+并提供了几种空间查询:
+
+* 空间临近查询(Spatial KNN Query)
+* 空间范围查询( Spatial Range Query)
+* 空间连接查询(Spatial Join Query)
+* 距离连接查询(Distance Join Query)
+
+[Spatial RDD](https://blog.csdn.net/SUDDEV/article/details/104261704)
+
+
+对应的几个类为：
+* 坐标：Coordinate
+* 点：Point、MultiPoint
+* 线：LineString、MultiLineString（多条线）、LinearRing(环线）
+* 面：Polygon、MultiPolygon
+* 集合：GeometryCollection
+
+### geospark部署
+
+
+环境准备
+* JDK 1.8
+* Scala 2.11.x
+
+
+```xml
+<properties>
+    <scala.version>2.11.8</scala.version>
+    <spark.version>2.3.4</spark.version>
+    <scala.binary.version>2.11</scala.binary.version>
+    <geospark.version>1.3.0</geospark.version>
+</properties>
+
+<dependencies>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <version>${spark.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_${scala.binary.version}</artifactId>
+      <version>${spark.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.datasyslab</groupId>
+      <artifactId>geospark</artifactId>
+      <version>${geospark.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.datasyslab</groupId>
+      <artifactId>geospark-sql_2.3</artifactId>
+      <version>${geospark.version}</version>
+    </dependency>
+  </dependencies>
+```
+
+### geospark示例
+
+尝鲜：新建一个CSV文件checkin.csv：
+
+```c
+-88.175933,32.360763,gas
+-88.388954,32.357073,bar
+-88.221102,32.35078,restaurant
+```
+
+Code:
+
+```js
+package com.suddev.bigdata.core
+
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.spark.{SparkConf, SparkContext}
+import org.datasyslab.geospark.enums.FileDataSplitter
+import org.datasyslab.geospark.serde.GeoSparkKryoRegistrator
+import org.datasyslab.geospark.spatialRDD.PointRDD
+
+
+object DemoApp {
+  def main(args: Array[String]): Unit = {
+    // 创建SparkConf
+    val conf = new SparkConf().
+      setAppName("GeoSparkDemo1").
+      setMaster("local[*]").
+      set("spark.serializer", classOf[KryoSerializer].getName).
+      set("spark.kryo.registrator", classOf[GeoSparkKryoRegistrator].getName)
+    val sc = new SparkContext(conf)
+
+    val pointRDDInputLocation = "data/checkin.csv"
+    // 这个变量控制我们的地理经度和纬度在数据的哪两列，我们这里是第0,1列，Offset就设置为0
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    // 这个参数允许我们除了经纬度外还可以携带其他自定义数据
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    // 获取rawRDD进行遍历输出
+    objectRDD.rawSpatialRDD.rdd.collect().foreach(println)
+  }
+}
+```
+
+Output:
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2xpne7kb29g0.png)
+
+
+
+通过GeometryFactory创建地理数据：
+
+```js
+package com.suddev.bigdata.core
+import com.vividsolutions.jts.geom.{Coordinate, GeometryFactory}
+
+object GeoDemoApp {
+  def main(args: Array[String]): Unit = {
+    // 创建一个坐标
+    val coord = new Coordinate(-84.01, 34.01)
+    // 实例化Geometry工厂类
+    val factory = new GeometryFactory()
+    // 创建Point
+    val pointObject = factory.createPoint(coord)
+    // 创建Polygon
+    val coordinates = new Array[Coordinate](5)
+    coordinates(0) = new Coordinate(0,0)
+    coordinates(1) = new Coordinate(0,4)
+    coordinates(2) = new Coordinate(4,4)
+    coordinates(3) = new Coordinate(4,0)
+    // 多边形是闭合的，所有最后一个点就是第一个点
+    coordinates(4) = coordinates(0) 
+    val polygonObject = factory.createPolygon(coordinates)
+    // 创建LineString
+    val coordinates2 = new Array[Coordinate](4)
+    coordinates2(0) = new Coordinate(0,0)
+    coordinates2(1) = new Coordinate(0,4)
+    coordinates2(2) = new Coordinate(4,4)
+    coordinates2(3) = new Coordinate(4,0)
+    val linestringObject = factory.createLineString(coordinates2)
+  }
+}
+```
+
+### 创建SpatialRDD(SRDD)
+
+GeoSpark-Core 提供了三种特殊的SpatialRDD： 
+
+* PointRDD
+* PolygonRDD
+* LineStringRDD
+
+它们可以从Spark RDD，CSV，TSV，WKT，WKB，Shapefiles，GeoJSON和NetCDF / HDF格式加载。
+这里给出几种常用场景示例：
+
+step 1. 初始化SparkContext
+
+```sql
+val conf = new SparkConf().
+	 setAppName("GeoSparkDemo2").
+	 setMaster("local[*]").
+	 set("spark.serializer", classOf[KryoSerializer].getName).
+	 set("spark.kryo.registrator", classOf[GeoSparkKryoRegistrator].getName)
+val sc = new SparkContext(conf)
+```
+
+step 2. 创建typed Spatial RDD - 通过已有Spark RDD创建PointRDD
+
+```js
+// 数据准备
+val data = Array(
+      (-88.331492,32.324142,"hotel"),
+      (-88.175933,32.360763,"gas"),
+      (-88.388954,32.357073,"bar"),
+      (-88.221102,32.35078,"restaurant")
+    )
+val geometryFactory = new GeometryFactory()
+// 创建Spark RDD[Point]
+val pointsRowSpatialRDD = sc.parallelize(data)
+      .map(x => {
+      	// 创建坐标
+        val coord = new Coordinate(x._1, x._2)
+        // 用户定义数据
+        val userData = x._3
+        // 创建Point
+        val point = geometryFactory.createPoint(coord)
+        // Point支持携带用户数据
+        point.setUserData(userData)
+        point
+       })
+// 创建PointRDD 
+val pointRDD = new PointRDD(pointsRowSpatialRDD)
+```
+
+step 2. 创建typed Spatial RDD - 通过CSV/TSV创建PointRDD
+
+创建checkin.csv在 data/checkin.csv路径下:
+
+```js
+-88.331492,32.324142,hotel
+-88.175933,32.360763,gas
+-88.388954,32.357073,bar
+-88.221102,32.35078,restaurant
+```
+
+checkin.csv一共有三列(Column IDs) 为 0, 1, 2.
+第0，1 列是坐标
+第2列是用户定义数据
+pointRDDOffset 控制地理坐标从第几列开始，故offset=0
+
+```js
+val pointRDDInputLocation = "data/checkin.csv"
+val pointRDDOffset = 0  // The coordinates start from Column 0
+val pointRDDSplitter = FileDataSplitter.CSV // or use  FileDataSplitter.TSV
+val carryOtherAttributes = true // 支持携带用户定义数据 (hotel, gas, bar...)
+var objectRDD = new PointRDD(sc, pointRDDInputLocation, pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+```
+
+step 2. 创建typed Spatial RDD - 通过CSV/TSV创建PolygonRDD/LineStringRDD
+
+创建checkinshape.csv在 data/checkin.csv路径下:
+
+```js
+-88.331492,32.324142,-88.331492,32.324142,-88.331492,32.324142,-88.331492,32.324142,-88.331492,32.324142,hotel
+-88.175933,32.360763,-88.175933,32.360763,-88.175933,32.360763,-88.175933,32.360763,-88.175933,32.360763,gas
+-88.388954,32.357073,-88.388954,32.357073,-88.388954,32.357073,-88.388954,32.357073,-88.388954,32.357073,bar
+-88.221102,32.35078,-88.221102,32.35078,-88.221102,32.35078,-88.221102,32.35078,-88.221102,32.35078,restaurant
+```
+
+checkinshape.csv一共有11列(Column IDs) 为 0~10
+第0 - 9 列是5个坐标
+第10列是用户定义数据
+polygonRDDStartOffset 控制地理坐标从第几列开始，故StartOffset = 0
+polygonRDDStartOffset 控制地理坐标从第几列结束，故EndOffset = 8
+
+
+```js
+val polygonRDDInputLocation = "data/checkinshape.csv"
+val polygonRDDStartOffset = 0 // The coordinates start from Column 0
+val polygonRDDEndOffset = 8 // The coordinates end at Column 8
+val polygonRDDSplitter = FileDataSplitter.CSV // or use  FileDataSplitter.TSV
+val carryOtherAttributes = true
+var objectRDD = new PolygonRDD(sc, polygonRDDInputLocation, polygonRDDStartOffset, polygonRDDEndOffset, polygonRDDSplitter, carryOtherAttributes)
+```
+
+step 3. 创建通用Spatial RDD
+
+通用SpatialRDD不同于PointRDD，PolygonRDD和LineStringRDD，
+
+它允许输入数据文件包含混合的几何类型，能够适用更多场景。
+
+WKT/WKB/GeoJson/Shapefile等文件类型就
+
+可以支持保存多种地理数据如 LineString, Polygon和MultiPolygon
+
+
+step 3. 创建通用Spatial RDD - 通过WKT/WKB创建 - checkin.tsv
+
+```tsv
+POINT(-88.331492 32.324142)	hotel
+POINT(-88.175933 32.360763)	gas
+POINT(-88.388954 32.357073)	bar
+POINT(-88.221102 32.35078)	restaurant
+```
+
+代码：
+
+```js
+val inputLocation = "data/checkin.tsv"
+val wktColumn = 0 // The WKT string starts from Column 0
+val allowTopologyInvalidGeometries = true 
+val skipSyntaxInvalidGeometries = false  
+val spatialRDD = WktReader.readToGeometryRDD(sc, inputLocation, wktColumn, allowTopologyInvalidGeometries, skipSyntaxInvalidGeometries)
+```
+
+step 3. 创建通用Spatial RDD - 通过GeoJSON创建 - polygon.json
+
+```json
+{ "type": "Feature", "properties": { "STATEFP": "01", "COUNTYFP": "077", "TRACTCE": "011501", "BLKGRPCE": "5", "AFFGEOID": "1500000US010770115015", "GEOID": "010770115015", "NAME": "5", "LSAD": "BG", "ALAND": 6844991, "AWATER": 32636 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -87.621765, 34.873444 ], [ -87.617535, 34.873369 ], [ -87.6123, 34.873337 ], [ -87.604049, 34.873303 ], [ -87.604033, 34.872316 ], [ -87.60415, 34.867502 ], [ -87.604218, 34.865687 ], [ -87.604409, 34.858537 ], [ -87.604018, 34.851336 ], [ -87.603716, 34.844829 ], [ -87.603696, 34.844307 ], [ -87.603673, 34.841884 ], [ -87.60372, 34.841003 ], [ -87.603879, 34.838423 ], [ -87.603888, 34.837682 ], [ -87.603889, 34.83763 ], [ -87.613127, 34.833938 ], [ -87.616451, 34.832699 ], [ -87.621041, 34.831431 ], [ -87.621056, 34.831526 ], [ -87.62112, 34.831925 ], [ -87.621603, 34.8352 ], [ -87.62158, 34.836087 ], [ -87.621383, 34.84329 ], [ -87.621359, 34.844438 ], [ -87.62129, 34.846387 ], [ -87.62119, 34.85053 ], [ -87.62144, 34.865379 ], [ -87.621765, 34.873444 ] ] ] } },
+{ "type": "Feature", "properties": { "STATEFP": "01", "COUNTYFP": "045", "TRACTCE": "021102", "BLKGRPCE": "4", "AFFGEOID": "1500000US010450211024", "GEOID": "010450211024", "NAME": "4", "LSAD": "BG", "ALAND": 11360854, "AWATER": 0 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -85.719017, 31.297901 ], [ -85.715626, 31.305203 ], [ -85.714271, 31.307096 ], [ -85.69999, 31.307552 ], [ -85.697419, 31.307951 ], [ -85.675603, 31.31218 ], [ -85.672733, 31.312876 ], [ -85.672275, 31.311977 ], [ -85.67145, 31.310988 ], [ -85.670622, 31.309524 ], [ -85.670729, 31.307622 ], [ -85.669876, 31.30666 ], [ -85.669796, 31.306224 ], [ -85.670356, 31.306178 ], [ -85.671664, 31.305583 ], [ -85.67177, 31.305299 ], [ -85.671878, 31.302764 ], [ -85.671344, 31.302123 ], [ -85.668276, 31.302076 ], [ -85.66566, 31.30093 ], [ -85.665687, 31.30022 ], [ -85.669183, 31.297677 ], [ -85.668703, 31.295638 ], [ -85.671985, 31.29314 ], [ -85.677177, 31.288211 ], [ -85.678452, 31.286376 ], [ -85.679236, 31.28285 ], [ -85.679195, 31.281426 ], [ -85.676865, 31.281049 ], [ -85.674661, 31.28008 ], [ -85.674377, 31.27935 ], [ -85.675714, 31.276882 ], [ -85.677938, 31.275168 ], [ -85.680348, 31.276814 ], [ -85.684032, 31.278848 ], [ -85.684387, 31.279082 ], [ -85.692398, 31.283499 ], [ -85.705032, 31.289718 ], [ -85.706755, 31.290476 ], [ -85.718102, 31.295204 ], [ -85.719132, 31.29689 ], [ -85.719017, 31.297901 ] ] ] } },
+{ "type": "Feature", "properties": { "STATEFP": "01", "COUNTYFP": "055", "TRACTCE": "001300", "BLKGRPCE": "3", "AFFGEOID": "1500000US010550013003", "GEOID": "010550013003", "NAME": "3", "LSAD": "BG", "ALAND": 1378742, "AWATER": 247387 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -86.000685, 34.00537 ], [ -85.998837, 34.009768 ], [ -85.998012, 34.010398 ], [ -85.987865, 34.005426 ], [ -85.986656, 34.004552 ], [ -85.985, 34.002659 ], [ -85.98851, 34.001502 ], [ -85.987567, 33.999488 ], [ -85.988666, 33.99913 ], [ -85.992568, 33.999131 ], [ -85.993144, 33.999714 ], [ -85.994876, 33.995153 ], [ -85.998823, 33.989548 ], [ -85.999925, 33.994237 ], [ -86.000616, 34.000028 ], [ -86.000685, 34.00537 ] ] ] } },
+{ "type": "Feature", "properties": { "STATEFP": "01", "COUNTYFP": "089", "TRACTCE": "001700", "BLKGRPCE": "2", "AFFGEOID": "1500000US010890017002", "GEOID": "010890017002", "NAME": "2", "LSAD": "BG", "ALAND": 1040641, "AWATER": 0 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -86.574172, 34.727375 ], [ -86.562684, 34.727131 ], [ -86.562797, 34.723865 ], [ -86.562957, 34.723168 ], [ -86.562336, 34.719766 ], [ -86.557381, 34.719143 ], [ -86.557352, 34.718322 ], [ -86.559921, 34.717363 ], [ -86.564827, 34.718513 ], [ -86.567582, 34.718565 ], [ -86.570572, 34.718577 ], [ -86.573618, 34.719377 ], [ -86.574172, 34.727375 ] ] ] } },
+```
+
+代码：
+
+```js
+val inputLocation = "data/polygon.json"
+val allowTopologyInvalidGeometries = true 
+val skipSyntaxInvalidGeometries = false
+val spatialRDD = GeoJsonReader.readToGeometryRDD(sc, inputLocation, allowTopologyInvalidGeometries, skipSyntaxInvalidGeometries)
+```
+
+step 3. 创建通用Spatial RDD - 通过Shapefile创建
+
+```js
+val shapefileInputLocation="data/myshapefile"
+// System.setProperty("geospark.global.charset", "utf8")
+val spatialRDD = ShapefileReader.readToGeometryRDD(sc, shapefileInputLocation)
+```
+
+注意:
+
+.shp, .shx, .dbf 文件后缀必须是小写. 并且 shapefile 文件必须命名为myShapefile, 文件夹结构如下:
+
+```js
+- shapefile1
+- shapefile2
+- myshapefile
+    - myshapefile.shp
+    - myshapefile.shx
+    - myshapefile.dbf
+    - myshapefile...
+    - ...
+```
+
+如果出现乱码问题可以在ShapefileReader.readToGeometryRDD方法调用之前设置编码参数
+
+
+```js
+System.setProperty("geospark.global.charset", "utf8")
+```
+
+step 4. 坐标系转换
+
+GeoSpark采用EPGS标准坐标系，其坐标系也可参考EPSG官网：https://epsg.io/
+
+如果需要转换成其他标准的坐标系，可以通过以下方法
+
+```js
+// 源标准
+val sourceCrsCode = "epsg:4326"
+// 目标标准
+val targetCrsCode = "epsg:3857"
+objectRDD.CRSTransform(sourceCrsCode, targetCrsCode)
+```
+
+### 空间范围查询(Spatial Range Query)
+
+空间范围查询，顾名思义我们可以给定一个范围（query window），然后查询出包含在当前范围内的地理对象。
+
+1.1 数据准备
+
+创建checkin1.csv在 data/checkin1.csv路径下:
+注意这里故意把bar坐标修改了一下
+
+```js
+-88.331492,32.324142,hotel
+-88.175933,32.360763,gas
+-99.388954,32.357073,bar
+-88.221102,32.35078,restaurant
+```
+
+1.2 代码示例
+
+considerBoundaryIntersection参数可以配置查询是否包括query window边界上的地理对象。
+
+```js
+package com.suddev.bigdata.query
+
+import com.vividsolutions.jts.geom.Envelope
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.spark.{SparkConf, SparkContext}
+import org.datasyslab.geospark.enums.FileDataSplitter
+import org.datasyslab.geospark.serde.GeoSparkKryoRegistrator
+import org.datasyslab.geospark.spatialOperator.RangeQuery
+import org.datasyslab.geospark.spatialRDD.PointRDD
+
+/**
+ * Spatial Range Query
+ * @author Rand
+ * @date 2020/4/16 0016
+ */
+object SpatialRangeQueryApp {
+
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().
+      setAppName("SpatialRangeQueryApp").setMaster("local[*]").
+      set("spark.serializer",classOf[KryoSerializer].getName).
+      set("spark.kryo.registrator", classOf[GeoSparkKryoRegistrator].getName)
+    implicit val sc = new SparkContext(conf)
+    val objectRDD = createPointRDD
+    objectRDD.rawSpatialRDD.rdd.collect().foreach(println)
+
+    // 定义QueryWindow
+    val rangeQueryWindow = new Envelope(-90.01, -80.01, 30.01, 40.01)
+    // 是否考虑边界
+    val considerBoundaryIntersection = false
+    val usingIndex = false
+    val queryResult = RangeQuery.SpatialRangeQuery(objectRDD, rangeQueryWindow, considerBoundaryIntersection, usingIndex)
+    queryResult.rdd.collect().foreach(println)
+  }
+
+  def createPointRDD(implicit sc:SparkContext): PointRDD ={
+    val pointRDDInputLocation = "data/checkin1.csv"
+    // 这个变量控制我们的地理经度和纬度在数据的哪两列，我们这里是第0,1列，Offset就设置为0
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    // 这个参数允许我们除了经纬度外还可以携带其他自定义数据
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    objectRDD
+  }
+}
+```
+
+这里的rangeQueryWindow除了支持Envelope外还可以使用Point/Polygon/LineString
+
+点->创建一个Point Query Window：
+
+```js
+val geometryFactory = new GeometryFactory()
+val pointObject = geometryFactory.createPoint(new Coordinate(-84.01, 34.01))
+```
+
+多边形->创建一个Polygon Query Window：
+
+```js
+val geometryFactory = new GeometryFactory()
+val coordinates = new Array[Coordinate](5)
+coordinates(0) = new Coordinate(0,0)
+coordinates(1) = new Coordinate(0,4)
+coordinates(2) = new Coordinate(4,4)
+coordinates(3) = new Coordinate(4,0)
+coordinates(4) = coordinates(0) // The last coordinate is the same as the first coordinate in order to compose a closed ring
+val polygonObject = geometryFactory.createPolygon(coordinates)
+```
+
+线->创建一个Linestring Query Window：
+
+```js
+val geometryFactory = new GeometryFactory()
+val coordinates = new Array[Coordinate](5)
+coordinates(0) = new Coordinate(0,0)
+coordinates(1) = new Coordinate(0,4)
+coordinates(2) = new Coordinate(4,4)
+coordinates(3) = new Coordinate(4,0)
+val linestringObject = geometryFactory.createLineString(coordinates)
+```
+
+1.3 运行效果
+
+可以看到查询结果包含hotel,gas,restaurant不包含bar
+
+```js
+POINT (-88.331492 32.324142)	hotel
+POINT (-88.175933 32.360763)	gas
+POINT (-99.388954 32.357073)	bar
+POINT (-88.221102 32.35078)	restaurant
+-------------------------------
+POINT (-88.331492 32.324142)	hotel
+POINT (-88.175933 32.360763)	gas
+POINT (-88.221102 32.35078)	restaurant
+-------------------------------
+```
+
+2.空间临近查询(Spatial KNN Query)
+
+空间临近算法，我们可以给的一个中心点的坐标，然后找出该点相邻的K个地理对象
+
+2.1 数据准备
+
+创建checkin2.csv在 data/checkin2.csv路径下:
+
+```js
+-88.331492,32.324142,hotel
+-88.175933,32.360763,gas1
+-88.176033,32.360763,gas2
+-88.175833,32.360763,gas3
+-88.388954,32.357073,bar
+-88.221102,32.35078,restaurant
+```
+
+2.2 代码示例
+
+k参数可以设置限制查询k个结果
+
+🙃这里吐槽一下，如果查询结果为5个，但是我们k设置的大于5就会报空指针异常hhh，不能查到多少返回多少么
+
+🙃再吐槽一下，它这种设计一次只能查询一个点，实际生产上肯定是一批点和另外一批点做KNN匹配，而他这个不支持两个RDD查询，如果有感兴趣的两个RDD做KNN匹配的请给我留言，我单独写一篇文章
+
+```js
+package com.suddev.bigdata.query
+
+import com.vividsolutions.jts.geom.{Coordinate, Envelope, GeometryFactory}
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.spark.{SparkConf, SparkContext}
+import org.datasyslab.geospark.enums.FileDataSplitter
+import org.datasyslab.geospark.serde.GeoSparkKryoRegistrator
+import org.datasyslab.geospark.spatialOperator.{KNNQuery, RangeQuery}
+import org.datasyslab.geospark.spatialRDD.PointRDD
+import scala.collection.JavaConversions._
+
+/**
+ * SpatialKNNQueryApp
+ * @author Rand
+ * @date 2020/4/16 0016
+ */
+object SpatialKNNQueryApp {
+
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().
+      setAppName("SpatialKNNQueryApp").setMaster("local[*]").
+      set("spark.serializer",classOf[KryoSerializer].getName).
+      set("spark.kryo.registrator", classOf[GeoSparkKryoRegistrator].getName)
+    implicit val sc = new SparkContext(conf)
+    val objectRDD = createPointRDD
+    objectRDD.rawSpatialRDD.rdd.collect().foreach(println)
+    val geometryFactory = new GeometryFactory()
+    // 做临近查询的中心点
+    val pointObject = geometryFactory.createPoint(new Coordinate(-84.01, 34.01))
+    val K = 2 // K Nearest Neighbors
+    val usingIndex = false
+    val result = KNNQuery.SpatialKnnQuery(objectRDD, pointObject, K, usingIndex)
+    println("-----------------------------------")
+    // 记得import scala.collection.JavaConversions._ 否则这里报错哈
+    result.foreach(println)
+  }
+
+  def createPointRDD(implicit sc:SparkContext): PointRDD ={
+    val pointRDDInputLocation = "data/checkin2.csv"
+    // 这个变量控制我们的地理经度和纬度在数据的哪两列，我们这里是第0,1列，Offset就设置为0
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    // 这个参数允许我们除了经纬度外还可以携带其他自定义数据
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    objectRDD
+  }
+}
+```
+
+2.3 运行效果
+
+可以看到查询结果包含gas3，gas1两个点
+
+```js
+POINT (-88.331492 32.324142)	hotel
+POINT (-88.175933 32.360763)	gas1
+POINT (-88.176033 32.360763)	gas2
+POINT (-88.175833 32.360763)	gas3
+POINT (-88.388954 32.357073)	bar
+POINT (-88.221102 32.35078)	restaurant
+-----------------------------------
+POINT (-88.175833 32.360763)	gas3
+POINT (-88.175933 32.360763)	gas1
+```
+
+3.空间连接查询(Spatial Join Query)
+
+空间连接查询算法，类似于数据库中的Join操作， 
+
+有Spatial RDD A and B，遍历A中的几何对象去匹配B中覆盖或相交的几何对象。
+
+3.1 数据准备
+
+创建checkin3.csv在 data/checkin3.csv路径下:
+
+```js
+-88.331492,32.324142,1.hotel
+-88.175933,32.360763,1.gas
+-88.388954,32.357073,1.bar
+-88.588954,32.357073,1.spark
+```
+
+创建checkin4.csv在 data/checkin4.csv路径下:
+
+```js
+-88.175933,32.360763,2.gas
+-88.388954,32.357073,2.bar
+-88.221102,32.35078,2.restaurant
+-88.321102,32.35078,2.bus
+```
+
+3.2 代码示例
+
+```js
+package com.suddev.bigdata.query
+
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.spark.{SparkConf, SparkContext}
+import org.datasyslab.geospark.enums.{FileDataSplitter, GridType}
+import org.datasyslab.geospark.serde.GeoSparkKryoRegistrator
+import org.datasyslab.geospark.spatialOperator.JoinQuery
+import org.datasyslab.geospark.spatialRDD.PointRDD
+/**
+ * SpatialJoinQueryApp
+ *
+ * @author Rand
+ * @date 2020/4/16 0016
+ */
+object SpatialJoinQueryApp {
+
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().
+      setAppName("SpatialJoinQueryApp").setMaster("local[*]").
+      set("spark.serializer",classOf[KryoSerializer].getName).
+      set("spark.kryo.registrator", classOf[GeoSparkKryoRegistrator].getName)
+    implicit val sc = new SparkContext(conf)
+    // 准备数据
+    val objectRDD = createObjectRDDRDD
+    objectRDD.rawSpatialRDD.rdd.collect().foreach(println)
+    val queryWindowRDD = createQueryWindowRDD
+    println("---------------------------")
+    queryWindowRDD.rawSpatialRDD.rdd.collect().foreach(println)
+    println("---------------------------")
+    objectRDD.analyze()
+    // 必须设置objectRDD和queryWindowRDD的spatialPartitioning
+    // 条件有二
+    // 1.objectRDD和queryWindowRDD的spatialPartitioning 必须非空相同
+    // 2.objectRDD和queryWindowRDD的分区数量必须一样
+    objectRDD.spatialPartitioning(GridType.KDBTREE)
+    queryWindowRDD.spatialPartitioning(objectRDD.getPartitioner)
+    val considerBoundaryIntersection = false
+    val usingIndex = false
+    val result = JoinQuery.SpatialJoinQuery(objectRDD, queryWindowRDD, usingIndex, considerBoundaryIntersection)
+    result.rdd.foreach(println)
+  }
+
+  def createObjectRDDRDD(implicit sc:SparkContext): PointRDD ={
+    val pointRDDInputLocation = "data/checkin3.csv"
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    objectRDD
+  }
+
+  def createQueryWindowRDD(implicit sc:SparkContext): PointRDD ={
+    val pointRDDInputLocation = "data/checkin4.csv"
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    objectRDD
+  }
+}
+```
+
+3.3 运行效果
+
+可以看到两边的gas，barJoin关联上了
+
+```js
+POINT (-88.331492 32.324142)	1.hotel
+POINT (-88.175933 32.360763)	1.gas
+POINT (-88.388954 32.357073)	1.bar
+POINT (-88.588954 32.357073)	1.spark
+---------------------------
+POINT (-88.175933 32.360763)	2.gas
+POINT (-88.388954 32.357073)	2.bar
+POINT (-88.221102 32.35078)	2.restaurant
+POINT (-88.321102 32.35078)	2.bus
+---------------------------
+(POINT (-88.175933 32.360763)	2.gas,[POINT (-88.175933 32.360763)	1.gas])
+(POINT (-88.388954 32.357073)	2.bar,[POINT (-88.388954 32.357073)	1.bar])
+```
+
+4.距离连接查询(Distance Join Query)
+
+距离联接查询将两个Spatial RDD A和B和一个距离作为输入。
+
+对于A中的每个几何对象，找到B中都在给定距离之内的集合对象。
+
+⚠️关于距离说明：
+
+GeoSpark不会控制SpatialRDD中所有几何的坐标单位（基于度或基于米）。
+
+GeoSpark中所有相关距离的单位与SpatialRDD中所有几何的单位（）相同。
+
+转换参考坐标系（Coordinate Reference System）代码:
+
+
+```js
+val sourceCrsCode = "epsg:4326" // WGS84, the most common degree-based CRS
+val targetCrsCode = "epsg:3857" // The most common meter-based CRS
+objectRDD.CRSTransform(sourceCrsCode, targetCrsCode)
+```
+
+4.1 数据准备
+
+创建checkin5.csv在 data/checkin5.csv路径下:
+
+```js
+-89.331492,32.324142,1.hotel
+-88.1760,32.360763,1.gas
+-88.3890,32.357073,1.bar
+-89.588954,32.357073,1.spark
+```
+
+创建checkin6.csv在 data/checkin6.csv路径下:
+
+```js
+-88.175933,32.360763,2.gas
+-88.388954,32.357073,2.bar
+-88.221102,32.35078,2.restaurant
+-88.321102,32.35078,2.bus
+```
+
+4.2 代码示例
+
+```js
+package com.suddev.bigdata.query
+
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.spark.{SparkConf, SparkContext}
+import org.datasyslab.geospark.enums.{FileDataSplitter, GridType}
+import org.datasyslab.geospark.serde.GeoSparkKryoRegistrator
+import org.datasyslab.geospark.spatialOperator.JoinQuery
+import org.datasyslab.geospark.spatialRDD.{CircleRDD, PointRDD}
+
+/**
+ * DistanceJoinQueryApp
+ *
+ * @author Rand
+ * @date 2020/4/16 0016
+ */
+object DistanceJoinQueryApp {
+
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().
+      setAppName("DistanceJoinQueryApp$").setMaster("local[*]").
+      set("spark.serializer",classOf[KryoSerializer].getName).
+      set("spark.kryo.registrator", classOf[GeoSparkKryoRegistrator].getName)
+    implicit val sc = new SparkContext(conf)
+    // 准备数据
+    val objectRddA = createObjectRDDA
+    objectRddA.rawSpatialRDD.rdd.collect().foreach(println)
+    val objectRddB = createObjectRDDB
+    println("---------------------------")
+    objectRddB.rawSpatialRDD.rdd.collect().foreach(println)
+    println("---------------------------")
+    // 设置距离
+    val circleRDD = new CircleRDD(objectRddA, 0.1) // Create a CircleRDD using the given distance
+    circleRDD.analyze()
+    circleRDD.spatialPartitioning(GridType.KDBTREE)
+    objectRddB.spatialPartitioning(circleRDD.getPartitioner)
+
+    val considerBoundaryIntersection = false // Only return gemeotries fully covered by each query window in queryWindowRDD
+    val usingIndex = false
+
+    val result = JoinQuery.DistanceJoinQueryFlat(objectRddB, circleRDD, usingIndex, considerBoundaryIntersection)
+    result.rdd.foreach(println)
+  }
+
+  def createObjectRDDA(implicit sc:SparkContext): PointRDD ={
+    val pointRDDInputLocation = "data/checkin5.csv"
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    objectRDD
+  }
+
+  def createObjectRDDB(implicit sc:SparkContext): PointRDD ={
+    val pointRDDInputLocation = "data/checkin6.csv"
+    val pointRDDOffset = 0
+    val pointRDDSplitter = FileDataSplitter.CSV
+    val carryOtherAttributes = true
+    val objectRDD = new PointRDD(sc, pointRDDInputLocation,pointRDDOffset, pointRDDSplitter, carryOtherAttributes)
+    objectRDD
+  }
+}
+```
+
+4.3 运行效果
+
+可以看到
+
+1.gas匹配到了2.gas,2.restaurant两个点
+
+1.bar匹配到了2.bar,2.bus两个点
+
+```js
+POINT (-89.331492 32.324142)	1.hotel
+POINT (-88.176 32.360763)	1.gas
+POINT (-88.389 32.357073)	1.bar
+POINT (-89.588954 32.357073)	1.spark
+---------------------------
+POINT (-88.175933 32.360763)	2.gas
+POINT (-88.388954 32.357073)	2.bar
+POINT (-88.221102 32.35078)	2.restaurant
+POINT (-88.321102 32.35078)	2.bus
+---------------------------
+(POINT (-88.176 32.360763)	1.gas,POINT (-88.175933 32.360763)	2.gas)
+(POINT (-88.176 32.360763)	1.gas,POINT (-88.221102 32.35078)	2.restaurant)
+(POINT (-88.389 32.357073)	1.bar,POINT (-88.388954 32.357073)	2.bar)
+(POINT (-88.389 32.357073)	1.bar,POINT (-88.321102 32.35078)	2.bus)
+```
+
+```js
 
 ```
 
-```sh
+```js
 
 ```
 
-```sh
+```js
 
 ```
 
-```sh
 
-```
 
-```sh
 
-```
 
-```sh
 
-```
 
 ## kafka
 
@@ -2876,12 +3683,43 @@ Time: 2017-12-12 10:57:47
 ```sh
 ```
 
-## postgresql
+## PostgreSQL
 
-```sh
-```
+PostgreSQL vs MongoDB
+
+[postgresql的速度比MongoDB更快](http://blog.chinaunix.net/uid-69999418-id-5848402.html)
+
+[Mongodb与PostgreSQL+postgis相比，各自的优劣势是什么?](https://www.zhihu.com/question/47292026)
+
+Spark对接
+
+[Spark对接分析型数据库PostgreSQL版快速入门](https://help.aliyun.com/document_detail/118439.html)
+
+[Spark jdbc postgresql数据库连接和写入操作源代码解读](https://my.oschina.net/u/4363935/blog/4026459)
+
+[Spark jdbc postgresql数据库连接和写入操作源代码解读](https://www.cnblogs.com/zhchoutai/p/8677027.html)
+
+[Spark读写postgresql](https://blog.csdn.net/weixin_40450867/article/details/102613275)
+
+flink连接
+
+[flink连接postgresql数据库](https://blog.csdn.net/weixin_43315211/article/details/88354331)
+
+[Flink-cdc实时读postgresql](https://www.cnblogs.com/xiongmozhou/p/14817641.html)
+
+[flink cdc捕获postgresql数据](https://blog.csdn.net/weixin_41197407/article/details/112655218)
+
+[创建分析型数据库PostgreSQL版结果表](https://help.aliyun.com/knowledge_detail/162453.html)
 
 ## MongoDB
+
+[MongoDB 如何上手和避坑？](https://mp.weixin.qq.com/s/EhVsdlRQDC1VP1S1QQfnkg)
+
+[MongoDB 不得不知的 12 个知识点](https://mp.weixin.qq.com/s/EMHKgo2R8z8uyjAksK8hIQ)
+
+[当物流行业遇见MongoDB](https://mp.weixin.qq.com/s/SHn_YLqR0Wzu8OF_j21PIA)
+
+[云MongoDB 优化让LBS服务性能提升十倍](https://mp.weixin.qq.com/s/mCIL100G1GGNcxNHJiSKUQ)
 
 **HDFS vs. MongoDB**
 
@@ -3101,6 +3939,8 @@ MongoSpark.load(sc)
 
 # 3. zeppelin常用命令：
 
+
+
 ```sh
 sudo vim conf/zeppelin-site.xml
 bin/zeppelin-daemon.sh restart
@@ -3288,3 +4128,316 @@ TUMBLE(rowtime, INTERVAL '5' SECOND), url
 ## kafka
 
 ## python
+
+## spark
+
+首先确认Zeppelin的机器上已安装有Hadoop客户端和Spark客户端，
+
+能通过Hadoop客户端连接HDFS，
+
+通过Spark客户端提交任务给YARN。
+
+```sh
+cd zeppelin-0.9.0-bin-all
+vi conf/zeppelin-env.sh
+
+# 在zeppelin-env.sh文件中找到SPARK_HOME和HADOOP_CONF_DIR两项配置，修改成实际的路径
+export SPARK_HOME=/opt/cloudera/parcels/CDH/lib/spark
+export HADOOP_CONF_DIR=/etc/hadoop/conf
+# 重启Zeppelin
+./bin/zeppelin-daemon.sh restart
+```
+
+选择Interpreter
+
+搜索spark
+
+将spark.master配置成yarn-client，其他可以暂时保持不变。
+
+验证测试
+
+```sql
+%spark
+import org.apache.hadoop.fs.{FileSystem, Path}
+val fs = FileSystem.get(sc.hadoopConfiguration)
+val dirSize = fs.getContentSummary(new Path("hdfs:///user/root")).getLength
+```
+
+## flink - Python env - Conda
+
+### 准备工作
+
+本文内容就是在 Zeppelin notebook 里利用 Conda 来创建 Python env 自动部署到 Yarn 集群中，无需手动在集群上去安装任何 Pyflink 的包，并且可以在一个 Yarn 集群里同时使用多个版本的 PyFlink。
+
+下载 Flink 1.13， 需要注意的是，本文的功能只能用在 Flink 1.13 以上版本，
+
+然后：
+
+把 **flink-Python-*.jar** 这个 jar 包 copy 到 **Flink 的 lib 文件夹**下；
+
+
+
+把 **opt/Python** 这个文件夹 copy 到 **Flink 的 lib 文件夹**下。
+
+
+安装以下软件 (这些软件是用于创建 Conda env 的)：
+
+
+* [miniconda](https://docs.conda.io/en/latest/miniconda.html)
+
+* [conda pack](https://conda.github.io/conda-pack/)
+
+* [mamba](https://github.com/mamba-org/mamba)
+
+
+### 搭建 PyFlink 环境
+
+接下来就可以在 Zeppelin 里搭建并且使用 PyFlink 了。
+
+#### Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境
+
+因为 Zeppelin 天生支持 Shell，
+
+所以可以在 Zeppelin 里用 Shell 来制作 PyFlink 环境。
+
+注意这里的 **Python 第三方包**是在 **PyFlink 客户端 (JobManager)** 需要的包，
+
+比如 Matplotlib 这些，并且确保至少安装了下面这些包：
+
+某个版本的 **Python (这里用的是 3.7）**
+
+**apache-flink (这里用的是 1.13.1)**
+
+**jupyter，grpcio，protobuf** (这三个包是 Zeppelin 需要的)
+
+剩下的包可以根据需要来指定：
+
+
+```sql
+%sh
+
+# make sure you have conda and momba installed.
+# install miniconda: https://docs.conda.io/en/latest/miniconda.html
+# install mamba: https://github.com/mamba-org/mamba
+
+echo "name: pyflink_env
+channels:
+- conda-forge
+- defaults
+dependencies:
+- Python=3.7
+- pip
+- pip:
+  - apache-flink==1.13.1
+- jupyter
+- grpcio
+- protobuf
+- matplotlib
+- pandasql
+- pandas
+- scipy
+- seaborn
+- plotnine
+" > pyflink_env.yml
+   
+mamba env remove -n pyflink_env
+mamba env create -f pyflink_env.yml
+```
+
+运行下面的代码打包 PyFlink 的 **Conda 环境**并且**上传**到 **HDFS** (注意这里打包出来的文件格式是 tar.gz)：
+
+
+```sql
+%sh
+
+rm -rf pyflink_env.tar.gz
+conda pack --ignore-missing-files -n pyflink_env -o pyflink_env.tar.gz
+
+hadoop fs -rmr /tmp/pyflink_env.tar.gz
+hadoop fs -put pyflink_env.tar.gz /tmp
+# The Python conda tar should be public accessible, so need to change permission here.
+hadoop fs -chmod 644 /tmp/pyflink_env.tar.gz
+```
+
+
+#### Step 2. 制作 TaskManager 上的 PyFlink Conda 环境
+
+
+运行下面的代码来创建 **TaskManager 上的 PyFlink Conda 环境**，
+
+TaskManager 上的 PyFlink 环境**至少包含以下 2 个包**：
+
+* 某个版本的 Python (这里用的是 3.7）
+
+* apache-flink (这里用的是 1.13.1)
+
+
+剩下的包是 **Python UDF** 需要依赖的包，比如这里指定了 **pandas**
+
+```sql
+%sh
+
+echo "name: pyflink_tm_env
+channels:
+- conda-forge
+- defaults
+dependencies:
+- Python=3.7
+- pip
+- pip:
+  - apache-flink==1.13.1
+- pandas
+" > pyflink_tm_env.yml
+   
+mamba env remove -n pyflink_tm_env
+mamba env create -f pyflink_tm_env.yml
+```
+
+运行下面的代码打包 PyFlink 的 Conda 环境并且上传到 HDFS (注意这里使用的是 zip 格式）：
+
+```sql
+%sh
+
+rm -rf pyflink_tm_env.zip
+conda pack --ignore-missing-files --zip-symlinks -n pyflink_tm_env -o pyflink_tm_env.zip
+
+hadoop fs -rmr /tmp/pyflink_tm_env.zip
+hadoop fs -put pyflink_tm_env.zip /tmp
+# The Python conda tar should be public accessible, so need to change permission here.
+hadoop fs -chmod 644 /tmp/pyflink_tm_env.zip
+```
+
+#### Step 3. 在 PyFlink 中使用 Conda 环境
+
+
+接下来就可以在 Zeppelin 中使用上面创建的 Conda 环境了，
+
+首先需要在 Zeppelin 里配置 Flink，主要**配置的选项**有：
+
+* **flink.execution.mode** 为 **yarn-application**, 本文所讲的方法只适用于 **yarn-application 模式**；
+
+* 指定 **yarn.ship-archives**，**zeppelin.pyflink.Python** 以及 **zeppelin.interpreter.conda.env.name** 来配置 **JobManager** 侧的 **PyFlink Conda 环境**；
+
+* 指定 **Python.archives** 以及 **Python.executable** 来指定 **TaskManager** 侧的 **PyFlink Conda 环境**；
+
+* 指定其他**可选的 Flink 配置**，比如这里的 **flink.jm.memory** 和 **flink.tm.memory**。
+
+
+```sql
+%flink.conf
+
+
+flink.execution.mode yarn-application
+
+yarn.ship-archives /mnt/disk1/jzhang/zeppelin/pyflink_env.tar.gz
+zeppelin.pyflink.Python pyflink_env.tar.gz/bin/Python
+zeppelin.interpreter.conda.env.name pyflink_env.tar.gz
+
+Python.archives hdfs:///tmp/pyflink_tm_env.zip
+Python.executable pyflink_tm_env.zip/bin/Python3.7
+
+flink.jm.memory 2048
+flink.tm.memory 2048
+```
+
+接下来就可以如一开始所说的那样在 Zeppelin 里使用 **PyFlink 以及指定的 Conda 环境**了。有 2 种场景:
+
+下面的例子里，可以在 PyFlink 客户端 (JobManager 侧) 
+
+使用上面创建的 JobManager 侧的 Conda 环境，
+
+比如下边使用了 **Matplotlib**。
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.u24vlra1yzk.png)
+
+下面的例子是在 **PyFlink UDF** 里使用上面创建的 **TaskManager 侧 Conda 环境里的库**，
+
+比如下面在 UDF 里使用 **Pandas**。
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5s0w557gjm80.png)
+
+## Apache Sedona
+
+[Apache Sedona](https://github.com/apache/incubator-sedona)(孵化)是一个用于处理大规模空间数据的集群计算系统。
+
+Sedona通过一组开箱使用的空间弹性分布式数据集(srdd)/ 
+
+SpatialSQL扩展了Apache Spark / SparkSQL，
+
+可以有效地跨机器加载、处理和分析大规模空间数据。
+
+| Name  |  API |  介绍|
+|---|---|---|
+|Core  | RDD  | SpatialRDD 和查询运算符。 |
+|SQL  | SQL/DataFrame  |Sedona 核心的 SQL 接口。|
+|Viz |  RDD, SQL/DataFrame | 空间 RDD 和 DataFrame 的可视化|
+|Zeppelin |  Apache Zeppelin | Apache Zeppelin 0.8.1+ 插件|
+
+这是一个[jupyter示例](https://mybinder.org/v2/gh/apache/incubator-sedona/HEAD?filepath=binder)
+
+可以安装在[zeppelin](https://github.com/apache/incubator-sedona/tree/master/zeppelin)上
+
+## oracle (貌似不太常用)
+
+## 简单介绍oracle
+
+Oracle数据库中的空间和图形特性
+
+Oracle数据库现在包括**机器学习**，**空间**和**图形功能**。
+
+如果你有Oracle数据库许可证，你可以使用所有行业领先的机器学习、空间和图形功能，
+
+在**本地**和**Oracle云数据库**服务中进行开发和部署
+
+一些应用：
+
+使用[oracle](https://www.jianshu.com/p/08afbdc63848/)作为数据源发布图层到[geoserver](https://docs.geoserver.org/latest/en/user/data/database/oracle.html)
+
+### 连接Oracle数据库
+
+简单来说，步骤如下：
+
+1. 下载ojdbc8.jar
+2. 创建新jdbc解释器
+3. 配置jdbc参数
+4. 测试新解释器
+
+1. 进入 Interpreters page.
+2. 创建 new jdbc Interpreter.
+3. 配置参数。
+
+```sql
+default.driver	oracle.jdbc.driver.OracleDriver
+default.url		jdbc:oracle:thin:@//host:port/servicename
+default.user		database_user
+default.password	password
+artifact			/opt/oracle/ojdbc8.jar
+```
+
+用新的解释器创建新的notbook绑定。
+
+```sql
+
+```
+
+```sql
+
+```
+
+```sql
+
+```
+
+
+# 高阶技巧
+
+[使用 Flink 前需要知道的 10 个『陷阱』](https://mp.weixin.qq.com/s/iQdYaChIftZckyXRy3tZ0g)
+
+[我司Kafka+Flink+MySQL生产完整案例代码](https://mp.weixin.qq.com/s/enbuh3BGp1ocAlCoSyQysQ)，这个案例用的是java
+
+[【Flink】第二十六篇：源码角度分析Task执行过程](https://mp.weixin.qq.com/s/BOxSh3YltFrrT_IupQAB6Q)，这个案例用的是java
+
+[实时数仓 | Flink实时维表join方法总结（附项目源码）](https://mp.weixin.qq.com/s/X3YYm9psakwF-HamjCvKBg)，这个案例用的是java
+
+
+
