@@ -1622,95 +1622,191 @@ spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPA
 
 # zeppelin常用命令：
 
+```sh
 sudo vim conf/zeppelin-site.xml
 bin/zeppelin-daemon.sh restart
-cat logs/zeppelin-xxxxx-Pro.local.log
+vim logs/zeppelin-xxxxx-Pro.local.log
+```
 
 ## 在local模式下运行：
 
+```sh
 tar -xvf flink-1.10.0-bin-scala_2.11.tgz
-minicluster 的端口为 8081
+```
+
+**minicluster** 的端口为 **8081**
 
 查看log
+
+```sh
 cd ../zeppelin-0.9.0-SNAPSHOT
-cat logs/zeppelin-自动补全？
+vim logs/zeppelin-自动补全？
+```
+
+tab键自动补全命令
 
 ## 在remote模式下运行：
 
 flink.excution.mode设置为remote
 flink.excution.remote.host设置为localhost
-flink.excution.remote.port设置为8081
+flink.excution.remote.port设置为**8081**
 
 ## yarn模式下的运行：
 
- 确保hadoop已经安装
+确保hadoop已经安装
 
+
+```sh
 hadoop classpath
+```
+
 获得hadoop的所有jar
 
+```sh
 echo $HADOOP_CONF_DIR
+```
 
 
-FLINK_HOME设置为/Users/xxx/xxx/flink-1.10.0
-flink.excution.mode设置为yarn
-flink.excution.remote.host设置为localhost
-flink.excution.remote.port设置为8081
-flink.jm.memory设置为1024
-flink.tm.memory设置为1024
-flink.tm.slot设置为2
-local.number-taskmanager设置为4
-flink.yarn.appName设置为Zeppelin Flink Session
-flink.yarn.queue设置为default
-zeppelin.flink.maxResult设置为1000
-zeppelin.pyflink.python设置为/Users/xxx/anaconda3/bin/python
+* FLINK_HOME设置为/Users/xxx/xxx/flink-1.10.0
+* flink.excution.mode设置为yarn
+* flink.excution.remote.host设置为localhost
+* flink.excution.remote.port设置为8081
+* flink.jm.memory设置为1024
+* flink.tm.memory设置为1024
+* flink.tm.slot设置为2
+* local.number-taskmanager设置为4
+* flink.yarn.appName设置为Zeppelin Flink Session
+* flink.yarn.queue设置为default
+* zeppelin.flink.maxResult设置为1000
+* zeppelin.pyflink.python设置为/Users/xxx/anaconda3/bin/python
 
 
+```sh
 ps aux | grep RemoteInterpreterServer
+```
+
 flink的classpath
 
 ## inline configuration
 
 一定要在进程起来前跑
 
+```sql
 %flink.conf
 flink.execution.mode yarn
+```
 
 ## hive：
 
 
 常用命令：
-bin/hive 开启进程
-show tables 
-quit 退出
 
-先要copy一些jar(不同版本，要copy的jar不同)
+```sh
+bin/hive # 开启进程
+```
+
+```sh
+show tables 
+```
+
+```sh
+quit # 退出
+```
+
+
+
+先要copy一些jar(不同版本，要copy的jar不同)：
+
+```sh
 cp ~/flink-connector-hive-2.11-1.10.0.jar ~/Flink_Videos/flink-1.10.0/lin
 cp lib/hive-exec-2.3.4.jar  ~/Flink_Videos/flink-1.10.0/lin
+```
 
+```sh
 cd conf
 pwd
-把目录copy下来
+```
 
+把目录copy下来，放到配置页面
+
+```sql
 %flink.bsql
 show tables;
-
 select * from bank;
+```
 
 ## SQL
 
+```sql
 %flink.bsql
 show tables;
 --this is a comment
 showfunctions
+```
 
+```sql
 %flink.ssql
 show tables;
 --this is a comment
 showfunctions
-
+```
 
 
 ## Streaming
+
+采用Flink Job Control Tutorial进行学习：
+
+single模式下：指select语句只有一行
+
+这里必须用到html的模板，
+
+{0}指代max(rowtime)
+
+{1}指代count(*)
+
+默认的刷新频率是3秒
+
+```sql
+% flink.ssql(type = single, refreshInterval = 1000, template = Total count is <h1>{1}</h1> <br> {0})
+
+select max(rowtime), count(*) from log
+```
+
+update模式下：每一次更新数据，都是对原来的数据做一次update
+
+默认是table模式，不需要制定template
+
+
+```sql
+%flink.ssql(type)
+
+select url, count(1) as c from log group by url
+```
+
+
+append模式下：会得到时间序列时间。第一个字段，select字段，必须是时间。
+
+settings的设置：
+
+keys：永远设置为时间
+
+values：设置为PV值
+
+groups：设置为URL(home search product)
+
+threshold: 默认保留一个小时的数据，但也可以设置为60000，表示保留1分钟的数据
+
+以5秒为一个窗口的单元，查看5秒以内，每一个窗口的pv：
+
+```sql
+%flink.ssql(type = append, threshold)
+select TUMBEL_START(rowtime, INTERVAL '5' SECOND) as
+start_time, url, count(1) as pv from log group by
+TUMBLE(rowtime, INTERVAL '5' SECOND), url
+```
+
+
+
 
 ## kafka
 
