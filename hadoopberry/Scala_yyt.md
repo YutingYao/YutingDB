@@ -1,5 +1,7 @@
 # 1. scala概述
 
+[3小时入门](https://mp.weixin.qq.com/s/ZQNx1bLWH3vY9i4kemIQxQ)
+
 ## 1.1. 特性
 
 换行符：分号
@@ -919,4 +921,282 @@ scala：
 
 ```js
 import java.util
+```
+
+## java和scala调用python程序
+
+### java中调用python的方法
+
+1. 使用Jython；
+2. 使用Jep；:key: 
+3. 使用Runtime.getRuntime()；:key: 
+4. 使用py4j 的方式。
+
+   本文今天将介绍使用Runtime.getRuntime()的方式调用python程序。
+
+python代码：（脚本名`JavaCallPythonDemo.py`）
+
+```py
+# coding=utf-8
+if __name__ == '__main__':
+   print("hello, world")
+```
+
+java代码：
+```java
+public static void main(String[] args) {
+   String[] arguments = new String[] {"/usr/bin/python3", "src/main/python/JavaCallPythonDemo.py"};
+   try {
+       Process process = Runtime.getRuntime().exec(arguments);
+       BufferedReader bufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+       String line = null;
+       while ((line = bufferReader.readLine()) != null) {
+           System.out.println(line);
+       }
+       bufferReader.close();
+       //process.waitFor()返回值为0表示我们调用python脚本成功，返回值为1表示调用python脚本失败
+       int res = process.waitFor();
+       System.out.println(res);
+   } catch (Exception e) {
+       e.printStackTrace();
+   }
+}
+```
+
+Java代码中Process的几种方法：
+
+1. destroy()：杀掉子进程
+2. exitValue()：返回子进程的出口值，值 0 表示正常终止
+3. getErrorStream()：获取子进程的错误流
+4. getInputStream()：获取子进程的输入流
+5. getOutputStream()：获取子进程的输出流
+6. waitFor()：导致当前线程等待，如有必要，一直要等到由该 Process 对象表示的进程已经终止。
+   如果已终止该子进程，此方法立即返回。如果没有终止该子进程，调用的线程将被阻塞，直到退出子进程，根据惯例，0 表示正常终止
+
+遇到的问题：
+
+当python代码中有引入第三方库时，process.waitFor()会返回1，即调用失败。
+
+解决方案：
+
+将 String[] arguments = new String[] {"python", "src/main/python/JavaCallPythonDemo.py"}中的参数python
+
+换成绝对路径即可。比如："/usr/bin/python3"
+
+### scala调用python的代码
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1pgejbudddkw.png)
+
+python代码：(脚本名`ScalaCallPythonDemo.py`)
+
+```py
+# coding=utf-8
+import sys
+def sum(a, b):
+   print(int(a) + int(b))
+if __name__ == '__main__':
+   sum(sys.argv[1], sys.argv[2])
+```
+
+Scala代码：
+
+```js
+def main(args: Array[String]): Unit = {
+ val arguments = Array[String]("/usr/bin/python3", "src/main/python/ScalaCallPythonDemo.py", "6", "10")
+ try {
+   val process = Runtime.getRuntime.exec(arguments)
+   val bufferReader = new BufferedReader(new InputStreamReader(process.getInputStream, StandardCharsets.UTF_8))
+   var line = ""
+   var flag:Boolean= true
+   while (flag){
+     line = bufferReader.readLine()
+     //Scala在读取文件时，如果读到最后会返回一个null值，因此，此时我们将标志位改为false，以便下一次结束while循环
+     if (line == null){
+       flag = false
+     }else{
+       println(line)
+     }
+   }
+   bufferReader.close()
+   val res = process.waitFor
+   System.out.println(res)
+ } catch {
+   case e: Exception =>
+     e.printStackTrace()
+ }
+}
+```
+
+## Scala与JAVA互操作
+
+### Java调Scala
+
+Java可以直接操作纵Scala类，如同scala直接使用Java中的类一样，例如：
+
+ 
+
+```js
+//在Person.scala文件中定义Scala语法的Person类
+package cn.scala.xtwy.scalaToJava
+class Person(val name:String,val age:Int)
+//伴生对象
+object Person{
+  def getIdentityNo()= {"test"}
+}
+
+//ScalaInJava.java文件中定义了ScalaInJava类
+//直接调用Scala中的Person类
+
+package cn.scala.xtwy.scalaToJava;
+ 
+public class ScalaInJava {
+    public static void main(String[] args) {
+       Person p=new Person("摇摆少年梦", 27);
+       System.out.println("name="+p.name()+" age="+p.age());
+       //伴生对象的方法当做静态方法来使用
+       System.out.println(Person.getIdentityNo());
+    }
+}
+
+```
+
+对！就是这么简单，Java似乎可以无缝操纵Scala语言中定义的类，
+
+在trait那一节中我们提到，如果trait中全部是抽象成员，
+
+则它与java中的interface是等同的，
+
+这时候java可以把它当作接口来使用，但如果trait中定义了具体成员，
+
+则它有着自己的内部实现，此时在java中使用的时候需要作相应的调整。
+
+
+### Scala调java
+
+Scala可以直接调用Java实现的任何类，
+
+只要符合scala语法就可以，不过某些方法在JAVA类中不存在，
+
+但在scala中却存在操作更简便的方法，例如集合的`foreach`方法，
+
+在java中是不存在的，但我们想用的话怎么办呢？
+
+这时候可以通过隐式转换来实现，scala已经为我们考虑到实际应用场景了，例如：
+
+```java
+import java.util.ArrayList;
+
+class RevokeJavaCollections {
+    def getList={
+      val list=new ArrayList[String]()
+      list.add("摇摆少年梦")
+      list.add("学途无忧网金牌讲师")
+      list
+    }
+
+  def main(args: Array[String]) {
+    val list=getList
+    //因为list是java.util.ArrayList类型，所以下这条语句编译不会通过
+    list.foreach(println)
+  }
+
+}
+```
+
+此时只要引入`scala.collection.JavaConversions._`包就可以了，
+
+它会我们自动地进行隐式转换，从而可以使用scala中的一些非常方便的高阶函数，
+
+如`foreach`方法，代码如下：
+
+```js
+import java.util.ArrayList;
+//引入下面这条语句后便可以调用scala集合中的方法，如foreach,map等
+import scala.collection.JavaConversions._
+/**
+ * Created by 摇摆少年梦 on 2015/8/16.
+ */
+object RevokeJavaCollections{
+  def getList={
+    val list=new ArrayList[String]()
+    list.add("摇摆少年梦")
+    list.add("学途无忧网金牌讲师")
+    list
+  }
+
+  def main(args: Array[String]) {
+    val list=getList
+    //现在可以调用scala集合中的foreach等方法了
+    list.foreach(println)
+    val list2=list.map(x=>x*2)
+    println(list2)
+  }
+}
+```
+
+### Scala与Java集合互转摘要
+
+对于集合而言，Scala从2.8.1开始引入`scala.collection.JavaConverters`
+
+用于Scala与Java集合的互转。
+
+在scala代码中如果需要集合转换，首先引入`scala.collection.JavaConverters._`，
+
+进而显示调用`asJava`或者`asScala`方法完成转型。
+
+与此雷同的`scala.collection.JavaConversions`已被标注为
+
+@Deprecated（since 2.12.0），`JavaConversions`可以做到隐式转换，
+
+即不需要`asJava`或者`asScala`的调用，但是这样可能会对阅读造成障碍，可能会让人难以知晓什么变成了什么。
+
+以下可以通过`asScala`和`asJava`进行互转：
+
+*    scala.collection.Iterable       <=> java.lang.Iterable
+*    scala.collection.Iterator       <=> java.util.Iterator
+*    scala.collection.mutable.Buffer <=> java.util.List
+*    scala.collection.mutable.Set    <=> java.util.Set
+*    scala.collection.mutable.Map    <=> java.util.Map
+*    scala.collection.concurrent.Map <=> java.util.concurrent.ConcurrentMap
+
+以下可以通过`asScala`将Java的转成Scala的，
+
+通过特殊的命名（如`asJavaCollection`）将Scala的转成Java的：
+
+*    scala.collection.Iterable    <=> java.util.Collection   (via asJavaCollection)
+*    scala.collection.Iterator    <=> java.util.Enumeration  (via asJavaEnumeration)
+*    scala.collection.mutable.Map <=> java.util.Dictionary   (via asJavaDictionary)
+  
+以下可以通过`asJava`进行Scala到Java的单向转换：
+
+*    scala.collection.Seq         => java.util.List
+*    scala.collection.mutable.Seq => java.util.List
+*    scala.collection.Set         => java.util.Set
+*    scala.collection.Map         => java.util.Map
+
+以下可以通过`asScala`进行Java到Scala的单向转换：
+
+*    java.util.Properties => scala.collection.mutable.Map
+  
+在所有情形下，从原始类型转变到对侧类型之后再转变回来的话会是同一个对象，举例
+
+```js
+import scala.collection.JavaConverters._
+val source = new scala.collection.mutable.ListBuffer[Int]
+val target: java.util.List[Int] = source.asJava
+val other: scala.collection.mutable.Buffer[Int] = target.asScala
+assert(source eq other)
+```
+
+另外，转换方法也有其描述性的名称可供显示调用，举例如下：
+
+```js
+scala> val vs = java.util.Arrays.asList("hi", "bye")
+vs: java.util.List[String] = [hi, bye]
+scala> val ss = asScalaIterator(vs.iterator)
+ss: Iterator[String] = non-empty iterator
+scala> .toList
+res0: List[String] = List(hi, bye)
+scala> val ss = asScalaBuffer(vs)
+ss: scala.collection.mutable.Buffer[String] = Buffer(hi, bye)
 ```
