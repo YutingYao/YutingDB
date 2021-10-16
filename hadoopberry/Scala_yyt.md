@@ -327,9 +327,9 @@ List(3, 6, 5).headOption.getOrElse(0)
 
 输出：Int = 3
 
-# Scalafunction和method的区别
+# 3. Scalafunction和method的区别
 
-## val 和 def
+## 3.1. val 和 def
 
 val语句  定义  function
 
@@ -345,7 +345,7 @@ class Test{
 }
 ```
 
-## **method**转换成**function**
+## 3.2. **method**转换成**function**
 
 在Scala中，无法直接操作**method**，
 
@@ -371,7 +371,7 @@ val f1 = m _
 val f1: (Int) => Int = m
 ```
 
-## 直接调用**function**上的**method**
+## 3.3. 直接调用**function**上的**method**
 
 可以直接调用function上的method，而method却不行
 
@@ -380,7 +380,7 @@ f.toString //编译通过
 m.toString //编译失败
 ```
 
-### 举个栗子：Curryingfunction和Curryingmethod
+### 3.3.1. 举个栗子：Curryingfunction和Curryingmethod
 
 **Curryingfunction**可以
 
@@ -429,7 +429,7 @@ method有：
 - 注解
 - method的功能
 
-## 总结
+## 3.4. 总结
 
 method不能作为**单独的表达式**而存在（参数为空的method除外），
 
@@ -468,7 +468,7 @@ method不能作为**单独的表达式**而存在（参数为空的method除外�
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6gwbokjcsqo0.png)
 
-## 传名参数
+## 3.5. 传名参数
 
 **传名参数**本质上是个方法，一个**参数列表为空**的方法：
 
@@ -533,7 +533,7 @@ m1(r.nextInt)
 > res23: List[Int] = List(1677134799, 180926366)
 
 
-## 有参 vs 无参
+## 3.6. 有参 vs 无参
 
 **有参方法**可以作为**表达式**的一部分出现，（调用函数并传参）
 
@@ -589,7 +589,7 @@ m1
 
 > res10: Int = 3
 
-## 方法可以自动(称之ETA扩展)或手动强制转换为函数
+## 3.7. 方法可以自动(称之ETA扩展)或手动强制转换为函数
 
 在scala中很多高级函数，如map(),filter()等，都是要求提供一个**函数**作为参数。
 
@@ -638,7 +638,7 @@ myList.map(m4)
 
 >res18: List[Int] = List(56, 72)
 
-## scala中操作符
+## 3.8. scala中操作符
 
 - 前缀操作符：op obj 被解释称 obj.op
 
@@ -646,9 +646,9 @@ myList.map(m4)
 
 - 后缀操作符：obj op被解释称 obj.op
 
-# 3. scala vs java
+# 4. scala vs java
 
-## 3.1. 文件名
+## 4.1. 文件名
 
 java要求**文件名**和**公共类**名必须要求一致，scala不要求。
 
@@ -660,12 +660,12 @@ test.java -> public class test{}
 test.scala -> class xxx(任意){}
 ```
 
-## 3.2. 关键字
+## 4.2. 关键字
 
 1. scala 中没有**public关键字**，默认访问权限就是public
 2. scala中没有**void关键字**，因为scala是完全面向对象的语言，所以采用特殊的对象来模拟：Unit
 
-## 3.3. method和function
+## 4.3. method和function
 
 1. method定义的参数顺序不同
 
@@ -751,7 +751,7 @@ test1(param2="t2")
 test1("t1","t2")
 ```
 
-## 3.4. 异常
+## 4.4. 异常
 
 java的异常和scala的异常大体相同，catch的实现有些小区别.
 
@@ -781,7 +781,7 @@ try{
 }
 ```
 
-## 3.5. 类和对象
+## 4.5. 类和对象
 
 1. scala类的定义和java一致 <br> 在**属性初始化**的时候有些区别。
    
@@ -873,7 +873,7 @@ package com.lucky.test
 package test  //会出问题
 ```
 
-## 3.6. import
+## 4.6. import
 
 scala也使用import导入类，但也有些区别，在scala中
 
