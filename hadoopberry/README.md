@@ -3,71 +3,71 @@
 * [1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）](#ibus)
 * [1.3. 安装远程控制（但这一步,目前没有成功）](#-1)
 * [1.4. ubuntu免密SSH登录](#ubuntuSSH)
-	* [1.4.1. 打开ssh服务端（每一台计算机都需要）](#ssh)
-	* [1.4.2. 免密登录-配置密钥对（每一条计算机都需要）](#-1)
-	* [1.4.3. 设置允许root远程登录（每一台计算机都需要）](#root)
-	* [1.4.4. 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）](#-1)
-	* [1.4.5. scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）](#scpU)
+  * [1.4.1. 打开ssh服务端（每一台计算机都需要）](#ssh)
+  * [1.4.2. 免密登录-配置密钥对（每一条计算机都需要）](#-1)
+  * [1.4.3. 设置允许root远程登录（每一台计算机都需要）](#root)
+  * [1.4.4. 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）](#-1)
+  * [1.4.5. scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）](#scpU)
 * [2.1. docker环境](#docker)
 * [2.2. zeppelin](#zeppelin)
 * [2.3. hadoop](#hadoop)
-	* [2.3.1. 在每个节点上安装 Java 8，使其成为每个节点的默认 Java](#Java8Java)
-	* [2.3.2. 下载 Hadoop，解压并授予 pi 所有权](#Hadooppi)
-	* [2.3.3. 配置 Hadoop 环境变量-bash](#Hadoop-bash)
-	* [2.3.4. 为 Hadoop 环境初始化 JAVA_HOME](#HadoopJAVA_HOME)
+  * [2.3.1. 在每个节点上安装 Java 8，使其成为每个节点的默认 Java](#Java8Java)
+  * [2.3.2. 下载 Hadoop，解压并授予 pi 所有权](#Hadooppi)
+  * [2.3.3. 配置 Hadoop 环境变量-bash](#Hadoop-bash)
+  * [2.3.4. 为 Hadoop 环境初始化 JAVA_HOME](#HadoopJAVA_HOME)
 * [2.4. 在Master节点的workers文件中指定Slave节点](#MasterworkersSlave)
-	* [2.4.1. 验证 Hadoop 安装](#Hadoop)
-	* [2.4.2. core-site.xml文件的配置](#core-site.xml)
-	* [2.4.3. hdfs-site.xml文件的配置](#hdfs-site.xml)
-	* [2.4.4. mapred-site.xml文件的配置](#mapred-site.xml)
-	* [2.4.5. yarn-site.xml文件的配置](#yarn-site.xml)
-	* [2.4.6. 创建 Datanode 和 Namenode 目录](#DatanodeNamenode)
-	* [2.4.7. 格式化NameNode-格式化HDFS](#NameNode-HDFS)
-	* [2.4.8. 把主节点上配置好的hadoop目录复制到从节点上](#hadoop-1)
-	* [2.4.9. 最后，在主节点hadoop222上运行命令](#hadoop222)
-	* [2.4.10. 启动HDFS，验证功能](#HDFS)
-	* [2.4.11. 执行分布式实例](#-1)
-	* [2.4.12. 使用以下命令停止群集](#-1)
-	* [2.4.13. Web查看集群状态](#Web)
-	* [2.4.14. 静默警告（由于使用了32位Hadoop构建和64位操作系统）](#Hadoop64)
+  * [2.4.1. 验证 Hadoop 安装](#Hadoop)
+  * [2.4.2. core-site.xml文件的配置](#core-site.xml)
+  * [2.4.3. hdfs-site.xml文件的配置](#hdfs-site.xml)
+  * [2.4.4. mapred-site.xml文件的配置](#mapred-site.xml)
+  * [2.4.5. yarn-site.xml文件的配置](#yarn-site.xml)
+  * [2.4.6. 创建 Datanode 和 Namenode 目录](#DatanodeNamenode)
+  * [2.4.7. 格式化NameNode-格式化HDFS](#NameNode-HDFS)
+  * [2.4.8. 把主节点上配置好的hadoop目录复制到从节点上](#hadoop-1)
+  * [2.4.9. 最后，在主节点hadoop222上运行命令](#hadoop222)
+  * [2.4.10. 启动HDFS，验证功能](#HDFS)
+  * [2.4.11. 执行分布式实例](#-1)
+  * [2.4.12. 使用以下命令停止群集](#-1)
+  * [2.4.13. Web查看集群状态](#Web)
+  * [2.4.14. 静默警告（由于使用了32位Hadoop构建和64位操作系统）](#Hadoop64)
 * [2.5. scala](#scala)
 * [2.6. 2.4 spark](#spark)
-	* [2.6.1. 下载Spark，解包并授予pi所有权](#Sparkpi)
-	* [2.6.2. 配置Spark环境变量](#Spark)
-	* [2.6.3. 配置spark-env.sh](#spark-env.sh)
-	* [2.6.4. 配置slaves](#slaves)
-	* [2.6.5. 启动Spark集群](#Spark-1)
-		* [2.6.5.1. 启动Hadoop集群](#Hadoop-1)
-		* [2.6.5.2. 启动Spark集群](#Spark-1)
-		* [2.6.5.3. 关闭Spark集群](#Spark-1)
-		* [2.6.5.4. 启动bin目录下的spark-shell](#binspark-shell)
-	* [2.6.6. 为了方便可以修改Bash环境变量配置](#Bash)
-	* [2.6.7. 配置Spark作业监控](#Spark-1)
+  * [2.6.1. 下载Spark，解包并授予pi所有权](#Sparkpi)
+  * [2.6.2. 配置Spark环境变量](#Spark)
+  * [2.6.3. 配置spark-env.sh](#spark-env.sh)
+  * [2.6.4. 配置slaves](#slaves)
+  * [2.6.5. 启动Spark集群](#Spark-1)
+    * [2.6.5.1. 启动Hadoop集群](#Hadoop-1)
+    * [2.6.5.2. 启动Spark集群](#Spark-1)
+    * [2.6.5.3. 关闭Spark集群](#Spark-1)
+    * [2.6.5.4. 启动bin目录下的spark-shell](#binspark-shell)
+  * [2.6.6. 为了方便可以修改Bash环境变量配置](#Bash)
+  * [2.6.7. 配置Spark作业监控](#Spark-1)
 * [2.7. 2.5 pyspark](#pyspark)
-	* [2.7.1. 使用Spark](#Spark-1)
-	* [2.7.2. 在Spark中采用本地模式启动pyspark](#Sparkpyspark)
-	* [2.7.3. pyspark独立应用程序编程](#pyspark-1)
-	* [2.7.4. Spark应用程序在集群中运行](#Spark-1)
-		* [2.7.4.1. 启动Hadoop集群](#Hadoop-1)
-		* [2.7.4.2. Hadoop YARN管理器](#HadoopYARN)
+  * [2.7.1. 使用Spark](#Spark-1)
+  * [2.7.2. 在Spark中采用本地模式启动pyspark](#Sparkpyspark)
+  * [2.7.3. pyspark独立应用程序编程](#pyspark-1)
+  * [2.7.4. Spark应用程序在集群中运行](#Spark-1)
+    * [2.7.4.1. 启动Hadoop集群](#Hadoop-1)
+    * [2.7.4.2. Hadoop YARN管理器](#HadoopYARN)
 * [2.8. geospark](#geospark)
-	* [2.8.1. geospark部署](#geospark-1)
-	* [2.8.2. geospark示例](#geospark-1)
-	* [2.8.3. 创建SpatialRDD(SRDD)](#SpatialRDDSRDD)
-	* [2.8.4. 空间范围查询(Spatial Range Query)](#SpatialRangeQuery)
+  * [2.8.1. geospark部署](#geospark-1)
+  * [2.8.2. geospark示例](#geospark-1)
+  * [2.8.3. 创建SpatialRDD(SRDD)](#SpatialRDDSRDD)
+  * [2.8.4. 空间范围查询(Spatial Range Query)](#SpatialRangeQuery)
 * [2.9. kafka](#kafka)
-	* [2.9.1. Ubuntu 系统安装Kafka](#UbuntuKafka)
-	* [2.9.2. 安装成功了Kafka](#Kafka)
-	* [2.9.3. Spark准备工作（jar文件）](#Sparkjar)
-	* [2.9.4. 编写Spark程序使用Kafka数据源](#SparkKafka)
+  * [2.9.1. Ubuntu 系统安装Kafka](#UbuntuKafka)
+  * [2.9.2. 安装成功了Kafka](#Kafka)
+  * [2.9.3. Spark准备工作（jar文件）](#Sparkjar)
+  * [2.9.4. 编写Spark程序使用Kafka数据源](#SparkKafka)
 * [2.10. flink](#flink)
 * [2.11. PostgreSQL](#PostgreSQL)
 * [2.12. MongoDB](#MongoDB)
-	* [2.12.1. Mongo Spark Connector 连接器](#MongoSparkConnector)
-		* [2.12.1.1. 案例](#-1)
-		* [2.12.1.2. 运价系统的架构图](#-1)
-	* [2.12.2. Spark 任务入口程序](#Spark-1)
-	* [2.12.3. Spark ＋ MongoDB演示](#SparkMongoDB)
+  * [2.12.1. Mongo Spark Connector 连接器](#MongoSparkConnector)
+    * [2.12.1.1. 案例](#-1)
+    * [2.12.1.2. 运价系统的架构图](#-1)
+  * [2.12.2. Spark 任务入口程序](#Spark-1)
+  * [2.12.3. Spark ＋ MongoDB演示](#SparkMongoDB)
 * [3.1. 在local模式下运行](#local)
 * [3.2. 在remote模式下运行](#remote)
 * [3.3. yarn模式下的运行](#yarn)
@@ -79,22 +79,21 @@
 * [3.9. python](#python)
 * [3.10. spark](#spark-1)
 * [3.11. flink - Python env - Conda](#flink-Pythonenv-Conda)
-	* [3.11.1. 准备工作](#-1)
-	* [3.11.2. 搭建 PyFlink 环境](#PyFlink)
-		* [3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境](#Step1.JobManagerPyFlinkConda)
-		* [3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境](#Step2.TaskManagerPyFlinkConda)
-		* [3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境](#Step3.PyFlinkConda)
+  * [3.11.1. 准备工作](#-1)
+  * [3.11.2. 搭建 PyFlink 环境](#PyFlink)
+    * [3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境](#Step1.JobManagerPyFlinkConda)
+    * [3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境](#Step2.TaskManagerPyFlinkConda)
+    * [3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境](#Step3.PyFlinkConda)
 * [3.12. Apache Sedona](#ApacheSedona)
 * [3.13. oracle (貌似不太常用)](#oracle)
 * [3.14. 简单介绍oracle](#oracle-1)
-	* [3.14.1. 连接Oracle数据库](#Oracle)
+  * [3.14.1. 连接Oracle数据库](#Oracle)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
- 
 
 Project to Design a Hadoop/Spark [Raspberry Pi 4 Cluster](https://github.com/YutingYao/pi-cluster) for Distributed Computing.
 
@@ -3947,6 +3946,377 @@ MongoSpark.load(sc)
 * 不要将**所有CPU核**分配给Spark
 * 预留**1-2个core**给**操作系统**及**其他管理进程**
 * 同机部署，适当情况可以**同机部署Spark+MongoDB**，利用**本地IO**提高性能
+
+## 安装SBT
+
+### Linux中安装SBT
+
+1. 在官网上下载.tgz安装包
+
+<https://www.scala-sbt.org/download.html>
+
+2. 使用tar -zxvf 对安装包进行解压
+
+```sh
+tar -zxvf sbt-1.3.2.tgz 
+```
+
+这里最好是登录超级用户，不然有时候会莫名安装失败
+
+```sh
+su root
+```
+
+3. 配置环境变量
+
+```sh
+vim /etc/profile
+```
+
+```sh
+export SBT_HOME=/usr/soft/sbt
+PATH=$PATH:$SBT_HOME
+```
+
+刷新环境变量
+
+```sh
+source /etc/profile
+```
+
+4. 简单测试
+
+4.1 随便在磁盘的某个位置建立一个文件夹如下所示
+
+```sh
+/home/shiaofu/work/Demo
+```
+
+4.2 创建一个文件名为hello的scala文件，文件里的代码如下所示
+
+```js
+object Hi{
+  def main(args:Array[String]) = println("hi!")
+}
+```
+
+4.3 在Demo文件下输入sbt命令进入sbt命令行 然后输入run命令会得到下图的
+
+```sh
+sbt
+```
+
+```sh
+run
+```
+
+### Spark快速入门之SBT安装
+
+Spark中没有自带sbt，需要手动安装sbt，
+
+我的方法是下载`sbt-launch.jar`，然后将源改为国内源（aliyun），
+
+我选择将sbt安装在`/usr/local/sbt`中。
+
+```sh
+sudo mkdir /usr/local/sbt
+sudo chown -R hadoop /usr/local/sbt   #username is hadoop.
+cd /usr/local/sbt
+mkdir sbtlaunch   #store sbt-launch.jar
+```
+
+1. 下载sbt-launch.jar,并存放至/usr/local/sbt/sbtlaunch
+
+```sh
+cd /usr/local/sbt/sbtlaunch
+wget https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.9/sbt-launch.jar -O ./sbt-launch.jar   #download sbt-launch.jar
+unzip -q ./sbt-launch.jar #解压
+$ 
+```
+
+2. 需要修改其中的`./sbt/sbt.boot.properties`文件,将[repositories]处修改为如下内容：
+
+即增加一条aliyun-nexus的镜像。(这一步可能，不需要)
+
+版本一：
+
+```sh
+cd /usr/local/sbt/sbtlaunch
+vim ./sbt/sbt.boot.properties
+```
+
+修改内容如下：
+
+```s
+[repositories]
+  local
+  aliyun-nexus: http://maven.aliyun.com/nexus/content/groups/public/
+  jcenter: https://jcenter.bintray.com/
+  typesafe-ivy-releases: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+  maven-central
+```
+
+版本二：
+
+```sh
+vim ~/.sbt/repositories
+```
+
+修改内容如下：
+
+```s
+[repositories]
+local
+aliyun-nexus: http://maven.aliyun.com/nexus/content/groups/public/
+typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
+```
+
+定位阿里源
+
+进入这两个文件，
+
+```sh
+vim sbtconfig.txt
+```
+
+和
+
+```sh
+vim sbtopts
+```
+
+将此行代码加入两个文件的最后一行
+
+```s
+-Dsbt.override.build.repos=true
+```
+
+3. 删除原来的`sbt-launch.`文件，然后重新打包
+
+```sh
+rm ./sbt-launch.jar           #delete the old jar
+jar -cfM ./sbt-launch.jar .   #create new jar 
+```
+
+4. 在`/usr/local/sbt`目录下创建sbt脚本文件并赋予可执行权限，来执行`sbt-launch.jar`
+
+```sh
+cd /usr/lcoal/sbt
+vim ./sbt         #create sbt script
+```
+
+添加如下内容:
+
+```sh
+SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+java $SBT_OPTS -jar `dirname`/sbt-launch.jar "$@"    #dirname为路径名 
+```
+
+my dirname ： `/usr/local/sbt/sbtlaunch`
+
+5. 保存后，为`./sbt`增加可执行权限:
+
+```sh
+chmod u+x ./sbt
+```
+
+6. 最后检验`sbt`是否可用
+
+```sh
+./sbt sbt-version
+```
+
+这一步请耐心等待，不要怀疑我天朝的网速，笔者出现第一条信息时等待了约10分钟，只要得到如下版本信息就没有问题
+
+1. 创建hello world项目，并编译，打包，运行。
+
+7.1 hello world的目录结构是：
+
+```sh
+find
+```
+
+代码如下：
+
+```sh
+mkdir ~/simpleapp
+mkdir ~/simpleapp/src
+mkdir ~/simpleapp/src/main
+mkdir ~/simpleapp/src/main/scala
+vim SimpleApp.scala   #内容如下
+```
+
+SimpleApp.scala
+
+```js
+object SimpleApp{
+        def main(args: Array[String]){
+                println("Hello World!")
+        } 
+}
+```
+
+7.2 创建simple.sbt
+
+```sh
+cd ~/simpleapp
+vim ./simple.sbt      #内容如下
+```
+
+simple.sbt内容如下：
+
+每一行之间空一行。
+
+scala version 和 spark版本信息根据所安装的spark所写。
+
+笔者安装的是spark2.1.0和scala 2.11.8。
+
+```sh
+name :="Simple Project"
+
+version :="1.0"
+
+scalaVersion := "2.11.8"
+
+libraryDependencies +="org.apache.spark" %% "spark-core" % "2.1.0"
+```
+
+7.3配置环境变量，编译和运行。
+
+```sh
+vim ~/.bashrc 		#在开头添加如下内容：export PATH=/usr/local/sbt:$PATH
+source ~/.bashrc         #使之生效
+cd ~/simpleapp
+sbt compile           #编译，等待很久，天朝龟速
+sbt package           #打包
+/usr/local/spark/bin/spark-submit --class "SimpleApp" ~/sparkapp/target/scala-2.11/simple-project_2.11-1.0.jar   #将生成的jar包通过spark-summit提交到spark中执行
+```
+
+8. 接下来进行spark第二个应用程序的打包
+
+1）首先进入用户的主文件夹
+
+```sh
+cd ~
+```
+
+创建应用程序根目录
+
+```sh
+mkdir sparkapp
+```
+
+创建所需的文件夹结构
+
+```sh
+mkdir -p ./sparkapp/src/main/scala
+```
+
+2）在./sparkapp/src/main/scala下建立一个SimpleApp.scala的文件
+
+```sh
+vim ./sparkapp/src/main/scala/SimpleApp.scala
+```
+
+内容如下：
+
+```s
+ /* SimpleApp.scala */
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+  
+object SimpleApp {
+  def main(args: Array[String]) {
+  val logFile = "file:///usr/local/spark-2.4.3/README.md"
+  val conf = new SparkConf().setAppName("Simple Application")
+  val sc = new SparkContext(conf)
+  val logData = sc.textFile(logFile, 2).cache()
+  val numAs = logData.filter(line => line.contains("a")).count()
+  val numBs = logData.filter(line => line.contains("b")).count()
+  println("Lines with a: %s, Lines with b: %s".format(numAs, numBs))
+}
+}
+```
+
+该程序计算 `/usr/local/spark/README` 文件中包含 “a” 的行数 和包含 “b” 的行数。
+
+代码第8行的 `/usr/local/spark` 为 Spark 的安装目录，
+
+如果不是该目录请自行修改。
+
+不同于 `Spark shell`，
+
+独立应用程序需要通过 `val sc = new SparkContext(conf)` 初始化 `SparkContext`，
+
+`SparkContext` 的参数 `SparkConf` 包含了应用程序的信息。
+
+
+该程序依赖 `Spark API`，因此我们需要通过`sbt` 进行编译打包。
+
+ `./sparkapp` 中新建文件 `simple.sbt`，
+
+```sh
+vim ./sparkapp/simple.sbt
+```
+ 
+添加内容如下，声明该独立应用程序的信息以及与 Spark 的依赖关系：
+
+```sh
+name := "Simple Project"
+version := "1.0"
+scalaVersion := "2.11.12"
+libraryDependencies += "org.apache.spark" %% "spark-core" % "2.4.3"
+```
+
+文件 `simpale.sbt` 需要指明 `Spark` 和 `Scla` 的版本。
+
+在上面的配置信息中，`scalaVersion`用来指定scala的版本，
+
+`sparkcore`用来指定spark的版本，
+
+这两个版本信息都可以在之前的启动 Spark shell 的过程中，
+
+从屏幕的显示信息中找到。
+
+下面就是笔者在启动过程当中，看到的相关版本信息
+
+（备注：屏幕显示信息会很长，需要往回滚动屏幕仔细寻找信息）
+
+
+3）使用 sbt 打包 Scala 程序
+
+```sh
+cd ~/sparkapp
+find .
+```
+
+接着，我们就可以通过如下代码将整个应用程序打包成 JAR（首次运行同样需要下载依赖包 ）：
+
+```sh
+/usr/local/sbt/sbt package
+```
+
+生成的jar包的位置为：
+
+```sh
+~/sparkapp/target/scala-2.11/simple-project_2.11-1.0.jar
+```
+
+4）通过spark-submit运行程序，将生成的jar包通过是spark-submit提交到spark中运行
+
+```sh
+/usr/local/spark-2.4.3/bin/spark-submit --class "SimpleApp" ~/sparkapp/target/scala-2.11/simple-project_2.11-1.0.jar
+```
+
+上面的命令输出的东西会特别多，所以也可以通过管道化来筛选跟输出指定的信息
+
+```sh
+/usr/local/spark-2.4.3/bin/spark-submit --class "SimpleApp" ~/sparkapp/target/scala-2.11/simple-project_2.11-1.0.jar 2>&1 | grep "Lines with a:"
+```
 
 # 3. zeppelin常用命令
 
