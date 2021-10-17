@@ -74,9 +74,21 @@ Scala的**集合类**的
 
 java 8引入了**function式编程Lambda表达式**。
 
-# 2. 常用集合操作(一行代码搞定)
+# 2. 99个Scala问题
 
-## 2.1. 过滤出集合中所有偶数
+这些是瑞士伯尔尼应用科学大学的Werner Hett所写的《九十九个序言问题》的[改编](http://aperiodic.net/phil/scala/s-99/)。
+
+- 那些标有一个星号`*`的很简单。如果你已经成功地解决了前面的问题，你应该能够在几分钟（比如15分钟）内解决它们。
+
+- 标有两个星号`**`的问题具有中等难度。如果您是一名熟练的Scala程序员，解决这些问题不应该超过30-90分钟。
+
+- 标有三个星号`***`的问题更难解决。您可能需要更多的时间（即几个小时或更长的时间）来找到一个好的解决方案。
+
+找到给定问题的最优雅的解决方案。效率固然重要，但清晰更为关键。一些（简单的）问题可以使用内置函数轻松解决。然而，在这些情况下，如果您试图找到自己的解决方案，您会学到更多。
+
+# 3. 常用集合操作(一行代码搞定)
+
+## 3.1. 过滤出集合中所有偶数
 
 filtermethod:
 
@@ -90,7 +102,7 @@ filtermethod:
 
 输出：2, 4, 6, 8
 
-## 2.2. 对序列中所有元素求和
+## 3.2. 对序列中所有元素求和
 
 reduceLeftmethod：
 
@@ -102,7 +114,7 @@ reduceLeftmethod：
 
 输出：45
 
-## 2.3. 统计单词出现次数
+## 3.3. 统计单词出现次数
 
 groupBymethod:
 
@@ -127,7 +139,7 @@ four有1个
 two有1和
 
 
-## 2.4. 将序列中单词首字母大写
+## 3.4. 将序列中单词首字母大写
 
 capitalize: 
 
@@ -147,7 +159,7 @@ List("one", "line", "of", "code").map(_.capitalize)
 
 List(One, Line, Of, Code)
 
-## 2.5. 将序列拼接成字符串
+## 3.5. 将序列拼接成字符串
 
 mkStringmethod:
 
@@ -163,7 +175,7 @@ mkStringmethod:
 
 输出：(1,2,3,4,5,6,7,8,9)
 
-## 2.6. 最大值，最小值和求和
+## 3.6. 最大值，最小值和求和
 
 这在Scala中轻而易举，直接调用min，max和summethod。
 
@@ -185,7 +197,7 @@ List(14, 35, -7, 46, 98).sum
 
 输出：186
 
-## 2.7. 获取序列中最大的前3个数值和位置
+## 3.7. 获取序列中最大的前3个数值和位置
 
 zipWithIndexmethod:
 
@@ -208,7 +220,7 @@ List(2, 0, 1, 4, 12, 5).zipWithIndex.sorted.reverse.take(3)
 
 输出：List((12,4), (5,5), (4,3))
 
-## 2.8. 读取文本文件
+## 3.8. 读取文本文件
 
 在Scala中读取文本文件相当轻松。
 
@@ -217,7 +229,7 @@ val fileContent = io.Source.fromFile("myfile.txt").mkString
 val fileLines = io.Source.fromFile("myfile.txt").getLines.toList
 ```
 
-## 2.9. 下载URL链接
+## 3.9. 下载URL链接
 
 下载文件就是这么容易。
 
@@ -232,7 +244,7 @@ import java.io.File
 new URL("http://www.oschina.net/favicon.ico") #> new File("d:/favicon.ico") !!
 ```
 
-## 2.10. 并行计算
+## 3.10. 并行计算
 
 parmethod：
 
@@ -256,7 +268,7 @@ Scala 的**并行集合**可以利用**多核**优势加速计算过程，
 
 输出：Int = 1784293664
 
-## 2.11. 两个List相乘求和
+## 3.11. 两个List相乘求和
 
 dataList 加权 weightList 求和。
 
@@ -264,7 +276,7 @@ dataList 加权 weightList 求和。
 dataList.zip(weightList).map{t => t._1 * t._2}.sum
 ```
 
-## 2.12. 按多个字段排序List
+## 3.12. 按多个字段排序List
 
 先按学生的**年龄**排序，
 
@@ -290,7 +302,7 @@ List(
 
 输出：List(Student(a,14,60), Student(a,15,70), Student(b,15,80))
 
-## 2.13. 将List相邻元素分组(这个好难，看不懂)
+## 3.13. 将List相邻元素分组(这个好难，看不懂)
 
 每相邻的10个元素分成一组：
 
@@ -321,7 +333,7 @@ List(
 	Vector(20)
  )
 
-## 2.14. 取序列的第1个元素
+## 3.14. 取序列的第1个元素
 
 ```js
 List(3, 6, 5).headOption.getOrElse(0)
@@ -329,9 +341,9 @@ List(3, 6, 5).headOption.getOrElse(0)
 
 输出：Int = 3
 
-# 3. Scalafunction和method的区别
+# 4. Scalafunction和method的区别
 
-## 3.1. val 和 def
+## 4.1. val 和 def
 
 val语句  定义  function
 
@@ -347,7 +359,7 @@ class Test{
 }
 ```
 
-## 3.2. **method**转换成**function**
+## 4.2. **method**转换成**function**
 
 在Scala中，无法直接操作**method**，
 
@@ -373,7 +385,7 @@ val f1 = m _
 val f1: (Int) => Int = m
 ```
 
-## 3.3. 直接调用**function**上的**method**
+## 4.3. 直接调用**function**上的**method**
 
 可以直接调用function上的method，而method却不行
 
@@ -382,7 +394,7 @@ f.toString //编译通过
 m.toString //编译失败
 ```
 
-### 3.3.1. 举个栗子：Curryingfunction和Curryingmethod
+### 4.3.1. 举个栗子：Curryingfunction和Curryingmethod
 
 **Curryingfunction**可以
 
@@ -431,7 +443,7 @@ method有：
 - 注解
 - method的功能
 
-## 3.4. 总结
+## 4.4. 总结
 
 method不能作为**单独的表达式**而存在（参数为空的method除外），
 
@@ -470,7 +482,7 @@ method不能作为**单独的表达式**而存在（参数为空的method除外�
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6gwbokjcsqo0.png)
 
-## 3.5. 传名参数
+## 4.5. 传名参数
 
 **传名参数**本质上是个方法，一个**参数列表为空**的方法：
 
@@ -535,7 +547,7 @@ m1(r.nextInt)
 > res23: List[Int] = List(1677134799, 180926366)
 
 
-## 3.6. 有参 vs 无参
+## 4.6. 有参 vs 无参
 
 **有参方法**可以作为**表达式**的一部分出现，（调用函数并传参）
 
@@ -591,7 +603,7 @@ m1
 
 > res10: Int = 3
 
-## 3.7. 方法可以自动(称之ETA扩展)或手动强制转换为函数
+## 4.7. 方法可以自动(称之ETA扩展)或手动强制转换为函数
 
 在scala中很多高级函数，如map(),filter()等，都是要求提供一个**函数**作为参数。
 
@@ -640,7 +652,7 @@ myList.map(m4)
 
 >res18: List[Int] = List(56, 72)
 
-## 3.8. scala中操作符
+## 4.8. scala中操作符
 
 - 前缀操作符：op obj 被解释称 obj.op
 
@@ -648,9 +660,9 @@ myList.map(m4)
 
 - 后缀操作符：obj op被解释称 obj.op
 
-# 4. scala vs java
+# 5. scala vs java
 
-## 4.1. 文件名
+## 5.1. 文件名
 
 java要求**文件名**和**公共类**名必须要求一致，scala不要求。
 
@@ -662,12 +674,12 @@ test.java -> public class test{}
 test.scala -> class xxx(任意){}
 ```
 
-## 4.2. 关键字
+## 5.2. 关键字
 
 1. scala 中没有**public关键字**，默认访问权限就是public
 2. scala中没有**void关键字**，因为scala是完全面向对象的语言，所以采用特殊的对象来模拟：Unit
 
-## 4.3. method和function
+## 5.3. method和function
 
 1. method定义的参数顺序不同
 
@@ -753,7 +765,7 @@ test1(param2="t2")
 test1("t1","t2")
 ```
 
-## 4.4. 异常
+## 5.4. 异常
 
 java的异常和scala的异常大体相同，catch的实现有些小区别.
 
@@ -783,7 +795,7 @@ try{
 }
 ```
 
-## 4.5. 类和对象
+## 5.5. 类和对象
 
 1. scala类的定义和java一致 <br> 在**属性初始化**的时候有些区别。
    
@@ -875,7 +887,7 @@ package com.lucky.test
 package test  //会出问题
 ```
 
-## 4.6. import
+## 5.6. import
 
 scala也使用import导入类，但也有些区别，在scala中
 
@@ -923,9 +935,9 @@ scala：
 import java.util
 ```
 
-## java和scala调用python程序
+## 5.7. java和scala调用python程序
 
-### java中调用python的方法
+### 5.7.1. java中调用python的方法
 
 1. 使用Jython；
 2. 使用Jep；:key: 
@@ -983,7 +995,7 @@ Java代码中Process的几种方法：
 
 换成绝对路径即可。比如："/usr/bin/python3"
 
-### scala调用python的代码
+### 5.7.2. scala调用python的代码
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1pgejbudddkw.png)
 
@@ -1027,9 +1039,9 @@ def main(args: Array[String]): Unit = {
 }
 ```
 
-## Scala与JAVA互操作
+## 5.8. Scala与JAVA互操作
 
-### Java调Scala
+### 5.8.1. Java调Scala
 
 Java可以直接操作纵Scala类，如同scala直接使用Java中的类一样，例如：
 
@@ -1071,7 +1083,7 @@ public class ScalaInJava {
 则它有着自己的内部实现，此时在java中使用的时候需要作相应的调整。
 
 
-### Scala调java
+### 5.8.2. Scala调java
 
 Scala可以直接调用Java实现的任何类，
 
@@ -1134,7 +1146,7 @@ object RevokeJavaCollections{
 }
 ```
 
-### Scala与Java集合互转摘要
+### 5.8.3. Scala与Java集合互转摘要
 
 对于集合而言，Scala从2.8.1开始引入`scala.collection.JavaConverters`
 

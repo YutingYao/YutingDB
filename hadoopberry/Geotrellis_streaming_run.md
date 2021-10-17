@@ -1,4 +1,4 @@
-# GeoTrellis Streaming demo
+# 1. GeoTrellis Streaming demo
 
 这是一个包含通过`GeoTrellis` 渲染 tiff 过程的项目。
 输入数据是一个 `Kafka` 流，输出 -一组栅格和一些 json 元数据输出。
@@ -13,12 +13,12 @@
 - [Usage example](#usage-example)
   - [Kafka in Docker usage](#kafka-in-docker-usage)
 
-## Kafka in Docker usage
+## 1.1. Kafka in Docker usage
 
 1. 在 `/etc/hosts` 文件中添加以下别名：```127.0.0.1 localhost kafka```（绝对是 Mac OS 设置的工作变体：```127.0.0.1 localhost.localdomain localhost kafka ` ``)
 2. 运行`make kafka`
 
-## Environment
+## 1.2. Environment
 
 要在任何“Spark”模式下运行此应用程序，请确保您的计算机上安装了正确的“Spark”客户端。
 
@@ -26,7 +26,7 @@
 
 确保所有必要的更改都被引入到“application.conf”文件中。
 
-## Makefile commands
+## 1.3. Makefile commands
 
 提供 Makefile 以简化应用程序的启动和集成测试。
 
@@ -40,7 +40,7 @@
 |kafka-send-messages      |生成演示 kafka 消息                                           |
 |sbt-spark-demo           |从 SBT shell 运行 Spark 流应用程序                      |
 
-## application.conf 描述
+## 1.4. application.conf 描述
 
 通过资源文件夹（`streaming`）中的配置文件提供的应用程序设置。
 
@@ -113,7 +113,7 @@ lc8 {
 }
 ```
 
-## SBT shell 中的使用示例
+## 1.5. SBT shell 中的使用示例
 
 1. 例如，我们已经在 9092 端口本地运行了 `Kafka`。
   1.1 如果没有，可以启动【docker in Kafka】(#kafka-in-docker-usage)
@@ -168,7 +168,7 @@ make sbt-spark-demo
 make kafka-send-messages
 ```
 
-## 使用示例
+## 1.6. 使用示例
 
 1. 例如，我们已经在 9092 端口上本地运行了 `Kafka`。如果没有，可以启动[Kafka in docker](#kafka-in-docker-usage)
 2. 构建一个组装 fat jar：`make build`
@@ -182,7 +182,7 @@ $ make build && make local-spark-processing
 $ make kafka-send-messages
 ```
 
-# GeoTrellis setup
+# 2. GeoTrellis setup
 
 GeoTrellis代码无法在Java 7或以下版本中运行。你可以在Linux或Mac终端输入以下命令来测试你的Java版本:
 
@@ -194,7 +194,7 @@ javac -version
 
 GeoGrillis是一个Scala库，因此您自然必须用Scala编写应用程序。如果您是Scala新手，我们建议您好好学习scala
 
-## GeoTrellis Spark 项目模板
+## 2.1. GeoTrellis Spark 项目模板
 
 GeoGrillis维护一个g8模板，用于引导依赖Spark的新GeoGrillis ingest项目。通过以下方式获得：
 
@@ -245,13 +245,13 @@ libraryDependencies ++= Seq(
 
 现在您已经建立了一个简单的GeoTrellis环境，现在是时候对它的一些功能进行实践了。
 
-## GeoTrellis模块层次结构
+## 2.2. GeoTrellis模块层次结构
 
 这是所有GeoTrellis模块的完整列表。虽然它们之间存在一定的相互依赖关系，
 
 但您可以在您的`build.sbt`中依赖任意多(或任意少)的它们。
 
-## geotrellis-accumulo
+## 2.3. geotrellis-accumulo
 
 为 Apache Accumulo 实现了 geotrellis.store 类型。
 
@@ -260,7 +260,7 @@ libraryDependencies ++= Seq(
 在“Accumulo”中保存和加载图层。使用图层查询 API 高效查询大型图层。
 
 
-## geotrellis-accumulo-spark
+## 2.4. geotrellis-accumulo-spark
 
 实现了 `geotrellis.spark.store` types 为了 `Apache Accumulo`, 从而拓展 `geotrellis-accumulo`.
 
@@ -270,7 +270,7 @@ libraryDependencies ++= Seq(
 
 Supoort Accumulo backend 为了 `TileLayerRDDs`.
 
-## geotrellis-cassandra
+## 2.5. geotrellis-cassandra
 
 实现了 `geotrellis.store` types 为了 `Apache Cassandra`.
 
@@ -278,7 +278,7 @@ Supoort Accumulo backend 为了 `TileLayerRDDs`.
 
 保存和加载图层 to and from `Cassandra.` Query large layers efficiently using the layer query API.
 
-## geotrellis-cassandra-spark
+## 2.6. geotrellis-cassandra-spark
 
 实现了 geotrellis.spark.store types 为了 Apache Cassandra, 从而拓展 geotrellis-cassandra.
 
@@ -287,7 +287,7 @@ Supoort Accumulo backend 为了 `TileLayerRDDs`.
 保存和加载图层 to and from Cassandra within a Spark Context using RDDs.
 Supoort Accumulo backend 为了 TileLayerRDDs.
 
-## geotrellis-gdal
+## 2.7. geotrellis-gdal
 
 实现了 GeoTrellis GDAL support.
 
@@ -295,11 +295,11 @@ Supoort Accumulo backend 为了 TileLayerRDDs.
 
 实现了 GDALRasterSources to read, reproject, resample, convert rasters. Performs all transformations via GDALWarp.
 
-## geotrellis-gdal-spark
+## 2.8. geotrellis-gdal-spark
 
 Contains geotrellis.raster.gdal.* integration tests 为了 Spark.
 
-## geotrellis-geomesa
+## 2.9. geotrellis-geomesa
 
 Experimental. GeoTrellis compatibility 为了 the distributed feature store GeoMesa.
 
@@ -307,7 +307,7 @@ Experimental. GeoTrellis compatibility 为了 the distributed feature store GeoM
 
 Save and load RDDs of features to and from GeoMesa.
 
-## geotrellis-geotools
+## 2.10. geotrellis-geotools
 
 提供： geotrellis.geotools.*
 
@@ -315,7 +315,7 @@ Conversion functions between GeoTrellis, OpenGIS and GeoTools Features.
 
 提供： geotrellis.geotools.*
 
-## geotrellis-geowave
+## 2.11. geotrellis-geowave
 
 Experimental. GeoTrellis compatibility 为了 the distributed feature store GeoWave.
 
@@ -323,7 +323,7 @@ Experimental. GeoTrellis compatibility 为了 the distributed feature store GeoW
 
 Save and load RDDs of features to and from GeoWave.
 
-## geotrellis-hbase
+## 2.12. geotrellis-hbase
 
 实现了 geotrellis.store types 为了 Apache HBase.
 
@@ -331,7 +331,7 @@ Save and load RDDs of features to and from GeoWave.
 
 保存和加载图层 to and from HBase. Query large layers efficiently using the layer query API.
 
-## geotrellis-hbase-spark
+## 2.13. geotrellis-hbase-spark
 
 实现了 geotrellis.spark.store types 为了 Apache hbase, 从而拓展 geotrellis-hbase.
 
@@ -340,7 +340,7 @@ Save and load RDDs of features to and from GeoWave.
 保存和加载图层 to and from HBase within a Spark Context using RDDs.
 Supoort Accumulo backend 为了 TileLayerRDDs.
 
-## geotrellis-layer
+## 2.14. geotrellis-layer
 
 Datatypes to describe Layers (sets of spatially referenced rasters).
 
@@ -358,7 +358,7 @@ Mask and Stitch operations 为了 collection layers.
 
 实现了 tiling 为了 RasterSources.
 
-## geotrellis-macros
+## 2.15. geotrellis-macros
 
 The intention of this package is to keep API both performant and expressive enough.
 
@@ -366,7 +366,7 @@ The intention of this package is to keep API both performant and expressive enou
 
 Contains inline macro implementations 为了 Tile NoData, foreach, map and some type conversions.
 
-## geotrellis-proj4
+## 2.16. geotrellis-proj4
 
 提供： geotrellis.proj4.*, org.osgeo.proj4.* (Java)
 
@@ -377,7 +377,7 @@ Lookup CRS’s based on EPSG and other codes.
 
 Transform (x, y) coordinates from one CRS to another.
 
-## geotrellis-raster
+## 2.17. geotrellis-raster
 
 Types and algorithms 为了 Raster processing.
 
@@ -411,14 +411,14 @@ Delaunay triangulation rasterizer.
 Provides an abstract, higher order API 为了 reading RasterSources from different sources. RasterSource is an abstraction over I/O implementations. Other GeoTrellis packages provide concrete RasterSource implementations, such as GDALRasterSource in a geotrellis.raster.gdal package.
 实现了 lazy RasterSource transformation operations: reprojection, resampling and cellType conversion.
 
-## geotrellis-raster-testkit
+## 2.18. geotrellis-raster-testkit
 
 Integration tests 为了 geotrellis-raster.
 
 Build test raster data.
 Assert raster data matches Array data or other rasters in scalatest.
 
-## geotrellis-s3
+## 2.19. geotrellis-s3
 
 实现了 the geotrellis.store types 为了 the AWS Simple Storage Service (S3) backend.
 
@@ -429,7 +429,7 @@ Allows the use of Amazon S3 as a Tile layer backend.
 Save/load raster layers to/from S3
 Save/load Cloud Optimized GeoTiffs (COGs) to/from S3
 
-## geotrellis-s3-spark
+## 2.20. geotrellis-s3-spark
 
 实现了 geotrellis.store and geotrellis.spark types 为了 interoperability between GeoTrellis, Spark and S3.
 
@@ -439,13 +439,13 @@ Save/load Spark RDD Tile layers to/from S3
 Support S3 operations on GeoTiff, COG and Slippy tiles
 Use SaveToS3 to save pyramided image and vector tile layers in X/Y/Z format
 
-## geotrellis-shapefile
+## 2.21. geotrellis-shapefile
 
 提供： geotrellis.shapefile.*
 
 Read geometry and feature data from shapefiles into GeoTrellis types using GeoTools.
 
-## geotrellis-spark
+## 2.22. geotrellis-spark
 
 Tile layer algorithms powered by Apache Spark.
 
@@ -465,7 +465,7 @@ Save spatially keyed RDDs of byte arrays to z/x/y files into HDFS or the local f
 Utilities around creating spark contexts 为了 applications using GeoTrellis, including a Kryo registrator that registers most types.
 实现了 GeoTrellis COGLayer creation, persistence and query mechanisms.
 
-## geotrellis-spark-pipeline
+## 2.23. geotrellis-spark-pipeline
 
 Pipelines are the operative construct in GeoTrellis, the original idea was taken from PDAL. Pipelines represent a set of instructions rather than a simple ETL process: how to read data, transform (process), write it. The result of the Pipeline should not always be writing, it can also be some intermediate transformation result, or just a raw data.
 
@@ -475,14 +475,14 @@ Provides a JSON DSL that represents a set of instructions performed on some data
 Provides a Scala DSL that abstracts over GeoTrellis pipeline operations. It also allows users to avoid manually writing the JSON DSL.
 Allows reads (from local file system, s3, hdfs, etc), transformations (tile-to-layout, reproject, pyramid) and writes (all supported GeoTrellis stores).
 
-## geotrellis-spark-testkit
+## 2.24. geotrellis-spark-testkit
 
 Integration tests 为了 geotrellis-spark.
 
 Utility code to create test RDDs of raster data.
 Matching methods to test equality of RDDs of raster data in scalatest unit tests.
 
-## geotrellis-store
+## 2.25. geotrellis-store
 
 Types and interfaces 为了 interacting with a number of different storage backends in an abstract way.
 
@@ -496,7 +496,7 @@ Local file system and HDFS COG and GeoTrellis Value and Collection readers imple
 Indexing strategies implementation: ZCurve and HilbertCurve.
 GeoTrellisRasterSources that implement access to GeoTrellis layers through the new API.
 
-## geotrellis-util
+## 2.26. geotrellis-util
 
 Plumbing 为了 other GeoTrellis modules.
 
@@ -509,7 +509,7 @@ Lenses
 RangeReaderProvider 为了 reading contiguous subsets of data from a source
 Implementations 为了 FileRangeReader and HttpRangeReader
 
-## geotrellis-vector
+## 2.27. geotrellis-vector
 
 Types and algorithms 为了 processing Vector data.
 
@@ -525,14 +525,14 @@ Geometric operations: Convex Hull, Densification, Simplification
 Perform Kriging interpolation on point values.
 Perform affine transformations of geometries
 
-## geotrellis-vector-testkit
+## 2.28. geotrellis-vector-testkit
 
 Integration tests 为了 geotrellis-vector.
 
 GeometryBuilder 为了 building test geometries
 GeometryMatcher 为了 scalatest unit tests, which aides in testing equality in geometries with an optional threshold.
 
-## geotrellis-vectortile
+## 2.29. geotrellis-vectortile
 
 Experimental. A full Mapbox VectorTile codec.
 
@@ -541,8 +541,8 @@ Experimental. A full Mapbox VectorTile codec.
 Lazy decoding
 Read/write VectorTile tile layers from any tile backend
 
-# zeppelin docker
+# 3. zeppelin docker
 
-# zeppelin kafka
+# 4. zeppelin kafka
 
-# zeppelin sbt
+# 5. zeppelin sbt

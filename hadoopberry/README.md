@@ -107,7 +107,7 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 # 1. 烧录系统
 
-## <a name=''></a>1.1. 三步走
+## 1.1. <a name=''></a>1.1. 三步走
 
 1. 下载树莓派ubuntu镜像-[Ubuntu Desktop 21.04](https://ubuntu.com/download/raspberry-pi/thank-you?version=21.04&architecture=desktop-arm64+raspi)，ubuntu镜像使用desktop版本
 2. [SD卡格式化](https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/)
@@ -121,7 +121,7 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 sudo apt install vim
 ```
 
-## <a name='ibus'></a>1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）
+## 1.2. <a name='ibus'></a>1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）
 
 ```sh
 #ctrl+alt+t进入终端，输入ibus
@@ -131,7 +131,7 @@ ibus-setup     #添加输入法（pinyin）
 ibus restart   #重启ibus
 ```
 
-## <a name='-1'></a>1.3. 安装远程控制（但这一步,目前没有成功）
+## 1.3. <a name='-1'></a>1.3. 安装远程控制（但这一步,目前没有成功）
 
 ```sh
 sudo apt-get install tightvncserver
@@ -167,7 +167,7 @@ Reboot the system so that the settings take effect
 sudo reboot
 ```
 
-## <a name='ubuntuSSH'></a>1.4. ubuntu免密SSH登录
+## 1.4. <a name='ubuntuSSH'></a>1.4. ubuntu免密SSH登录
 
 准备工作：关闭防火墙（但这一步,貌似不需要）
 
@@ -221,7 +221,7 @@ sudo apt install net-tools
 ifconfig
 ```
 
-### <a name='ssh'></a>1.4.1. 打开ssh服务端（每一台计算机都需要）
+### 1.4.1. <a name='ssh'></a>1.4.1. 打开ssh服务端（每一台计算机都需要）
 
 A、B分别安装ssh：这一步可能不需要。
 
@@ -253,7 +253,7 @@ sudo service ssh start
 service ssh status
 ```
 
-### <a name='-1'></a>1.4.2. 免密登录-配置密钥对（每一条计算机都需要）
+### 1.4.2. <a name='-1'></a>1.4.2. 免密登录-配置密钥对（每一条计算机都需要）
 
 A、B分别生成公钥和私钥，输入命令，提示直接按enter即可：
 
@@ -289,7 +289,7 @@ cd ~/.ssh
 
 * know_hosts : 已知的主机公钥清单
 
-### <a name='root'></a>1.4.3. 设置允许root远程登录（每一台计算机都需要）
+### 1.4.3. <a name='root'></a>1.4.3. 设置允许root远程登录（每一台计算机都需要）
 
 因为scp是基于ssh的拷贝服务，
 
@@ -341,7 +341,7 @@ sudo vim /etc/ssh/ssh_config
 sudo vim /usr/share/openssh/sshd_config
 ```
 
-### <a name='-1'></a>1.4.4. 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）
+### 1.4.4. <a name='-1'></a>1.4.4. 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）
 
 将公钥添加到本地主机认证中，执行下面的命令：
 
@@ -372,7 +372,7 @@ ssh localhost
 exit
 ```
 
-### <a name='scpU'></a>1.4.5. scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）
+### 1.4.5. <a name='scpU'></a>1.4.5. scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）
 
 **在 node01 上进行配置：ssh-copy-id**
 
@@ -558,7 +558,7 @@ ssh node04
 
 [大数据架构](http://dblab.xmu.edu.cn/blog/988-2/)请参考这个链接。
 
-## <a name='docker'></a>2.1. docker环境
+## 2.1. <a name='docker'></a>2.1. docker环境
 
 安装docker
 
@@ -601,7 +601,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker run hello-world
 ```
 
-## <a name='zeppelin'></a>2.2. zeppelin
+## 2.2. <a name='zeppelin'></a>2.2. zeppelin
 
 下载[带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
 
@@ -677,7 +677,7 @@ docker run -u $(id -u) -p 8080:8080 --rm -v $PWD/logs:/logs -v $PWD/notebook:/no
   -e ZEPPELIN_LOG_DIR='/logs' -e ZEPPELIN_NOTEBOOK_DIR='/notebook' --name zeppelin apache/zeppelin:0.10.0
 ```
 
-## <a name='hadoop'></a>2.3. hadoop
+## 2.3. <a name='hadoop'></a>2.3. hadoop
 
 Hadoop 集群的安装配置大致包括以下步骤：
 
@@ -695,7 +695,7 @@ Hadoop 集群的安装配置大致包括以下步骤：
 
 [树莓派的Hadoop 3集群上的分布式TensorFlow](https://oliver-hu.medium.com/distributed-tensorflow-on-raspberry-pis-hadoop-3-cluster-603a164bb896)
 
-### <a name='Java8Java'></a>2.3.1. 在每个节点上安装 Java 8，使其成为每个节点的默认 Java
+### 2.3.1. <a name='Java8Java'></a>2.3.1. 在每个节点上安装 Java 8，使其成为每个节点的默认 Java
 
 ```sh
 sudo apt-get install openjdk-8-jdk
@@ -703,7 +703,7 @@ sudo update-alternatives --config java    // Select number corresponding to Java
 sudo update-alternatives --config javac   // Select number corresponding to Java 8
 ```
 
-### <a name='Hadooppi'></a>2.3.2. 下载 Hadoop，解压并授予 pi 所有权
+### 2.3.2. <a name='Hadooppi'></a>2.3.2. 下载 Hadoop，解压并授予 pi 所有权
 
 下载：
 
@@ -746,7 +746,7 @@ z : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解
 v : 显示详细信息
 f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
 
-### <a name='Hadoop-bash'></a>2.3.3. 配置 Hadoop 环境变量-bash
+### 2.3.3. <a name='Hadoop-bash'></a>2.3.3. 配置 Hadoop 环境变量-bash
 
 版本一：
 
@@ -796,7 +796,7 @@ source /root/.bash_profile
 
 使配置的环境变量生效。
 
-### <a name='HadoopJAVA_HOME'></a>2.3.4. 为 Hadoop 环境初始化 JAVA_HOME
+### 2.3.4. <a name='HadoopJAVA_HOME'></a>2.3.4. 为 Hadoop 环境初始化 JAVA_HOME
 
 ```sh
 sudo vim /opt/hadoop/etc/hadoop/hadoop-env.sh
@@ -838,7 +838,7 @@ JAVA_HOME=/usr/java/jdk1.8.0_131
 
 JAVA_HOME=/usr/java/jdk1.8.0_231
 
-## <a name='MasterworkersSlave'></a>2.4. 在Master节点的workers文件中指定Slave节点
+## 2.4. <a name='MasterworkersSlave'></a>2.4. 在Master节点的workers文件中指定Slave节点
 
 版本一：
 
@@ -865,7 +865,7 @@ sudo vim workers
 
 Slave1
 
-### <a name='Hadoop'></a>2.4.1. 验证 Hadoop 安装
+### 2.4.1. <a name='Hadoop'></a>2.4.1. 验证 Hadoop 安装
 
 ```sh
 source ~/.bashrc
@@ -882,7 +882,7 @@ hdfs-site.xml           # 文件系统的配置文件
 mapred-site.xml         # mapreducer 任务配置文件
 yarn-site.xml           # yarn框架配置，主要一些任务的启动位置
 
-### <a name='core-site.xml'></a>2.4.2. core-site.xml文件的配置
+### 2.4.2. <a name='core-site.xml'></a>2.4.2. core-site.xml文件的配置
 
 这个是hadoop的核心配置，这里需要配置两属性，
 
@@ -966,7 +966,7 @@ HDFS数据保存在Linux的哪个目录，默认路径是Linux的tmp目录
 </configuration>
 ```
 
-### <a name='hdfs-site.xml'></a>2.4.3. hdfs-site.xml文件的配置
+### 2.4.3. <a name='hdfs-site.xml'></a>2.4.3. hdfs-site.xml文件的配置
 
 对于Hadoop的分布式文件系统HDFS而言，
 
@@ -1089,7 +1089,7 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
 </configuration>
 ```
 
-### <a name='mapred-site.xml'></a>2.4.4. mapred-site.xml文件的配置
+### 2.4.4. <a name='mapred-site.xml'></a>2.4.4. mapred-site.xml文件的配置
 
 “/usr/local/hadoop/etc/hadoop”目录下有一个mapred-site.xml.template，
 
@@ -1201,7 +1201,7 @@ MapReduce程序运行使用的框架
 </configuration>
 ```
 
-### <a name='yarn-site.xml'></a>2.4.5. yarn-site.xml文件的配置
+### 2.4.5. <a name='yarn-site.xml'></a>2.4.5. yarn-site.xml文件的配置
 
 yarn框架的配置，主要是一些任务的启动位置
 
@@ -1300,7 +1300,7 @@ MapReduce程序的运行方式：shuffle洗牌
 </configuration>
 ```
 
-### <a name='DatanodeNamenode'></a>2.4.6. 创建 Datanode 和 Namenode 目录
+### 2.4.6. <a name='DatanodeNamenode'></a>2.4.6. 创建 Datanode 和 Namenode 目录
 
 ```sh
 sudo mkdir -p /opt/hadoop_tmp/hdfs/datanode
@@ -1308,7 +1308,7 @@ sudo mkdir -p /opt/hadoop_tmp/hdfs/namenode
 sudo chown pi:pi -R /opt/hadoop_tmp
 ```
 
-### <a name='NameNode-HDFS'></a>2.4.7. 格式化NameNode-格式化HDFS
+### 2.4.7. <a name='NameNode-HDFS'></a>2.4.7. 格式化NameNode-格式化HDFS
 
 配置完成后，运行命令，一般第一次的时候需要初始化，之后就不需要了
 
@@ -1343,7 +1343,7 @@ ls
 tree
 ```
 
-### <a name='hadoop-1'></a>2.4.8. 把主节点上配置好的hadoop目录复制到从节点上
+### 2.4.8. <a name='hadoop-1'></a>2.4.8. 把主节点上配置好的hadoop目录复制到从节点上
 
 版本一：
 
@@ -1381,7 +1381,7 @@ sudo tar -zxf ~/hadoop.master.tar.gz -C /usr/local
 sudo chown -R hadoop /usr/local/hadoop
 ```
 
-### <a name='hadoop222'></a>2.4.9. 最后，在主节点hadoop222上运行命令
+### 2.4.9. <a name='hadoop222'></a>2.4.9. 最后，在主节点hadoop222上运行命令
 
 直接执行start-all.sh，启动 Hadoop。
 
@@ -1391,7 +1391,7 @@ sudo chown -R hadoop /usr/local/hadoop
 start-all.sh
 ```
 
-### <a name='HDFS'></a>2.4.10. 启动HDFS，验证功能
+### 2.4.10. <a name='HDFS'></a>2.4.10. 启动HDFS，验证功能
 
 现在就可以启动Hadoop了，启动需要在Master节点上进行，执行如下命令：、
 
@@ -1460,7 +1460,7 @@ hadoop fs -mkdir /tmp
 hadoop fs -ls /
 ```
 
-### <a name='-1'></a>2.4.11. 执行分布式实例
+### 2.4.11. <a name='-1'></a>2.4.11. 执行分布式实例
 
 执行分布式实例过程与伪分布式模式一样，首先创建HDFS上的用户目录，命令如下：
 
@@ -1495,7 +1495,7 @@ hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.
 
 通过Web界面查看任务进度，在Web界面点击 “Tracking UI” 这一列的History连接，可以看到任务的运行信息。
 
-### <a name='-1'></a>2.4.12. 使用以下命令停止群集
+### 2.4.12. <a name='-1'></a>2.4.12. 使用以下命令停止群集
 
 最后，关闭Hadoop集群，需要在Master节点执行如下命令：
 
@@ -1509,7 +1509,7 @@ mr-jobhistory-daemon.sh stop historyserver
 stop-dfs && stop-yarn.sh
 ```
 
-### <a name='Web'></a>2.4.13. Web查看集群状态
+### 2.4.13. <a name='Web'></a>2.4.13. Web查看集群状态
 
 或直接进入 Web-UI 界面进行查看，端口为 9870。可以看到此时有一个可用的 Datanode：
 
@@ -1519,7 +1519,7 @@ stop-dfs && stop-yarn.sh
 
 至此，Hadoop分布式集群搭建成功。
 
-### <a name='Hadoop64'></a>2.4.14. 静默警告（由于使用了32位Hadoop构建和64位操作系统）
+### 2.4.14. <a name='Hadoop64'></a>2.4.14. 静默警告（由于使用了32位Hadoop构建和64位操作系统）
 
 修改Hadoop环境配置:
 
@@ -1826,7 +1826,7 @@ start-dfs.sh && start-yarn.sh
 2. NodeManager
 3. jps
 
-## <a name='scala'></a>2.5. scala
+## 2.5. <a name='scala'></a>2.5. scala
 
 点击链接<https://www.scala-lang.org/download/2.12.10.html，下载对应版本scala（本文选择scala> 2.12.10）：
 
@@ -1868,7 +1868,7 @@ source /etc/profile
 scala -version
 ```
 
-## <a name='spark'></a>2.6. 2.4 spark
+## 2.6. <a name='spark'></a>2.6. 2.4 spark
 
 我们可以使用Spark SQL来执行常规分析，
 
@@ -1900,7 +1900,7 @@ Apache Spark on [Google Colaboratory](https://mikestaszel.com/2018/03/07/apache-
 
 [spark 案例](https://github.com/YutingYao/spark)
 
-### <a name='Sparkpi'></a>2.6.1. 下载Spark，解包并授予pi所有权
+### 2.6.1. <a name='Sparkpi'></a>2.6.1. 下载Spark，解包并授予pi所有权
 
 版本一：
 
@@ -1949,7 +1949,7 @@ sudo mv ./spark-2.0.2-bin-without-hadoop/ ./spark
 sudo chown -R hadoop ./spark
 ```
 
-### <a name='Spark'></a>2.6.2. 配置Spark环境变量
+### 2.6.2. <a name='Spark'></a>2.6.2. 配置Spark环境变量
 
 ```bash
 sudo vim /etc/profile
@@ -2034,7 +2034,7 @@ bin/run-example SparkPi 2>&1 | grep "Pi is"
 这里涉及到Linux Shell中管道的知识，详情可以参考[Linux Shell中的管道命令](http://dblab.xmu.edu.cn/blog/824-2/)
 过滤后的运行结果如下图示，可以得到π 的 5 位小数近似值：
 
-### <a name='spark-env.sh'></a>2.6.3. 配置spark-env.sh
+### 2.6.3. <a name='spark-env.sh'></a>2.6.3. 配置spark-env.sh
 
 安装后，还需要修改Spark的配置文件spark-env.sh
 
@@ -2100,7 +2100,7 @@ sudo tar -zxf ~/spark.master.tar.gz -C /usr/local
 sudo chown -R hadoop /usr/local/spark
 ```
 
-### <a name='slaves'></a>2.6.4. 配置slaves
+### 2.6.4. <a name='slaves'></a>2.6.4. 配置slaves
 
 在Master节点主机上进行如下操作：
 
@@ -2129,9 +2129,9 @@ slave01
 slave02
 ```
 
-### <a name='Spark-1'></a>2.6.5. 启动Spark集群
+### 2.6.5. <a name='Spark-1'></a>2.6.5. 启动Spark集群
 
-#### <a name='Hadoop-1'></a>2.6.5.1. 启动Hadoop集群
+#### 2.6.5.1. <a name='Hadoop-1'></a>2.6.5.1. 启动Hadoop集群
 
 启动Spark集群前，要先启动Hadoop集群。
 
@@ -2142,7 +2142,7 @@ cd /usr/local/hadoop/
 sbin/start-all.sh
 ```
 
-#### <a name='Spark-1'></a>2.6.5.2. 启动Spark集群
+#### 2.6.5.2. <a name='Spark-1'></a>2.6.5.2. 启动Spark集群
 
 启动Master节点
 
@@ -2198,7 +2198,7 @@ cd /usr/local/spark/
 在浏览器上查看Spark独立集群管理器的集群信息
 在master主机上打开浏览器，访问<http://master:8080>,（集群模式）
 
-#### <a name='Spark-1'></a>2.6.5.3. 关闭Spark集群
+#### 2.6.5.3. <a name='Spark-1'></a>2.6.5.3. 关闭Spark集群
 
 关闭Master节点
 
@@ -2219,7 +2219,7 @@ cd /usr/local/hadoop/
 sbin/stop-all.sh
 ```
 
-#### <a name='binspark-shell'></a>2.6.5.4. 启动bin目录下的spark-shell
+#### 2.6.5.4. <a name='binspark-shell'></a>2.6.5.4. 启动bin目录下的spark-shell
 
 ```sh
 ./bin/spark-shell
@@ -2227,7 +2227,7 @@ sbin/stop-all.sh
 
 即会出现spark scala的命令行执行环境：
 
-### <a name='Bash'></a>2.6.6. 为了方便可以修改Bash环境变量配置
+### 2.6.6. <a name='Bash'></a>2.6.6. 为了方便可以修改Bash环境变量配置
 
 ```sh
 vim /etc/bash.bashrc
@@ -2246,7 +2246,7 @@ export PATH=${JAVA_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${SPARK_HOME
 source /etc/bash.bashrc
 ```
 
-### <a name='Spark-1'></a>2.6.7. 配置Spark作业监控
+### 2.6.7. <a name='Spark-1'></a>2.6.7. 配置Spark作业监控
 
 与Hadoop类似，Spark还提供监视您部署的作业的功能。但是，使用Spark，我们必须手动配置监控选项。
 
@@ -2299,7 +2299,7 @@ Spark历史服务器界面可以通过 <http://pi1:18080> 访问
 spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.11-2.4.4.jar 7
 ```
 
-## <a name='pyspark'></a>2.7. 2.5 pyspark
+## 2.7. <a name='pyspark'></a>2.7. 2.5 pyspark
 
 前面已经安装了Hadoop和Spark，
 
@@ -2311,7 +2311,7 @@ spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPA
 
 这里假设不需要用到HDFS，
 
-### <a name='Spark-1'></a>2.7.1. 使用Spark
+### 2.7.1. <a name='Spark-1'></a>2.7.1. 使用Spark
 
 因此，就没有启动Hadoop。现在我们直接开始使用Spark。
 
@@ -2342,7 +2342,7 @@ Spark的运行模式取决于传递给SparkContext的Master URL的值。Master U
 * yarn-cluster 以集群模式连接YARN集群。集群的位置可以在HADOOP_CONF_DIR 环境变量中找到。
 * mesos://HOST:PORT 连接到指定的Mesos集群。默认接口是5050。
 
-### <a name='Sparkpyspark'></a>2.7.2. 在Spark中采用本地模式启动pyspark
+### 2.7.2. <a name='Sparkpyspark'></a>2.7.2. 在Spark中采用本地模式启动pyspark
 
 –master：
 
@@ -2400,7 +2400,7 @@ bin/pyspark
 >>> exit()
 ```
 
-### <a name='pyspark-1'></a>2.7.3. pyspark独立应用程序编程
+### 2.7.3. <a name='pyspark-1'></a>2.7.3. pyspark独立应用程序编程
 
 接着我们通过一个简单的应用程序来演示如何通过 Spark API 编写一个独立应用程序。
 
@@ -2439,7 +2439,7 @@ python3 ~/test.py
 
 Lines with a: 62, Lines with b: 30
 
-### <a name='Spark-1'></a>2.7.4. Spark应用程序在集群中运行
+### 2.7.4. <a name='Spark-1'></a>2.7.4. Spark应用程序在集群中运行
 
 需要借助于集群管理器（包括本地集群管理器、YARN、Mesos）来为其实现资源管理调度服务，
 
@@ -2453,7 +2453,7 @@ Lines with a: 62, Lines with b: 30
 
 请登录Linux系统，打开一个终端。
 
-#### <a name='Hadoop-1'></a>2.7.4.1. 启动Hadoop集群
+#### 2.7.4.1. <a name='Hadoop-1'></a>2.7.4.1. 启动Hadoop集群
 
 ```sh
 cd /usr/local/hadoop/
@@ -2518,7 +2518,7 @@ res1: String = # Apache Spark
 
 用户在独立集群管理Web界面查看应用的运行情况，可以浏览器中输入地址进行查看(<http://master:8080/>)
 
-#### <a name='HadoopYARN'></a>2.7.4.2. Hadoop YARN管理器
+#### 2.7.4.2. <a name='HadoopYARN'></a>2.7.4.2. Hadoop YARN管理器
 
 （1）在集群中运行应用程序JAR包
 
@@ -2563,7 +2563,7 @@ res3: String = # Apache Spark
 
 可以在浏览器中输入地址进行查看(<http://master:8088/cluster>)
 
-## <a name='geospark'></a>2.8. geospark
+## 2.8. <a name='geospark'></a>2.8. geospark
 
 [系列教程](https://www.jianshu.com/nb/37398936)
 
@@ -2596,7 +2596,7 @@ GeoSpark扩展了Spark Core和SparkSQL并提出了空间弹性分布式数据集
 * 面：Polygon、MultiPolygon
 * 集合：GeometryCollection
 
-### <a name='geospark-1'></a>2.8.1. geospark部署
+### 2.8.1. <a name='geospark-1'></a>2.8.1. geospark部署
 
 环境准备
 
@@ -2644,7 +2644,7 @@ GeoSpark扩展了Spark Core和SparkSQL并提出了空间弹性分布式数据集
   </dependencies>
 ```
 
-### <a name='geospark-1'></a>2.8.2. geospark示例
+### 2.8.2. <a name='geospark-1'></a>2.8.2. geospark示例
 
 尝鲜：新建一个CSV文件checkin.csv：
 
@@ -2727,7 +2727,7 @@ object GeoDemoApp {
 }
 ```
 
-### <a name='SpatialRDDSRDD'></a>2.8.3. 创建SpatialRDD(SRDD)
+### 2.8.3. <a name='SpatialRDDSRDD'></a>2.8.3. 创建SpatialRDD(SRDD)
 
 GeoSpark-Core 提供了三种特殊的SpatialRDD：
 
@@ -2917,7 +2917,7 @@ val targetCrsCode = "epsg:3857"
 objectRDD.CRSTransform(sourceCrsCode, targetCrsCode)
 ```
 
-### <a name='SpatialRangeQuery'></a>2.8.4. 空间范围查询(Spatial Range Query)
+### 2.8.4. <a name='SpatialRangeQuery'></a>2.8.4. 空间范围查询(Spatial Range Query)
 
 空间范围查询，顾名思义我们可以给定一个范围（query window），然后查询出包含在当前范围内的地理对象。
 
@@ -3381,7 +3381,7 @@ POINT (-88.321102 32.35078) 2.bus
 
 ```
 
-## <a name='kafka'></a>2.9. kafka
+## 2.9. <a name='kafka'></a>2.9. kafka
 
 到[Kafka官网](https://kafka.apache.org/downloads)下载安装文件时，一定要选择和自己电脑上已经安装的scala版本号一致才可以，
 
@@ -3393,7 +3393,7 @@ POINT (-88.321102 32.35078) 2.bus
 
 前面的2.11就是支持的scala版本号，后面的0.10.2.0是Kafka自身的版本号。
 
-### <a name='UbuntuKafka'></a>2.9.1. Ubuntu 系统安装Kafka
+### 2.9.1. <a name='UbuntuKafka'></a>2.9.1. Ubuntu 系统安装Kafka
 
 访问Kafka官方下载页面,下载稳定版本0.10.1.0的kafka.此安装包内已经附带zookeeper,不需要额外安装zookeeper.按顺序执行如下步骤:
 
@@ -3420,7 +3420,7 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.
 6. Consumer Group
 每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）
 
-### <a name='Kafka'></a>2.9.2. 安装成功了Kafka
+### 2.9.2. <a name='Kafka'></a>2.9.2. 安装成功了Kafka
 
 进入kafka所在的目录
 
@@ -3542,7 +3542,7 @@ hello spark
 
 如果记不住是哪个终端，那么所有这些终端窗口都不要关闭，要继续留着后面使用。
 
-### <a name='Sparkjar'></a>2.9.3. Spark准备工作（jar文件）
+### 2.9.3. <a name='Sparkjar'></a>2.9.3. Spark准备工作（jar文件）
 
 按照我们前面安装好的Spark版本，这些jar包都不在里面，
 
@@ -3618,7 +3618,7 @@ export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath):$(/usr/loc
 export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath):/usr/local/spark/examples/jars/*:/usr/local/spark/jars/kafka/*:/usr/local/kafka/libs/*
 ```
 
-### <a name='SparkKafka'></a>2.9.4. 编写Spark程序使用Kafka数据源
+### 2.9.4. <a name='SparkKafka'></a>2.9.4. 编写Spark程序使用Kafka数据源
 
 下面，我们就可以进行程序编写了。
 
@@ -3693,12 +3693,12 @@ Time: 2017-12-12 10:57:47
 
 ```
 
-## <a name='flink'></a>2.10. flink
+## 2.10. <a name='flink'></a>2.10. flink
 
 ```sh
 ```
 
-## <a name='PostgreSQL'></a>2.11. PostgreSQL
+## 2.11. <a name='PostgreSQL'></a>2.11. PostgreSQL
 
 PostgreSQL vs MongoDB
 
@@ -3726,7 +3726,7 @@ flink连接
 
 [创建分析型数据库PostgreSQL版结果表](https://help.aliyun.com/knowledge_detail/162453.html)
 
-## <a name='MongoDB'></a>2.12. MongoDB
+## 2.12. <a name='MongoDB'></a>2.12. MongoDB
 
 [MongoDB 如何上手和避坑？](https://mp.weixin.qq.com/s/EhVsdlRQDC1VP1S1QQfnkg)
 
@@ -3764,7 +3764,7 @@ flink连接
 
 在进行一些预处理后，MongoDB就会比较容地支持到。而一般来说，HDFS是不支持更新类型操作的。
 
-### <a name='MongoSparkConnector'></a>2.12.1. Mongo Spark Connector 连接器
+### 2.12.1. <a name='MongoSparkConnector'></a>2.12.1. Mongo Spark Connector 连接器
 
 在这里我们在介绍下MongoDB官方提供的Mongo Spark连接器。
 
@@ -3798,7 +3798,7 @@ flink连接
 
 当然，这种部署方式需要注意**内存资源和CPU资源**的隔离。隔离的方式可以通过Linux的**cgroups**。
 
-#### <a name='-1'></a>2.12.1.1. 案例
+#### 2.12.1.1. <a name='-1'></a>2.12.1.1. 案例
 
 1. 法国航空是法国最大的航空公司：
 
@@ -3844,7 +3844,7 @@ MongoDB基于**内存缓存的数据管理方式**决定了对**并发读写的�
 
 事实上，全球最大的航空分销商，管理者全世界95%航空库存的Amadeus也正是使用MongoDB作为其1000多亿**运价缓存的存储方案**。
 
-#### <a name='-1'></a>2.12.1.2. 运价系统的架构图
+#### 2.12.1.2. <a name='-1'></a>2.12.1.2. 运价系统的架构图
 
 左边是发起航班查询请求的客户端，
 
@@ -3872,7 +3872,7 @@ Spark 计算任务会**定期触发（如每天一次或者每4小时一次）**
 
 从Mongodb里取出需要计算的仓位，调用东航自己的**运价逻辑**，得出结果以后，并保存回MongoDB。
 
-### <a name='Spark-1'></a>2.12.2. Spark 任务入口程序
+### 2.12.2. <a name='Spark-1'></a>2.12.2. Spark 任务入口程序
 
 Spark和MongoDB的连接使用非常简单，下面就是一个代码示例：
 
@@ -3893,7 +3893,7 @@ cabinsRDD.collect()
 cabinsRDD.saveToMongo()
 ```
 
-### <a name='SparkMongoDB'></a>2.12.3. Spark ＋ MongoDB演示
+### 2.12.3. <a name='SparkMongoDB'></a>2.12.3. Spark ＋ MongoDB演示
 
 安装 Spark（略）
 
@@ -3947,9 +3947,9 @@ MongoSpark.load(sc)
 * 预留**1-2个core**给**操作系统**及**其他管理进程**
 * 同机部署，适当情况可以**同机部署Spark+MongoDB**，利用**本地IO**提高性能
 
-## 安装SBT
+## 2.13. 安装SBT
 
-### Linux中安装SBT
+### 2.13.1. Linux中安装SBT
 
 1. 在官网上下载.tgz安装包
 
@@ -4010,7 +4010,7 @@ sbt
 run
 ```
 
-### Spark快速入门之SBT安装
+### 2.13.2. Spark快速入门之SBT安装
 
 Spark中没有自带sbt，需要手动安装sbt，
 
@@ -4326,7 +4326,7 @@ bin/zeppelin-daemon.sh restart
 vim logs/zeppelin-xxxxx-Pro.local.log
 ```
 
-## <a name='local'></a>3.1. 在local模式下运行
+## 3.1. <a name='local'></a>3.1. 在local模式下运行
 
 ```sh
 tar -xvf flink-1.10.0-bin-scala_2.11.tgz
@@ -4343,13 +4343,13 @@ vim logs/zeppelin-自动补全？
 
 tab键自动补全命令
 
-## <a name='remote'></a>3.2. 在remote模式下运行
+## 3.2. <a name='remote'></a>3.2. 在remote模式下运行
 
 flink.excution.mode设置为remote
 flink.excution.remote.host设置为localhost
 flink.excution.remote.port设置为**8081**
 
-## <a name='yarn'></a>3.3. yarn模式下的运行
+## 3.3. <a name='yarn'></a>3.3. yarn模式下的运行
 
 确保hadoop已经安装
 
@@ -4382,7 +4382,7 @@ ps aux | grep RemoteInterpreterServer
 
 flink的classpath
 
-## <a name='inlineconfiguration'></a>3.4. inline configuration
+## 3.4. <a name='inlineconfiguration'></a>3.4. inline configuration
 
 一定要在进程起来前跑
 
@@ -4391,7 +4391,7 @@ flink的classpath
 flink.execution.mode yarn
 ```
 
-## <a name='hive'></a>3.5. hive
+## 3.5. <a name='hive'></a>3.5. hive
 
 常用命令：
 
@@ -4427,7 +4427,7 @@ show tables;
 select * from bank;
 ```
 
-## <a name='SQL'></a>3.6. SQL
+## 3.6. <a name='SQL'></a>3.6. SQL
 
 ```sql
 %flink.bsql
@@ -4443,7 +4443,7 @@ show tables;
 showfunctions
 ```
 
-## <a name='Streaming'></a>3.7. Streaming
+## 3.7. <a name='Streaming'></a>3.7. Streaming
 
 采用Flink Job Control Tutorial进行学习：
 
@@ -4494,11 +4494,11 @@ start_time, url, count(1) as pv from log group by
 TUMBLE(rowtime, INTERVAL '5' SECOND), url
 ```
 
-## <a name='kafka-1'></a>3.8. kafka
+## 3.8. <a name='kafka-1'></a>3.8. kafka
 
-## <a name='python'></a>3.9. python
+## 3.9. <a name='python'></a>3.9. python
 
-## <a name='spark-1'></a>3.10. spark
+## 3.10. <a name='spark-1'></a>3.10. spark
 
 首先确认Zeppelin的机器上已安装有Hadoop客户端和Spark客户端，
 
@@ -4532,9 +4532,9 @@ val fs = FileSystem.get(sc.hadoopConfiguration)
 val dirSize = fs.getContentSummary(new Path("hdfs:///user/root")).getLength
 ```
 
-## <a name='flink-Pythonenv-Conda'></a>3.11. flink - Python env - Conda
+## 3.11. <a name='flink-Pythonenv-Conda'></a>3.11. flink - Python env - Conda
 
-### <a name='-1'></a>3.11.1. 准备工作
+### 3.11.1. <a name='-1'></a>3.11.1. 准备工作
 
 本文内容就是在 Zeppelin notebook 里利用 Conda 来创建 Python env 自动部署到 Yarn 集群中，无需手动在集群上去安装任何 Pyflink 的包，并且可以在一个 Yarn 集群里同时使用多个版本的 PyFlink。
 
@@ -4554,11 +4554,11 @@ val dirSize = fs.getContentSummary(new Path("hdfs:///user/root")).getLength
 
 * [mamba](https://github.com/mamba-org/mamba)
 
-### <a name='PyFlink'></a>3.11.2. 搭建 PyFlink 环境
+### 3.11.2. <a name='PyFlink'></a>3.11.2. 搭建 PyFlink 环境
 
 接下来就可以在 Zeppelin 里搭建并且使用 PyFlink 了。
 
-#### <a name='Step1.JobManagerPyFlinkConda'></a>3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境
+#### 3.11.2.1. <a name='Step1.JobManagerPyFlinkConda'></a>3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境
 
 因为 Zeppelin 天生支持 Shell，
 
@@ -4621,7 +4621,7 @@ hadoop fs -put pyflink_env.tar.gz /tmp
 hadoop fs -chmod 644 /tmp/pyflink_env.tar.gz
 ```
 
-#### <a name='Step2.TaskManagerPyFlinkConda'></a>3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境
+#### 3.11.2.2. <a name='Step2.TaskManagerPyFlinkConda'></a>3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境
 
 运行下面的代码来创建 **TaskManager 上的 PyFlink Conda 环境**，
 
@@ -4666,7 +4666,7 @@ hadoop fs -put pyflink_tm_env.zip /tmp
 hadoop fs -chmod 644 /tmp/pyflink_tm_env.zip
 ```
 
-#### <a name='Step3.PyFlinkConda'></a>3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境
+#### 3.11.2.3. <a name='Step3.PyFlinkConda'></a>3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境
 
 接下来就可以在 Zeppelin 中使用上面创建的 Conda 环境了，
 
@@ -4713,7 +4713,7 @@ flink.tm.memory 2048
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5s0w557gjm80.png)
 
-## <a name='ApacheSedona'></a>3.12. Apache Sedona
+## 3.12. <a name='ApacheSedona'></a>3.12. Apache Sedona
 
 [Apache Sedona](https://github.com/apache/incubator-sedona)(孵化)是一个用于处理大规模空间数据的集群计算系统。
 
@@ -4734,9 +4734,9 @@ SpatialSQL扩展了Apache Spark / SparkSQL，
 
 可以安装在[zeppelin](https://github.com/apache/incubator-sedona/tree/master/zeppelin)上
 
-## <a name='oracle'></a>3.13. oracle (貌似不太常用)
+## 3.13. <a name='oracle'></a>3.13. oracle (貌似不太常用)
 
-## <a name='oracle-1'></a>3.14. 简单介绍oracle
+## 3.14. <a name='oracle-1'></a>3.14. 简单介绍oracle
 
 Oracle数据库中的空间和图形特性
 
@@ -4750,7 +4750,7 @@ Oracle数据库现在包括**机器学习**，**空间**和**图形功能**。
 
 使用[oracle](https://www.jianshu.com/p/08afbdc63848/)作为数据源发布图层到[geoserver](https://docs.geoserver.org/latest/en/user/data/database/oracle.html)
 
-### <a name='Oracle'></a>3.14.1. 连接Oracle数据库
+### 3.14.1. <a name='Oracle'></a>3.14.1. 连接Oracle数据库
 
 简单来说，步骤如下：
 
