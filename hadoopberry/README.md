@@ -601,7 +601,27 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker run hello-world
 ```
 
-## 2.2. <a name='zeppelin'></a>2.2. zeppelin
+## 2.2. <a name='zeppelin'></a> zeppelin
+
+requirement：
+
+```sh
+sudo apt-get update
+sudo apt-get install git
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install npm
+sudo apt-get install libfontconfig
+sudo apt-get install r-base-dev
+sudo apt-get install r-cran-evaluate
+```
+
+安装maven
+
+```sh
+wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+sudo tar -zxf apache-maven-3.6.3-bin.tar.gz -C /usr/local/
+sudo ln -s /usr/local/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
+```
 
 下载[带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
 
@@ -631,7 +651,7 @@ admin = yyt123456, yaoyuting
 #user3 = password4, role2
  
 # 重启Zeppelin 
-cd /opt/zeppelin-0.9.0-bin-all/bin
+cd /opt/zeppelin-0.10.0-bin-all/bin
 ./zeppelin-daemon.sh restart
  
 # 浏览器访问
