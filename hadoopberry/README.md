@@ -167,393 +167,6 @@ Reboot the system so that the settings take effect
 sudo reboot
 ```
 
-## 1.4. <a name='ubuntuSSH'></a>1.4. ubuntu免密SSH登录
-
-准备工作：关闭防火墙（但这一步,貌似不需要）
-
-```sh
-systemctl statusfirewalld.service
-```
-
-```sh
-systemctl stopfirewalld.service
-```
-
-```sh
-systemctl disablefirewalld.service
-```
-
-配置主机名
-
-为了方便，经常使用主机名替代IP机制，因此需要配置主机名和IP地址的对应关系。运行命令vi /etc/hosts，进行编辑配置，在文件末尾添加如下一行文字即可。
-
-```sh
-sudo vim /etc/hosts
-```
-
-据说，这一步需要ipv6 的字段删除
-
-```sh
-192.168.31.219 node01
-192.168.31.6 node02
-```
-
-修改完成以后，请重新启动Slave节点的Linux系统。
-
-这样就完成了Master节点和Slave节点的配置，
-
-然后，需要在各个节点上都执行如下命令，测试是否相互ping得通，
-
-如果ping不通，后面就无法顺利配置成功：
-
-```sh
-ping Master -c 3   # 只ping 3次就会停止，否则要按Ctrl+c中断ping命令
-ping Slave1 -c 3
-```
-
-Debian貌似不需要net-tools，ubuntu需要net-tools
-
-```sh
-sudo apt install net-tools
-```
-
-```sh
-ifconfig
-```
-
-### 1.4.1. <a name='ssh'></a>1.4.1. 打开ssh服务端（每一台计算机都需要）
-
-A、B分别安装ssh：这一步可能不需要。
-
-```sh
-sudo apt-get install ssh
-```
-
-Ubuntu默认安装SSH server，这一步可能不需要。
-
-```bash
-sudo apt-get install openssh-server
-```
-
-Ubuntu默认安装SSH Client，这一步可能不需要。
-
-```bash
-sudo apt-get install openssh-client
-```
-
-开启Openssh服务：
-
-```bash
-sudo service ssh start
-```
-
-查看SSH服务运行状态：（也可以不查看）
-
-```bash
-service ssh status
-```
-
-### 1.4.2. <a name='-1'></a>1.4.2. 免密登录-配置密钥对（每一条计算机都需要）
-
-A、B分别生成公钥和私钥，输入命令，提示直接按enter即可：
-
-生成自己的公钥私钥
-
-★
-
-```bash
-sudo su
-```
-
-```bash
-ssh-keygen -t rsa
-```
-
-生成之后会在用户的根目录生成一个 “.ssh”的文件夹
-
-查看私钥id_rsa 和公钥id_rsa.pub：
-
-★
-
-```bash
-cd ~/.ssh
-```
-
-生成以下几个文件:
-
-* authorized_keys:存放远程免密登录的公钥,主要通过这个文件记录多台机器的公钥
-
-* id_rsa : 生成的私钥文件
-
-* id_rsa.pub ： 生成的公钥文件
-
-* know_hosts : 已知的主机公钥清单
-
-### 1.4.3. <a name='root'></a>1.4.3. 设置允许root远程登录（每一台计算机都需要）
-
-因为scp是基于ssh的拷贝服务，
-
-ssh在没有密钥登录的情况下，禁用了密码登录，
-
-所以会出现无法拷贝文件，我们需要打开密码登录。
-
-将/etc/ssh/sshd_config文件中。
-
-在slave1和slave2上设置允许root远程登录：
-
-```bash
-sudo vim /etc/ssh/sshd_config
-```
-
-设置PermitRootLogin为yes
-
-可选操作:禁用密码登陆
-
-在公钥上传之后，我们现在可以禁用通过密码登陆SSH的方式了。为此，我们需要通过以下命令用文本编辑器打开/etc/ssh/ssh_config。
-
-主要找到下面的几行，修改成下面的样子:
-
-```s
-PermitRootLogin prohibit-password 改为yes。
-RSAAuthentication yes #这个貌似没找到
-PubkeyAuthentication yes
-AuthorizedKeysFile %h/.ssh/authorized_keys
-```
-
-配置完成后重启：
-
-```sh
- sudo service ssh restart
-```
-
-或
-
-```bash
-sudo /etc/init.d/ssh restart
-```
-
-由于本人多次操作失败，所以还修改了如下文件：
-
-```sh
-sudo find / -name ssh*config
-sudo vim /etc/ssh/sshd_config
-sudo vim /etc/ssh/ssh_config
-sudo vim /usr/share/openssh/sshd_config
-```
-
-### 1.4.4. <a name='-1'></a>1.4.4. 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）
-
-将公钥添加到本地主机认证中，执行下面的命令：
-
-```bash
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-chmod 644 ~/.ssh/authorized_keys 
-```
-
-id_rsa.pub是公钥，id_rsa是私钥
-
-然后测试：
-
-```bash
-ssh localhost 
-```
-
-先要输入yes，再来一遍：
-
-```bash
-ssh localhost 
-```
-
-无需密码即可登录则成功。
-
-输入命令 exit 可退出ssh当前登录
-
-```bash
-exit
-```
-
-### 1.4.5. <a name='scpU'></a>1.4.5. scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）
-
-**在 node01 上进行配置：ssh-copy-id**
-
-```bash
-sudo su
-```
-
-```bash
-ssh-keygen -t rsa
-```
-
-```bash
-ssh-copy-id -i node01 # 对自己也做一次
-```
-
-```bash
-ssh-copy-id -i node02
-```
-
-```bash
-ssh-copy-id -i node03
-```
-
-```bash
-ssh-copy-id -i node04
-```
-
-**在 node02 上进行配置：ssh-copy-id**
-
-```bash
-sudo su
-```
-
-```bash
-ssh-keygen -t rsa
-```
-
-```bash
-ssh-copy-id -i node01 # 对自己也做一次
-```
-
-```bash
-ssh-copy-id -i node02
-```
-
-```bash
-ssh-copy-id -i node03
-```
-
-```bash
-ssh-copy-id -i node04
-```
-
-**在 node03 上进行配置：ssh-copy-id**
-
-```bash
-sudo su
-```
-
-```bash
-ssh-keygen -t rsa
-```
-
-```bash
-ssh-copy-id -i node01 # 对自己也做一次
-```
-
-```bash
-ssh-copy-id -i node02
-```
-
-```bash
-ssh-copy-id -i node03
-```
-
-```bash
-ssh-copy-id -i node04
-```
-
-**在 node04 上进行配置：ssh-copy-id**
-
-```bash
-sudo su
-```
-
-```bash
-ssh-keygen -t rsa
-```
-
-```bash
-ssh-copy-id -i node01 # 对自己也做一次
-```
-
-```bash
-ssh-copy-id -i node02
-```
-
-```bash
-ssh-copy-id -i node03
-```
-
-```bash
-ssh-copy-id -i node04
-```
-
-**貌似SCP也可以：**
-
-scp到合适的位置：
-
-./就是当前目录下的意思，去掉也是可以的
-
-```bash
-scp ./id_rsa.pub root@node01:/home/pi
-```
-
-```bash
-scp .ssh/id_rsa.pub chenlb@192.168.1.181:/home/chenlb/id_rsa.pub
-```
-
-```bash
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-```
-
-**分别将node2和node3上id_rsa.pub内容拷贝至node1的authorized_keys文件中（这个还没试过）**
-
-将node1的authorized_keys分别拷贝至node2和node3对应位置
-
-```bash
-ssh root@node01 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-```
-
-```bash
-ssh root@node02 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-```
-
-```bash
-ssh root@node01 'chmod 600 .ssh/authorized_keys'
-```
-
-```bash
-ssh root@node02 'chmod 600 .ssh/authorized_keys'
-```
-
-**authorized_keys的权限要是600。**
-
-```bash
- chmod 600 .ssh/authorized_keys
-```
-
-```bash
-chmod 700 ~/.ssh/ 
-chmod 640 ~/.ssh/authorized_keys
-```
-
-```bash
-chmod 644 ~/.ssh/authorized_keys 
-```
-
-也就是是说，700更加高级耶
--rw------- (600)    只有拥有者有读写权限。
--rw-r--r-- (644)    只有拥有者有读写权限；而属组用户和其他用户只有读权限。
--rwx------ (700)    只有拥有者有读、写、执行权限。
-
-**然后，就可以随意ssh啦~~~~**
-
-```bash
-ssh node01
-```
-
-```bash
-ssh node02
-```
-
-```bash
-ssh node03
-```
-
-```bash
-ssh node04
-```
-
 # 2. 安装大数据分析软件
 
 [大数据架构](http://dblab.xmu.edu.cn/blog/988-2/)请参考这个链接。
@@ -601,103 +214,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker run hello-world
 ```
 
-## 2.2. <a name='zeppelin'></a> zeppelin
-
-requirement：
-
-```sh
-sudo apt-get update
-sudo apt-get install git
-sudo apt-get install openjdk-8-jdk
-sudo apt-get install npm
-sudo apt-get install libfontconfig
-sudo apt-get install r-base-dev
-sudo apt-get install r-cran-evaluate
-```
-
-安装maven
-
-```sh
-wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-sudo tar -zxf apache-maven-3.6.3-bin.tar.gz -C /usr/local/
-sudo ln -s /usr/local/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
-```
-
-下载[带有所有解释器的二进制包](https://dlcdn.apache.org/zeppelin/zeppelin-0.10.0/zeppelin-0.10.0-bin-all.tgz)
-
-```sh
-sudo su
-# 安装到/opt目录下
-tar -zxf zeppelin-0.10.0-bin-all.tgz -C /opt
-chown -R root:root /opt/zeppelin-0.10.0-bin-all
-
-cd /opt/zeppelin-0.10.0-bin-all/conf
-cp zeppelin-env.sh.template zeppelin-env.sh
-cp shiro.ini.template shiro.ini
- 
-# 修改默认端口，在zeppelin-env.sh中找到ZEPPELIN_PORT配置，修改成自己想要的
-vim zeppelin-env.sh
-export ZEPPELIN_PORT=18080         # port number to listen (default 8080)
- 
-# 配置简单登录认证，在shiro.ini中找到[users]配置，修改成自己想要的
-vim shiro.ini
-[users]
-# List of users with their password allowed to access Zeppelin.
-# To use a different strategy (LDAP / Database / ...) check the shiro doc at http://shiro.apache.org/configuration.html#Configuration-INISections
-# To enable admin user, uncomment the following line and set an appropriate password.
-admin = yyt123456, yaoyuting
-#user1 = password2, role1, role2
-#user2 = password3, role3
-#user3 = password4, role2
- 
-# 重启Zeppelin 
-cd /opt/zeppelin-0.10.0-bin-all/bin
-./zeppelin-daemon.sh restart
- 
-# 浏览器访问
-http://localhost:18080
-使用yaoyuting/yyt123456登录
-```
-
-[Build from source](https://zeppelin.apache.org/docs/latest/setup/basics/how_to_build.html#build-requirements)
-
-Supported Interpreters:
-
-* [Spark](https://www.apache.org/dyn/closer.lua/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz)
-* [Hive](http://www.apache.org/dyn/closer.cgi/hive/)
-* JDBC
-* Python
-* HDFS
-* [Hbase](https://hbase.apache.org/downloads.html)
-* Elasticsearch
-* Markdown
-* Shell
-* Flink
-* Geode
-* [PostgreSQL](https://www.postgresql.org/download/linux/ubuntu/)
-  
-  Ubuntu默认包含PostgreSQL。要在Ubuntu上安装PostgreSQL，请使用apt get（或其他apt驱动）命令：
-
-  ```s
-  apt-get install postgresql-12
-  ```
-
-使用此命令在容器中启动Apache Zeppelin。
-
-```s
-docker run -p 8080:8080 --rm --name zeppelin apache/zeppelin:0.10.0
-```
-
-要持久保存日志和笔记本目录，请使用docker容器的卷选项。您还可以将体积用于Spark和Flink二进制分布。
-
-```s
-docker run -u $(id -u) -p 8080:8080 --rm -v $PWD/logs:/logs -v $PWD/notebook:/notebook \
-  -v /usr/lib/spark-2.4.7:/opt/spark -v /usr/lib/flink-1.12.2:/opt/flink \
-  -e FLINK_HOME=/opt/flink -e SPARK_HOME=/opt/spark \
-  -e ZEPPELIN_LOG_DIR='/logs' -e ZEPPELIN_NOTEBOOK_DIR='/notebook' --name zeppelin apache/zeppelin:0.10.0
-```
-
-## 2.3. <a name='hadoop'></a>2.3. hadoop
+## 2.3. <a name='hadoop'></a> hadoop
 
 Hadoop 集群的安装配置大致包括以下步骤：
 
@@ -715,15 +232,20 @@ Hadoop 集群的安装配置大致包括以下步骤：
 
 [树莓派的Hadoop 3集群上的分布式TensorFlow](https://oliver-hu.medium.com/distributed-tensorflow-on-raspberry-pis-hadoop-3-cluster-603a164bb896)
 
-### 2.3.1. <a name='Java8Java'></a>2.3.1. 在每个节点上安装 Java 8，使其成为每个节点的默认 Java
+### 2.3.1. <a name='Java8Java'></a> 在每个节点上安装 Java 8，使其成为每个节点的默认 Java
 
 ```sh
 sudo apt-get install openjdk-8-jdk
+```
+
+貌似不需要
+
+```sh
 sudo update-alternatives --config java    // Select number corresponding to Java 8
 sudo update-alternatives --config javac   // Select number corresponding to Java 8
 ```
 
-### 2.3.2. <a name='Hadooppi'></a>2.3.2. 下载 Hadoop，解压并授予 pi 所有权
+### 2.3.2. <a name='Hadooppi'></a> 下载 Hadoop，解压并授予 pi 所有权
 
 下载：
 
@@ -741,8 +263,10 @@ sudo tar -zxvf hadoop-2.7.3.tar.gz -C /root/training/
 sudo tar -zxvf hadoop-3.1.4.tar.gz -C module/hadoop/
 ```
 
+最终采用如下版本：
+
 ```sh
-sudo tar -xvf hadoop-3.2.1.tar.gz -C /opt/
+sudo tar -xvf hadoop-3.3.1.tar.gz -C /opt
 ```
 
 ```sh
@@ -761,14 +285,22 @@ chown是change own的缩写：
 sudo chown pi:pi -R /opt/hadoop 
 ```
 
+这里，把 pi:pi 改成 root:root
+
+```sh
+sudo chown root:root -R /opt/hadoop 
+```
+
 x : 从 tar 包中把文件提取出来
 z : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解压
 v : 显示详细信息
 f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
 
-### 2.3.3. <a name='Hadoop-bash'></a>2.3.3. 配置 Hadoop 环境变量-bash
+### 2.3.3. <a name='Hadoop-bash'></a> 配置 Hadoop 环境变量-bash
 
 版本一：
+
+最终选择如下版本：
 
 ```sh
 sudo vim ~/.bashrc
@@ -776,8 +308,10 @@ sudo vim ~/.bashrc
 
 *添加（在文件顶部插入）：
 
+最终选择如下版本：
+
 ```sh
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-armhf/
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/
 export HADOOP_HOME=/opt/hadoop
 export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
@@ -811,12 +345,12 @@ export PATH=$PATH:/usr/local/hadoop/bin:/usr/local/hadoop/sbin
 保存退出后，运行命令
 
 ```sh
-source /root/.bash_profile
+source ~/.bashrc
 ```
 
 使配置的环境变量生效。
 
-### 2.3.4. <a name='HadoopJAVA_HOME'></a>2.3.4. 为 Hadoop 环境初始化 JAVA_HOME
+### 2.3.4. <a name='HadoopJAVA_HOME'></a> 为 Hadoop 环境初始化 JAVA_HOME
 
 ```sh
 sudo vim /opt/hadoop/etc/hadoop/hadoop-env.sh
@@ -826,8 +360,10 @@ sudo vim /opt/hadoop/etc/hadoop/hadoop-env.sh
 
 版本一：
 
+最终选择如下版本：
+
 ```sh
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-armhf/
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/
 ```
 
 版本二：
@@ -854,11 +390,15 @@ export  JAVA_HOME=/usr/java/jdk1.8.0_281/
 sudo vim yarn-env.sh
 ```
 
-JAVA_HOME=/usr/java/jdk1.8.0_131
+最终选择如下版本：
+
+```sh
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/
+```
 
 JAVA_HOME=/usr/java/jdk1.8.0_231
 
-## 2.4. <a name='MasterworkersSlave'></a>2.4. 在Master节点的workers文件中指定Slave节点
+## 2.4. <a name='MasterworkersSlave'></a>在Master节点的workers文件中指定Slave节点
 
 版本一：
 
@@ -902,7 +442,7 @@ hdfs-site.xml           # 文件系统的配置文件
 mapred-site.xml         # mapreducer 任务配置文件
 yarn-site.xml           # yarn框架配置，主要一些任务的启动位置
 
-### 2.4.2. <a name='core-site.xml'></a>2.4.2. core-site.xml文件的配置
+### 2.4.2. <a name='core-site.xml'></a>core-site.xml文件的配置
 
 这个是hadoop的核心配置，这里需要配置两属性，
 
@@ -986,7 +526,7 @@ HDFS数据保存在Linux的哪个目录，默认路径是Linux的tmp目录
 </configuration>
 ```
 
-### 2.4.3. <a name='hdfs-site.xml'></a>2.4.3. hdfs-site.xml文件的配置
+### 2.4.3. <a name='hdfs-site.xml'></a> hdfs-site.xml文件的配置
 
 对于Hadoop的分布式文件系统HDFS而言，
 
@@ -1109,7 +649,7 @@ pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
 </configuration>
 ```
 
-### 2.4.4. <a name='mapred-site.xml'></a>2.4.4. mapred-site.xml文件的配置
+### 2.4.4. <a name='mapred-site.xml'></a> mapred-site.xml文件的配置
 
 “/usr/local/hadoop/etc/hadoop”目录下有一个mapred-site.xml.template，
 
@@ -1221,7 +761,7 @@ MapReduce程序运行使用的框架
 </configuration>
 ```
 
-### 2.4.5. <a name='yarn-site.xml'></a>2.4.5. yarn-site.xml文件的配置
+### 2.4.5. <a name='yarn-site.xml'></a> yarn-site.xml文件的配置
 
 yarn框架的配置，主要是一些任务的启动位置
 
@@ -1320,7 +860,7 @@ MapReduce程序的运行方式：shuffle洗牌
 </configuration>
 ```
 
-### 2.4.6. <a name='DatanodeNamenode'></a>2.4.6. 创建 Datanode 和 Namenode 目录
+### 2.4.6. <a name='DatanodeNamenode'></a> 创建 Datanode 和 Namenode 目录
 
 ```sh
 sudo mkdir -p /opt/hadoop_tmp/hdfs/datanode
@@ -1328,7 +868,7 @@ sudo mkdir -p /opt/hadoop_tmp/hdfs/namenode
 sudo chown pi:pi -R /opt/hadoop_tmp
 ```
 
-### 2.4.7. <a name='NameNode-HDFS'></a>2.4.7. 格式化NameNode-格式化HDFS
+### 2.4.7. <a name='NameNode-HDFS'></a> 格式化NameNode-格式化HDFS
 
 配置完成后，运行命令，一般第一次的时候需要初始化，之后就不需要了
 
@@ -1363,7 +903,7 @@ ls
 tree
 ```
 
-### 2.4.8. <a name='hadoop-1'></a>2.4.8. 把主节点上配置好的hadoop目录复制到从节点上
+### 2.4.8. <a name='hadoop-1'></a> 把主节点上配置好的hadoop目录复制到从节点上
 
 版本一：
 
@@ -1401,7 +941,7 @@ sudo tar -zxf ~/hadoop.master.tar.gz -C /usr/local
 sudo chown -R hadoop /usr/local/hadoop
 ```
 
-### 2.4.9. <a name='hadoop222'></a>2.4.9. 最后，在主节点hadoop222上运行命令
+### 2.4.9. <a name='hadoop222'></a> 最后，在主节点hadoop222上运行命令
 
 直接执行start-all.sh，启动 Hadoop。
 
@@ -1411,7 +951,7 @@ sudo chown -R hadoop /usr/local/hadoop
 start-all.sh
 ```
 
-### 2.4.10. <a name='HDFS'></a>2.4.10. 启动HDFS，验证功能
+### 2.4.10. <a name='HDFS'></a> 启动HDFS，验证功能
 
 现在就可以启动Hadoop了，启动需要在Master节点上进行，执行如下命令：、
 
@@ -1480,7 +1020,7 @@ hadoop fs -mkdir /tmp
 hadoop fs -ls /
 ```
 
-### 2.4.11. <a name='-1'></a>2.4.11. 执行分布式实例
+### 2.4.11. <a name='-1'></a> 执行分布式实例
 
 执行分布式实例过程与伪分布式模式一样，首先创建HDFS上的用户目录，命令如下：
 
@@ -1515,7 +1055,7 @@ hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.
 
 通过Web界面查看任务进度，在Web界面点击 “Tracking UI” 这一列的History连接，可以看到任务的运行信息。
 
-### 2.4.12. <a name='-1'></a>2.4.12. 使用以下命令停止群集
+### 2.4.12. <a name='-1'></a> 使用以下命令停止群集
 
 最后，关闭Hadoop集群，需要在Master节点执行如下命令：
 
@@ -1529,7 +1069,7 @@ mr-jobhistory-daemon.sh stop historyserver
 stop-dfs && stop-yarn.sh
 ```
 
-### 2.4.13. <a name='Web'></a>2.4.13. Web查看集群状态
+### 2.4.13. <a name='Web'></a> Web查看集群状态
 
 或直接进入 Web-UI 界面进行查看，端口为 9870。可以看到此时有一个可用的 Datanode：
 
@@ -1539,7 +1079,7 @@ stop-dfs && stop-yarn.sh
 
 至此，Hadoop分布式集群搭建成功。
 
-### 2.4.14. <a name='Hadoop64'></a>2.4.14. 静默警告（由于使用了32位Hadoop构建和64位操作系统）
+### 2.4.14. <a name='Hadoop64'></a> 静默警告（由于使用了32位Hadoop构建和64位操作系统）
 
 修改Hadoop环境配置:
 
@@ -1846,7 +1386,7 @@ start-dfs.sh && start-yarn.sh
 2. NodeManager
 3. jps
 
-## 2.5. <a name='scala'></a>2.5. scala
+## 2.5. <a name='scala'></a> scala
 
 点击链接<https://www.scala-lang.org/download/2.12.10.html，下载对应版本scala（本文选择scala> 2.12.10）：
 
@@ -1888,7 +1428,7 @@ source /etc/profile
 scala -version
 ```
 
-## 2.6. <a name='spark'></a>2.6. 2.4 spark
+## 2.6. <a name='spark'></a> spark
 
 我们可以使用Spark SQL来执行常规分析，
 
@@ -1969,7 +1509,7 @@ sudo mv ./spark-2.0.2-bin-without-hadoop/ ./spark
 sudo chown -R hadoop ./spark
 ```
 
-### 2.6.2. <a name='Spark'></a>2.6.2. 配置Spark环境变量
+### 2.6.2. <a name='Spark'></a> 配置Spark环境变量
 
 ```bash
 sudo vim /etc/profile
@@ -2054,7 +1594,7 @@ bin/run-example SparkPi 2>&1 | grep "Pi is"
 这里涉及到Linux Shell中管道的知识，详情可以参考[Linux Shell中的管道命令](http://dblab.xmu.edu.cn/blog/824-2/)
 过滤后的运行结果如下图示，可以得到π 的 5 位小数近似值：
 
-### 2.6.3. <a name='spark-env.sh'></a>2.6.3. 配置spark-env.sh
+### 2.6.3. <a name='spark-env.sh'></a> 配置spark-env.sh
 
 安装后，还需要修改Spark的配置文件spark-env.sh
 
@@ -2120,7 +1660,7 @@ sudo tar -zxf ~/spark.master.tar.gz -C /usr/local
 sudo chown -R hadoop /usr/local/spark
 ```
 
-### 2.6.4. <a name='slaves'></a>2.6.4. 配置slaves
+### 2.6.4. <a name='slaves'></a> 配置slaves
 
 在Master节点主机上进行如下操作：
 
@@ -2162,7 +1702,7 @@ cd /usr/local/hadoop/
 sbin/start-all.sh
 ```
 
-#### 2.6.5.2. <a name='Spark-1'></a>2.6.5.2. 启动Spark集群
+#### 2.6.5.2. <a name='Spark-1'></a> 启动Spark集群
 
 启动Master节点
 
@@ -2218,7 +1758,7 @@ cd /usr/local/spark/
 在浏览器上查看Spark独立集群管理器的集群信息
 在master主机上打开浏览器，访问<http://master:8080>,（集群模式）
 
-#### 2.6.5.3. <a name='Spark-1'></a>2.6.5.3. 关闭Spark集群
+#### 2.6.5.3. <a name='Spark-1'></a> 关闭Spark集群
 
 关闭Master节点
 
@@ -3719,6 +3259,12 @@ Time: 2017-12-12 10:57:47
 ```
 
 ## 2.11. <a name='PostgreSQL'></a>2.11. PostgreSQL
+
+  Ubuntu默认包含PostgreSQL。要在Ubuntu上安装PostgreSQL，请使用apt get（或其他apt驱动）命令：
+
+  ```s
+  apt-get install postgresql-12
+  ```
 
 PostgreSQL vs MongoDB
 

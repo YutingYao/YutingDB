@@ -1,6 +1,20 @@
+
+
 # 1. scala概述
 
 [3小时入门](https://mp.weixin.qq.com/s/ZQNx1bLWH3vY9i4kemIQxQ)
+
+## scala的启动
+
+```js
+object Test1 {
+  def main(args: Array[String]): Unit = {
+    print("hello scala")
+  }
+}
+```
+
+我们对这段程序进行编译后，会生成两个class文件
 
 ## 1.1. 特性
 
@@ -1214,9 +1228,9 @@ ss: scala.collection.mutable.Buffer[String] = Buffer(hi, bye)
 ```
 
 
-# scala 包
+# 6. scala 包
 
-## java
+## 6.1. java
 
 java.time.LocalDateTime
 java.time.LocalDate
@@ -1279,7 +1293,7 @@ java.net.URLEncoder
 java.net.URLDncoder
 java.net.URISyntaxException
 
-## akka
+## 6.2. akka
 
 akka.actor.Actor
 akka.actor.ActorRef
@@ -1323,7 +1337,7 @@ akka.http.scaladsl.model.headers.Authorization
 akka.http.scaladsl.model._
 akka.Done
 
-## cats
+## 6.3. cats
 
 cats.syntax.show._
 cats.syntax.eq._
@@ -1395,7 +1409,7 @@ cats.instances.map._
 cats.instances.tuple._
 cats.instances.vector._
 
-## com
+## 6.4. com
 
 com.azavea.franklin
 com.azavea.stac
@@ -1409,7 +1423,7 @@ com.amazonaws
 com.github
 com.zaxxer
 
-## io
+## 6.5. io
 
 io.circe.generic
 io.circe.syntax
@@ -1427,7 +1441,7 @@ io.circe.jsonnumber
 
 io.chrisdavenport.log
 
-## org
+## 6.6. org
 
 org.apache.spark
 org.apache.log
@@ -1447,7 +1461,7 @@ org.openjdk.
 org.scalatestplus.scalacheck
 
 
-## scala
+## 6.7. scala
 
 scala.collection.immutable
 scala.collection.mutable
@@ -1483,7 +1497,7 @@ scala.annotation.tailrec
 scala.reflect.macros
 scala.deriving.mirror
 
-## zio
+## 6.8. zio
 
 zio.test.assertion
 zio.test.defaultrunnablespec
@@ -1495,7 +1509,7 @@ zio._
 
 
 
-## doobie
+## 6.9. doobie
 
 doobie.util.transactor.transactor
 doobie.util.transactor.strategy
@@ -1507,7 +1521,7 @@ doobie.free.connection.setautocommit
 doobie.free.connection.unit
 doobie.postgres
 
-## sttp
+## 6.10. sttp
 
 sttp.tapir.server
 sttp.tapir.generic.auto
@@ -1521,11 +1535,11 @@ sttp.client.sttpbackend
 sttp.model.statuscode
 sttp.capabilities.fs2.fs2streams
 
-## shaded
+## 6.11. shaded
 
 shaded.ahc.org.asynchttpclient
 
-## shapeless
+## 6.12. shapeless
 
 shapeless.tag
 shapeless.labelledgeneric
@@ -1533,36 +1547,36 @@ shapeless.labelled.fieldtype
 shapeless.test.illtyped
 shapeless.witness
 
-## eu
+## 6.13. eu
 
 eu.timepit.refined.types.numeric
 eu.timepit.refined.auto
 eu.timepit.refined.types.numeric.nonnegint
 eu.timepit.refined.types.string.nonemptystring
 
-## geotrellis
+## 6.14. geotrellis
 
 geotrellis.vector
 geotrellis.raster
 
-## pureconfig
+## 6.15. pureconfig
 
 pureconfig.generic.auto
 pureconfig.generic.producthint
 pureconfig.generic.semiauto
 
-## sbt
+## 6.16. sbt
 
 sbt._
 
-## spark
+## 6.17. spark
 
 spark.implicits
 
-## autoderivedsuite
+## 6.18. autoderivedsuite
 
 autoderivedsuite._
 
-## gigahorse
+## 6.19. gigahorse
 
 gigahorse.support
