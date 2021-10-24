@@ -2,72 +2,50 @@
 * [1.1. 三步走](#)
 * [1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）](#ibus)
 * [1.3. 安装远程控制（但这一步,目前没有成功）](#-1)
-* [1.4. ubuntu免密SSH登录](#ubuntuSSH)
-  * [1.4.1. 打开ssh服务端（每一台计算机都需要）](#ssh)
-  * [1.4.2. 免密登录-配置密钥对（每一条计算机都需要）](#-1)
-  * [1.4.3. 设置允许root远程登录（每一台计算机都需要）](#root)
-  * [1.4.4. 本地主机认证（其实，不认证本地主机也没有太大关系，主要是认证其他主机）](#-1)
-  * [1.4.5. scp传输到其他机器上（由于本人多次操作失败，改用U盘拷贝）](#scpU)
 * [2.1. docker环境](#docker)
-* [2.2. zeppelin](#zeppelin)
-* [2.3. hadoop](#hadoop)
-  * [2.3.1. 在每个节点上安装 Java 8，使其成为每个节点的默认 Java](#Java8Java)
-  * [2.3.2. 下载 Hadoop，解压并授予 pi 所有权](#Hadooppi)
-  * [2.3.3. 配置 Hadoop 环境变量-bash](#Hadoop-bash)
-  * [2.3.4. 为 Hadoop 环境初始化 JAVA_HOME](#HadoopJAVA_HOME)
-* [2.4. 在Master节点的workers文件中指定Slave节点](#MasterworkersSlave)
-  * [2.4.1. 验证 Hadoop 安装](#Hadoop)
-  * [2.4.2. core-site.xml文件的配置](#core-site.xml)
-  * [2.4.3. hdfs-site.xml文件的配置](#hdfs-site.xml)
-  * [2.4.4. mapred-site.xml文件的配置](#mapred-site.xml)
-  * [2.4.5. yarn-site.xml文件的配置](#yarn-site.xml)
-  * [2.4.6. 创建 Datanode 和 Namenode 目录](#DatanodeNamenode)
-  * [2.4.7. 格式化NameNode-格式化HDFS](#NameNode-HDFS)
-  * [2.4.8. 把主节点上配置好的hadoop目录复制到从节点上](#hadoop-1)
-  * [2.4.9. 最后，在主节点hadoop222上运行命令](#hadoop222)
-  * [2.4.10. 启动HDFS，验证功能](#HDFS)
-  * [2.4.11. 执行分布式实例](#-1)
-  * [2.4.12. 使用以下命令停止群集](#-1)
-  * [2.4.13. Web查看集群状态](#Web)
-  * [2.4.14. 静默警告（由于使用了32位Hadoop构建和64位操作系统）](#Hadoop64)
-* [2.5. scala](#scala)
-* [2.6. 2.4 spark](#spark)
-  * [2.6.1. 下载Spark，解包并授予pi所有权](#Sparkpi)
-  * [2.6.2. 配置Spark环境变量](#Spark)
-  * [2.6.3. 配置spark-env.sh](#spark-env.sh)
-  * [2.6.4. 配置slaves](#slaves)
-  * [2.6.5. 启动Spark集群](#Spark-1)
-    * [2.6.5.1. 启动Hadoop集群](#Hadoop-1)
-    * [2.6.5.2. 启动Spark集群](#Spark-1)
-    * [2.6.5.3. 关闭Spark集群](#Spark-1)
-    * [2.6.5.4. 启动bin目录下的spark-shell](#binspark-shell)
-  * [2.6.6. 为了方便可以修改Bash环境变量配置](#Bash)
-  * [2.6.7. 配置Spark作业监控](#Spark-1)
+* [ hadoop](#hadoop)
+	* [ 静默警告（由于使用了32位Hadoop构建和64位操作系统）](#32Hadoop64)
+* [ scala](#scala)
+* [ spark](#spark)
+	* [2.6.1. 下载Spark，解包并授予pi所有权](#Sparkpi)
+	* [ 配置Spark环境变量](#Spark)
+	* [ 配置spark-env.sh](#spark-env.sh)
+	* [ 配置slaves](#slaves)
+	* [2.6.5. 启动Spark集群](#Spark-1)
+		* [2.6.5.1. 启动Hadoop集群](#Hadoop)
+		* [ 启动Spark集群](#Spark-1)
+		* [ 关闭Spark集群](#Spark-1)
+		* [2.6.5.4. 启动bin目录下的spark-shell](#binspark-shell)
+	* [2.6.6. 为了方便可以修改Bash环境变量配置](#Bash)
+	* [2.6.7. 配置Spark作业监控](#Spark-1)
 * [2.7. 2.5 pyspark](#pyspark)
-  * [2.7.1. 使用Spark](#Spark-1)
-  * [2.7.2. 在Spark中采用本地模式启动pyspark](#Sparkpyspark)
-  * [2.7.3. pyspark独立应用程序编程](#pyspark-1)
-  * [2.7.4. Spark应用程序在集群中运行](#Spark-1)
-    * [2.7.4.1. 启动Hadoop集群](#Hadoop-1)
-    * [2.7.4.2. Hadoop YARN管理器](#HadoopYARN)
+	* [2.7.1. 使用Spark](#Spark-1)
+	* [2.7.2. 在Spark中采用本地模式启动pyspark](#Sparkpyspark)
+	* [2.7.3. pyspark独立应用程序编程](#pyspark-1)
+	* [2.7.4. Spark应用程序在集群中运行](#Spark-1)
+		* [2.7.4.1. 启动Hadoop集群](#Hadoop-1)
+		* [2.7.4.2. Hadoop YARN管理器](#HadoopYARN)
 * [2.8. geospark](#geospark)
-  * [2.8.1. geospark部署](#geospark-1)
-  * [2.8.2. geospark示例](#geospark-1)
-  * [2.8.3. 创建SpatialRDD(SRDD)](#SpatialRDDSRDD)
-  * [2.8.4. 空间范围查询(Spatial Range Query)](#SpatialRangeQuery)
+	* [2.8.1. geospark部署](#geospark-1)
+	* [2.8.2. geospark示例](#geospark-1)
+	* [2.8.3. 创建SpatialRDD(SRDD)](#SpatialRDDSRDD)
+	* [2.8.4. 空间范围查询(Spatial Range Query)](#SpatialRangeQuery)
 * [2.9. kafka](#kafka)
-  * [2.9.1. Ubuntu 系统安装Kafka](#UbuntuKafka)
-  * [2.9.2. 安装成功了Kafka](#Kafka)
-  * [2.9.3. Spark准备工作（jar文件）](#Sparkjar)
-  * [2.9.4. 编写Spark程序使用Kafka数据源](#SparkKafka)
+	* [2.9.1. Ubuntu 系统安装Kafka](#UbuntuKafka)
+	* [2.9.2. 安装成功了Kafka](#Kafka)
+	* [2.9.3. Spark准备工作（jar文件）](#Sparkjar)
+	* [2.9.4. 编写Spark程序使用Kafka数据源](#SparkKafka)
 * [2.10. flink](#flink)
 * [2.11. PostgreSQL](#PostgreSQL)
 * [2.12. MongoDB](#MongoDB)
-  * [2.12.1. Mongo Spark Connector 连接器](#MongoSparkConnector)
-    * [2.12.1.1. 案例](#-1)
-    * [2.12.1.2. 运价系统的架构图](#-1)
-  * [2.12.2. Spark 任务入口程序](#Spark-1)
-  * [2.12.3. Spark ＋ MongoDB演示](#SparkMongoDB)
+	* [2.12.1. Mongo Spark Connector 连接器](#MongoSparkConnector)
+		* [2.12.1.1. 案例](#-1)
+		* [2.12.1.2. 运价系统的架构图](#-1)
+	* [2.12.2. Spark 任务入口程序](#Spark-1)
+	* [2.12.3. Spark ＋ MongoDB演示](#SparkMongoDB)
+* [2.13. 安装SBT](#SBT)
+	* [2.13.1. Linux中安装SBT](#LinuxSBT)
+	* [2.13.2. Spark快速入门之SBT安装](#SparkSBT)
 * [3.1. 在local模式下运行](#local)
 * [3.2. 在remote模式下运行](#remote)
 * [3.3. yarn模式下的运行](#yarn)
@@ -79,15 +57,15 @@
 * [3.9. python](#python)
 * [3.10. spark](#spark-1)
 * [3.11. flink - Python env - Conda](#flink-Pythonenv-Conda)
-  * [3.11.1. 准备工作](#-1)
-  * [3.11.2. 搭建 PyFlink 环境](#PyFlink)
-    * [3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境](#Step1.JobManagerPyFlinkConda)
-    * [3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境](#Step2.TaskManagerPyFlinkConda)
-    * [3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境](#Step3.PyFlinkConda)
+	* [3.11.1. 准备工作](#-1)
+	* [3.11.2. 搭建 PyFlink 环境](#PyFlink)
+		* [3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境](#Step1.JobManagerPyFlinkConda)
+		* [3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境](#Step2.TaskManagerPyFlinkConda)
+		* [3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境](#Step3.PyFlinkConda)
 * [3.12. Apache Sedona](#ApacheSedona)
 * [3.13. oracle (貌似不太常用)](#oracle)
 * [3.14. 简单介绍oracle](#oracle-1)
-  * [3.14.1. 连接Oracle数据库](#Oracle)
+	* [3.14.1. 连接Oracle数据库](#Oracle)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -107,7 +85,7 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 
 # 1. 烧录系统
 
-## 1.1. <a name=''></a>1.1. 三步走
+## <a name=''></a>1.1. 三步走
 
 1. 下载树莓派ubuntu镜像-[Ubuntu Desktop 21.04](https://ubuntu.com/download/raspberry-pi/thank-you?version=21.04&architecture=desktop-arm64+raspi)，ubuntu镜像使用desktop版本
 2. [SD卡格式化](https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/)
@@ -121,7 +99,7 @@ Cluster made out of [Nvidia Jetson Nano's](https://github.com/YutingYao/NanoClus
 sudo apt install vim
 ```
 
-## 1.2. <a name='ibus'></a>1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）
+## <a name='ibus'></a>1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）
 
 ```sh
 #ctrl+alt+t进入终端，输入ibus
@@ -131,7 +109,7 @@ ibus-setup     #添加输入法（pinyin）
 ibus restart   #重启ibus
 ```
 
-## 1.3. <a name='-1'></a>1.3. 安装远程控制（但这一步,目前没有成功）
+## <a name='-1'></a>1.3. 安装远程控制（但这一步,目前没有成功）
 
 ```sh
 sudo apt-get install tightvncserver
@@ -171,7 +149,7 @@ sudo reboot
 
 [大数据架构](http://dblab.xmu.edu.cn/blog/988-2/)请参考这个链接。
 
-## 2.1. <a name='docker'></a>2.1. docker环境
+## <a name='docker'></a>2.1. docker环境
 
 安装docker
 
@@ -214,872 +192,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker run hello-world
 ```
 
-## 2.3. <a name='hadoop'></a> hadoop
+## <a name='hadoop'></a> hadoop
 
-Hadoop 集群的安装配置大致包括以下步骤：
-
-（1）步骤1：选定一台机器作为 Master；
-
-（2）步骤2：在Master节点上创建hadoop用户、安装SSH服务端、安装Java环境；
-
-（3）步骤3：在Master节点上安装Hadoop，并完成配置；
-
-（4）步骤4：在其他Slave节点上创建hadoop用户、安装SSH服务端、安装Java环境；
-
-（5）步骤5：将Master节点上的“/usr/local/hadoop”目录复制到其他Slave节点上；
-
-（6）步骤6：在Master节点上开启Hadoop；
-
-[树莓派的Hadoop 3集群上的分布式TensorFlow](https://oliver-hu.medium.com/distributed-tensorflow-on-raspberry-pis-hadoop-3-cluster-603a164bb896)
-
-### 2.3.1. <a name='Java8Java'></a> 在每个节点上安装 Java 8，使其成为每个节点的默认 Java
-
-```sh
-sudo apt-get install openjdk-8-jdk
-```
-
-貌似不需要
-
-```sh
-sudo update-alternatives --config java    // Select number corresponding to Java 8
-sudo update-alternatives --config javac   // Select number corresponding to Java 8
-```
-
-### 2.3.2. <a name='Hadooppi'></a> 下载 Hadoop，解压并授予 pi 所有权
-
-下载：
-
-```sh
-cd && wget https://www-us.apache.org/dist/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz
-```
-
-解压：
-
-```sh
-sudo tar -zxvf hadoop-2.7.3.tar.gz -C /root/training/
-```
-
-```sh
-sudo tar -zxvf hadoop-3.1.4.tar.gz -C module/hadoop/
-```
-
-最终采用如下版本：
-
-```sh
-sudo tar -xvf hadoop-3.3.1.tar.gz -C /opt
-```
-
-```sh
-rm hadoop-3.2.1.tar.gz && cd /opt
-```
-
-mv是移动目录的意思：
-
-```sh
-sudo mv hadoop-3.2.1 hadoop
-```
-
-chown是change own的缩写：
-
-```sh
-sudo chown pi:pi -R /opt/hadoop 
-```
-
-这里，把 pi:pi 改成 root:root
-
-```sh
-sudo chown root:root -R /opt/hadoop 
-```
-
-x : 从 tar 包中把文件提取出来
-z : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解压
-v : 显示详细信息
-f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
-
-### 2.3.3. <a name='Hadoop-bash'></a> 配置 Hadoop 环境变量-bash
-
-版本一：
-
-最终选择如下版本：
-
-```sh
-sudo vim ~/.bashrc
-```
-
-*添加（在文件顶部插入）：
-
-最终选择如下版本：
-
-```sh
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/
-export HADOOP_HOME=/opt/hadoop
-export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
-export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
-```
-
-版本二：
-
-```sh
-sudo vim /root/.bash_profile
-```
-
-*添加（在文件顶部插入）：
-
-```sh
-#设置Hadoop的家目录
-HADOOP_HOME=/root/training/hadoop-2.7.3
-export HADOOP_HOME
-
-#将Hadoop的家目录添加到环境变量中
-PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
-export PATH
-```
-
-版本三：
-
-```sh
-export PATH=$PATH:/usr/local/hadoop/bin:/usr/local/hadoop/sbin
-```
-
-保存退出后，运行命令
-
-```sh
-source ~/.bashrc
-```
-
-使配置的环境变量生效。
-
-### 2.3.4. <a name='HadoopJAVA_HOME'></a> 为 Hadoop 环境初始化 JAVA_HOME
-
-```sh
-sudo vim /opt/hadoop/etc/hadoop/hadoop-env.sh
-```
-
-*添加（在文件顶部插入）：
-
-版本一：
-
-最终选择如下版本：
-
-```sh
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/
-```
-
-版本二：
-
-```sh
-export JAVA_HOME=/root/training/jdk1.8.0_144
-```
-
-版本三：
-
-```sh
-export JAVA_HOME=/usr/java/jdk1.8.0_13
-```
-
-版本四：
-
-```sh
-export  JAVA_HOME=/usr/java/jdk1.8.0_281/
-```
-
-**此外，可能还需要修改**
-
-```sh
-sudo vim yarn-env.sh
-```
-
-最终选择如下版本：
-
-```sh
-JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64/
-```
-
-JAVA_HOME=/usr/java/jdk1.8.0_231
-
-## 2.4. <a name='MasterworkersSlave'></a>在Master节点的workers文件中指定Slave节点
-
-版本一：
-
-```sh
-sudo vim slaves
-```
-
-chenc02
-chenc03
-
-版本二：
-
-```sh
-sudo vim workers 
-```
-
-node02
-
-版本三：
-
-```sh
-sudo vim workers 
-```
-
-Slave1
-
-### 2.4.1. <a name='Hadoop'></a>2.4.1. 验证 Hadoop 安装
-
-```sh
-source ~/.bashrc
-cd && hadoop version | grep Hadoop
-Hadoop 3.2.1
-```
-
-设置 Hadoop 集群
-hadoop-env.sh           # java的环境变量
-yarn-env.sh             # 制定yarn框架的Java运行环境
-slaves                  # 指定datanode数据存储服务器
-core-site.xml           # hadoop-web界面路径
-hdfs-site.xml           # 文件系统的配置文件
-mapred-site.xml         # mapreducer 任务配置文件
-yarn-site.xml           # yarn框架配置，主要一些任务的启动位置
-
-### 2.4.2. <a name='core-site.xml'></a>core-site.xml文件的配置
-
-这个是hadoop的核心配置，这里需要配置两属性，
-
-fs.default.name 配置hadoop的HDFS系统命令，位置为主机的9000端口，
-
-hadoop.tmp.dir 配置haddop的tmp目录的根位置。
-
-```sh
-sudo vim /opt/hadoop/etc/hadoop/core-site.xml
-```
-
-修改文件结尾为：
-版本一：
-
-```xml
-<configuration>
-  <property>
-    <name>fs.defaultFS</name>
-    <value>hdfs://pi1:9000</value>
-  </property>
-</configuration>
-```
-
-版本二：
-
-配置NameNode的地址，9000是进行RPC通信的端口号
-
-```xml
-<property>
-<name>fs.defaultFS</name>
-<value>hdfs://hadoop222:9000</value>
-</property>
-```
-
-注意：该参数一定要进行配置，Linux的tmp目录是临时目录，当系统重启后数据会丢失
-
-HDFS数据保存在Linux的哪个目录，默认路径是Linux的tmp目录
-
-```xml
-<property>
-<name>hadoop.tmp.dir</name>
-<value>/root/training/hadoop-2.7.3/tmp</value>
-</property>
-```
-
-版本三：
-
-```xml
-<configuration>
-<property>
-        <name>fs.defaultFS</name>
-        <value>hdfs://chenc01:9000</value>
-</property>
-
-<property>
-        <name>io.file.buffer.size</name>
-        <value>131072</value>
-</property>
-
-<property>
-        <name>hadoop.tmp.dir</name>
-        <value>file:/home/hadoop/tmp</value>
-        <description>Abase for other tmporary directries.</description>
-</property>
-</configuration>
-```
-
-版本四：
-
-```xml
-<configuration>
-        <property>
-                <name>fs.defaultFS</name>
-                <value>hdfs://Master:9000</value>
-        </property>
-        <property>
-                <name>hadoop.tmp.dir</name>
-                <value>file:/usr/local/hadoop/tmp</value>
-                <description>Abase for other temporary directories.</description>
-        </property>
-</configuration>
-```
-
-### 2.4.3. <a name='hdfs-site.xml'></a> hdfs-site.xml文件的配置
-
-对于Hadoop的分布式文件系统HDFS而言，
-
-一般都是采用冗余存储，冗余因子通常为3，
-
-也就是说，一份数据保存三份副本。
-
-但是，本教程只有一个Slave节点作为数据节点，
-
-即集群中只有一个数据节点，数据只能保存一份，
-
-所以 ，dfs.replication的值还是设置为 1。
-
-HDFS主要的配置文件， dfs.http.address配置了hdfs的http的访问位置；
-
-dfs.replication 配置文件的副本，一般不大于从机个数。
-
-```sh
-pi@pi1:~$ sudo mousepad /opt/hadoop/etc/hadoop/hdfs-site.xml
-```
-
-修改文件结尾为：
-
-版本一：
-
-```xml
-<configuration>
-  <property>
-    <name>dfs.datanode.data.dir</name>
-    <value>file:///opt/hadoop_tmp/hdfs/datanode</value>
-  </property>
-  <property>
-    <name>dfs.namenode.name.dir</name>
-    <value>file:///opt/hadoop_tmp/hdfs/namenode</value>
-  </property>
-  <property>
-    <name>dfs.replication</name>
-    <value>1</value>
-  </property>
-</configuration> 
-```
-
-版本二：
-
-注意：dfs.replication参数配置的原则，
-
-一般情况下，数据块的冗余度跟数据节点（DataNode）的个数保持一致，最大不超过3
-
-数据块的冗余度，默认为3，伪分布模式仅有一台机器，就只能设置为1
-
-```xml
-<property>
-<name>dfs.replication</name>
-<value>3</value>
-</property>
-```
-
-是否开启HDFS的权限检查，默认为true
-
-```xml
-<property>
-<name>dfs.permissions</name>
-<value>false</value>
-</property>
-```
-
-版本三：
-
-```xml
-<configuration>
-<property>
-<configuration>
-<property>
-        <name>dfs.namenode.secondary.http-address</name>
-        <value>chenc01:9000</value>
-</property>
-
-<property>
-        <name>dfs.namenode.name.dir</name>
-        <value>file:/home/hadoop/dfs/name</value>
-</property>
-
-<property>
-        <name>dfs.datanode.data.dir</name>
-        <value>file:/home/hadoop/dfs/data</value>
-</property>
-
-<property>
-        <name>dfs.replication</name>
-        <value>2</value>
-</property>
-
-<property>
-        <name>dfs.webhdfs.enabled</name>
-        <value>true</value>
-</property>
-</configuration>
-```
-
-版本四：
-
-```xml
-<configuration>
-        <property>
-                <name>dfs.namenode.secondary.http-address</name>
-                <value>Master:50090</value>
-        </property>
-        <property>
-                <name>dfs.replication</name>
-                <value>1</value>
-        </property>
-        <property>
-                <name>dfs.namenode.name.dir</name>
-                <value>file:/usr/local/hadoop/tmp/dfs/name</value>
-        </property>
-        <property>
-                <name>dfs.datanode.data.dir</name>
-                <value>file:/usr/local/hadoop/tmp/dfs/data</value>
-        </property>
-</configuration>
-```
-
-### 2.4.4. <a name='mapred-site.xml'></a> mapred-site.xml文件的配置
-
-“/usr/local/hadoop/etc/hadoop”目录下有一个mapred-site.xml.template，
-
-需要修改文件名称，把它重命名为mapred-site.xml，
-
-然后，把mapred-site.xml文件配置成如下内容：
-
-这个是mapreduce任务配置文件，
-
-mapreduce.framework.name 属性下配置yarn,
-
-mapred.map.tasks和mapred.reduce.tasks 分别为map和reduce 的任务数。
-
-同时指定hadoop历史服务器hsitoryserver
-
-我们可以通过historyserver查看mapreduce的作业记录，
-
-比如用了多少个map,用了多少个reduce，
-
-作业启动时间，作业完成时间。
-
-默认清空下，hadoop历史服务器是没有启动的，我们需要通过命令来启动:
-
-```sh
-/home/hadoop/hadoop-3.1.3/sbin/mr-jobhistory-daemon.sh  start historyserver
-```
-
-注意：默认情况下是没有mapred-site.xml文件的，
-但有mapred-site.xml.template文件，
-运行命令cp mapred-site.xml.templatemapred-site.xml拷贝一份即可。
-
-```sh
-sudo vim /opt/hadoop/etc/hadoop/mapred-site.xml
-```
-
-修改文件结尾为：
-
-版本一：
-
-```xml
-<configuration>
-  <property>
-    <name>mapreduce.framework.name</name>
-    <value>yarn</value>
-  </property>
-</configuration>
-```
-
-版本二：
-
-MapReduce程序运行使用的框架
-
-```xml
-<property>
-<name>mapreduce.framework.name</name>
-<value>yarn</value>
-</property>
-```
-
-版本三：
-
-```xml
-<configuration>
-<property>
-        <name>mapreduce.framework.name</name>
-        <value>yarn</value>
-</property>
-
-<property>
-        <name>mapreduce.jobhistory.address</name>
-        <value>chenc01:10020</value>
-</property>
-
-<property>
-        <name>mapreduce.jobhistory.webapp.address</name>
-        <value>chenc01:19888</value>
-</property>
-</configuration>
-```
-
-版本四：
-
-```xml
-<configuration>
-        <property>
-                <name>mapreduce.framework.name</name>
-                <value>yarn</value>
-        </property>
-        <property>
-                <name>mapreduce.jobhistory.address</name>
-                <value>Master:10020</value>
-        </property>
-        <property>
-                <name>mapreduce.jobhistory.webapp.address</name>
-                <value>Master:19888</value>
-        </property>
-        <property>
-                <name>yarn.app.mapreduce.am.env</name>
-                <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
-        </property>
-        <property>
-                <name>mapreduce.map.env</name>
-                <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
-        </property>
-        <property>
-                <name>mapreduce.reduce.env</name>
-                <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
-        </property> 
-</configuration>
-```
-
-### 2.4.5. <a name='yarn-site.xml'></a> yarn-site.xml文件的配置
-
-yarn框架的配置，主要是一些任务的启动位置
-
-```sh
-sudo vim /opt/hadoop/etc/hadoop/yarn-site.xml
-```
-
-修改文件结尾为：
-
-版本一：
-
-```xml
-<configuration>
-  <property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
-  </property>
-  <property>
-    <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>  
-    <value>org.apache.hadoop.mapred.ShuffleHandler</value>
-  </property>
-</configuration> 
-```
-
-版本二：
-
-Yarn的主节点ResourceManager的位置
-
-MapReduce程序的运行方式：shuffle洗牌
-
-```xml
-<property>
-<name>yarn.nodemanager.aux-services</name>
-<value>mapreduce_shuffle</value>
-</property>
-```
-
-```xml
-<property>
-<name>yarn.resourcemanager.hostname</name>
-<value>hadoop221</value>
-</property>
-```
-
-版本三：
-
-```xml
-<configuration>
-<!-- Site specific YARN configuration properties -->
-<proetry>
-        <name>yarn.nodemanager.aux-service</name>
-        <value>mapreduce_shuffle</value>
-</proetry>
-
-<proetry>
-        <name>yarn.nodemanager.uax-service.mapreduce.shuffle.class</name>
-        <value>org.apache.hadoop.mapreduced.ShuffleHandle</value>
-</proetry>
-<proetry>
-        <name>yarn.resoucemanager.address</name>
-        <value>chenc01:8032</value>
-</proetry>
-<proetry>
-        <name>yarn.resourcemanager.shceduler.address</name>
-        <value>chenc01:8030</value>
-</proetry>
-<proetry>
-        <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>chenc01:8031</value>
-</proetry>
-
-<proetry>
-        <name>yarn.resourcemanager.admin.address</name>
-        <value>chenc01:8033</value>
-</proetry>
-
-<proetry>
-        <name>yarn.resourcemanager.webapp.address</name>
-        <value>chenc01:8088</value>
-</proetry>
-</configuration>
-```
-
-版本五：
-
-```xml
-<configuration>
-        <property>
-                <name>yarn.resourcemanager.hostname</name>
-                <value>Master</value>
-        </property>
-        <property>
-                <name>yarn.nodemanager.aux-services</name>
-                <value>mapreduce_shuffle</value>
-        </property>
-</configuration>
-```
-
-### 2.4.6. <a name='DatanodeNamenode'></a> 创建 Datanode 和 Namenode 目录
-
-```sh
-sudo mkdir -p /opt/hadoop_tmp/hdfs/datanode
-sudo mkdir -p /opt/hadoop_tmp/hdfs/namenode
-sudo chown pi:pi -R /opt/hadoop_tmp
-```
-
-### 2.4.7. <a name='NameNode-HDFS'></a> 格式化NameNode-格式化HDFS
-
-配置完成后，运行命令，一般第一次的时候需要初始化，之后就不需要了
-
-版本一：
-
-```sh
-hdfs namenode –format
-hdfs namenode -format
-```
-
-可能出现创建文件夹失败的问题，这个权限问题，
-
-使用 root 账号使用命令sudo chmod -R a+w /绝对路径。
-
-初始化HDFS失败都要把之前创建的文件夹给删除。
-
-版本二：
-
-```sh
-hdfs namenode -format -force
-```
-
-版本三：
-
-```sh
-cd /home/hadoop/hadoop-3.1.3/bin/
-./hdfs namenode -format
-# 查看是否生成相应的内容
-
-cd /home/hadoop/dfs/
-ls
-tree
-```
-
-### 2.4.8. <a name='hadoop-1'></a> 把主节点上配置好的hadoop目录复制到从节点上
-
-版本一：
-
-```sh
-scp -r hadoop-2.7.3/ root@hadoop223:/root/training
-```
-
-```sh
-scp -r hadoop-2.7.3/ root@hadoop224:/root/training
-```
-
-版本三：
-
-```sh
-scp -r /home/hadoop/hadoop-3.13 hadoop@chenc02:~/
-scp -r /home/hadoop/hadoop-3.13 hadoop@chenc03:~/
-```
-
-版本四：
-
-```sh
-cd /usr/local
-sudo rm -r ./hadoop/tmp     # 删除 Hadoop 临时文件
-sudo rm -r ./hadoop/logs/*   # 删除日志文件
-tar -zcf ~/hadoop.master.tar.gz ./hadoop   # 先压缩再复制
-cd ~
-scp ./hadoop.master.tar.gz Slave1:/home/hadoop
-```
-
-然后在Slave1节点上执行如下命令：
-
-```sh
-sudo rm -r /usr/local/hadoop    # 删掉旧的（如果存在）
-sudo tar -zxf ~/hadoop.master.tar.gz -C /usr/local
-sudo chown -R hadoop /usr/local/hadoop
-```
-
-### 2.4.9. <a name='hadoop222'></a> 最后，在主节点hadoop222上运行命令
-
-直接执行start-all.sh，启动 Hadoop。
-
-此时 node02上的相关服务也会被启动：
-
-```sh
-start-all.sh
-```
-
-### 2.4.10. <a name='HDFS'></a> 启动HDFS，验证功能
-
-现在就可以启动Hadoop了，启动需要在Master节点上进行，执行如下命令：、
-
-```sh
-start-dfs.sh
-start-yarn.sh
-mr-jobhistory-daemon.sh start historyserver
-```
-
-```sh
-start-dfs && start-yarn.sh
-```
-
-使用jps命令验证设置。在每台服务器上使用 jps 命令查看服务进程，
-
-```sh
-jps
-```
-
-通过命令jps可以查看各个节点所启动的进程。
-
-如果已经正确启动，则在Master节点上可以看到
-
-* NameNode
-* ResourceManager
-* SecondrryNameNode
-* JobHistoryServer
-
-在Slave节点可以看到
-
-* DataNode
-* NodeManager
-
-另外还需要在Master节点上通过命令：
-
-```sh
-hdfs dfsadmin -report
-```
-
-查看数据节点是否正常启动，
-
-如果屏幕信息中的“Live datanodes”不为 0 ，则说明集群启动成功
-
-也可以在Linux系统的浏览器中输入地址“<http://master:9870/>”，
-
-通过 Web 页面看到查看名称节点和数据节点的状态。如果不成功，可以通过启动日志排查原因。
-
-这里再次强调，伪分布式模式和分布式模式切换时需要注意以下事项：
-
-（a）从分布式切换到伪分布式时，不要忘记修改slaves配置文件；
-
-（b）在两者之间切换时，若遇到无法正常启动的情况，可以删除所涉及节点的临时文件夹，
-
-这样虽然之前的数据会被删掉，但能保证集群正确启动。
-
-所以，如果集群以前能启动，但后来启动不了，
-
-特别是数据节点无法启动，不妨试着删除所有节点（包括Slave节点）上的“/usr/local/hadoop/tmp”文件夹，
-
-再重新执行一次“hdfs namenode -format”，再次启动即可。
-
-创建临时目录以测试文件系统：
-
-```sh
-hadoop fs -mkdir /tmp
-hadoop fs -ls /
-```
-
-### 2.4.11. <a name='-1'></a> 执行分布式实例
-
-执行分布式实例过程与伪分布式模式一样，首先创建HDFS上的用户目录，命令如下：
-
-```sh
-hdfs dfs -mkdir -p /user/hadoop
-```
-
-然后，在HDFS中创建一个input目录，并把“/usr/local/hadoop/etc/hadoop”目录中的配置文件作为输入文件复制到input目录中，命令如下：
-
-```sh
-hdfs dfs -mkdir input
-hdfs dfs -put /usr/local/hadoop/etc/hadoop/*.xml input
-```
-
-接着就可以运行 MapReduce 作业了，命令如下：
-
-```sh
-hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar grep input output 'dfs[a-z.]+'
-```
-
-运行时的输出信息与伪分布式类似，会显示MapReduce作业的进度。
-
-执行过程可能会有点慢，但是，如果迟迟没有进度，
-
-比如5分钟都没看到进度变化，那么不妨重启Hadoop再次测试。
-
-若重启还不行，则很有可能是内存不足引起，建议增大虚拟机的内存，
-
-或者通过更改YARN的内存配置来解决。
-
-在执行过程中，可以在Linux系统中打开浏览器，在地址栏输入“<http://master:8088/cluster>”，
-
-通过Web界面查看任务进度，在Web界面点击 “Tracking UI” 这一列的History连接，可以看到任务的运行信息。
-
-### 2.4.12. <a name='-1'></a> 使用以下命令停止群集
-
-最后，关闭Hadoop集群，需要在Master节点执行如下命令：
-
-```sh
-stop-yarn.sh
-stop-dfs.sh
-mr-jobhistory-daemon.sh stop historyserver
-```
-
-```sh
-stop-dfs && stop-yarn.sh
-```
-
-### 2.4.13. <a name='Web'></a> Web查看集群状态
-
-或直接进入 Web-UI 界面进行查看，端口为 9870。可以看到此时有一个可用的 Datanode：
-
-接着可以查看 Yarn 的情况，端口号为 8088 ：
-
-浏览器输入<http://10.0.0.61:8088/cluster>
-
-至此，Hadoop分布式集群搭建成功。
-
-### 2.4.14. <a name='Hadoop64'></a> 静默警告（由于使用了32位Hadoop构建和64位操作系统）
+### <a name='32Hadoop64'></a> 静默警告（由于使用了32位Hadoop构建和64位操作系统）
 
 修改Hadoop环境配置:
 
@@ -1386,7 +501,7 @@ start-dfs.sh && start-yarn.sh
 2. NodeManager
 3. jps
 
-## 2.5. <a name='scala'></a> scala
+## <a name='scala'></a> scala
 
 点击链接<https://www.scala-lang.org/download/2.12.10.html，下载对应版本scala（本文选择scala> 2.12.10）：
 
@@ -1428,7 +543,7 @@ source /etc/profile
 scala -version
 ```
 
-## 2.6. <a name='spark'></a> spark
+## <a name='spark'></a> spark
 
 我们可以使用Spark SQL来执行常规分析，
 
@@ -1460,7 +575,7 @@ Apache Spark on [Google Colaboratory](https://mikestaszel.com/2018/03/07/apache-
 
 [spark 案例](https://github.com/YutingYao/spark)
 
-### 2.6.1. <a name='Sparkpi'></a>2.6.1. 下载Spark，解包并授予pi所有权
+### <a name='Sparkpi'></a>2.6.1. 下载Spark，解包并授予pi所有权
 
 版本一：
 
@@ -1509,7 +624,7 @@ sudo mv ./spark-2.0.2-bin-without-hadoop/ ./spark
 sudo chown -R hadoop ./spark
 ```
 
-### 2.6.2. <a name='Spark'></a> 配置Spark环境变量
+### <a name='Spark'></a> 配置Spark环境变量
 
 ```bash
 sudo vim /etc/profile
@@ -1594,7 +709,7 @@ bin/run-example SparkPi 2>&1 | grep "Pi is"
 这里涉及到Linux Shell中管道的知识，详情可以参考[Linux Shell中的管道命令](http://dblab.xmu.edu.cn/blog/824-2/)
 过滤后的运行结果如下图示，可以得到π 的 5 位小数近似值：
 
-### 2.6.3. <a name='spark-env.sh'></a> 配置spark-env.sh
+### <a name='spark-env.sh'></a> 配置spark-env.sh
 
 安装后，还需要修改Spark的配置文件spark-env.sh
 
@@ -1660,7 +775,7 @@ sudo tar -zxf ~/spark.master.tar.gz -C /usr/local
 sudo chown -R hadoop /usr/local/spark
 ```
 
-### 2.6.4. <a name='slaves'></a> 配置slaves
+### <a name='slaves'></a> 配置slaves
 
 在Master节点主机上进行如下操作：
 
@@ -1689,9 +804,9 @@ slave01
 slave02
 ```
 
-### 2.6.5. <a name='Spark-1'></a>2.6.5. 启动Spark集群
+### <a name='Spark-1'></a>2.6.5. 启动Spark集群
 
-#### 2.6.5.1. <a name='Hadoop-1'></a>2.6.5.1. 启动Hadoop集群
+#### <a name='Hadoop'></a>2.6.5.1. 启动Hadoop集群
 
 启动Spark集群前，要先启动Hadoop集群。
 
@@ -1702,7 +817,7 @@ cd /usr/local/hadoop/
 sbin/start-all.sh
 ```
 
-#### 2.6.5.2. <a name='Spark-1'></a> 启动Spark集群
+#### <a name='Spark-1'></a> 启动Spark集群
 
 启动Master节点
 
@@ -1758,7 +873,7 @@ cd /usr/local/spark/
 在浏览器上查看Spark独立集群管理器的集群信息
 在master主机上打开浏览器，访问<http://master:8080>,（集群模式）
 
-#### 2.6.5.3. <a name='Spark-1'></a> 关闭Spark集群
+#### <a name='Spark-1'></a> 关闭Spark集群
 
 关闭Master节点
 
@@ -1779,7 +894,7 @@ cd /usr/local/hadoop/
 sbin/stop-all.sh
 ```
 
-#### 2.6.5.4. <a name='binspark-shell'></a>2.6.5.4. 启动bin目录下的spark-shell
+#### <a name='binspark-shell'></a>2.6.5.4. 启动bin目录下的spark-shell
 
 ```sh
 ./bin/spark-shell
@@ -1787,7 +902,7 @@ sbin/stop-all.sh
 
 即会出现spark scala的命令行执行环境：
 
-### 2.6.6. <a name='Bash'></a>2.6.6. 为了方便可以修改Bash环境变量配置
+### <a name='Bash'></a>2.6.6. 为了方便可以修改Bash环境变量配置
 
 ```sh
 vim /etc/bash.bashrc
@@ -1806,7 +921,7 @@ export PATH=${JAVA_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${SPARK_HOME
 source /etc/bash.bashrc
 ```
 
-### 2.6.7. <a name='Spark-1'></a>2.6.7. 配置Spark作业监控
+### <a name='Spark-1'></a>2.6.7. 配置Spark作业监控
 
 与Hadoop类似，Spark还提供监视您部署的作业的功能。但是，使用Spark，我们必须手动配置监控选项。
 
@@ -1859,7 +974,7 @@ Spark历史服务器界面可以通过 <http://pi1:18080> 访问
 spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.11-2.4.4.jar 7
 ```
 
-## 2.7. <a name='pyspark'></a>2.7. 2.5 pyspark
+## <a name='pyspark'></a>2.7. 2.5 pyspark
 
 前面已经安装了Hadoop和Spark，
 
@@ -1871,7 +986,7 @@ spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi $SPA
 
 这里假设不需要用到HDFS，
 
-### 2.7.1. <a name='Spark-1'></a>2.7.1. 使用Spark
+### <a name='Spark-1'></a>2.7.1. 使用Spark
 
 因此，就没有启动Hadoop。现在我们直接开始使用Spark。
 
@@ -1902,7 +1017,7 @@ Spark的运行模式取决于传递给SparkContext的Master URL的值。Master U
 * yarn-cluster 以集群模式连接YARN集群。集群的位置可以在HADOOP_CONF_DIR 环境变量中找到。
 * mesos://HOST:PORT 连接到指定的Mesos集群。默认接口是5050。
 
-### 2.7.2. <a name='Sparkpyspark'></a>2.7.2. 在Spark中采用本地模式启动pyspark
+### <a name='Sparkpyspark'></a>2.7.2. 在Spark中采用本地模式启动pyspark
 
 –master：
 
@@ -1960,7 +1075,7 @@ bin/pyspark
 >>> exit()
 ```
 
-### 2.7.3. <a name='pyspark-1'></a>2.7.3. pyspark独立应用程序编程
+### <a name='pyspark-1'></a>2.7.3. pyspark独立应用程序编程
 
 接着我们通过一个简单的应用程序来演示如何通过 Spark API 编写一个独立应用程序。
 
@@ -1999,7 +1114,7 @@ python3 ~/test.py
 
 Lines with a: 62, Lines with b: 30
 
-### 2.7.4. <a name='Spark-1'></a>2.7.4. Spark应用程序在集群中运行
+### <a name='Spark-1'></a>2.7.4. Spark应用程序在集群中运行
 
 需要借助于集群管理器（包括本地集群管理器、YARN、Mesos）来为其实现资源管理调度服务，
 
@@ -2013,7 +1128,7 @@ Lines with a: 62, Lines with b: 30
 
 请登录Linux系统，打开一个终端。
 
-#### 2.7.4.1. <a name='Hadoop-1'></a>2.7.4.1. 启动Hadoop集群
+#### <a name='Hadoop-1'></a>2.7.4.1. 启动Hadoop集群
 
 ```sh
 cd /usr/local/hadoop/
@@ -2078,7 +1193,7 @@ res1: String = # Apache Spark
 
 用户在独立集群管理Web界面查看应用的运行情况，可以浏览器中输入地址进行查看(<http://master:8080/>)
 
-#### 2.7.4.2. <a name='HadoopYARN'></a>2.7.4.2. Hadoop YARN管理器
+#### <a name='HadoopYARN'></a>2.7.4.2. Hadoop YARN管理器
 
 （1）在集群中运行应用程序JAR包
 
@@ -2123,7 +1238,7 @@ res3: String = # Apache Spark
 
 可以在浏览器中输入地址进行查看(<http://master:8088/cluster>)
 
-## 2.8. <a name='geospark'></a>2.8. geospark
+## <a name='geospark'></a>2.8. geospark
 
 [系列教程](https://www.jianshu.com/nb/37398936)
 
@@ -2156,7 +1271,7 @@ GeoSpark扩展了Spark Core和SparkSQL并提出了空间弹性分布式数据集
 * 面：Polygon、MultiPolygon
 * 集合：GeometryCollection
 
-### 2.8.1. <a name='geospark-1'></a>2.8.1. geospark部署
+### <a name='geospark-1'></a>2.8.1. geospark部署
 
 环境准备
 
@@ -2204,7 +1319,7 @@ GeoSpark扩展了Spark Core和SparkSQL并提出了空间弹性分布式数据集
   </dependencies>
 ```
 
-### 2.8.2. <a name='geospark-1'></a>2.8.2. geospark示例
+### <a name='geospark-1'></a>2.8.2. geospark示例
 
 尝鲜：新建一个CSV文件checkin.csv：
 
@@ -2287,7 +1402,7 @@ object GeoDemoApp {
 }
 ```
 
-### 2.8.3. <a name='SpatialRDDSRDD'></a>2.8.3. 创建SpatialRDD(SRDD)
+### <a name='SpatialRDDSRDD'></a>2.8.3. 创建SpatialRDD(SRDD)
 
 GeoSpark-Core 提供了三种特殊的SpatialRDD：
 
@@ -2477,7 +1592,7 @@ val targetCrsCode = "epsg:3857"
 objectRDD.CRSTransform(sourceCrsCode, targetCrsCode)
 ```
 
-### 2.8.4. <a name='SpatialRangeQuery'></a>2.8.4. 空间范围查询(Spatial Range Query)
+### <a name='SpatialRangeQuery'></a>2.8.4. 空间范围查询(Spatial Range Query)
 
 空间范围查询，顾名思义我们可以给定一个范围（query window），然后查询出包含在当前范围内的地理对象。
 
@@ -2941,7 +2056,7 @@ POINT (-88.321102 32.35078) 2.bus
 
 ```
 
-## 2.9. <a name='kafka'></a>2.9. kafka
+## <a name='kafka'></a>2.9. kafka
 
 到[Kafka官网](https://kafka.apache.org/downloads)下载安装文件时，一定要选择和自己电脑上已经安装的scala版本号一致才可以，
 
@@ -2953,7 +2068,7 @@ POINT (-88.321102 32.35078) 2.bus
 
 前面的2.11就是支持的scala版本号，后面的0.10.2.0是Kafka自身的版本号。
 
-### 2.9.1. <a name='UbuntuKafka'></a>2.9.1. Ubuntu 系统安装Kafka
+### <a name='UbuntuKafka'></a>2.9.1. Ubuntu 系统安装Kafka
 
 访问Kafka官方下载页面,下载稳定版本0.10.1.0的kafka.此安装包内已经附带zookeeper,不需要额外安装zookeeper.按顺序执行如下步骤:
 
@@ -2980,7 +2095,7 @@ Partition是物理上的概念，每个Topic包含一个或多个Partition.
 6. Consumer Group
 每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）
 
-### 2.9.2. <a name='Kafka'></a>2.9.2. 安装成功了Kafka
+### <a name='Kafka'></a>2.9.2. 安装成功了Kafka
 
 进入kafka所在的目录
 
@@ -3102,7 +2217,7 @@ hello spark
 
 如果记不住是哪个终端，那么所有这些终端窗口都不要关闭，要继续留着后面使用。
 
-### 2.9.3. <a name='Sparkjar'></a>2.9.3. Spark准备工作（jar文件）
+### <a name='Sparkjar'></a>2.9.3. Spark准备工作（jar文件）
 
 按照我们前面安装好的Spark版本，这些jar包都不在里面，
 
@@ -3178,7 +2293,7 @@ export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath):$(/usr/loc
 export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath):/usr/local/spark/examples/jars/*:/usr/local/spark/jars/kafka/*:/usr/local/kafka/libs/*
 ```
 
-### 2.9.4. <a name='SparkKafka'></a>2.9.4. 编写Spark程序使用Kafka数据源
+### <a name='SparkKafka'></a>2.9.4. 编写Spark程序使用Kafka数据源
 
 下面，我们就可以进行程序编写了。
 
@@ -3253,12 +2368,12 @@ Time: 2017-12-12 10:57:47
 
 ```
 
-## 2.10. <a name='flink'></a>2.10. flink
+## <a name='flink'></a>2.10. flink
 
 ```sh
 ```
 
-## 2.11. <a name='PostgreSQL'></a>2.11. PostgreSQL
+## <a name='PostgreSQL'></a>2.11. PostgreSQL
 
   Ubuntu默认包含PostgreSQL。要在Ubuntu上安装PostgreSQL，请使用apt get（或其他apt驱动）命令：
 
@@ -3292,7 +2407,7 @@ flink连接
 
 [创建分析型数据库PostgreSQL版结果表](https://help.aliyun.com/knowledge_detail/162453.html)
 
-## 2.12. <a name='MongoDB'></a>2.12. MongoDB
+## <a name='MongoDB'></a>2.12. MongoDB
 
 [MongoDB 如何上手和避坑？](https://mp.weixin.qq.com/s/EhVsdlRQDC1VP1S1QQfnkg)
 
@@ -3330,7 +2445,7 @@ flink连接
 
 在进行一些预处理后，MongoDB就会比较容地支持到。而一般来说，HDFS是不支持更新类型操作的。
 
-### 2.12.1. <a name='MongoSparkConnector'></a>2.12.1. Mongo Spark Connector 连接器
+### <a name='MongoSparkConnector'></a>2.12.1. Mongo Spark Connector 连接器
 
 在这里我们在介绍下MongoDB官方提供的Mongo Spark连接器。
 
@@ -3364,7 +2479,7 @@ flink连接
 
 当然，这种部署方式需要注意**内存资源和CPU资源**的隔离。隔离的方式可以通过Linux的**cgroups**。
 
-#### 2.12.1.1. <a name='-1'></a>2.12.1.1. 案例
+#### <a name='-1'></a>2.12.1.1. 案例
 
 1. 法国航空是法国最大的航空公司：
 
@@ -3410,7 +2525,7 @@ MongoDB基于**内存缓存的数据管理方式**决定了对**并发读写的�
 
 事实上，全球最大的航空分销商，管理者全世界95%航空库存的Amadeus也正是使用MongoDB作为其1000多亿**运价缓存的存储方案**。
 
-#### 2.12.1.2. <a name='-1'></a>2.12.1.2. 运价系统的架构图
+#### <a name='-1'></a>2.12.1.2. 运价系统的架构图
 
 左边是发起航班查询请求的客户端，
 
@@ -3438,7 +2553,7 @@ Spark 计算任务会**定期触发（如每天一次或者每4小时一次）**
 
 从Mongodb里取出需要计算的仓位，调用东航自己的**运价逻辑**，得出结果以后，并保存回MongoDB。
 
-### 2.12.2. <a name='Spark-1'></a>2.12.2. Spark 任务入口程序
+### <a name='Spark-1'></a>2.12.2. Spark 任务入口程序
 
 Spark和MongoDB的连接使用非常简单，下面就是一个代码示例：
 
@@ -3459,7 +2574,7 @@ cabinsRDD.collect()
 cabinsRDD.saveToMongo()
 ```
 
-### 2.12.3. <a name='SparkMongoDB'></a>2.12.3. Spark ＋ MongoDB演示
+### <a name='SparkMongoDB'></a>2.12.3. Spark ＋ MongoDB演示
 
 安装 Spark（略）
 
@@ -3513,9 +2628,9 @@ MongoSpark.load(sc)
 * 预留**1-2个core**给**操作系统**及**其他管理进程**
 * 同机部署，适当情况可以**同机部署Spark+MongoDB**，利用**本地IO**提高性能
 
-## 2.13. 安装SBT
+## <a name='SBT'></a>2.13. 安装SBT
 
-### 2.13.1. Linux中安装SBT
+### <a name='LinuxSBT'></a>2.13.1. Linux中安装SBT
 
 1. 在官网上下载.tgz安装包
 
@@ -3576,7 +2691,7 @@ sbt
 run
 ```
 
-### 2.13.2. Spark快速入门之SBT安装
+### <a name='SparkSBT'></a>2.13.2. Spark快速入门之SBT安装
 
 Spark中没有自带sbt，需要手动安装sbt，
 
@@ -3892,7 +3007,7 @@ bin/zeppelin-daemon.sh restart
 vim logs/zeppelin-xxxxx-Pro.local.log
 ```
 
-## 3.1. <a name='local'></a>3.1. 在local模式下运行
+## <a name='local'></a>3.1. 在local模式下运行
 
 ```sh
 tar -xvf flink-1.10.0-bin-scala_2.11.tgz
@@ -3909,13 +3024,13 @@ vim logs/zeppelin-自动补全？
 
 tab键自动补全命令
 
-## 3.2. <a name='remote'></a>3.2. 在remote模式下运行
+## <a name='remote'></a>3.2. 在remote模式下运行
 
 flink.excution.mode设置为remote
 flink.excution.remote.host设置为localhost
 flink.excution.remote.port设置为**8081**
 
-## 3.3. <a name='yarn'></a>3.3. yarn模式下的运行
+## <a name='yarn'></a>3.3. yarn模式下的运行
 
 确保hadoop已经安装
 
@@ -3948,7 +3063,7 @@ ps aux | grep RemoteInterpreterServer
 
 flink的classpath
 
-## 3.4. <a name='inlineconfiguration'></a>3.4. inline configuration
+## <a name='inlineconfiguration'></a>3.4. inline configuration
 
 一定要在进程起来前跑
 
@@ -3957,7 +3072,7 @@ flink的classpath
 flink.execution.mode yarn
 ```
 
-## 3.5. <a name='hive'></a>3.5. hive
+## <a name='hive'></a>3.5. hive
 
 常用命令：
 
@@ -3993,7 +3108,7 @@ show tables;
 select * from bank;
 ```
 
-## 3.6. <a name='SQL'></a>3.6. SQL
+## <a name='SQL'></a>3.6. SQL
 
 ```sql
 %flink.bsql
@@ -4009,7 +3124,7 @@ show tables;
 showfunctions
 ```
 
-## 3.7. <a name='Streaming'></a>3.7. Streaming
+## <a name='Streaming'></a>3.7. Streaming
 
 采用Flink Job Control Tutorial进行学习：
 
@@ -4060,11 +3175,11 @@ start_time, url, count(1) as pv from log group by
 TUMBLE(rowtime, INTERVAL '5' SECOND), url
 ```
 
-## 3.8. <a name='kafka-1'></a>3.8. kafka
+## <a name='kafka-1'></a>3.8. kafka
 
-## 3.9. <a name='python'></a>3.9. python
+## <a name='python'></a>3.9. python
 
-## 3.10. <a name='spark-1'></a>3.10. spark
+## <a name='spark-1'></a>3.10. spark
 
 首先确认Zeppelin的机器上已安装有Hadoop客户端和Spark客户端，
 
@@ -4098,9 +3213,9 @@ val fs = FileSystem.get(sc.hadoopConfiguration)
 val dirSize = fs.getContentSummary(new Path("hdfs:///user/root")).getLength
 ```
 
-## 3.11. <a name='flink-Pythonenv-Conda'></a>3.11. flink - Python env - Conda
+## <a name='flink-Pythonenv-Conda'></a>3.11. flink - Python env - Conda
 
-### 3.11.1. <a name='-1'></a>3.11.1. 准备工作
+### <a name='-1'></a>3.11.1. 准备工作
 
 本文内容就是在 Zeppelin notebook 里利用 Conda 来创建 Python env 自动部署到 Yarn 集群中，无需手动在集群上去安装任何 Pyflink 的包，并且可以在一个 Yarn 集群里同时使用多个版本的 PyFlink。
 
@@ -4120,11 +3235,11 @@ val dirSize = fs.getContentSummary(new Path("hdfs:///user/root")).getLength
 
 * [mamba](https://github.com/mamba-org/mamba)
 
-### 3.11.2. <a name='PyFlink'></a>3.11.2. 搭建 PyFlink 环境
+### <a name='PyFlink'></a>3.11.2. 搭建 PyFlink 环境
 
 接下来就可以在 Zeppelin 里搭建并且使用 PyFlink 了。
 
-#### 3.11.2.1. <a name='Step1.JobManagerPyFlinkConda'></a>3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境
+#### <a name='Step1.JobManagerPyFlinkConda'></a>3.11.2.1. Step 1. 制作 **JobManager** 上的 **PyFlink Conda** 环境
 
 因为 Zeppelin 天生支持 Shell，
 
@@ -4187,7 +3302,7 @@ hadoop fs -put pyflink_env.tar.gz /tmp
 hadoop fs -chmod 644 /tmp/pyflink_env.tar.gz
 ```
 
-#### 3.11.2.2. <a name='Step2.TaskManagerPyFlinkConda'></a>3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境
+#### <a name='Step2.TaskManagerPyFlinkConda'></a>3.11.2.2. Step 2. 制作 TaskManager 上的 PyFlink Conda 环境
 
 运行下面的代码来创建 **TaskManager 上的 PyFlink Conda 环境**，
 
@@ -4232,7 +3347,7 @@ hadoop fs -put pyflink_tm_env.zip /tmp
 hadoop fs -chmod 644 /tmp/pyflink_tm_env.zip
 ```
 
-#### 3.11.2.3. <a name='Step3.PyFlinkConda'></a>3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境
+#### <a name='Step3.PyFlinkConda'></a>3.11.2.3. Step 3. 在 PyFlink 中使用 Conda 环境
 
 接下来就可以在 Zeppelin 中使用上面创建的 Conda 环境了，
 
@@ -4279,7 +3394,7 @@ flink.tm.memory 2048
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5s0w557gjm80.png)
 
-## 3.12. <a name='ApacheSedona'></a>3.12. Apache Sedona
+## <a name='ApacheSedona'></a>3.12. Apache Sedona
 
 [Apache Sedona](https://github.com/apache/incubator-sedona)(孵化)是一个用于处理大规模空间数据的集群计算系统。
 
@@ -4300,9 +3415,9 @@ SpatialSQL扩展了Apache Spark / SparkSQL，
 
 可以安装在[zeppelin](https://github.com/apache/incubator-sedona/tree/master/zeppelin)上
 
-## 3.13. <a name='oracle'></a>3.13. oracle (貌似不太常用)
+## <a name='oracle'></a>3.13. oracle (貌似不太常用)
 
-## 3.14. <a name='oracle-1'></a>3.14. 简单介绍oracle
+## <a name='oracle-1'></a>3.14. 简单介绍oracle
 
 Oracle数据库中的空间和图形特性
 
@@ -4316,7 +3431,7 @@ Oracle数据库现在包括**机器学习**，**空间**和**图形功能**。
 
 使用[oracle](https://www.jianshu.com/p/08afbdc63848/)作为数据源发布图层到[geoserver](https://docs.geoserver.org/latest/en/user/data/database/oracle.html)
 
-### 3.14.1. <a name='Oracle'></a>3.14.1. 连接Oracle数据库
+### <a name='Oracle'></a>3.14.1. 连接Oracle数据库
 
 简单来说，步骤如下：
 
