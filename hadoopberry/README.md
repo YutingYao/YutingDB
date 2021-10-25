@@ -145,6 +145,135 @@ Reboot the system so that the settings take effect
 sudo reboot
 ```
 
+
+### 再试一遍：
+
+ubuntu20.04的系统不太好搞
+
+```sh
+# 安装可能需要用到的内容
+sudo apt install tightvncserver gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal gnome-session-flashback gdm3
+# 第一次会提示输入密码。
+# 这里启动窗口是为了自动生成一份配置文件
+tightvncserver :0 -geometry 1280x720 -depth 24 -dpi 96
+# 先杀掉窗口
+tightvncserver -kill :0
+```
+
+修改文件
+
+此文件的权限应该是775
+
+```sh
+vncserver -kill :1
+mv ~/.vnc/xstartup ~/.vnc/xstartup.bak
+sudo vim ~/.vnc/xstartup
+```
+
+```sh
+sudo vim /home/yaoyuting03/.vnc/xstartup
+```
+
+```sh
+sudo vim ~/.vnc/xstartup
+```
+
+添加内容:
+
+```sh
+#!/bin/bash
+xrdb $HOME/.Xresources
+startxfce4 &
+```
+
+```sh
+#!/bin/sh
+
+xrdb $HOME/.Xresources
+xsetroot -solid grey
+#x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
+#x-window-manager &
+
+# Fix to make GNOME work
+export XKL_XMODMAP_DISABLE=1
+/etc/X11/Xsession
+
+# 下面这一段是我加上去的
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XKL_XMODMAP_DISABLE=1
+export XDG_CURRENT_DESKTOP="GNOME-Flashback:GNOME"
+export XDG_MENU_PREFIX="gnome-flashback-"
+gnome-session --session=gnome-flashback-metacity --disable-acceleration-check &
+```
+
+添加
+
+```sh
+unset DBUS_SESSION_BUS_ADDRESS
+```
+
+修改
+
+```sh
+# /etc/X11/XSession
+# 改成这个
+mate-session
+```
+
+输入
+
+```sh
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+startxfce4 &
+```
+
+使其可执行:
+
+```sh
+chmod +x ~/.vnc/xstartup
+```
+
+
+执行
+
+```sh
+sudo chmod +x ~/.vnc/xstartup
+vncserver 
+```
+
+
+服务可以通过以下方式启动或停止:
+
+终止当前正在运行的服务器：
+
+```sh
+vncserver -kill :1
+```
+
+```sh
+sudo service vncserver@1 start/stop
+```
+
+```sh
+tightvncserver
+```
+
+启动一个新的服务器
+
+```sh
+# 再次启动窗口
+tightvncserver :0 -geometry 1280x720 -depth 24 -dpi 96
+```
+
+### 可能需要安装 xfce4
+
+```sh
+sudo apt install xfce4 xfce4-goodies
+```
+
 # 2. 安装大数据分析软件
 
 [大数据架构](http://dblab.xmu.edu.cn/blog/988-2/)请参考这个链接。
@@ -2642,54 +2771,6 @@ MongoSpark.load(sc)
 tar -zxvf sbt-1.3.2.tgz 
 ```
 
-这里最好是登录超级用户，不然有时候会莫名安装失败
-
-```sh
-su root
-```
-
-3. 配置环境变量
-
-```sh
-vim /etc/profile
-```
-
-```sh
-export SBT_HOME=/usr/soft/sbt
-PATH=$PATH:$SBT_HOME
-```
-
-刷新环境变量
-
-```sh
-source /etc/profile
-```
-
-4. 简单测试
-
-4.1 随便在磁盘的某个位置建立一个文件夹如下所示
-
-```sh
-/home/shiaofu/work/Demo
-```
-
-4.2 创建一个文件名为hello的scala文件，文件里的代码如下所示
-
-```js
-object Hi{
-  def main(args:Array[String]) = println("hi!")
-}
-```
-
-4.3 在Demo文件下输入sbt命令进入sbt命令行 然后输入run命令会得到下图的
-
-```sh
-sbt
-```
-
-```sh
-run
-```
 
 ### <a name='SparkSBT'></a>2.13.2. Spark快速入门之SBT安装
 
@@ -2715,103 +2796,7 @@ unzip -q ./sbt-launch.jar #解压
 $ 
 ```
 
-2. 需要修改其中的`./sbt/sbt.boot.properties`文件,将[repositories]处修改为如下内容：
-
-即增加一条aliyun-nexus的镜像。(这一步可能，不需要)
-
-版本一：
-
-```sh
-cd /usr/local/sbt/sbtlaunch
-vim ./sbt/sbt.boot.properties
-```
-
-修改内容如下：
-
-```s
-[repositories]
-  local
-  aliyun-nexus: http://maven.aliyun.com/nexus/content/groups/public/
-  jcenter: https://jcenter.bintray.com/
-  typesafe-ivy-releases: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
-  maven-central
-```
-
-版本二：
-
-```sh
-vim ~/.sbt/repositories
-```
-
-修改内容如下：
-
-```s
-[repositories]
-local
-aliyun-nexus: http://maven.aliyun.com/nexus/content/groups/public/
-typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
-sonatype-oss-releases
-maven-central
-sonatype-oss-snapshots
-```
-
-定位阿里源
-
-进入这两个文件，
-
-```sh
-vim sbtconfig.txt
-```
-
-和
-
-```sh
-vim sbtopts
-```
-
-将此行代码加入两个文件的最后一行
-
-```s
--Dsbt.override.build.repos=true
-```
-
-3. 删除原来的`sbt-launch.`文件，然后重新打包
-
-```sh
-rm ./sbt-launch.jar           #delete the old jar
-jar -cfM ./sbt-launch.jar .   #create new jar 
-```
-
-4. 在`/usr/local/sbt`目录下创建sbt脚本文件并赋予可执行权限，来执行`sbt-launch.jar`
-
-```sh
-cd /usr/lcoal/sbt
-vim ./sbt         #create sbt script
-```
-
-添加如下内容:
-
-```sh
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
-java $SBT_OPTS -jar `dirname`/sbt-launch.jar "$@"    #dirname为路径名 
-```
-
-my dirname ： `/usr/local/sbt/sbtlaunch`
-
-5. 保存后，为`./sbt`增加可执行权限:
-
-```sh
-chmod u+x ./sbt
-```
-
-6. 最后检验`sbt`是否可用
-
-```sh
-./sbt sbt-version
-```
-
-这一步请耐心等待，不要怀疑我天朝的网速，笔者出现第一条信息时等待了约10分钟，只要得到如下版本信息就没有问题
-
+2. 
 1. 创建hello world项目，并编译，打包，运行。
 
 7.1 hello world的目录结构是：
