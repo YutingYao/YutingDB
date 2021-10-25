@@ -32,15 +32,13 @@ sudo apt-get install r-cran-evaluate
 安装maven
 
 ```sh
-wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-sudo tar -zxf apache-maven-3.6.3-bin.tar.gz -C /usr/local/
-sudo ln -s /usr/local/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
+sudo apt-get install maven
 ```
 
 可以为Maven配置更换国内源加速依赖文件下载，通过新增文件
 
 ```sh
-sudo vim ~/.m2/setting.xml
+sudo vim /etc/maven/setting.xml
 ```
 
 添加如下内容后
@@ -54,7 +52,7 @@ sudo vim ~/.m2/setting.xml
 </mirror>
 ```
 
-版本二：
+添加的格式参考下方：
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
