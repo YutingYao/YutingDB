@@ -24,6 +24,182 @@ sbt是一款Spark用来对scala编写程序进行打包的工具，Spark 中没�
 su root
 ```
 
+如果在国内网络环境，sbt的网络依赖可能会存在下载阻碍，可以单独配置更换国内源，通过新增文件
+
+```sh
+vim ~/.sbt/repositories
+```
+
+添加如下内容后
+
+精简一下文件，不是越多越好，直接定位到阿里云提供的源即可！！！:star:
+
+版本一：
+
+```s
+[repositories]
+local
+aliyun: http://maven.aliyun.com/nexus/content/groups/public/
+typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
+```
+
+版本二：
+
+```s
+[repositories]
+local
+aliyun: https://maven.aliyun.com/repository/public
+huaweicloud-maven: https://repo.huaweicloud.com/repository/maven/
+jcenter: https://jcenter.bintray.com
+maven-central: https://repo1.maven.org/maven2/
+typesafe: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sbt-plugin-repo: https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
+```
+
+版本三：
+
+```sh
+[repositories]
+local
+aliyun: http://maven.aliyun.com/nexus/content/groups/public
+typesafe-ivy-releases: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
+```
+
+版本四：
+
+```sh
+[repositories]
+local
+aliyun-maven-public: https://maven.aliyun.com/repository/public
+aliyun-maven-central: https://maven.aliyun.com/repository/central
+huaweicloud-maven: https://repo.huaweicloud.com/repository/maven/
+maven-central: https://repo1.maven.org/maven2/
+huaweicloud-ivy: https://repo.huaweicloud.com/repository/ivy/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
+sbt-plugin-repo: https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
+```
+
+版本五：
+
+```sh
+[repositories]
+local
+jcenter:https://maven.aliyun.com/repository/jcenter
+central:https://maven.aliyun.com/repository/central
+google:https://maven.aliyun.com/repository/google
+releases:https://maven.aliyun.com/repository/releases
+typesafe: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
+```
+
+版本六：
+
+```sh
+alirepo1:https://maven.aliyun.com/repository/central
+alirepo2:https://maven.aliyun.com/repository/jcenter
+alirepo3:https://maven.aliyun.com/repository/public
+```
+
+版本七：
+
+```sh
+[repositories]
+local
+osc: http://maven.aliyun.com/nexus/content/groups/public/
+typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
+```
+
+版本八：
+
+```sh
+[repositories]
+  local
+  local-maven: file:///file/repository/maven
+  aliyun-nexus: https://maven.aliyun.com/nexus/content/groups/public/
+  aliyun-nexus2: https://maven.aliyun.com/nexus/content/groups/public/,[organization]/[module]/(scala_[scalaVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+  maven-central
+
+[ivy]
+  ivy-home: /file/repository/sbt
+```
+
+版本九：
+
+```sh
+[repositories]
+local
+aliyun: http://maven.aliyun.com/nexus/content/groups/public/
+typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
+```
+
+> 如果只是在单个项目中修改的话,在build.sbt里添加
+
+```sh
+resolvers += "aliyun" at "http://maven.aliyun.com/nexus/content/groups/public/"
+```
+
+有可能需要修改启动jar,也可能不需要
+
+修改/soft/sbt/bin/sbt-launch.jar包的/sbt/sbt.boot.properties
+
+```s
+[scala]
+  version: ${sbt.scala.version-auto}
+
+[app]
+  org: ${sbt.organization-org.scala-sbt}
+  name: sbt
+  version: ${sbt.version-read(sbt.version)[1.3.4]}
+  class: ${sbt.main.class-sbt.xMain}
+  components: xsbti,extra
+  cross-versioned: ${sbt.cross.versioned-false}
+  resources: ${sbt.extraClasspath-}
+
+[repositories]
+  local
+  local-maven: file:/file/repository/maven
+  local-preloaded-ivy: file:///${sbt.preloaded-${sbt.global.base-${user.home}/.sbt}/preloaded/}, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
+  local-preloaded: file:///${sbt.preloaded-${sbt.global.base-${user.home}/.sbt}/preloaded/}
+  aliyun-nexus: http://maven.aliyun.com/nexus/content/groups/public/
+  aliyun-nexus2: https://maven.aliyun.com/nexus/content/groups/public/,[organization]/[module]/(scala_[scalaVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+  maven-central
+  sbt-maven-releases: https://repo.scala-sbt.org/scalasbt/maven-releases/, bootOnly
+  sbt-maven-snapshots: https://repo.scala-sbt.org/scalasbt/maven-snapshots/, bootOnly
+  typesafe-ivy-releases: https://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+  sbt-ivy-snapshots: https://repo.scala-sbt.org/scalasbt/ivy-snapshots/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+
+[boot]
+  directory: ${sbt.boot.directory-${sbt.global.base-${user.home}/.sbt}/boot/}
+  lock: ${sbt.boot.lock-true}
+
+[ivy]
+  ivy-home: /file/repository/sbt
+  checksums: ${sbt.checksums-sha1,md5}
+  override-build-repos: ${sbt.override.build.repos-false}
+  repository-config: ${sbt.repository.config-${sbt.global.base-${user.home}/.sbt}/repositories}
+```
+
+执行
+
+```sh
+sbt --version
+```
+
+查看是否正常
+
 ## Create the project
 
 到一个空文件夹。

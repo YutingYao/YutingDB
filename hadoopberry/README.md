@@ -1,3 +1,5 @@
+这个文档主要用来记录踩过的坑，成功版可参考本目录下的其他markdown文档。
+
 <!-- vscode-markdown-toc -->
 * [1.1. 三步走](#)
 * [1.2. 安装输入法ibus 需要重启（但这一步,貌似不需要）](#ibus)
@@ -109,7 +111,7 @@ ibus-setup     #添加输入法（pinyin）
 ibus restart   #重启ibus
 ```
 
-## <a name='-1'></a>1.3. 安装远程控制（但这一步,目前没有成功）
+## <a name='-1'></a>1.3. 安装远程控制（但这一步,目前没有成功）(尝试n种方法最终放弃)
 
 ```sh
 sudo apt-get install tightvncserver
