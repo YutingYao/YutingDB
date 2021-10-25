@@ -1,4 +1,4 @@
-## 安装
+## 安装 (这是官方提供的安装方式，但是不适用于ARM架构，所以安装失败)
 
 https://docs.docker.com/compose/install/
 
@@ -30,7 +30,41 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 
-### 启动
+## 安装方法二
+
+用pip安装的树莓派方法亲测可用
+
+```sh
+sudo apt-get update
+sudo apt-get install -y python python-pip
+sudo apt-get install libffi-dev
+sudo pip install docker-compose
+```
+
+如果不安装libffi-dev的话，后面使用pip安装docker-compose的时候会报错，提示找不到ffi.h文件
+
+拷贝python2.7的dist-packages文件夹到docker的工作目录下
+
+```sh
+cd  /usr/local/lib/python2.7/dist-packages
+sudo cp -r backports /usr/local/lib/python2.7/dist-packages/docker/transport/
+```
+
+如果不执行此操作，使用docker-compose命令会报错：No module named ssl_match_hostname
+
+```sh
+docker-compose version
+```
+
+如果报错No module named shutil_get_terminal_size
+
+那么安装一下ipython
+
+```sh
+sudo apt-get install ipython
+```
+
+## 启动
 
 Compose 是 Docker 公司推出的一个工具软件，可以管理多个 Docker 容器组成一个应用。你需要定义一个 YAML[17] 格式的配置文件 docker-compose.yml，写好多个容器之间的调用关系。然后，只要一个命令，就能同时启动/关闭这些容器。
 
