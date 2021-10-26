@@ -28,7 +28,7 @@ export SCALA_HOME = /opt/scala
 export PATH = $PATH:$SCALA_HOME/bin
 ```
 
-执行source命令并测试：
+ 执行source命令并测试：
 
 ```bash
 source  ~/.bashrc

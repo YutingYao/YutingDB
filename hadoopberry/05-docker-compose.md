@@ -1,3 +1,20 @@
+## 命令
+
+[命令合集](https://www.cnblogs.com/minseo/p/11548177.html)
+
+```s
+docker-compose up
+docker-compose ps
+docker-compose stop
+docker-compose down
+docker-compose start 
+docker-compose build
+docker-compose pull
+docker-compose restart
+docker-compose rm
+docker-compose run
+```
+
 ## 安装 (这是官方提供的安装方式，但是不适用于ARM架构，所以安装失败)
 
 https://docs.docker.com/compose/install/

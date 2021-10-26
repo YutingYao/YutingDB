@@ -40,9 +40,11 @@ ifconfig
 sudo vim /etc/hosts
 ```
 
+```
 192.168.31.219 node01
 192.168.31.6 node02
 192.168.31.189 ubuntu01
+```
 
 ```s
 ssh-keygen -t rsa
