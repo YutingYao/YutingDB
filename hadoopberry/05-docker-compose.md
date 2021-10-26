@@ -30,9 +30,9 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 
-## 安装方法二
+## 安装方法二(亲测不可用)
 
-用pip安装的树莓派方法亲测可用
+用pip安装的树莓派方法
 
 ```sh
 sudo apt-get update
@@ -64,9 +64,25 @@ docker-compose version
 sudo apt-get install ipython
 ```
 
+## 安装方法三
+
+```sh
+sudo apt-get install docker-compose
+```
+
+成功了，小丑竟是我自己
+
 ## 启动
 
 Compose 是 Docker 公司推出的一个工具软件，可以管理多个 Docker 容器组成一个应用。你需要定义一个 YAML[17] 格式的配置文件 docker-compose.yml，写好多个容器之间的调用关系。然后，只要一个命令，就能同时启动/关闭这些容器。
+
+```sh
+sudo sudo
+```
+
+```sh
+sudo systemctl start docker
+```
 
 ```sh
 # 启动所有服务
