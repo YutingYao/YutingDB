@@ -25,18 +25,18 @@ class Solution:
         # 初始化一个 len(word1)+1 * len(word2)+1 的矩阵
         matrix = [[i+j for j in range(len(word2) + 1)] for i in range(len(word1) + 1)]
         # 辅助理解，matrix 矩阵的样子
-        # print(matrix)
+        print(matrix)
         for i in range(1, len(word1)+1):
             for j in range(1,len(word2)+1):
                 if word1[i-1] == word2[j-1]:
-                    d = 0
+                    distance = 0
                 else:
-                    d = 1
-                matrix[i][j] = min(matrix[i-1][j]+1, matrix[i][j-1]+1, matrix[i-1][j-1]+d)
+                    distance = 1
+                matrix[i][j] = min(matrix[i-1][j]+1, matrix[i][j-1]+1, matrix[i-1][j-1]+distance)
 
-        return matrix[len(word1)][len(word2)]
+        return matrix[-1][-1] # 返回最后一个值
     
 s = Solution()
-word1 = 'horse'
-word2 = 'ros'
+word1 = "intention"
+word2 = "execution"
 print(s.minDistance(word1, word2))
