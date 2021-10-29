@@ -2329,3 +2329,380 @@ void main()
 
 ```
 
+
+
+## 写一个程序, 要求功能：求出用1，2，5这三个数不同个数组合的和为100的组合个数。
+
+```s
+如：100个1是一个组合，5个1加19个5是一个组合。。。。 请用C++语言写。
+答案：最容易想到的算法是：
+设x是1的个数，y是2的个数，z是5的个数，number是组合数
+注意到0<=x<=100，0<=y<=50，0<=z=20，所以可以编程为：
+```
+
+```c++
+number=0;
+for (x=0; x<=100; x++)
+for (y=0; y<=50; y++)
+for (z=0; z<=20; z++)
+if ((x+2*y+5*z)==100)
+number++;
+cout<<number<<endl;
+```
+
+```s
+上面这个程序一共要循环100*50*20次，效率实在是太低了
+事实上，这个题目是一道明显的数学问题，而不是单纯的编程问题。我的解法如下：
+因为x+2y+5z=100
+所以x+2y=100-5z，且z<=20 x<=100 y<=50
+所以(x+2y)<=100，且(x+5z)是偶数
+对z作循环，求x的可能值如下：
+```
+
+```s
+z=0, x=100, 98, 96, ... 0
+z=1, x=95, 93, ..., 1
+z=2, x=90, 88, ..., 0
+z=3, x=85, 83, ..., 1
+z=4, x=80, 78, ..., 0
+......
+z=19, x=5, 3, 1
+z=20, x=0
+```
+
+```s
+因此，组合总数为100以内的偶数+95以内的奇数+90以内的偶数+...+5以内的奇数+1，
+即为： (51+48)+(46+43)+(41+38)+(36+33)+(31+28)+(26+23)+(21+18)+(16+13)+(11+8)+(6+3)+1
+某个偶数m以内的偶数个数（包括0）可以表示为m/2+1=(m+2)/2
+某个奇数m以内的奇数个数也可以表示为(m+2)/2
+所以，求总的组合次数可以编程为：
+```
+
+```s
+number=0;
+for (int m=0;m<=100;m+=5)
+{
+number+=(m+2)/2;
+}
+cout<<number<<endl;
+```
+
+```s
+这个程序,只需要循环21次, 两个变量，就可以得到答案,比上面的那个程序高效了许多
+倍----只是因为作了一些简单的数学分析
+
+这再一次证明了：计算机程序=数据结构+算法，而且算法是程序的灵魂，对任何工程问
+题，当用软件来实现时，必须选取满足当前的资源限制，用户需求限制，开发时间限制等种
+种限制条件下的最优算法。而绝不能一拿到手，就立刻用最容易想到的算法编出一个程序了
+事——这不是一个专业的研发人员的行为。
+那么，那种最容易想到的算法就完全没有用吗？不，这种算法正好可以用来验证新算法
+的正确性，在调试阶段，这非常有用。在很多大公司，例如微软，都采用了这种方法：在调
+试阶段，对一些重要的需要好的算法来实现的程序，而这种好的算法又比较复杂时，同时用
+容易想到的算法来验证这段程序，如果两种算法得出的结果不一致（而最容易想到的算法保
+证是正确的），那么说明优化的算法出了问题，需要修改。
+可以举例表示为：
+```
+
+```c++
+#ifdef DEBUG
+int simple();
+#end if
+int optimize();
+......
+in a function:
+{
+result=optimize();
+ASSERT(result==simple());
+}
+```
+
+```s
+这样,在调试阶段,如果简单算法和优化算法的结果不一致,就会打出断言。同时，在程
+序的发布版本，却不会包含笨重的simple()函数。——任何大型工程软件都需要预先设计良
+好的调试手段，而这里提到的就是一种有用的方法。
+一个学生的信息是：姓名，学号，性别，年龄等信息，用一个链表，把这些学生信息连在一起， 给出一个age, 在些链表中删除学生年龄等于age的学生信息。
+```
+
+```c++
+#include "stdio.h"
+#include "conio.h"
+
+struct stu{
+char name[20];
+char sex;
+int no;
+int age;
+struct stu * next;
+}*linklist;
+struct stu *creatlist(int n)
+{
+int i;
+//h为头结点，p为前一结点，s为当前结点
+struct stu *h,*p,*s;
+h = (struct stu *)malloc(sizeof(struct stu));
+h->next = NULL;
+p=h;
+for(i=0;i<n;i++)
+{ 
+s = (struct stu *)malloc(sizeof(struct stu));
+p->next = s;
+printf("Please input the information of the student: name sex no age \n");
+scanf("%s %c %d %d",s->name,&s->sex,&s->no,&s->age);
+s->next = NULL;
+p = s;
+}
+printf("Create successful!");
+return(h);
+}
+void deletelist(struct stu *s,int a)
+{
+struct stu *p;
+while(s->age!=a)
+{
+p = s;
+s = s->next;
+}
+if(s==NULL)
+printf("The record is not exist.");
+else
+{
+p->next = s->next;
+printf("Delete successful!");
+}
+}
+void display(struct stu *s)
+{
+s = s->next;
+while(s!=NULL)
+{
+printf("%s %c %d %d\n",s->name,s->sex,s->no,s->age);
+s = s->next;
+}
+}
+int main()
+{
+struct stu *s;
+int n,age;
+printf("Please input the length of seqlist:\n");
+scanf("%d",&n);
+s = creatlist(n);
+display(s);
+printf("Please input the age:\n");
+scanf("%d",&age);
+deletelist(s,age);
+display(s);
+return 0;
+}
+```
+
+## 实现一个函数，把一个字符串中的字符从小写转为大写。
+
+```c++
+#include "stdio.h"
+#include "conio.h"
+
+void uppers(char *s,char *us)
+{
+for(;*s!='\0';s++,us++)
+{
+if(*s>='a'&&*s<='z')
+*us = *s-32;
+else
+*us = *s;
+}
+*us = '\0';
+}
+int main()
+{
+char *s,*us;
+char ss[20];
+printf("Please input a string:\n");
+scanf("%s",ss);
+s = ss;
+uppers(s,us);
+printf("The result is:\n%s\n",us);
+getch();
+}
+
+```
+
+## 随机输入一个数，判断它是不是对称数（回文数）（如3，121，12321，45254）。不能用字符串库函数 
+
+```s
+函数名称：Symmetry 
+功能： 判断一个数时候为回文数(121,35653) 
+输入： 长整型的数 
+输出： 若为回文数返回值为1 esle 0 
+```
+
+```c++
+unsigned char Symmetry (long n)
+{
+long i,temp;
+i=n; temp=0;
+while(i) //不用出现长度问题,将数按高低位掉换
+{
+temp=temp*10+i%10;
+i/=10;
+}
+return(temp==n);
+} 
+
+```
+
+方法一：
+
+```s
+功能： 
+判断字符串是否为回文数字 
+实现： 
+先将字符串转换为正整数，再将正整数逆序组合为新的正整数，两数相同则为回文数字 
+输入： 
+char *s：待判断的字符串 
+输出： 
+无 
+返回： 
+0：正确；1：待判断的字符串为空；2：待判断的字符串不为数字； 
+3：字符串不为回文数字；4：待判断的字符串溢出 
+```
+
+```c
+unsigned IsSymmetry(char *s) 
+{ 
+char *p = s; 
+long nNumber = 0; 
+long n = 0; 
+long nTemp = 0; 
+
+/*判断输入是否为空*/ 
+if (*s == \'\\0\') 
+return 1; 
+
+/*将字符串转换为正整数*/ 
+while (*p != \'\\0\') 
+{ 
+/*判断字符是否为数字*/ 
+if (*p<\'0\' || *p>\'9\') 
+return 2; 
+
+/*判断正整数是否溢出*/ 
+if ((*p-\'0\') > (4294967295-(nNumber*10))) 
+return 4; 
+
+nNumber = (*p-\'0\') + (nNumber * 10); 
+
+p++; 
+} 
+
+/*将数字逆序组合，直接抄楼上高手的代码，莫怪，呵呵*/ 
+n = nNumber; 
+while(n) 
+{ 
+/*判断正整数是否溢出*/ 
+if ((n%10) > (4294967295-(nTemp*10))) 
+return 3; 
+
+nTemp = nTemp*10 + n%10; 
+n /= 10; 
+} 
+
+/*比较逆序数和原序数是否相等*/ 
+if (nNumber != nTemp) 
+return 3; 
+
+return 0; 
+} 
+
+```
+
+方法二：
+
+```s
+功能： 
+判断字符串是否为回文数字 
+实现： 
+先得到字符串的长度，再依次比较字符串的对应位字符是否相同 
+输入： 
+char *s：待判断的字符串 
+输出： 
+无 
+返回： 
+0：正确；1：待判断的字符串为空；2：待判断的字符串不为数字； 
+3：字符串不为回文数字 
+```
+
+```c
+unsigned IsSymmetry_2(char *s) 
+{ 
+char *p = s; 
+int nLen = 0; 
+int i = 0; 
+
+/*判断输入是否为空*/ 
+if (*s == \'\\0\') 
+return 1; 
+
+/*得到字符串长度*/ 
+while (*p != \'\\0\') 
+{ 
+/*判断字符是否为数字*/ 
+if (*p<\'0\' || *p>\'9\') 
+return 2; 
+
+nLen++; 
+p++; 
+} 
+
+/*长度不为奇数，不为回文数字*/ 
+if (nLen%2 == 0) 
+return 4; 
+
+/*长度为1，即为回文数字*/ 
+if (nLen == 1) 
+return 0; 
+
+/*依次比较对应字符是否相同*/ 
+p = s; 
+i = nLen/2 - 1; 
+while (i) 
+{ 
+if (*(p+i) != *(p+nLen-i-1)) 
+return 3; 
+
+i--; 
+} 
+
+return 0; 
+} 
+
+```
+
+## 求2~2000的所有素数.有足够的内存,要求尽量快
+
+```c++
+int findvalue[2000]={2};
+static int find=1;
+bool adjust(int value)
+{
+assert(value>=2);
+if(value==2) return true;
+for(int i=0;i<=find;i++)
+{
+if(value%findvalue[i]==0)
+return false;
+}
+findvalue[find++];
+return true;
+}
+```
+
+## A,B,C,D四个进程
+
+```s
+A向buf里面写数据，B,C,D向buf里面读数据，
+当A写完，且B，C，D都读一次后，A才能再写。用P，V操作实现。
+```
+
+## 将单向链表reverse，如ABCD变成DCBA，只能搜索链表一次
+
+## 将二叉树的两个孩子换位置，即左变右，右变左。不能用递规（变态！）
