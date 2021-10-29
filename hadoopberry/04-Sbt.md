@@ -2,6 +2,10 @@
 
 ## [安装sdk](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html)
 
+windows环境下直接下载[镜像](https://www.scala-sbt.org/1.x/docs/zh-cn/Installing-sbt-on-Windows.html)
+
+在命令行输入`sbt`，测试是否安装成功
+
 
 ```sh
 sudo apt-get update
