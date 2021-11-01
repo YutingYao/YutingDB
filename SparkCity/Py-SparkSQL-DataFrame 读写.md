@@ -14,7 +14,12 @@
 
 美中不足的是，`SparkSQL`的灵活性会稍差一些，其默认支持的数据类型通常只有 `Int,Long,Float,Double,String,Boolean` 等这些标准SQL数据类型, `类型扩展`相对繁琐。对于一些较为SQL中不直接支持的功能，通常可以借助于`用户自定义函数(UDF)`来实现，如果功能更加复杂，则可以转成RDD来进行实现。
 
+## SparkSession
+
+### python版本
+
 ```py
+# python
 import findspark
 
 #指定spark_home为刚才的解压路径,指定python路径
@@ -36,11 +41,51 @@ spark = SparkSession.builder \
 sc = spark.sparkContext
 ```
 
+### scala版本
+
+首先要获取Spark SQL编程"入口"：SparkSession。
+
+这里以读取parquet为例：
+
+```scala
+// scala
+val spark = SparkSession.builder()
+.appName("example").master("local[*]").getOrCreate();
+
+val df = sparkSession.read.format("parquet").load("/路径/parquet文件")
+```
+
 可以通过Spark-shell来操作Spark SQL，
 
 `spark`作为SparkSession的变量名，
 
 `sc`作为SparkContext的变量名
+
+### 说说Spark SQL 获取Hive数据的方式
+
+首先，配置 `$HIVE_HOME/conf/hive-site.xml`，增加如下内容：
+
+```xml
+<property>
+<name>hive.metastore.uris</name>
+<value>thrift://ip:port</value>
+</property>
+```
+
+然后，启动`hive metastore`
+
+最后，将hive-site.xml复制或者软链到`$SPARK_HOME/conf/`。
+
+如果hive的元数据存储在mysql中，那么需要将mysql的连接驱动jar包如`mysql-connector-java-5.1.12.jar`放到`$SPARK_HOME/lib/`下，
+
+启动spark-sql即可操作hive中的库和表。
+
+而此时使用`hive元数据`获取SparkSession的方式为：
+
+```scala
+val spark = SparkSession.builder()
+.config(sparkConf).enableHiveSupport().getOrCreate()
+```
 
 ## RDD，DataFrame和DataSet对比
 
@@ -131,6 +176,18 @@ sparkSession.read.json
 sparkSession.read.csv
 ```
 
+加载外部数据 以加载json和mysql为例：
+
+```scala
+// json
+val ds = sparkSession.read.json("/路径/people.json")
+// mysql
+val ds = sparkSession.read.format("jdbc")
+.options(Map("url" -> "jdbc:mysql://ip:port/db",
+"driver" -> "com.mysql.jdbc.Driver",
+"dbtable" -> "tableName", "user" -> "root", "root" -> "123")).load()
+```
+
 
 ### 2、输出
 
@@ -166,6 +223,8 @@ dataFrame.write.csv("path")
 
 ### 通过toDF方法转换成DataFrame (普通方式)
 
+案例一：定义一个case class，利用反射机制来推断
+
 ```scala
 //scala
 rdd.map(para(para(0).trim(),para(1).trim().toInt)).toDF("name","age")
@@ -187,6 +246,40 @@ peopleDF.show
 |   Justin| 19| 
 +---------+---+
 ```
+
+案例二：
+
+```scala
+// 1) 从HDFS中加载文件为普通RDD
+val lineRDD = sparkContext.textFile("hdfs://ip:port/person.txt").map(_.split(" "))
+
+// 2) 定义case class（相当于表的schema）
+case class Person(id:Int, name:String, age:Int)
+
+// 3) 将RDD和case class关联
+val personRDD = lineRDD.map(x => Person(x(0).toInt, x(1), x(2).toInt))
+
+// 4) 将RDD转换成DataFrame
+val ds= personRDD.toDF
+```
+
+如果想使用SQL风格的语法，需要将DataSet注册成表:
+
+案例一（scala）：
+
+```scala
+personDS.registerTempTable("person")
+```
+
+```scala
+//查询年龄最大的前两名
+val result = sparkSession.sql("select * from person order by age desc limit 2")
+//保存结果为json文件。注意：如果不指定存储格式，则默认存储为parquet
+result.write.format("json").save("hdfs://ip:port/res2")
+```
+
+案例二（scala）：
+
 
 ```scala
 // 注册成一张临时表 - scala
@@ -295,6 +388,22 @@ df.show()
 ### 通过createDataFrame方法指定schema动态创建DataFrame
 
 通过编程的方式来设置schema，适用于编译器不能确定列的情况
+
+手动定义一个schema StructType，直接指定在RDD上
+
+案例一：
+
+```scala
+val schemaString ="name age"
+
+val schema =  StructType(schemaString.split(" ").map(fieldName => StructField(fieldName, StringType, true)))
+
+val rowRdd = peopleRdd.map(p=>Row(p(0),p(1)))
+
+val ds = sparkSession.createDataFrame(rowRdd,schema)
+```
+
+案例二：
 
 ```scala
 // scala
@@ -453,7 +562,7 @@ df.show()
 #### 读取hive数据表
 
 ```py
-#读取hive数据表生成DataFrame
+#读取hive数据表生成DataFrame-python
 
 spark.sql("CREATE TABLE IF NOT EXISTS src (key INT, value STRING) USING hive")
 spark.sql("LOAD DATA LOCAL INPATH 'data/kv1.txt' INTO TABLE src")
@@ -693,7 +802,7 @@ df_flat.show()
 ```
 
 ```py
-#filter过滤
+#filter过滤-py
 df_filter = df.rdd.filter(lambda s:s[0].endswith("Spark")).toDF(["value"])
 
 df_filter.show()
@@ -1114,8 +1223,14 @@ df.show()
 
 #### 表查询(select,selectExpr,where)
 
+```scala
+// scala-查询所有的name和age和salary，并将salary加1000
+personDS.select(col("name"), col("age"), col("salary") + 1000)
+personDS.select(personDS("name"), personDS("age"), personDS("salary") + 1000)
+```
+
 ```py
-#表查询select
+#表查询select-py
 dftest = df.select("name").limit(2)
 dftest.show()
 ```
@@ -1433,6 +1548,8 @@ dfagg.show()
 df.groupBy("gender","age").agg(F.collect_list(col("name"))).show()
 ```
 
+注意：直接使用col方法需要`import org.apache.spark.sql.functions._`
+
 ```s
 +------+---+------------------+
 |gender|age|collect_list(name)|
@@ -1442,6 +1559,11 @@ df.groupBy("gender","age").agg(F.collect_list(col("name"))).show()
 |female| 16|       [HanMeiMei]|
 |  null| 16|           [RuHua]|
 +------+---+------------------+
+```
+
+```scala
+// scala-按年龄进行分组并统计相同年龄的人数
+personDS.groupBy("age").count()
 ```
 
 ```py
