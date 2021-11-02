@@ -7264,29 +7264,28 @@ object GeoSparkExample {
 
       GeoSparkSQLRegistrator.registerAll(sparkSession.sqlContext)
 
-      // Prepare NYC area landmarks which includes airports, museums, colleges, hospitals
+      // 准备纽约地区地标，包括机场、博物馆、大学、医院
       val arealmRDD = ShapefileReader.readToPolygonRDD(sparkSession.sparkContext,
                                                        nycArealandmarkShapefileLocation)
 
-      // Prepare NYC taxi trips. Only use the taxi trips' pickup points
+      // 准备纽约出租车之旅。仅使用出租车行程的接送点
       val tripDf = sparkSession.read.format("csv")
                                     .option("delimiter", ",")
                                     .option("header", "false")
                                     .load(nyctripCSVLocation)
-      // Convert from DataFrame to RDD. This can also be done directly through GeoSpark RDD API.
+      // 从 DataFrame 转换为 RDD。这也可以直接通过 GeoSpark RDD API 完成。
       tripDf.createOrReplaceTempView("tripdf")
       val tripRDD = new SpatialRDD[Geometry]
       tripRDD.rawSpatialRDD = Adapter.toRdd(sparkSession.sql(
         "select ST_Point(cast(tripdf._c0 as Decimal(24, 14)), " +
           "cast(tripdf._c1 as Decimal(24, 14))) from tripdf"))
 
-      // Convert the Coordinate Reference System from degree-based to meter-based.
-      // This returns the accurate distance calculate.
+      // 将坐标参考系从基于度的转换为基于米的。
+      // 这将返回准确的距离计算。
       arealmRDD.CRSTransform("epsg:4326", "epsg:3857")
       tripRDD.CRSTransform("epsg:4326", "epsg:3857")
 
-      // !!!NOTE!!!: Analyze RDD step can be avoided if you know the rectangle boundary of your
-      // dataset and approximate total count.
+      // !!!NOTE!!!: 如果您知道数据集的矩形边界和近似总数，则可以避免分析 RDD 步骤。
       arealmRDD.analyze()
       tripRDD.analyze()
 
@@ -7326,47 +7325,45 @@ object GeoSparkExample {
       GeoSparkSQLRegistrator.registerAll(sparkSession.sqlContext)
 
 
-      // Prepare NYC area landmarks which includes airports, museums, colleges, hospitals
+      // 准备纽约地区地标，包括机场、博物馆、大学、医院
       val arealmRDD = new SpatialRDD[Geometry]()
       arealmRDD.rawSpatialRDD = ShapefileReader.readToGeometryRDD(sparkSession.sparkContext,
                                                                   nycArealandmarkShapefileLocation)
-      // Use the center point of area landmarks to check co-location. This is required by Ripley's K function.
+      // 使用区域地标的中心点检查并置。这是 Ripley 的 K 函数所要求的。
       arealmRDD.rawSpatialRDD = arealmRDD.rawSpatialRDD.rdd.map[Geometry](f => f.getCentroid)
 
-      // The following two lines are optional. The purpose is to show the structure of the shapefile.
+      // 以下两行是可选的。目的是显示shapefile的结构。
       val arealmDf = Adapter.toDf(arealmRDD, sparkSession)
       arealmDf.show()
 
-      // Prepare NYC taxi trips. Only use the taxi trips' pickup points
+      // 准备纽约出租车之旅。仅使用出租车行程的接送点
       val tripDf = sparkSession.read.format("csv")
         .option("delimiter", ",")
         .option("header", "false")
         .load(nyctripCSVLocation)
 
       tripDf.show() // Optional
-      // Convert from DataFrame to RDD. This can also be done directly through GeoSpark RDD API.
+      // 从 DataFrame 转换为 RDD。这也可以直接通过 GeoSpark RDD API 完成。
       tripDf.createOrReplaceTempView("tripdf")
       val tripRDD = new SpatialRDD[Geometry]
       tripRDD.rawSpatialRDD = Adapter.toRdd(
         sparkSession.sql("select ST_Point(cast(tripdf._c0 as Decimal(24, 14)), " +
           "cast(tripdf._c1 as Decimal(24, 14))) from tripdf"))
 
-      // Convert the Coordinate Reference System from degree-based to meter-based. This returns the
-      // accurate distance calculate.
+      // 将坐标参考系从基于度的转换为基于米的。这将返回准确的距离计算。
       arealmRDD.CRSTransform("epsg:4326", "epsg:3857")
       tripRDD.CRSTransform("epsg:4326", "epsg:3857")
 
-      // !!!NOTE!!!: Analyze RDD step can be avoided if you know the rectangle boundary of your
-      // dataset and approximate total count.
+      // !!!NOTE!!!: 如果您知道数据集的矩形边界和近似总数，则可以避免分析 RDD 步骤。
       arealmRDD.analyze()
       tripRDD.analyze()
 
-      // Cache indexed NYC taxi trip rdd to improve iterative performance
+      // 缓存索引 NYC 出租车行程 rdd 以提高迭代性能
       tripRDD.spatialPartitioning(GridType.KDBTREE)
       tripRDD.buildIndex(IndexType.QUADTREE, true)
       tripRDD.indexedRDD = tripRDD.indexedRDD.cache()
 
-      // Parameter settings. Check the definition of Ripley's K function.
+      // 参数设置。检查 Ripley's K 函数的定义。
       val area = tripRDD.boundaryEnvelope.getArea
       val maxDistance = 0.01 * Math.max(tripRDD.boundaryEnvelope.getHeight,
                                         tripRDD.boundaryEnvelope.getWidth)
@@ -7375,18 +7372,17 @@ object GeoSparkExample {
       val beginDistance = 0.0
       var currentDistance = 0.0
 
-      // Start the iteration
+      // 开始迭代
       println("distance(meter),observedL,difference,coLocationStatus")
       for (i <- 1 to iterationTimes) {
         currentDistance = beginDistance + i * distanceIncrement
 
         val bufferedArealmRDD = new CircleRDD(arealmRDD, currentDistance)
         bufferedArealmRDD.spatialPartitioning(tripRDD.getPartitioner)
-        // Run GeoSpark Distance Join Query
+        // 运行 GeoSpark 距离 Join Query
         val adjacentMatrix = JoinQuery.DistanceJoinQueryFlat(tripRDD, bufferedArealmRDD, true, true)
 
-        // Uncomment the following two lines if you want to see what the join result looks like in
-        // SparkSQL
+        // 如果您想查看 SparkSQL 中连接结果的样子，请取消对以下两行的注释
         // var adjacentMatrixDf = Adapter.toDf(adjacentMatrix, sparkSession)
         // adjacentMatrixDf.show()
 
@@ -9421,18 +9417,18 @@ object UdtRegistrator {
 
 ```scala
 /**
-  * FILE: Adapter
-  * PATH: org.datasyslab.geosparksql.utils.Adapter
+  * 文件: Adapter
+  * 路径: org.datasyslab.geosparksql.utils.Adapter
   * Copyright (c) GeoSpark Development Team
   *
   * MIT License
   *
-  * Permission is hereby granted, free of charge, to any person obtaining a copy
-  * of this software and associated documentation files (the "Software"), to deal
-  * in the Software without restriction, including without limitation the rights
-  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  * copies of the Software, and to permit persons to whom the Software is
-  * furnished to do so, subject to the following conditions:
+  * 特此向任何获得副本的人免费授予许可
+  * 本软件及相关文档文件（“软件”），以处理
+  * 在软件中不受限制，包括但不限于权利
+  * 使用、复制、修改、合并、发布、分发、再许可和/或出售
+  * 软件的副本，并允许软件的使用人
+  * 提供这样做，受以下条件的约束：
   *
   * The above copyright notice and this permission notice shall be included in all
   * copies or substantial portions of the Software.
@@ -9495,8 +9491,8 @@ object Adapter {
   }
 
   /*
-   * Since UserDefinedType is hidden from users. We cannot directly return spatialRDD to spatialDf.
-   * Let's wait for Spark side's change
+   * 由于 UserDefinedType 对用户隐藏。我们不能直接将spatialRDD 返回给spatialDf。
+   * 让我们等待Spark方面的变化
    */
   /*
   def toSpatialDf(spatialRDD: SpatialRDD[Geometry], sparkSession: SparkSession): DataFrame =
@@ -10678,6 +10674,8 @@ if __name__ == '__main__':
  
 #### linear_regression.py
 
+pd.DataFrame.from_records
+
 ```py
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10755,12 +10753,12 @@ def randomforest_regression(X_train, y_train, X_test, y_test, max_depth=6):
 
     y_pred = clf.predict(X_test)
 
-    # The mean squared error
+    # 均方误差
     print("Mean squared error: %.2f"
           % mean_squared_error(y_test, y_pred))
-    # Explained variance score: 1 is perfect prediction
+    # 解释方差得分：1 是完美预测
     print('Coefficient of determination(R^2): %.2f' % r2_score(y_test, y_pred))
-    # The coefficients
+    # 系数
     cols = X_train.columns.tolist()
     coef = clf.feature_importances_
     coef = list(zip(cols, coef))
@@ -10775,17 +10773,17 @@ def lasso_regression(X_train, y_train, X_test, y_test, normalize=False):
     clf = linear_model.LassoCV(alphas=np.arange(0.1, 2, 0.1), max_iter=5000)
     clf.fit(X_train, y_train)
 
-    # Make predictions using the testing set
+    # 使用测试集进行预测
     y_pred = clf.predict(X_test)
 
-    # The intercept
+    # 拦截
     print("Intercept: %.4f" % clf.intercept_)
-    # The mean squared error
+    # 均方误差
     print("Mean squared error: %.2f"
           % mean_squared_error(y_test, y_pred))
-    # Explained variance score: 1 is perfect prediction
+    # 解释方差得分：1 是完美预测
     print('Coefficient of determination(R^2): %.2f' % r2_score(y_test, y_pred))
-    # The coefficients
+    # 系数
     cols = X_train.columns.tolist()
     coef = clf.coef_.tolist()
     coef = list(zip(cols, coef))
@@ -10867,23 +10865,22 @@ def stepwise_selection(X, y,
                        threshold_in=0.01,
                        threshold_out = 0.05,
                        verbose=True):
-    """ Perform a forward-backward feature selection
-    based on p-value from statsmodels.api.OLS
-    Arguments:
-        X - pandas.DataFrame with candidate features
-        y - list-like with the target
-        initial_list - list of features to start with (column names of X)
-        threshold_in - include a feature if its p-value < threshold_in
-        threshold_out - exclude a feature if its p-value > threshold_out
-        verbose - whether to print the sequence of inclusions and exclusions
-    Returns: list of selected features
-    Always set threshold_in < threshold_out to avoid infinite looping.
+    """ 根据 statsmodels.api.OLS 中的 p 值执行前向后向特征选择
+    参数：
+        X - pandas.DataFrame 具有候选特征
+        y - 与目标类似的列表
+        initial_list - 开始的功能列表（X 的列名）
+        threshold_in - 包含一个特征，如果它的 p 值 < threshold_in
+        threshold_out - 如果 p 值 > threshold_out，则排除特征
+        verbose - 是否打印包含和排除的顺序
+    返回：选定功能列表
+    始终设置 threshold_in < threshold_out 以避免无限循环。
     See https://en.wikipedia.org/wiki/Stepwise_regression for the details
     """
     included = list(initial_list)
     while True:
         changed=False
-        # forward step
+        # 向前迈进
         excluded = list(set(X.columns)-set(included))
         new_pval = pd.Series(index=excluded)
         for new_column in excluded:
@@ -10897,11 +10894,11 @@ def stepwise_selection(X, y,
             if verbose:
                 print('Add  {:30} with p-value {:.6}'.format(best_feature, best_pval))
 
-        # backward step
+        # 倒退一步
         model = sm.OLS(y, sm.add_constant(pd.DataFrame(X[included]))).fit()
-        # use all coefs except intercept
+        # 使用除截距以外的所有系数
         pvalues = model.pvalues.iloc[1:]
-        worst_pval = pvalues.max() # null if pvalues is empty
+        worst_pval = pvalues.max() # 如果 pvalues 为空，则为 null
         if worst_pval > threshold_out:
             changed=True
             worst_feature = pvalues.argmax()

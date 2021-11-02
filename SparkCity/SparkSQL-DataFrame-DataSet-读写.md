@@ -1,4 +1,41 @@
-## RDD编程 vs SparkSQL编程
+<!-- vscode-markdown-toc -->
+* 1. [RDD编程 vs SparkSQL编程](#RDDvsSparkSQL)
+* 2. [RDD，DataFrame和DataSet对比](#RDDDataFrameDataSet)
+* 3. [创建DataSet](#DataSet)
+* 4. [DataSet -> DataFrame -> RDD](#DataSet-DataFrame-RDD)
+* 5. [Spark SQL的数据源](#SparkSQL)
+	* 5.1. [1、输入](#)
+	* 5.2. [2、输出](#-1)
+* 6. [创建DataFrame](#DataFrame)
+	* 6.1. [通过toDF方法转换成DataFrame (普通方式)](#toDFDataFrame)
+	* 6.2. [通过createDataFrame方法将Pandas.DataFrame转换成pyspark中的DataFrame](#createDataFramePandas.DataFramepysparkDataFrame)
+	* 6.3. [通过createDataFrame方法指定schema动态创建DataFrame](#createDataFrameschemaDataFrame)
+	* 6.4. [通过读取文件创建](#-1)
+		* 6.4.1. [读取json文件](#json)
+		* 6.4.2. [读取csv文件](#csv)
+		* 6.4.3. [读取parquet文件](#parquet)
+		* 6.4.4. [读取hive数据表](#hive)
+		* 6.4.5. [读取mysql数据表](#mysql)
+* 7. [DataFrame保存成文件](#DataFrame-1)
+* 8. [DataFrame的API交互](#DataFrameAPI)
+	* 8.1. [Action操作](#Action)
+	* 8.2. [类RDD操作](#RDD)
+	* 8.3. [类Excel操作](#Excel)
+	* 8.4. [类SQL表操作](#SQL)
+		* 8.4.1. [表查询(select,selectExpr,where)](#selectselectExprwhere)
+		* 8.4.2. [表连接(join,union,unionAll)](#joinunionunionAll)
+		* 8.4.3. [表分组(groupby,agg,pivot)](#groupbyaggpivot)
+* 9. [DataFrame的SQL交互](#DataFrameSQL)
+	* 9.1. [注册视图后进行SQL交互](#SQL-1)
+	* 9.2. [对Hive表进行增删改查操作](#Hive)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+##  1. <a name='RDDvsSparkSQL'></a>RDD编程 vs SparkSQL编程
 
 [参考链接](https://mp.weixin.qq.com/s/QIvWpLbz-ZDjB4X9clh9Ig)
 
@@ -42,7 +79,7 @@ sc = spark.sparkContext
 
 `sc`作为SparkContext的变量名
 
-## RDD，DataFrame和DataSet对比
+##  2. <a name='RDDDataFrameDataSet'></a>RDD，DataFrame和DataSet对比
 
 Spark的发展会逐步将DataSet`作为主要的数据抽象`，弱化RDD和DataFrame
 
@@ -76,7 +113,7 @@ DataFrame->RDD
 dataFrame.rdd
 ```
 
-## 创建DataSet
+##  3. <a name='DataSet'></a>创建DataSet
 
 RDD->DataSet
 
@@ -90,7 +127,7 @@ DataFrame -> DataSet
 dataFrame.to[Person]
 ```
 
-## DataSet -> DataFrame -> RDD
+##  4. <a name='DataSet-DataFrame-RDD'></a>DataSet -> DataFrame -> RDD
 
 DataSet->RDD
 
@@ -104,9 +141,9 @@ DataSet -> DataFrame
 dataSet.toDF
 ```
 
-## Spark SQL的数据源
+##  5. <a name='SparkSQL'></a>Spark SQL的数据源
 
-### 1、输入
+###  5.1. <a name=''></a>1、输入
 
 对于Spark SQL的输入需要使用:
 
@@ -132,7 +169,7 @@ sparkSession.read.csv
 ```
 
 
-### 2、输出
+###  5.2. <a name='-1'></a>2、输出
 
 对于Spark SQL的输出需要使用
 
@@ -162,9 +199,9 @@ dataFrame.write.csv("path")
 
 如果需要保存成一个text文件，那么需要dataFrame里面只有一列（只需要一列即可）
 
-## 创建DataFrame
+##  6. <a name='DataFrame'></a>创建DataFrame
 
-### 通过toDF方法转换成DataFrame (普通方式)
+###  6.1. <a name='toDFDataFrame'></a>通过toDF方法转换成DataFrame (普通方式)
 
 ```scala
 //scala
@@ -257,7 +294,7 @@ root
  |-- score: long (nullable = true)
 ```
 
-### 通过createDataFrame方法将Pandas.DataFrame转换成pyspark中的DataFrame
+###  6.2. <a name='createDataFramePandas.DataFramepysparkDataFrame'></a>通过createDataFrame方法将Pandas.DataFrame转换成pyspark中的DataFrame
 
 ```py
 import pandas as pd 
@@ -292,7 +329,7 @@ df.show()
 +---------+---+
 ```
 
-### 通过createDataFrame方法指定schema动态创建DataFrame
+###  6.3. <a name='createDataFrameschemaDataFrame'></a>通过createDataFrame方法指定schema动态创建DataFrame
 
 通过编程的方式来设置schema，适用于编译器不能确定列的情况
 
@@ -348,11 +385,11 @@ dfstudent.show()
 
 ```
 
-### 通过读取文件创建
+###  6.4. <a name='-1'></a>通过读取文件创建
 
 可以读取json文件，csv文件，hive数据表或者mysql数据表得到DataFrame。
 
-#### 读取json文件
+####  6.4.1. <a name='json'></a>读取json文件
 
 ```py
 #读取json文件生成DataFrame
@@ -370,7 +407,7 @@ df.show()
 +----+-------+
 ```
 
-#### 读取csv文件
+####  6.4.2. <a name='csv'></a>读取csv文件
 
 ```py
 #读取csv文件
@@ -433,7 +470,7 @@ root
  |-- label: integer (nullable = true)
 ```
 
-#### 读取parquet文件
+####  6.4.3. <a name='parquet'></a>读取parquet文件
 
 ```py
 #读取parquet文件
@@ -450,7 +487,7 @@ df.show()
 +------+--------------+----------------+
 ```
 
-#### 读取hive数据表
+####  6.4.4. <a name='hive'></a>读取hive数据表
 
 ```py
 #读取hive数据表生成DataFrame
@@ -475,7 +512,7 @@ df.show(5)
 only showing top 5 rows
 ```
 
-#### 读取mysql数据表
+####  6.4.5. <a name='mysql'></a>读取mysql数据表
 
 ```py
 #读取mysql数据表生成DataFrame
@@ -490,7 +527,7 @@ df.show()
 ```
 
 
-## DataFrame保存成文件
+##  7. <a name='DataFrame-1'></a>DataFrame保存成文件
 
 可以保存成csv文件，json文件，parquet文件或者保存成hive数据表
 
@@ -521,7 +558,7 @@ df.write.parquet("data/people_write.parquet")
 df.write.bucketBy(42, "name").sortBy("age").saveAsTable("people_bucketed")
 ```
 
-## DataFrame的API交互
+##  8. <a name='DataFrameAPI'></a>DataFrame的API交互
 
 ```py
 from pyspark.sql import Row
@@ -552,7 +589,7 @@ root
  |-- gender: string (nullable = true)
 ```
 
-### Action操作
+###  8.1. <a name='Action'></a>Action操作
 
 DataFrame的Action操作包括show,count,collect,,describe,take,head,first等操作。
 
@@ -636,7 +673,7 @@ df.head(2)
  Row(name='HanMeiMei', age=16, gender='female')]
 ```
 
-### 类RDD操作
+###  8.2. <a name='RDD'></a>类RDD操作
 
 DataFrame支持RDD中一些诸如distinct,cache,sample,foreach,intersect,except等操作。
 
@@ -808,7 +845,7 @@ dfexcept.show()
 +-----------+
 ```
 
-### 类Excel操作
+###  8.3. <a name='Excel'></a>类Excel操作
 
 可以对DataFrame进行增加列，删除列，重命名列，排序等操作，去除重复行，去除空行，就跟操作Excel表格一样。
 
@@ -1079,7 +1116,7 @@ df_freq.show()
 +-------------+----------------+
 ```
 
-### 类SQL表操作
+###  8.4. <a name='SQL'></a>类SQL表操作
 
 类SQL表操作主要包括
 
@@ -1112,7 +1149,7 @@ df.show()
 +---------+---+------+
 ```
 
-#### 表查询(select,selectExpr,where)
+####  8.4.1. <a name='selectselectExprwhere'></a>表查询(select,selectExpr,where)
 
 ```py
 #表查询select
@@ -1224,7 +1261,7 @@ dftest.show()
 +------+---+------+
 ```
 
-#### 表连接(join,union,unionAll)
+####  8.4.2. <a name='joinunionunionAll'></a>表连接(join,union,unionAll)
 
 ```py
 #表连接join
@@ -1375,7 +1412,7 @@ dfunion.show()
 +---------+---+------+
 ```
 
-#### 表分组(groupby,agg,pivot)
+####  8.4.3. <a name='groupbyaggpivot'></a>表分组(groupby,agg,pivot)
 
 ```py
 #表分组 groupBy
@@ -1503,13 +1540,13 @@ dforder.show()
 +---------+-----+------+-----+
 ```
 
-## DataFrame的SQL交互
+##  9. <a name='DataFrameSQL'></a>DataFrame的SQL交互
 
 将DataFrame注册为临时表视图或者全局表视图后，可以使用sql语句对DataFrame进行交互。
 
 不仅如此，还可以通过SparkSQL对Hive表直接进行增删改查等操作。
 
-### 注册视图后进行SQL交互
+###  9.1. <a name='SQL-1'></a>注册视图后进行SQL交互
 
 ```py
 #注册为临时表视图, 其生命周期和SparkSession相关联
@@ -1572,7 +1609,7 @@ spark.newSession().sql("select * from global_temp.student").show()
 +---------+---+------+
 ```
 
-### 对Hive表进行增删改查操作
+###  9.2. <a name='Hive'></a>对Hive表进行增删改查操作
 
 ```py
 #删除hive表

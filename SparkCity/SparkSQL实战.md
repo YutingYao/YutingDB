@@ -1,4 +1,24 @@
-## 数据说明
+<!-- vscode-markdown-toc -->
+* 1. [数据说明](#)
+* 2. [任务](#-1)
+* 3. [步骤](#-1)
+	* 3.1. [加载数据](#-1)
+		* 3.1.1. [tbStock.txt](#tbStock.txt)
+		* 3.1.2. [tbStockDetail.txt](#tbStockDetail.txt)
+		* 3.1.3. [tbDate.txt](#tbDate.txt)
+	* 3.2. [注册表](#-1)
+	* 3.3. [解析表](#-1)
+		* 3.3.1. [计算所有订单中每年的销售单数、销售总额](#-1)
+		* 3.3.2. [计算所有订单每年最大金额订单的销售额](#-1)
+		* 3.3.3. [计算所有订单中每年最畅销货品](#-1)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+##  1. <a name=''></a>数据说明
 
 这里有三个数据集，合起来大概有`几十万条`数据，是关于`货品交易`的数据集。
 
@@ -6,7 +26,7 @@
 tbDate.txt -- tbStockDetail.txt -- tbStock.txt
 ```
 
-## 任务
+##  2. <a name='-1'></a>任务
 
 这里有三个需求：
 
@@ -14,11 +34,11 @@ tbDate.txt -- tbStockDetail.txt -- tbStock.txt
 - 计算所有订单每年`最大金额订单的销售额`
 - 计算所有订单中每年`最畅销货品`
 
-## 步骤
+##  3. <a name='-1'></a>步骤
 
-### 加载数据
+###  3.1. <a name='-1'></a>加载数据
 
-#### tbStock.txt
+####  3.1.1. <a name='tbStock.txt'></a>tbStock.txt
 
 ```scala
 case class tbStock(ordernumber:String,locationid:String,dateid:String) extends Serializable
@@ -39,7 +59,7 @@ tbStockDS.show()
 只显示20行
 ```
 
-#### tbStockDetail.txt
+####  3.1.2. <a name='tbStockDetail.txt'></a>tbStockDetail.txt
 
 ```scala
 case class tbStockDetail(ordernumber:String,rownum:Int,itemid:String,number:Int,price:Double,amount:Double) extends Serializable
@@ -60,7 +80,7 @@ tbStockDetailDS.show()
 只显示20行
 ```
 
-#### tbDate.txt
+####  3.1.3. <a name='tbDate.txt'></a>tbDate.txt
 
 ```scala
 case class tbDate(dateid:String,years:Int,theyear:Int,month:Int,day:Int,weekday:Int,week:Int,quarter:Int,period:Int,halfmonth:Int) extends Serializable
@@ -81,7 +101,7 @@ tbDateDS.show()
 只显示20行
 ```
 
-### 注册表
+###  3.2. <a name='-1'></a>注册表
 
 ```sql
 tbStockDS.createOrReplaceTempView("tbStock")
@@ -89,9 +109,9 @@ tbDateDS.createOrReplaceTempView("tbDate")
 tbStockDetailDS.createOrReplaceTempView("tbStockDetail")
 ```
 
-### 解析表
+###  3.3. <a name='-1'></a>解析表
 
-#### 计算所有订单中每年的销售单数、销售总额
+####  3.3.1. <a name='-1'></a>计算所有订单中每年的销售单数、销售总额
 
 ```sql
 -- sql语句
@@ -124,7 +144,7 @@ order by c.theyear").show
 只显示20行
 ```
 
-#### 计算所有订单每年最大金额订单的销售额
+####  3.3.2. <a name='-1'></a>计算所有订单每年最大金额订单的销售额
 
 a、先统计每年每个订单的销售额
 
@@ -192,7 +212,7 @@ order by theyear desc").show
 只显示20行
 ```
 
-#### 计算所有订单中每年最畅销货品
+####  3.3.3. <a name='-1'></a>计算所有订单中每年最畅销货品
 
 a、求出每年每个货品的销售额
 

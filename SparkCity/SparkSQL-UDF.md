@@ -1,4 +1,29 @@
-## 自定义函数大致可以分为三种
+<!-- vscode-markdown-toc -->
+* 1. [自定义函数大致可以分为三种](#)
+* 2. [自定义udf函数](#udf)
+	* 2.1. [通过匿名函数注册UDF](#UDF)
+	* 2.2. [通过实名函数注册UDF](#UDF-1)
+	* 2.3. [DataFrame的udf方法](#DataFrameudf)
+		* 2.3.1. [注册：](#-1)
+		* 2.3.2. [使用：](#-1)
+		* 2.3.3. [withColumn和select的区别](#withColumnselect)
+* 3. [用户自定义聚合函数](#-1)
+	* 3.1. [弱类型用户自定义聚合函数](#-1)
+	* 3.2. [强类型用户自定义聚合函数](#-1)
+* 4. [完整代码](#-1)
+	* 4.1. [示例一，使用UDF给user表添加两列](#UDFuser)
+	* 4.2. [实例二：温度转化](#-1)
+	* 4.3. [实例三：时间转化](#-1)
+* 5. [实践操作四：写一个UDF来将一些Int数字分类](#UDFInt)
+	* 5.1. [案例五：SparkSQL解析多层嵌套Json时](#SparkSQLJson)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+##  1. <a name=''></a>自定义函数大致可以分为三种
 
 UDF(User-Defined-Function)：
 
@@ -26,9 +51,9 @@ UDTF(User-Defined Table-Generating Functions)：
 flatMap
 ```
 
-## 自定义udf函数
+##  2. <a name='udf'></a>自定义udf函数
 
-### 通过匿名函数注册UDF
+###  2.1. <a name='UDF'></a>通过匿名函数注册UDF
 
 1. 注册一个UDF函数
 
@@ -79,7 +104,7 @@ spark.sql("select name,strLen(name) as name_len from user").show
 +-----+--------+
 ```
 
-### 通过实名函数注册UDF
+###  2.2. <a name='UDF-1'></a>通过实名函数注册UDF
 
 实名函数的注册有点不同，要在后面加 _(注意前面有个空格)
 
@@ -105,11 +130,11 @@ spark.udf.register("isAdult", isAdult _)
 
 至于使用都是一样的
 
-### DataFrame的udf方法
+###  2.3. <a name='DataFrameudf'></a>DataFrame的udf方法
 
 DataFrame的udf方法虽然和Spark Sql的名字一样，但是属于不同的类，它在org.apache.spark.sql.functions里，下面是它的用法
 
-#### 注册：
+####  2.3.1. <a name='-1'></a>注册：
 
 ```scala
 import org.apache.spark.sql.functions._
@@ -119,7 +144,7 @@ val strLen = udf((str: String) => str.length())
 val udf_isAdult = udf(isAdult _)
 ```
 
-#### 使用：
+####  2.3.2. <a name='-1'></a>使用：
 
 可通过`withColumn`和`select`使用
 
@@ -143,7 +168,7 @@ userDF.select(col("*"), strLen(col("name")) as "name_len", udf_isAdult(col("age"
 +-----+---+--------+-------+
 ```
 
-#### withColumn和select的区别
+####  2.3.3. <a name='withColumnselect'></a>withColumn和select的区别
 
 可通过`withColumn`的源码看出`withColumn`的功能是`实现增加一列`，或者`替换`一个已存在的列，他会先`判断`DataFrame里有没有这个列名，如果有的话就会替换掉原来的列，没有的话就用调用select方法`增加一列`，
 
@@ -178,9 +203,9 @@ def withColumn(colName: String, col: Column): DataFrame = {
 }
 ```
 
-## 用户自定义聚合函数
+##  3. <a name='-1'></a>用户自定义聚合函数
 
-### 弱类型用户自定义聚合函数
+###  3.1. <a name='-1'></a>弱类型用户自定义聚合函数
 
 需要继承`UserDefinedAggregateFunction`类，并实现其中的8个方法
 
@@ -316,7 +341,7 @@ override def evaluate(buffer: Row): Any = ???
 
 3. 需要通过spark.sql去运行你的SQL语句，可以通过 `select UDAF`(列名) 来应用你的用户自定义聚合函数。
 
-### 强类型用户自定义聚合函数
+###  3.2. <a name='-1'></a>强类型用户自定义聚合函数
 
 1. 新建一个class，继承Aggregator[Employee, Average, Double]，其中Employee是在应用聚合函数的时候传入的对象，Average是聚合函数在运行的时候内部需要的数据结构，Double是聚合函数最终需要输出的类型。这些可以根据自己的业务需求去调整。复写相对应的方法：
 
@@ -337,9 +362,9 @@ override def outputEncoder: Encoder[Double] = ???
 
 2. 新建一个UDAF实例，通过DF或者DS的DSL风格语法去应用。
 
-## 完整代码
+##  4. <a name='-1'></a>完整代码
 
-### 示例一，使用UDF给user表添加两列
+###  4.1. <a name='UDFuser'></a>示例一，使用UDF给user表添加两列
 
 下面的代码的功能是使用UDF给user表添加两列:`name_len、isAdult`，每个输出结果都是一样的
 
@@ -506,7 +531,7 @@ object UdfDemo {
 
 ```
 
-### 实例二：温度转化
+###  4.2. <a name='-1'></a>实例二：温度转化
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -539,7 +564,7 @@ object ScalaUDFExample {
 {"city":"Montreal","avgHigh":11.1,"avgLow":1.4}
 ```
 
-### 实例三：时间转化
+###  4.3. <a name='-1'></a>实例三：时间转化
 
 ```scala
 case class Purchase(customer_id: Int, purchase_id: Int, date: String, time: String, tz: String, amount:Double)
@@ -577,7 +602,7 @@ val makeDt = udf(makeDT(_:String,_:String,_:String))
 df.select($"customer_id", makeDt($"date", $"time", $"tz"), $"amount").take(2)
 ```
 
-## 实践操作四：写一个UDF来将一些Int数字分类
+##  5. <a name='UDFInt'></a>实践操作四：写一个UDF来将一些Int数字分类
 
 ```scala
 val formatDistribution = (view: Int) => {
@@ -610,7 +635,7 @@ SQL：
 session.sql("select user_id, formatDistribution(variance_digg_count) as variance from video")
 ```
 
-### 案例五：SparkSQL解析多层嵌套Json时
+###  5.1. <a name='SparkSQLJson'></a>案例五：SparkSQL解析多层嵌套Json时
 
 解决思路：
 
