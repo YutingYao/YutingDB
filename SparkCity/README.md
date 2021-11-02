@@ -2404,6 +2404,68 @@ object Strategy {
 
 extends spark.internal.Logging
 
+`serde`是一个序列化与反序列化框架。
+
+Serde自身并未提供具体的序列化与反序列化实现，需要`结合社区提供的其他模块`，实现对具体数据结构的操作。
+
+大部分语言一般是通过`反射`实现序列化操作，`性能开销`普遍较大。
+
+而serde是基于`rust的trait系统`来实现序列化&反序列化，
+
+每种数据结构通过实现serde的Serialize和Deserialize接口来实现序列化功能，
+
+并且`rust编译器`可以在很多场景下对序列化进行高度优化，因此这种实现方案的性能特别高。
+
+serde是开箱即用的，可以序列化和反序列化`任何一种常见的Rust数据类型`，
+
+包括`String, &str, usize,Vec<T>, HashMap<K,V>`等，
+
+以及由这些基础数据类型构造的`其他复杂数据类型`。
+
+社区支持的数据结构:
+
+JSON https://github.com/serde-rs/json
+
+Bincode https://github.com/servo/bincode
+
+CBOR https://github.com/pyfisch/cbor
+
+YAML https://github.com/dtolnay/serde-yaml
+
+MessagePack https://github.com/3Hren/msgpack-rust
+
+TOML https://github.com/alexcrichton/toml-rs
+
+Pickle https://github.com/birkenfeld/serde-pickle
+
+RON https://github.com/ron-rs/ron
+
+BSON https://github.com/mongodb/bson-rust
+
+Avro https://github.com/flavray/avro-rs
+
+JSON5 https://github.com/callum-oakley/json5-rs
+
+Postcard https://github.com/jamesmunns/postcard
+
+URL https://docs.rs/serde_qs
+
+Envy https://github.com/softprops/envy
+
+Envy Store https://github.com/softprops/envy-store
+
+S-expressions https://github.com/rotty/lexpr-rs
+
+D-Bus https://docs.rs/zvariant/2.5.0/zvariant/
+
+FlexBuffers https://github.com/google/flatbuffers/tree/master/rust/flexbuffers
+
+Bencode https://github.com/P3KI/bendy
+
+DynamoDB Items https://docs.rs/serde_dynamo/2.0.0/serde_dynamo/
+
+
+
 ```scala
 package edu.gmu.stc.analysis
 
