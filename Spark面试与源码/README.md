@@ -47,6 +47,8 @@
 
 [【硬刚大数据】从零到大数据专家面试篇之SparkSQL篇](https://mp.weixin.qq.com/s/w9StfmI-1h4nAkpp3d-SZw)
 
+[大数据面试题总结（附答案）](https://mp.weixin.qq.com/s/kpBmsfJ3D_SP8pUadGvgig)
+
 ###  1.2. <a name='-1'></a>基础
 
 ####  1.2.1. <a name='RDD'></a>RDD
@@ -218,6 +220,8 @@
 [用户访问session分析(十三) --json 数据格式](https://mp.weixin.qq.com/s/Cycxf6A8K8szlp5eWYuEpA)
 
 [诡异 | Spark使用get_json_object函数](https://mp.weixin.qq.com/s/UG8tYeFIxuiZg-db9pB3xA)
+
+[JSON 之 Jackson](https://mp.weixin.qq.com/s/3hK7sAp_y2Uh9Sb2e9ioHA)
 
 ####  1.3.2. <a name='streaming'></a>streaming
 
