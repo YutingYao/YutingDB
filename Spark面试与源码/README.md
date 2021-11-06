@@ -223,6 +223,8 @@
 
 [JSON 之 Jackson](https://mp.weixin.qq.com/s/3hK7sAp_y2Uh9Sb2e9ioHA)
 
+[STTP的基本使用(2)：Json](https://mp.weixin.qq.com/s/rNs0Kuj6fWudUw4q3bxiyw)
+
 ####  1.3.2. <a name='streaming'></a>streaming
 
 [Spark之Spark Streaming（初级篇）](https://mp.weixin.qq.com/s/qFcvfqgj7VFJO-GTnB_d7Q)
