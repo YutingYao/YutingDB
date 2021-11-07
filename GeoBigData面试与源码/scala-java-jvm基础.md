@@ -216,6 +216,8 @@
 
 ###  3.2. <a name='-1'></a>语法糖
 
+[一文搞懂scala中奇怪的特殊符号应用场景](https://mp.weixin.qq.com/s/JbJLqfqn8dsG6dj89oUQkA)
+
 [Scala学习笔记(五) 抽象类以及类中的一些语法糖](https://mp.weixin.qq.com/s/5ADSeIaOmeYQCm8AlMFESg)
 
 [【雷火UX数据挖掘】Scala的语法糖](https://mp.weixin.qq.com/s/bpfIB3dUSdjzIQIzYC5lMg)
