@@ -127,6 +127,10 @@
 
 [Spark 源码（1） - 通信基石之 Spark Rpc 的发展历程](https://mp.weixin.qq.com/s/WYtxvp1IiRdK-Yy6SoB0qQ)
 
+[Flink架构分析之RPC详解](https://www.cnblogs.com/andyhe/p/10579604.html)
+
+[Java架构-还不了解Flink底层RPC使用的框架和原理？那就认真看完](https://mp.weixin.qq.com/s/bSfCkdTrYSGB5rA67IIl7A)
+
 ####  1.2.6. <a name='-1'></a>运行机制
  
 [Spark on YARN-Cluster和YARN-Client的区别](https://mp.weixin.qq.com/s/tzO0iJT2aauRh0T3R6Oxnw)

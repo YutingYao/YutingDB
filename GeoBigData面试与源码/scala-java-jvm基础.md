@@ -22,6 +22,13 @@
 	* 4.3. [序列化](#-1)
 	* 4.4. [其他](#-1)
 	* 4.5. [JVM面试](#JVM)
+* 5. [环境搭建](#-1)
+	* 5.1. [maven](#maven)
+		* 5.1.1. [面试](#-1)
+		* 5.1.2. [实战](#-1)
+	* 5.2. [sbt](#sbt)
+	* 5.3. [Makefile](#Makefile)
+	* 5.4. [docker](#docker)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -406,3 +413,63 @@
 [面试系列二：精选大数据面试真题JVM专项-附答案详细解析](https://mp.weixin.qq.com/s/0auWlqdL8dK1Yo1uwHzjmQ)
 
 [总结的JVM面试题](https://mp.weixin.qq.com/s/t3whubIsUV5Xg08u0-thrg)
+
+##  5. <a name='-1'></a>环境搭建
+
+###  5.1. <a name='maven'></a>maven
+
+####  5.1.1. <a name='-1'></a>面试
+
+[Maven详解【面试+工作】](https://mp.weixin.qq.com/s/WL5-CuDJs8iyA_-phP47fQ)
+
+[面试问你：maven的生命周期你知道吗？](https://mp.weixin.qq.com/s/tM47bGP6mVHKm_YoDzi7KQ)
+
+[Maven面试题及答案（18题）](https://mp.weixin.qq.com/s/JK58sISMw-sHcILInTc35g)
+
+[面试：Maven 的这 7 个问题你思考过没有？](https://mp.weixin.qq.com/s/Etb5rMU4C-2Yh3j0mHgLKA)
+
+[Maven笔记之面试题整理](https://mp.weixin.qq.com/s/2Mcwk3KUx8Vg80qDYFwOIw)
+
+[Maven从入门到精通](https://mp.weixin.qq.com/s/5otPSpHK69YiolUTx9y2bw)
+
+[Maven入门教程(二）](https://mp.weixin.qq.com/s/gN8VJhcrpFrs9CcMaktVrQ)
+
+####  5.1.2. <a name='-1'></a>实战
+
+[大佬对Maven进行深度讲解：什么是Maven？POM.XML如何解读？](https://mp.weixin.qq.com/s/xpe9cLw7uvsWt5TRVv3PNA)
+
+[各种主流SCM及maven相关插件](https://cloud.tencent.com/developer/article/1415961)
+
+[Maven自动部署-SCM](http://www.360doc6.net/wxarticlenew/825347219.html)
+
+[Maven架构选型：单模块还是多模块？网友：多此一举~](https://mp.weixin.qq.com/s/IySquKLJL5AZ9Vk7fJYHwQ)
+
+[面试官：说说 Maven 的依赖管理！](https://mp.weixin.qq.com/s/tyPZeXHR3u2aavBVisp-VQ)
+
+[Apache Flink利用Maven对Scala与Java进行混编](https://mp.weixin.qq.com/s/4R80PSOTk1JbX0NiE7LMBg)
+
+###  5.2. <a name='sbt'></a>sbt
+
+[SBT和Scala之间不得不说的那些事儿](https://mp.weixin.qq.com/s/SA8CgeZUIPguKE0ZHhz-Lg)
+
+[内网环境idea使用sbt构建scala项目](https://mp.weixin.qq.com/s/2eDAlYa53maXLPn0JlS_Bw)
+
+[【读书笔记】Testing in scala （一）sbt工具使用](https://mp.weixin.qq.com/s/_t-LNJ_2eHMl3KlwI5OEWQ)
+
+###  5.3. <a name='Makefile'></a>Makefile
+
+[make命令和makefile文件](https://mp.weixin.qq.com/s/zfRwUW_SdwzgLxkDPtrE_A)
+
+[Makefile 使用（1）](https://mp.weixin.qq.com/s/CGAWqpX599tqOS-6ZYNjww)
+
+[Makefile 使用（2）：基础知识整理](https://mp.weixin.qq.com/s/AOQZ-Oad-w0PJnJFVAsb1w)
+
+###  5.4. <a name='docker'></a>docker
+
+[史上最详细的docker学习手册，请查收！](https://mp.weixin.qq.com/s/yxA5Hf5UkwJ6seiYaqZDQg)
+
+[教你用 Docker 搭建网站](https://mp.weixin.qq.com/s/NcbyTWGYh021nWJkTliydA)
+
+[Docker 从入门到精通（建议收藏的教程）](https://mp.weixin.qq.com/s/q00XXglhGggrfeFHTuJ9oQ)
+
+[Docker最常用的命令总结](https://mp.weixin.qq.com/s/VLBFbqhiIIWzD864Xp4WwA)
