@@ -41,6 +41,22 @@
 
 ##  1. <a name='SBT'></a>SBT
 
+> path
+
+javaOptions ++= Seq(s"-Djava.library.`path`=${Environment.`ldLibraryPath`}")
+
+lazy val `ldLibraryPath` = either("LD_LIBRARY_PATH", "/usr/local/lib")
+
+> MergeStrategy
+
+assemblyMergeStrategy in assembly := {
+    case "reference.conf" => MergeStrategy.concat
+    case "application.conf" => MergeStrategy.concat
+    case n if n.endsWith(".SF") || n.endsWith(".RSA") || n.endsWith(".DSA") => MergeStrategy.discard
+    case "META-INF/MANIFEST.MF" => MergeStrategy.discard
+    case _ => MergeStrategy.first
+  },
+
 ```sbt
 lazy val commonSettings = Seq(
   version := "0.0.1-SNAPSHOT",
@@ -77,7 +93,7 @@ lazy val commonSettings = Seq(
 
   test in assembly := {},
 
-  /** Shapeless shading due to circe */
+  /** Shapeless shading due to circe 由于环形造成的形状阴影 */
   assemblyShadeRules in assembly := {
     val shadePackage = "com.azavea.shaded"
     Seq(
@@ -85,6 +101,7 @@ lazy val commonSettings = Seq(
       ShadeRule.rename("javax.ws.rs.**" -> s"$shadePackage.javax.ws.rs.@1").inAll
     )
   },
+  
   assemblyMergeStrategy in assembly := {
     case "reference.conf" => MergeStrategy.concat
     case "application.conf" => MergeStrategy.concat
@@ -227,6 +244,10 @@ sbt-spark-demo:
 
 ###  5.1. <a name='resourcesapplication.conf'></a>/resources/application.conf
 
+`output-path` = "../data/img"
+
+`crs` = "EPSG:4326"
+
 ```conf
 lc8 {
   scenes = [
@@ -261,6 +282,19 @@ vlm.source.gdal.enabled = true
 ###  5.2. <a name='producersrcmainscalacomazavea'></a>/producer/src/main/scala/com/azavea/
 
 ####  5.2.1. <a name='Main.scala'></a>Main.scala
+
+> path
+
+val `outputPath`      = Opts.option[String]("outputPath", help = "path to put generated kafka messages").withDefault("../data/json")
+
+> path -> persist
+
+(`outputPath`, generateOnly, sendGenerated, generateAndSend, skipGeneration).mapN { (`path`, go, seg, gas, sg) =>
+      if(go) Generator.persist(`path`)
+      else if (seg) Generator.sendPersisted(`path`)
+      else if (sg) Generator.send(`path`)
+      else { Generator.persist(`path`); Generator.sendPersisted(`path`) }
+    }
 
 ```scala
 /*
@@ -314,6 +348,16 @@ object Main extends CommandApp(
 
 ####  5.2.2. <a name='confLC8ScenesConfig.scala'></a>/conf/LC8ScenesConfig.scala
 
+> path
+
+case class LC8Scene(name: String, band: Int, count: Int, crs: String, `outputPath`: String) {
+  private val pattern = """_([0-9]{6})_""".r
+  def `path`: String = {
+    val (`path`, row) = pattern.findFirstIn(name).getOrElse(throw new Exception("Bad LC8 Scene name")).init.tail.splitAt(3)
+    s"s3://landsat-pds/c1/L8/${`path`}/${row}/${name}/${name}_B${band}.TIF"
+  }
+}
+
 ```scala
 /*
  * Copyright 2019 Azavea
@@ -356,6 +400,107 @@ object LC8ScenesConfig {
 ```
 
 ####  5.2.3. <a name='generatorGenerator.scala'></a>/generator/Generator.scala
+
+> message
+
+kafka -> lazy val `messageSender` -> `getMessageSender` -> `IngestStreamConfig`.kafka.`bootstrapServers`
+`IngestStreamConfig`.kafka.`topic`
+
+`messageSender`.batchWriteValue
+
+> reproject
+
+polygon = mp.`reproject`(`crs`, scene.`getCRS`)
+
+> path
+
+if(`path`.`isLocalPath`) 
+  new PrintWriter(
+    s"$`path`/${fields.name}.json"
+    ) { 
+    write(fields.asJson.spaces2); 
+    close 
+    }
+
+val files = getListOfFiles(`path`).filter(
+  _.endsWith(".json")
+  )
+    println(
+      s"Sending: $`path` -> $files"
+      )
+
+val source = getRasterSource(scene.`path`)
+
+`outputPath` = scene.`outputPath`
+
+`uri` = scene.`path`
+
+generateFields
+      .map(_.map(persistFields(_, `outputPath`)))
+
+> fields - generate and persist
+
+fields.name
+
+fields.asJson.spaces2
+
+  // 漂亮打印仅仅是为了一个真实的kafka实例的演示目的，它是被推荐的 NOTE: pretty print is done only for demo purposes for a real kafka instance it's recommended to
+
+  def persistFields(fields: Fields, path: String): Unit =
+    if(path.isLocalPath) new PrintWriter(s"$path/${fields.name}.json") { write(fields.asJson.spaces2); close }
+    else throw new Exception("Only local FS is supported now")
+
+  def sendFields(fields: Fields, path: String): Unit =
+    messageSender.batchWriteValue(IngestStreamConfig.kafka.topic, fields.asJson.spaces2 :: Nil)
+
+  def sendPersisted(path: String): Unit = {
+    val files = getListOfFiles(path).filter(_.endsWith(".json"))
+    println(s"Sending: $path -> $files")
+    val json = files.map(getJsonFromFile).filter(_.nonEmpty)
+    messageSender.batchWriteValue(IngestStreamConfig.kafka.topic, json)
+  }
+
+  def generateFields(implicit cs: ContextShift[IO]): List[IO[Fields]] =
+    LC8ScenesConfig.scenes.map { scene =>
+      IO {
+        val source = getRasterSource(scene.path)
+        val extent = source.extent
+        val crs = source.crs
+        val fields =
+          multiPolygons(extent)(scene.count)
+            .map { case (id, mp) =>
+              Field(
+                id         = s"${scene.name}-${id}",
+                polygon    = mp.reproject(crs, scene.getCRS),
+                outputPath = scene.outputPath,
+                crs        = scene.getCRS
+              )
+            }
+
+        Fields(
+          name      = scene.name,
+          uri       = scene.path,
+          list      = fields.toList,
+          targetCRS = Some(scene.getCRS)
+        )
+      }
+    }
+
+  def persist(outputPath: String)(implicit cs: ContextShift[IO]): Unit =
+    generateFields
+      .map(_.map(persistFields(_, outputPath)))
+      .parSequence
+      .unsafeRunSync
+
+  def send(outputPath: String)(implicit cs: ContextShift[IO]): Unit =
+    generateFields
+      .map(_.map(sendFields(_, outputPath)))
+      .parSequence
+      .unsafeRunSync
+
+}
+
+
 
 ```scala
 /*
@@ -478,6 +623,15 @@ object Generator {
 ```
 
 ####  5.2.4. <a name='generatorpackage.scala'></a>/generator/package.scala
+
+if (d.exists && d.isDirectory) 
+  d.listFiles.filter(
+    _.isFile
+    )
+    .toList
+    .map(
+      _.`getAbsolutePath`
+      )
 
 ```scala
 /*
@@ -607,6 +761,32 @@ addSbtPlugin("de.heikoseeberger" % "sbt-header" % "5.2.0")
 
 ###  7.1. <a name='resourcesapplication.conf-1'></a>/resources/application.conf
 
+> tiff
+
+`geotiff`.s3 {
+    allow-global-read: false
+    region: "us-west-2"
+  }
+
+> kafka
+
+`kafka` {
+    threads           = 10
+    topic             = "geotrellis-streaming"
+    otopic            = "geotrellis-streaming-output"
+    application-id    = "geotrellis-streaming"
+    `bootstrap-servers` = "localhost:9092"
+  }
+
+> gdal
+
+  gdal.options {
+    GDAL_DISABLE_READDIR_ON_OPEN = "YES"
+    CPL_VSIL_CURL_ALLOWED_EXTENSIONS = ".tif"
+  }
+
+  source.gdal.enabled = true
+
 ```scala
 ingest.stream {
   kafka {
@@ -648,6 +828,10 @@ vlm {
 
 ####  7.2.1. <a name='Main.scala-1'></a>Main.scala
 
+`publishToKafka` = Opts.option[String]
+
+`publishToKafka` = param.toBoolean
+
 ```scala
 /*
  * Copyright 2019 Azavea
@@ -682,6 +866,46 @@ object Main extends CommandApp(
 ```
 
 ####  7.2.2. <a name='package.scala'></a>package.scala
+
+> crs - geotiff - gdal
+
+def `toGeoTiff`(`crs`: `CRS`): `MultibandGeoTiff` = `GeoTiff`(self, `crs`)
+
+def getRasterSource(uri: String): 
+  RasterSource = if(`GDALEnabled`.enabled) 
+    `GDALRasterSource`(uri) 
+    else 
+    `GeoTiffRasterSource`(uri)
+
+> path - hdfs
+
+def `isLocalPath`: 
+  Boolean = !`path`.startsWith("s3://") || 
+    !`path`.startsWith("s3a://") || 
+    !`path`.startsWith("s3n://") || 
+    !`path`.startsWith("hdfs://")
+
+def `nonLocalPath`: 
+  Boolean = !`isLocalPath`
+
+> tile
+
+implicit class rasterMethods(val self: Raster[MultibandTile]) extends AnyVal {
+    def polygonalHistogramDouble(multiPolygon: MultiPolygon): Array[Histogram[Double]] =
+      self.tile.polygonalHistogramDouble(self.extent, multiPolygon)
+
+    def polygonalMean(multiPolygon: MultiPolygon): Array[Double] =
+      self.tile.polygonalMean(self.extent, multiPolygon)
+
+    def polygonalSumDouble(multiPolygon: MultiPolygon): Array[Double] =
+      self.tile.polygonalSumDouble(self.extent, multiPolygon)
+
+    def polygonalMinDouble(multiPolygon: MultiPolygon): Array[Double] =
+      self.tile.polygonalMinDouble(self.extent, multiPolygon)
+
+    def polygonalMaxDouble(multiPolygon: MultiPolygon): Array[Double] =
+      self.tile.polygonalMinDouble(self.extent, multiPolygon)
+  }
 
 ```sbt
 /*
@@ -769,6 +993,15 @@ package object azavea {
 
 ####  7.2.3. <a name='confGDALEnabled.scala'></a>/conf/GDALEnabled.scala
 
+> gdal
+
+case class `GDALEnabled`(enabled: Boolean = true)
+
+object `GDALEnabled` {
+  lazy val conf: `GDALEnabled` = pureconfig.loadConfigOrThrow[`GDALEnabled`]("vlm.source.gdal")
+  implicit def `GDALEnabledObjectToClass`(obj: `GDALEnabled`.type): `GDALEnabled` = conf
+}
+
 ```scala
 /*
  * Copyright 2019 Azavea
@@ -798,6 +1031,30 @@ object GDALEnabled {
 ```
 
 ####  7.2.4. <a name='confIngestStreamConfig.scala'></a>/conf/IngestStreamConfig.scala
+
+> kafka
+
+case class `KafkaStreamConfig`(
+  threads: Int, 
+  topic: String, 
+  otopic: String, 
+  applicationId: String, 
+  `bootstrapServers`: String
+  )
+
+case class `IngestStreamConfig`(
+  kafka: `KafkaStreamConfig`, 
+  spark: SparkStreamConfig
+  )
+
+> 序列化特性
+
+trait `Implicits` extends `Serializable`
+
+ - object `Implicits` extends `Implicits`
+
+ - package object `json` extends `Implicits`
+
 
 ```scala
 /*
@@ -843,6 +1100,55 @@ object IngestStreamConfig {
 
 ####  7.2.5. <a name='jsonFields.scala'></a>/json/Fields.scala
 
+> crs
+
+import geotrellis.`proj4`.{`CRS`, LatLng}
+
+case class Field(
+  id: String, 
+  polygon: MultiPolygon, 
+  `outputPath`: String, 
+  `crs`: `CRS` = LatLng
+  ) 
+  {
+  def reproject(``targetCRS``: `CRS`): Field = this.copy(
+    polygon = polygon.reproject(`crs`, `targetCRS`),
+    `crs`     = `targetCRS`
+  )
+}
+
+case class Fields(
+  name: String, 
+  uri: String, 
+  list: List[Field], 
+  `targetCRS`: Option[`CRS`] = None
+  )
+
+> jsonfield
+
+case class `Fields`(
+  name: String, 
+  uri: String, 
+  list: List[Field], 
+  targetCRS: Option[CRS] = None
+  )
+
+object Fields extends LazyLogging {
+  def fromString(value: String): Option[Fields] = {
+    parse(value) match {
+      case Right(r) => r.as[Fields] match {
+        case Right(r) => Some(r)
+        case Left(e) =>
+          logger.warn(e.stackTraceString)
+          None
+      }
+      case Left(e) =>
+        logger.warn(e.stackTraceString)
+        None
+    }
+  }
+}
+
 ```scala
 /*
  * Copyright 2019 Azavea
@@ -870,6 +1176,7 @@ import io.circe.parser._
 import io.circe.generic.extras.ConfiguredJsonCodec
 import com.typesafe.scalalogging.LazyLogging
 
+// outputPath可以是一个文件夹，在这种情况下，polygon id将是输出的名称
 // outputPath can be a folder, in this case polygon id would be the name of the output
 @ConfiguredJsonCodec
 case class Field(id: String, polygon: MultiPolygon, outputPath: String, crs: CRS = LatLng) {
@@ -901,6 +1208,144 @@ object Fields extends LazyLogging {
 ```
 
 ####  7.2.6. <a name='jsonImplicits.scala'></a>/json/Implicits.scala
+
+> json -> JsonPrinter
+
+val `prettyJsonPrinter`: Printer = Printer.spaces2.copy(dropNullValues = true)
+
+> json -> extentencoder -> List
+
+implicit val extentEncoder: `Encoder`[`Extent`] =
+  new `Encoder`[`Extent`] {
+    final def apply(`extent`: `Extent`): `Json` =
+      `List`(`extent`.xmin, `extent`.ymin, `extent`.xmax, `extent`.ymax).`asJson`
+  }
+
+> json -> extentdecoder -> emap -> List
+
+implicit val extentDecoder: `Decoder`[Extent] =
+  `Decoder`[`Json`] emap { js =>
+    new EitherOps(js.as[List[Double]]).map { case `List`(xmin, ymin, xmax, ymax) =>
+      `Extent`(xmin, ymin, xmax, ymax)
+    }.leftMap(_ => "`Extent`")
+  }
+
+> json -> pointencoder 
+
+implicit val pointEncoder: `Encoder`[Point] =
+  new `Encoder`[Point] {
+    final def apply(p: Point): `Json` =
+      `Json`.obj("lat" -> p.y.`asJson`, "lon" -> p.x.`asJson`)
+  }
+
+> json -> pointdecoder -> emap
+
+implicit val pointDecoder: `Decoder`[Point] =
+  `Decoder`.decodeJson.emap { `json`: `Json` =>
+    val lat = `json`.hcursor.downField("lat").as[Double].toOption
+    val lon = `json`.hcursor.downField("lon").as[Double].toOption
+    val res = (lat, lon).mapN { case (y, x) => Point(x, y) }
+
+    res.toRight[String]("Point"): Either[String, Point]
+  }
+
+> json -> geometryEncoder -> parse -> matchcase
+
+implicit val geometryEncoder: `Encoder`[Geometry] =
+  new `Encoder`[Geometry] {
+    final def apply(geom: Geometry): Json = {
+      `parse`(geom.`toGeoJson`) match {
+        case Right(js: `Json`) => js
+        case Left(e) => throw e
+      }
+    }
+  }
+
+> json -> geometrydecoder -> spaces4
+
+implicit val geometryDecoder: Decoder[Geometry] = Decoder[Json] map {
+  _.spaces4.`parseGeoJson`[Geometry]
+}
+
+> json -> multipolygonEncoder -> parse -> matchcase
+
+implicit val multipolygonEncoder: `Encoder`[MultiPolygon] =
+  new `Encoder[`MultiPolygon] {
+    final def apply(mp: MultiPolygon): `Json` = {
+      `parse`(mp.`toGeoJson`) match {
+        case Right(js: `Json`) => js
+        case Left(e) => throw e
+      }
+    }
+  }
+
+> json -> multipolygonDecoder -> spaces4
+
+implicit val multipolygonDecoder: `Decoder`[MultiPolygon] = `Decoder`[`Json`] map {
+  _.`spaces4`.`parseGeoJson`[MultiPolygon]
+}
+
+> json -> polygonEncoder -> parse -> matchcase
+
+implicit val polygonEncoder: `Encoder`[Polygon] =
+  new `Encoder`[Polygon] {
+    final def apply(p: Polygon): `Json` = {
+      parse(p.`toGeoJson`) match {
+        case Right(js: Json) => js
+        case Left(e) => throw e
+      }
+    }
+  }
+
+> json -> polygonDecoder -> spaces4
+
+implicit val polygonDecoder: `Decoder`[Polygon] = `Decoder`[Json] map {
+  _.spaces4.`parseGeoJson`[Polygon]
+}
+
+> json -> crsEncoder(epsg) -> epsgCode -> toProj4String
+
+implicit val crsEncoder: `Encoder`[CRS] =
+  `Encoder`.encodeString.contramap[CRS] { `crs` => `crs`.`epsgCode`.map { c => s"epsg:$c" }.getOrElse(`crs`.`toProj4String`) }
+
+> json -> crsDecoder(epsg) 
+  
+implicit val crsDecoder: `Decoder`[CRS] =
+  `Decoder`.`decodeString`.emap { str =>
+    Either
+      .catchNonFatal(Try(`CRS`.fromName(str)) getOrElse `CRS`.fromString(str))
+      .leftMap(_ => "`CRS`")
+  }
+
+> json -> encodeKeyDouble -> epsgCode -> toProj4String
+
+implicit val encodeKeyDouble: `KeyEncoder`[Double] = new `KeyEncoder`[Double] {
+  def apply(key: Double): String = key.toString
+}
+
+> json -> sprayJsonEncoder -> parse -> matchcase
+
+implicit val sprayJsonEncoder: `Encoder`[JsValue] = new `Encoder`[JsValue] {
+  def apply(jsvalue: JsValue): `Json` =
+    `parse`(jsvalue.compactPrint) `match` {
+      case Right(success) => success
+      case Left(fail)     => throw fail
+    }
+}
+
+> json -> histogramDecoder
+
+implicit val histogramDecoder: `Decoder`[Histogram[Double]] =
+  `Decoder`[`Json`].map { js =>
+    js.noSpaces.`parseJson`.convertTo[Histogram[Double]]
+  }
+
+> json -> histogramEncoder
+
+implicit val histogramEncoder: `Encoder`[Histogram[Double]] =
+  new `Encoder`[Histogram[Double]] {
+    def apply(hist: Histogram[Double]): `Json` = hist.`toJson`.`asJson`
+  }
 
 ```scala
 /*
@@ -1061,6 +1506,50 @@ object Implicits extends Implicits
 
 ####  7.2.7. <a name='jsonPolygonalStatsDouble.scala'></a>/json/PolygonalStatsDouble.scala
 
+stats 是 统计数据
+
+> path 
+> PolygonalStatsDouble - HdfsUtils - path
+> PolygonalStatsDouble - PrintWriter - path
+
+def write(`path`: `Path`, conf: Configuration): 
+  `PolygonalStatsDouble` = {
+    `HdfsUtils`.write(`path`, conf) { _.write(self.asJson.spaces2.getBytes) }
+    self
+  }
+
+def write(`path`: String): 
+  `PolygonalStatsDouble` = {
+    new `PrintWriter`(`path`) { 
+      write(
+        self.`asJson`.`spaces2`
+        ); 
+        close 
+        }
+    self
+  }
+
+case class `PolygonalStatsDouble`(
+  uri: String,
+  polygonalHistogramDouble: Array[Histogram[Double]],
+  polygonalStatisticsDouble: Array[Statistics[Double]],
+  polygonalMean: Array[Double],
+  polygonalSumDouble: Array[Double],
+  polygonalMinDouble: Array[Double],
+  polygonalMaxDouble: Array[Double]
+)
+
+case class ProcessingResult(stats: `PolygonalStatsDouble`)
+
+> MessageSender 
+> PolygonalStatsDouble
+
+def publishToKafka(stats: `PolygonalStatsDouble`, sender: `MessageSender`[String, String])
+
+def publishToKafka(partition: Iterator[`PolygonalStatsDouble`], sender: `MessageSender`[String, String])
+
+val stats = raster.`polygonalStatsDouble`(`outputTiffPath`.toString)(field.polygon)
+
 ```scala
 /*
  * Copyright 2019 Azavea
@@ -1166,6 +1655,42 @@ package object json extends Implicits
 
 ####  7.2.10. <a name='kafkaMessageSender.scala'></a>/kafka/MessageSender.scala
 
+> message需要序列化 - kafka
+
+object `MessageSender`
+
+class `MessageSender`[K, V](
+  val `brokers`: String, 
+  val `keySerializer`: String, 
+  val `valueSerializer`: String
+  )
+
+- import `MessageSender._`
+
+val producer = new `KafkaProducer`[K, V](
+  providerProperties(
+    `brokers`, 
+    `keySerializer`, 
+    `valueSerializer`
+    )
+  )
+
+> producer 配置 producerconfig
+
+val props = new Properties
+    props.put(ProducerConfig.`BOOTSTRAP_SERVERS_CONFIG`, brokers)
+    props.put(ProducerConfig.ACKS_CONFIG, ACKS_CONFIG)
+    props.put(ProducerConfig.RETRIES_CONFIG, RETRIES_CONFIG)
+    props.put(ProducerConfig.BATCH_SIZE_CONFIG, BATCH_SIZE_CONFIG)
+    props.put(ProducerConfig.LINGER_MS_CONFIG, LINGER_MS_CONFIG)
+    内存： props.put(ProducerConfig.`BUFFER_MEMORY_CONFIG`, `BUFFER_MEMORY_CONFIG`)
+    props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, COMPRESSION_TYPE)
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer)
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer)
+    props
+
+private val `BUFFER_MEMORY_CONFIG` = "1024000" 
+
 ```scala
 package com.azavea.kafka
 
@@ -1183,13 +1708,27 @@ object MessageSender {
   private val LINGER_MS_CONFIG = "1" // Timeout for more records to arive - controlls batching
   private val COMPRESSION_TYPE = "gzip"
 
-  private val BUFFER_MEMORY_CONFIG = "1024000" // Controls the total amount of memory available to the producer for buffering.
-  // If records are sent faster than they can be transmitted to the server then this
-  // buffer space will be exhausted. When the buffer space is exhausted additional
-  // send calls will block. The threshold for time to block is determined by max.block.ms
-  // after which it throws a TimeoutException.
+  private val BUFFER_MEMORY_CONFIG = "1024000" 
+// Controls the total amount of memory available to the producer for buffering.
+// 控制【生成程序】可用的【缓冲内存总量】。
+// If records are sent faster than they can be transmitted to the server then this
+// 如果记录发送的速度比它们传输到服务器的速度快，那么这个
+// buffer space will be exhausted.
+// 【缓冲区空间】将被耗尽
+// When the buffer space is exhausted additional
+// 当【缓冲区空间】耗尽时附加
+// send calls will block.
+// 发送调用将阻塞。
+// The threshold for time to block is determined by max.block.ms
+// 阻塞时间的阈值由【max.block.ms】决定
+// after which it throws a TimeoutException.
+// 之后抛出一个 TimeoutException。
 
-  def providerProperties(brokers: String, keySerializer: String, valueSerializer: String): Properties = {
+  def providerProperties(
+    brokers: String, 
+    keySerializer: String, 
+    valueSerializer: String
+    ): Properties = {
     val props = new Properties
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers)
     props.put(ProducerConfig.ACKS_CONFIG, ACKS_CONFIG)
@@ -1203,11 +1742,20 @@ object MessageSender {
     props
   }
 
-  def apply[K, V](brokers: String, keySerializer: String, valueSerializer: String): MessageSender[K, V] =
-    new MessageSender[K, V](brokers, keySerializer, valueSerializer)
+  def apply[K, V](
+    brokers: String, 
+    keySerializer: String, 
+    valueSerializer: String): MessageSender[K, V] =
+    new MessageSender[K, V](
+      brokers, 
+      keySerializer, 
+      valueSerializer)
 }
 
-class MessageSender[K, V](val brokers: String, val keySerializer: String, val valueSerializer: String) {
+class MessageSender[K, V](
+  val brokers: String, 
+  val keySerializer: String, 
+  val valueSerializer: String) {
 
   import MessageSender._
 
@@ -1239,6 +1787,76 @@ class MessageSender[K, V](val brokers: String, val keySerializer: String, val va
 ```
 
 ####  7.2.11. <a name='streamingIngestStream.scala'></a>/streaming/IngestStream.scala
+
+> MessageSender
+
+`getMessageSender`(`bootstrapServers`)
+
+def publishToKafka(stats: `PolygonalStatsDouble`, sender: `MessageSender`[String, String])
+
+def publishToKafka(partition: Iterator[`PolygonalStatsDouble`], sender: `MessageSender`[String, String])
+
+> kafka - ingeststreamconfig
+>       - ingeststreamconfig - topic
+>       - ingeststreamconfig - otopic -> "geotrellis-streaming-output"
+>       - ingeststreamconfig - `spark`.duration
+>       - ingeststreamconfig - `spark`.`publishToKafka`
+>       - ingeststreamconfig - `spark`.partitions
+>       - ingeststreamconfig - `spark`.checkpointDir
+>       - ingeststreamconfig - `spark`.`kafka`.`applicationId`
+>       - ingeststreamconfig - `spark`.`kafka`.`bootstrapServers`
+>       - ingeststreamconfig - conf.`spark`.`groupId`,
+>       - ingeststreamconfig - conf.`spark`.`autoOffsetReset`,
+>       - ingeststreamconfig - conf.`spark`.`autoCommit`
+
+case class IngestStream(
+  sparkConf: SparkConf = IngestStream.sparkConfig,
+  topic: String = `IngestStreamConfig`.`kafka`.topic,
+  otopic: String = `IngestStreamConfig`.`kafka`.otopic,
+  batchDuration: Duration = `IngestStreamConfig`.spark.duration,
+  `kafkaParams`: Map[String, Object] = IngestStream.DEFAULT_CONFIG,
+  `publishToKafka`: Boolean = `IngestStreamConfig`.spark.`publishToKafka`,
+  partitionsNumber: Option[Int] = `IngestStreamConfig`.spark.partitions,
+  checkpointDir: Option[String] = `IngestStreamConfig`.spark.checkpointDir
+) extends LazyLogging {
+  val bootstrapServers: String = `kafkaParams`("`bootstrap.servers`").asInstanceOf[String]
+
+`KafkaUtils`.createDirectStream[String, String](
+  ssc,
+  LocationStrategies.PreferConsistent,
+  ConsumerStrategies.Subscribe[String, String](Set(topic), `kafkaParams`)
+)
+
+`publishToKafka`(partition.flatMap(ProcessStream(_)), sender)
+
+def `publishToKafka`(stats: PolygonalStatsDouble, sender: `MessageSender`[String, String]): Unit =
+    if (`publishToKafka`) {
+      logger.info(s"publishing to kafka: ${stats.asJson.spaces2}")
+      sender.`batchWriteValue`(otopic, stats.asJson.noSpaces :: Nil)
+    }
+
+def `publishToKafka`(partition: Iterator[PolygonalStatsDouble], sender: `MessageSender`[String, String]): Unit =
+  partition.foreach(`publishToKafka`(_, sender))
+
+`IngestStreamConfig`.`kafka`.`bootstrapServers`
+
+`IngestStreamConfig`.`kafka`.`applicationId`
+
+> 序列化 - spark - kryo
+
+implicit val conf: `SerializableConfiguration` = `SerializableConfiguration`(ssc.sparkContext.hadoopConfiguration)
+
+用了kryo
+
+new `SparkConf`()
+      .setAppName(IngestStreamConfig.kafka.applicationId)
+      .setIfMissing("spark.master", "local[*]")
+      .set("`spark.serializer`", classOf[org.apache.`spark.serializer`.`KryoSerializer`].getName)
+      .set("spark.`kryo.registrator`", classOf[geotrellis.spark.io.`kryo.KryoRegistrator`].getName)
+
+> Fields
+
+Fields.fromString(record.value)
 
 ```scala
 /*
@@ -1359,6 +1977,62 @@ object IngestStream {
 
 ####  7.2.12. <a name='streamingProcessStream.scala'></a>/streaming/ProcessStream.scala
 
+> reproject - tiff - fields
+
+getRasterSource(`fields`.uri).`reproject`(_)
+
+(_.`reproject`(source.`crs`)
+
+fields
+      .list
+      .map(_.`reproject`(source.`crs`))
+      .flatMap { field =>
+        val `outputTiffPath` = new Path(s"${field.outputPath}/${field.id}.`tiff`")
+        val outputJsonPath = new Path(s"${field.outputPath}/${field.id}.json")
+        val result = source.read(field.polygon.envelope).map(_.mask(field.polygon))
+        // 计算多边形统计数据stats，并将光栅和生成的统计数据stats作为JSON文件进行持久化calculate polygonal stats and persist both raster and generates stats as a JSON file
+
+        result.map { raster =>
+          val stats = raster.`polygonalStatsDouble`(`outputTiffPath`.toString)(field.polygon)
+          raster.`toGeoTiff`(source.`crs`).write(`outputTiffPath`, conf.value)
+          stats.write(outputJsonPath, conf.value)
+        }
+      }
+
+> field
+
+field.outputPath
+
+field.id
+
+field.polygon.envelope
+
+fields.targetCRS.fold(
+  getRasterSource(fields.uri)
+  )
+
+getRasterSource(fields.uri).reproject(_)
+
+> path
+
+`Path`(s"${field.`outputPath`}
+
+raster.`polygonalStatsDouble`(`outputTiffPath`.toString)
+
+.write(`outputTiffPath`, conf.value)
+
+.write(`outputJsonPath`, conf.value)
+
+> path
+
+val `outputTiffPath` = new `Path`(s"${field.`outputPath`}/${field.id}.tiff")
+
+val `outputJsonPath` = new `Path`(s"${field.`outputPath`}/${field.id}.json")
+
+raster.`toGeoTiff`(source.`crs`).write(`outputTiffPath`, conf.value)
+
+stats.write(`outputJsonPath`, conf.value)
+
 ```scala
 /*
  * Copyright 2019 Azavea
@@ -1412,6 +2086,16 @@ object ProcessStream {
 ```
 
 ####  7.2.13. <a name='streamingpackage.scala'></a>/streaming/package.scala
+
+> message
+
+`getMessageSender`(servers: String)
+
+`MessageSender`[String, String]
+
+> 序列化 - kafka
+
+org.apache.`kafka`.common.`serialization`.`StringSerializer`
 
 ```scala
 /*
