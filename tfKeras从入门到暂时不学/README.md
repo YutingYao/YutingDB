@@ -10,9 +10,477 @@ Study Notes of Yuting
 
 [Jupyter notobook](https://github.com/YutingYao/Interview/tree/master/docs/Algorithm/Leetcode/Python)
 
+# Section 1 - 一些链接
+
+2.	气候与地质GIS
+
+2.1.	https://mp.weixin.qq.com/s/KYx39vsomq7mmNqdmN7whw
+
+2.2.	https://mp.weixin.qq.com/s/S0S0An6-46SFzx-b86Ywxw
+
+2.3.	https://mp.weixin.qq.com/s/xkQsk92q5qNoz7YsoMcbjg
+
+2.4.	https://mp.weixin.qq.com/s/YYd7_NWxbiCi2O8qcCeFvw
+
+2.5.	https://mp.weixin.qq.com/s/XR4P3EQ2z8w44F2dSKTBcw
+
+2.6.	https://mp.weixin.qq.com/s/aFqxGdewN40bSEXETJA-sA
+
+2.7.	https://mp.weixin.qq.com/s/Um0L0YPceSER2oEZZ9cydA
+
+2.8.	地图可视化
+
+2.8.1.	https://mp.weixin.qq.com/s/tN68a1oM7UkdLnIsUJ8YpQ
+
+2.8.2.	https://mp.weixin.qq.com/s/ElktjLqWanyT2J2CwRfhJA
+
+4.	可视化
+
+4.1.	pandas
+
+4.1.1.	函数
+
+https://mp.weixin.qq.com/s/Ucbn5t_dJCCsdRp-rTWPYg
+
+https://mp.weixin.qq.com/s/0l4sYgTwl46NZPuNCFjKnQ
+
+https://mp.weixin.qq.com/s/SS6FdfcOU7mSCE2sPYaWFw
+
+4.1.2.	技巧
+
+https://mp.weixin.qq.com/s/hLPrL2KXdzqhAc_YHVERjw
+
+https://mp.weixin.qq.com/s/w_NU6XsJUbFKSuLbIpEFkQ
+
+https://mp.weixin.qq.com/s/BziTF7-giq01meJrfR3B6Q
+
+https://mp.weixin.qq.com/s/9MU2AKDAzZNhA-Fg4uWN7Q
+
+https://mp.weixin.qq.com/s/Y2JTsW7yKur30PfSVZxSaQ
+
+https://mp.weixin.qq.com/s/LcOqrV0fWBusepBiEPQW0g
+
+https://mp.weixin.qq.com/s/y7_JDu0xebNFCeniu0V5sw
+
+https://mp.weixin.qq.com/s/sAd3UcH0eD260aRnb29gYQ
+
+4.2.	matplotlab
+
+4.2.1.	https://mp.weixin.qq.com/s/wMTaSivoTTGBgHOyWj28jg
+
+4.3.	bokeh
+
+4.3.1.	https://mp.weixin.qq.com/s/i1CzifFSj-RyPWYS2N7FJA
+
+4.4.	sanddance
+
+4.4.1.	https://mp.weixin.qq.com/s/eMy3htCR4PAIKKYudMjHQQ
+
+4.5.	highcharts
+
+4.5.1.	https://mp.weixin.qq.com/s/vgovcW9hPkiYduW4m05VeQ
+
+4.6.	PYGAL
+
+4.6.1.	https://mp.weixin.qq.com/s/38YJbi9boE0ig_gGsCo1gA
+
+4.7.	lux
+
+4.7.1.	https://mp.weixin.qq.com/s/dYYEb997R4NoQFhGlfi6lg
+
+5.	python
+
+5.1.	PYPY
+
+5.1.1.	https://mp.weixin.qq.com/s/g-77Lodf0-fYAfETOiVzCg
+
+5.2.	python导入
+
+5.2.1.	https://mp.weixin.qq.com/s/R0-7DS168Svo7m0Vrnn7Xw
+
+5.2.2.	https://mp.weixin.qq.com/s/FMDeMWhM8WsLTP2uJRajlw
+
+5.3.	python建议
+
+5.3.1.	https://mp.weixin.qq.com/s/Hs92VWyF_l0YxfztX6k-GQ
+
+5.3.2.	https://mp.weixin.qq.com/s/jxjEHZxWnCRNMyCWA96bWA
+
+5.3.3.	https://mp.weixin.qq.com/s/u_Ps81i04BTumh6rrAcU6A
+
+5.3.4.	https://mp.weixin.qq.com/s/zFVGaWR157iCCk3q0M68VQ
+
+5.3.5.	https://mp.weixin.qq.com/s/BOtE4XMkHrNyI3R9WkSVRQ
+
+5.4.	打包
+
+5.4.1.	https://mp.weixin.qq.com/s/T4EOSZrwk08pWHKQ2zf7_A
+
+5.5.	编辑器
+
+5.5.1.	https://mp.weixin.qq.com/s/4evu40s_u_I4mQhFSVEKyA
+
+5.5.2.	https://mp.weixin.qq.com/s/XsHSS0bRV3qK-dVOy3OXtg
+
+5.6.	正则表达式
+
+5.6.1.	https://mp.weixin.qq.com/s/ww9INFym1Y1wuLqHx3Ikvg
+
+5.7.	获取数据
+
+5.7.1.	https://mp.weixin.qq.com/s/lmHvNQw33WIQpwtME9JFNA
+
+5.8.	安装
+
+5.8.1.	https://mp.weixin.qq.com/s/Vz6PSgWJwH4_L6QoH0yulA
+
+5.8.2.	https://mp.weixin.qq.com/s/OwcnbuslZErO_LpQ_BP8SA
+
+5.9.	函数总结
+
+5.9.1.	https://mp.weixin.qq.com/s/8cdEzYLdBnz4QiToBR6jmQ
+
+6.	python框架
+
+6.1.	numpy
+
+6.1.1.	https://mp.weixin.qq.com/s/5_6QKacG9lcyjwHJfLqYSA
+
+6.1.2.	https://mp.weixin.qq.com/s/BziTF7-giq01meJrfR3B6Q
+
+6.2.	scipy
+
+6.2.1.	https://mp.weixin.qq.com/s/JKszXtD3vi5odYXzmmNtZQ
+
+6.2.2.	https://mp.weixin.qq.com/s/OrFxwXBdAXhyKjBoS0kO1w
+
+6.3.	LazyPredict
+
+6.3.1.	https://mp.weixin.qq.com/s/aHrxT91e1dmTQzIW1ClWaw
+
+6.4.	TensorFlow
+
+6.4.1.	深度森林
+
+https://mp.weixin.qq.com/s/Fv3ZwpiJ0I8PTsucV1ezXQ
+
+6.5.	SKlearn
+
+6.5.1.	https://mp.weixin.qq.com/s/fk8foDKUDSctHh-U_v4p_g
+
+6.5.2.	https://mp.weixin.qq.com/s/n0ZKarn4ZdthXN2kKDkseg
+
+6.5.3.	https://mp.weixin.qq.com/s/2DE4g-cUUGPD7-yQDNI5MQ
+
+6.5.4.	https://mp.weixin.qq.com/s/ntVVtsRmKQIo5Foy8kn-gw
+
+6.6.	pyQT
+
+6.6.1.	https://mp.weixin.qq.com/s/_7PEMDQxnR3b5KXiVQ-TGg
+
+6.7.	yellowbrick
+
+6.7.1.	https://mp.weixin.qq.com/s/enoh0nqHqAuI1tXII5Ny7g
+
+6.8.	pyarmadillo
+
+6.8.1.	https://mp.weixin.qq.com/s/WHrzVNDnYFVRYuOztqkfYQ
+
+6.9.	对比与汇总
+
+6.9.1.	https://mp.weixin.qq.com/s/V-5Dco_fsX_zowdw7-tTsg
+
+6.9.2.	https://mp.weixin.qq.com/s/usrrJL_I7T2doNm1LFbo3g
 
 
-# Section 1 - Packages
+7.	模型总结
+
+7.1.	对比与汇总
+
+7.1.1.	https://mp.weixin.qq.com/s/RRATYGVfwYBd15lJ_gb3RQ
+
+7.1.2.	https://mp.weixin.qq.com/s/pvPnlnLh4sqo4rQ1rdYQJg
+
+7.1.3.	https://mp.weixin.qq.com/s/PkTBe4EUFF0CuZOHUgVpAw
+
+7.1.4.	https://mp.weixin.qq.com/s/qm7hOe_KXKPzfZ1P4sjrVA
+
+7.2.	有监督
+
+7.2.1.	单模型
+
+
+线性
+
+回归
+
+https://mp.weixin.qq.com/s/P0GsIxrm-oU9dCN9gEwzQg
+
+https://mp.weixin.qq.com/s/eBkQL6RcHmYSDv_9NV_fkg
+
+https://mp.weixin.qq.com/s/r3F2Q1bWy9QQG-uELbWe6w
+
+https://mp.weixin.qq.com/s/LPfrzLCVBj3SUQAf9fnlmA
+
+树
+
+https://mp.weixin.qq.com/s/NX6NS4c9MNdMfto2-u5fDg
+
+神经网络
+
+7.2.2.	集成模型
+
+bagging
+
+随机森林
+
+https://mp.weixin.qq.com/s/7SImJ5ACT6atH2_sHd0XQw
+
+boosting
+
+XGBboost
+
+https://mp.weixin.qq.com/s/IMSK9i992Sf1FqwcOKIA0Q
+
+https://mp.weixin.qq.com/s/Gh7f86UkSY2UACpGWznYzw
+
+https://mp.weixin.qq.com/s/1y4q-g3JJgJlLkrsb0zunw
+
+https://mp.weixin.qq.com/s/cMgd-wBlzjacL21FPK2y7Q
+
+7.3.	无监督
+
+7.3.1.	kmeans
+
+https://mp.weixin.qq.com/s/0SUtBTCuoXmlVkLjVhepXg
+
+7.4.	概率模型
+
+7.4.1.	贝叶斯
+
+https://mp.weixin.qq.com/s/j1w9xF6dI1W62-a_eSJghQ
+
+https://mp.weixin.qq.com/s/VEMG7e0D9Q1OwRE6wAxrsA
+
+7.5.	模型评估
+
+7.5.1.	https://mp.weixin.qq.com/s/s0wJFPDB7NZVJqYjZ8iiOg
+
+8.	人生经验
+
+8.1.	https://mp.weixin.qq.com/s/YcRxH57BImlbWptBOv68tQ
+
+8.2.	https://mp.weixin.qq.com/s/-X918oxIWyelkNH-ey_EqQ
+
+8.3.	https://mp.weixin.qq.com/s/s0nJp5944gvSFQmbyaFvUQ
+
+8.4.	大佬
+
+8.4.1.	https://mp.weixin.qq.com/s/cRFi11rgYwtQs0i5AZRmkw
+
+8.4.2.	https://mp.weixin.qq.com/s/4u3JuQ0mUuj7NRS1O4IgBw
+
+8.4.3.	https://mp.weixin.qq.com/s/h64C2aCK4I8Q0O61EIVLow
+
+8.5.	大厂
+
+8.5.1.	https://mp.weixin.qq.com/s/_zWBb0pfYqTSn9scCFAgVg
+
+8.5.2.	https://mp.weixin.qq.com/s/tQPpPoV_nIG33T7M1hOFag
+
+8.5.3.	https://mp.weixin.qq.com/s/dYsNz6cWBSfDILz3NjmqMg
+
+8.5.4.	https://mp.weixin.qq.com/s/NOIsOB2FT1zabpF7fQtZ5A
+
+8.5.5.	https://mp.weixin.qq.com/s/xazTkMoZdidw8q7leAYvLg
+
+8.5.6.	https://mp.weixin.qq.com/s/8gfW3aXGyGTIr5Pa2mQewA
+
+8.5.7.	https://mp.weixin.qq.com/s/YErAslMZdFeeFeYcc2Y8_Q
+
+9.	数学基础
+
+9.1.	卷积
+
+9.1.1.	https://mp.weixin.qq.com/s/_PHcRZfgFKg4XZgu-G9Z-Q
+
+9.2.	数学符号
+
+9.2.1.	https://mp.weixin.qq.com/s/Pnk8dTpdiSe8Xott_oSnxQ
+
+9.3.	概率分布
+
+9.3.1.	https://mp.weixin.qq.com/s/2Eck3MnXE6oehcOFX0Qzgw
+
+9.4.	激活函数
+
+9.4.1.	https://mp.weixin.qq.com/s/SiLcytppeb03RRjea5rj0A
+
+9.4.2.	https://mp.weixin.qq.com/s/_36dB0tPeg4TgRaVEESD0Q
+
+9.5.	分布式
+
+9.5.1.	https://mp.weixin.qq.com/s/EC8b6XIJVqJDOFltmW1wiw
+
+9.6.	最大熵模型
+
+9.6.1.	https://mp.weixin.qq.com/s/MMlQCcaOJ9s20xRfR_TMiw
+
+9.7.	距离
+
+9.7.1.	https://mp.weixin.qq.com/s/1qCo9H47jD4iGU02FYw__A
+
+9.8.	哈希函数
+
+9.8.1.	https://mp.weixin.qq.com/s/tnDi-6IirMoDXCIqaZsnmg
+
+9.9.	cpu
+
+9.9.1.	https://mp.weixin.qq.com/s/ZOpX1ktBk8dPMaGXs9OPIw
+
+10.	SQL
+
+10.1.	数仓
+
+10.1.1.	https://mp.weixin.qq.com/s/ubqibiMqHvCaFenfKfyUvA
+
+10.1.2.	https://mp.weixin.qq.com/s/E7jjMA9NHOJ-DK5SH9DLgg
+
+10.1.3.	https://mp.weixin.qq.com/s/ERhlIhPuRll3jAYE3We4Sw
+
+10.2.	大数据
+
+10.2.1.	数据清洗
+
+https://mp.weixin.qq.com/s/elDSwaetvJUclUnYvDyNvA
+
+https://mp.weixin.qq.com/s/tjv7x8quJeVuVmRpI0SiHQ
+
+10.2.2.	特征
+
+https://mp.weixin.qq.com/s/65Ml31PDwujJYWIlX7kauQ
+
+https://mp.weixin.qq.com/s/xmUmW9by5AhE5PVyEuScnQ
+
+https://mp.weixin.qq.com/s/6CwiKWQ2Wa0BmKSu7ed1Kw
+
+10.2.3.	降维
+
+https://mp.weixin.qq.com/s/4r4Cir4begKagjg_vp0cQg
+
+https://mp.weixin.qq.com/s/z_CAevgHn8rixUGKJe3Z_g
+
+10.2.4.	归一
+
+https://mp.weixin.qq.com/s/BvZe7YPXiQPCYr1sgGSs9g
+
+https://mp.weixin.qq.com/s/CnbS3rOgj-BCkR78F3otHg
+
+10.2.5.	pyspark
+
+https://mp.weixin.qq.com/s/YGZ-bc5c3hPP4o05S8a2kw
+
+10.3.	技巧
+
+10.3.1.	https://mp.weixin.qq.com/s/azTWglO0bLYYvfzfOpkn_g
+
+10.3.2.	https://mp.weixin.qq.com/s/pwuMe2ZJryT6oxjP3_tG1Q
+
+10.3.3.	https://mp.weixin.qq.com/s/Mdre0sgeQrvVzTzB9jYDaw
+
+10.4.	函数
+
+10.4.1.	https://mp.weixin.qq.com/s/NzBYmXojzzFrz7QEJV8P0A
+
+10.4.2.	https://mp.weixin.qq.com/s/Svnv64iYsje3DQ_IARrxJA
+
+10.4.3.	https://mp.weixin.qq.com/s/bNB5ZE6KBwoYYSBvuiKf8w
+
+10.4.4.	https://mp.weixin.qq.com/s/O9zMme9wiqXBh3GdJvxOgw
+
+10.5.	超全笔记
+
+10.5.1.	https://mp.weixin.qq.com/s/IPd_gFSCPOSFmvf1-nWRlA
+
+11.	jupyter神奇
+
+11.1.	jupyterlab
+
+11.1.1.	https://mp.weixin.qq.com/s/NMTmyQDl2rESY7SDq9GRFg
+
+11.1.2.	https://mp.weixin.qq.com/s/C1BbqrY15MfPxLDyLQCAZg
+
+11.2.	编辑器
+
+11.2.1.	https://mp.weixin.qq.com/s/bS3BKDRuaag8CgzEvk4Fng
+
+11.2.2.	https://mp.weixin.qq.com/s/1uY_7pLne6zfFgy2bmnCAg
+
+11.3.	技巧
+
+11.3.1.	https://mp.weixin.qq.com/s/9MxAYZ-KN0nv70IV-mgTYw
+
+11.3.2.	https://mp.weixin.qq.com/s/XOLAYoG9Hjr8_ag4H-WFoQ
+
+11.3.3.	https://mp.weixin.qq.com/s/Kndo7vrCU1nOcUL4atgfjw
+
+12.	常用功能
+
+12.1.	知识图谱
+
+12.1.1.	https://mp.weixin.qq.com/s/GyvVvOkP5FvE0XCwRMt3eA
+
+12.1.2.	https://mp.weixin.qq.com/s/gTDApmfi-_fI4S8iwLm4lw
+
+12.2.	OCR
+
+12.2.1.	https://mp.weixin.qq.com/s/fq1UJcNP2RQ9yq1bFeXEZg
+
+12.3.	目标检测
+
+12.3.1.	https://mp.weixin.qq.com/s/m8yl5QZQYisNFtWY3VdWBw
+
+12.4.	图神经网络
+
+12.4.1.	https://mp.weixin.qq.com/s/hK1duUWomCt6bkXasn9bZg
+
+12.5.	调试
+
+12.5.1.	https://mp.weixin.qq.com/s/edDh_U3efG_P902z9z6B3w
+
+12.5.2.	https://mp.weixin.qq.com/s/KTQKGhmz1B_69bY6yLCWaQ
+
+12.6.	调参
+
+12.6.1.	https://mp.weixin.qq.com/s/vZj2rqGDxnP395N5Fx9t_w
+
+12.6.2.	https://mp.weixin.qq.com/s/MF7_gbFz2Nf_HltK_EyrPw
+
+12.7.	埋点
+
+12.7.1.	https://mp.weixin.qq.com/s/KQlxF1DaldfN2Q-xnp9ueQ
+
+12.8.	异常值检测
+
+12.8.1.	https://mp.weixin.qq.com/s/Bjqdko3Tihtfjo_QeaOsFQ
+
+12.9.	自动化
+
+12.9.1.	https://mp.weixin.qq.com/s/ttQnL0_qJbEo8mpRyH2WAA
+
+12.9.2.	https://mp.weixin.qq.com/s/VmcSv3w8iXa5fNykjQGa_A
+
+13.	网站大全
+
+13.1.	数据分析
+
+13.1.1.	https://mp.weixin.qq.com/s/_8U_iLGJTCLc19FptSry-g
+
+13.2.	算法学习
+
+13.2.1.	https://mp.weixin.qq.com/s/bCilC07c9PqrdebraoEvBA
+
+# Section 2 - Packages
 
 ## tensorflow
 
