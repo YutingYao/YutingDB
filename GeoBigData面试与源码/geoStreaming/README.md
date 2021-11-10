@@ -746,7 +746,7 @@ override def close(): Unit = {
                 List<List<List<Coordinate>>> listCoodinate = convertMultiCoordinates(
                         json, '[', ']', "],", ",", 4);
                 if (time != 0) {
-                    //TODO: Fix timestamp to original timestamp
+                    //TODO: Fix timestamp to original timestamp 修正时间戳到原始时间戳
                     spatialPolygon = new MultiPolygon(listCoodinate, oId, time, uGrid);
                     //spatialPolygon = new MultiPolygon(listCoodinate, oId, System.currentTimeMillis(), uGrid);
                     //System.out.println("time " + time + spatialPolygon);
@@ -940,7 +940,7 @@ override def close(): Unit = {
                         json, '[', ']', "],", ",", 2);
                 if (time != 0) {
                     //spatialLineString = new LineString(strOId, parent.get(0), time, uGrid);
-                    //TODO: Fix timestamp to original timestamp
+                    //TODO: Fix timestamp to original timestamp 修正时间戳到原始时间戳
                     spatialLineString = new LineString(strOId, parent.get(0), time, uGrid);
                     //spatialLineString = new LineString(strOId, parent.get(0), System.currentTimeMillis(), uGrid);
 

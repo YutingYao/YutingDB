@@ -5921,7 +5921,7 @@ class GeometryRDD extends Logging{
       case (tuple1, tuple2) => tuple1
     }).map(tuple => tuple._2)
 
-    //TODO: is there any other efficient way
+    //TODO: is there any other efficient way 还有其他有效的办法吗
     pairedRDD.groupByKey()
   }
 
@@ -6230,7 +6230,7 @@ class ShapeFileMetaRDD (sc: SparkContext, @transient conf: Configuration) extend
   def saveShapeFileMetaToDB(): Unit = {
     shapeFileMetaRDD.foreachPartition(itor => {
       val shapeFileMetaList = itor.toList
-      //TODO: make sure the table name is right
+      //TODO: make sure the table name is right 确保表名正确
       //val tableName = shapeFileMetaList.head.getFilePath.split("/").last.toLowerCase
       val tableName = FilenameUtils.getBaseName(shapeFileMetaList.head.getFilePath)
 
@@ -10242,7 +10242,7 @@ object ScalaExample extends App{
 			RangeQuery.SpatialRangeQuery(spatialRDD, new Envelope(-180, 180, -90, 90), false, false).count
 		catch {
 			case e: Exception =>
-				// TODO Auto-generated catch block
+				// TODO Auto-generated catch block 自动生成的catch块
 				e.printStackTrace()
 		}
 	}
