@@ -26,6 +26,8 @@
 
 ##  2. <a name='-1'></a>入门
 
+[FLINK官方中文文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/learn-flink/overview/)
+
 [Flink完全分布式集群安装](https://www.zhihu.com/tardis/sogou/art/131592261)
 
 [搭建Flink集群环境](https://mp.weixin.qq.com/s/kxfsJXB2PIjgfmkO2wUXOw)
