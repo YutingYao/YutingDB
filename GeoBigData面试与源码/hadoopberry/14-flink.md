@@ -47,8 +47,17 @@ jobmanager.rpc.address: ubuntu01
 jobmanager.heap.size: 1024m      // 定义允许JVM在每个节点上分配的最大主内存量
 
 ```yaml
- jobmanager.heap.size: 512m
- taskmanager.memory.process.size: 512m
+ jobmanager.heap.size: 800m
+ taskmanager.memory.process.size: 800m
+```
+
+由于树莓派3b+的内存太小，因此，还需要配置：
+
+```yaml
+jobmanager.memory.jvm-metaspace.size: 52m
+taskmanager.memory.jvm-overhead.min: 52m
+taskmanager.memory.network.min: 52m
+
 ```
 
 taskmanager.numberOfTaskSlots：每台机器上可用的cpu数量
@@ -143,6 +152,31 @@ jps
 ```
 
 查看各节点上的进程是否正常启动了。
+
+## 提交作业（Job）
+
+```s
+./bin/flink run examples/streaming/WordCount.jar
+```
+
+```s
+tail log/flink-*-taskexecutor-*.out
+```
+
+输出
+
+```s
+  (nymph,1)
+  (in,3)
+  (thy,1)
+  (orisons,1)
+  (be,4)
+  (all,2)
+  (my,1)
+  (sins,1)
+  (remember,1)
+  (d,4)
+```
 
 ## 跑个实例
 
