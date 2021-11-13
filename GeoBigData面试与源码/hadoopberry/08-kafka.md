@@ -24,6 +24,8 @@ server.1=node01:2888:3888
 server.2=node01:2888:3888 
 ```
 
+！！！一定不能有多余的空格。😣😣，不然会有bug
+
 补充：(可跳过)
 
 ```s
@@ -105,8 +107,18 @@ echo 2 > /opt/zookeeper/data/myid
 ```sh
 cd /opt/zookeeper/bin     
 ./zkServer.sh start
-./zkServer.sh stop
+```
+
+```sh
+./zkServer.sh restart
+```
+
+```sh
 ./zkServer.sh status
+```
+
+```sh
+./zkServer.sh stop
 ```
 
 安装成功后显示Mode：standalone，follower，leader
