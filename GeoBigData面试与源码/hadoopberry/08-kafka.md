@@ -151,16 +151,16 @@ broker.id=0
 # 指定监听的地址及端口号，该配置项是指定内网ip
 listeners=PLAINTEXT://192.168.99.1:9092
 # 如果需要开放外网访问，则在该配置项指定外网ip
-advertised.listeners=PLAINTEXT://192.168.99.1:9092
+# advertised.listeners=PLAINTEXT://192.168.99.1:9092
 # 指定kafka日志文件的存储目录
-log.dirs=/usr/local/kafka/kafka-logs
+log.dirs=/opt/kafka/logs
 # 指定zookeeper的连接地址，若有多个地址则用逗号分隔
 zookeeper.connect=192.168.99.4:2181
 ```
 
 修改 ：
 
-listeners=PLAINTEXT://172.29.57.201:9092
+listeners=PLAINTEXT://ubuntu01:9092
 
 （可能还需要修改这个，可跳过）
 
@@ -289,7 +289,7 @@ log.retention.check.interval.ms=300000
 log.cleaner.enable=true
 
 #broker需要使用zookeeper保存meta数据
-zookeeper.connect=172.29.57.201:2181,172.29.57.202:2181,172.29.57.203:2181
+zookeeper.connect=ubuntu01:2181,node01:2181,node02:2181
 
 #zookeeper链接超时时间
 zookeeper.connection.timeout.ms=6000
@@ -503,7 +503,7 @@ broker.id=1
 # 指定监听的地址及端口号，该配置项是指定内网ip
 listeners=PLAINTEXT://192.168.99.2:9092
 # 如果需要开放外网访问，则在该配置项指定外网ip
-advertised.listeners=PLAINTEXT://192.168.99.2:9092
+# advertised.listeners=PLAINTEXT://192.168.99.2:9092
 ```
 
 ```s
@@ -512,7 +512,7 @@ broker.id=2
 # 指定监听的地址及端口号，该配置项是指定内网ip
 listeners=PLAINTEXT://192.168.99.3:9092
 # 如果需要开放外网访问，则在该配置项指定外网ip
-advertised.listeners=PLAINTEXT://192.168.99.3:9092
+# advertised.listeners=PLAINTEXT://192.168.99.3:9092
 ```
 
 （可能不需要改）
@@ -543,11 +543,19 @@ log.dirs=/opt/kafka/logs
 zookeeper.connect=ubuntu01:2181,node01:2181,node02:2181
 ```
 
+注：启动前删除server.properties中log.dirs对应目录中的kafka-logs，因为上面跑单机的时候产生的文件，不删除的话kafka集群起不来，另外防火墙要开放9092端口
+
 必须先启动zookeeper
 
 ```sh
 # 启动kafka，node01和node02可能也需要启动
 ./kafka-server-start.sh -daemon /opt/kafka/config/server.properties
+```
+
+查看下日志是否真的启动成功了
+
+```
+tail -200f /opt/kafka/logs/server.log
 ```
 
 通过jps查看KAFKA进程
@@ -664,7 +672,7 @@ esac
 创建Topic–test
 
 ```s
-bin/kafka-topics.sh --create --zookeeper 172.29.57.201:2181,172.29.57.202:2181,172.29.57.203:2181 --replication-factor 3 --partitions 3 --topic test
+bin/kafka-topics.sh --create --zookeeper ubuntu01:2181,node01:2181,node02:2181 --replication-factor 1 --partitions 3 --topic test
 ```
 
 查看已经创建的Topic列表
@@ -676,13 +684,13 @@ bin/kafka-topics.sh --list --zookeeper localhost:2181
 在master启动生产者（任意一台）
 
 ```s
-bin/kafka-console-producer.sh --broker-list 172.29.57.201:9092,172.29.57.202:9092,172.29.57.203:9092 --topic test
+bin/kafka-console-producer.sh --broker-list ubuntu01:9092,node01:9092,node02:9092 --topic test
 ```
 
 在另外两台服务器其中之一启动消费者
 
 ```s
-bin/kafka-console-consumer.sh --bootstrap-server 172.29.57.201:9092,172.29.57.202:9092,172.29.57.203:9092 --from-beginning --topic test
+bin/kafka-console-consumer.sh --bootstrap-server ubuntu01:9092,node01:9092,node02:9092 --from-beginning --topic test
 ```
 
 生产者的服务器输入内容，消费者服务器就会显示：
@@ -690,7 +698,7 @@ bin/kafka-console-consumer.sh --bootstrap-server 172.29.57.201:9092,172.29.57.20
 - 生产者
 
 ```s
-bin/kafka-console-producer.sh --broker-list 172.29.57.201:9092,172.29.57.202:9092,172.29.57.203:9092 --topic test
+bin/kafka-console-producer.sh --broker-list ubuntu01:9092,node01:9092,node02:9092 --topic test
 
 >hello world！
 ```
@@ -698,7 +706,7 @@ bin/kafka-console-producer.sh --broker-list 172.29.57.201:9092,172.29.57.202:909
 - 消费者
 
 ```s
-bin/kafka-console-consumer.sh --bootstrap-server 172.29.57.201:9092,172.29.57.202:9092,172.29.57.203:9092 --topic test
+bin/kafka-console-consumer.sh --bootstrap-server ubuntu01:9092,node01:9092,node02:9092 --topic test
 
 hello world!
 ```
@@ -748,12 +756,14 @@ bin/kafka-topics.sh --list --zookeeper localhost:2181
 三个节点都需要写上：
 
 ```s
+# 我感觉这个版本的不对
 bin/kafka-topics.sh --bootstrap-server ubuntu01:9092,node01:9092,node02:9092 --list
 ```
 
 集群创建topic,三个节点都需要写上：
 
 ```s
+# 我感觉这个版本的不对
 bin/kafka-topics.sh --bootstrap-server ubuntu01:9092,node01:9092,node02:9092 -create --topic topic02 --partitions 3 --replication-factor 3
 ```
 
@@ -766,17 +776,17 @@ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic myFirstTopic
 ```
 
 ```s
-bin/kafka-console-producer.sh --broker-list 192.168.66.10:9092,192.168.66.11:9092,192.168.66.12:9092 --topic test
+bin/kafka-console-producer.sh --broker-list ubuntu01:9092,node01:9092,node02:9092 --topic test
 ```
 
 消费消息(消费者)
 
 ```s
-bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic myFirstTopic --from-beginning
+bin/kafka-console-consumer.sh --bootstrap-server (新版本)localhost:9092 --topic myFirstTopic --from-beginning
 ```
 
 ```s
-bin/kafka-console-consumer.sh –zookeeper  192.168.66.10:2181,192.168.66.11:2181,192.168.66.12:2181  --from-beginning  --topic  test
+bin/kafka-console-consumer.sh –zookeeper (老版本) 192.168.66.10:2181,192.168.66.11:2181,192.168.66.12:2181  --from-beginning  --topic  test
 ```
 
 ## Kafka的bin目录配置到环境变量~/.bashrc
@@ -896,14 +906,14 @@ hello spark
 
 ```sh
 cd /opt/kafka
-./bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic dblab --from-beginning  
+./bin/kafka-console-consumer.sh --zookeeper (老版本) localhost:2181 --topic dblab --from-beginning  
 ```
 
 请另外打开第四个终端，输入下面命令：
 
 ```sh
 cd /opt/kafka
-./bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic wordsendertest --from-beginning
+./bin/kafka-console-consumer.sh --zookeeper (老版本)localhost:2181 --topic wordsendertest --from-beginning
 ```
 
 可以看到，屏幕上会显示出如下结果，也就是刚才你在另外一个终端里面输入的内容：
