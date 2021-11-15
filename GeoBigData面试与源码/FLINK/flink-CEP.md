@@ -1,4 +1,47 @@
-## flink CEP的感性认识
+<!-- vscode-markdown-toc -->
+* 1. [flink CEP的感性认识](#flinkCEP)
+* 2. [flink CEP的构成（模式pattern + 模式类型.如next）](#flinkCEPpattern.next)
+* 3. [如何使用flink CEP?](#flinkCEP-1)
+	* 3.1. [第一步. 定义事件模式(Pattern就是我们定义的正则表达式)](#.Pattern)
+		* 3.1.1. [optional和greedy的用法：](#optionalgreedy)
+		* 3.1.2. [定义条件where()、or()、until()](#whereoruntil)
+		* 3.1.3. [指定时间约束](#)
+		* 3.1.4. [超时事件的处理](#-1)
+		* 3.1.5. [超时触发机制扩展](#-1)
+		* 3.1.6. [wait 算子:](#wait:)
+		* 3.1.7. [规则动态注入](#-1)
+	* 3.2. [第二步. 绑定DataStream(DataStream就是正则表达式中待匹配的字符串)](#.DataStreamDataStream)
+	* 3.3. [第三步. 匹配结果处理](#.)
+	* 3.4. [一个示例流程](#-1)
+	* 3.5. [为了使用 Flink CEP，我们需要导入依赖](#FlinkCEP)
+	* 3.6. [Dewey 计数法](#Dewey)
+* 4. [CEP规则引擎案例-简单的报警-http状态码为非200的数量](#CEP--http200)
+	* 4.1. [第0步. 创建DataStream. 自定义的source](#0.DataStream.source)
+	* 4.2. [第0步. 创建DataStream. 每秒http状态码为非200的比例-sql语法](#0.DataStream.http200-sql)
+	* 4.3. [第一步. 定义事件模式](#.-1)
+	* 4.4. [第二步. 绑定DataStream + 第三步. 匹配结果处理](#.DataStream.)
+* 5. [CEP规则引擎案例-在10秒钟之内连续两个event的温度超过阈值](#CEP-10event)
+	* 5.1. [第一步. 定义事件模式pattern(warningPattern)](#.patternwarningPattern)
+	* 5.2. [第二步. warningPattern绑定DataStream(inputEventStream.keyBy("rackID")) -> tempPatternStream](#.warningPatternDataStreaminputEventStream.keyByrackID-tempPatternStream)
+	* 5.3. [第三步. 匹配结果处理 tempPatternStream -> warnings](#.tempPatternStream-warnings)
+	* 5.4. [第一步. 定义事件模式-警报模式(alertPattern)](#.-alertPattern)
+	* 5.5. [第二步. alertPattern绑定DataStream(warnings.keyBy("rackID")) -> alertPatternStream](#.alertPatternDataStreamwarnings.keyByrackID-alertPatternStream)
+	* 5.6. [第三步. 匹配结果处理 alertPatternStream -> alerts](#.alertPatternStream-alerts)
+* 6. [CEP规则引擎案例-连续三次登录失败（next方法为连续事件）](#CEP-next)
+* 7. [CEP规则引擎案例-订单超时15分钟（followedBy方法为间隔事件）](#CEP-15followedBy)
+* 8. [CEP规则引擎案例-网络安全](#CEP-)
+	* 8.1. [Flink CEP](#FlinkCEP-1)
+	* 8.2. [[Siddhi](https://github.com/siddhi-io/siddhi)](#Siddhihttps:github.comsiddhi-iosiddhi)
+* 9. [一个Flink-Cep使用案例+Groovy+Aviator 来实现一个物联网监控规则](#Flink-CepGroovyAviator)
+	* 9.1. [技术背景简介](#-1)
+	* 9.2. [案例分析](#-1)
+	* 9.3. [实现-定义 规则模板-Pattern模板通过Groovy定义](#--PatternGroovy)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->##  1. <a name='flinkCEP'></a>flink CEP的感性认识
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4ytsfdg32a40.png)
 
@@ -10,7 +53,7 @@ CEP其实就是一个`规则引擎`，把符合规则的所有数据都拉出来
 
 实时逻辑判断
 
-## flink CEP的构成（模式pattern + 模式类型.如next）
+##  2. <a name='flinkCEPpattern.next'></a>flink CEP的构成（模式pattern + 模式类型.如next）
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1m7mio7f9ksg.png)
 
@@ -20,9 +63,9 @@ CEP其实就是一个`规则引擎`，把符合规则的所有数据都拉出来
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4qlt1o3atlk0.png)
 
-## 如何使用flink CEP?
+##  3. <a name='flinkCEP-1'></a>如何使用flink CEP?
 
-### 第一步. 定义事件模式(Pattern就是我们定义的正则表达式)
+###  3.1. <a name='.Pattern'></a>第一步. 定义事件模式(Pattern就是我们定义的正则表达式)
 
 定义模式主要有如下 5 个部分组成：
 
@@ -39,7 +82,7 @@ filter：核心处理逻辑
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4i9osde3y7e0.png)
 
 
-#### optional和greedy的用法：
+####  3.1.1. <a name='optionalgreedy'></a>optional和greedy的用法：
 
 ```java
 //触发2、3、4次,尽可能重复执行
@@ -49,7 +92,7 @@ start.times(2, 4).greedy();
 start.times(2, 4).optional().greedy();
 ```
 
-#### 定义条件where()、or()、until()
+####  3.1.2. <a name='whereoruntil'></a>定义条件where()、or()、until()
 
 where：
 - .where(_.getCallType == "success") 
@@ -82,14 +125,14 @@ middle.oneOrMore()
    )
 ```
 
-#### 指定时间约束
+####  3.1.3. <a name=''></a>指定时间约束
 - .within(Time.seconds(10)); 
 
-#### 超时事件的处理
+####  3.1.4. <a name='-1'></a>超时事件的处理
 
 通过 within 方法，我们的 parttern 规则将匹配的事件限定在一定的窗口范围内。当有超过窗口时间之后到达的 event，我们可以通过在 select 或 flatSelect 中，实现 PatternTimeoutFunction 和 PatternFlatTimeoutFunction 来处理这种情况。
 
-#### 超时触发机制扩展
+####  3.1.5. <a name='-1'></a>超时触发机制扩展
 
 原生 Flink CEP 中超时触发的功能可以通过 within+outputtag 结合来实现。
 
@@ -119,11 +162,11 @@ middle.oneOrMore()
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7usyxu7fahk.png)
 
-#### wait 算子:
+####  3.1.6. <a name='wait:'></a>wait 算子:
 
 对应 NFA 中的 `ignore 状态`，将在没有到达`时间窗口`结束时间时`自旋`，在 ComputationState 中记录 `wait` 的开始时间，在 NFA 的 doProcess 中，将到来的数据与waiting 状态处理，如果到了 waiting 的结束时间，则进行状态转移。
 
-#### 规则动态注入
+####  3.1.7. <a name='-1'></a>规则动态注入
 
 线上运行的 CEP 中肯定经常遇到规则变更的情况，如果每次变更时都将任务重启、重新发布是非常不优雅的。尤其在营销或者风控这种对实时性要求比较高的场景，如果规则窗口过长（一两个星期），状态过大，就会导致重启时间延长，期间就会造成一些想要处理的异常行为不能及时发现。
 
@@ -146,7 +189,7 @@ val result: SingleOutputStreamOperator[ComplexEvent] = patternStream.select
 val timeoutResult: DataStream<TimeoutEvent> = result.getSideOutput(outputTag)
 ```
 
-### 第二步. 绑定DataStream(DataStream就是正则表达式中待匹配的字符串)
+###  3.2. <a name='.DataStreamDataStream'></a>第二步. 绑定DataStream(DataStream就是正则表达式中待匹配的字符串)
 
 调用 CEP.pattern()，给定输入流和模式，就能得到一个 PatternStream 
 
@@ -166,7 +209,7 @@ val patternStream=CEP.pattern[EventLog(dataStream.keyBy(_.id),pattern)
 
 flink 通过DataStream 和 自定义的Pattern进行匹配，生成一个经过过滤之后的DataStream.
 
-### 第三步. 匹配结果处理
+###  3.3. <a name='.'></a>第三步. 匹配结果处理
 
 提供 `select` 和 `flatSelect` 两种方法从 PatternStream 提取事件结果事件。 
 
@@ -187,7 +230,7 @@ flatSelect 方法:
 
 可以返回多条记录，它通过一个 `Collector[OUT]` 类型的参数来将要输出的数据传递到下游。
 
-### 一个示例流程
+###  3.4. <a name='-1'></a>一个示例流程
 
 ```scala
 val input: DataStream[Event] =  ...
@@ -204,7 +247,7 @@ val result: DataStream[Alert] = patternStream.select(createAlert(_))
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1bko7chgpxj.png)
 
-### 为了使用 Flink CEP，我们需要导入依赖
+###  3.5. <a name='FlinkCEP'></a>为了使用 Flink CEP，我们需要导入依赖
 
 ```xml
 <dependency>
@@ -214,7 +257,7 @@ val result: DataStream[Alert] = patternStream.select(createAlert(_))
 </dependency>
 ```
 
-### Dewey 计数法
+###  3.6. <a name='Dewey'></a>Dewey 计数法
 
 当一个事件到来时，如果这个事件同时符合多个输出的结果集，那么这个事件是如何保存的？
 
@@ -226,9 +269,9 @@ Flink CEP 通过`Dewey 计数法`在多个`结果集`中共享`同一个事件�
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.36yghuft5ak0.png)
 
-## CEP规则引擎案例-简单的报警-http状态码为非200的数量
+##  4. <a name='CEP--http200'></a>CEP规则引擎案例-简单的报警-http状态码为非200的数量
 
-### 第0步. 创建DataStream. 自定义的source
+###  4.1. <a name='0.DataStream.source'></a>第0步. 创建DataStream. 自定义的source
 
 ```java
  public static class MySource implements SourceFunction<Tuple4<String,Long,Integer,Integer>>{
@@ -258,7 +301,7 @@ Flink CEP 通过`Dewey 计数法`在多个`结果集`中共享`同一个事件�
  }
 ```
 
-### 第0步. 创建DataStream. 每秒http状态码为非200的比例-sql语法
+###  4.2. <a name='0.DataStream.http200-sql'></a>第0步. 创建DataStream. 每秒http状态码为非200的比例-sql语法
 
 ```java
 // 定义一个sql，每秒http状态码为非200的比例。大于0.7的时候触发报警。
@@ -275,7 +318,7 @@ Flink CEP 通过`Dewey 计数法`在多个`结果集`中共享`同一个事件�
   DataStream<Result> ds1 = tenv.toAppendStream(table, Result.class);
 ```
 
-### 第一步. 定义事件模式
+###  4.3. <a name='.-1'></a>第一步. 定义事件模式
 
 times()与模式组：
 
@@ -311,7 +354,7 @@ times()与模式组：
     //greedy：      在 Pattern 匹配成功的前提下，会尽可能多地触发。
 ```
 
-### 第二步. 绑定DataStream + 第三步. 匹配结果处理
+###  4.4. <a name='.DataStream.'></a>第二步. 绑定DataStream + 第三步. 匹配结果处理
 
 ```java
 DataStream<Map<String,List<Result>>> alertStream = org.apache.flink.cep.CEP.pattern(ds1,pattern).
@@ -339,9 +382,9 @@ DataStream<Map<String,List<Result>>> alertStream = org.apache.flink.cep.CEP.patt
   });
 ```
 
-## CEP规则引擎案例-在10秒钟之内连续两个event的温度超过阈值
+##  5. <a name='CEP-10event'></a>CEP规则引擎案例-在10秒钟之内连续两个event的温度超过阈值
 
-### 第一步. 定义事件模式pattern(warningPattern)
+###  5.1. <a name='.patternwarningPattern'></a>第一步. 定义事件模式pattern(warningPattern)
 
 ```java
 // Warning pattern: Two consecutive temperature events whose temperature is higher than the given threshold
@@ -375,7 +418,7 @@ Pattern<MonitoringEvent, ?> warningPattern = Pattern.<MonitoringEvent>begin("fir
  .within(Time.seconds(10));
 ```
 
-### 第二步. warningPattern绑定DataStream(inputEventStream.keyBy("rackID")) -> tempPatternStream
+###  5.2. <a name='.warningPatternDataStreaminputEventStream.keyByrackID-tempPatternStream'></a>第二步. warningPattern绑定DataStream(inputEventStream.keyBy("rackID")) -> tempPatternStream
 
 使用报警模式和输入流生成模式流
 
@@ -386,7 +429,7 @@ PatternStream<MonitoringEvent> tempPatternStream = CEP.pattern(
  warningPattern);
 ```
 
-### 第三步. 匹配结果处理 tempPatternStream -> warnings
+###  5.3. <a name='.tempPatternStream-warnings'></a>第三步. 匹配结果处理 tempPatternStream -> warnings
 
 使用`select方法`为每个匹配的报警模式生成相应的`报警`。其中
 
@@ -405,7 +448,7 @@ DataStream<TemperatureWarning> warnings = tempPatternStream.select(
 );
 ```
 
-### 第一步. 定义事件模式-警报模式(alertPattern)
+###  5.4. <a name='.-alertPattern'></a>第一步. 定义事件模式-警报模式(alertPattern)
 
 ```java
 // 警报模式：在 20 秒的时间间隔内连续出现两次温度警告
@@ -414,7 +457,7 @@ Pattern<TemperatureWarning, ?> alertPattern = Pattern.<TemperatureWarning>begin(
  .within(Time.seconds(20));
 ```
 
-### 第二步. alertPattern绑定DataStream(warnings.keyBy("rackID")) -> alertPatternStream
+###  5.5. <a name='.alertPatternDataStreamwarnings.keyByrackID-alertPatternStream'></a>第二步. alertPattern绑定DataStream(warnings.keyBy("rackID")) -> alertPatternStream
 
 然后通过上面的`报警模式alertPattern`和`警告流warnings`生成我们的报警流`alertPatternStream`。
 
@@ -425,7 +468,7 @@ PatternStream<TemperatureWarning> alertPatternStream = CEP.pattern(
  alertPattern);
 ```
 
-### 第三步. 匹配结果处理 alertPatternStream -> alerts
+###  5.6. <a name='.alertPatternStream-alerts'></a>第三步. 匹配结果处理 alertPatternStream -> alerts
 
 最后当收集到的两次警告中，第一次警告的平均温度<第二次的时候，生成报警，封装TemperatureAlert信息返回。
 
@@ -451,7 +494,7 @@ DataStream<TemperatureAlert> alerts = alertPatternStream.flatSelect(
         alerts.print();
 ```
 
-## CEP规则引擎案例-连续三次登录失败（next方法为连续事件）
+##  6. <a name='CEP-next'></a>CEP规则引擎案例-连续三次登录失败（next方法为连续事件）
 
 ```java
 import com.alibaba.fastjson.JSONObject;
@@ -554,7 +597,7 @@ public class LoginFailWithCep {
 }
 ```
 
-## CEP规则引擎案例-订单超时15分钟（followedBy方法为间隔事件）
+##  7. <a name='CEP-15followedBy'></a>CEP规则引擎案例-订单超时15分钟（followedBy方法为间隔事件）
 
 ```java
 
@@ -663,7 +706,7 @@ public class OrderPayTimeout {
 }
 ```
 
-## CEP规则引擎案例-网络安全
+##  8. <a name='CEP-'></a>CEP规则引擎案例-网络安全
 
 `CEP规则引擎`可分为`实时`和`离线`两种分析模式
 
@@ -676,7 +719,7 @@ public class OrderPayTimeout {
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5mizadwto280.png)
 
-### Flink CEP
+###  8.1. <a name='FlinkCEP-1'></a>Flink CEP
 
 是基于Flink计算框架衍生出的一个计算算子，是实时复杂事件处理的解决方案，它利用`NFA（非确定有限自动机）`对象进行状态管理；
 
@@ -703,7 +746,7 @@ proceed：
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2m39y49fqb60.png)
 
-### [Siddhi](https://github.com/siddhi-io/siddhi)
+###  8.2. <a name='Siddhihttps:github.comsiddhi-iosiddhi'></a>[Siddhi](https://github.com/siddhi-io/siddhi)
 
 是一种轻巧、易集成的开源CEP引擎，它识别事件流中需要关注的特征事件，并进行实时分析处理，Siddhi与流框架Flink能友好集成，并获得不错的处理性能。
 
@@ -713,9 +756,9 @@ Siddhi可以作为嵌入式Java和`Python`库运行，可以作为裸机、VM和
 
 有关使用Siddhi的更多信息，请参阅[Siddhi文档](https://siddhi.io/en/v5.1/docs/)。
 
-## 一个Flink-Cep使用案例+Groovy+Aviator 来实现一个物联网监控规则
+##  9. <a name='Flink-CepGroovyAviator'></a>一个Flink-Cep使用案例+Groovy+Aviator 来实现一个物联网监控规则
 
-### 技术背景简介
+###  9.1. <a name='-1'></a>技术背景简介
 
 Flink-Cep 
 
@@ -729,7 +772,7 @@ Aviator
 
 - 用于执行`求值表达式`，例如求1>2的值，得到true，为什么用这个东西，也跟后续`动态规则变更`相关，接下来的案例也会具体介绍。
 
-### 案例分析
+###  9.2. <a name='-1'></a>案例分析
 
 物联网通常都是设备数据，比喻说设备的温度、耗电量等等，会有对设备的监控，
 
@@ -773,7 +816,7 @@ val pattern=Pattern.begin("start",AfterMatchSkipStrategy.skipPastLastEvent()).wh
 
 对于规则里面的条件`value.value>10`， 对于规则配置来说就是一个`条件表达式`，要是`条件表达式`可执行可使用`Aviator`。
 
-### 实现-定义 规则模板-Pattern模板通过Groovy定义
+###  9.3. <a name='--PatternGroovy'></a>实现-定义 规则模板-Pattern模板通过Groovy定义
 
 ```scala
 
