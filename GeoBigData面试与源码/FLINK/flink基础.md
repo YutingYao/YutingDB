@@ -1,6 +1,8 @@
 <!-- vscode-markdown-toc -->
 * 1. [面试](#)
 * 2. [入门](#-1)
+	* 2.1. [flink SQL](#flinkSQL)
+	* 2.2. [其他](#-1)
 * 3. [进阶](#-1)
 * 4. [源码](#-1)
 * 5. [实战与应用](#-1)
@@ -24,7 +26,21 @@
 
 [Flink吐血总结，学习与面试收藏这一篇就够了！！！](https://mp.weixin.qq.com/s/44G_siAfCLINOR0bBrun3g)
 
+[深度解读！新一代大数据引擎Flink厉害在哪？（附实现原理细节）](https://mp.weixin.qq.com/s/3rQURkPEUjdzc8mxVorXOA)
+
 ##  2. <a name='-1'></a>入门
+
+###  2.1. <a name='flinkSQL'></a>flink SQL
+
+[flink sql 知其所以然（四）| sql api 类型系统](https://mp.weixin.qq.com/s/aqDRWgr3Kim7lblx10JvtA)
+
+[33张图解flink sql应用提交（建议收藏！）](https://mp.weixin.qq.com/s/ak9s2gUw6On7WwoiduEhYQ)
+
+[FlinkSQL窗口函数篇：易理解与实战案例](https://mp.weixin.qq.com/s/ZIYOEvCMsHlV8pZyt1qLyA)
+
+[FlinkSQL窗口，让你眼前一亮，是否可以大吃一惊呢](https://mp.weixin.qq.com/s/WjGFNrnRUJv8qrvQq70QlQ)
+
+###  2.2. <a name='-1'></a>其他
 
 [FLINK官方中文文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/learn-flink/overview/)
 
@@ -64,8 +80,6 @@
 
 [Flink进阶教程：以flatMap为例，如何进行算子自定义](https://mp.weixin.qq.com/s/I6-ibigdB9TPs38cbYgU3A)
 
-[33张图解flink sql应用提交（建议收藏！）](https://mp.weixin.qq.com/s/ak9s2gUw6On7WwoiduEhYQ)
-
 [实时数仓 | Flink实时维表join方法总结（附项目源码）](https://mp.weixin.qq.com/s/X3YYm9psakwF-HamjCvKBg)
 
 [如何解决生产环境 Flink 应用的技术难题？](https://mp.weixin.qq.com/s/LJzJ8o9kl-NCnk1LtmNsKg)
@@ -87,8 +101,6 @@
 [Flink内核原理与实现](https://mp.weixin.qq.com/s/NrgKJQit8WdO5-095cBzVw)
 
 [「Flink」工具人Flink之组件通信](https://mp.weixin.qq.com/s/bmQa1xTyMDYKHnz8pYxPJQ)
-
-[flink sql 知其所以然（四）| sql api 类型系统](https://mp.weixin.qq.com/s/aqDRWgr3Kim7lblx10JvtA)
 
 [【源码解析】flink 任务提交解析](https://mp.weixin.qq.com/s/Qz79PQ9GvbBOXmvsrfnh_w)
 
