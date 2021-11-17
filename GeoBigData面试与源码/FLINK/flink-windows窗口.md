@@ -1,8 +1,56 @@
+<!-- vscode-markdown-toc -->
+* 1. [WindowAssigner窗口分配器，用来确定哪些数据被分配到哪些窗口。](#WindowAssigner)
+	* 1.1. [窗口处理的 Flink 程序一般结构 Keyed Windows + Non-Keyed Windows](#FlinkKeyedWindowsNon-KeyedWindows)
+	* 1.2. [Allowed Lateness 允许迟到](#AllowedLateness)
+	* 1.3. [获取 late data 作为 side output](#latedatasideoutput)
+	* 1.4. [连续窗口操作](#)
+	* 1.5. [窗口生命周期](#-1)
+	* 1.6. [窗口划分的源码](#-1)
+	* 1.7. [内置 WindowAssigner](#WindowAssigner-1)
+	* 1.8. [一张经典图](#-1)
+	* 1.9. [通过size和interval组合可以得出四种基本窗口](#sizeinterval)
+	* 1.10. [滚动窗口 Tumbling Time Window](#TumblingTimeWindow)
+	* 1.11. [滚动窗口 Tumbling Count Window](#TumblingCountWindow)
+	* 1.12. [滑动窗口 Sliding Time Window](#SlidingTimeWindow)
+	* 1.13. [会话窗口Session Window](#SessionWindow)
+* 2. [WindowFunction窗口函数，用来对窗口内的数据做计算](#WindowFunction)
+	* 2.1. [ReduceFunction 对输入的两个相同类型的元素按照指定的计算逻辑进行集合](#ReduceFunction)
+	* 2.2. [AggregateFunction 增量聚合，用于 Window 的增量计算，减轻 Window 内 State 的存储压力。](#AggregateFunctionWindowWindowState)
+	* 2.3. [ProcessWindowFunction 全量聚合，可以与 AggregateFunction 结合起来使用](#ProcessWindowFunctionAggregateFunction)
+	* 2.4. [ReduceFunction 或 AggregateFunction 与 ProcessWindowFunction 组合](#ReduceFunctionAggregateFunctionProcessWindowFunction)
+		* 2.4.1. [使用ReduceFunction进行增量聚合](#ReduceFunction-1)
+		* 2.4.2. [ 使用AggregateFunction进行增量聚合](#AggregateFunction)
+* 3. [Trigger 触发器,用来确定何时触发窗口的计算](#Trigger)
+	* 3.1. [Trigger 示例：](#Trigger-1)
+	* 3.2. [PurgingTrigger 的应用：](#PurgingTrigger)
+	* 3.3. [DeltaTrigger 的应用：](#DeltaTrigger)
+	* 3.4. [GlobalWindow + 触发 = 自定义 WindowAssigner](#GlobalWindowWindowAssigner)
+	* 3.5. [自定义Trigger](#Trigger-1)
+	* 3.6. [TriggerResult 有如下几种取值：](#TriggerResult)
+	* 3.7. [内置触发器](#-1)
+	* 3.8. [自定义触发器 - 继承并实现 Trigger 抽象类](#-Trigger)
+* 4. [Evictor 清除器,对满足驱逐条件的数据做过滤](#Evictor)
+	* 4.1. [内置 evictor](#evictor)
+	* 4.2. [TimeEvictor 的应用1](#TimeEvictor1)
+	* 4.3. [TimeEvictor 的应用2](#TimeEvictor2)
+	* 4.4. [CountEvictor 的应用](#CountEvictor)
+	* 4.5. [DeltaEvictor 的应用](#DeltaEvictor)
+* 5. [时间语义](#-1)
+	* 5.1. [水位线watermarks](#watermarks)
+		* 5.1.1. [为什么要引入watermark](#watermark)
+		* 5.1.2. [watermark策略](#watermark-1)
+	* 5.2. [语法格式样例](#-1)
+	* 5.3. [选择时间特性](#-1)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
 
 
-
-## WindowAssigner窗口分配器，用来确定哪些数据被分配到哪些窗口。
+##  1. <a name='WindowAssigner'></a>WindowAssigner窗口分配器，用来确定哪些数据被分配到哪些窗口。
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.8vj588z5eko.png)
 
@@ -23,7 +71,7 @@ stream
   .reduce/aggregate/process()           <-    Aggregate/Window function
 ```
 
-### 窗口处理的 Flink 程序一般结构 Keyed Windows + Non-Keyed Windows
+###  1.1. <a name='FlinkKeyedWindowsNon-KeyedWindows'></a>窗口处理的 Flink 程序一般结构 Keyed Windows + Non-Keyed Windows
 
 (1) Keyed Windows：
 
@@ -62,7 +110,109 @@ stream
 - 是否调用了 keyBy() 方法
 - Keyed Windows 使用 window() 方法，Non-Keyed Windows 使用 windowAll() 方法。
 
-### 窗口生命周期
+###  1.2. <a name='AllowedLateness'></a>Allowed Lateness 允许迟到
+
+默认情况下，允许的延迟设置为0。也就是说，到达水印后面的元素将被丢弃。
+
+您可以这样指定允许的延迟时间：
+
+> scala
+
+```scala
+val input: DataStream[T] = ...
+
+input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .allowedLateness(<time>)
+    .<windowed transformation>(<window function>)
+```
+
+> java
+
+```java
+DataStream<T> input = ...;
+
+input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .allowedLateness(<time>)
+    .<windowed transformation>(<window function>);
+```
+
+###  1.3. <a name='latedatasideoutput'></a>获取 late data 作为 side output
+
+首先需要指定要使用窗口流上的sideOutputLateData（OutputTag）获取最新数据。然后，您可以根据窗口操作的结果获得侧面输出流：
+
+> scala
+
+```scala
+val lateOutputTag = OutputTag[T]("late-data")
+
+val input: DataStream[T] = ...
+
+val result = input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .allowedLateness(<time>)
+    .sideOutputLateData(lateOutputTag)
+    .<windowed transformation>(<window function>)
+
+val lateStream = result.getSideOutput(lateOutputTag)
+```
+
+> java
+
+```java
+final OutputTag<T> lateOutputTag = new OutputTag<T>("late-data"){};
+
+DataStream<T> input = ...;
+
+SingleOutputStreamOperator<T> result = input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .allowedLateness(<time>)
+    .sideOutputLateData(lateOutputTag)
+    .<windowed transformation>(<window function>);
+
+DataStream<T> lateStream = result.getSideOutput(lateOutputTag);
+```
+
+###  1.4. <a name=''></a>连续窗口操作
+
+允许将`连续加窗操作串`在一起。当你想要执行两个`连续的窗口操作`，你想使用`不同的键`，但仍然希望来自相同的`上游窗口`的元素最终在相同的`下游窗口`时，这是很有用的。考虑一下这个例子:
+
+> scala
+
+```scala
+val input: DataStream[Int] = ...
+
+val resultsPerKey = input
+    .keyBy(<key selector>)
+    .window(TumblingEventTimeWindows.of(Time.seconds(5)))
+    .reduce(new Summer())
+
+val globalResults = resultsPerKey
+    .windowAll(TumblingEventTimeWindows.of(Time.seconds(5)))
+    .process(new TopKWindowFunction())
+```
+
+> java
+
+```java
+DataStream<Integer> input = ...;
+
+DataStream<Integer> resultsPerKey = input
+    .keyBy(<key selector>)
+    .window(TumblingEventTimeWindows.of(Time.seconds(5)))
+    .reduce(new Summer());
+
+DataStream<Integer> globalResults = resultsPerKey
+    .windowAll(TumblingEventTimeWindows.of(Time.seconds(5)))
+    .process(new TopKWindowFunction());
+```
+
+###  1.5. <a name='-1'></a>窗口生命周期
 
 创建：
 
@@ -98,7 +248,7 @@ stream
 
 
 
-### 窗口划分的源码
+###  1.6. <a name='-1'></a>窗口划分的源码
 
 ```java
 /**
@@ -151,7 +301,7 @@ window_end = window_start + windowSize
 watermark(水位线，包含延迟) > 窗口结束时间
 ```
 
-### 内置 WindowAssigner
+###  1.7. <a name='WindowAssigner-1'></a>内置 WindowAssigner
 
 - GlobalWindows
   
@@ -326,11 +476,11 @@ input
 
 - MergingWindowAssigner: 内部定义了Window可以Merge的特性。一个抽象类，本身是一个WindowAssigner。
 
-### 一张经典图
+###  1.8. <a name='-1'></a>一张经典图
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1aqrko750oow.png)
 
-### 通过size和interval组合可以得出四种基本窗口
+###  1.9. <a name='sizeinterval'></a>通过size和interval组合可以得出四种基本窗口
 
 - time-tumbling-window 无重叠数据的时间窗口，设置方式举例：
 
@@ -356,7 +506,7 @@ countWindow(5)
 countWindow(5,3)
 ```
 
-### 滚动窗口 Tumbling Time Window
+###  1.10. <a name='TumblingTimeWindow'></a>滚动窗口 Tumbling Time Window
 
 应用场景：👀 
 
@@ -378,7 +528,7 @@ val tumblingCnts: DataStream[(Int, Int)] = counts
   .sum(1) 
 ```
 
-### 滚动窗口 Tumbling Count Window
+###  1.11. <a name='TumblingCountWindow'></a>滚动窗口 Tumbling Count Window
 
 应用场景：👀
 
@@ -399,7 +549,7 @@ val tumblingCnts: DataStream[(Int, Int)] = buyCnts
 
 - 每当窗口中填满100个元素了，就会对窗口进行计算
 
-### 滑动窗口 Sliding Time Window
+###  1.12. <a name='SlidingTimeWindow'></a>滑动窗口 Sliding Time Window
 
 link支持窗口的两个重要属性-（size和interval）：✨
 
@@ -420,7 +570,7 @@ val slidingCnts: DataStream[(Int, Int)] = buyCnts
   .sum(1)
 ```
 
-### 会话窗口Session Window
+###  1.13. <a name='SessionWindow'></a>会话窗口Session Window
 
 应用场景：👀需要计算每个用户在`活跃期间`总共购买的商品数量，如果用户`30秒没有活动`则视为`会话断开`（假设raw data stream是单个用户的购买行为流）
 
@@ -436,9 +586,37 @@ val sessionCnts: DataStream[(Int, Int)] = vehicleCnts
 ****
 ```
 
-## WindowFunction窗口函数，用来对窗口内的数据做计算
+##  2. <a name='WindowFunction'></a>WindowFunction窗口函数，用来对窗口内的数据做计算
 
-### ReduceFunction 对输入的两个相同类型的元素按照指定的计算逻辑进行集合
+###  2.1. <a name='ReduceFunction'></a>ReduceFunction 对输入的两个相同类型的元素按照指定的计算逻辑进行集合
+
+ReduceFunction可以这样定义和使用:
+
+> scala
+
+```scala
+val input: DataStream[(String, Long)] = ...
+
+input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .reduce { (v1, v2) => (v1._1, v1._2 + v2._2) }
+```
+
+> java
+
+```java
+DataStream<Tuple2<String, Long>> input = ...;
+
+input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .reduce(new ReduceFunction<Tuple2<String, Long>>() {
+      public Tuple2<String, Long> reduce(Tuple2<String, Long> v1, Tuple2<String, Long> v2) {
+        return new Tuple2<>(v1.f0, v1.f1 + v2.f1);
+      }
+    });
+```
 
 它接受两个相同类型的输入，生成一个输出，即两两合一地进行汇总操作，生成一个同类型的新元素。
 
@@ -482,7 +660,75 @@ DataStream<Tuple2<String, Integer>> result = wordsCount
         });
 ```
 
-### AggregateFunction 增量聚合，用于 Window 的增量计算，减轻 Window 内 State 的存储压力。
+###  2.2. <a name='AggregateFunctionWindowWindowState'></a>AggregateFunction 增量聚合，用于 Window 的增量计算，减轻 Window 内 State 的存储压力。
+
+AggregateFunction可以这样定义和使用：
+
+> scala
+
+```scala
+
+/**
+ * The accumulator is used to keep a running sum and a count. The [getResult] method
+ * computes the average.
+ */
+class AverageAggregate extends AggregateFunction[(String, Long), (Long, Long), Double] {
+  override def createAccumulator() = (0L, 0L)
+
+  override def add(value: (String, Long), accumulator: (Long, Long)) =
+    (accumulator._1 + value._2, accumulator._2 + 1L)
+
+  override def getResult(accumulator: (Long, Long)) = accumulator._1 / accumulator._2
+
+  override def merge(a: (Long, Long), b: (Long, Long)) =
+    (a._1 + b._1, a._2 + b._2)
+}
+
+val input: DataStream[(String, Long)] = ...
+
+input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .aggregate(new AverageAggregate)
+```
+
+> java
+
+```java
+/**
+ * The accumulator is used to keep a running sum and a count. The {@code getResult} method
+ * computes the average.
+ */
+private static class AverageAggregate
+    implements AggregateFunction<Tuple2<String, Long>, Tuple2<Long, Long>, Double> {
+  @Override
+  public Tuple2<Long, Long> createAccumulator() {
+    return new Tuple2<>(0L, 0L);
+  }
+
+  @Override
+  public Tuple2<Long, Long> add(Tuple2<String, Long> value, Tuple2<Long, Long> accumulator) {
+    return new Tuple2<>(accumulator.f0 + value.f1, accumulator.f1 + 1L);
+  }
+
+  @Override
+  public Double getResult(Tuple2<Long, Long> accumulator) {
+    return ((double) accumulator.f0) / accumulator.f1;
+  }
+
+  @Override
+  public Tuple2<Long, Long> merge(Tuple2<Long, Long> a, Tuple2<Long, Long> b) {
+    return new Tuple2<>(a.f0 + b.f0, a.f1 + b.f1);
+  }
+}
+
+DataStream<Tuple2<String, Long>> input = ...;
+
+input
+    .keyBy(<key selector>)
+    .window(<window assigner>)
+    .aggregate(new AverageAggregate());
+```
 
 它是高级别的抽象，主要用来做`增量聚合`，**每来一条元素都做一次聚合**，
 
@@ -506,7 +752,7 @@ AggregateFunction 接口中有三个参数：
 
 我们看一下它的源码定义：
 
-```scala
+```java
 public interface AggregateFunction<IN, ACC, OUT> extends Function, Serializable {
    // 在一次新的aggregate发起时，创建一个新的Accumulator，Accumulator是我们所说的中间状态数据，简称ACC
    // 这个函数一般在初始化时调用
@@ -628,7 +874,59 @@ private static class AverageAggregateFunction implements AggregateFunction<Tuple
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3jgximd8vmg0.png)
 
-### ProcessWindowFunction 全量聚合，可以与 AggregateFunction 结合起来使用
+###  2.3. <a name='ProcessWindowFunctionAggregateFunction'></a>ProcessWindowFunction 全量聚合，可以与 AggregateFunction 结合起来使用
+
+ProcessWindowFunction可以这样定义和使用:
+
+> scala
+
+```scala
+val input: DataStream[(String, Long)] = ...
+
+input
+  .keyBy(_._1)
+  .window(TumblingEventTimeWindows.of(Time.minutes(5)))
+  .process(new MyProcessWindowFunction())
+
+/* ... */
+
+class MyProcessWindowFunction extends ProcessWindowFunction[(String, Long), String, String, TimeWindow] {
+
+  def process(key: String, context: Context, input: Iterable[(String, Long)], out: Collector[String]) = {
+    var count = 0L
+    for (in <- input) {
+      count = count + 1
+    }
+    out.collect(s"Window ${context.window} count: $count")
+  }
+}
+```
+
+> java
+
+```java
+DataStream<Tuple2<String, Long>> input = ...;
+
+input
+  .keyBy(t -> t.f0)
+  .window(TumblingEventTimeWindows.of(Time.minutes(5)))
+  .process(new MyProcessWindowFunction());
+
+/* ... */
+
+public class MyProcessWindowFunction 
+    extends ProcessWindowFunction<Tuple2<String, Long>, String, String, TimeWindow> {
+
+  @Override
+  public void process(String key, Context context, Iterable<Tuple2<String, Long>> input, Collector<String> out) {
+    long count = 0;
+    for (Tuple2<String, Long> in: input) {
+      count++;
+    }
+    out.collect("Window: " + context.window() + "count: " + count);
+  }
+}
+```
 
 它是低级别的抽象用,来做`全量聚合`，**每来一条元素都存在状态里面**，
 
@@ -759,7 +1057,7 @@ Context中有两种状态:
   - 比如处理`迟到数据`或`自定义Trigger`等场景。
   - 当使用`单个窗口`的状态时，要在`clear函数`中清理状态。
 
-### ReduceFunction 或 AggregateFunction 与 ProcessWindowFunction 组合
+###  2.4. <a name='ReduceFunctionAggregateFunctionProcessWindowFunction'></a>ReduceFunction 或 AggregateFunction 与 ProcessWindowFunction 组合
 
 可以使用 ProcessWindowFunction 与 ReduceFunction 或者 AggregateFunction 等增量函数组合使用，以充分利用两种函数各自的优势。
 
@@ -798,7 +1096,65 @@ val maxMin = input
 
 
 
-#### 使用ReduceFunction进行增量聚合
+####  2.4.1. <a name='ReduceFunction-1'></a>使用ReduceFunction进行增量聚合
+
+下面的示例展示了如何将递增的ReduceFunction与ProcessWindowFunction组合起来，以返回窗口中最小的事件以及窗口的开始时间。
+
+> scala
+
+```scala
+
+val input: DataStream[SensorReading] = ...
+
+input
+  .keyBy(<key selector>)
+  .window(<window assigner>)
+  .reduce(
+    (r1: SensorReading, r2: SensorReading) => { if (r1.value > r2.value) r2 else r1 },
+    ( key: String,
+      context: ProcessWindowFunction[_, _, _, TimeWindow]#Context,
+      minReadings: Iterable[SensorReading],
+      out: Collector[(Long, SensorReading)] ) =>
+      {
+        val min = minReadings.iterator.next()
+        out.collect((context.window.getStart, min))
+      }
+  )
+
+```
+
+> java
+
+```java
+DataStream<SensorReading> input = ...;
+
+input
+  .keyBy(<key selector>)
+  .window(<window assigner>)
+  .reduce(new MyReduceFunction(), new MyProcessWindowFunction());
+
+// Function definitions
+
+private static class MyReduceFunction implements ReduceFunction<SensorReading> {
+
+  public SensorReading reduce(SensorReading r1, SensorReading r2) {
+      return r1.value() > r2.value() ? r2 : r1;
+  }
+}
+
+private static class MyProcessWindowFunction
+    extends ProcessWindowFunction<SensorReading, Tuple2<Long, SensorReading>, String, TimeWindow> {
+
+  public void process(String key,
+                    Context context,
+                    Iterable<SensorReading> minReadings,
+                    Collector<Tuple2<Long, SensorReading>> out) {
+      SensorReading min = minReadings.iterator().next();
+      out.collect(new Tuple2<Long, SensorReading>(context.window().getStart(), min));
+  }
+}
+
+```
 
 如下代码示例展示了如何将 ReduceFunction 增量函数与 ProcessWindowFunction 组合使用 ->
 
@@ -881,7 +1237,100 @@ private static class MyProcessWindowFunction extends ProcessWindowFunction<Tuple
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1jn2hvwkuv34.png)
 
-####  使用AggregateFunction进行增量聚合
+####  2.4.2. <a name='AggregateFunction'></a> 使用AggregateFunction进行增量聚合
+
+下面的示例展示了如何将增量AggregateFunction与ProcessWindowFunction组合起来计算平均值，并同时发出键和窗口。
+
+> scala
+
+```scala
+
+val input: DataStream[(String, Long)] = ...
+
+input
+  .keyBy(<key selector>)
+  .window(<window assigner>)
+  .aggregate(new AverageAggregate(), new MyProcessWindowFunction())
+
+// Function definitions
+
+/**
+ * The accumulator is used to keep a running sum and a count. The [getResult] method
+ * computes the average.
+ */
+class AverageAggregate extends AggregateFunction[(String, Long), (Long, Long), Double] {
+  override def createAccumulator() = (0L, 0L)
+
+  override def add(value: (String, Long), accumulator: (Long, Long)) =
+    (accumulator._1 + value._2, accumulator._2 + 1L)
+
+  override def getResult(accumulator: (Long, Long)) = accumulator._1 / accumulator._2
+
+  override def merge(a: (Long, Long), b: (Long, Long)) =
+    (a._1 + b._1, a._2 + b._2)
+}
+
+class MyProcessWindowFunction extends ProcessWindowFunction[Double, (String, Double), String, TimeWindow] {
+
+  def process(key: String, context: Context, averages: Iterable[Double], out: Collector[(String, Double)]) = {
+    val average = averages.iterator.next()
+    out.collect((key, average))
+  }
+}
+
+```
+
+> java
+
+```java
+DataStream<Tuple2<String, Long>> input = ...;
+
+input
+  .keyBy(<key selector>)
+  .window(<window assigner>)
+  .aggregate(new AverageAggregate(), new MyProcessWindowFunction());
+
+// Function definitions
+
+/**
+ * The accumulator is used to keep a running sum and a count. The {@code getResult} method
+ * computes the average.
+ */
+private static class AverageAggregate
+    implements AggregateFunction<Tuple2<String, Long>, Tuple2<Long, Long>, Double> {
+  @Override
+  public Tuple2<Long, Long> createAccumulator() {
+    return new Tuple2<>(0L, 0L);
+  }
+
+  @Override
+  public Tuple2<Long, Long> add(Tuple2<String, Long> value, Tuple2<Long, Long> accumulator) {
+    return new Tuple2<>(accumulator.f0 + value.f1, accumulator.f1 + 1L);
+  }
+
+  @Override
+  public Double getResult(Tuple2<Long, Long> accumulator) {
+    return ((double) accumulator.f0) / accumulator.f1;
+  }
+
+  @Override
+  public Tuple2<Long, Long> merge(Tuple2<Long, Long> a, Tuple2<Long, Long> b) {
+    return new Tuple2<>(a.f0 + b.f0, a.f1 + b.f1);
+  }
+}
+
+private static class MyProcessWindowFunction
+    extends ProcessWindowFunction<Double, Tuple2<String, Double>, String, TimeWindow> {
+
+  public void process(String key,
+                    Context context,
+                    Iterable<Double> averages,
+                    Collector<Tuple2<String, Double>> out) {
+      Double average = averages.iterator().next();
+      out.collect(new Tuple2<>(key, average));
+  }
+}
+```
 
 如下代码示例展示了如何将 AggregateFunction 增量函数与 ProcessWindowFunction 组合使用 ->
 
@@ -984,7 +1433,7 @@ private static class MyProcessWindowFunction extends ProcessWindowFunction<Tuple
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.29i57w7e48u8.png)
 
-## Trigger 触发器,用来确定何时触发窗口的计算
+##  3. <a name='Trigger'></a>Trigger 触发器,用来确定何时触发窗口的计算
 
 Trigger 接口有 6 个方法，可以允许 Trigger 对不同的事件做出反应：
 
@@ -1016,17 +1465,17 @@ public abstract class Trigger<T, W extends Window> implements Serializable {
 }
 ```
 
-### Trigger 示例：
+###  3.1. <a name='Trigger-1'></a>Trigger 示例：
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.164nnp6u07j4.png)
 
-### PurgingTrigger 的应用：
+###  3.2. <a name='PurgingTrigger'></a>PurgingTrigger 的应用：
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6axdle7s19c0.png)
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2kvnn6fj8hg0.png)
 
-### DeltaTrigger 的应用：
+###  3.3. <a name='DeltaTrigger'></a>DeltaTrigger 的应用：
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2ytbwtb1a0k0.png)
 
@@ -1068,7 +1517,7 @@ DataStream<Tuple4<Integer, Integer, Double, Long>> topSpeeds = carData
         .max( positionToMax: 1);
 ```
 
-### GlobalWindow + 触发 = 自定义 WindowAssigner
+###  3.4. <a name='GlobalWindowWindowAssigner'></a>GlobalWindow + 触发 = 自定义 WindowAssigner
 
 对于一些复杂的窗口，我们还可以自定义 `WindowAssigner`，但实现起来不一定简单，倒不如利用 GlobalWindow 和自定义 Trigger 来达到同样的效果。
 
@@ -1101,7 +1550,7 @@ public enum TriggerResult {
 }
 ```
 
-### 自定义Trigger
+###  3.5. <a name='Trigger-1'></a>自定义Trigger
 
 接下来我们以一个提前计算的案例来解释如何使用自定义的Trigger。在股票或任何交易场景中，我们比较关注价格急跌的情况，默认窗口长度是60秒，如果价格跌幅超过5%，则立即执行Window Function，如果价格跌幅在1%到5%之内，那么10秒后触发Window Function:
 
@@ -1153,7 +1602,7 @@ val average = input
 
 在自定义Trigger时，如果使用了状态，一定要使用clear方法将状态数据清理，否则随着窗口越来越多，状态数据会越积越多。
 
-### TriggerResult 有如下几种取值：
+###  3.6. <a name='TriggerResult'></a>TriggerResult 有如下几种取值：
 
 决定窗口是否应该被`处理`、被`清除`、被`处理+清除`、还是`什么都不做`。
 
@@ -1179,7 +1628,7 @@ FIRE_AND_PURGE: 触发计算+清理，处理数据并移除窗口和窗口中的
 - FIRE+PURGE的组合处理，即`处理`并`移除`窗口中的数据
 - 表示触发`窗口计算`并`清除数据`。首先触发`窗口计算(FIRE)`，然后清除`所有状态和元数据(PURGE)`。
 
-### 内置触发器
+###  3.7. <a name='-1'></a>内置触发器
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3u7lkjb609m0.png)
 
@@ -1207,7 +1656,7 @@ NeverTrigger
 
 ProcessingTimeoutTrigger：可以将任意 Trigger 作为参数转为为 ProcessingTimeout 类型的 Trigger。在第一个元素到达后设置一个超时处理时间。还可以通过指定 resetTimerOnNewRecord 为每个到达的元素重新更新计时器，也可以指定是否应通过 shouldClearOnTimeout 在超时时清理窗口所有数据。（ProcessingTimeoutTrigger 于 1.12.0 版本引入。）
 
-### 自定义触发器 - 继承并实现 Trigger 抽象类
+###  3.8. <a name='-Trigger'></a>自定义触发器 - 继承并实现 Trigger 抽象类
 
 假设我们有如下场景：
 
@@ -1326,7 +1775,7 @@ DataStream<String> result = stream
     .aggregate(new AverageAggregateFunction());
 ```
 
-## Evictor 清除器,对满足驱逐条件的数据做过滤
+##  4. <a name='Evictor'></a>Evictor 清除器,对满足驱逐条件的数据做过滤
 
 Evictor 提供了在使用 WindowFunction 之前或者之后从窗口中删除元素的能力。
 
@@ -1370,7 +1819,7 @@ evictBefore() 用于在使用窗口函数之前从窗口中删除元素，
 
 而 evictAfter() 用于在使用窗口函数之后从窗口中删除元素。
 
-### 内置 evictor
+###  4.1. <a name='evictor'></a>内置 evictor
 
 默认情况下，所有内置的 Evictors 都是在触发窗口函数之前使用。
 
@@ -1456,7 +1905,7 @@ private void evict(Iterable<TimestampedValue<T>> elements, int size, EvictorCont
 }
 ```
 
-### TimeEvictor 的应用1
+###  4.2. <a name='TimeEvictor1'></a>TimeEvictor 的应用1
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6n1rq150dn40.png)
 
@@ -1481,7 +1930,7 @@ DataStream<Tuple4<Integer, Integer, Double, Long>> topSpeeds = carData
         .max( positionToMax: 1);
 ```
 
-### TimeEvictor 的应用2
+###  4.3. <a name='TimeEvictor2'></a>TimeEvictor 的应用2
 
 如下代码所示，在触发窗口函数计算之前只保留最近10s内的元素：
 
@@ -1525,7 +1974,7 @@ DataStream<Tuple2<String, Long>> result = stream
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6pxgaod6u7k0.png)
 
-### CountEvictor 的应用
+###  4.4. <a name='CountEvictor'></a>CountEvictor 的应用
 
 
 ```scala
@@ -1571,7 +2020,7 @@ DataStream<Tuple2<String, Long>> result = stream
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7jgv3nfh7uk0.png)
 
-### DeltaEvictor 的应用
+###  4.5. <a name='DeltaEvictor'></a>DeltaEvictor 的应用
 
 根据用户自定的 DeltaFunction 函数来计算窗口中最后一个元素与其余每个元素之间的差值，如果差值大于等于用户指定的阈值就会删除该元素。
 
@@ -1626,7 +2075,7 @@ DataStream<Tuple2<String, Long>> result = stream
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3jvzuunwrdi0.png)
 
-## 时间语义
+##  5. <a name='-1'></a>时间语义
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4rnpr9qv7rq0.png)
 
@@ -1636,9 +2085,9 @@ DataStream<Tuple2<String, Long>> result = stream
 
 事件时间(event time)
 
-### 水位线watermarks
+###  5.1. <a name='watermarks'></a>水位线watermarks
 
-#### 为什么要引入watermark
+####  5.1.1. <a name='watermark'></a>为什么要引入watermark
 
 由于`实时计算的输入数据`是持续不断的，因此我们需要一个有效的`进度指标`，来帮助我们确定`关闭时间窗口`的正确时间点，保证`关闭窗口`后不会再有数据进入该窗口，可以安全输出这个`窗口的聚合结果`。
 
@@ -1667,7 +2116,7 @@ Watermark(t)定义了在一个流中事件时间已到达时间t，同时这也�
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1gfv6y3umagw.png)
 
-#### watermark策略
+####  5.1.2. <a name='watermark-1'></a>watermark策略
 
 严格意义上`递增的时间戳`,发出到目前为止已观察到的`最大时间戳`的水印。时间戳小于`最大时间戳`的行不会迟到。
 
@@ -1691,7 +2140,7 @@ watermark for rowtime_column as rowtime_column - INTERVAL'5'SECOND
 watermark for rowtime_column as rowtime_column - INTERVAL 'string' timeUnit
 ```
 
-### 语法格式样例
+###  5.2. <a name='-1'></a>语法格式样例
 
 ```sql
 CREATE TABLE Orders (
@@ -1702,7 +2151,7 @@ CREATE TABLE Orders (
 ) WITH ( . . . );
 ```
 
-### 选择时间特性
+###  5.3. <a name='-1'></a>选择时间特性
 
 以下示例展示了一个聚合每小时时间窗口内的事件的 Flink 程序:
 
