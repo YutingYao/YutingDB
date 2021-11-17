@@ -1,8 +1,89 @@
-## Flink 1.7 版本
+<!-- vscode-markdown-toc -->
+* 1. [flink-kafka连接器](#flink-kafka)
+	* 1.1. [依赖](#)
+	* 1.2. [Kafka Consumer](#KafkaConsumer)
+		* 1.2.1. [配置 Kafka Consumer 开始消费的位置](#KafkaConsumer-1)
+		* 1.2.2. [Kafka Consumer 和容错](#KafkaConsumer-1)
+		* 1.2.3. [Kafka Consumer Topic 和分区发现](#KafkaConsumerTopic)
+		* 1.2.4. [Kafka Consumer 提交 Offset 的行为配置](#KafkaConsumerOffset)
+		* 1.2.5. [Kafka Consumer 和 时间戳抽取以及 watermark 发送](#KafkaConsumerwatermark)
+	* 1.3. [Kafka Producer](#KafkaProducer)
+		* 1.3.1. [SerializationSchema](#SerializationSchema)
+		* 1.3.2. [Kafka Producer 和容错](#KafkaProducer-1)
+	* 1.4. [Kafka 连接器指标](#Kafka)
+	* 1.5. [启用 Kerberos 身份验证](#Kerberos)
+	* 1.6. [升级到最近的连接器版本](#-1)
+	* 1.7. [问题排查](#-1)
+		* 1.7.1. [数据丢失](#-1)
+		* 1.7.2. [UnknownTopicOrPartitionException](#UnknownTopicOrPartitionException)
+		* 1.7.3. [ProducerFencedException](#ProducerFencedException)
+* 2. [flink-kafka的发展](#flink-kafka-1)
+	* 2.1. [Flink 1.7 版本](#Flink1.7)
+	* 2.2. [Flink 1.8 版本](#Flink1.8)
+	* 2.3. [Flink 1.10 版本](#Flink1.10)
+	* 2.4. [Flink 1.11 版本](#Flink1.11)
+	* 2.5. [Flink 1.12 版本](#Flink1.12)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+
+##  1. <a name='flink-kafka'></a>flink-kafka连接器
+
+[Flink 提供了 Apache Kafka 连接器](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/connectors/datastream/kafka/)，用于从 Kafka topic 中读取或者向其中写入数据，可提供精确一次的处理语义。
+
+###  1.1. <a name=''></a>依赖
+
+```xml
+<dependency>
+    <groupId>org.apache.flink</groupId>
+    <artifactId>flink-connector-kafka_2.11</artifactId>
+    <version>1.14.0</version>
+</dependency>
+```
+
+###  1.2. <a name='KafkaConsumer'></a>Kafka Consumer
+
+####  1.2.1. <a name='KafkaConsumer-1'></a>配置 Kafka Consumer 开始消费的位置
+
+####  1.2.2. <a name='KafkaConsumer-1'></a>Kafka Consumer 和容错
+
+####  1.2.3. <a name='KafkaConsumerTopic'></a>Kafka Consumer Topic 和分区发现
+
+####  1.2.4. <a name='KafkaConsumerOffset'></a>Kafka Consumer 提交 Offset 的行为配置
+
+####  1.2.5. <a name='KafkaConsumerwatermark'></a>Kafka Consumer 和 时间戳抽取以及 watermark 发送
+
+###  1.3. <a name='KafkaProducer'></a>Kafka Producer
+
+####  1.3.1. <a name='SerializationSchema'></a>SerializationSchema
+
+####  1.3.2. <a name='KafkaProducer-1'></a>Kafka Producer 和容错
+
+###  1.4. <a name='Kafka'></a>Kafka 连接器指标
+
+###  1.5. <a name='Kerberos'></a>启用 Kerberos 身份验证 
+
+###  1.6. <a name='-1'></a>升级到最近的连接器版本 
+
+###  1.7. <a name='-1'></a>问题排查
+
+####  1.7.1. <a name='-1'></a>数据丢失
+
+####  1.7.2. <a name='UnknownTopicOrPartitionException'></a>UnknownTopicOrPartitionException
+
+####  1.7.3. <a name='ProducerFencedException'></a>ProducerFencedException
+
+##  2. <a name='flink-kafka-1'></a>flink-kafka的发展
+
+###  2.1. <a name='Flink1.7'></a>Flink 1.7 版本
 
 社区添加了 Kafka 2.0 连接器，可以从 Kafka 2.0 读写数据时保证 Exactly-Once 语义。
 
-## Flink 1.8 版本
+###  2.2. <a name='Flink1.8'></a>Flink 1.8 版本
 
 `FlinkKafkaConsumer` 现在将根据 topic 规范过滤已恢复的分区
 
@@ -24,11 +105,11 @@ connector变动:
 
 考虑这个例子：如果你有一个正在消耗topic的Kafka Consumer A，你做了一个`保存点`，然后改变你的Kafka消费者而不是从topic消费 B，然后从`保存点`重新启动你的工作。在此更改之前，您的消费者现在将使用这`两个主题A，B`因为它存储在消费者正在使用topic消费的`状态A`。通过此更改，您的使用者将仅B在还原后使用topic，因为我们使用`配置的topic`过滤状态中`存储的topic`。
 
-## Flink 1.10 版本
+###  2.3. <a name='Flink1.10'></a>Flink 1.10 版本
 
 Kafka 0.8 和 0.9 的 connector 已被标记为废弃并不再主动支持。
 
-## Flink 1.11 版本
+###  2.4. <a name='Flink1.11'></a>Flink 1.11 版本
 
 Table & SQL 支持 `Change Data Capture（CDC）`
 
@@ -56,7 +137,7 @@ CREATE TABLE my_table (
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.40xiwpalwxg0.png)
 
-## Flink 1.12 版本
+###  2.5. <a name='Flink1.12'></a>Flink 1.12 版本
 
 扩展了 `Kafka SQL connector`，使其可以在 `upsert 模式`下工作，并且支持在 `SQL DDL` 中处理 `connector 的 metadata`。现在，`时态表 Join` 可以完全用 `SQL` 来表示，不再依赖于 `Table API` 了。
 

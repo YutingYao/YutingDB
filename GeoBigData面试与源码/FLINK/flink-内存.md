@@ -207,6 +207,8 @@ JVM 堆空间的实际大小不受 Flink 掌控，而是取决于本地执行进
 
 ####  3.2.1. <a name='IOException:Insufficientnumberofnetworkbuffers'></a>IOException: Insufficient number of network buffers
 
+[网络内存调优指南(英文)](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/memory/network_mem_tuning/)
+
 该异常仅与 TaskManager 相关。
 
 该异常通常说明网络内存过小。 可以通过调整以下配置参数增大网络内存：

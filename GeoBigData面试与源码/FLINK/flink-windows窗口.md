@@ -2087,6 +2087,12 @@ DataStream<Tuple2<String, Long>> result = stream
 
 ###  5.1. <a name='watermarks'></a>水位线watermarks
 
+Watermark机制（解决乱序问题）
+
+setAutoWatermarkInterval(long milliseconds)：设置自动发送 watermark 的时间间隔。
+
+你可以使用 long getAutoWatermarkInterval() 获取当前配置值。
+
 ####  5.1.1. <a name='watermark'></a>为什么要引入watermark
 
 由于`实时计算的输入数据`是持续不断的，因此我们需要一个有效的`进度指标`，来帮助我们确定`关闭时间窗口`的正确时间点，保证`关闭窗口`后不会再有数据进入该窗口，可以安全输出这个`窗口的聚合结果`。

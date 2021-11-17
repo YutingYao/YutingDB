@@ -1,14 +1,15 @@
 <!-- vscode-markdown-toc -->
-* 1. [下载后解压](#)
-* 2. [在master节点上配置Flink](#masterFlink)
-* 3. [ssh 复制](#ssh)
-* 4. [启动集群](#-1)
-* 5. [提交作业（Job）](#Job)
-* 6. [跑个实例](#-1)
-* 7. [查看日志](#-1)
-* 8. [监视集群的状态和正在运行的作业](#-1)
-* 9. [查看磁盘空间](#-1)
-* 10. [查看inode空间](#inode)
+* 1. [不同作业环境](#)
+* 2. [下载后解压](#-1)
+* 3. [在master节点上配置Flink](#masterFlink)
+* 4. [ssh 复制](#ssh)
+* 5. [启动集群](#-1)
+* 6. [提交作业（Job）](#Job)
+* 7. [跑个实例](#-1)
+* 8. [查看日志](#-1)
+* 9. [监视集群的状态和正在运行的作业](#-1)
+* 10. [查看磁盘空间](#-1)
+* 11. [查看inode空间](#inode)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -16,7 +17,15 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-##  1. <a name=''></a>下载后解压
+##  1. <a name=''></a>不同作业环境
+
+[YARN](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/yarn/#per-job-cluster-mode)
+
+[Docker](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/standalone/docker/#enabling-python)
+
+[Native Kubernetes](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/native_kubernetes/)
+
+##  2. <a name='-1'></a>下载后解压
 
 [树莓派3B搭建Flink集群](https://cloud.tencent.com/developer/article/1438249)
 
@@ -36,7 +45,7 @@ cd /opt
 sudo mv flink-1.14.0-bin-scala_2.12 flink
 ```
 
-##  2. <a name='masterFlink'></a>在master节点上配置Flink
+##  3. <a name='masterFlink'></a>在master节点上配置Flink
 
 所有的配置都在"conf/flink-conf.yaml"文件中。
 
@@ -126,7 +135,7 @@ sudo vim masters
 ubuntu01:8081
 ```
 
-##  3. <a name='ssh'></a>ssh 复制
+##  4. <a name='ssh'></a>ssh 复制
 
 分别开启node01 和 node02 的ssh
 
@@ -149,7 +158,7 @@ scp -r /opt/flink root@node01:/opt/
 scp -r /opt/flink root@node02:/opt/
 ```
 
-##  4. <a name='-1'></a>启动集群
+##  5. <a name='-1'></a>启动集群
 
 ```sh
 ./bin/start-cluster.sh
@@ -208,7 +217,7 @@ jps
 
 查看各节点上的进程是否正常启动了。
 
-##  5. <a name='Job'></a>提交作业（Job）
+##  6. <a name='Job'></a>提交作业（Job）
 
 ```s
 ./bin/flink run examples/streaming/WordCount.jar
@@ -233,7 +242,7 @@ tail log/flink-*-taskexecutor-*.out
   (d,4)
 ```
 
-##  6. <a name='-1'></a>跑个实例
+##  7. <a name='-1'></a>跑个实例
 
 ```sh
  ./bin/flink run examples/streaming/SocketWindowWordCount.jar --hostname ubuntu01 --port 9000
@@ -262,13 +271,13 @@ hdfs dfs -cat hdfs://hadoop:8020/result
 * study 1
 * up 1
 
-##  7. <a name='-1'></a>查看日志
+##  8. <a name='-1'></a>查看日志
 
 ```sh
 tail log/flink-*-taskexecutor-*.out
 ```
 
-##  8. <a name='-1'></a>监视集群的状态和正在运行的作业
+##  9. <a name='-1'></a>监视集群的状态和正在运行的作业
 
 执行以下命令查询输出结果：
 
@@ -276,13 +285,13 @@ tail log/flink-*-taskexecutor-*.out
 http://ubuntu01:8081/
 ```
 
-##  9. <a name='-1'></a>查看磁盘空间
+##  10. <a name='-1'></a>查看磁盘空间
 
 ```sh
 df -h
 ```
 
-##  10. <a name='inode'></a>查看inode空间
+##  11. <a name='inode'></a>查看inode空间
 
 ```sh
 df -i
