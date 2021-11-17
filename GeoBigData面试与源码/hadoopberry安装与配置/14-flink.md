@@ -1,5 +1,9 @@
 ## 下载后解压
 
+[树莓派3B搭建Flink集群](https://cloud.tencent.com/developer/article/1438249)
+
+[树莓派3B搭建Flink集群](https://mp.weixin.qq.com/s/TwfuOpmuLxFTI8SyRKbiFg)
+
 到 opt：
 
 ```sh

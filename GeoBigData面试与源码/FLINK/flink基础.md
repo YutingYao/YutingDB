@@ -2,7 +2,8 @@
 * 1. [面试](#)
 * 2. [入门](#-1)
 	* 2.1. [flink SQL](#flinkSQL)
-	* 2.2. [其他](#-1)
+	* 2.2. [官方文档](#-1)
+	* 2.3. [其他](#-1)
 * 3. [进阶](#-1)
 * 4. [源码](#-1)
 * 5. [实战与应用](#-1)
@@ -13,6 +14,8 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 ##  1. <a name=''></a>面试
+
+[终于有人把云计算与数据库的关系讲明白了](https://mp.weixin.qq.com/s/RIf69WqvJ4xh0Qjx94nL0g)
 
 [当场打脸面试官，Flink流处理任务到底啥时候释放？](https://mp.weixin.qq.com/s/Mm8kvjtVuLu5dc522Z3dLw)
 
@@ -28,6 +31,10 @@
 
 [深度解读！新一代大数据引擎Flink厉害在哪？（附实现原理细节）](https://mp.weixin.qq.com/s/3rQURkPEUjdzc8mxVorXOA)
 
+[史上最全干货！Flink面试大全总结（全文6万字、110个知识点、160张图）](https://mp.weixin.qq.com/s/gv1_pAVI-b1DDV6921sr_w)
+
+[深度解读！新一代大数据引擎Flink厉害在哪？（附实现原理细节）](https://mp.weixin.qq.com/s/3rQURkPEUjdzc8mxVorXOA)
+
 ##  2. <a name='-1'></a>入门
 
 ###  2.1. <a name='flinkSQL'></a>flink SQL
@@ -40,11 +47,87 @@
 
 [FlinkSQL窗口，让你眼前一亮，是否可以大吃一惊呢](https://mp.weixin.qq.com/s/WjGFNrnRUJv8qrvQq70QlQ)
 
-###  2.2. <a name='-1'></a>其他
+### 指标
+
+[官方指标大全](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/metrics/#end-to-end-latency-tracking)
+
+[如何实时监控 Flink 集群和作业？](https://mp.weixin.qq.com/s/bYm0jkEmFg3uCnFDgaT0iw)
+
+[Flink深入浅出：指标与监控大屏实战](https://mp.weixin.qq.com/s/AGx9Ll-p3KMzyoJayIIKqw)
+
+[使用Prometheus+Grafana监控Flink on YARN作业](https://mp.weixin.qq.com/s/aHI-XG3wpM6mWwYSHszH2Q)
+
+[基于 Prometheus 与 Grafana 打造企业级 Flink 监控系统](https://mp.weixin.qq.com/s/kdD45pBjENzNwA8RH4PjQQ)
+
+[基于Prometheus+Grafana打造企业级Flink监控系统](https://mp.weixin.qq.com/s/TLbPyPWONKhTyo2l6FnJQw)
+
+[Flink 任务实时监控最佳实践](https://mp.weixin.qq.com/s/D83oZ2Tdcq2DRoOl1p_cmA)
+
+[Flink Metrics原理与监控系统搭建(实践篇)](https://mp.weixin.qq.com/s/iF8drds1lM7hSAyasXfAGA)
+
+[一口气搞懂「Flink Metrics」监控指标和性能优化，全靠这33张图和7千字（建议收藏）](https://mp.weixin.qq.com/s/-52EbT3ViuvCqkgN6x5v4g)
+
+[Flink Task Metrics源码解读](https://mp.weixin.qq.com/s/cPiesA4YfAzQCMircyfLMg)
+
+[Flink Metrics监控与 RestApi](https://mp.weixin.qq.com/s/F8qfd3hS1ArTzPXcPLeD8w)
+
+[Flink 指标（一）](https://www.jianshu.com/p/e50586fff515)
+
+[详解 Flink 指标、监控与告警](https://mp.weixin.qq.com/s/wfV1SfOKa1D9_ZF2rdO2kg)
+
+[Flink 实时 metrics](https://mp.weixin.qq.com/s/updGN1pL6O1ZzCU0TtloBg)
+
+[从 0 到 1 搭建一套 Flink 的监控系统](https://mp.weixin.qq.com/s/nSpJksVmlnA_7x59okLOGg)
+
+[深入理解Flink网络栈:监控、指标及反压(下)](https://mp.weixin.qq.com/s/ywpmYUCJRPimkwiWQbL-1w)
+
+### 生产问题
+
+[Flink经典的生产问题和解决方案](https://mp.weixin.qq.com/s/j-6V3ctP-1xXUri-0zvsoA)
+
+[Flink企业级优化全面总结（3万字长文，15张图）](https://mp.weixin.qq.com/s/lgvSG8N6Kz9wU49weHMWVg)
+
+[Flink重点难点：Flink任务综合调优(Checkpoint/反压/内存)](https://mp.weixin.qq.com/s/klSOQU6ag7T812TAQ6DzIg)
+
+[背感压力，Flink背压你了解多少？](https://mp.weixin.qq.com/s/MDpNfo8VOoeNYrhSBePaqQ)
+
+[【Flink 精选】如何分析及处理反压?](https://mp.weixin.qq.com/s/Mjsq4gVJlGMRH8iEyY2EXA)
+
+[Flink 数据传输及反压详解](https://www.jianshu.com/p/efb1313ba52a)
+
+[一文搞懂 Flink 网络流控与反压机制](https://www.cnblogs.com/felixzh/p/11635063.html)
+
+[Flink 实践 | 有赞 Flink 实时任务资源优化探索与实践](https://mp.weixin.qq.com/s/hKkOSPYinr59QYzJE-GAUA)
+
+[揭秘！带你看懂Flink在袋鼠云应用中的前世今生](https://mp.weixin.qq.com/s/t60G8Ni9Qb0b4hjx9ceQow)
+
+[Flink 在 58 同城的应用与实践](https://mp.weixin.qq.com/s/PU73U9sKrzWsuaSaFGT-Fg)
+
+[Flink在大搜车流计算的探索与实践](https://mp.weixin.qq.com/s/KVmS0ZToSxlrpdTtclOj4A)
+
+[学不会去当产品吧？Flink实战任务调优](https://mp.weixin.qq.com/s/-JI6dl7LPJLNj7r2FN59GQ)
+
+[Flink在唯品会的实践](https://mp.weixin.qq.com/s/gQRyD4igKHUCqEh4gRvZjw)
+
+[滴滴是如何从零构建集中式实时计算平台的？| 技术头条](https://mp.weixin.qq.com/s/7inLGzALrDZT_cwzLG04DQ)
+
+###  2.2. <a name='-1'></a>官方文档
 
 [FLINK官方中文文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/learn-flink/overview/)
 
 [pyflink官方文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/api/python/)
+
+[官方配置参数](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/config/#memory-configuration)
+
+## kafka
+
+[Flink 1.14.0 全新的 Kafka Connector](https://mp.weixin.qq.com/s/TT7WY9G2g2-jvZE9Paozpw)
+
+###  2.3. <a name='-1'></a>其他
+
+[Flink CDC 2.1 正式发布，稳定性大幅提升，新增 Oracle，MongoDB 支持](https://mp.weixin.qq.com/s/ImCATHNpI_hmWDwh13EvhQ)
+
+[Flink内部Exactly Once三板斧:状态、状态后端与检查点](https://mp.weixin.qq.com/s/iy64wfWDdzTvBH8CaC9KnQ)
 
 [Flink完全分布式集群安装](https://www.zhihu.com/tardis/sogou/art/131592261)
 
@@ -75,6 +158,8 @@
 [重磅！《Apache Flink 十大技术难点实战》发布，帮你从容应对生产环境中的技术难题](https://mp.weixin.qq.com/s/9ipBG7DxF-fO6QkKUoZWcw)
 
 ##  3. <a name='-1'></a>进阶
+
+[你在被窝里刷手机岁月静好，一个名叫 Flink 的 ​“神秘引擎” 却在远方和时间赛跑](https://mp.weixin.qq.com/s/sCGXpBKltvJTAi9e4DnX6g)
 
 [flink on k8s jobmanager HA 完全部署](https://mp.weixin.qq.com/s/-_zhbZ1RVGe0oNJlzD2vPg)
 
