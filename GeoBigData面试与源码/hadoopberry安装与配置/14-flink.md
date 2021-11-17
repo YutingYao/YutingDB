@@ -1,4 +1,22 @@
-## 下载后解压
+<!-- vscode-markdown-toc -->
+* 1. [下载后解压](#)
+* 2. [在master节点上配置Flink](#masterFlink)
+* 3. [ssh 复制](#ssh)
+* 4. [启动集群](#-1)
+* 5. [提交作业（Job）](#Job)
+* 6. [跑个实例](#-1)
+* 7. [查看日志](#-1)
+* 8. [监视集群的状态和正在运行的作业](#-1)
+* 9. [查看磁盘空间](#-1)
+* 10. [查看inode空间](#inode)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+##  1. <a name=''></a>下载后解压
 
 [树莓派3B搭建Flink集群](https://cloud.tencent.com/developer/article/1438249)
 
@@ -18,7 +36,7 @@ cd /opt
 sudo mv flink-1.14.0-bin-scala_2.12 flink
 ```
 
-## 在master节点上配置Flink
+##  2. <a name='masterFlink'></a>在master节点上配置Flink
 
 所有的配置都在"conf/flink-conf.yaml"文件中。
 
@@ -42,6 +60,14 @@ cd conf
 sudo vim flink-conf.yaml
 ```
 
+包括这些参数:
+
+* 每个 JobManager 的可用内存值（jobmanager.memory.process.size），
+* 每个 TaskManager 的可用内存值 （taskmanager.memory.process.size，并检查 内存调优指南），
+* 每台机器的可用 CPU 数（taskmanager.numberOfTaskSlots），
+* 集群中所有 CPU 数（parallelism.default）和
+* 临时目录（io.tmp.dirs）
+
 jobmanager.rpc.address: master   // 指向master节点
 
 ```yaml
@@ -55,9 +81,20 @@ jobmanager.heap.size: 1024m      // 定义允许JVM在每个节点上分配的�
  taskmanager.memory.process.size: 800m
 ```
 
+你可以在 conf/flink-conf.yaml 文件中通过 env.java.home 配置项来设置此变量。
+
+```yaml
+env.java.home: /usr/lib/jvm/java-8-openjdk-arm64/
+```
+
+```yaml
+env.java.home: /usr/lib/jvm/java-8-openjdk-armhf/
+```
+
 由于树莓派3b+的内存太小，因此，还需要配置：
 
 ```yaml
+# 我猜的，还没验证过是否可行
 jobmanager.memory.jvm-metaspace.size: 52m
 taskmanager.memory.jvm-overhead.min: 52m
 taskmanager.memory.network.min: 52m
@@ -89,7 +126,7 @@ sudo vim masters
 ubuntu01:8081
 ```
 
-## ssh 复制
+##  3. <a name='ssh'></a>ssh 复制
 
 分别开启node01 和 node02 的ssh
 
@@ -112,7 +149,7 @@ scp -r /opt/flink root@node01:/opt/
 scp -r /opt/flink root@node02:/opt/
 ```
 
-## 启动集群
+##  4. <a name='-1'></a>启动集群
 
 ```sh
 ./bin/start-cluster.sh
@@ -125,6 +162,20 @@ scp -r /opt/flink root@node02:/opt/
 ```
 
 注：
+
+你可以使用 bin/jobmanager.sh 和 bin/taskmanager.sh 脚本为正在运行的集群添加 JobManager 和 TaskManager 实例。
+
+添加 JobManager:
+
+```sh
+./bin/jobmanager.sh ((start|start-foreground) [host] [webui-port])|stop|stop-all
+```
+
+添加 TaskManager:
+
+```sh
+bin/taskmanager.sh start|start-foreground|stop|stop-all
+```
 
 停止单个的Job Manager的命令:
 
@@ -144,10 +195,10 @@ scp -r /opt/flink root@node02:/opt/
 
 注意观察启动过程中的输出信息，如下：
 
-- Starting cluster.
-- Starting `standalonesession` daemon on host ubuntu01.
-- Starting `taskexecutor` daemon on host node01.
-- Starting `taskexecutor` daemon on host node02.
+* Starting cluster.
+* Starting `standalonesession` daemon on host ubuntu01.
+* Starting `taskexecutor` daemon on host node01.
+* Starting `taskexecutor` daemon on host node02.
 
 启动以后，分别在master、worker01和worker02节点上执行
 
@@ -157,7 +208,7 @@ jps
 
 查看各节点上的进程是否正常启动了。
 
-## 提交作业（Job）
+##  5. <a name='Job'></a>提交作业（Job）
 
 ```s
 ./bin/flink run examples/streaming/WordCount.jar
@@ -182,7 +233,7 @@ tail log/flink-*-taskexecutor-*.out
   (d,4)
 ```
 
-## 跑个实例
+##  6. <a name='-1'></a>跑个实例
 
 ```sh
  ./bin/flink run examples/streaming/SocketWindowWordCount.jar --hostname ubuntu01 --port 9000
@@ -206,18 +257,18 @@ hdfs dfs -cat hdfs://hadoop:8020/result
 
 可以看到以下计算结果：
 
-- day 2
-- good 2
-- study 1
-- up 1
+* day 2
+* good 2
+* study 1
+* up 1
 
-## 查看日志
+##  7. <a name='-1'></a>查看日志
 
 ```sh
 tail log/flink-*-taskexecutor-*.out
 ```
 
-## 监视集群的状态和正在运行的作业
+##  8. <a name='-1'></a>监视集群的状态和正在运行的作业
 
 执行以下命令查询输出结果：
 
@@ -225,13 +276,13 @@ tail log/flink-*-taskexecutor-*.out
 http://ubuntu01:8081/
 ```
 
-## 查看磁盘空间
+##  9. <a name='-1'></a>查看磁盘空间
 
 ```sh
 df -h
 ```
 
-## 查看inode空间
+##  10. <a name='inode'></a>查看inode空间
 
 ```sh
 df -i
