@@ -1,5 +1,12 @@
+<!-- vscode-markdown-toc -->
+* 1. [Flink Maven Archetype](#FlinkMavenArchetype)
 
-## Flink Maven Archetype
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+##  1. <a name='FlinkMavenArchetype'></a>Flink Maven Archetype
 
 完整版见：这里只是最简单的V1版本
 

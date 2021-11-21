@@ -76,6 +76,10 @@
 	* 15.1. [安装指南](#-1)
 	* 15.2. [SQL 语义](#SQL-1)
 	* 15.3. [示例](#-1)
+* 16. [CDC](#CDC)
+	* 16.1. [mongoDB](#mongoDB)
+	* 16.2. [Oracle](#Oracle)
+	* 16.3. [Postgres 数据库作为 Catalog](#PostgresCatalog)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -3532,9 +3536,9 @@ FROM Ticker
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.69vnz0pg3o80.png)
 
-## CDC
+##  16. <a name='CDC'></a>CDC
 
-### mongoDB
+###  16.1. <a name='mongoDB'></a>mongoDB
 
 ```sql
 
@@ -3568,7 +3572,7 @@ MongoDB CDC 也支持两种启动模式：
 - 默认的initial 模式是先同步表中的存量的数据，然后同步表中的增量数据；
 - latest-offset 模式则是从当前时间点开始只同步表中增量数据。
 
-### Oracle
+###  16.2. <a name='Oracle'></a>Oracle
 
 ```sql
 -- 在 Flink SQL 中声明一张 Oracle CDC 表:'products'
@@ -3596,7 +3600,7 @@ CREATE TABLE products (
 SELECT * FROM products;
 ```
 
-### Postgres 数据库作为 Catalog
+###  16.3. <a name='PostgresCatalog'></a>Postgres 数据库作为 Catalog
 
 ```sql
 CREATE CATALOG mypg WITH(

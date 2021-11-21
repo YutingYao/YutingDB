@@ -1,12 +1,16 @@
 <!-- vscode-markdown-toc -->
 * 1. [面试](#)
 * 2. [入门](#-1)
-	* 2.1. [flink SQL](#flinkSQL)
-	* 2.2. [官方文档](#-1)
-	* 2.3. [其他](#-1)
-* 3. [进阶](#-1)
-* 4. [源码](#-1)
-* 5. [实战与应用](#-1)
+	* 2.1. [官方文档](#-1)
+	* 2.2. [k8s](#k8s)
+	* 2.3. [flink SQL](#flinkSQL)
+	* 2.4. [指标](#-1)
+	* 2.5. [生产问题](#-1)
+* 3. [kafka](#kafka)
+	* 3.1. [其他](#-1)
+* 4. [进阶](#-1)
+* 5. [源码](#-1)
+* 6. [实战与应用](#-1)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -37,7 +41,7 @@
 
 ##  2. <a name='-1'></a>入门
 
-###  2.2. <a name='-1'></a>官方文档
+###  2.1. <a name='-1'></a>官方文档
 
 [Apache Flink Training Excercises](https://hub.fastgit.org/apache/flink-training/tree/release-1.14)
 
@@ -67,7 +71,7 @@
 
 [官方配置参数](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/config/#memory-configuration)
 
-### k8s
+###  2.2. <a name='k8s'></a>k8s
 
 [Kubernetes 安装](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/standalone/kubernetes/)
 
@@ -75,7 +79,7 @@
 
 [Native Kubernetes](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/native_kubernetes/)
 
-###  2.1. <a name='flinkSQL'></a>flink SQL
+###  2.3. <a name='flinkSQL'></a>flink SQL
 
 [flink sql 知其所以然（四）| sql api 类型系统](https://mp.weixin.qq.com/s/aqDRWgr3Kim7lblx10JvtA)
 
@@ -85,7 +89,7 @@
 
 [FlinkSQL窗口，让你眼前一亮，是否可以大吃一惊呢](https://mp.weixin.qq.com/s/WjGFNrnRUJv8qrvQq70QlQ)
 
-### 指标
+###  2.4. <a name='-1'></a>指标
 
 [官方指标大全](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/metrics/#end-to-end-latency-tracking)
 
@@ -119,7 +123,7 @@
 
 [深入理解Flink网络栈:监控、指标及反压(下)](https://mp.weixin.qq.com/s/ywpmYUCJRPimkwiWQbL-1w)
 
-### 生产问题
+###  2.5. <a name='-1'></a>生产问题
 
 [Flink经典的生产问题和解决方案](https://mp.weixin.qq.com/s/j-6V3ctP-1xXUri-0zvsoA)
 
@@ -151,11 +155,11 @@
 
 
 
-## kafka
+##  3. <a name='kafka'></a>kafka
 
 [Flink 1.14.0 全新的 Kafka Connector](https://mp.weixin.qq.com/s/TT7WY9G2g2-jvZE9Paozpw)
 
-###  2.3. <a name='-1'></a>其他
+###  3.1. <a name='-1'></a>其他
 
 [Flink CDC 2.1 正式发布，稳定性大幅提升，新增 Oracle，MongoDB 支持](https://mp.weixin.qq.com/s/ImCATHNpI_hmWDwh13EvhQ)
 
@@ -189,7 +193,7 @@
 
 [重磅！《Apache Flink 十大技术难点实战》发布，帮你从容应对生产环境中的技术难题](https://mp.weixin.qq.com/s/9ipBG7DxF-fO6QkKUoZWcw)
 
-##  3. <a name='-1'></a>进阶
+##  4. <a name='-1'></a>进阶
 
 [你在被窝里刷手机岁月静好，一个名叫 Flink 的 ​“神秘引擎” 却在远方和时间赛跑](https://mp.weixin.qq.com/s/sCGXpBKltvJTAi9e4DnX6g)
 
@@ -205,7 +209,7 @@
 
 [【学习笔记】-从浅入深理解流式计算框架Flink](https://mp.weixin.qq.com/s/qELKTMY9mudj5QVN4OJ_QQ)
 
-##  4. <a name='-1'></a>源码
+##  5. <a name='-1'></a>源码
 
 [JobManager & TaskManager启动流程分析](https://www.jianshu.com/p/8d0947069977)
 
@@ -229,7 +233,7 @@
 
 [大咖分享 | 通过制作一个迷你版Flink来学习Flink源码](https://mp.weixin.qq.com/s/hHz_7oFOfH6lu3bwbo2zsw)
 
-##  5. <a name='-1'></a>实战与应用
+##  6. <a name='-1'></a>实战与应用
 
 [Flink学习篇二 Scala API实现简单词频统计](https://mp.weixin.qq.com/s/rLF9DPP7ECOBHoQLR0kaig)
 

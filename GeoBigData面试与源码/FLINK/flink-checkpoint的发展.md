@@ -1,4 +1,14 @@
-## Flink 1.11 版本
+<!-- vscode-markdown-toc -->
+* 1. [Flink 1.11 版本](#Flink1.11)
+* 2. [Flink 1.12 版本](#Flink1.12)
+* 3. [Flink 1.13 版本](#Flink1.13)
+* 4. [Flink1.14版本](#Flink1.14)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->##  1. <a name='Flink1.11'></a>Flink 1.11 版本
 
 实际生产环境中，用户经常遭遇 checkpoint 超时失败、长时间不能完成带来的困扰。
 
@@ -20,13 +30,13 @@ Checkpoint & Savepoint 优化:
   - 但是它的使用也有一定的局限性，它会增加整体 state 的大小，对存储 IO 带来额外的开销，因此在 IO 已经是瓶颈的场景下就不太适合使用 unaligned checkpoint 机制。
   - unaligned checkpoint 还没有作为默认模式，需要用户手动配置来开启，并且只在 exactly-once 模式下生效。
 
-## Flink 1.12 版本
+##  2. <a name='Flink1.12'></a>Flink 1.12 版本
 
 当 checkpoint 的`间隔`比较小时，这会成为一个很大的问题，因为会创建大量的`小文件`。
 
 File Sink 增加了`小文件合并`功能，从而使得即使作业 checkpoint `间隔`比较小时，也不会产生大量的文件。
 
-## Flink 1.13 版本
+##  3. <a name='Flink1.13'></a>Flink 1.13 版本
 
 以前版本的Flink只有在检查点成功的情况下才会报告指标(例如，持久化数据的大小、触发时间)。
 
@@ -46,7 +56,7 @@ File Sink 增加了`小文件合并`功能，从而使得即使作业 checkpoint
 
 - 更好的报告失败的checkpoints的`异常或者失败的原因`。Flink现在提供了失败或被中止的`检查点的统计信息`，以便更容易地确定`失败原因`，而不必分析日志。
 
-## Flink1.14版本
+##  4. <a name='Flink1.14'></a>Flink1.14版本
 
 在流的执行模式下的 `Checkpoint 机制`：
 

@@ -1,10 +1,21 @@
-## Flink 1.9 版本 
+<!-- vscode-markdown-toc -->
+* 1. [Flink 1.9 版本](#Flink1.9)
+* 2. [Flink 1.10 版本](#Flink1.10)
+* 3. [Flink 1.11 版本](#Flink1.11)
+* 4. [Flink 1.12 版本](#Flink1.12)
+* 5. [Flink 1.13 版本](#Flink1.13)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->##  1. <a name='Flink1.9'></a>Flink 1.9 版本 
 
 Flink 1.9 推出了预览版的 Hive 集成。
 
 该版本允许用户使用 `SQL DDL` 将 Flink 特有的`元数据`持久化到 `Hive Metastore`、调用 `Hive 中定义的 UDF` 以及读、写 `Hive 中的表`。Flink 只支持写入`未分区的 Hive 表`。
 
-## Flink 1.10 版本 
+##  2. <a name='Flink1.10'></a>Flink 1.10 版本 
 
 在 Flink 1.10 中，Flink SQL 扩展支持了 `INSERT` `OVERWRITE` 和 `PARTITION` 的语法，允许用户写入 Hive 中的`静态`和`动态分区`。
 
@@ -34,7 +45,7 @@ LIMIT 下推：
 
 Flink 1.10 在 `Flink table 核心`引入了通用的`可插拔模块`机制，目前主要应用于`系统内置函数`。通过模块，用户可以扩展 Flink 的`系统对象`，例如像使用 `Flink 系统函数`一样使用 `Hive 内置函数`。新版本中包含一个预先实现好的 `HiveModule`，能够支持多个 Hive 版本，当然用户也可以选择编写自己的`可插拔模块`。
 
-## Flink 1.11 版本 
+##  3. <a name='Flink1.11'></a>Flink 1.11 版本 
 
 `FileSystem 连接器`还扩展了 `Table API/SQL` 支持的`用例`和`格式集`，从而实现了直接启用从 `Kafka` 到 `Hive 的 streaming` 数据传输等方案。
 
@@ -62,7 +73,7 @@ Flink 1.10 在 `Flink table 核心`引入了通用的`可插拔模块`机制，�
   - 提供 Hive 相关依赖的`内置支持`，避免用户自己下载所需的相关依赖。现在只需要`单独下载`一个包，配置 `HADOOP_CLASSPATH` 就可以运行。
   - 在 Hive 性能方面，1.10.0 中已经支持了 `ORC（Hive 2+）的向量化读取`，1.11.0 中我们补全了所有版本的 `Parquet 和 ORC 向量化`支持来提升性能。
 
-## Flink 1.12 版本
+##  4. <a name='Flink1.12'></a>Flink 1.12 版本
 
 使用 `Hive 表`进行 `Temporal Table Join`:
 
@@ -73,7 +84,7 @@ Flink 1.10 在 `Flink table 核心`引入了通用的`可插拔模块`机制，�
 
 在 FileSystem/Hive connector 的流式写入中支持小文件合并.
 
-## Flink 1.13 版本
+##  5. <a name='Flink1.13'></a>Flink 1.13 版本
 
 Hive查询语法兼容性:
 

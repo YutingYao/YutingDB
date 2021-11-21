@@ -1,29 +1,28 @@
 <!-- vscode-markdown-toc -->
-* 1. [Flink 操作场景](#Flink)
-* 2. [一些定义](#)
-* 3. [场景说明](#-1)
-* 4. [环境搭建](#-1)
-* 5. [环境讲解](#-1)
-	* 5.1. [Flink WebUI 界面](#FlinkWebUI)
-	* 5.2. [日志](#-1)
-		* 5.2.1. [JobManager 日志](#JobManager)
-		* 5.2.2. [TaskManager 日志](#TaskManager)
-	* 5.3. [Flink CLI 相关命令](#FlinkCLI)
-	* 5.4. [Flink REST API](#FlinkRESTAPI)
-	* 5.5. [Kafka Topics](#KafkaTopics)
-* 6. [核心特性探索](#-1)
-	* 6.1. [获取所有运行中的 Job](#Job)
-		* 6.1.1. [CLI 命令](#CLI)
-		* 6.1.2. [REST API 请求](#RESTAPI)
-	* 6.2. [Job 失败与恢复](#Job-1)
-		* 6.2.1. [Step 1: 观察输出](#Step1:)
-		* 6.2.2. [Step 2: 模拟失败](#Step2:)
-		* 6.2.3. [Step 3: 失败恢复](#Step3:)
-	* 6.3. [Job 升级与扩容](#Job-1)
-		* 6.3.1. [Step 1: 停止 Job](#Step1:Job)
-		* 6.3.2. [Step 2a: 重启 Job (不作任何变更)](#Step2a:Job)
-		* 6.3.3. [Step 2b: 重启 Job (修改并行度)](#Step2b:Job)
-	* 6.4. [查询 Job 指标](#Job-1)
+* 1. [一些定义](#)
+* 2. [场景说明](#-1)
+* 3. [环境搭建](#-1)
+* 4. [环境讲解](#-1)
+	* 4.1. [Flink WebUI 界面](#FlinkWebUI)
+	* 4.2. [日志](#-1)
+		* 4.2.1. [JobManager 日志](#JobManager)
+		* 4.2.2. [TaskManager 日志](#TaskManager)
+	* 4.3. [Flink CLI 相关命令](#FlinkCLI)
+	* 4.4. [Flink REST API](#FlinkRESTAPI)
+	* 4.5. [Kafka Topics](#KafkaTopics)
+* 5. [核心特性探索](#-1)
+	* 5.1. [获取所有运行中的 Job](#Job)
+		* 5.1.1. [CLI 命令](#CLI)
+		* 5.1.2. [REST API 请求](#RESTAPI)
+	* 5.2. [Job 失败与恢复](#Job-1)
+		* 5.2.1. [Step 1: 观察输出](#Step1:)
+		* 5.2.2. [Step 2: 模拟失败](#Step2:)
+		* 5.2.3. [Step 3: 失败恢复](#Step3:)
+	* 5.3. [Job 升级与扩容](#Job-1)
+		* 5.3.1. [Step 1: 停止 Job](#Step1:Job)
+		* 5.3.2. [Step 2a: 重启 Job (不作任何变更)](#Step2a:Job)
+		* 5.3.3. [Step 2b: 重启 Job (修改并行度)](#Step2b:Job)
+	* 5.4. [查询 Job 指标](#Job-1)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -38,7 +37,7 @@
 - 如何从失败作业中进行恢复
 - 执行一些日常操作任务，如升级和扩容
 
-##  2. <a name=''></a>一些定义
+##  1. <a name=''></a>一些定义
 
 Flink Session Cluster 定义：
 
@@ -178,11 +177,11 @@ stream
 - 键控流的keyBy(…)调用
 - 非键控流的window(…)调用
 
-##  3. <a name='-1'></a>场景说明
+##  2. <a name='-1'></a>场景说明
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.691qdrtdoqg0.png)
 
-##  4. <a name='-1'></a>环境搭建
+##  3. <a name='-1'></a>环境搭建
 
 你需要在自己的主机上提前安装好 docker (1.12+) 和 docker-compose (2.1+)。
 
@@ -232,17 +231,17 @@ operations-playground_zookeeper_1              /bin/sh -c /usr/sbin/sshd  ...   
 docker-compose down -v
 ```
 
-##  5. <a name='-1'></a>环境讲解
+##  4. <a name='-1'></a>环境讲解
 
-###  5.1. <a name='FlinkWebUI'></a>Flink WebUI 界面
+###  4.1. <a name='FlinkWebUI'></a>Flink WebUI 界面
 
 打开浏览器并访问 http://localhost:8081
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5zo01pchs300.png)
 
-###  5.2. <a name='-1'></a>日志
+###  4.2. <a name='-1'></a>日志
 
-####  5.2.1. <a name='JobManager'></a>JobManager 日志
+####  4.2.1. <a name='JobManager'></a>JobManager 日志
 
 可以通过 docker-compose 命令进行查看。
 
@@ -252,7 +251,7 @@ docker-compose logs -f jobmanager
 
 JobManager 刚启动完成之时，你会看到很多关于 checkpoint completion (检查点完成)的日志。
 
-####  5.2.2. <a name='TaskManager'></a>TaskManager 日志
+####  4.2.2. <a name='TaskManager'></a>TaskManager 日志
 
 ```sh
 docker-compose logs -f taskmanager
@@ -260,7 +259,7 @@ docker-compose logs -f taskmanager
 
 TaskManager 刚启动完成之时，你同样会看到很多关于 checkpoint completion (检查点完成)的日志。
 
-###  5.3. <a name='FlinkCLI'></a>Flink CLI 相关命令
+###  4.3. <a name='FlinkCLI'></a>Flink CLI 相关命令
 
 Flink CLI 相关命令可以在 `client 容器`内进行使用。 
 
@@ -270,7 +269,7 @@ Flink CLI 相关命令可以在 `client 容器`内进行使用。
 docker-compose run --no-deps client flink --help
 ```
 
-###  5.4. <a name='FlinkRESTAPI'></a>Flink REST API
+###  4.4. <a name='FlinkRESTAPI'></a>Flink REST API
 
 Flink REST API 可以通过`本机`的 `localhost:8081` 进行访问，
 
@@ -288,7 +287,7 @@ Flink REST API 可以通过`本机`的 `localhost:8081` 进行访问，
 curl localhost:8081/jobs
 ```
 
-###  5.5. <a name='KafkaTopics'></a>Kafka Topics
+###  4.5. <a name='KafkaTopics'></a>Kafka Topics
 
 可以运行如下命令查看 Kafka Topics 中的记录：
 
@@ -302,11 +301,11 @@ docker-compose exec kafka kafka-console-consumer.sh \
   --bootstrap-server localhost:9092 --topic output
 ```
 
-##  6. <a name='-1'></a>核心特性探索
+##  5. <a name='-1'></a>核心特性探索
 
-###  6.1. <a name='Job'></a>获取所有运行中的 Job
+###  5.1. <a name='Job'></a>获取所有运行中的 Job
 
-####  6.1.1. <a name='CLI'></a>CLI 命令
+####  5.1.1. <a name='CLI'></a>CLI 命令
 
 ```s
 docker-compose run --no-deps client flink list
@@ -321,7 +320,7 @@ Waiting for response...
 --------------------------------------------------------------
 No scheduled jobs.
 ```
-####  6.1.2. <a name='RESTAPI'></a>REST API 请求
+####  5.1.2. <a name='RESTAPI'></a>REST API 请求
 
 ```sh
 curl localhost:8081/jobs
@@ -344,13 +343,13 @@ curl localhost:8081/jobs
 
 后续对该 Job 的 所有操作（无论是通过 CLI 还是 REST API）都需要带上 **JobID**。
 
-###  6.2. <a name='Job-1'></a>Job 失败与恢复
+###  5.2. <a name='Job-1'></a>Job 失败与恢复
 
 在 `Job (部分)失败`的情况下，Flink 对事件处理依然能够提供`精确一次`的保障， 
 
 在本节中你将会观察到并能够在某种程度上验证这种行为:
 
-####  6.2.1. <a name='Step1:'></a>Step 1: 观察输出
+####  5.2.1. <a name='Step1:'></a>Step 1: 观察输出
 
 事件以特定速率生成，刚好使得每个统计窗口都包含确切的 1000 条记录。
 
@@ -363,7 +362,7 @@ docker-compose exec kafka kafka-console-consumer.sh \
   --bootstrap-server localhost:9092 --topic output
 ```
 
-####  6.2.2. <a name='Step2:'></a>Step 2: 模拟失败
+####  5.2.2. <a name='Step2:'></a>Step 2: 模拟失败
 
 为了模拟部分失败故障，你可以 kill 掉一个 TaskManager
 
@@ -397,7 +396,7 @@ JobManager 就会感知到 TaskManager 已失联
 
 在生产环境中也经常出现这种 `Job 挂掉`但`源头还在不断产生数据`的情况。
 
-####  6.2.3. <a name='Step3:'></a>Step 3: 失败恢复 
+####  5.2.3. <a name='Step3:'></a>Step 3: 失败恢复 
 
 一旦 TaskManager 重启成功，它将会重新连接到 JobManager。
 
@@ -425,7 +424,7 @@ docker-compose up -d taskmanager
 注意：在大部分生产环境中都需要一个资源管理器 (Kubernetes、Yarn)对 失败的 Job 进行自动重启。
 ```
 
-###  6.3. <a name='Job-1'></a>Job 升级与扩容 
+###  5.3. <a name='Job-1'></a>Job 升级与扩容 
 
 升级 Flink 作业一般都需要两步：
 
@@ -448,7 +447,7 @@ docker-compose exec kafka kafka-console-consumer.sh \
   --bootstrap-server localhost:9092 --topic output
 ```
 
-####  6.3.1. <a name='Step1:Job'></a>Step 1: 停止 Job 
+####  5.3.1. <a name='Step1:Job'></a>Step 1: 停止 Job 
 
 方式一：CLI 命令
 
@@ -528,7 +527,7 @@ curl -X POST localhost:8081/jobs/<job-id>/stop -d '{"drain": false}'
 }
 ```
 
-####  6.3.2. <a name='Step2a:Job'></a>Step 2a: 重启 Job (不作任何变更)
+####  5.3.2. <a name='Step2a:Job'></a>Step 2a: 重启 Job (不作任何变更)
 
 现在你可以从这个 Savepoint 重新启动待升级的 Job，为了简单起见，不对该 Job 作任何变更就直接重启。
 
@@ -611,7 +610,7 @@ curl -X POST http://localhost:8081/jars/<jar-id>/run \
 - 因为刚启动的 Job 正在处理`停止期间积压`的大量数据。
 - 另外，你还会看到在升级期间 没有产生任何数据丢失：所有窗口都在输出 1000。
 
-####  6.3.3. <a name='Step2b:Job'></a>Step 2b: 重启 Job (修改并行度)
+####  5.3.3. <a name='Step2b:Job'></a>Step 2b: 重启 Job (修改并行度)
 
 在从 Savepoint 重启 Job 之前，你还可以通过修改并行度来达到扩容 Job 的目的。
 
@@ -677,7 +676,7 @@ docker-compose scale taskmanager=2
 
 一旦 Job 再次运行起来，从 output Topic 的输出中你会看到在扩容期间数据依然没有丢失： 所有窗口的`计数都正好是 1000`。
 
-###  6.4. <a name='Job-1'></a>查询 Job 指标
+###  5.4. <a name='Job-1'></a>查询 Job 指标
 
 可以通过 JobManager 提供的 REST API 来获取系统和`用户指标`
 
