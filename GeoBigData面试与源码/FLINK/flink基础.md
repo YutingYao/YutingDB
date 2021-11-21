@@ -37,6 +37,44 @@
 
 ##  2. <a name='-1'></a>入门
 
+###  2.2. <a name='-1'></a>官方文档
+
+[Apache Flink Training Excercises](https://hub.fastgit.org/apache/flink-training/tree/release-1.14)
+
+[Task 生命周期](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/internals/task_lifecycle/)
+
+[Task 故障恢复](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/state/task_failure_recovery/)
+
+[怎样在 JobManager 里描述和追踪作业状态](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/internals/job_scheduling/)
+
+[State and Checkpoints](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/state/large_state_tuning/)
+
+[Checkpoint 使 Flink 的状态具有良好的容错性](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/state/checkpoints/)
+
+[Checkpointing under backpressure](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/state/checkpointing_under_backpressure/)
+
+[Savepoints](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/state/savepoints/)
+
+[监控 Checkpoint](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/monitoring/checkpoint_monitoring/)
+
+[延迟 VS 正确性](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/learn-flink/streaming_analytics/)
+
+[如何持久化以及持久化在哪里均取决于选择的 State Backend](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/ops/state/state_backends/)
+
+[FLINK官方中文文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/learn-flink/overview/)
+
+[pyflink官方文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/api/python/)
+
+[官方配置参数](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/config/#memory-configuration)
+
+### k8s
+
+[Kubernetes 安装](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/standalone/kubernetes/)
+
+[Kubernetes 高可用服务](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/ha/kubernetes_ha/)
+
+[Native Kubernetes](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/resource-providers/native_kubernetes/)
+
 ###  2.1. <a name='flinkSQL'></a>flink SQL
 
 [flink sql 知其所以然（四）| sql api 类型系统](https://mp.weixin.qq.com/s/aqDRWgr3Kim7lblx10JvtA)
@@ -111,13 +149,7 @@
 
 [滴滴是如何从零构建集中式实时计算平台的？| 技术头条](https://mp.weixin.qq.com/s/7inLGzALrDZT_cwzLG04DQ)
 
-###  2.2. <a name='-1'></a>官方文档
 
-[FLINK官方中文文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/learn-flink/overview/)
-
-[pyflink官方文档](https://nightlies.apache.org/flink/flink-docs-release-1.14/api/python/)
-
-[官方配置参数](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/config/#memory-configuration)
 
 ## kafka
 

@@ -3531,3 +3531,100 @@ FROM Ticker
 ```
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.69vnz0pg3o80.png)
+
+## CDC
+
+### mongoDB
+
+```sql
+
+-- 在 Flink SQL 中声明一张 MongoDB CDC 表：'products'
+CREATE TABLE products (
+    _id STRING,       -- 文档id，必要字段
+    name STRING,
+    weight DECIMAL(10,3),
+    tags ARRAY<STRING>, -- 数组类型
+    price ROW<amount DECIMAL(10,2), currency STRING>, -- 嵌董文档类型
+    suppliers ARRAY<ROW<name STRING, address STRING>>,-- 嵌套文档类型
+    db_name STRING METADATA FROM 'database_name' VIRTUAL,  -- 获取库名元数据
+    collection_name STRING METADATA FROM 'collection_name' VIRTUAL,  -- 获取集合名元数据
+    PRIMARY KEY(_id) NOT ENFORCED
+) WITH (
+    'connector' = 'mongodb-cdc',
+    'hosts' = 'localhost:27017,localhost:27018,localhost:27019',
+    'username' = 'flinkuser',
+    'password' = 'flinkpw',
+    'database' = 'inventory',
+    'collection' = 'products'
+)；
+
+-- 从products集合中读取存量历史数据+增量变更数据
+
+SELECT * FROM products;
+```
+
+MongoDB CDC 也支持两种启动模式：
+
+- 默认的initial 模式是先同步表中的存量的数据，然后同步表中的增量数据；
+- latest-offset 模式则是从当前时间点开始只同步表中增量数据。
+
+### Oracle
+
+```sql
+-- 在 Flink SQL 中声明一张 Oracle CDC 表:'products'
+CREATE TABLE products (
+    id INT NOT NULL,
+    name STRING,
+    description STRING,
+    weight DECIMAL(10, 3),
+    db_name STRING METADATA FROM 'database_name' VIRTUAL, -- 获取库名元数据
+    schema_name STRING METADATA FROM 'schema_name' VIRTUAL,-- 获取模式名元数据
+    table_name STRING METADATA FROM 'table_name' VIRTUAL, --  获取表名元数据
+    PRIMARY KEY(id) NOT ENFORCED
+ )WITH (
+    'connector' = 'oracle-cdc',
+    'hostname' = 'localhost',
+    'port' = '1521',
+    'username' = 'flinkuser',
+    'password' = 'flinkpw',
+    'database-name' = 'XE',
+    'schema-name' = 'inventory',
+    'table-name' = 'products'
+)；
+
+-- 从products表中读取存量历史数据+增量变更数据
+SELECT * FROM products;
+```
+
+### Postgres 数据库作为 Catalog
+
+```sql
+CREATE CATALOG mypg WITH(
+    'type' = 'jdbc',
+    'default-database' = '...',
+    'username' = '...',
+    'password' = '...',
+    'base-url' = '...'
+);
+
+USE CATALOG mypg;
+```
+
+Flink 中的 Postgres 表的完整路径应该是 "<catalog>.<db>.`<schema.table>`"。
+
+如果指定了 schema，请注意需要转义 <schema.table>。
+
+这里提供了一些访问 Postgres 表的例子：
+
+```sql
+-- 扫描 'public' schema（即默认 schema）中的 'test_table' 表，schema 名称可以省略
+SELECT * FROM mypg.mydb.test_table;
+SELECT * FROM mydb.test_table;
+SELECT * FROM test_table;
+
+-- 扫描 'custom_schema' schema 中的 'test_table2' 表，
+-- 自定义 schema 不能省略，并且必须与表一起转义。
+SELECT * FROM mypg.mydb.`custom_schema.test_table2`
+SELECT * FROM mydb.`custom_schema.test_table2`;
+SELECT * FROM `custom_schema.test_table2`;
+```
