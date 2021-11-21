@@ -2,8 +2,13 @@
 * 1. [启动 flink SQL 客户端](#flinkSQL)
 * 2. [Flink 内置函数的完整列表](#Flink)
 	* 2.1. [举个栗子--时间函数](#--)
+		* 2.1.1. [Date and Time](#DateandTime)
+		* 2.1.2. [时间戳](#)
+		* 2.1.3. [间隔年到月](#-1)
+		* 2.1.4. [隔 DAY TO SECOND](#DAYTOSECOND)
+		* 2.1.5. [当前系统时间-CURRENT_TIMESTAMP](#-CURRENT_TIMESTAMP)
 * 3. [source 表 - 使用 CREATE TABLE 语句](#source-CREATETABLE)
-	* 3.1. [举个栗子](#)
+	* 3.1. [举个栗子](#-1)
 	* 3.2. [CREATE 语句](#CREATE)
 		* 3.2.1. [CREATE TABLE](#CREATETABLE)
 		* 3.2.2. [模式映射](#-1)
@@ -27,13 +32,16 @@
 	* 9.4. [如何使用 Debezium Format](#DebeziumFormat-1)
 	* 9.5. [消息体中包含 schema 信息](#schema)
 	* 9.6. [可用 METADATA 元数据](#METADATA)
+* 10. [动态表 & 连续查询(Continuous Query)](#ContinuousQuery)
+* 11. [调整 Flink Table 和 SQL API 程序的配置项](#FlinkTableSQLAPI)
+* 12. [数据类型](#-1)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
-##  1. <a name='flinkSQL'></a>启动 flink SQL 客户端 
+##  1. <a name='flinkSQL'></a>启动 flink SQL 客户端
 
 在安装文件夹中使用以下命令启动本地集群：
 
@@ -57,9 +65,700 @@ SELECT 'Hello World';
 
 [Flink 内置函数的完整列表](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/dev/table/functions/systemfunctions/)
 
-这些函数为用户在开发 SQL 查询时提供了一个功能强大的工具箱。 
+这些函数为用户在开发 SQL 查询时提供了一个功能强大的工具箱。
+
+### sql 函数
+
+#### 比较函数
+
+```sql
+value1 = value2
+value1 <> value2
+value1 > value2
+value1 >= value2
+value1 < value2
+value1 <= value2
+value IS NULL
+value IS NOT NULL
+value1 IS DISTINCT FROM value2
+value1 IS NOT DISTINCT FROM value2
+value1 BETWEEN [ ASYMMETRIC | SYMMETRIC ] value2 AND value3
+value1 NOT BETWEEN [ ASYMMETRIC | SYMMETRIC ] value2 AND value3
+string1 LIKE string2 [ ESCAPE char ]
+string1 NOT LIKE string2 [ ESCAPE char ]
+string1 SIMILAR TO string2 [ ESCAPE char ]
+string1 NOT SIMILAR TO string2 [ ESCAPE char ]
+value1 IN (value2 [, value3]* )
+value1 NOT IN (value2 [, value3]* )
+EXISTS (sub-query)
+value IN (sub-query)
+value NOT IN (sub-query)
+```
+
+#### 逻辑函数
+
+```sql
+boolean1 OR boolean2
+boolean1 AND boolean2
+NOT boolean
+boolean IS FALSE
+boolean IS NOT FALSE
+boolean IS TRUE
+boolean IS NOT TRUE
+boolean IS UNKNOWN
+boolean IS NOT UNKNOWN
+```
+
+#### 算术函数
+
+```sql
++ numeric
+- numeric
+numeric1 + numeric2
+numeric1 - numeric2
+numeric1 * numberic2
+numeric1 / numeric2
+numeric1 % numeric2
+POWER(numeric1, numeric2)
+ABS(numeric)
+SQRT(numeric)
+LN(numeric)
+LOG10(numeric)
+LOG2(numeric)
+LOG(numeric2) LOG(numeric1, numeric2)
+EXP(numeric)
+CEIL(numeric) CEILING(numeric)
+FLOOR(numeric)
+SIN(numeric)
+SINH(numeric)
+COS(numeric)
+TAN(numeric)
+TANH(numeric)
+COT(numeric)
+ASIN(numeric)
+ACOS(numeric)
+ATAN(numeric)
+ATAN2(numeric1, numeric2)
+COSH(numeric)
+-- 弧度 numeric 的度数表示
+DEGREES(numeric)
+-- 度数 numeric 的弧度表示
+RADIANS(numeric)
+SIGN(numeric)
+ROUND(numeric, INT)
+-- 无比接近 pi 的值。
+PI()
+-- 无比接近 e 的值。
+E()
+-- [0.0, 1.0) 范围内的伪随机双精度值。
+RAND()
+RAND(INT)
+--  [0.0, INT) 范围内的伪随机双精度值。
+RAND_INTEGER(INT)
+RAND_INTEGER(INT1, INT2)
+-- 根据 RFC 4122 类型 4（伪随机生成）UUID，
+-- 返回 UUID（通用唯一标识符）字符串。 
+-- 例如“3d3c68f7-f608-473f-b60c-b0c44ad4cc4e”，
+-- UUID 是使用加密强的伪随机数生成器生成的。
+UUID()
+-- 二进制格式返回 INTEGER 的字符串表示形式。
+-- 如果 INTEGER 为 NULL，则返回 NULL。 
+-- 例如 
+-- 4.bin() 返回“100”，
+-- 12.bin() 返回“1100”。
+BIN(INT)
+-- 以十六进制格式返回整数 numeric 值或 STRING 的字符串表示形式。
+-- 如果参数为 NULL，则返回 NULL。 
+-- 例如
+-- 数字 20 返回“14”，
+-- 数字 100 返回“64”，
+-- 字符串“hello,world” 返回“68656C6C6F2C776F726C64”。
+HEX(numeric) HEX(string)
+-- 返回截取 integer2 位小数的数字
+TRUNCATE(numeric1, integer2)
+```
+
+#### 字符串函数
+
+```sql
+-- STRING1 和 STRING2 的连接
+string1 || string2
+-- 字符串中的字符数
+CHAR_LENGTH(string) 
+CHARACTER_LENGTH(string)
+-- 以大写形式返回字符串。
+UPPER(string)
+-- 以小写形式返回字符串
+LOWER(string)
+-- 返回 STRING2 中第一次出现 STRING1 的位置（从 1 开始）；
+-- 如果在 STRING2 中找不到 STRING1 返回 0
+POSITION(string1 IN string2)
+-- 从 STRING1 中删除以字符串 STRING2 的字符串的结果。
+-- 开头LEADING/结尾TRAILING/开头且结尾BOTH
+-- 默认情况下，两边的空格都会被删除。
+TRIM([ BOTH | LEADING | TRAILING ] string1 FROM string2)
+-- 从 STRING 中删除左边空格的字符串
+LTRIM(string)
+-- 从 STRING 中删除右边空格的字符串
+RTRIM(string)
+-- INT 个 string 连接的字符串
+REPEAT(string, int)
+-- STRING1 所有与正则表达式 STRING2 匹配的子字符串被 STRING3 替换后的字符串
+-- 例如 'foobar'.regexpReplace('oo|ar', '') 返回 "fb"。
+REGEXP_REPLACE(string1, string2, string3)
+-- 该字符串
+-- 从位置 INT1 用 STRING2 替换 STRING1 的 INT2（默认为 STRING2 的长度）字符。 
+-- 例如 
+-- 'xxxxxtest'.overlay('xxxx', 6) 返回 "xxxxxxxxx"； 
+-- 'xxxxxtest'.overlay('xxxx', 6, 2) 返回 "xxxxxxxxxst"。
+OVERLAY(string1 PLACING string2 FROM integer1 [ FOR integer2 ])
+-- STRING 从位置 INT1 开始，长度为 INT2（默认到结尾）的子字符串。
+SUBSTRING(string FROM integer1 [ FOR integer2 ])
+-- 它用 STRING1 中的 STRING3（非重叠）替换所有出现的 STRING2。 
+-- 例如 
+-- 'hello world'.replace('world', 'flink') 返回 'hello flink'； 
+-- 'ababab'.replace('abab', 'z') 返回 'zab'。
+REPLACE(string1, string2, string3)
+-- 将字符串 STRING1 按照 STRING2 正则表达式的规则拆分，
+-- 返回指定 INTEGER1 处位置的字符串。
+-- 正则表达式匹配组索引从 1 开始， 0 表示匹配整个正则表达式。
+-- 此外，正则表达式匹配组索引不应超过定义的组数。 
+-- 例如 REGEXP_EXTRACT('foothebar', 'foo(.*?)(bar)', 2) 返回 "bar"。
+REGEXP_EXTRACT(string1, string2[, integer])
+-- 新形式的 STRING，
+-- 其中每个单词的第一个字符转换为大写，
+-- 其余字符转换为小写。
+-- 这里的单词表示字母数字的字符序列。
+INITCAP(string)
+-- 连接 string1，string2， … 的字符串。
+-- 如果有任一参数为 NULL，则返回 NULL。 
+-- 例如 CONCAT('AA', 'BB', 'CC') 返回 "AABBCC"。
+CONCAT(string1, string2, ...)
+-- 将 STRING2， STRING3， … 与分隔符 STRING1 连接起来的字符串。
+-- 在要连接的字符串之间添加分隔符。 
+-- 如果 STRING1 为 NULL，则返回 NULL。
+-- 与 concat() 相比，concat_ws() 会自动跳过 NULL 参数。 
+-- 例如 concat_ws('~', 'AA', Null(STRING), 'BB', '', 'CC') 
+-- 返回 "AA~BB~~CC".
+CONCAT_WS(string1, string2, string3, ...)
+-- 从 string1 靠左填充 string2 到 INT 长度的新字符串。
+-- 如果 string1 的长度小于 INT 值，则返回 string1 缩短为整数字符。
+-- 例如 
+-- LPAD('hi', 4, '??') 返回 "??hi"；
+-- LPAD('hi', 1, '??') 返回 `“h”。
+LPAD(string1, integer, string2)
+-- 从 string1 靠右边填充 string2 到 INT 长度的新字符串。
+-- 如果 string1 的长度小于 INT 值，则返回 string1 缩短为长度为 INT 的新字符串。
+-- 例如 
+-- RPAD('hi', 4, '??') 返回 "hi??", 
+-- RPAD('hi', 1, '??') 返回 "h"。
+RPAD(string1, integer, string2)
+-- 字符串 string1 的 base64 解码的结果；
+-- 如果字符串为 NULL，则返回 NULL。 
+-- 例如 FROM_BASE64('aGVsbG8gd29ybGQ=') 
+-- 返回 "hello world"。
+FROM_BASE64(string)
+-- 字符串 string 的 base64 编码的结果；
+-- 如果字符串为 NULL，则返回 NULL。 
+-- 例如 TO_BASE64('hello world') 返回 "aGVsbG8gd29ybGQ="。
+TO_BASE64(string)
+-- 字符串 string 第一个字符的数值。
+-- 如果字符串为 NULL 则返回 NULL。
+-- 例如 
+-- ascii('abc') 返回 97，
+-- ascii(CAST(NULL AS VARCHAR)) 返回 NULL。
+ASCII(string)
+-- 二进制等于 integer 的 ASCII 字符。
+-- 如果整数 integer 大于 255，我们先将得到整数对 255 取模数， 并返回模数的 CHR。
+-- 如果整数为 NULL，则返回 NULL。
+-- 例如 
+-- chr(97) 返回 a，
+-- chr(353) 返回 a， 
+-- ascii(CAST(NULL AS VARCHAR)) 返回 NULL
+CHR(integer)
+-- 使用提供的字符集（‘US-ASCII’，‘ISO-8859-1’，‘UTF-8’，‘UTF-16BE’，‘UTF-16LE’，‘UTF-16’）解码。 
+-- 如果任一参数为空，则结果也将为空。
+DECODE(binary, string)
+-- 使用提供的字符集（‘US-ASCII’，‘ISO-8859-1’，‘UTF-8’，‘UTF-16BE’，‘UTF-16LE’，‘UTF-16’）编码。 
+-- 如果任一参数为空，则结果也将为空。
+ENCODE(string1, string2)
+-- string2 在 string1 中第一次出现的位置。
+-- 如果有任一参数为 NULL，则返回 NULL。
+INSTR(string1, string2)
+-- 字符串中最左边的长度为 integer 值的字符串。
+-- 如果 integer 为负，则返回 EMPTY 字符串。
+-- 如果有任一参数 为 NULL 则返回 NULL。
+LEFT(string, integer)
+-- 字符串中最右边的长度为 integer 值的字符串。
+-- 如果 integer 为负，则返回 EMPTY 字符串。
+-- 如果有任一参数 为 NULL 则返回 NULL
+RIGHT(string, integer)
+-- string2 中 string1 在位置 integer 之后第一次出现的位置。
+-- 未找到返回 0。
+-- 如果有任一参数为 NULL 则返回 NULL。
+LOCATE(string1, string2[, integer])
+-- 从 URL 返回指定的部分。
+-- string2 的有效值包括“HOST”，“PATH”，“QUERY”，“REF”，“PROTOCOL”，“AUTHORITY”，“FILE”和“USERINFO”。 
+-- 如果有任一参数为 NULL，则返回 NULL。
+-- 例如 
+-- parse_url(' http://facebook.com/path1/p.php?k1=v1&k2=v2#Ref1', 'HOST') 
+-- 返回 'facebook.com'。 
+-- 还可以通过提供关键词 string3 作为第三个参数来提取 QUERY 中特定键的值。
+-- 例如 
+-- parse_url('http://facebook.com/path1/p.php?k1=v1&k2=v2#Ref1', 'QUERY', 'k1') 
+-- 返回 'v1'。
+PARSE_URL(string1, string2[, string3])
+-- 如果 string1 的任何（可能为空）子字符串
+-- 与 Java 正则表达式 string2 匹配，则返回 TRUE，否则返回 FALSE。 
+-- 如果有任一参数为 NULL，则返回 NULL。
+REGEXP(string1, string2)
+-- 反转的字符串。
+-- 如果字符串为 NULL，则返回 NULL。
+REVERSE(string)
+-- 通过分隔符 string2 拆分 string1，
+-- 返回拆分字符串的第 integer（从零开始）个字符串。
+-- 如果整数为负，则返回 NULL。 
+-- 如果有任一参数为 NULL，则返回 NULL。
+SPLIT_INDEX(string1, string2, integer1)
+-- 使用分隔符将 string1 拆分为键值对后返回一个 map。
+-- string2 是 pair 分隔符，默认为 ‘,'。
+-- string3 是键值分隔符，默认为 ‘='。
+STR_TO_MAP(string1[, string2, string3]])
+-- 字符串的子字符串，
+-- 从位置 integer1 开始，长度为 integer2（默认到末尾）
+SUBSTR(string[, integer1[, integer2]])
+```
+
+#### 时间函数
+
+```sql
+DATE string
+TIME string
+TIMESTAMP string
+INTERVAL string range
+YEAR(date)
+LOCALTIME
+LOCALTIMESTAMP
+CURRENT_TIME
+CURRENT_DATE
+CURRENT_TIMESTAMP
+NOW()
+CURRENT_ROW_TIMESTAMP()
+EXTRACT(timeinteravlunit FROM temporal)
+YEAR(date)
+QUARTER(date)
+MONTH(date)
+WEEK(date)
+DAYOFYEAR(date)
+DAYOFMONTH
+HOUR(timestamp)
+MINUTE(timestamp)
+SECOND(timestamp)
+FLOOR(timepoint TO timeintervalunit)
+CEIL(timespoint TO timeintervaluntit)
+(timepoint1, temporal1) OVERLAPS (timepoint2, temporal2)
+DATE_FORMAT(timestamp, string)
+TIMESTAMPADD(timeintervalunit, interval, timepoint)
+TIMESTAMPDIFF(timepointunit, timepoint1, timepoint2)
+CONVERT_TZ(string1, string2, string3)
+FROM_UNIXTIME(numeric[, string])
+UNIX_TIMESTAMP()
+UNIX_TIMESTAMP(string1[, string2])
+TO_DATE(string1[, string2])
+TO_TIMESTAMP_LTZ(numeric, precision)
+TO_TIMESTAMP(string1[, string2])
+CURRENT_WATERMARK(rowtime)
+```
+
+#### 条件函数
+
+```sql
+-- 当第一个时间值包含在 (valueX_1, valueX_2, …) 中时，返回 resultX。
+-- 当没有值匹配时，如果提供则返回 result_z， 
+-- 否则返回 NULL。
+CASE value WHEN value1_1 [, value1_2]* 
+THEN RESULT1 
+(WHEN value2_1 [, value2_2 ]* THEN result_2)* 
+(ELSE result_z) 
+END
+-- 满足第一个条件 X 时返回 resultX。
+-- 当不满足任何条件时，如果提供则返回 result_z，
+-- 否则返回 NULL。
+CASE WHEN condition1 
+THEN result1 
+(WHEN condition2 THEN result2)* 
+(ELSE result_z) 
+END
+-- 如果 value1 等于 value2 返回 NULL；否则返回 value1。
+-- 例如 
+-- NULLIF(5, 5) 返回 NULL；
+-- NULLIF(5, 0) 返回 5
+NULLIF(value1, value2)
+-- 从 value1, value2, … 返回第一个不为 NULL 的值。
+-- 例如 COALESCE(3, 5, 3) 返回 3。
+COALESCE(value1, value2 [, value3]*)
+-- 如果满足条件，则返回 true_value，否则返回 false_value。
+-- 例如 IF(5 > 3, 5, 3) 返回 5。
+IF(condition, true_value, false_value)
+-- 如果输入为 NULL，则返回 null_replacement；否则返回输入。
+IFNULL(input, null_replacement)
+-- 如果字符串中的所有字符都是字母
+IS_ALPHA(string)
+-- 如果 string 可以解析为有效数字
+IS_DECIMAL(string)
+-- 如果字符串中的所有字符都是数字，
+-- 则返回 true，否则返回 false。
+IS_DIGIT(string)
+-- 所有输入参数的最大值，
+-- 如果输入参数中包含 NULL，则返回 NULL。
+GREATEST(value1[, value2]*)
+-- 所有输入参数的最小值，
+-- 如果输入参数中包含 NULL，则返回 NULL。
+LEAST(value1[, value2]*)
+```
+
+#### 类型转换函数
+
+```sql
+-- 被强制转换为类型 type 的新值。
+-- 例如 CAST('42' AS INT) 返回 42； 
+-- CAST(NULL AS VARCHAR) 返回 VARCHAR 类型的 NULL。
+CAST(value AS type)
+
+-- 输入表达式的数据类型的字符串表示形式。
+-- 默认情况下返回的字符串是一个摘要字符串
+TYPEOF(input) 
+-- 如果 force_serializable 设置为 TRUE，
+-- 则字符串表示可以保留在目录中的完整数据类型。
+TYPEOF(input, force_serializable)
+```
+
+#### 集合函数
+
+```sql
+-- 数组中元素的数量。
+CARDINALITY(array)
+-- 数组中 INT 位置的元素。索引从 1 开始。
+array '[' INT ']'
+-- 数组的唯一元素（其基数应为 1）；如果数组为空，则返回 NULL。如果数组有多个元素，则抛出异常。
+ELEMENT(array)
+-- map 中的 entries 数量。
+CARDINALITY(map)
+-- map 中指定 key 对应的值。
+map ‘[’ value ‘]’
+```
+
+#### 集合函数
+
+```sql
+-- 确定一个JSON字符串是否满足给定的路径搜索条件。
+// TRUE
+SELECT JSON_EXISTS('{"a": true}', '$.a');
+// FALSE
+SELECT JSON_EXISTS('{"a": true}', '$.b');
+// TRUE
+SELECT JSON_EXISTS('{"a": [{ "b": 1 }]}',
+  '$.a[0].b');
+
+// TRUE
+SELECT JSON_EXISTS('{"a": true}',
+  'strict $.b' TRUE ON ERROR);
+// FALSE
+SELECT JSON_EXISTS('{"a": true}',
+  'strict $.b' FALSE ON ERROR);
+
+-- 从JSON字符串中提取标量。
+// STRING: "true"
+JSON_VALUE('{"a": true}', '$.a')
+
+// BOOLEAN: true
+JSON_VALUE('{"a": true}', '$.a' RETURNING BOOLEAN)
+
+// STRING: "false"
+JSON_VALUE('{"a": true}', 'lax $.b'
+    DEFAULT FALSE ON EMPTY)
+
+// STRING: "false"
+JSON_VALUE('{"a": true}', 'strict $.b'
+    DEFAULT FALSE ON ERROR)
+```
+
+#### 值构建函数
+
+```sql
+ARRAY ‘[’ value1 [, value2 ]* ‘]’
+MAP ‘[’ value1, value2 [, value3, value4 ]* ‘]’
+```
+
+#### 值获取函数
+
+```sql
+-- 按名称从 Flink 复合类型（例如，Tuple，POJO）返回字段的值。
+tableName.compositeType.field
+-- 返回 Flink 复合类型（例如，Tuple，POJO）的平面表示，
+-- 将其每个直接子类型转换为单独的字段。
+-- 在大多数情况下，平面表示 的字段与原始字段的命名类似，
+-- 但使用 $ 分隔符（例如 mypojo$mytuple$f0）
+tableName.compositeType.*
+```
+
+#### 分组函数
+
+```sql
+GROUP_ID()
+
+GROUPING(expression1 [, expression2]* ) 
+GROUPING_ID(expression1 [, expression2]* )
+```
+
+#### 哈希函数
+
+```sql
+MD5(string)
+SHA1(string)
+SHA224(string)
+SHA256(string)
+SHA384(string)
+SHA512(string)
+SHA2(string, hashLength)
+```
+
+#### 聚合函数
+
+聚合函数将所有的行作为输入，并返回单个聚合值作为结果。
+
+默认情况下或使用关键字 ALL
+
+使用 DISTINCT 则对所有值去重后计算。
+
+```sql
+COUNT([ ALL ] expression | DISTINCT expression1 [, expression2]*)
+COUNT(*) | COUNT(1)
+AVG([ ALL | DISTINCT ] expression)
+SUM([ ALL | DISTINCT ] expression)
+MAX([ ALL | DISTINCT ] expression)
+MIN([ ALL | DISTINCT ] expression )
+
+-- 所有输入行中表达式的总体标准偏差。
+STDDEV_POP([ ALL | DISTINCT ] expression)
+
+-- 所有输入行中表达式的样本标准偏差。
+STDDEV_SAMP([ ALL | DISTINCT ] expression)
+
+-- 所有输入行中表达式的总体方差（总体标准差的平方）
+VAR_POP([ ALL | DISTINCT ] expression)
+
+-- 所有输入行中表达式的样本方差（样本标准差的平方）
+VAR_SAMP([ ALL | DISTINCT ] expression)
+
+-- 跨所有输入行的多组表达式。
+COLLECT([ ALL | DISTINCT ] expression)
+
+-- VAR_SAMP() 的同义方法。
+VARIANCE([ ALL | DISTINCT ] expression)
+
+-- 值在一组值中的排名。结果是 1 加上分区顺序中当前行之前或等于当前行的行数。排名在序列中不一定连续。
+RANK()
+
+-- 值在一组值中的排名。结果是一加先前分配的等级值。与函数 rank 不同，dense_rank 不会在排名序列中产生间隙。
+DENSE_RANK()
+
+-- ROW_NUMBER 和 RANK 相似。ROW_NUMBER 按 顺序对所有行进行编号（例如 1，2，3，4，5）。RANK 为等值 row 提供相同的序列值（例如 1，2，2，4，5）。
+ROW_NUMBER()
+
+-- 窗口中当前行之后第 offset 行处的表达式值。
+LEAD(expression [, offset] [, default])
+
+-- 窗口中当前行之前第 offset 行处的表达式值。
+LAG(expression [, offset] [, default])
+
+-- 一组有序值中的第一个值
+FIRST_VALUE(expression)
+
+-- 一组有序值中的最后一个值
+LAST_VALUE(expression)
+
+-- 连接字符串表达式的值并在它们之间放置分隔符值。字符串末尾不添加分隔符时则分隔符的默认值为“,”。
+LISTAGG(expression [, separator])
+```
+
+#### 时间间隔单位和时间点单位标识符
+
+下表列出了`时间间隔单位`和`时间点单位`标识符。
+
+对于 Table API，请使用 _ 代替空格（例如 `DAY_TO_HOUR`）。
+
+```sql
+MILLENIUM （仅适用SQL）
+CENTURY （仅适用SQL）
+YEAR
+YEAR TO MONTH
+QUARTER
+MONTH
+WEEK
+DAY
+DAY TO HOUR
+DAY TO MINUTE
+DAY TO SECOND
+HOUR
+HOUR TO MINUTE
+HOUR TO SECOND
+MINUTE
+MINUTE TO SECOND
+SECOND
+DOY （仅适用SQL）
+DOW （仅适用SQL）
+MILLISECOND
+MICROSECOND
+SQL_TSI_YEAR （仅适用SQL）
+SQL_TSI_QUARTER （仅适用SQL）
+SQL_TSI_MONTH （仅适用SQL）
+SQL_TSI_WEEK （仅适用SQL）
+SQL_TSI_DAY （仅适用SQL）
+SQL_TSI_HOUR （仅适用SQL）
+SQL_TSI_MINUTE （仅适用SQL）
+SQL_TSI_SECOND （仅适用SQL）
+```
 
 ###  2.1. <a name='--'></a>举个栗子--时间函数
+
+####  2.1.1. <a name='DateandTime'></a>Date and Time
+
+Date的数据类型，由年-月-日组成，取值范围为
+
+0000-01-01 ~ 9999 -12-31。
+
+与SQL标准相比，范围从0000年开始。
+
+--------------------------------------------------
+
+不带时区的Time的数据类型，包括小时:分钟:秒[.分数]，
+
+精度可达纳秒，取值范围为:
+
+00:00.000000000到23:59:59.999999999。
+
+####  2.1.2. <a name=''></a>时间戳
+
+不带时区的时间戳的数据类型
+
+* 年-月-日-小时：分钟：秒[.小数]
+
+* year-month-day hour:minute:second[.fractional]
+
+精度高达纳秒
+
+数值范围为：
+
+* 0000-01-01 00:00:00.000000000到9999-12-31 23:59:59.99999999。
+
+与SQL标准相比，不支持闰秒(23:59:60和23:59:61)，语义更接近java.time.LocalDateTime。
+
+####  2.1.3. <a name='-1'></a>间隔年到月
+
+一组年-月间隔类型的数据类型。
+
+该类型必须参数化为以下解析之一:
+
+* 间隔年,
+
+* 年到月的间隔，
+
+* 或几个月的间隔。
+
+年-月的间隔为：
+
+* +years-months
+
+取值范围为：
+
+* -9999-11 ~ +9999-11。
+
+对于所有类型的解析，值表示都是相同的。例如，50个月的间隔总是用年到月的间隔格式(默认的年精度)表示:
+
+* +04-02
+
+```sql
+INTERVAL YEAR
+INTERVAL YEAR(p)
+INTERVAL YEAR(p) TO MONTH
+INTERVAL MONTH
+
+-- 其中p是年的位数（年精度）。
+-- p的值必须介于1和4之间（包括1和4）。
+-- 如果未指定年份精度，则p等于2
+```
+
+
+
+####  2.1.4. <a name='DAYTOSECOND'></a>隔 DAY TO SECOND
+
+一组日时间间隔类型的数据类型。
+
+该类型必须参数化为以下分辨率之一，精度高达纳秒：
+
+* 每隔几天，
+
+* 几天到几小时的间隔，
+
+* 几天到几分钟的间隔，
+
+* 天到秒的间隔，
+
+* 每隔几个小时，
+
+* 小时到分钟的间隔，
+
+* 小时到秒的间隔，
+
+* 每隔几分钟，
+
+* 分到秒的间隔，
+
+* 或秒的间隔。
+
+日时间间隔由
+
+* +天 小时：月：秒
+
+* +days hours:months:seconds.fractional 
+
+组成。
+
+分数值范围为:
+
+* -9999999 23:59:59.99999999到+9999999 23:59:59.99999999。
+  
+对于所有类型的分辨率，值表示都是相同的。例如，70秒的间隔始终以天到秒的间隔格式表示（具有默认精度）：
+  
+* +00 00:01:10.000000。
+
+```sql
+INTERVAL DAY
+INTERVAL DAY(p1)
+INTERVAL DAY(p1) TO HOUR
+INTERVAL DAY(p1) TO MINUTE
+INTERVAL DAY(p1) TO SECOND(p2)
+INTERVAL HOUR
+INTERVAL HOUR TO MINUTE
+INTERVAL HOUR TO SECOND(p2)
+INTERVAL MINUTE
+INTERVAL MINUTE TO SECOND(p2)
+INTERVAL SECOND
+INTERVAL SECOND(p2)
+
+-- 其中,
+-- p1是天数（日精度），
+-- p2是分数秒（分数精度）的位数。
+-- p1的值必须介于1和6之间（包括1和6）。
+-- p2的值必须介于0和9之间（包括0和9）。
+-- 如果未指定p1，则默认情况下它等于2。
+-- 如果未指定p2，则默认情况下等于6。
+```
+
+
+
+####  2.1.5. <a name='-CURRENT_TIMESTAMP'></a>当前系统时间-CURRENT_TIMESTAMP
 
 例如，CURRENT_TIMESTAMP 将在执行时打印出机器的当前系统时间。
 
@@ -178,7 +877,7 @@ CREATE TABLE MyTable (
 
 ##  3. <a name='source-CREATETABLE'></a>source 表 - 使用 CREATE TABLE 语句
 
-###  3.1. <a name=''></a>举个栗子
+###  3.1. <a name='-1'></a>举个栗子
 
 下面是一个示例，定义一个以 CSV 文件作为存储格式的 source 表，其中 emp_id，name，dept_id 作为 CREATE 表语句中的列。
 
@@ -204,21 +903,21 @@ SELECT * from 员工信息 WHERE 部门_id = 1;
 
 目前 Flink SQL 支持下列 CREATE 语句：
 
-- 根据指定的表名创建一个表，如果同名表已经在 catalog 中存在了，则无法注册。
+* 根据指定的表名创建一个表，如果同名表已经在 catalog 中存在了，则无法注册。
 
-  - CREATE TABLE
+  * CREATE TABLE
 
-- 根据给定的表属性创建数据库。若数据库中已存在同名表会抛出异常。
+* 根据给定的表属性创建数据库。若数据库中已存在同名表会抛出异常。
 
-  - CREATE DATABASE
+  * CREATE DATABASE
 
-- 根据给定的 query 语句创建一个视图。若数据库中已经存在同名视图会抛出异常.
+* 根据给定的 query 语句创建一个视图。若数据库中已经存在同名视图会抛出异常.
 
-  - CREATE VIEW
+  * CREATE VIEW
 
-- 创建一个有 catalog 和数据库命名空间的 catalog function ，需要指定一个 identifier ，可指定 language tag。 若 catalog 中，已经有同名的函数注册了，则无法注册。
+* 创建一个有 catalog 和数据库命名空间的 catalog function ，需要指定一个 identifier ，可指定 language tag。 若 catalog 中，已经有同名的函数注册了，则无法注册。
 
-  - CREATE FUNCTION 
+  * CREATE FUNCTION
 
 ------------------------------------------
 
@@ -419,7 +1118,7 @@ WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL '0.001' SECOND
 WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL 'string' timeUnit
 ```
 
-发出到目前为止已观察到的最大时间戳减去指定延迟的 watermark 
+发出到目前为止已观察到的最大时间戳减去指定延迟的 watermark
 
 例如，
 
@@ -697,7 +1396,6 @@ CREATE TABLE KafkaTable (
 |key.fields|List<String>|表结构中用来配置消息键（Key）格式数据类型的字段列表。默认情况下该列表为空，因此消息键没有定义。 列表格式为 'field1;field2'。|'user_id;item_id'|
 |value.fields-include|枚举类型，可选值：[ALL, EXCEPT_KEY]|定义消息体（Value）格式如何处理消息键（Key）字段的策略。 默认情况下，表结构中 'ALL' 即所有的字段都会包含在消息体格式中，即消息键字段在消息键和消息体格式中都会出现。|'ALL'|
 
-
 格式元数据的配置键以 'value.' 作为前缀
 
 只读列必须声明为 VIRTUAL 以在 INSERT INTO 操作中排除它们。
@@ -771,11 +1469,11 @@ CREATE TABLE KafkaTable (
 
 scan.startup.mode 配置项决定了 Kafka consumer 的启动模式。有效值为：
 
-- `group-offsets`：从 Zookeeper/Kafka 中某个指定的消费组已提交的偏移量开始。
-- `earliest-offset`：从可能的最早偏移量开始。
-- `latest-offset`：从最末尾偏移量开始。
-- `timestamp`：从用户为每个 partition 指定的时间戳开始。
-- `specific-offsets`：从用户为每个 partition 指定的偏移量开始。
+* `group-offsets`：从 Zookeeper/Kafka 中某个指定的消费组已提交的偏移量开始。
+* `earliest-offset`：从可能的最早偏移量开始。
+* `latest-offset`：从最末尾偏移量开始。
+* `timestamp`：从用户为每个 partition 指定的时间戳开始。
+* `specific-offsets`：从用户为每个 partition 指定的偏移量开始。
 
 ##  9. <a name='DebeziumFormat'></a>Debezium Format
 
@@ -832,7 +1530,7 @@ CREATE TABLE user_behavior (
 
 以下是一个使用 Kafka 连接器和 Confluent Avro 格式创建表的示例。
 
-- 使用原始的 UTF-8 字符串作为 Kafka 的 key：
+* 使用原始的 UTF-8 字符串作为 Kafka 的 key：
 
 ```sql
 CREATE TABLE user_created (
@@ -861,7 +1559,7 @@ CREATE TABLE user_created (
 )
 ```
 
-- Kafka 的 key 和 value 在 Schema Registry 中都注册为 Avro 记录的表的示例：
+* Kafka 的 key 和 value 在 Schema Registry 中都注册为 Avro 记录的表的示例：
 
 ```sql
 CREATE TABLE user_created (
@@ -1117,4 +1815,178 @@ CREATE TABLE KafkaTable (
   'scan.startup.mode' = 'earliest-offset',
   'value.format' = 'debezium-json'
 );
+```
+
+##  10. <a name='ContinuousQuery'></a>动态表 & 连续查询(Continuous Query)
+
+使用具有以下模式的单击事件流:
+
+```json
+[
+  user:  VARCHAR,   // 用户名
+  cTime: TIMESTAMP, // 访问 URL 的时间
+  url:   VARCHAR    // 用户访问的 URL
+]
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5ki47h3tduw0.png)
+
+不适用于需要计算更新的场景：
+
+* 下面的查询就是一个例子，它根据最后一次单击的时间为每个用户计算一个 RANK。
+* 一旦 click 表接收到一个新行，用户的 lastAction 就会更新，
+* 并必须计算一个新的排名。
+* 然而，由于两行不能具有相同的排名，所以所有较低排名的行也需要更新。
+
+```sql
+SELECT user, RANK() OVER (ORDER BY lastAction)
+FROM (
+  SELECT user, MAX(cTime) AS lastAction FROM clicks GROUP BY user
+);
+```
+
+Flink的 Table API 和 SQL 支持三种方式来编码一个动态表的变化:
+
+1. Append-only 流
+
+2. Retract 流
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3yl53i0wxui0.png)
+
+3. Upsert 流：与 retract 流的主要区别在于 UPDATE 操作是用单个 message 编码的，因此效率更高。
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3vuvhdbgu2q0.png)
+
+##  11. <a name='FlinkTableSQLAPI'></a>调整 Flink Table 和 SQL API 程序的配置项
+
+```sql
+SET 'table.exec.mini-batch.enabled' = 'true'
+SET 'table.exec.mini-batch.allow-latency' = '5s';
+SET 'table.exec.mini-batch.size' = '5000';
+```
+
+|Key|默认|举例|类型|说明|
+|---|---|---|---|---|
+|table.exec.mini-batch.allow-latency|0 ms|'5s'|Duration|MiniBatch可以使用最大延迟来缓冲输入记录。MiniBatch是一种缓冲输入记录以减少状态访问的优化。MiniBatch在允许的延迟时间间隔内以及达到最大缓冲记录数时触发。注意：如果table.exec.mini-batch.enabled设置为true，则其值必须大于零。|
+|table.exec.mini-batch.enabled|false|'true'|Boolean|指定是否启用MiniBatch优化。MiniBatch是缓冲输入记录以减少状态访问的优化。这在默认情况下是禁用的。要启用此功能，用户应该将此配置设置为true。注意:如果启用了mini-batch， 'table.exec.mini-batch. 'allow-latency’和‘table.exec.mini-batch。尺寸'必须设置。|
+|table.exec.mini-batch.size|-1|'5000'|Long|MiniBatch可以缓冲的最大输入记录数。MiniBatch是一种缓冲输入记录以减少状态访问的优化。MiniBatch在允许的延迟时间间隔内以及达到最大缓冲记录数时触发。注意：MiniBatch目前仅适用于非窗口聚合。如果table.exec.mini-batch.enabled设置为true，则其值必须为正值。|
+
+##  12. <a name='-1'></a>数据类型
+
+下表列出了无需进一步信息即可隐式映射到数据类型的类。
+
+|Class|Data Type|
+|---|---|
+|java.lang.String|STRING|
+|java.lang.Boolean|BOOLEAN|
+|boolean|BOOLEAN NOT NULL|
+|java.lang.Byte|TINYINT|
+|byte|TINYINT NOT NULL|
+|java.lang.Short|SMALLINT|
+|short|SMALLINT NOT NULL|
+|java.lang.Integer|INT|
+|int|INT NOT NULL|
+|java.lang.Long|BIGINT|
+|long|BIGINT NOT NULL|
+|java.lang.Float|FLOAT|
+|float|FLOAT NOT NULL|
+|java.lang.Double|DOUBLE|
+|double|DOUBLE NOT NULL|
+|java.sql.Date|DATE|
+|java.time.LocalDate|DATE|
+|java.sql.Time|TIME(0)|
+|java.time.LocalTime|TIME(9)|
+|java.sql.Timestamp|TIMESTAMP(9)|
+|java.time.LocalDateTime|TIMESTAMP(9)|
+|java.time.OffsetDateTime|TIMESTAMP(9) WITH TIME ZONE|
+|java.time.Instant|TIMESTAMP_LTZ(9)|
+|java.time.Duration|INVERVAL SECOND(9)|
+|java.time.Period|INTERVAL YEAR(4) TO MONTH|
+|byte[]|BYTES|
+|T[]|ARRAY<T>|
+|java.util.Map<K, V>|MAP<K, V>|
+|structured type T|anonymous structured type T|
+
+## executeSql 和 sqlQuery 
+
+以下示例演示如何在已注册表和内联表上指定SQL查询。
+
+```scala
+val env = StreamExecutionEnvironment.getExecutionEnvironment
+val tableEnv = StreamTableEnvironment.create(env)
+
+// read a DataStream from an external source
+// 从外部源读取数据流
+val ds: DataStream[(Long, String, Integer)] = env.addSource(...)
+
+// SQL query with an inlined (unregistered) table
+// 带有内联(未注册)表的SQL查询
+val table = ds.toTable(tableEnv, $"user", $"product", $"amount")
+val result = tableEnv.sqlQuery(
+  s"SELECT SUM(amount) FROM $table WHERE product LIKE '%Rubber%'")
+
+// SQL query with a registered table
+// 带有注册表的SQL查询
+// register the DataStream under the name "Orders"
+// 以“Orders”的名称注册DataStream
+tableEnv.createTemporaryView("Orders", ds, $"user", $"product", $"amount")
+// run a SQL query on the Table and retrieve the result as a new Table
+// 在表上运行SQL查询，并以新表的形式检索结果
+val result2 = tableEnv.sqlQuery(
+  "SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'")
+
+// create and register a TableSink
+// 创建并注册 a TableSink
+val schema = Schema.newBuilder()
+  .column("product", DataTypes.STRING())
+  .column("amount", DataTypes.INT())
+  .build()
+
+val sinkDescriptor = TableDescriptor.forConnector("filesystem")
+  .schema(schema)
+  .format(FormatDescriptor.forFormat("csv")
+    .option("field-delimiter", ",")
+    .build())
+  .build()
+
+tableEnv.createTemporaryTable("RubberOrders", sinkDescriptor)
+
+// run an INSERT SQL on the Table and emit the result to the TableSink
+// 在表上运行INSERT SQL，并将结果发送到TableSink
+tableEnv.executeSql(
+  "INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'")
+```
+
+执行一个查询:
+
+```scala
+val env = StreamExecutionEnvironment.getExecutionEnvironment()
+val tableEnv = StreamTableEnvironment.create(env, settings)
+// enable checkpointing
+// enable 检查点
+tableEnv.getConfig.getConfiguration.set(
+  ExecutionCheckpointingOptions.CHECKPOINTING_MODE, CheckpointingMode.EXACTLY_ONCE)
+tableEnv.getConfig.getConfiguration.set(
+  ExecutionCheckpointingOptions.CHECKPOINTING_INTERVAL, Duration.ofSeconds(10))
+
+tableEnv.executeSql("CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)")
+
+// execute SELECT statement
+// 执行SELECT语句
+val tableResult1 = tableEnv.executeSql("SELECT * FROM Orders")
+val it = tableResult1.collect()
+try while (it.hasNext) {
+  val row = it.next
+  // handle row
+  // 处理行
+}
+finally it.close() 
+// close the iterator to avoid resource leak
+// 关闭迭代器以避免资源泄漏
+
+// execute Table
+// 执行表
+val tableResult2 = tableEnv.sqlQuery("SELECT * FROM Orders").execute()
+tableResult2.print()
+
 ```

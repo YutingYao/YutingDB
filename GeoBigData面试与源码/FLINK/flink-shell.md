@@ -1,13 +1,32 @@
+<!-- vscode-markdown-toc -->
+* 1. [SQL 客户端](#SQL)
+* 2. [Python REPL](#PythonREPL)
+* 3. [Scala REPL](#ScalaREPL)
+	* 3.1. [DataSet API](#DataSetAPI)
+	* 3.2. [DataStream API](#DataStreamAPI)
+	* 3.3. [Table APi](#TableAPi)
+		* 3.3.1. [stream](#stream)
+		* 3.3.2. [batch](#batch)
+	* 3.4. [SQL](#SQL-1)
+		* 3.4.1. [stream](#stream-1)
+		* 3.4.2. [batch](#batch-1)
+	* 3.5. [Adding external dependencies](#Addingexternaldependencies)
+	* 3.6. [安装程序](#)
 
-## SQL 客户端
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+##  1. <a name='SQL'></a>SQL 客户端
 
 [SQL 客户端](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/dev/table/sqlclient/)命令行界面（CLI） 能够在命令行中检索和可视化分布式应用中实时产生的结果。
 
-## Python REPL
+##  2. <a name='PythonREPL'></a>Python REPL
 
 你可以通过PyPi安装PyFlink，然后使用[Python Shell](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/deployment/repls/python_shell/):
 
-## Scala REPL
+##  3. <a name='ScalaREPL'></a>Scala REPL
 
 Flink附带了一个集成的交互式Scala Shell。既可以在本地设置中使用，也可以在集群设置中使用。
 
@@ -17,7 +36,7 @@ Flink附带了一个集成的交互式Scala Shell。既可以在本地设置中�
 bin/start-scala-shell.sh local
 ```
 
-### DataSet API 
+###  3.1. <a name='DataSetAPI'></a>DataSet API 
 
 下面的例子将在Scala shell中执行wordcount程序:
 
@@ -47,7 +66,7 @@ benv.execute("MyProgram")
 
 print()命令将自动将指定的任务发送到JobManager执行，并将在终端中显示计算的结果。
 
-### DataStream API
+###  3.2. <a name='DataStreamAPI'></a>DataStream API
 
 类似于上面的批处理程序，我们可以通过DataStream API来执行流程序:
 
@@ -79,9 +98,9 @@ senv.execute("Streaming Wordcount")
 
 Flink Shell带有命令历史和自动补全功能。
 
-### Table APi
+###  3.3. <a name='TableAPi'></a>Table APi
 
-#### stream
+####  3.3.1. <a name='stream'></a>stream
 
 ```scala
 Scala-Flink> 
@@ -126,7 +145,7 @@ senv.execute("Table Wordcount")
 // --------------变化--------------
 ```
 
-#### batch
+####  3.3.2. <a name='batch'></a>batch
 
 ```scala
 Scala-Flink> 
@@ -167,9 +186,9 @@ textSource.join(split('text) as 'word).
     groupBy('word).select('word, 'word.count as 'count).toDataStream().print
 ```
 
-### SQL
+###  3.4. <a name='SQL-1'></a>SQL
 
-#### stream
+####  3.4.1. <a name='stream-1'></a>stream
 
 ```scala
 Scala-Flink> 
@@ -229,7 +248,7 @@ senv.execute("SQL Wordcount")
 // --------------变化--------------
 ```
 
-#### batch
+####  3.4.2. <a name='batch-1'></a>batch
 
 ```scala
 Scala-Flink> 
@@ -283,7 +302,7 @@ result.toDataStream().print
 // --------------变化--------------
 ```
 
-### Adding external dependencies
+###  3.5. <a name='Addingexternaldependencies'></a>Adding external dependencies
 
 可以向Scala-shell添加外部类路径。
 
@@ -305,7 +324,7 @@ result.toDataStream().print
 bin/start-scala-shell.sh [local | remote <host> <port> | yarn] --addclasspath <path/to/jar.jar>
 ```
 
-### 安装程序
+###  3.6. <a name=''></a>安装程序
 
 ```s
 bin/start-scala-shell.sh --help
