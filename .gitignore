@@ -6,3 +6,5 @@
 *.meta
 *.scala
 *.java
+*.class
+*.xml
