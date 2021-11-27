@@ -1,4 +1,4 @@
-
+metals/
 *.log
 .vscode/settings.json
 .metals/metals.h2.db
