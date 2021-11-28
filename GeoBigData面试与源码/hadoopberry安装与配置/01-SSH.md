@@ -30,6 +30,53 @@ sudo service ssh start
 service ssh status
 ```
 
+# 设置静态IP
+
+设置静态IP就是为了让他们重启时不会自动分配动态的IP,方便它们之间“沟通”。
+
+```sh
+sudo vim  /etc/dhcpcd.conf
+```
+
+```s
+interface wlan0
+ 
+static ip_address=自定义的树莓派内网ip地址/24
+static routers=内网网关ip地址
+static domain_name_servers=114.114.114.114 #自定义dns
+```
+
+内网网关就是路由器的管理地址，我的路由器管理地址就是192.168.2.181 我的自己设置b41的内网ip地址是192.168.2.181，其他两个树莓派也一样设置，内网IP的设置不能与其他设备相同。
+
+这里的interface wlan0是指连接wifi的时候设置静态地址，前提是树莓派要用Wifi连接到路由器，而不是使用网线连接。如果是网线连接需要设置eth0,可以使用ipconfig查看树莓派有几个网卡。
+
+```s
+# ubuntu01
+interface eth0
+ 
+static ip_address=192.168.31.189/24
+static routers=192.168.31.1
+static domain_name_servers=192.168.31.1 #自定义dns
+```
+
+```s
+# node01
+interface eth0
+ 
+static ip_address=192.168.31.219/24
+static routers=192.168.31.1
+static domain_name_servers=192.168.31.1 #自定义dns
+```
+
+```s
+# node02
+interface eth0
+ 
+static ip_address=192.168.31.6/24
+static routers=192.168.31.1
+static domain_name_servers=192.168.31.1 #自定义dns
+```
+
 # 配置 /etc/hosts 配置主机名
 
 ```sh
@@ -40,7 +87,7 @@ ifconfig
 sudo vim /etc/hosts
 ```
 
-```
+```s
 192.168.31.219 node01
 192.168.31.6 node02
 192.168.31.189 ubuntu01
