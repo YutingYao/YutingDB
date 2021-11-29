@@ -6,14 +6,14 @@ class ListNode:
 
 class Solution:
     # 返回从尾部到头部的列表值序列，例如[1,2,3]
-    def printListFromTailToHead(self, listNode):
+    def printListFromTailToHead(self, node):
         # write code here
-        if not listNode:
+        if not node:
             return []
         
         result =[]
         
-        while listNode:
-            result.insert(0, listNode.val)
-            listNode = listNode.next
+        while node:
+            result.insert(0, node.val)
+            node = node.next
         return result

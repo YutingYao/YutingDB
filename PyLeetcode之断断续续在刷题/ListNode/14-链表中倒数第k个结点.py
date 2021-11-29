@@ -10,17 +10,17 @@ class Solution:
         if head == None or k <= 0:
             return None
         
-        pAhead = head
-        pBhead = None
+        node = head
+        dummy = None
         
         for i in range(k-1):
-            if pAhead.next != None:
-                pAhead = pAhead.next
+            if node.next != None:
+                node = node.next
             else:
                 return None
             
-        pBhead = head
-        while pAhead.next != None:
-            pAhead = pAhead.next
-            pBhead = pBhead.next
-        return pBhead
+        dummy = head
+        while node.next != None:
+            node = node.next
+            dummy = dummy.next
+        return dummy
