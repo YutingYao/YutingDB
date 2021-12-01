@@ -5,12 +5,12 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph
+* https://leetcode-cn.com/problems/number-of-connected-components-in-an-undirected-graph
 
 > 内容描述
 
 ```
-Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), write a function to find the number of connected components in an undirected graph.
+给定从 0 到 n -1 标记的 n 个节点和一个无向边列表（每条边是一对节点），编写一个函数来查找无向图中的连通分量的数量。
 
 Example 1:
 
@@ -30,8 +30,9 @@ Input: n = 5 and edges = [[0, 1], [1, 2], [2, 3], [3, 4]]
      1 --- 2 --- 3
 
 Output:  1
+
 Note:
-You can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not appear together in edges.
+您可以假设边中不会出现重复的边。由于所有边都是无向的，[0, 1] 与 [1, 0] 相同，因此不会一起出现在边中。
 ```
 
 ## 解题方案

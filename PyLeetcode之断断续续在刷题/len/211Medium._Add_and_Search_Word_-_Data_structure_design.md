@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/add-and-search-word-data-structure-design/>
+<https://leetcode-cn.com/problems/add-and-search-word-data-structure-design/>
 
 难度： Medium
 

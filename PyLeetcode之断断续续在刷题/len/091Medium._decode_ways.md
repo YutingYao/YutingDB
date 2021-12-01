@@ -1,7 +1,7 @@
 ###91. Decode Ways
 
 题目： 
-<https://leetcode.com/problems/decode-ways/>
+<https://leetcode-cn.com/problems/decode-ways/>
 
 
 

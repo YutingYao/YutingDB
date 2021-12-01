@@ -6,7 +6,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/subsets
+* https://leetcode-cn.com/problems/subsets
 
 > 内容描述
 

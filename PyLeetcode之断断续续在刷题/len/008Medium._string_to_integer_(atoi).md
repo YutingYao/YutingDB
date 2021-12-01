@@ -1,7 +1,7 @@
 ### 8. String to Integer (atoi)
 
 题目:
-<https://leetcode.com/problems/string-to-integer-atoi/>
+<https://leetcode-cn.com/problems/string-to-integer-atoi/>
 
 
 难度:
