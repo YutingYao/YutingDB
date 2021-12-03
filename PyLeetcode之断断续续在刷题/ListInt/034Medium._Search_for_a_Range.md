@@ -4,7 +4,7 @@
 
 题目：
 
- https://leetcode.com/problems/search-for-a-range/
+ https://leetcode-cn.com/problems/search-for-a-range/
 
 
 

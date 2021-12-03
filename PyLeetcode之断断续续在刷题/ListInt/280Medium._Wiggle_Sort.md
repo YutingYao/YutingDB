@@ -5,7 +5,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/wiggle-sort/>
+<https://leetcode-cn.com/problems/wiggle-sort/>
 
 
 
@@ -27,7 +27,7 @@
 
 这样的写法TLE:
 
-```
+```py
 class Solution(object):
     def wiggleSort(self, nums): # 此法超时
         """

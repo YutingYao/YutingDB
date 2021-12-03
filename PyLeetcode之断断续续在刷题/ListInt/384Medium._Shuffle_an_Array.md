@@ -3,7 +3,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/shuffle-an-array/>
+<https://leetcode-cn.com/problems/shuffle-an-array/>
 
 
 
@@ -62,7 +62,7 @@ for i from n−1 downto 1 do
 
 AC代码：
 
-```
+```py
 class Solution(object):
 
     def __init__(self, nums):

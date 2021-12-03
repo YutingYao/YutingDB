@@ -1,7 +1,7 @@
 ### 33. Search in Rotated Sorted Array
 
 题目:
-<https://leetcode.com/problems/search-in-rotated-sorted-array/>
+<https://leetcode-cn.com/problems/search-in-rotated-sorted-array/>
 
 
 难度:

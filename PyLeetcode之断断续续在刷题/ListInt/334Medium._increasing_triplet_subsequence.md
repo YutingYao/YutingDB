@@ -1,7 +1,7 @@
 ###334. Increasing Triplet Subsequence
 
 题目:
-<https://leetcode.com/problems/increasing-triplet-subsequence/>
+<https://leetcode-cn.com/problems/increasing-triplet-subsequence/>
 
 
 难度:
@@ -12,7 +12,7 @@ Medium
 
 用longest increasing subsequence来求，超时
 
-```
+```py
 class Solution(object):
     def increasingTriplet(self, nums):
         """
@@ -46,7 +46,7 @@ class Solution(object):
 
 AC代码
 
-```
+```py
 class Solution(object):
     def increasingTriplet(self, nums):
         """

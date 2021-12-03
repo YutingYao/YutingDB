@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/container-with-most-water/>
+<https://leetcode-cn.com/problems/container-with-most-water/>
 
 
 难度:
@@ -31,7 +31,7 @@ height = [3,2,1,3]
 所以代码写起来就简单了,AC无能，超时，时间复杂度O(N^2)
 
 
-```
+```py
 class Solution(object):  # 此法超时
     def maxArea(self, height):
         """

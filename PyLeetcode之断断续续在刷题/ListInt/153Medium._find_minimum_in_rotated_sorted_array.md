@@ -2,7 +2,7 @@
 
 
 题目:
-<https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/>
+<https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/>
 
 
 难度:
@@ -32,7 +32,7 @@ O(N) 就不说了
 
 
 
-```
+```py
 class Solution(object):
     def findMin(self, nums):
         """
@@ -60,7 +60,7 @@ class Solution(object):
 
 非递归
 
-```
+```py
 class Solution(object):
     def findMin(self, nums):
         """

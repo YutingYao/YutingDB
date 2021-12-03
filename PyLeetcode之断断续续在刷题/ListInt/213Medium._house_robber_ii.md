@@ -2,7 +2,7 @@
 
 
 题目:
-<https://leetcode.com/problems/house-robber-ii/>
+<https://leetcode-cn.com/problems/house-robber-ii/>
 
 
 难度:
@@ -29,7 +29,7 @@ Show me the code
 
 AC代码
 
-```
+```py
 class Solution(object):
     def rob(self, nums):
         """

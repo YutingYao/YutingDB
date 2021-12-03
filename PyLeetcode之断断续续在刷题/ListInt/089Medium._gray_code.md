@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/gray-code/>
+<https://leetcode-cn.com/problems/gray-code/>
 
 
 难度:
@@ -17,7 +17,7 @@ A gray code sequence must begin with 0. ->简化了一点
 
 先写了一段代码：
 
-```
+```py
 def nextCode(curCode, res, n):
         if curCode not in res:
 		res.append(curCode)
@@ -40,7 +40,7 @@ print res
 
 不失所望，到11就超时
 
-```
+```py
 
 class Solution(object):
     def grayCode(self, n):
@@ -84,7 +84,7 @@ Gray code，要用位运算！瞑目
 <https://en.wikipedia.org/wiki/Gray_code>
 
 服气，这个待研究
-```
+```py
 class Solution(object):
     def grayCode(self, n):
         """

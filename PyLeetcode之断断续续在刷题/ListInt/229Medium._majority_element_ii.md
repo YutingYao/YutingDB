@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/majority-element-ii/>
+<https://leetcode-cn.com/problems/majority-element-ii/>
 
 
 难度:
@@ -18,7 +18,7 @@ majority element是两两比较扔掉不同的元素，然后最后会留下一�
 
 最后再加一个比较来确认这些函数是majority element
 
-```
+```py
 class Solution(object):
     def majorityElement(self, nums):
         """

@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/coin-change/>
+<https://leetcode-cn.com/problems/coin-change/>
 
 难度:
 
@@ -15,7 +15,7 @@ DP入门
 
 伪码：
 
-```
+```s
 Set Min[i] equal to Infinity for all of i
 Min[0]=0
 
@@ -30,7 +30,7 @@ Output Min[S]
 
 AC代码
 
-```
+```py
 class Solution(object):
     def coinChange(self, coins, amount):
         """

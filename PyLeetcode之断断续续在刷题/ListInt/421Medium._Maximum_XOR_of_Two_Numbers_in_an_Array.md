@@ -1,7 +1,7 @@
 ### 421. Maximum XOR of Two Numbers in an Array
 
 题目:
-<https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/>
+<https://leetcode-cn.com/problems/maximum-xor-of-two-numbers-in-an-array/>
 
 
 难度:

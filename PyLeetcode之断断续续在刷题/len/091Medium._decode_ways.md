@@ -26,7 +26,7 @@ BASE CASE（len(s) = 1 和 len(s) = 2 ）:
 
 Python代码（可美化）
 
-```
+```py
 class Solution(object):
     def numDecodings(self, s):
         """

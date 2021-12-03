@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/counting-bits/>
+<https://leetcode-cn.com/problems/counting-bits/>
 
 难度:
 Medium
@@ -11,7 +11,7 @@ Medium
 
 **O(n\*sizeof(integer))** 算法，其实就是把count of 1 bit拿来用：
 
-```
+```py
 class Solution(object):
     def countBits(self, num):
         """

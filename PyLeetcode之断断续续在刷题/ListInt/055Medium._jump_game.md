@@ -1,7 +1,7 @@
 ### 55. Jump Game
 
 题目:
-<https://leetcode.com/problems/jump-game/>
+<https://leetcode-cn.com/problems/jump-game/>
 
 
 难度:

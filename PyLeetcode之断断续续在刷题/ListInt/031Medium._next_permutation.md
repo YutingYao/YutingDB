@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/next-permutation/>
+<https://leetcode-cn.com/problems/next-permutation/>
 
 
 难度:

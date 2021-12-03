@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/first-missing-positive
+* https://leetcode-cn.com/problems/first-missing-positive
 
 > 内容描述
 

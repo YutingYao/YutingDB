@@ -1,7 +1,7 @@
 ### 740. Delete and Earn
 
 题目:
-<https://leetcode.com/problems/delete-and-earn/>
+<https://leetcode-cn.com/problems/delete-and-earn/>
 
 
 难度:

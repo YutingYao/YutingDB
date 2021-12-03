@@ -1,7 +1,7 @@
 ### 162. Find Peak Element
 
 题目:
-<https://leetcode.com/problems/find-peak-element/>
+<https://leetcode-cn.com/problems/find-peak-element/>
 
 
 难度:

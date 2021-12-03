@@ -1,7 +1,7 @@
 ###238. Product of Array Except Self
 
 题目:
-<https://leetcode.com/problems/product-of-array-except-self/>
+<https://leetcode-cn.com/problems/product-of-array-except-self/>
 
 
 难度:
@@ -17,7 +17,7 @@ Medium
 会超时
 
 
-```
+```py
 class Solution(object):
         def productExceptSelf(self,nums):
             """
@@ -48,7 +48,7 @@ class Solution(object):
     output[i] =  { i 前面的数的乘积}  X  { i 后面的数的乘积}
 
 
-```
+```py
 class Solution(object):
         def productExceptSelf(self,nums):
             """
@@ -78,7 +78,7 @@ class Solution(object):
 空间O（n），再看到满足要求的“标准解法”
 
 
-```
+```py
 class Solution(object):
         def productExceptSelf(self,nums):
             """

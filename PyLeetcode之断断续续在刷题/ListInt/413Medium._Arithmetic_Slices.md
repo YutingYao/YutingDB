@@ -3,7 +3,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/arithmetic-slices/>
+<https://leetcode-cn.com/problems/arithmetic-slices/>
 
 
 
@@ -21,7 +21,7 @@ tag 是DP
 
 AC代码
 
-```
+```py
 class Solution(object):
     def numberOfArithmeticSlices(self, A):
         """

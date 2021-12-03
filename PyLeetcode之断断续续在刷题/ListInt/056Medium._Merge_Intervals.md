@@ -1,7 +1,7 @@
 ### 56. Merge Intervals
 
 题目:
-<https://leetcode.com/problems/merge-intervals/>
+<https://leetcode-cn.com/problems/merge-intervals/>
 
 
 难度:

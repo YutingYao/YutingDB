@@ -1,7 +1,7 @@
 ### 300. Longest Increasing Subsequence
 
 题目:
-<https://leetcode.com/problems/longest-increasing-subsequence/>
+<https://leetcode-cn.com/problems/longest-increasing-subsequence/>
 
 
 难度:
