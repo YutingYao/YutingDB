@@ -2,7 +2,7 @@
 
 
 题目:
-<https://leetcode.com/problems/maximal-square/>
+<https://leetcode-cn.com/problems/maximal-square/>
 
 
 难度:
@@ -43,7 +43,7 @@ dp[i][j] = dp[i-1][j-1] + 1 #如果dp[i-1][j-1]为1，dp[i-1][j]为1，dp[i][j-1
 则完美的考虑了这一情况
 
 
-```
+```py
 class Solution(object):
 	def maximalSquare(self, matrix):
 		"""

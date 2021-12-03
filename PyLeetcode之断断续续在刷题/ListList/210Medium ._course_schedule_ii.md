@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/course-schedule-ii/>
+<https://leetcode-cn.com/problems/course-schedule-ii/>
 
 
 难度:
@@ -14,7 +14,7 @@ Medium
 在207的基础上加了order，进击
 
 
-```
+```py
 class Solution(object):
     def findOrder(self, numCourses, prerequisites):
         """

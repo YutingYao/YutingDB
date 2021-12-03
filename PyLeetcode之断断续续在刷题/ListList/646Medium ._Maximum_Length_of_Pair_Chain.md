@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/maximum-length-of-pair-chain
+* https://leetcode-cn.com/problems/maximum-length-of-pair-chain
 
 > 内容描述
 
@@ -87,7 +87,7 @@ class Solution(object):
 
 
 
-```
+```py
 class Solution(object):
     def findLongestChain(self, pairs):
         """

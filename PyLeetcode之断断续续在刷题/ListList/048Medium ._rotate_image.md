@@ -2,7 +2,7 @@
 
 
 题目:
-<https://leetcode.com/problems/rotate-image/>
+<https://leetcode-cn.com/problems/rotate-image/>
 
 
 难度:

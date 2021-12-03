@@ -1,7 +1,7 @@
 ###131. Palindrome Partitioning
 
 题目:
-<https://leetcode.com/problems/palindrome-partitioning/>
+<https://leetcode-cn.com/problems/palindrome-partitioning/>
 
 
 难度:
@@ -14,7 +14,7 @@ key部分长这样，拆法是类似于combination，然后这个len(s) == 0是�
 
 这个recursion tree是这样的，感觉时间复杂度是O(n!)，因为每次树都branch n个分支
 
-```
+```py
 
 class Solution(object):
     def partition(self, s):

@@ -1,7 +1,7 @@
 ### 289. Game of Life
 
 题目： 
-<https://leetcode.com/problems/game-of-life/>
+<https://leetcode-cn.com/problems/game-of-life/>
 
 
 难度 : Medium

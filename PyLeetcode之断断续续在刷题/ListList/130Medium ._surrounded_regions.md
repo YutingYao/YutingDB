@@ -3,7 +3,7 @@
 
 题目:
 
-<https://leetcode.com/problems/surrounded-regions>
+<https://leetcode-cn.com/problems/surrounded-regions>
 
 
 难度:
@@ -33,7 +33,7 @@ loop，然后碰到O做DFS/BFS找出O所在区域:
 
 
 
-```
+```py
 class Solution(object):
     def solve(self, board):
         """
@@ -98,7 +98,7 @@ class Solution(object):
 
 AC代码
 
-```
+```py
 class Solution(object):
     def solve(self, board):
         """

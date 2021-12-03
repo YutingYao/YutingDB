@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/word-search/>
+<https://leetcode-cn.com/problems/word-search/>
 
 
 难度:
@@ -23,7 +23,7 @@ loop， 如果碰到跟word开头的字母一样，把这个扔进去loop，可�
 
 
 
-```
+```py
 class Solution(object):
     def exist(self, board, word):
         """

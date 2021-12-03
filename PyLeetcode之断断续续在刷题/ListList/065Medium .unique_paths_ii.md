@@ -1,7 +1,7 @@
  ###65.Unique Paths II
 
 题目： 
-<https://leetcode.com/problems/unique-paths-ii/>
+<https://leetcode-cn.com/problems/unique-paths-ii/>
 
 
 
@@ -25,7 +25,7 @@ dp(i, j) = dp（i,j-1) + dp(i-1,j)
 
 Python代码
 
-```
+```py
 class Solution(object):
     def uniquePathsWithObstacles(self, obstacleGrid):
         """

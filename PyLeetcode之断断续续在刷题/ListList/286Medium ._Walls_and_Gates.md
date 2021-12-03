@@ -3,7 +3,7 @@
 
 
 题目： 
-https://leetcode.com/problems/walls-and-gates/
+https://leetcode-cn.com/problems/walls-and-gates/
 
 
 
@@ -21,7 +21,7 @@ naive的想法是针对所有为0的点做all pairs shortest path，然后最终
 
 naive的想法AC 
 
-```
+```py
 class Solution(object):
     def wallsAndGates(self, rooms):
         """

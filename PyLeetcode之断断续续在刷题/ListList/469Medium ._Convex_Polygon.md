@@ -3,7 +3,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/convex-polygon/
+<https://leetcode-cn.com/problems/convex-polygon/
 
 
 
@@ -59,7 +59,7 @@ http://stackoverflow.com/questions/471962/how-do-determine-if-a-polygon-is-compl
 
 所以根据这个答案AC代码
 
-```
+```py
 class Solution(object):
     def isConvex(self, points):
         """

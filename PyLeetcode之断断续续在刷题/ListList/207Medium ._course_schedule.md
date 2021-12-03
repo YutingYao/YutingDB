@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/course-schedule/>
+<https://leetcode-cn.com/problems/course-schedule/>
 
 
 难度:
@@ -26,7 +26,7 @@ DFS 和 BFS都可以用来拓扑排序。
 
 
 
-```
+```py
 class Solution(object):
     def canFinish(self, numCourses, prerequisites):
         """
@@ -62,7 +62,7 @@ class Solution(object):
 
 搞了半天，写了一个涂色法，在超时的边缘。之所以超时边缘是因为每次都要去prerequisites里看，没有删减，不高效.
 
-```
+```py
 class Solution(object):
     def canFinish(self, numCourses, prerequisites):
         """

@@ -2,7 +2,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/combinations/>
+<https://leetcode-cn.com/problems/combinations/>
 
 
 难度 : Medium
@@ -39,7 +39,7 @@ for i in c:
 
 作弊AC代码:
 
-```
+```py
 class Solution(object):
     def combine(self, n, k):
         """
@@ -59,7 +59,7 @@ class Solution(object):
 但是会超时
 
 
-```
+```py
 class Solution(object):
     def combine(self, n, k):
         """
@@ -103,7 +103,7 @@ class Solution(object):
 参考这里： <https://shenjie1993.gitbooks.io/leetcode-python/content/077%20Combinations.html>
 
 
-```
+```py
 class Solution(object):
     def combine(self, n, k):
         """

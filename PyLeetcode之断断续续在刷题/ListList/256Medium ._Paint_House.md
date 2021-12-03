@@ -1,7 +1,7 @@
 ### 256. Paint House
 
 题目:
-<https://leetcode.com/problems/paint-house/>
+<https://leetcode-cn.com/problems/paint-house/>
 
 难度:
 Medium
@@ -26,7 +26,7 @@ Medium
 
 AC代码
 
-```
+```py
 class Solution(object):
     def minCost(self, costs):
         """

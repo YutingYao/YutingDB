@@ -1,7 +1,7 @@
 ### 406. Queue Reconstruction by Height
 
 题目:
-<https://leetcode.com/problems/queue-reconstruction-by-height/>
+<https://leetcode-cn.com/problems/queue-reconstruction-by-height/>
 
 
 难度:

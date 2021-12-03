@@ -4,7 +4,7 @@
 
 题目:
 
-<https://leetcode.com/problems/design-snake-game/>
+<https://leetcode-cn.com/problems/design-snake-game/>
 
 难度： Medium
 
@@ -18,7 +18,7 @@ AC代码
 
 
 
-```
+```py
 class SnakeGame(object):
 
     def __init__(self, width,height,food):

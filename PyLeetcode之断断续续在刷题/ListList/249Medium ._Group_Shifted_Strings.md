@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/group-shifted-strings
+* https://leetcode-cn.com/problems/group-shifted-strings
 
 > 内容描述
 

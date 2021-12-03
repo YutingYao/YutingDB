@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/triangle/>
+<https://leetcode-cn.com/problems/triangle/>
 
 难度:
 Medium
@@ -27,7 +27,7 @@ Medium
 
 感觉关于dp，我可能还需要补一些东西，因为我不能做到O(n) space
 
-```
+```py
 class Solution(object):
     def minimumTotal(self, triangle):
         """

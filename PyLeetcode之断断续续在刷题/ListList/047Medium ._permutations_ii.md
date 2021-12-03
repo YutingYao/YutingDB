@@ -1,7 +1,7 @@
 ### 47. Permutations II
 
 题目:
-<https://leetcode.com/problems/permutations-ii/>
+<https://leetcode-cn.com/problems/permutations-ii/>
 
 
 难度:

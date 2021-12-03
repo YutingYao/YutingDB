@@ -1,7 +1,7 @@
 ### 49. Group Anagrams python
 
 题目： 
-<https://leetcode.com/problems/anagrams/>
+<https://leetcode-cn.com/problems/anagrams/>
 
 
 难度 : Medium

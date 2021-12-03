@@ -1,7 +1,7 @@
 ### 46. Permutations
 
 题目:
-<https://leetcode.com/problems/permutations/>
+<https://leetcode-cn.com/problems/permutations/>
 
 
 难度:
@@ -34,7 +34,7 @@ class Solution(object):
 还有介绍的基本无memory使用的算法：
 
 
-```
+```py
 class Solution:
     def permute(self, num):
         """
