@@ -2,7 +2,7 @@
 ### 140. Word Break II
 
 题目:
-<https://leetcode.com/problems/word-break-ii/>
+<https://leetcode-cn.com/problems/word-break-ii/>
 
 
 难度:
@@ -13,7 +13,7 @@ Medium
 
 还是backtracking，会超时
 
-```
+```py
 class Solution(object):  # 此法超时
     def wordBreak(self, s, wordDict):
         """

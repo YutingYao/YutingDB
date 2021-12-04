@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/word-ladder/>
+<https://leetcode-cn.com/problems/word-ladder/>
 
 
 难度:

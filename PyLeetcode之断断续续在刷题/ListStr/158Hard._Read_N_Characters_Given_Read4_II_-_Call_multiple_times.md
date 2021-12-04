@@ -6,7 +6,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times
+* https://leetcode-cn.com/problems/read-n-characters-given-read4-ii-call-multiple-times
 
 > 内容描述
 

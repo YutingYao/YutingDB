@@ -5,7 +5,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/palindrome-permutation-ii/>
+<https://leetcode-cn.com/problems/palindrome-permutation-ii/>
 
 
 
@@ -25,7 +25,7 @@ AC代码：
 
 
 
-```
+```python
 class Solution(object):
     def generatePalindromes(self, s):
         """

@@ -1,7 +1,7 @@
 ### 22. Generate Parentheses
 
 题目:
-<https://leetcode.com/problems/generate-parentheses/>
+<https://leetcode-cn.com/problems/generate-parentheses/>
 
 
 难度:

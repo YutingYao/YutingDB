@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/evaluate-reverse-polish-notation/>
+<https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/>
 
 
 难度:
@@ -13,7 +13,7 @@ Medium
 
 AC代码
 
-```
+```py
 class Solution(object):
     def evalRPN(self, tokens):
         """

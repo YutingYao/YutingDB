@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/restore-ip-addresses/>
+<https://leetcode-cn.com/problems/restore-ip-addresses/>
 
 
 难度:
@@ -14,7 +14,7 @@ Medium
 
 结果AC之路还是比较漫长的，因为不允许前缀为0困扰了一下
 
-```
+```py
 class Solution(object):
     def restoreIpAddresses(self, s):
         """

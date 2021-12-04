@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/letter-combinations-of-a-phone-number/>
+<https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/>
 
 
 难度:
