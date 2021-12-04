@@ -1,7 +1,7 @@
 ### 369.Plus One Linked List	
 
 题目： 
-<https://leetcode.com/problems/plus-one-linked-list/>
+<https://leetcode-cn.com/problems/plus-one-linked-list/>
 
 难度 : Medium
 
@@ -11,7 +11,7 @@
 
 
 
-```
+```python
 class Solution(object):
     def plusOne(self, head):
         """

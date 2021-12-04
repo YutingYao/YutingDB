@@ -1,7 +1,7 @@
 ###92. Reverse Linked List II 
 
 题目:
-<https://leetcode.com/problems/reverse-linked-list-ii/>
+<https://leetcode-cn.com/problems/reverse-linked-list-ii/>
 
 
 难度:
@@ -14,7 +14,7 @@ Medium
 
 AC 代码
 
-```
+```python
 class Solution(object):
     def reverseBetween(self, head, m, n):
         """

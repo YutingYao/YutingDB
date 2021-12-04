@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/nested-list-weight-sum-ii/>
+<https://leetcode-cn.com/problems/nested-list-weight-sum-ii/>
 
 难度:
 Medium 
@@ -18,7 +18,7 @@ Medium
 
 比较naive的AC代码：
 
-```
+```python
 class Solution(object):
     def depthSumInverse(self, nestedList):
         """

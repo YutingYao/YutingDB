@@ -2,7 +2,7 @@
 
 
 题目： 
-<https://leetcode.com/problems/partition-list/>
+<https://leetcode-cn.com/problems/partition-list/>
 
 
 难度 : Medium
@@ -22,7 +22,7 @@
 
 
 
-```
+```python
 class Solution(object):
     def partition(self, head, x):
         """

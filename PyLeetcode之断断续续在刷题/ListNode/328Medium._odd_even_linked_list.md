@@ -1,7 +1,7 @@
 ###328. Odd Even Linked List
 
 题目:
-<https://leetcode.com/problems/odd-even-linked-list/>
+<https://leetcode-cn.com/problems/odd-even-linked-list/>
 
 
 难度:
@@ -11,7 +11,7 @@ Medium
 
 想法：因为相对顺序保持不变，所以可以拆list，然后再组合在一起？这样是满足题目要求的，因为linked list不像array，我们操作的时候只是用指向，没有分配新的空间。
 
-```
+```python
 
 class Solution(object):
     def oddEvenList(self, head):
@@ -52,7 +52,7 @@ class Solution(object):
 
 看别人的优雅代码
 
-```
+```python
 class Solution(object):
     def oddEvenList(self, head):
         """

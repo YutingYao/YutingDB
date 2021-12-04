@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/merge-k-sorted-lists/>
+<https://leetcode-cn.com/problems/merge-k-sorted-lists/>
 
 
 难度:

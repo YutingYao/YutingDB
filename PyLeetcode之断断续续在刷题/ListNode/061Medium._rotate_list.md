@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/rotate-list/>
+<https://leetcode-cn.com/problems/rotate-list/>
 
 
 难度:
@@ -17,7 +17,7 @@ Medium
 
 AC 代码
 
-```
+```python
 class Solution(object):
     def rotateRight(self, head, k):
     	if head == None or k == 0 :

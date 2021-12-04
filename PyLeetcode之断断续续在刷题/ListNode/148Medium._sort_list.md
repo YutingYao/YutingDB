@@ -1,7 +1,7 @@
 ###148. Sort List
 
 题目:
-<https://leetcode.com/problems/sort-list/>
+<https://leetcode-cn.com/problems/sort-list/>
 
 
 难度:
@@ -15,7 +15,7 @@ merge sort做两件事， sort 和 merge。
 
 看一看标准伪码：
 
-```
+```python
 function mergesort(m)
    var list left, right, result
    if length(m) ≤ 1
@@ -52,7 +52,7 @@ function merge(left,right)
 
 另一处获得伪码
 
-```
+```python
 MergeSort(arr[], l,  r)
 If r > l
      1. Find the middle point to divide the array into two halves:  
@@ -72,7 +72,7 @@ merge sort用在linked list上的好处是不用开辟空间，然后就处理no
 
 然后需要注意的一点是拆分链表，所以有设置left node 的tail为None的操作.
 
-```
+```python
 class Solution(object):
     def sortList(self, head):
         """

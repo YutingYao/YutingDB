@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/reorder-list/>
+<https://leetcode-cn.com/problems/reorder-list/>
 
 
 难度:
@@ -12,7 +12,7 @@ Medium
 超时
 
 
-```
+```python
 
 class Solution(object):
     def reorderList(self, head):
@@ -58,7 +58,7 @@ class Solution(object):
 
 看了AC指南
 
-```
+```python
 class Solution(object):
     def reorderList(self, head):
         """

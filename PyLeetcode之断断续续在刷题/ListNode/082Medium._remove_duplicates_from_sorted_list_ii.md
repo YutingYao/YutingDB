@@ -3,7 +3,7 @@
 
 题目:
 
-<https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/>
+<https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/>
 
 
 难度:

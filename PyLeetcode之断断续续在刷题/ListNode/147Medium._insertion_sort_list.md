@@ -1,7 +1,7 @@
 ###147. Insertion Sort List
 
 题目:
-<https://leetcode.com/problems/insertion-sort-list/>
+<https://leetcode-cn.com/problems/insertion-sort-list/>
 
 
 难度:
@@ -11,7 +11,7 @@ insertion sort 也是入门必备，一个元素本身被认为是sort的，一�
 
 伪码
 
-```
+```python
 for i ← 1 to length(A)-1
     j ← i
     while j > 0 and A[j-1] > A[j]
@@ -27,7 +27,7 @@ end for
 
 就是这样，就是会超时||||
 
-```
+```python
 class Solution(object):
     def insertionSortList(self, head):
         """
