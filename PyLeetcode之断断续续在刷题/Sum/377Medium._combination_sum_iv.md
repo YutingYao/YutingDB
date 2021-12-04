@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/combination-sum-iv/>
+<https://leetcode-cn.com/problems/combination-sum-iv/>
 
 
 难度:
@@ -12,7 +12,7 @@ Medium
 
 直接用combination sum的思路： 超时
 
-```
+```python
 class Solution(object):
     def combinationSum4(self, candidates, target):
         """
@@ -56,7 +56,7 @@ class Solution(object):
 
 AC代码
 
-```
+```python
 class Solution(object):
     def combinationSum4(self, candidates, target):
         """

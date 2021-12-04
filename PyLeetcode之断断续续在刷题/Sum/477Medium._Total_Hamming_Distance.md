@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/total-hamming-distance/>
+<https://leetcode-cn.com/problems/total-hamming-distance/>
 
 
 难度:
@@ -14,7 +14,7 @@ Medium
 
 第一想法就是暴力，直接超时
 
-```
+```python
 class Solution(object): # 此法超时
     def totalHammingDistance(self, nums):
         """

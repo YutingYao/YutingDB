@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/target-sum
+* https://leetcode-cn.com/problems/target-sum
 
 > 内容描述
 
@@ -38,7 +38,7 @@ Your output answer is guaranteed to be fitted in a 32-bit integer.
 
 递归，findSum(s, start_idx) 函数的意思是从start_index开始向后的子集合能有几种得到s的方法
 
-```
+```python
 class Solution(object):
     def findTargetSumWays(self, nums, S):
         """

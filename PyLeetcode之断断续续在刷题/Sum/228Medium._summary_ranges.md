@@ -1,7 +1,7 @@
 ### 228. Summary Ranges
 
 题目:
-<https://leetcode.com/problems/summary-ranges/>
+<https://leetcode-cn.com/problems/summary-ranges/>
 
 
 难度:
@@ -27,7 +27,7 @@ class Solution(object):
 ```
 About the commas :-)
 
-```
+```python
 ranges += [],
 r[1:] = n,
 ```

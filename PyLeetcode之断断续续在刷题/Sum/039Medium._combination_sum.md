@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/combination-sum/>
+<https://leetcode-cn.com/problems/combination-sum/>
 
 
 难度:
@@ -13,7 +13,7 @@ Medium
 最初的思路：
 
 
-```
+```python
 res = []    
 def combSum(candidates, target, valueList):
     if target == 0:
@@ -28,7 +28,7 @@ def combSum(candidates, target, valueList):
 
 问题在于，有重复：
 
-```
+```python
 combSum([2,3,6,7],7,[])
 
 res

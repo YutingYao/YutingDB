@@ -3,7 +3,7 @@
 
 题目:
 
-<https://leetcode.com/problems/decode-string/>
+<https://leetcode-cn.com/problems/decode-string/>
 
 
 难度:
@@ -33,7 +33,7 @@ s = 3 *( a + 2 * ( c ) )
 
 
 
-```
+```python
 class Solution(object):
     def decodeString(self, s):
         """

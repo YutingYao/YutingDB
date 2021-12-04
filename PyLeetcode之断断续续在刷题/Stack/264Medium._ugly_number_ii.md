@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/ugly-number-ii/>
+<https://leetcode-cn.com/problems/ugly-number-ii/>
 
 
 难度:
@@ -25,7 +25,7 @@ Medium
 看一下deque + rotate：
 
 
-```
+```python
 import collections
 a = collections.deque()
 a.append(2)
@@ -51,7 +51,7 @@ a.rotate(idx) # deque([2, 3, 5, 7, 9])
 用这个微调之后的fasttable来解决问题
 
 
-```
+```python
 import collections
 import bisect
 
@@ -103,7 +103,7 @@ class Solution(object):
 根据页面hint 来做的
 
 
-```
+```python
 class Solution(object):
     def nthUglyNumber(self, n):
         """

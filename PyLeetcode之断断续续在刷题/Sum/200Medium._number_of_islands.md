@@ -2,7 +2,7 @@
 
 
 题目:
-<https://leetcode.com/problems/number-of-islands/>
+<https://leetcode-cn.com/problems/number-of-islands/>
 
 
 难度:
@@ -25,7 +25,7 @@ islandArea = []
 然后超时|||, 小改之后AC
 
 
-```
+```python
 
 class Solution(object):
     def numIslands(self, grid):
@@ -75,7 +75,7 @@ print a.numIslands(["11000","11000","00100","00011"])
 
 看了别人的代码，写的真美 ╮(╯_╰)╭ 啊
 
-```
+```python
 class Solution(object):
     def numIslands(self, grid):
         """

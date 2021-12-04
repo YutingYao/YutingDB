@@ -2,7 +2,7 @@
 
 
 题目:
-<https://leetcode.com/problems/clone-graph/>
+<https://leetcode-cn.com/problems/clone-graph/>
 
 
 难度:
@@ -25,7 +25,7 @@ DFS或者BFS把graph traverse一遍，边traverse边复制。因为nodes are lab
 
 
 
-```
+```python
 class Solution(object):
     def cloneGraph(self, node):
         """

@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/partition-equal-subset-sum
+* https://leetcode-cn.com/problems/partition-equal-subset-sum
 
 > 内容描述
 

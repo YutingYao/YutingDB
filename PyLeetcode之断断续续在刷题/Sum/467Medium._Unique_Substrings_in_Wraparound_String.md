@@ -1,7 +1,7 @@
 ### 467. Unique Substrings in Wraparound String
 
 题目:
-<https://leetcode.com/problems/Unique-Substrings-in-Wraparound-String/>
+<https://leetcode-cn.com/problems/Unique-Substrings-in-Wraparound-String/>
 
 
 难度:

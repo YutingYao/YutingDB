@@ -1,7 +1,7 @@
 ### 268. Missing Number
 
 题目:
-<https://leetcode.com/problems/missing-number/>
+<https://leetcode-cn.com/problems/missing-number/>
 
 
 难度:

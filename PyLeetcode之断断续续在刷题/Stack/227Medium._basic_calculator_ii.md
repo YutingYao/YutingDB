@@ -1,25 +1,24 @@
-### 224. Basic Calculator 
+###227. Basic Calculator II
 
 
 
 题目:
-<https://leetcode.com/problems/basic-calculator/>
+<https://leetcode-cn.com/problems/basic-calculator-ii/>
+
 
 难度:
 Medium
 
 思路：
 
-基本跟227一样，只是这里加了括号
-
 瞄了一眼，基本上infix(中缀表达式)都是表达成postfix(后缀表达式)再来求值的。
 比如 A + B * C 写成 A B C * +
+
 
 | Infix Expression | Prefix Expression | Postfix Expression |
 | ---------------- | ----------------- | ------------------ |
 | A + B            | + A B             | A B +              |
 | A + B * C        | + A * B C         | A B C * +          |
-
 
 
 infix 中缀转postfix 后缀还有专门的算法：<https://en.wikipedia.org/wiki/Shunting-yard_algorithm>
@@ -45,6 +44,7 @@ infix 中缀转postfix 后缀还有专门的算法：<https://en.wikipedia.org/w
 
 
 
+
 参考
 
 <http://interactivepython.org/runestone/static/pythonds/BasicDS/InfixPrefixandPostfixExpressions.html>
@@ -53,7 +53,7 @@ infix 中缀转postfix 后缀还有专门的算法：<https://en.wikipedia.org/w
 
 AC代码
 
-```
+```python
 class Solution(object):
     def calculate(self, s):
         """

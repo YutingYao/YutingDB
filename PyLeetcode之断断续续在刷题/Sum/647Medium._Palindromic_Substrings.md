@@ -1,7 +1,7 @@
 ### 647. Palindromic Substrings
 
 题目:
-<https://leetcode.com/problems/Palindromic-Substrings/>
+<https://leetcode-cn.com/problems/Palindromic-Substrings/>
 
 
 难度:

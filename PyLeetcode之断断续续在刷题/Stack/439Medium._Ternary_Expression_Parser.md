@@ -5,7 +5,7 @@
 
 
 题目:
-<https://leetcode.com/problems/ternary-expression-parser/>
+<https://leetcode-cn.com/problems/ternary-expression-parser/>
 
 
 
@@ -22,7 +22,7 @@ Medium
 
 AC代码：
 
-```
+```python
 class Solution(object):
     def parseTernary(self, expression):
         """

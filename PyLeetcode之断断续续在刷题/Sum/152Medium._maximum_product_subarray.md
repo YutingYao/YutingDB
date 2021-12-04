@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/maximum-product-subarray/>
+<https://leetcode-cn.com/problems/maximum-product-subarray/>
 
 
 难度:
@@ -24,7 +24,7 @@ dp[i] = max(dp[i-1] * a[i],a[i])
 
 最大值可能来源于最小值 -> 哲学般的句子
 
-```
+```python
 class Solution(object):
     def maxProduct(self, nums):
         """

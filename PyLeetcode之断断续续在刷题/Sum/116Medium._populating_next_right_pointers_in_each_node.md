@@ -1,11 +1,11 @@
-#  117. Populating Next Right Pointers in Each Node II
+#  116. Populating Next Right Pointers in Each Node
 **<font color=red>难度: 中等</font>**
 
 ## 刷题内容
 
 > 原题连接
 
-* https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii
+* https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node
 
 > 内容描述
 
@@ -25,22 +25,23 @@ Note:
 
 You may only use constant extra space.
 Recursive approach is fine, implicit stack space does not count as extra space for this problem.
+You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
 Example:
 
-Given the following binary tree,
+Given the following perfect binary tree,
 
      1
    /  \
   2    3
- / \    \
-4   5    7
+ / \  / \
+4  5  6  7
 After calling your function, the tree should look like:
 
      1 -> NULL
    /  \
   2 -> 3 -> NULL
- / \    \
-4-> 5 -> 7 -> NULL
+ / \  / \
+4->5->6->7 -> NULL
 ```
 
 ## 解题方案
@@ -56,12 +57,14 @@ class Solution:
     def connect(self, root):
         res = []
         self.recurHelper(root, 0, res)
-        for cur_level in res:
-            for i in range(len(cur_level)-1):
-                cur_level[i].next = cur_level[i+1]     
-    
+        for level in res:
+            for i in range(len(level)-1):
+                level[i].next = level[i+1]
+        
+                
     def recurHelper(self, root, level, res):
-        if not root: return
+        if not root:
+            return 
         if len(res) < level + 1:
             res.append([])
         res[level].append(root)
@@ -71,7 +74,8 @@ class Solution:
 
 > 思路 2
 
-迭代版本, beats 100%
+迭代，利用curLevel和nextLevel来记录，然后按层append.
+
 
 ```python
 class Solution:
@@ -88,12 +92,13 @@ class Solution:
                     next_level.append(node.left)
                 if node.right:
                     next_level.append(node.right)
-            res.append(next_level)
+            res.append(cur_level)
             cur_level = next_level
             
         for cur_level in res:
             for i in range(len(cur_level)-1):
                 cur_level[i].next = cur_level[i+1]
 ```
+
 
 

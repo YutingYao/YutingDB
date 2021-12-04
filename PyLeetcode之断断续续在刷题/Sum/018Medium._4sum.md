@@ -1,7 +1,7 @@
 ### 18. 4Sum
 
 题目:
-<https://leetcode.com/problems/4sum/>
+<https://leetcode-cn.com/problems/4sum/>
 
 
 难度:

@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/rectangle-area
+* https://leetcode-cn.com/problems/rectangle-area
 
 > 内容描述
 

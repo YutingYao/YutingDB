@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/is-subsequence
+* https://leetcode-cn.com/problems/is-subsequence
 
 > 内容描述
 

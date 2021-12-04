@@ -3,7 +3,7 @@
 
 
 题目:
-<https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/>
+<https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/>
 
 
 难度:

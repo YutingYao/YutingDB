@@ -1,7 +1,7 @@
 ### 15. 3Sum
 
 题目:
-<https://leetcode.com/problems/3sum/>
+<https://leetcode-cn.com/problems/3sum/>
 
 
 难度:
@@ -11,7 +11,7 @@ Medium
 
 第一想法，先把nums排序，用三个loop，无法AC
 
-```
+```python
 class Solution(object):
     def threeSum(self, nums):
         """
@@ -36,7 +36,7 @@ class Solution(object):
 然后查了一下2sum，用2sum的花样，因为要排除重复以及输出是按照从小到大的输出:但是还是超时
 
 
-```
+```python
 class Solution(object):  # 此法也超时
     def threeSum(self, nums):
         """

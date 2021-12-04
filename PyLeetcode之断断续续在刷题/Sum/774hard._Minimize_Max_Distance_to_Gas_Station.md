@@ -5,7 +5,7 @@
 
 > 原题连接
 
-* https://leetcode.com/problems/minimize-max-distance-to-gas-station
+* https://leetcode-cn.com/problems/minimize-max-distance-to-gas-station
 
 > 内容描述
 

@@ -2,7 +2,7 @@
 
 题目:
 
-<https://leetcode.com/problems/combination-sum-iii/>
+<https://leetcode-cn.com/problems/combination-sum-iii/>
 
 
 难度:
@@ -12,7 +12,7 @@ Medium
 继续Combination Sum 系列
 
 
-```
+```python
 class Solution(object):
     def combinationSum3(self, k, n):
         """

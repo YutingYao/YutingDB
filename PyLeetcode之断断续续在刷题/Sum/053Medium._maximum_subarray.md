@@ -33,7 +33,7 @@ O(N^2)
 
 从i开始，计算i到n，存比较大的sum，会超时
 
-```
+```python
 class Solution(object):
 	def maxSubArray(self, nums):
 	    """
@@ -116,7 +116,7 @@ class Solution(object):
 
 速度比较慢，AC代码，复杂度O(NlogN)
 
-```
+```python
 class Solution(object):
 	def maxSubArray(self, nums):
 		"""
