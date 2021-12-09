@@ -6,3 +6,5 @@ metals/
 *.meta
 *.class
 *.xml
+*.db
+*.db
