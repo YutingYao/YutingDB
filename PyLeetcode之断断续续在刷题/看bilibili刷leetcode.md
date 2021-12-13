@@ -1,0 +1,2139 @@
+
+## 经验
+
+[花花酱](https://www.bilibili.com/video/BV14E411R7Wa?spm_id_from=333.999.0.0)
+
+[Leetcode刷题阶段性总结（一些建议与思考）哈哈哈](https://www.bilibili.com/video/BV14K4y1a7Yk?spm_id_from=333.999.0.0)
+
+## 算法
+
+[哈哈哈 DSU(并查集实现)-Python](https://www.bilibili.com/video/BV19K4y1b7vT?spm_id_from=333.999.0.0)
+
+[哈哈哈 Tree-Python(广度优先遍历BFS)(1)](https://www.bilibili.com/video/BV1H7411D7Nm?spm_id_from=333.999.0.0)
+
+[哈哈哈 Tree-Python(深度优先遍历DFS)(2)](https://www.bilibili.com/video/BV1H7411D73V?spm_id_from=333.999.0.0)
+
+[哈哈哈 二分查找(Binary Search)合集](https://www.bilibili.com/video/BV1254y1B7xK?spm_id_from=333.999.0.0)
+
+[哈哈哈 Bubble_sort(用Python实现冒泡排序)(1)](https://www.bilibili.com/video/BV19E411E7df?spm_id_from=333.999.0.0)
+
+[哈哈哈 Selected_sort(用Python实现选择排序)(2)](https://www.bilibili.com/video/BV1AE411t7Pr?spm_id_from=333.999.0.0)
+
+[哈哈哈 Single linked list-Python(链表功能扩展-有条件翻转链表)（2）](https://www.bilibili.com/video/BV1n7411G7rc?spm_id_from=333.999.0.0)
+
+[哈哈哈 Inserted_sort(用Python实现插入排序)(3)](https://www.bilibili.com/video/BV1SE411p7zn?spm_id_from=333.999.0.0)
+
+[哈哈哈 Tree-Python(深度优先遍历的迭代实现)(3)](https://www.bilibili.com/video/BV1V54y197qo?spm_id_from=333.999.0.0)
+
+[哈哈哈 Shell_sort(用Python实现希尔排序)(4)](https://www.bilibili.com/video/BV1SE411T7t1?spm_id_from=333.999.0.0)
+
+[哈哈哈 Quick_sort(用Python实现快速排序)(5)](https://www.bilibili.com/video/BV1d7411R75g?spm_id_from=333.999.0.0)
+
+[哈哈哈 Merge_sort(用Python实现合并排序)(6)](https://www.bilibili.com/video/BV1gE411c7PR?spm_id_from=333.999.0.0)
+
+[DP 花花酱](https://www.bilibili.com/video/BV16b411N7o7?spm_id_from=333.999.0.0)
+
+[DP 花花酱](https://www.bilibili.com/video/BV1hb411P7C2?spm_id_from=333.999.0.0)
+
+[DP 花花酱](https://www.bilibili.com/video/BV1wb4y1b7df?spm_id_from=333.999.0.0)
+
+[Maximum Subarray DP 花花酱](https://www.bilibili.com/video/BV1yg411A7D4?spm_id_from=333.999.0.0)
+
+[Maximum Product Subarray DP 花花酱](https://www.bilibili.com/video/BV18q4y1z7TC?spm_id_from=333.999.0.0)
+
+[Fast Power for DP 花花酱](https://www.bilibili.com/video/BV1Je411s7NM?spm_id_from=333.999.0.0)
+
+[Best Time to Buy and Sell Stock DP 花花酱](https://www.bilibili.com/video/BV1Tg411P7S9?spm_id_from=333.999.0.0)
+
+[Disjoint-set/Union-find Forest 花花酱](https://www.bilibili.com/video/BV1jW411d7vi?spm_id_from=333.999.0.0)
+
+[Best Time to Buy and Sell Stock with  DP 花花酱](https://www.bilibili.com/video/BV1sq4y1q768?spm_id_from=333.999.0.0)
+
+[二叉树 花花酱](https://www.bilibili.com/video/BV1Gt411e7zm?spm_id_from=333.999.0.0)
+
+[背包问题 花花酱](https://www.bilibili.com/video/BV1ot411m7wv?spm_id_from=333.999.0.0)
+
+[背包问题 2 花花酱](https://www.bilibili.com/video/BV1Dt411U7eM?spm_id_from=333.999.0.0)
+
+[最小生成树 (Minimum Spanning Tree)  花花酱](https://www.bilibili.com/video/BV1A7411Y7mT?spm_id_from=333.999.0.0)
+
+[Binary Search 花花酱](https://www.bilibili.com/video/BV1yW411Z7um?spm_id_from=333.999.0.0)
+
+[Binary Search II 花花酱](https://www.bilibili.com/video/BV1ub411V7gs?spm_id_from=333.999.0.0)
+
+[Fenwick Tree / Binary Indexed Tree 花花酱](https://www.bilibili.com/video/BV1EW411d75F?spm_id_from=333.999.0.0)
+
+[Input Size V.S. Time Complexity 花花酱](https://www.bilibili.com/video/BV1jW411d7a2?spm_id_from=333.999.0.0)
+
+[Time/Space Complexity of Recursive Algorithms 花花酱](https://www.bilibili.com/video/BV1JW411d714?spm_id_from=333.999.0.0)
+
+[Segment Tree 花花酱](https://www.bilibili.com/video/BV1bb411y78M?spm_id_from=333.999.0.0)
+
+[Min Heap 花花酱](https://www.bilibili.com/video/BV1cy4y1q7P1?spm_id_from=333.999.0.0)
+
+[Amortized Analysis 均摊分析 花花酱](https://www.bilibili.com/video/BV1NW411C7v7?spm_id_from=333.999.0.0)
+
+[Recursion unrolling and performance measurement](https://www.bilibili.com/video/BV1Gt411r7MS?spm_id_from=333.999.0.0)
+
+
+## 题目
+
+### 1 Two Sum
+
+[哈哈哈](https://www.bilibili.com/video/BV1rE411Y7UN?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV19b411v7qp?spm_id_from=333.999.0.0)
+
+### 2. Add Two Numbers
+
+[花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1gJ411V7gJ?spm_id_from=333.999.0.0)
+
+[小梦想](https://www.bilibili.com/video/BV1Wb411e77s?spm_id_from=333.999.0.0)
+
+### 3. 数组中重复的数字
+
+[哈哈哈](https://www.bilibili.com/video/BV1h54y1B7No?spm_id_from=333.999.0.0)
+
+### 3. Longest Substring Without Repeating Characters
+
+[花花酱](https://www.bilibili.com/video/BV1CJ411G7Nn?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1va4y1J7Gx?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1ob411n7mv?spm_id_from=333.999.0.0)
+
+### 5. Longest Palindromic Substring -最长回文子串
+
+[花花酱](https://www.bilibili.com/video/BV18J411j7Pb?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1ra4y1Y7Gx?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7P6?spm_id_from=333.999.0.0)
+
+### 6. ZigZag Conversion
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7uH?spm_id_from=333.999.0.0)
+
+### 7 Reverse Integer
+
+[哈哈哈](https://www.bilibili.com/video/BV1sE411e73m?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Jb411i7bM?spm_id_from=333.999.0.0)
+
+### 8. String to Integer(atoi)
+
+[小梦想家](https://www.bilibili.com/video/BV1Cb411e7pz?spm_id_from=333.999.0.0)
+
+### 9-Palindrome
+
+[哈哈哈](https://www.bilibili.com/video/BV1hJ411S7kt?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Jb411i7YG?spm_id_from=333.999.0.0)
+
+### 11. Container With Most Water 
+
+[花花酱](https://www.bilibili.com/video/BV1CW41167qB?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7Gn?spm_id_from=333.999.0.0)
+
+### 12. Integer to Roman
+
+[小梦想家](https://www.bilibili.com/video/BV1Lb411x7Wf?spm_id_from=333.999.0.0)
+
+### 13. Roman to Integer
+
+[花花酱](https://www.bilibili.com/video/BV1vJ411J7Up?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1hJ411S7kQ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Jb411i7ue?spm_id_from=333.999.0.0)
+
+### 14-Longest common prefix
+
+[哈哈哈](https://www.bilibili.com/video/BV1cJ411D7qU?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Eb411i7QN?spm_id_from=333.999.0.0)
+
+### 15. 3Sum
+
+[花花酱](https://www.bilibili.com/video/BV1wp4y1W72o?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Tb411578b?spm_id_from=333.999.0.0)
+
+### 16. 3Sum Closest
+
+[小梦想家](https://www.bilibili.com/video/BV11441187Rr?spm_id_from=333.999.0.0)
+
+### 17. Letter Combinations of a Phone Number 
+
+[花花酱](https://www.bilibili.com/video/BV1PW411y7r2?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7sL?spm_id_from=333.999.0.0)
+
+## 19-Remove Nth Node From End of List
+
+[哈哈哈](https://www.bilibili.com/video/BV1Q7411V7DQ?spm_id_from=333.999.0.0)
+
+### 20-Valid parentheses
+
+[哈哈哈](https://www.bilibili.com/video/BV1DJ41127uA?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7ek?spm_id_from=333.999.0.0)
+
+### 21-Merge two sorted lists
+
+[哈哈哈](https://www.bilibili.com/video/BV1rJ41127ry?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7D7?spm_id_from=333.999.0.0)
+
+### 22. Generate Parentheses
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7t7?spm_id_from=333.999.0.0)
+
+### 23. Merge k Sorted Lists
+
+[花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
+
+### 24-Swap Nodes in Pairs
+
+[哈哈哈](https://www.bilibili.com/video/BV1M7411n7FT?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV13J411V7hG?spm_id_from=333.999.0.0)
+
+
+### 26-Remove duplicates from sorted array
+
+[哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i77e?spm_id_from=333.999.0.0)
+
+### 27-python-Remove element
+
+[哈哈哈](https://www.bilibili.com/video/BV1mJ411m7ir?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7hZ?spm_id_from=333.999.0.0)
+
+### 28-Implement str
+
+[哈哈哈](https://www.bilibili.com/video/BV1eL411n7YS?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1BJ41117d6?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1UK411K7zB?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7cG?spm_id_from=333.999.0.0)
+
+### 33. Search in Rotated Sorted Array
+
+[小梦想家](https://www.bilibili.com/video/BV1gJ411V7Sq?spm_id_from=333.999.0.0)
+
+### 34-在排序数组中查找元素的第一个
+
+[哈哈哈](https://www.bilibili.com/video/BV1Zv411y71t?spm_id_from=333.999.0.0)
+
+### 35-搜索插入位置
+
+[哈哈哈](https://www.bilibili.com/video/BV1HD4y1m7U2?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1eb411i7Aj?spm_id_from=333.999.0.0)
+
+### 36-有效的数独
+
+[哈哈哈](https://www.bilibili.com/video/BV1Cf4y1R7PR?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1MJ411p7FT?spm_id_from=333.999.0.0)
+
+### 37. Sudoku Solver 解数独
+
+[花花酱](https://www.bilibili.com/video/BV1Tt41137Xr?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1f5411h7er?spm_id_from=333.999.0.0)
+
+### 38-Count and say
+
+[哈哈哈](https://www.bilibili.com/video/BV1QJ411R7MF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i717?spm_id_from=333.999.0.0)
+
+### 39. Combination Sum 39-组合总和
+
+[花花酱](https://www.bilibili.com/video/BV1gb411u7dy?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Wz411e79d?spm_id_from=333.999.0.0)
+
+### 40. Combination Sum II 40-组合总和 II
+
+[花花酱](https://www.bilibili.com/video/BV1Pb411u7Yd?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1gT4y1J7JE?spm_id_from=333.999.0.0)
+
+### 42. Trapping Rain Water
+
+[花花酱](https://www.bilibili.com/video/BV1hJ41177gG?spm_id_from=333.999.0.0)
+
+### 46-把数字翻译成字符串
+
+[哈哈哈](https://www.bilibili.com/video/BV1Bz411i7cs?spm_id_from=333.999.0.0)
+
+### 46-全排列
+
+[哈哈哈](https://www.bilibili.com/video/BV1YA411v7zF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7fm?spm_id_from=333.999.0.0)
+
+### 47-全排列 II-剪枝版
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ev411672A?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1qK4y1x7Qs?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1z54y1a7rQ?spm_id_from=333.999.0.0)
+
+### 53-Maximum subarray
+
+[哈哈哈](https://www.bilibili.com/video/BV1QJ411R75H?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7dn?spm_id_from=333.999.0.0)
+
+### 54. Spiral Matrix
+
+[小梦想家](https://www.bilibili.com/video/BV1N7411h7i1?spm_id_from=333.999.0.0)
+
+### 56. Merge Intervals
+
+[花花酱](https://www.bilibili.com/video/BV11t411J7zV?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1w7411a7Wo?spm_id_from=333.999.0.0)
+
+### 57. Insert Interval 
+
+[花花酱](https://www.bilibili.com/video/BV11t411J74e?spm_id_from=333.999.0.0)
+
+### 58. Lengh of Last Words
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7so?spm_id_from=333.999.0.0)
+
+### 59. Spiral Matrix II 
+
+[小梦想家](https://www.bilibili.com/video/BV1J741157Kt?spm_id_from=333.999.0.0)
+
+### 61. Rotate List
+
+[花花酱](https://www.bilibili.com/video/BV14y4y1r728?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV117411L7UG?spm_id_from=333.999.0.0)
+
+### 62-不同路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1mC4y1W7Je?spm_id_from=333.999.0.0)
+
+### 64. Minimum Path Sum 64-最小路径和
+
+[花花酱](https://www.bilibili.com/video/BV12W411679S?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ka4y1i7Vu?spm_id_from=333.999.0.0)
+
+### 66-Plus one
+
+[哈哈哈](https://www.bilibili.com/video/BV1jJ411d7Ry?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7b1?spm_id_from=333.999.0.0)
+
+### 67-Add Binary
+
+[哈哈哈（常规方法）](https://www.bilibili.com/video/BV1N7411F73K?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV17J411d7G1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7Bo?spm_id_from=333.999.0.0)
+
+### 69 Sqrt(x)
+
+[花花酱](https://www.bilibili.com/video/BV1WW411C7YN?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1gJ411R7XR?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7TN?spm_id_from=333.999.0.0)
+
+### 70. Climbing Stairs
+
+[5:32 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1gJ411R7X1?spm_id_from=333.999.0.0)
+
+[哈哈哈 70(重制版)](https://www.bilibili.com/video/BV1G54y197eZ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7s9?spm_id_from=333.999.0.0)
+
+### 71. Simplify Path
+
+[小梦想家](https://www.bilibili.com/video/BV1V7411w7jX?spm_id_from=333.999.0.0)
+
+### 72. Edit Distance 72-编辑距离
+
+[花花酱](https://www.bilibili.com/video/BV1cb411u7uX?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1wv411P7aQ?spm_id_from=333.999.0.0)
+
+### 73. Set Matrix Zeroes
+
+[小梦想家](https://www.bilibili.com/video/BV1W7411T7rX?spm_id_from=333.999.0.0)
+
+### 75. Sort Colors
+
+[小梦想家](https://www.bilibili.com/video/BV1rE411n7mL?spm_id_from=333.999.0.0)
+
+### 76-最小覆盖子串
+
+[哈哈哈](https://www.bilibili.com/video/BV1PM4y1K7p6?spm_id_from=333.999.0.0)
+
+### 78. Subsets 78-子集
+
+[花花酱](https://www.bilibili.com/video/BV1jt411k7py?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1HD4y1Q7Te?spm_id_from=333.999.0.0)
+
+### 79. Word Search
+
+[小梦想家](https://www.bilibili.com/video/BV1yE411g7Tb?spm_id_from=333.999.0.0)
+
+### 83-Remove duplicates from sorted array
+
+[哈哈哈](https://www.bilibili.com/video/BV1yJ411R7FZ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7s7?spm_id_from=333.999.0.0)
+
+### 87. Scramble String
+
+[花花酱](https://www.bilibili.com/video/BV1QE41137MG?spm_id_from=333.999.0.0)
+
+### 88-Merge sorted array
+
+[哈哈哈](https://www.bilibili.com/video/BV14J411X7JE?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7bg?spm_id_from=333.999.0.0)
+
+### 90-子集 II
+
+[哈哈哈](https://www.bilibili.com/video/BV11z4y1Q7Hd?spm_id_from=333.999.0.0)
+
+### 91. Decode Ways
+
+[花花酱](https://www.bilibili.com/video/BV1Lb411y7ec?spm_id_from=333.999.0.0)
+
+### 92-Reverse Linked List II
+
+[哈哈哈](https://www.bilibili.com/video/BV1n7411G7N4?spm_id_from=333.999.0.0)
+
+### 94-Inorder wih stack
+
+[哈哈哈](https://www.bilibili.com/video/BV1uV411o78x?spm_id_from=333.999.0.0)
+
+### 94-Binary Tree Inorder Traversal
+
+[哈哈哈](https://www.bilibili.com/video/BV1n7411D7g5?spm_id_from=333.999.0.0)
+
+### 96. Unique Binary Search Trees
+
+[小梦想家](https://www.bilibili.com/video/BV1xV411Y731?spm_id_from=333.999.0.0)
+
+### 98. Validate Binary Search Tree 98-验证二叉搜索树
+
+[花花酱](https://www.bilibili.com/video/BV12t411Y7TP?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Wz4y1R7dF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7FV?spm_id_from=333.999.0.0)
+
+### 100-Same Tree 
+
+[哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7ti?spm_id_from=333.999.0.0)
+
+### 101-Symmetric tree
+
+[哈哈哈](https://www.bilibili.com/video/BV1VJ41197KD?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7eb?spm_id_from=333.999.0.0)
+
+### 102-Binary Tree Level Order Traversal
+
+[哈哈哈](https://www.bilibili.com/video/BV1W54y197Lc?spm_id_from=333.999.0.0)
+
+### 103. Binary Tree Zigzag Level Order Traversal
+
+[小梦想家](https://www.bilibili.com/video/BV1NE411M7Fm?spm_id_from=333.999.0.0)
+
+### 104-Maximum Depth of Binary
+
+[哈哈哈](https://www.bilibili.com/video/BV1AJ411Q7xG?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7eK?spm_id_from=333.999.0.0)
+
+### 105-从前序与中序遍历序列构
+
+[哈哈哈](https://www.bilibili.com/video/BV1uv411B73D?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1x54y1d7e8?spm_id_from=333.999.0.0)
+
+### 106-从中序与后序遍历序列构造二叉树
+
+[哈哈哈](https://www.bilibili.com/video/BV1r5411W7d2?spm_id_from=333.999.0.0)
+
+### 107-Binary Tree Level Order Traversal II
+
+[哈哈哈](https://www.bilibili.com/video/BV1eJ411z7d6?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7aP?spm_id_from=333.999.0.0)
+
+### 108 Convert Sorted Array to Binary Search Tree 
+
+[花花酱](https://www.bilibili.com/video/BV1F7411H7tH?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1JJ411q74U?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7FR?spm_id_from=333.999.0.0)
+
+### 110-Balanced Binary Tree
+
+[哈哈哈](https://www.bilibili.com/video/BV1NJ411v7b1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7Lb?spm_id_from=333.999.0.0)
+
+### 111-Minimum Depth of Binary Tree
+
+[哈哈哈](https://www.bilibili.com/video/BV1E7411k7KY?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7Vi?spm_id_from=333.999.0.0)
+
+### 112-Path Sum
+
+[哈哈哈](https://www.bilibili.com/video/BV1T7411r7Yr?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1pb411e7r7?spm_id_from=333.999.0.0)
+
+### 113. 二叉树中和为某一值的路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1P54y1i73U?spm_id_from=333.999.0.0)
+
+### 115. Distinct Subsequences
+
+[花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
+
+### 116. Populating Next Right Pointers in Each Node
+
+[花花酱](https://www.bilibili.com/video/BV1b4411R7G4?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1zQ4y1M75t?spm_id_from=333.999.0.0)
+
+### 118-Pascal's Triangle
+
+[哈哈哈](https://www.bilibili.com/video/BV1T741167KS?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Cb411e7tJ?spm_id_from=333.999.0.0)
+
+### 119-Pascal's Triangle II
+
+[哈哈哈](https://www.bilibili.com/video/BV187411B7Hj?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7hA?spm_id_from=333.999.0.0)
+
+### 121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
+
+[花花酱](https://www.bilibili.com/video/BV1oW411C7UB?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1cZ4y1K7HP?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1D7411s7A1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7by?spm_id_from=333.999.0.0)
+
+### 122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
+
+[哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1d7411x78d?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7iq?spm_id_from=333.999.0.0)
+
+### 123-买卖股票的最佳时机 III
+
+[哈哈哈](https://www.bilibili.com/video/BV1Xp4y1k7aD?spm_id_from=333.999.0.0)
+
+### 124. Binary Tree Maximum Path Sum
+
+[花花酱](https://www.bilibili.com/video/BV1ct411r7qw?spm_id_from=333.999.0.0)
+
+### 125-Valid Palindrome
+
+[哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7ML?spm_id_from=333.999.0.0)
+
+### 126. Word Ladder II
+
+[花花酱](https://www.bilibili.com/video/BV1yt411Y7gH?spm_id_from=333.999.0.0)
+
+### 127. Word Ladder
+
+[花花酱](https://www.bilibili.com/video/BV1yt411Y7Me?spm_id_from=333.999.0.0)
+
+### 128. Longest Consecutive Sequence
+
+[花花酱](https://www.bilibili.com/video/BV14t411Y7cg?spm_id_from=333.999.0.0)
+
+### 130. Surrounded Regions 130-被围绕的区域
+
+[花花酱](https://www.bilibili.com/video/BV1dE411f7U4?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV18y4y1j7JH?spm_id_from=333.999.0.0)
+
+### 131-分割回文串
+
+[哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
+
+### 132. Palindrome Partitioning II
+
+[花花酱](https://www.bilibili.com/video/BV1NJ411v7k9?spm_id_from=333.999.0.0)
+
+### 133. Clone Graph
+
+[小梦想家](https://www.bilibili.com/video/BV1wA411T7SM?spm_id_from=333.999.0.0)
+
+### 134. Gas Station
+
+[小梦想家](https://www.bilibili.com/video/BV1BC4y1472f?spm_id_from=333.999.0.0)
+
+### 136-Single Number
+
+[哈哈哈](https://www.bilibili.com/video/BV1g7411a7bf?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Sp4y1D7M3?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7PU?spm_id_from=333.999.0.0)
+
+### 141-Linked List Cycle
+
+[哈哈哈](https://www.bilibili.com/video/BV1g7411a7ta?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411H7XP?spm_id_from=333.999.0.0)
+
+### 144-Preorder with stack
+
+[哈哈哈](https://www.bilibili.com/video/BV1HT4y1G74i?spm_id_from=333.999.0.0)
+
+### 144-Binary Tree Preorder Traversal
+
+[哈哈哈](https://www.bilibili.com/video/BV1n7411D7NZ?spm_id_from=333.999.0.0)
+
+### 145-Postorder with stack
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ti4y187jL?spm_id_from=333.999.0.0)
+
+### 145-Binary Tree Postorder Traversal
+
+[哈哈哈](https://www.bilibili.com/video/BV1n7411D7ub?spm_id_from=333.999.0.0)
+
+### 146 LRU Cache 
+
+[花花酱](https://www.bilibili.com/video/BV19b411c7ue?spm_id_from=333.999.0.0)
+
+[花花酱](https://www.bilibili.com/video/BV1gt411Y7c6?spm_id_from=333.999.0.0)
+
+### 148. Sort List
+
+[花花酱](https://www.bilibili.com/video/BV1jW411d7z7?spm_id_from=333.999.0.0)
+
+### 149. Max Points on a Line
+
+[花花酱](https://www.bilibili.com/video/BV1zb411u7WW?spm_id_from=333.999.0.0)
+
+### 150. Evaluate Reverse Polish Notation
+
+[花花酱](https://www.bilibili.com/video/BV14f4y127K8?spm_id_from=333.999.0.0)
+
+### 151. Reverse Words in a String
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7g4?spm_id_from=333.999.0.0)
+
+### 152-乘积最大子数组
+
+[哈哈哈](https://www.bilibili.com/video/BV12a4y1i76G?spm_id_from=333.999.0.0)
+
+### 153-寻找旋转排序数组中的最小值
+
+[哈哈哈](https://www.bilibili.com/video/BV1bT4y1w7yK?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1yK411L7rp?spm_id_from=333.999.0.0)
+
+### 155-Min Stack
+
+[哈哈哈](https://www.bilibili.com/video/BV1H74118748?spm_id_from=333.999.0.0)
+
+### 160-Intersection of Two Linked Lists
+
+[哈哈哈](https://www.bilibili.com/video/BV1n741187X6?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1eb411H7uq?spm_id_from=333.999.0.0)
+
+### 162. Find Peak Element
+
+[小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
+
+### 165. Compare Version Numbers
+
+[小梦想家](https://www.bilibili.com/video/BV19K4y1C7L3?spm_id_from=333.999.0.0)
+
+166. Fraction to Recurring Decimal
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
+
+### 167-Two Sum II - Input array is sorted
+
+[哈哈哈](https://www.bilibili.com/video/BV167411h7ou?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7id?spm_id_from=333.999.0.0)
+
+### 168-Excel Sheet Column Title
+
+[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7FY?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H777?spm_id_from=333.999.0.0)
+
+### 169. Majority Element
+
+[花花酱](https://www.bilibili.com/video/BV1hb411c7bF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7pW?spm_id_from=333.999.0.0)
+
+### 171. Excel Sheet Column Number
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7nT?spm_id_from=333.999.0.0)
+
+### 172-Factorial Trailing Zeroes
+
+[哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7tS?spm_id_from=333.999.0.0)
+
+### 186. Reverse Words in a String II 
+
+[哈哈哈](https://www.bilibili.com/video/BV1GV411Z7fo?spm_id_from=333.999.0.0)
+
+### 189. Rotate Array 
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7Yy?spm_id_from=333.999.0.0)
+
+### 190. Reverse Bits
+
+[花花酱](https://www.bilibili.com/video/BV1NJ411k7VP?spm_id_from=333.999.0.0)
+
+### 198. House Robber 198-打家劫舍
+
+[12:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[花花酱](https://www.bilibili.com/video/BV1tW411676f?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1u64y1M7PA?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7hu?spm_id_from=333.999.0.0)
+
+### 200-岛屿数量
+
+[哈哈哈](https://www.bilibili.com/video/BV15K411p72j?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Cg4y1i7dZ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1KK4y1U7Ds?spm_id_from=333.999.0.0)
+
+### 203. Remove Linked List Elements
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7bf?spm_id_from=333.999.0.0)
+
+### 204-Count Primes
+
+[哈哈哈](https://www.bilibili.com/video/BV167411w7Sf?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7cV?spm_id_from=333.999.0.0)
+
+### 205. isomorphic strings
+
+[小梦想家](https://www.bilibili.com/video/BV1ab411H7ZS?spm_id_from=333.999.0.0)
+
+### 206-Reverse Linked List
+
+[哈哈哈](https://www.bilibili.com/video/BV1Q7411V7zr?spm_id_from=333.999.0.0)
+
+### 207-课程表
+
+[花花酱](https://www.bilibili.com/video/BV1Ut411a74a?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV19k4y1r76s?spm_id_from=333.999.0.0)
+
+### 208. Implement Trie (Prefix Tree)
+
+[花花酱](https://www.bilibili.com/video/BV1Ut411a74P?spm_id_from=333.999.0.0)
+
+### 209-长度最小的子数组
+
+[哈哈哈](https://www.bilibili.com/video/BV1JZ4y1N7Rt?spm_id_from=333.999.0.0)
+
+### 210. Course Schedule II 210-课程表II
+
+[花花酱](https://www.bilibili.com/video/BV1gW411y7Kb?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ja4y147on?spm_id_from=333.999.0.0)
+
+### 212. Word Search II
+
+[花花酱](https://www.bilibili.com/video/BV184411d7i9?spm_id_from=333.999.0.0)
+
+### 213. House Robber II 213-打家劫舍II
+
+[18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ea4y147oh?spm_id_from=333.999.0.0)
+
+### 216. Combination Sum III 216-组合总和 III
+
+[花花酱](https://www.bilibili.com/video/BV14b411u7q8?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1SC4y1a7Vy?spm_id_from=333.999.0.0)
+
+### 217. Contains Duplicate
+
+[小梦想家](https://www.bilibili.com/video/BV1ab411H7Zw?spm_id_from=333.999.0.0)
+
+### 218. The Skyline Problem
+
+[花花酱](https://www.bilibili.com/video/BV1hb411c7Q4?spm_id_from=333.999.0.0)
+
+### 219. Contains Duplicate II
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7ga?spm_id_from=333.999.0.0)
+
+### 221-最大正方形
+
+[哈哈哈](https://www.bilibili.com/video/BV1XT4y137Gq?spm_id_from=333.999.0.0)
+
+### 222. Count Complete Tree Nodes
+
+[花花酱](https://www.bilibili.com/video/BV1n44y1E73D?spm_id_from=333.999.0.0)
+
+### 223. Rectangle Area
+
+[小梦想家](https://www.bilibili.com/video/BV1Ck4y1z7Hp?spm_id_from=333.999.0.0)
+
+### 225-Implement Stack using Queues
+
+[哈哈哈](https://www.bilibili.com/video/BV1p741177pK?spm_id_from=333.999.0.0)
+
+### 226-翻转二叉树
+
+[哈哈哈](https://www.bilibili.com/video/BV1Sh411R7B2?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H73E?spm_id_from=333.999.0.0)
+
+### 229. Majority Element II 
+
+[哈哈哈](https://www.bilibili.com/video/BV12z411B7rS?spm_id_from=333.999.0.0)
+
+### 231. Power of Two
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
+
+### 232-Implement Queue using Stacks
+
+[哈哈哈](https://www.bilibili.com/video/BV1p741177pp?spm_id_from=333.999.0.0)
+
+### 234. Palindrome Linked List
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7ML?spm_id_from=333.999.0.0)
+
+### 235. Lowest Common Ancestor of a Binary Search Tree
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7VY?spm_id_from=333.999.0.0)
+
+### 236-二叉树的最近公共祖先
+
+[哈哈哈](https://www.bilibili.com/video/BV1ov411172r?spm_id_from=333.999.0.0)
+
+### 237. Delete Node in a Linked List
+
+[小梦想家](https://www.bilibili.com/video/BV1rv411h7Lv?spm_id_from=333.999.0.0)
+
+### 239. Sliding Window Maximum
+
+[花花酱](https://www.bilibili.com/video/BV1WW411C763?spm_id_from=333.999.0.0)
+
+### 240. 二维数组的查找
+
+[哈哈哈](https://www.bilibili.com/video/BV1dz411i7jC?spm_id_from=333.999.0.0)
+
+### 242. Valid Anagram 
+
+[小梦想家](https://www.bilibili.com/video/BV1Db411s78v?spm_id_from=333.999.0.0)
+
+### 243. Shortest Word Distance
+
+[小梦想家](https://www.bilibili.com/video/BV1Lb411x7Ae?spm_id_from=333.999.0.0)
+
+### 246. Strobogrammatic Number
+
+[小梦想家](https://www.bilibili.com/video/BV14b411g7zD?spm_id_from=333.999.0.0)
+
+### 257-二叉树的所有路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
+
+### 258. Add Digits
+
+[小梦想家](https://www.bilibili.com/video/BV1ub41137cm?spm_id_from=333.999.0.0)
+
+### 260-只出现一次的数字 III
+
+[哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
+
+### 263 Ugly Number
+
+[花花酱](https://www.bilibili.com/video/BV11W411C7zd?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Mb41157Pa?spm_id_from=333.999.0.0)
+
+### 264. Ugly Number II
+
+[花花酱](https://www.bilibili.com/video/BV1yW411C7Sm?spm_id_from=333.999.0.0)
+
+### 270. Closest Binary Search Tree Value
+
+[哈哈哈](https://www.bilibili.com/video/BV1zy4y1a7mR?spm_id_from=333.999.0.0)
+
+### 278. First Bad Version
+
+[小梦想家](https://www.bilibili.com/video/BV1rZ4y1P7YF?spm_id_from=333.999.0.0)
+
+### 282. Expression Add Operators
+
+[花花酱](https://www.bilibili.com/video/BV15W411C727?spm_id_from=333.999.0.0)
+
+### 283. Move Zeros
+
+[小梦想家](https://www.bilibili.com/video/BV1m441187Kt?spm_id_from=333.999.0.0)
+
+### 289. Game of Life
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7ji?spm_id_from=333.999.0.0)
+
+### 290. Word Pattern
+
+[小梦想家](https://www.bilibili.com/video/BV1d4411V7mi?spm_id_from=333.999.0.0)
+
+### 297. Serialize and Deserialize Binary Tree
+
+[花花酱](https://www.bilibili.com/video/BV1Hb411c7cr?spm_id_from=333.999.0.0)
+
+### 299. Bulls and Cows
+
+[小梦想家](https://www.bilibili.com/video/BV1M64y1M7aP?spm_id_from=333.999.0.0)
+
+### 300 Longest Increasing Subsequence 最长上升子序列
+
+[花花酱](https://www.bilibili.com/video/BV1Wf4y1y7ou?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1rT4y1u7jV?spm_id_from=333.999.0.0)
+
+### 301. Remove Invalid Parentheses
+
+[花花酱](https://www.bilibili.com/video/BV1VW411y7Xd?spm_id_from=333.999.0.0)
+
+### 303-区域和检索 - 数组不可变
+
+[哈哈哈](https://www.bilibili.com/video/BV1RV411d76R?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV18441137fs?spm_id_from=333.999.0.0)
+
+### 304. Range Sum Query 2D
+
+[花花酱](https://www.bilibili.com/video/BV1Jb411k7LQ?spm_id_from=333.999.0.0)
+
+### 309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期
+
+[花花酱](https://www.bilibili.com/video/BV1qW411C7Xc?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Vy4y1z7pb?spm_id_from=333.999.0.0)
+
+### 315. Count of Smaller Numbers After Self
+
+[花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
+
+### 321. Create Maximum Number
+
+[花花酱](https://www.bilibili.com/video/BV11W411U7NR?spm_id_from=333.999.0.0)
+
+### 322. Coin Change
+
+[花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1tz4y1d7XM?spm_id_from=333.999.0.0)
+
+### 326. Power of Three
+
+[小梦想家](https://www.bilibili.com/video/BV1Gx411o7QC?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1h441137PM?spm_id_from=333.999.0.0)
+
+### 329. Longest Increasing Path in a Matrix
+
+[花花酱](https://www.bilibili.com/video/BV1mW411d7q8?spm_id_from=333.999.0.0)
+
+### 342. Power of Four
+
+[小梦想家](https://www.bilibili.com/video/BV1Gx411o7D5?spm_id_from=333.999.0.0)
+
+### 343-整数拆分
+
+[哈哈哈](https://www.bilibili.com/video/BV1Dp4y1U79P?spm_id_from=333.999.0.0)
+
+### 344. Reverse String
+
+[小梦想家](https://www.bilibili.com/video/BV1Gx411o7Ha?spm_id_from=333.999.0.0)
+
+### 345. Reverse Vowels of a String
+
+[小梦想家](https://www.bilibili.com/video/BV1Gx411o7JH?spm_id_from=333.999.0.0)
+
+### 347. Top K Frequent Elements 
+
+[花花酱](https://www.bilibili.com/video/BV1Mt411371T?spm_id_from=333.999.0.0)
+
+### 349. Intersection of Two Arrays
+
+[小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
+
+### 350. Intersection of Two Arrays II 
+
+[小梦想家](https://www.bilibili.com/video/BV1gx411X7q8?spm_id_from=333.999.0.0)
+
+### 367. Valid Perfect Square
+
+[小梦想家](https://www.bilibili.com/video/BV1Gx411X7Ke?spm_id_from=333.999.0.0)
+
+### 374. Guess Number Higher or Lower
+
+[小梦想家](https://www.bilibili.com/video/BV1Hx41197ou?spm_id_from=333.999.0.0)
+
+### 376-摆动序列
+
+[哈哈哈](https://www.bilibili.com/video/BV1sk4y167wV?spm_id_from=333.999.0.0)
+
+### 377. Combination Sum IV
+
+[花花酱](https://www.bilibili.com/video/BV1gW411y7uz?spm_id_from=333.999.0.0)
+
+### 378-有序矩阵中第K小的元素
+
+[哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
+
+### 387. First Unique Character in a String
+
+[小梦想家](https://www.bilibili.com/video/BV1y4411A7d2?spm_id_from=333.999.0.0)
+
+### 389. Find the Difference
+
+[小梦想家](https://www.bilibili.com/video/BV1Et411K7jP?spm_id_from=333.999.0.0)
+
+### 391. Perfect Rectangle
+
+[花花酱](https://www.bilibili.com/video/BV184411c7cs?spm_id_from=333.999.0.0)
+
+### 392. Is Subsequence
+
+[小梦想家](https://www.bilibili.com/video/BV1fg4y1q7eT?spm_id_from=333.999.0.0)
+
+### 393. UTF-8 Validation
+
+[花花酱](https://www.bilibili.com/video/BV1SE411w7no?spm_id_from=333.999.0.0)
+
+### 399. Evaluate Division
+
+[花花酱](https://www.bilibili.com/video/BV1iW41167Nb?spm_id_from=333.999.0.0)
+
+### 404. Sum of Left Leaves
+
+[小梦想家](https://www.bilibili.com/video/BV1Et411K7wa?spm_id_from=333.999.0.0)
+
+### 405-Convert a Number to Hexadecimal
+
+[哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
+
+### 406. Queue Reconstruction by Height 
+
+[小梦想家](https://www.bilibili.com/video/BV144411R7ch?spm_id_from=333.999.0.0)
+
+### 408. Valid Word Abbreviation
+
+[小梦想家](https://www.bilibili.com/video/BV1A4411q74A?spm_id_from=333.999.0.0)
+
+### 409. Longest Palindrome
+
+[小梦想家](https://www.bilibili.com/video/BV1B441127W2?spm_id_from=333.999.0.0)
+
+### 410. Split Array Largest Sum
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
+
+### 412. Fizz Buzz
+
+[小梦想家](https://www.bilibili.com/video/BV1xE411R7yK?spm_id_from=333.999.0.0)
+
+### 413-等差数列划分
+
+[哈哈哈](https://www.bilibili.com/video/BV13a4y1i7tR?spm_id_from=333.999.0.0)
+
+### 414. Third Maximum Number
+
+[小梦想家](https://www.bilibili.com/video/BV1UE411X7k1?spm_id_from=333.999.0.0)
+
+### 415-Add Strings
+
+[哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
+
+### 416. Partition Equal Subset Sum
+
+[花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
+
+### 417. Pacific Atlantic Water Flow
+
+[花花酱](https://www.bilibili.com/video/BV1Kb411K7ty?spm_id_from=333.999.0.0)
+
+### 419. Battleships in a Board 
+
+[小梦想家](https://www.bilibili.com/video/BV1TJ411j7QZ?spm_id_from=333.999.0.0)
+
+### 429. N-ary Tree Level Order Traversal
+
+[小梦想家](https://www.bilibili.com/video/BV1CE411Q7BQ?spm_id_from=333.999.0.0)
+
+### 432. All O`one Data Structure
+
+[花花酱](https://www.bilibili.com/video/BV1XW411d7qR?spm_id_from=333.999.0.0)
+
+### 435-Non-overlapping Intervals
+
+[哈哈哈](https://www.bilibili.com/video/BV1i7411p7pv?spm_id_from=333.999.0.0)
+
+### 438. Find All Anagrams in a String
+
+[花花酱](https://www.bilibili.com/video/BV1iW411d7Nb?spm_id_from=333.999.0.0)
+
+### 443. String Compression
+
+[小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
+
+### 445-Add Two Numbers II
+
+[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
+
+### 447. Number of Boomerangs
+
+[小梦想家](https://www.bilibili.com/video/BV1hE411o7V2?spm_id_from=333.999.0.0)
+
+### 448. Find All Numbers Disappeared in an Array
+
+[小梦想家](https://www.bilibili.com/video/BV1SE411d7FM?spm_id_from=333.999.0.0)
+
+### 449. Serialize and Deserialize BST
+
+[花花酱](https://www.bilibili.com/video/BV1ab411c75V?spm_id_from=333.999.0.0)
+
+### 450. Delete Node in a BST
+
+[花花酱](https://www.bilibili.com/video/BV1XW411d7yU?spm_id_from=333.999.0.0)
+
+### 452. Minimum Number of Arrows to Burst Balloons
+
+[花花酱](https://www.bilibili.com/video/BV1bW411d77B?spm_id_from=333.999.0.0)
+
+### 455-Assign Cookies
+
+[哈哈哈](https://www.bilibili.com/video/BV157411s7b9?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1YE411r7UN?spm_id_from=333.999.0.0)
+
+
+### 460. LFU Cache / O(1)
+
+[花花酱](https://www.bilibili.com/video/BV1gt411Y7PR?spm_id_from=333.999.0.0)
+
+[花花酱](https://www.bilibili.com/video/BV1Xb411c7m7?spm_id_from=333.999.0.0)
+
+### 464. Can I Win
+
+[花花酱](https://www.bilibili.com/video/BV1KW411o7m2?spm_id_from=333.999.0.0)
+
+### 470. Implement Rand10() Using Rand7()
+
+[花花酱](https://www.bilibili.com/video/BV1Ut411Z7KX?spm_id_from=333.999.0.0)
+
+### 475. Heaters
+
+[小梦想家](https://www.bilibili.com/video/BV1vJ41117VH?spm_id_from=333.999.0.0)
+
+### 476. Number Complement
+
+[花花酱](https://www.bilibili.com/video/BV1PW411y7mv?spm_id_from=333.999.0.0)
+
+### 477. Total Hamming Distance
+
+[花花酱](https://www.bilibili.com/video/BV1SW411r78m?spm_id_from=333.999.0.0)
+
+### 480. Sliding Window Median
+
+[花花酱](https://www.bilibili.com/video/BV15W411C7iy?spm_id_from=333.999.0.0)
+
+### 485. Max Consecutive Ones
+
+[小梦想家](https://www.bilibili.com/video/BV1zJ411R7SJ?spm_id_from=333.999.0.0)
+
+### 486. Predict the Winner
+
+[花花酱](https://www.bilibili.com/video/BV1kW411d7R2?spm_id_from=333.999.0.0)
+
+### 494. Target Sum
+
+[花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
+
+[花花酱 下](https://www.bilibili.com/video/BV1WW411C7Mr?spm_id_from=333.999.0.0)
+
+### 500. Keyboard Row
+
+[小梦想家](https://www.bilibili.com/video/BV1vJ411X7BR?spm_id_from=333.999.0.0)
+
+### 503-Next Greater Element II
+
+[哈哈哈](https://www.bilibili.com/video/BV197411L77N?spm_id_from=333.999.0.0)
+
+### 504-Base 7
+
+[哈哈哈](https://www.bilibili.com/video/BV1pj411f7o5?spm_id_from=333.999.0.0)
+
+### 509. Fibonacci Number
+
+[1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+### 516. Longest Palindromic Subsequence
+
+[花花酱](https://www.bilibili.com/video/BV18W411d7k2?spm_id_from=333.999.0.0)
+
+### 520. Detect Capital
+
+[小梦想家](https://www.bilibili.com/video/BV1NJ41197da?spm_id_from=333.999.0.0)
+
+### 525. Contiguous Array
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7SD?spm_id_from=333.999.0.0)
+
+### 530. Minimum Absolute Difference in BST
+
+[花花酱](https://www.bilibili.com/video/BV1fW411k7eT?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1FJ41147BB?spm_id_from=333.999.0.0)
+
+### 535. Encode and Decode TinyURL
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411e7zp?spm_id_from=333.999.0.0)
+
+### 540. Single Element in a Sorted Array 540-有序数组中的单一元素
+
+[花花酱](https://www.bilibili.com/video/BV1gW411y7N3?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1P64y1F7cd?spm_id_from=333.999.0.0)
+
+### 546 Remove Boxes
+
+[花花酱](https://www.bilibili.com/video/BV11W411Z7jG?spm_id_from=333.999.0.0)
+
+### 547-朋友圈
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ta411F7rk?spm_id_from=333.999.0.0)
+
+### 560. Subarray Sum Equals K 和为K的子数组
+
+[花花酱](https://www.bilibili.com/video/BV1XW411d71i?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1d54y127ri?spm_id_from=333.999.0.0)
+
+### 567. Permutation in String 567-字符串的排列
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7g6?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1z54y1C7qB?spm_id_from=333.999.0.0)
+
+### 572-另一个树的子树
+
+[哈哈哈](https://www.bilibili.com/video/BV1cA411t7zD?spm_id_from=333.999.0.0)
+
+### 576. Out of Boundary Paths
+
+[花花酱](https://www.bilibili.com/video/BV18W411d7Cf?spm_id_from=333.999.0.0)
+
+### 621. Task Scheduler
+
+[花花酱](https://www.bilibili.com/video/BV1Wt411Y7Y9?spm_id_from=333.999.0.0)
+
+### 633-Sum of Square Numbers
+
+[哈哈哈](https://www.bilibili.com/video/BV1a7411h7on?spm_id_from=333.999.0.0)
+
+### 636. Exclusive Time of Functions
+
+[花花酱](https://www.bilibili.com/video/BV1PW411o7Bh?spm_id_from=333.999.0.0)
+
+### 639. Decode Ways II
+
+[花花酱](https://www.bilibili.com/video/BV1YW411r75q?spm_id_from=333.999.0.0)
+
+### 643. Maximum Average Subarray I
+
+[小梦想家](https://www.bilibili.com/video/BV1dV411k7i6?spm_id_from=333.999.0.0)
+
+### 645-错误的集合
+
+[哈哈哈](https://www.bilibili.com/video/BV1az411e7zU?spm_id_from=333.999.0.0)
+
+### 646-最长数对链
+
+[哈哈哈](https://www.bilibili.com/video/BV1rz411q7pZ?spm_id_from=333.999.0.0)
+
+### 650-只有两个键的键盘
+
+[哈哈哈](https://www.bilibili.com/video/BV1254y1z7ze?spm_id_from=333.999.0.0)
+
+### 652. Find Duplicate Subtrees
+
+[花花酱](https://www.bilibili.com/video/BV1cW411y7d1?spm_id_from=333.999.0.0)
+
+### 653. Two Sum IV
+
+[小梦想家](https://www.bilibili.com/video/BV1Qz4y197h1?spm_id_from=333.999.0.0)
+
+### 662. Maximum Width of Binary Tree
+
+[花花酱](https://www.bilibili.com/video/BV1cv411q7pb?spm_id_from=333.999.0.0)
+
+### 668. Kth Smallest Number in Multiplication Table
+
+[花花酱](https://www.bilibili.com/video/BV17W411C7ai?spm_id_from=333.999.0.0)
+
+### 680-Valid Palindrome II
+
+[哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
+
+### 683. K Empty Slots
+
+[花花酱](https://www.bilibili.com/video/BV1Jb411k7Yu?spm_id_from=333.999.0.0)
+
+### 684. Redundant Connection 684-冗余连接
+
+[花花酱](https://www.bilibili.com/video/BV1mt411J79j?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1oe411p7qF?spm_id_from=333.999.0.0)
+
+### 685. Redundant Connection II
+
+[花花酱](https://www.bilibili.com/video/BV1St411J7Ur?spm_id_from=333.999.0.0)
+
+### 687. Longest Univalue Path
+
+[花花酱](https://www.bilibili.com/video/BV1wt411r7Pr?spm_id_from=333.999.0.0)
+
+### 688. Knight Probability in Chessboard
+
+[花花酱](https://www.bilibili.com/video/BV1Hb411c7mu?spm_id_from=333.999.0.0)
+
+### 690. Employee Importance
+
+[花花酱](https://www.bilibili.com/video/BV1Ut411J7uC?spm_id_from=333.999.0.0)
+
+### 692. Top K Frequent Words
+
+[花花酱](https://www.bilibili.com/video/BV1Mt41137eL?spm_id_from=333.999.0.0)
+
+### 695-岛屿的最大面积
+
+[哈哈哈](https://www.bilibili.com/video/BV1s54y1B77k?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1wz4y1R7e6?spm_id_from=333.999.0.0)
+
+### 699. Falling Squares
+
+[花花酱](https://www.bilibili.com/video/BV1Lt41137EM?spm_id_from=333.999.0.0)
+
+### 707. Design Linked List
+
+[花花酱](https://www.bilibili.com/video/BV1yW411Z7dV?spm_id_from=333.999.0.0)
+
+### 712. Minimum ASCII Delete Sum for Two Strings
+
+[花花酱](https://www.bilibili.com/video/BV17W411d7m2?spm_id_from=333.999.0.0)
+
+### 714-买卖股票的最佳时机含手续费
+
+[哈哈哈](https://www.bilibili.com/video/BV1WK4y1E7mP?spm_id_from=333.999.0.0)
+
+### 715. Range Module
+
+[花花酱](https://www.bilibili.com/video/BV1jt411379W?spm_id_from=333.999.0.0)
+
+### 719. Find K-th Smallest Pair Distance
+
+[花花酱](https://www.bilibili.com/video/BV1zb411u7iP?spm_id_from=333.999.0.0)
+
+### 720. Longest Word in Dictionary
+
+[花花酱](https://www.bilibili.com/video/BV1vW411r75D?spm_id_from=333.999.0.0)
+
+### 724. Find Pivot Index
+
+[花花酱](https://www.bilibili.com/video/BV1KW411S7nG?spm_id_from=333.999.0.0)
+
+### 725. Split Linked List in Parts
+
+[花花酱](https://www.bilibili.com/video/BV1KW411S7ti?spm_id_from=333.999.0.0)
+
+### 726. Number of Atoms
+
+[花花酱](https://www.bilibili.com/video/BV11W411U7KT?spm_id_from=333.999.0.0)
+
+### 730. Count Different Palindromic Subsequences
+
+[花花酱](https://www.bilibili.com/video/BV12W41167vQ?spm_id_from=333.999.0.0)
+
+### 732. My Calendar III
+
+[花花酱](https://www.bilibili.com/video/BV1fW411k75b?spm_id_from=333.999.0.0)
+
+### 733. Flood Fill 
+
+[花花酱](https://www.bilibili.com/video/BV1yW41167S4?spm_id_from=333.999.0.0)
+
+### 737. Sentence Similarity II
+
+[花花酱](https://www.bilibili.com/video/BV1qW41167iB?spm_id_from=333.999.0.0)
+
+### 739-Daily Temperatures
+
+[哈哈哈](https://www.bilibili.com/video/BV1Q7411L7w8?spm_id_from=333.999.0.0)
+
+### 740. Delete and Earn
+
+[24:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[花花酱](https://www.bilibili.com/video/BV1xW41167b5?spm_id_from=333.999.0.0)
+
+### 741. Cherry Pickup
+
+[花花酱](https://www.bilibili.com/video/BV1tW41167jy?spm_id_from=333.999.0.0)
+
+### 743. Network Delay Time
+
+[花花酱](https://www.bilibili.com/video/BV1UW411r7S8?spm_id_from=333.999.0.0)
+
+### 745. Prefix and Suffix Search
+
+[花花酱](https://www.bilibili.com/video/BV1TW411k7PY?spm_id_from=333.999.0.0)
+
+### 746. Min Cost Climbing Stairs
+
+[7:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[花花酱](https://www.bilibili.com/video/BV1VW411y7Dq?spm_id_from=333.999.0.0)
+
+### 748. Shortest Completing Word
+
+[花花酱](https://www.bilibili.com/video/BV15W411y7sJ?spm_id_from=333.999.0.0)
+
+### 752. Open the Lock
+
+[花花酱](https://www.bilibili.com/video/BV1NW411y74z?spm_id_from=333.999.0.0)
+
+### 769. Max Chunks To Make Sorted
+
+[花花酱](https://www.bilibili.com/video/BV1LW411C7nD?spm_id_from=333.999.0.0)
+
+### 773. Sliding Puzzle
+
+[花花酱](https://www.bilibili.com/video/BV1PW411o7g4?spm_id_from=333.999.0.0)
+
+### 775. Global and Local Inversions
+
+[花花酱](https://www.bilibili.com/video/BV1JW411d75t?spm_id_from=333.999.0.0)
+
+### 778. Swim in Rising Water
+
+[花花酱](https://www.bilibili.com/video/BV1ab411k7TH?spm_id_from=333.999.0.0)
+
+### 784. Letter Case Permutation
+
+[花花酱](https://www.bilibili.com/video/BV1wW411o7WK?spm_id_from=333.999.0.0)
+
+### 785-判断二分图
+
+[哈哈哈](https://www.bilibili.com/video/BV1KQ4y1N72Z?spm_id_from=333.999.0.0)
+
+### 786. K-th Smallest Prime Fraction
+
+[花花酱](https://www.bilibili.com/video/BV1AW411o7oi?spm_id_from=333.999.0.0)
+
+### 787. Cheapest Flights Within K Stops
+
+[花花酱](https://www.bilibili.com/video/BV13W411o7wc?spm_id_from=333.999.0.0)
+
+### 790. Domino and Tromino Tiling
+
+[花花酱](https://www.bilibili.com/video/BV13W411o7AW?spm_id_from=333.999.0.0)
+
+### 792. Number of Matching Subsequences
+
+[花花酱](https://www.bilibili.com/video/BV13W411o7Af?spm_id_from=333.999.0.0)
+
+### 801. Minimum Swaps To Make Sequences Increasing
+
+[花花酱](https://www.bilibili.com/video/BV1FW411o7tL?spm_id_from=333.999.0.0) 
+
+### 803. Bricks Falling When Hit 
+
+[花花酱](https://www.bilibili.com/video/BV13W411o7kA?spm_id_from=333.999.0.0)
+
+### 813. Largest Sum of Averages
+
+[花花酱](https://www.bilibili.com/video/BV1XW411d7RB?spm_id_from=333.999.0.0)
+
+### 815. Bus Routes
+
+[花花酱](https://www.bilibili.com/video/BV1QW411d794?spm_id_from=333.999.0.0)
+
+### 817. Linked List Components
+
+[花花酱](https://www.bilibili.com/video/BV1cW411o7Eu?spm_id_from=333.999.0.0)
+
+### 818. Race Car (上)
+
+[花花酱](https://www.bilibili.com/video/BV1cW411o7Tb?spm_id_from=333.999.0.0)
+
+### 823. Binary Trees With Factors
+
+[花花酱](https://www.bilibili.com/video/BV1CW411d7RX?spm_id_from=333.999.0.0)
+
+### 827. Making A Large Island
+
+[花花酱](https://www.bilibili.com/video/BV1mW411d7rc?spm_id_from=333.999.0.0)
+
+### 842. Split Array into Fibonacci Sequence
+
+[花花酱](https://www.bilibili.com/video/BV1ZJ411H7t4?spm_id_from=333.999.0.0)
+
+### 847 Shortest Path Visiting All Nodes
+
+[花花酱](https://www.bilibili.com/video/BV1hW411d7MU?spm_id_from=333.999.0.0)
+
+### 856. Score of Parentheses
+
+[花花酱](https://www.bilibili.com/video/BV1bW411d7gp?spm_id_from=333.999.0.0)
+
+### 863. All Nodes Distance K in Binary Tree
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
+
+### 864. Shortest Path to Get All Keys
+
+[花花酱](https://www.bilibili.com/video/BV1LW411d7th?spm_id_from=333.999.0.0)
+
+### 865. Smallest Subtree with all the Deepest Nodes
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7ZR?spm_id_from=333.999.0.0)
+
+### 871. Minimum Number of Refueling Stops
+
+[花花酱](https://www.bilibili.com/video/BV1JW411d7VK?spm_id_from=333.999.0.0)
+
+### 873. Length of Longest Fibonacci Subsequence
+
+[花花酱](https://www.bilibili.com/video/BV1jW411d79H?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1ab411i7wx?spm_id_from=333.999.0.0)
+
+### 877 Stone Game
+
+[花花酱](https://www.bilibili.com/video/BV1mW411Z7Hr?spm_id_from=333.999.0.0)
+
+### 879. Profitable Schemes
+
+[花花酱](https://www.bilibili.com/video/BV1mW411Z7Jt?spm_id_from=333.999.0.0)
+
+### 882. Reachable Nodes In Subdivided Graph
+
+[花花酱](https://www.bilibili.com/video/BV11W411Z71N?spm_id_from=333.999.0.0)
+
+### 886. Possible Bipartition
+
+[花花酱](https://www.bilibili.com/video/BV1DW411Z7G6?spm_id_from=333.999.0.0)
+
+### 887. Super Egg Drop
+
+[花花酱](https://www.bilibili.com/video/BV1Tv411i7cP?spm_id_from=333.999.0.0)
+
+### 889. Construct Binary Tree from Preorder and Postorder
+
+[花花酱](https://www.bilibili.com/video/BV1DW411Z7Qi?spm_id_from=333.999.0.0)
+
+### 891. Sum of Subsequence Widths
+
+[花花酱](https://www.bilibili.com/video/BV1DW411Z7Yv?spm_id_from=333.999.0.0)
+
+### 894. All Possible Full Binary Trees
+
+[花花酱](https://www.bilibili.com/video/BV1rW411Z7Sb?spm_id_from=333.999.0.0)
+
+### 895. Maximum Frequency Stack
+
+[花花酱](https://www.bilibili.com/video/BV1rW411Z7Hp?spm_id_from=333.999.0.0)
+
+### 898. Bitwise ORs of Subarrays
+
+[花花酱](https://www.bilibili.com/video/BV1kW411Z7HV?spm_id_from=333.999.0.0)
+
+### 901. Online Stock Span
+
+[花花酱](https://www.bilibili.com/video/BV1kW411k77K?spm_id_from=333.999.0.0)
+
+### 904-水果成篮
+
+[哈哈哈](https://www.bilibili.com/video/BV19i4y1M7Xn?spm_id_from=333.999.0.0)
+
+### 909. Snakes and Ladders
+
+[小梦想家](https://www.bilibili.com/video/BV1cy4y1W7u9?spm_id_from=333.999.0.0)
+
+### 923. 3Sum With Multiplicity 
+
+[花花酱](https://www.bilibili.com/video/BV14t411o7QT?spm_id_from=333.999.0.0)
+
+### 926. Flip String to Monotone Increasing
+
+[花花酱](https://www.bilibili.com/video/BV1ft411R7qv?spm_id_from=333.999.0.0)
+
+### 930-和相同的二元子数组(滑动窗口+前缀和)
+
+[哈哈哈](https://www.bilibili.com/video/BV1iy4y1T7M3?spm_id_from=333.999.0.0)
+
+### 934. Shortest Bridge
+
+[花花酱](https://www.bilibili.com/video/BV19t411y7rL?spm_id_from=333.999.0.0)
+
+### 943. Find the Shortest Superstring
+
+[花花酱](https://www.bilibili.com/video/BV1yt411171k?spm_id_from=333.999.0.0)
+
+### 946-Python-栈的压入、弹出序列
+
+[哈哈哈](https://www.bilibili.com/video/BV1JD4y1o7ZD?spm_id_from=333.999.0.0)
+
+### 964. Least Operators to Express Number
+
+[花花酱](https://www.bilibili.com/video/BV1Pt411k7qn?spm_id_from=333.999.0.0)
+
+### 980. Unique Paths III 
+
+[花花酱](https://www.bilibili.com/video/BV1yt41187Si?spm_id_from=333.999.0.0)
+
+### 994-腐烂的橘子
+
+[哈哈哈](https://www.bilibili.com/video/BV1Yp4y1D7Kg?spm_id_from=333.999.0.0)
+
+### 993, 994, 995, 996
+
+[花花酱](https://www.bilibili.com/video/BV1bb41117PB?spm_id_from=333.999.0.0)
+
+### 967. Numbers With Same Consecutive Differences
+
+[花花酱](https://www.bilibili.com/video/BV1gt411B7oG?spm_id_from=333.999.0.0)
+
+### 975. Odd Even Jump
+
+[花花酱](https://www.bilibili.com/video/BV1pt411p7M4?spm_id_from=333.999.0.0)
+
+### 992-K 个不同整数的子数组
+
+[哈哈哈](https://www.bilibili.com/video/BV1t44y1q7th?spm_id_from=333.999.0.0)
+
+### 1000. Minimum Cost to Merge Stones
+
+[花花酱](https://www.bilibili.com/video/BV1db411v7DG?spm_id_from=333.999.0.0)
+
+### 1004-最大连续1的个数 III
+
+[哈哈哈](https://www.bilibili.com/video/BV1Zg411L7Qu?spm_id_from=333.999.0.0)
+
+### 1019. Next Greater Node In Linked List
+
+[花花酱](https://www.bilibili.com/video/BV12b411s77J?spm_id_from=333.999.0.0)
+
+### 1025,1026,1027,1028
+
+[花花酱](https://www.bilibili.com/video/BV1Nb411j7qr?spm_id_from=333.999.0.0)
+
+### 1024. Video Stitching
+
+[花花酱](https://www.bilibili.com/video/BV1kb411u7Qk?spm_id_from=333.999.0.0)
+
+### 1043. Partition Array for Maximum Sum
+
+[花花酱](https://www.bilibili.com/video/BV154411J7so?spm_id_from=333.999.0.0)
+
+### 1091-二进制矩阵中的最短路径
+
+[哈哈哈](https://www.bilibili.com/video/BV17k4y1r7EP?spm_id_from=333.999.0.0)
+
+### 1095. Find in Mountain Array
+
+[花花酱](https://www.bilibili.com/video/BV1m5411V7x7?spm_id_from=333.999.0.0)
+
+### 1105. Filling Bookcase Shelves
+
+[花花酱](https://www.bilibili.com/video/BV1Mx411X7Ks?spm_id_from=333.999.0.0)
+
+### 1106. Parsing A Boolean Expression
+
+[花花酱](https://www.bilibili.com/video/BV1Cx411X7aF?spm_id_from=333.999.0.0)
+
+### 1110. Delete Nodes And Return Forest
+
+[花花酱](https://www.bilibili.com/video/BV1u4411977H?spm_id_from=333.999.0.0)
+
+### 1114 - 1115 - 1116 - 多线程 threading
+
+[花花酱](https://www.bilibili.com/video/BV12t411P79a?spm_id_from=333.999.0.0)
+
+### 1124. Longest Well-Performing Interval
+
+[花花酱](https://www.bilibili.com/video/BV1Et41157Jw?spm_id_from=333.999.0.0)
+
+### 1125. Smallest Sufficient Team
+
+[花花酱](https://www.bilibili.com/video/BV14t411G7WL?spm_id_from=333.999.0.0)
+
+### 1129. Shortest Path with Alternating Colors
+
+[花花酱](https://www.bilibili.com/video/BV1Et411J7Dh?spm_id_from=333.999.0.0)
+
+### 1137. N-th Tribonacci Number
+
+[3:55 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+### 1140. Stone Game II
+
+[花花酱](https://www.bilibili.com/video/BV1Gt411c7hM?spm_id_from=333.999.0.0)
+
+### 1145. Binary Tree Coloring Game
+
+[花花酱](https://www.bilibili.com/video/BV1ft411K7Gf?spm_id_from=333.999.0.0)
+
+### 1155. Number of Dice Rolls With Target Sum
+
+[花花酱](https://www.bilibili.com/video/BV1t4411Q7JN?spm_id_from=333.999.0.0)
+
+### 1172. Dinner Plate Stacks
+
+[花花酱](https://www.bilibili.com/video/BV1E4411z7xb?spm_id_from=333.999.0.0)
+
+### 1178. Number of Valid Words for Each Puzzle
+
+[花花酱](https://www.bilibili.com/video/BV1x441117vz?spm_id_from=333.999.0.0)
+
+### 1187. Make Array Strictly Increasing
+
+[花花酱](https://www.bilibili.com/video/BV1sJ411N7jD?spm_id_from=333.999.0.0)
+
+### 1191. K-Concatenation Maximum Sum
+
+[花花酱](https://www.bilibili.com/video/BV1AJ411w756?spm_id_from=333.999.0.0)
+
+### 1201. Ugly Number III
+
+[花花酱](https://www.bilibili.com/video/BV1QJ411M7Jx?spm_id_from=333.999.0.0)
+
+### 1202. Smallest String With Swaps
+
+[花花酱](https://www.bilibili.com/video/BV1PJ411T7Wq?spm_id_from=333.999.0.0)
+
+### 1206. Design Skiplist 
+
+[花花酱](https://www.bilibili.com/video/BV1kT4y1F7Nr?spm_id_from=333.999.0.0)
+
+### 1218. Longest Arithmetic Subsequence of Given Difference
+
+[花花酱](https://www.bilibili.com/video/BV1tE411f73y?spm_id_from=333.999.0.0)
+
+### 1220. Count Vowels Permutation
+
+[花花酱](https://www.bilibili.com/video/BV1FJ411c7pT?spm_id_from=333.999.0.0)
+
+### 1223 Dice Roll Simulation
+
+[花花酱](https://www.bilibili.com/video/BV17E411k7PR?spm_id_from=333.999.0.0)
+
+### 1240 Tiling a Rectangle with the Fewest Squares
+
+[花花酱](https://www.bilibili.com/video/BV1UE411t7Gb?spm_id_from=333.999.0.0)
+
+### 1248-统计「优美子数组」
+
+[哈哈哈](https://www.bilibili.com/video/BV1FU4y1H76T?spm_id_from=333.999.0.0)
+
+### 1252 1253 1254 1255
+
+[花花酱](https://www.bilibili.com/video/BV1kE411Y7rg?spm_id_from=333.999.0.0)
+
+### 1263. Minimum Moves to Move a Box to Their Target
+
+[花花酱](https://www.bilibili.com/video/BV1AJ411Q7B6?spm_id_from=333.999.0.0)
+
+### 1277-统计全为1的正方形子矩阵
+
+[哈哈哈](https://www.bilibili.com/video/BV1nk4y1k7vi?spm_id_from=333.999.0.0)
+
+### 1278. Palindrome Partitioning III
+
+[花花酱](https://www.bilibili.com/video/BV1HJ411q7nc?spm_id_from=333.999.0.0)
+
+### 1284. Minimum Number of Flips to Convert Binary Matrix
+
+[花花酱](https://www.bilibili.com/video/BV1nJ411y7m1?spm_id_from=333.999.0.0)
+
+### 1293. Shortest Path in a Grid with Obstacles Elimination
+
+[花花酱](https://www.bilibili.com/video/BV1VJ411k72A?spm_id_from=333.999.0.0)
+
+### 1296. Divide Array in Sets of K Consecutive Numbers
+
+[花花酱](https://www.bilibili.com/video/BV1gJ411e7cS?spm_id_from=333.999.0.0)
+
+### 1301. Number of Paths with Max Score
+
+[花花酱](https://www.bilibili.com/video/BV1pJ411a7ry?spm_id_from=333.999.0.0)
+
+### 1310. XOR Queries of a Subarray
+
+[花花酱](https://www.bilibili.com/video/BV1oJ411L78Y?spm_id_from=333.999.0.0)
+
+### 1312. Minimum Insertion Steps to Make a String Palindrom
+
+[花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
+
+### 1320. Minimum Distance to Type a Word Using Two Finger
+
+[花花酱](https://www.bilibili.com/video/BV11J411n7fN?spm_id_from=333.999.0.0)
+
+### 1334. Find the City With Smallest Number of Neighbors
+
+[花花酱](https://www.bilibili.com/video/BV1b7411z7Tb?spm_id_from=333.999.0.0)
+
+### 1335. Minimum Difficulty of a Job Schedule
+
+[花花酱](https://www.bilibili.com/video/BV1K7411r7xj?spm_id_from=333.999.0.0)
+
+### 1344. Jump Game V
+
+[花花酱](https://www.bilibili.com/video/BV1h7411W7wS?spm_id_from=333.999.0.0)
+
+### 1349. Maximum Students Taking Exam
+
+[花花酱](https://www.bilibili.com/video/BV1w7411V7eC?spm_id_from=333.999.0.0)
+
+### 1353. Maximum Number of Events That Can Be Attended 
+
+[花花酱](https://www.bilibili.com/video/BV1C7411j7YJ?spm_id_from=333.999.0.0)
+
+### 1354. Construct Target Array With Multiple Sums
+
+[花花酱](https://www.bilibili.com/video/BV1g7411c793?spm_id_from=333.999.0.0)
+
+### 1368. Minimum Cost to Make at Least One Valid Path
+
+[花花酱](https://www.bilibili.com/video/BV1oE411E74t?spm_id_from=333.999.0.0)
+
+### 1371. Find the Longest Substring Containing Vowels in Eve
+
+[花花酱](https://www.bilibili.com/video/BV1CE411K7hb?spm_id_from=333.999.0.0)
+
+### 1373. Maximum Sum BST in Binary Tree
+
+[花花酱](https://www.bilibili.com/video/BV17E411u797?spm_id_from=333.999.0.0)
+
+### 1377. Frog Position After T Seconds
+
+[花花酱](https://www.bilibili.com/video/BV1mE411K7vc?spm_id_from=333.999.0.0)
+
+### 1382. Balance a Binary Search Tree
+
+[花花酱](https://www.bilibili.com/video/BV1y7411f7v2?spm_id_from=333.999.0.0)
+
+### 1395. Count Number of Teams
+
+[花花酱](https://www.bilibili.com/video/BV1cc411h73E?spm_id_from=333.999.0.0)
+
+### 1406. Stone Game III
+
+[花花酱](https://www.bilibili.com/video/BV1zT4y1G7Tb?spm_id_from=333.999.0.0)
+
+### 1409. Queries on a Permutation With Key
+
+[花花酱](https://www.bilibili.com/video/BV1mz411b7Uw?spm_id_from=333.999.0.0)
+
+### 1416. Restore The Array
+
+[花花酱](https://www.bilibili.com/video/BV1gK4y1k7Rv?spm_id_from=333.999.0.0)
+
+### 1424. Diagonal Traverse II
+
+[花花酱](https://www.bilibili.com/video/BV1r5411x7Tm?spm_id_from=333.999.0.0)
+
+### 1425. Constrained Subset Sum
+
+[花花酱](https://www.bilibili.com/video/BV13t4y1m7fD?spm_id_from=333.999.0.0)
+
+### 1438. Longest Continuous Subarray With Absolute
+
+[花花酱](https://www.bilibili.com/video/BV1Cf4y1m7aN?spm_id_from=333.999.0.0)
+
+### 1442. Count Triplets That Can Form Two Arrays of Equal
+
+[花花酱](https://www.bilibili.com/video/BV17g4y1B7yo?spm_id_from=333.999.0.0)
+
+### 1443. Minimum Time to Collect All Apples in a Tree
+
+[花花酱](https://www.bilibili.com/video/BV1e541147oZ?spm_id_from=333.999.0.0)
+
+### 1444. Number of Ways of Cutting a Pizza
+
+[花花酱](https://www.bilibili.com/video/BV1CK411W7nR?spm_id_from=333.999.0.0)
+
+### 1449. Form Largest Integer With Digits That Add
+
+[花花酱](https://www.bilibili.com/video/BV19Q4y1A7Rf?spm_id_from=333.999.0.0)
+
+### 1473. Paint House III
+
+[花花酱](https://www.bilibili.com/video/BV15K411p7nT?spm_id_from=333.999.0.0)
+
+### 1475. Final Prices With a Special Discount in a Sho
+
+[花花酱](https://www.bilibili.com/video/BV1na4y1Y7VU?spm_id_from=333.999.0.0)
+
+### 1483. Kth Ancestor of a Tree Node
+
+[花花酱](https://www.bilibili.com/video/BV1kt4y1X7fk?spm_id_from=333.999.0.0)
+
+### 1488. Avoid Flood in The City
+
+[花花酱](https://www.bilibili.com/video/BV1af4y1y7uW?spm_id_from=333.999.0.0)
+
+## 1489. Find Critical and Pseudo-Critical Edges in
+
+[花花酱](https://www.bilibili.com/video/BV1cV41167oi?spm_id_from=333.999.0.0)
+
+### 1493. Longest Subarray of 1's After Deleting One
+
+[花花酱](https://www.bilibili.com/video/BV1rC4y18751?spm_id_from=333.999.0.0)
+
+### 1499. Max Value of Equation
+
+[花花酱](https://www.bilibili.com/video/BV1VK411H7zy?spm_id_from=333.999.0.0)
+
+### 1505. Minimum Possible Integer After at Most K Adjacent
+
+[花花酱](https://www.bilibili.com/video/BV1YD4y1S7BQ?spm_id_from=333.999.0.0)
+
+### 1508. Range Sum of Sorted Subarray Sums
+
+[花花酱](https://www.bilibili.com/video/BV1fg4y1v7qe?spm_id_from=333.999.0.0)
+
+### 1520. Maximum Number of Non-Overlapping Substrings
+
+[花花酱](https://www.bilibili.com/video/BV1yz4y1D7p3?spm_id_from=333.999.0.0)
+
+### 1530. Number of Good Leaf Nodes Pairs
+
+[花花酱](https://www.bilibili.com/video/BV1bv411q7SD?spm_id_from=333.999.0.0)
+
+### 1531. String Compression II
+
+[花花酱](https://www.bilibili.com/video/BV1aK4y1v7B9?spm_id_from=333.999.0.0)
+
+### 1537. Get the Maximum Score
+
+[小梦想家](https://www.bilibili.com/video/BV1KC4y1t7P8?spm_id_from=333.999.0.0)
+
+### 1539. Kth Missing Positive Number
+
+[小梦想家](https://www.bilibili.com/video/BV1SC4y147Eo?spm_id_from=333.999.0.0)
+
+### 1542. Find Longest Awesome Substring
+
+[花花酱](https://www.bilibili.com/video/BV1ZD4y1U79Y?spm_id_from=333.999.0.0)
+
+### 1546. Maximum Number of Non-Overlapping Subarrays With Sum
+
+[小梦想家](https://www.bilibili.com/video/BV1LA411n7L8?spm_id_from=333.999.0.0)
+
+### 1550. Three Consecutive Odds
+
+[小梦想家](https://www.bilibili.com/video/BV1aV411m7fy?spm_id_from=333.999.0.0)
+
+### 1553. Minimum Number of Days to Eat N Oranges
+
+[花花酱](https://www.bilibili.com/video/BV1Qf4y197Zk?spm_id_from=333.999.0.0)
+
+### 1556. Thousand Separator
+
+[小梦想家](https://www.bilibili.com/video/BV1Ka4y177HV?spm_id_from=333.999.0.0)
+
+### 1558. Minimum Numbers of Function Calls to Make Target
+
+[花花酱](https://www.bilibili.com/video/BV1xC4y1t7Q3?spm_id_from=333.999.0.0)
+
+### 1563. Stone Game V 
+
+[花花酱](https://www.bilibili.com/video/BV1B54y1U77f?spm_id_from=333.999.0.0)
+
+### 1569. Number of Ways to Reorder Array to Get Sa
+
+[花花酱](https://www.bilibili.com/video/BV1pZ4y1T7TY?spm_id_from=333.999.0.0)
+
+### 1573. Number of Ways to Split a String
+
+[花花酱](https://www.bilibili.com/video/BV1bi4y1u7c3?spm_id_from=333.999.0.0)
+
+### 1585. Check If String Is Transformable With
+
+[花花酱](https://www.bilibili.com/video/BV1a54y1m75Y?spm_id_from=333.999.0.0)
+
+### 1593. Split a String Into the Max Number of Unique Substri
+
+[花花酱](https://www.bilibili.com/video/BV14y4y1k77x?spm_id_from=333.999.0.0) 
+
+### 1595. Minimum Cost to Connect Two Groups of Points
+
+[花花酱](https://www.bilibili.com/video/BV1Xf4y1D7SW?spm_id_from=333.999.0.0)
+
+### 1621. Number of Sets of K Non-Overlapping Line
+
+[花花酱](https://www.bilibili.com/video/BV1JV411y7eK?spm_id_from=333.999.0.0)
+
+### 1631. Path With Minimum Effort
+
+[花花酱](https://www.bilibili.com/video/BV1tr4y1w725?spm_id_from=333.999.0.0)
+
+### 1642. Furthest Building You Can Reach
+
+[花花酱](https://www.bilibili.com/video/BV1az4y1C7Pk?spm_id_from=333.999.0.0)
+
+### 1648. Sell Diminishing-Valued Colored Balls
+
+[花花酱](https://www.bilibili.com/video/BV11z4y1C7PC?spm_id_from=333.999.0.0)
+
+### 1655. Distribute Repeating Integers
+
+[花花酱](https://www.bilibili.com/video/BV1qt4y1a7Lm?spm_id_from=333.999.0.0)
+
+### 1659. Maximize Grid Happiness
+
+[花花酱](https://www.bilibili.com/video/BV1kf4y1v7Js?spm_id_from=333.999.0.0)
+
+### 1674. Minimum Moves to Make Array Complement
+
+[花花酱](https://www.bilibili.com/video/BV1qz4y1k7Cm?spm_id_from=333.999.0.0)
+
+### 1675. Minimize Deviation in Array
+
+[花花酱](https://www.bilibili.com/video/BV15541157p6?spm_id_from=333.999.0.0)
+
+### 1681. Minimum Incompatibility
+
+[花花酱](https://www.bilibili.com/video/BV16p4y1z79z?spm_id_from=333.999.0.0)
+
+### 1690. Stone Game VII
+
+[花花酱](https://www.bilibili.com/video/BV1wf4y1e7xH?spm_id_from=333.999.0.0)
+
+### 1696. Jump Game VI
+
+[花花酱](https://www.bilibili.com/video/BV1554y1t7Tz?spm_id_from=333.999.0.0)
+
+### 1707. Maximum XOR With an Element From Array
+
+[花花酱](https://www.bilibili.com/video/BV13v411t742?spm_id_from=333.999.0.0)
+
+### 1713. Minimum Operations to Make a Subsequence
+
+[花花酱](https://www.bilibili.com/video/BV1Yy4y127DQ?spm_id_from=333.999.0.0)
+
+### 1727. Largest Submatrix With Rearrangements
+
+[花花酱](https://www.bilibili.com/video/BV1XT4y1N7gy?spm_id_from=333.999.0.0)
+
+### 1745. Palindrome Partitioning IV
+
+[花花酱](https://www.bilibili.com/video/BV1yo4y1R75T?spm_id_from=333.999.0.0)
+
+### 1760. Minimum Limit of Balls in a Bag
+
+[花花酱](https://www.bilibili.com/video/BV1bK4y1H7Ly?spm_id_from=333.999.0.0)
+
+### 1770. Maximum Score from Performing Multiplication
+
+[花花酱](https://www.bilibili.com/video/BV1Li4y1T7j6?spm_id_from=333.999.0.0)
+
+### 1771. Maximize Palindrome Length From Subsequences
+
+[花花酱](https://www.bilibili.com/video/BV1Cp4y1H7Xq?spm_id_from=333.999.0.0)
+
+### 1775. Equal Sum Arrays With Minimum Number of Operatio
+
+[花花酱](https://www.bilibili.com/video/BV1Di4y1T7nF?spm_id_from=333.999.0.0)
+
+### 1786. Number of Restricted Paths From First to Last Node
+
+[花花酱](https://www.bilibili.com/video/BV1Df4y147TB?spm_id_from=333.999.0.0)
+
+### 1792. Maximum Average Pass Ratio
+
+[花花酱](https://www.bilibili.com/video/BV1qb4y197zc?spm_id_from=333.999.0.0)
+
+### 1799. Maximize Score After N Operations
+
+[花花酱](https://www.bilibili.com/video/BV1Sf4y1x7Cy?spm_id_from=333.999.0.0)
+
+### 1815. Maximum Number of Groups Getting Fresh Donuts
+
+[花花酱](https://www.bilibili.com/video/BV1CU4y187tk?spm_id_from=333.999.0.0)
+
+### 1838. Frequency of the Most Frequent Element
+
+[花花酱](https://www.bilibili.com/video/BV1Ai4y1P7Yt?spm_id_from=333.999.0.0)
+
+### 1847. Closest Room
+
+[花花酱](https://www.bilibili.com/video/BV1cy4y1x7sz?spm_id_from=333.999.0.0)
+
+### 1872. Stone Game VIII
+
+[花花酱](https://www.bilibili.com/video/BV1vb4y1z7wx?spm_id_from=333.999.0.0)
+
+### s
