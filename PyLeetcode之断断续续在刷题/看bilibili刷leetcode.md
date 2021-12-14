@@ -154,6 +154,41 @@
 
 [官方](https://www.bilibili.com/video/BV1rv411k7VY?spm_id_from=333.999.0.0)
 
+暴力求解：
+
+* 时间复杂度:O(n2)
+
+* 时间复杂度:O(1)
+
+```py
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        for i in range(len(nums)-1):
+            for j in range(i+1,len(nums)):
+                if nums[i] + nums [j] == target:
+                    return [i,j]
+```
+
+查找表法:
+
+* 哈希表(不需要维护表的顺序性)
+
+* 平衡二叉搜素树
+
+* 时间复杂度:O(n)
+
+* 时间复杂度:O(n)
+
+```py
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        dic = {}
+        for i,n in enumerate(nums):
+            if n in dic:
+                return [dic[n],i]
+            dic[target - n] = i
+```
+
 ### 2. Add Two Numbers
 
 [花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
@@ -165,6 +200,40 @@
 [洛阳](https://www.bilibili.com/video/BV1rZ4y1j7V3?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1DA411L7YQ?spm_id_from=333.999.0.0)
+
+* 时间复杂度:O(max(m,n))
+
+* 时间复杂度:O(max(m,n))
+
+特殊情况：
+
+两个链表的长度不同。
+
+进位
+
+```py
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummy = pointer = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
+        carry = 0 # 易错点：carry需要先赋值
+        while l1 or l2 or carry: # 易错点：carry要存在
+            # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
+            # 易错点：调用listnode要有.val
+            sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            tail = sumNode % 10
+            carry = sumNode // 10
+            pointer.next = ListNode(tail)
+            pointer = pointer.next
+            # # l1,l2不一定存在，所以不能写成：l1 = l1.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+        return dummy.next
+```
 
 ### 3. 数组中重复的数字
 
@@ -182,6 +251,42 @@
 
 [官方](https://www.bilibili.com/video/BV1DK4y1b7xp?spm_id_from=333.999.0.0)
 
+方法一：暴力解法
+
+* 时间复杂度: 2个指针遍历字符串O(n2) + hashset判断是否重复O(n) = O(n3)
+
+* 时间复杂度: O(m), m 为所有可能出现的情况
+
+方法二：涉及 sub 的问题，可以使用 “滑动窗口”
+
+特殊情况：
+
+* 字符串为空
+  
+* 字符串均为重复字符串
+
+* 时间复杂度: O(n) + hashset判断是否重复O(n) = O(n3)
+
+* 时间复杂度: O(m), m 为所有可能出现的情况
+
+```py
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        dic = {}
+        start = 0
+        res = 0
+        for i, char in enumerate(s):
+            if char in dic and start <= dic[char]:
+                # 易错点: and start <= dic[char]: 
+                # 含义为"tmmzuxt",
+                # start在m，当有新的t进来时，上一个t在start的前面，所以，此时的start不需要修改
+                start = dic[char] + 1 # 易错点: 这里的dic[char]还是前一个,且 +1
+            else:
+                res = max(res,i-start+1) # 易错点: +1
+            dic[char] = i # 易错点: dic[char]滞后更新
+        return res
+```
+
 ### 4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays
 
 [官方](https://www.bilibili.com/video/BV1Xv411z76J?spm_id_from=333.999.0.0)
@@ -197,6 +302,36 @@
 [小明](https://www.bilibili.com/video/BV1so4y1o765?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1L54y1D7pa?spm_id_from=333.999.0.0)
+
+暴力解法：
+
+* 时间复杂度:O(n3),在两个for循环里面，还做了一次遍历
+
+* 时间复杂度:O(1)
+
+中心扩散法：
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4sfvjkqc4qo0.png)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6ur1lzo89kk0.png)
+
+* 时间复杂度:O(n2)
+
+* 时间复杂度:O(1)
+
+动态规划法：
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.67y5euem0vo0.png)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.90ngy2t8j3k.png)
+
+* 时间复杂度:O(n2)
+
+* 时间复杂度:O(n2)
+
+Manacher算法：
+
+不要求
 
 ### 6. ZigZag Conversion
 
