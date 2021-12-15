@@ -11,40 +11,35 @@
 
 # medium
 
-class Solution(object):
-    def longestPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        stringlenth = len(s)
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        lenStr = len(s)
 
-        maxlength,leftindex,rightindex = 0,0,0
-
-        for index in range(stringlenth): # range(4)生成0,1,2,3
-            # odd case
-            buffermaxodd = min(index+1,stringlenth-index)
-            for buffer in range(buffermaxodd):
-                if s[index-buffer] != s[index+buffer]:
-                    break
-                if 2*buffer + 1 > maxlength :
-                    maxlength = 2 * buffer + 1
-                    leftindex = index-buffer
-                    rightindex = index+buffer
-
-            # even case
-            buffermaxeven = min(index+1,stringlenth-index-1)
-            if index+1 < stringlenth and s[index] == s[index+1]:
-                for buffer in range(buffermaxeven):
-                    if s[index-buffer] != s[index+buffer+1]:
-                        break
-                    if 2 * buffer + 2 > maxlength :
-                        maxlength = 2*buffer +2
-                        leftindex = index-buffer
-                        rightindex = index+buffer+1
+        if lenStr == 1:
+            return s
 
 
-        return s[leftindex:rightindex+1]
+        def getLen(l,r) -> int:
+            while l>=0 and r<lenStr and s[l] == s[r]: # 注意：边界
+                l -= 1
+                r += 1
+            return r - l - 1 # 注意：是 “-1”
+
+        start = 0  
+        end = 1 # 注意：在第一次的时候，end = 1
+        maxmaxLen = maxLen = 1
+
+        for mid in range(lenStr):
+            maxLen = max(getLen(mid,mid),getLen(mid,mid+1))
+            
+            if maxLen > maxmaxLen:
+                maxmaxLen = maxLen
+                start = mid - (maxLen-1) // 2 #易错点：-1，最好背一背
+                end = start + maxLen
+        return s[start:end]
+
+
+
 
 if __name__ == "__main__":
 	s = Solution()

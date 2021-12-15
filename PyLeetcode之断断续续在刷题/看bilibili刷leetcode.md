@@ -235,11 +235,9 @@ class Solution:
         return dummy.next
 ```
 
-### 3. 数组中重复的数字
+### 3. 数组中重复的数字 Longest Substring Without Repeating Characters
 
 [哈哈哈](https://www.bilibili.com/video/BV1h54y1B7No?spm_id_from=333.999.0.0)
-
-### 3. Longest Substring Without Repeating Characters
 
 [花花酱](https://www.bilibili.com/video/BV1CJ411G7Nn?spm_id_from=333.999.0.0)
 
@@ -319,6 +317,79 @@ class Solution:
 
 * 时间复杂度:O(1)
 
+```py
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        strLen = len(s)
+        if strLen == 1:
+            return s
+
+        mid = 0
+        strStart = strEnd = 0
+        maxLen = 1
+
+
+
+        while mid < strLen:
+
+            # 优化：
+            if strLen - mid <= maxLen/2:
+                break
+
+            start = end = mid
+            
+            # 第一步：
+            while end + 1 < strLen and s[end] == s[end+1]: # 注意边界
+                end += 1
+
+            # 第二步：
+            while  end + 1 < strLen and start > 0 and s[start-1] == s[end+1]: # 注意边界
+                start -= 1
+                end += 1
+            
+            # 第三步：
+            if end - start + 1 > maxLen:
+                maxLen = end - start + 1
+                strStart = start
+                strEnd = end
+
+            mid += 1
+
+        return s[strStart:strEnd+1]
+```
+
+```py
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        lenStr = len(s)
+
+        if lenStr == 0:
+            return ''
+
+        if lenStr == 1:
+            return s
+
+
+        def getLen(l,r) -> int:
+            while l>=0 and r<lenStr and s[l] == s[r]: # 注意：边界
+                l -= 1
+                r += 1
+            return r - l - 1 # 注意：是 “-1”
+
+        start = 0  
+        end = 1 # 注意：在第一次的时候，end = 1
+        maxmaxLen = maxLen = 1
+
+        for mid in range(lenStr):
+            maxLen = max(getLen(mid,mid),getLen(mid,mid+1))
+            
+            if maxLen > maxmaxLen:
+                maxmaxLen = maxLen
+                start = mid - (maxLen-1) // 2 #易错点：-1，最好背一背
+                end = start + maxLen
+        return s[start:end]
+```
+
 动态规划法：
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.67y5euem0vo0.png)
@@ -328,6 +399,39 @@ class Solution:
 * 时间复杂度:O(n2)
 
 * 时间复杂度:O(n2)
+
+```py
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        lenStr = len(s)
+        maxlen = maxmaxlen = 1
+        start = 0
+
+        if lenStr == 0:
+            return ''
+
+        if lenStr == 1:
+            return s
+
+        dp = [[False for _ in range(lenStr)] for _ in range(lenStr)]
+        for i in range(lenStr):
+            dp[1][1] = True 
+            # dp[1][1]是正确写法，dp[1,1]是错误写法
+
+        for j in range(1,lenStr): # 把三角形画出来，先j，再i，
+            for i in range(j):
+                if s[i] == s[j]:
+                    if j-i < 3:
+                        dp[i][j] = True
+                    else:
+                        dp[i][j] = dp[i+1][j-1]
+                if dp[i][j]:
+                    maxlen = j-i+1
+                    if maxlen > maxmaxlen:
+                        maxmaxlen = maxlen
+                        start = i
+        return s[start:start+maxmaxlen]
+```
 
 Manacher算法：
 
@@ -343,11 +447,76 @@ Manacher算法：
 
 [小梦想家](https://www.bilibili.com/video/BV1Jb411i7bM?spm_id_from=333.999.0.0)
 
+* 时间复杂度:O(log10(n)), 每次迭代都会除以10
+
+* 时间复杂度:O(1)
+
+```py
+class Solution:
+    def reverse(self, x: int) -> int:
+        res = 0 
+        a = abs(x)
+
+        if a < 10:
+            return x
+
+        while a != 0:
+            tmp = a % 10
+            res = res * 10 + tmp
+            a = a // 10
+        # 要注意return和while的相对位置
+        # 不要写在while循环内部
+
+        if x > 0 and res < 1<<31:
+            return res 
+        elif x<0 and res <= 1<<31:
+            return -res
+        else:
+            return 0
+```
+
 ### 8. String to Integer(atoi)
 
 [小梦想家](https://www.bilibili.com/video/BV1Cb411e7pz?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1AZ4y1s7TD?spm_id_from=333.999.0.0)
+
+* 时间复杂度:O(n)
+
+* 时间复杂度:O(1)
+
+|模式|描述|
+|---|---|
+|^|匹配字符串的开头|
+|[...]|用来表示一组字符,单独列出：[amk] 匹配 'a'，'m'或'k'|
+|*|匹配0个或多个的表达式。|
+|?|匹配0个或1个由前面的正则表达式定义的片段，非贪婪方式|
+|+|匹配1个或多个的表达式。|
+|\d|匹配任意数字，等价于 [0-9]。|
+|\D|匹配任意非数字，等价于 [^0-9]。|
+
+[正则表达式中小括号、中括号、大括号的作用](https://blog.csdn.net/weixin_45621662/article/details/103921232)
+
+```py
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        import re
+        at_oi_re = re.compile('^[ ]*([+-]?\d+)')
+        # 易错点：要注意中括号[]和小括号()的区别
+        # 易错点：要注意小括号()的位置，小括号的作用是匹配并提取，所以+-要包括起来
+        # 易错点：不能漏掉*？
+
+        # 字符串的 开头 匹配 0个或多个[空格]
+        # 匹配 0个或多个[+-]
+        # 匹配 0个或多个[0-9]
+        if not at_oi_re.search(s):
+            return 0
+        res = int(at_oi_re.findall(s)[0])
+        # 易错点：findall返回一个列表，所以必须有[0]
+        # 易错点：必须有int()
+        return min(max(res, -(1<<31)), (1<<31) - 1) # 在两者之间，背一背
+        # 要加小括号(1<<31)
+```
 
 ### 9-Palindrome
 
@@ -356,6 +525,61 @@ Manacher算法：
 [小梦想家](https://www.bilibili.com/video/BV1Jb411i7YG?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Af4y1m7kk?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        return True if str(x) == str(x)[::-1] else False
+```
+
+```py
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0:
+            return False
+
+        if x < 10:
+            return True
+
+        bkp = x
+        res = 0
+
+        while x != 0:
+            tmp = x % 10
+            res = res*10 + tmp
+            x //= 10
+
+        return bkp == res
+```
+
+翻转一半字符法：
+
+* 时间复杂度:O(log10(n)), 每次迭代都会除以10
+
+* 时间复杂度:O(1)
+
+经过尝试，这个方法在边界处理上容易出错，不推荐。
+
+```py
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 10 and x >= 0:
+            return True
+
+        if x < 0 or x % 10 == 0:
+            return False
+
+        res = 0
+
+        # 翻转一半字符串
+
+        while x > res:
+            tmp = x % 10
+            res = res*10 + tmp
+            x //= 10
+
+        return x == res or x == res//10
+```
 
 ### 11. Container With Most Water 
 
@@ -367,11 +591,92 @@ Manacher算法：
 
 [官方](https://www.bilibili.com/video/BV1TK41157jH?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def maxArea(self, height):
+        left, right = 0, len(height) - 1
+        water = 0
+        while left < right:
+            area = min(height[left], height[right]) * (right - left)
+            water = max(water, area)
+            if height[left] <= height[right]:  # 移动较小的那一端
+                left += 1
+            else:
+                right -= 1
+        return water
+```
+
+```py
+# python 版本： 思路：双指针，盛水面积取决于低的那块板，所以每次只移动低的那边。
+
+class Solution:
+    def maxArea(self, height):
+        i, j, res = 0, len(height)-1,  0# 最小值
+        while i < j:
+            res = max(res, (j - i) * min(height[j], height[i]))
+            if height[j] > height[i]:
+                i += 1
+            else:
+                j -= 1
+        return res
+```
+
 ### 12. Integer to Roman
 
 [小梦想家](https://www.bilibili.com/video/BV1Lb411x7Wf?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1hN411Q7ka?spm_id_from=333.999.0.0)
+
+```py
+# 根据评论里大佬代码写的，牛皮
+# 枚举1954
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        list1=[1000,900,500,400,100,90,50,40,10,9,5,4,1]
+        list2=['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I']
+        resultStr=""
+        for i in range(len(list1)):
+            while num>=list1[i]:
+                print("-"*20)
+                print(num)
+                resultStr+=list2[i]
+                print(resultStr)
+                num-=list1[i]
+        return resultStr
+```
+
+```py
+class Solution:
+
+    VALUE_SYMBOLS = [
+        (1000, "M"),
+        (900, "CM"),
+        (500, "D"),
+        (400, "CD"),
+        (100, "C"),
+        (90, "XC"),
+        (50, "L"),
+        (40, "XL"),
+        (10, "X"),
+        (9, "IX"),
+        (5, "V"),
+        (4, "IV"),
+        (1, "I"),
+    ]
+    print(type(VALUE_SYMBOLS))
+    def intToRoman(self, num: int) -> str:
+        roman = list()
+        for value, symbol in Solution.VALUE_SYMBOLS:
+            while num >= value:
+                print("-"*20)
+                print(num)
+                num -= value
+                roman.append(symbol)
+                print(roman)
+            if num == 0:
+                break
+        return "".join(roman)
+```
 
 ### 13. 机器人的运动范围 
 
@@ -409,6 +714,71 @@ Manacher算法：
 
 [小梦想家](https://www.bilibili.com/video/BV11441187Rr?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        '''
+            题目: 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。
+            找出 nums 中的三个整数，使得它们的和与 target 最接近。
+            返回这三个数的和。假定每组输入只存在唯一答案
+        '''
+        nums = sorted(nums)
+        res = sum(nums[0:3])
+        for i in range(len(nums)-1):
+            l, r = i+1, len(nums) - 1
+            while l < r:
+                total = nums[i] + nums[l] + nums[r]
+                if total < target:
+                    l += 1
+                elif total > target:
+                    r -= 1
+                elif total == target:
+                    return total
+
+                if abs(res-target) > abs(total-target):
+                    res = total
+        return res
+```
+
+```py
+# （python）排序+双指针 O(n**2)
+
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        n=len(nums)
+        ans=float("inf")
+        for i in range(n-1):
+            left,right=i+1,n-1 
+            while left<right:
+                sum=nums[i]+nums[left]+nums[right]
+                if abs(sum-target)<abs(ans-target):
+                    ans=sum 
+                if sum>target:
+                    right-=1
+                elif sum<target:
+                    left+=1
+                else:
+                    return ans 
+        return ans
+```
+
+```py
+# （python）三重暴力破解 O(n**3)
+
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        result=1000
+        for i in range(0,len(nums)):
+            for j in range(i+1,len(nums)):
+                for k in range(j+1,len(nums)):
+                    a=nums[i]+nums[j]+nums[k]-target
+                    if abs(a) < result:
+                        result=abs(a)
+                        end=nums[i]+nums[j]+nums[k]
+        return end
+```
+
 ### 17. Letter Combinations of a Phone Number 
 
 [花花酱](https://www.bilibili.com/video/BV1PW411y7r2?spm_id_from=333.999.0.0)
@@ -418,6 +788,27 @@ Manacher算法：
 [小明](https://www.bilibili.com/video/BV1Ti4y1A73M?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Sp4y1r7YP?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def letterCombinations(self, digits):
+        if not digits:
+            return list()
+        
+        phoneMap = {
+            "2": "abc",
+            "3": "def",
+            "4": "ghi",
+            "5": "jkl",
+            "6": "mno",
+            "7": "pqrs",
+            "8": "tuv",
+            "9": "wxyz",
+        }
+
+        groups = (phoneMap[digit] for digit in digits)
+        return ["".join(combination) for combination in itertools.product(*groups)]
+```
 
 ### 19-Remove Nth Node From End of List
 
@@ -430,6 +821,52 @@ Manacher算法：
 [官方](https://www.bilibili.com/video/BV1KK4y1E7st?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Z5411c79y?spm_id_from=333.999.0.0)
+
+```py
+class Solution14:
+    def FindKthToTail(self, head, k):
+        # write code here
+        if head == None or k <= 0:
+            return None
+        
+        node = head
+        dummy = None
+        
+        for i in range(k-1):
+            if node.next != None:
+                node = node.next
+            else:
+                return None
+            
+        dummy = head
+        while node.next != None:
+            node = node.next
+            dummy = dummy.next
+        return dummy
+```
+
+```py
+class Solution19(object):
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+        """
+        dummy = ListNode(-1)
+        dummy.next = head
+        p, q = dummy, dummy
+        
+        for i in range(n):
+            q = q.next
+            
+        while q.next:
+            p = p.next
+            q = q.next
+        
+        p.next = p.next.next
+        return dummy.next
+```
 
 ### 20-Valid parentheses
 
