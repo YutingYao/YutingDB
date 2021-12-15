@@ -591,34 +591,38 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1TK41157jH?spm_id_from=333.999.0.0)
 
+暴力解法：
+
+* 时间复杂度:O(n2)
+
+* 时间复杂度:O(1)
+
+双指针法：
+
+由于盛水面积由较短边控制，所以，指针放在两端，每次只移动较短边。因为，移动较长边的话。一定仍然是不变的。
+
+* 时间复杂度:O(n)
+
+* 时间复杂度:O(1)
+
+
+
 ```py
+# 这个写起来超级简单！
+# NO BUG
 class Solution:
-    def maxArea(self, height):
-        left, right = 0, len(height) - 1
-        water = 0
+    def maxArea(self, height: List[int]) -> int:
+        left = 0
+        right = len(height)-1
+        maxRes = res = 0
         while left < right:
-            area = min(height[left], height[right]) * (right - left)
-            water = max(water, area)
-            if height[left] <= height[right]:  # 移动较小的那一端
+            res = (right - left)*min(height[left],height[right])
+            if height[left] < height[right]:
                 left += 1
             else:
                 right -= 1
-        return water
-```
-
-```py
-# python 版本： 思路：双指针，盛水面积取决于低的那块板，所以每次只移动低的那边。
-
-class Solution:
-    def maxArea(self, height):
-        i, j, res = 0, len(height)-1,  0# 最小值
-        while i < j:
-            res = max(res, (j - i) * min(height[j], height[i]))
-            if height[j] > height[i]:
-                i += 1
-            else:
-                j -= 1
-        return res
+            maxRes = max(maxRes,res)
+        return maxRes
 ```
 
 ### 12. Integer to Roman
@@ -628,24 +632,22 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1hN411Q7ka?spm_id_from=333.999.0.0)
 
 ```py
-# 根据评论里大佬代码写的，牛皮
-# 枚举1954
+# 这个写起来超级简单！
+# NO BUG
 class Solution:
     def intToRoman(self, num: int) -> str:
-        list1=[1000,900,500,400,100,90,50,40,10,9,5,4,1]
-        list2=['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I']
-        resultStr=""
-        for i in range(len(list1)):
-            while num>=list1[i]:
-                print("-"*20)
-                print(num)
-                resultStr+=list2[i]
-                print(resultStr)
-                num-=list1[i]
-        return resultStr
+        strlist = ["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"]
+        numlist = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
+        res = ''
+        for i in range(len(numlist)):
+            while num >= numlist[i]:
+                num -= numlist[i]
+                res = res + strlist[i]
+        return res
 ```
 
 ```py
+# 其他方法
 class Solution:
 
     VALUE_SYMBOLS = [
@@ -692,6 +694,21 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1cp4y1H75L?spm_id_from=333.999.0.0)
 
+```py
+# 看不懂下方代码，就看小明的讲解
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        dic = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}
+        res = 0
+        for i in range(len(s)-1):
+            if dic[s[i]] < dic[s[i+1]]:
+                res -= dic[s[i]]
+            else:
+                res += dic[s[i]]
+        res += dic[s[-1]]
+        return res
+```
+
 ### 14-Longest common prefix
 
 [哈哈哈](https://www.bilibili.com/video/BV1cJ411D7qU?spm_id_from=333.999.0.0)
@@ -699,6 +716,51 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Eb411i7QN?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1tV411k7GY?spm_id_from=333.999.0.0)
+
+* 时间复杂度:O(mn),m是字符串平均长度,n是字符串数量
+
+* 时间复杂度:O(1)
+
+```py
+# 参考了小梦想家,首次学习while true循环:
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        lookup = set()
+        res = ''
+        i = 0
+        while True:
+            # 由于string的长度是不确定的，所以
+            try:
+                lookup = set(string[i] for string in strs)
+                if len(lookup) == 1:
+                    res += lookup.pop()
+                    i += 1
+                else:
+                    break
+            except Exception as e:
+                break
+        return res
+```
+
+```py
+# 如果不使用try catch
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        if strs == [""]:
+            return strs[0]
+        lookup = set()
+        res = ''
+        i = 0
+        minlen = min(len(string) for string in strs)
+        while i< minlen:
+            lookup = set(string[i] for string in strs)
+            if len(lookup) == 1:
+                res += lookup.pop()
+                i += 1
+            else:
+                break
+        return res
+```
 
 ### 15. 3Sum
 
