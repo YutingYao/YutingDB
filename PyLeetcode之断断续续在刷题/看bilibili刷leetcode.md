@@ -772,57 +772,76 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV19i4y1s7VZ?spm_id_from=333.999.0.0)
 
+暴力解法：
+
+* 时间复杂度:O(n3)
+
+* 时间复杂度:O(1)
+
+双指针法：
+
+先排序：时间复杂度:O(n log(n)) + O(n2)
+
+```py
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        # nums.sort() # 另一种写法
+        nums = sorted(nums)
+        res = []
+        for i in range(n-2):
+            # 优化部分：
+            if nums[i] > 0: break
+            if nums[i] + nums[i+1] + nums[i+2] > 0: break
+            # 这个写法不对：if i+1 < n-2 and nums[i] == nums[i+1]: continue
+            # 这样可能直接跳过了[-1,-1,2,3]的前三个
+            # 这个写法是正确的↓：
+            if i - 1 >= 0 and nums[i] == nums[i-1]: continue
+            if nums[i] + nums[n-2] + nums[n-1] < 0:continue
+            # 双指针部分：
+            left = i + 1
+            right = n - 1
+            while left < right: 
+                if nums[i] + nums[left] + nums[right] > 0:
+                    right -= 1
+                elif nums[i] + nums[left] + nums[right] < 0:
+                    left += 1
+                else:
+                    res.append([nums[i],nums[left],nums[right]])
+                    # 去重：
+                    while nums[left] == nums[left + 1] and left + 1 < right: # 注意边界
+                        left += 1
+                    left +=1
+                    while nums[right] == nums[right - 1] and left < right - 1: # 注意边界
+                        right -= 1
+                    right -=1
+        return res
+```
+
 ### 16. 3Sum Closest
 
 [小梦想家](https://www.bilibili.com/video/BV11441187Rr?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def threeSumClosest(self, nums: List[int], target: int) -> int:
-        '''
-            题目: 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。
-            找出 nums 中的三个整数，使得它们的和与 target 最接近。
-            返回这三个数的和。假定每组输入只存在唯一答案
-        '''
-        nums = sorted(nums)
-        res = sum(nums[0:3])
-        for i in range(len(nums)-1):
-            l, r = i+1, len(nums) - 1
-            while l < r:
-                total = nums[i] + nums[l] + nums[r]
-                if total < target:
-                    l += 1
-                elif total > target:
-                    r -= 1
-                elif total == target:
-                    return total
-
-                if abs(res-target) > abs(total-target):
-                    res = total
-        return res
-```
-
-```py
-# （python）排序+双指针 O(n**2)
-
+# 和上一题差不多
 class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         nums.sort()
-        n=len(nums)
-        ans=float("inf")
-        for i in range(n-1):
-            left,right=i+1,n-1 
+        minAim = sum(nums[0:3]) - target
+        n = len(nums)
+        for i in range(n-2):
+            left = i+1
+            right = n-1
             while left<right:
-                sum=nums[i]+nums[left]+nums[right]
-                if abs(sum-target)<abs(ans-target):
-                    ans=sum 
-                if sum>target:
-                    right-=1
-                elif sum<target:
-                    left+=1
+                aim = nums[i] + nums[left] + nums[right] - target
+                if abs(aim) < abs(minAim): minAim = aim
+                if aim == 0: 
+                    return target
+                elif aim > 0:
+                    right -= 1
                 else:
-                    return ans 
-        return ans
+                    left += 1
+        return minAim + target
 ```
 
 ```py
@@ -850,6 +869,24 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Ti4y1A73M?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Sp4y1r7YP?spm_id_from=333.999.0.0)
+
+深度优先 or 广度优先
+
+* 时间复杂度:O(3m × 4n), m是对应3个字母的数字, n是对应4个字母的数字
+
+* 时间复杂度:O(3m × 4n), m是对应3个字母的数字, n是对应4个字母的数字
+
+```py
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if not digits: # 易错点：一定要判断判断字符串是否为空
+            return [] 
+        dic = {'2':'abc','3':'def','4':'ghi','5':'kjl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz'}
+        res = [char for char in dic[digits[0]]] # 前面的排在前面
+        for num in digits[1:]:
+            res = [string + char for string in res for char in dic[num]]
+        return res
+```
 
 ```py
 class Solution:
@@ -884,50 +921,36 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Z5411c79y?spm_id_from=333.999.0.0)
 
-```py
-class Solution14:
-    def FindKthToTail(self, head, k):
-        # write code here
-        if head == None or k <= 0:
-            return None
-        
-        node = head
-        dummy = None
-        
-        for i in range(k-1):
-            if node.next != None:
-                node = node.next
-            else:
-                return None
-            
-        dummy = head
-        while node.next != None:
-            node = node.next
-            dummy = dummy.next
-        return dummy
-```
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6ccdr2kcw7c0.png)
 
 ```py
-class Solution19(object):
-    def removeNthFromEnd(self, head, n):
-        """
-        :type head: ListNode
-        :type n: int
-        :rtype: ListNode
-        """
-        dummy = ListNode(-1)
-        dummy.next = head
-        p, q = dummy, dummy
-        
-        for i in range(n):
-            q = q.next
-            
-        while q.next:
-            p = p.next
-            q = q.next
-        
-        p.next = p.next.next
-        return dummy.next
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        fast = ListNode(0)
+        slow = ListNode(0)
+        fast.next = head
+        slow.next = head
+        for _ in range(n):
+            fast = fast.next
+
+        # 易错点：
+        # 要考虑特殊情况，比如说，链表长度和n一样时
+
+        if fast.next == None: # 易错点：== 千万不要写错
+            return head.next
+
+        while fast.next != None:
+            fast = fast.next
+            slow = slow.next
+
+        slow.next = slow.next.next
+
+        return head
 ```
 
 ### 20-Valid parentheses
@@ -942,6 +965,28 @@ class Solution19(object):
 
 [官方](https://www.bilibili.com/video/BV1QA411L7y7?spm_id_from=333.999.0.0)
 
+先进后出，所以用栈
+
+* 时间复杂度:O(n)
+
+* 时间复杂度:O(n))
+
+```py
+# 这道题背一背！
+class Solution:
+    def isValid(self, s: str) -> bool:
+        dic = {'{':'}','[':']','(':')'}
+        stack = [] # stack 要提前定义好
+        for char in s:
+            if char in dic: # 是“key”
+                stack.append(char) # 一个char进来，要么被append
+            elif not stack or dic[stack.pop()] != char: 
+                # 如果上一步不被append就是不对的
+                # 如果这一步不匹配也是不对的
+                return False
+        return not stack # 如果append上了，但没有被完全pop也是不对的
+```
+
 ### 21-Merge two sorted lists
 
 [哈哈哈](https://www.bilibili.com/video/BV1rJ41127ry?spm_id_from=333.999.0.0)
@@ -954,11 +999,179 @@ class Solution19(object):
 
 [官方](https://www.bilibili.com/video/BV1ck4y1k7J9?spm_id_from=333.999.0.0)
 
+```py
+class Solution21(object):
+    def mergeTwoLists(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        if l1 == None:
+            return l2
+        if l2 == None:
+            return l1
+        
+        dummy = ListNode(-1)
+        cur = dummy
+        
+        while l1 and l2:
+            if l1.val < l2.val:
+                cur.next = l1
+                l1 = l1.next
+            else:
+                cur.next = l2
+                l2 = l2.next
+            cur = cur.next
+        
+        if l1:
+            cur.next = l1
+        else:
+            cur.next = l2
+        return dummy.next
+```
+
+```py
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        if l1 is None:
+            return l2
+        elif l2 is None:
+            return l1
+        elif l1.val < l2.val:
+            l1.next = self.mergeTwoLists(l1.next, l2)
+            return l1
+        else:
+            l2.next = self.mergeTwoLists(l1, l2.next)
+            return l2
+```
+
 ### 22. Generate Parentheses
 
 [小梦想家](https://www.bilibili.com/video/BV1hb411i7t7?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1vK4y1b744?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def generateParenthesis(self, n):
+        ans = []
+        def backtrack(S, left, right):
+            if len(S) == 2 * n:
+                ans.append(''.join(S))
+                return
+            if left < n:
+                S.append('(')
+                backtrack(S, left+1, right)
+                S.pop()
+            if right < left:
+                S.append(')')
+                backtrack(S, left, right+1)
+                S.pop()
+
+        backtrack([], 0, 0)
+        return ans
+```
+
+```py
+# 头皮发麻。我感觉我是天才，你们不知道用最基本的单位“()”进行组装吗。绝对是原创一次过
+
+class Solution:
+    def generateParenthesis(self, n):
+        if n == 1:
+            return list({'()'})
+        res = set()
+        for i in self.generateParenthesis(n - 1):
+            for j in range(len(i) + 2):
+                res.add(i[0:j] + '()' + i[j:])
+        return list(res)
+```
+
+```py
+# python版递归思路：
+class Solution:
+    def generateParenthesis(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        res = []
+
+        def dfs(s, left, right):
+            if left == n == right:
+                # 终止条件是括号数都是n
+                res.append(s)
+                return
+            if right <= left <= n:
+                # 如果左边的括号数大于右边的括号数且小于n则可以继续递归
+                # 只要满足上述条件就一定还有分支有解
+                dfs(s + '(', left+1, right)
+                dfs(s + ')', left, right + 1)
+        dfs('', 0, 0)
+        return res
+```
+
+```py
+class Solution:
+    def generateParenthesis(self, n):
+        # (parentheses, #left, #right)
+        stack=[('',0,0)]
+        ans=[]
+        while stack:
+            p,left,right=stack.pop()
+            if left==right==n:
+                ans.append(p)
+                continue
+            
+            if left<n:
+                stack.append((p+'(',left+1,right))
+            if right<n and right<left:
+                stack.append((p+')',left,right+1))
+        return ans
+```
+
+```py
+class Solution:
+    def generateParenthesis(self, n):
+        if n == 0:
+            return [""]
+        elif n == 1:
+            return ["()"]
+        elif n == 2:
+            return ["()()", "(())"]
+        result = []
+        for i in range(n):
+            j = n - 1 - i
+            temp1 = self.generateParenthesis(i)
+            temp2 = self.generateParenthesis(j)
+            result.extend(["(%s)%s" % (p, q) for p in temp1 for q in temp2])
+        return result
+# 请问兄弟是怎么想出来的，太厉害了吧！
+# result.extend(["(%s)%s" % (p, q) for p in temp1 for q in temp2]) 这句是什么意思呀？大佬们帮忙解答一下好吗？小白看不懂
+# 不好意思才刚刚注意到，%是格式化字符串输出，extend是把结果凑起来。这行代码干的事其实是递归生成括号。
+# 如果把所有的情况分解拆开，发现最底层的形式无非n=0, 1, 2这三种情况，那么我们其实可以让括号一层一层包裹起来。这行代码其实就是一层一层包裹括号。
+# for循环里面存在重复计算吧，比如说n=7的时候，i=2,j=4计算了2和4个括号的全排列，i=4，j=2的时候又计算了一遍，其实可以只计算一半，然后全排列的时候p和q调一下位置就行了。
+```
+
+```py
+# 不懂是不是动态规划，每新增一对括号，就是在上一次的结果的各个位置插入一个"()"，用集合防止重复
+
+class Solution:
+    def generateParenthesis(self, n):
+        result = {''}
+        for i in range(n):
+            temp = set()
+            for s in result:  # 在上一次的结果的所有字符串的各个位置上插入'()'
+                for j in range(len(s) + 1):
+                    temp.add(s[:j] + '()' + s[j:])
+            result = temp
+        return list(result)
+```
 
 ### 23. Merge k Sorted Lists
 
@@ -967,6 +1180,29 @@ class Solution19(object):
 [小明](https://www.bilibili.com/video/BV1Ty4y1178e?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1GK41157mu?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        import heapq
+        h = []
+        for lst_head in lists:
+            if lst_head:
+                heapq.heappush(h, (lst_head.val, lst_head))
+        cur = ListNode(-1)
+        dummy = cur
+        while h:
+            smallest_node = heapq.heappop(h)[1]
+            cur.next = smallest_node
+            cur = cur.next
+            if smallest_node.next:
+                heapq.heappush(h, (smallest_node.next.val, smallest_node.next))
+        return dummy.next
+```
 
 ### 24-Swap Nodes in Pairs
 
@@ -978,6 +1214,72 @@ class Solution19(object):
 
 [洛阳](https://www.bilibili.com/video/BV1VC4y1s75E?spm_id_from=333.999.0.0)
 
+```py
+class Solution(object):
+    def swapPairs(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return None
+        if not head.next:
+            return head
+        tmp = head.next
+        head.next = self.swapPairs(head.next.next)
+        tmp.next = head
+        return tmp
+```
+
+```py
+# 方法一：递归
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        newHead = head.next
+        head.next = self.swapPairs(newHead.next)
+        newHead.next = head
+        return newHead
+```
+
+```py
+# 方法二：迭代
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        dummyHead = ListNode(0)
+        dummyHead.next = head
+        temp = dummyHead
+        while temp.next and temp.next.next:
+            node1 = temp.next
+            node2 = temp.next.next
+            temp.next = node2
+            node1.next = node2.next
+            node2.next = node1
+            temp = node1
+        return dummyHead.next
+```
+
+```py
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        res = ListNode(next=head)
+        pre = res
+        
+        # 必须有pre的下一个和下下个才能交换，否则说明已经交换结束了
+        while pre.next and pre.next.next:
+            cur = pre.next
+            post = pre.next.next
+            
+            # pre，cur，post对应最左，中间的，最右边的节点
+            cur.next = post.next
+            post.next = cur
+            pre.next = post
+
+            pre = pre.next.next
+        return res.next
+```
+
 ### 26-Remove duplicates from sorted array
 
 [哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
@@ -985,6 +1287,43 @@ class Solution19(object):
 [小梦想家](https://www.bilibili.com/video/BV1hb411i77e?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV13V41177Mq?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        if n == 0: return 0
+        left = 0
+        for right in range(1, n):
+            if nums[right] != nums[left]:
+                left += 1
+                nums[left] = nums[right]
+        return left + 1
+```
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.xxd39w8j94g.png" width="30%">
+
+```py
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        i = 0
+        while i < (len(nums) - 1):
+            if nums[i] == nums[i+1]:
+                nums.remove(nums[i])
+            else:
+                i += 1
+        return len(nums)
+```
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6zs7v6d4w740.png" width="60%">
 
 ### 27-python-Remove element
 
