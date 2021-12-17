@@ -1324,6 +1324,24 @@ class Solution:
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.65tcjjz2oy80.png" width="50%">
 
+```py
+# so easy，一遍过
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        arr = []
+        for listhead in lists:
+            while listhead:
+                arr.append(listhead.val)
+                listhead = listhead.next
+        arr.sort()
+        dummy = ListNode(0)
+        cur = dummy
+        for value in arr:
+            cur.next = ListNode(value)
+            cur = cur.next
+        return dummy.next
+```
+
 优先队列：
 
 * 时间复杂度: O(N logk) 
@@ -1331,6 +1349,26 @@ class Solution:
 * 空间复杂度: O(N) + O(1)
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
+
+```py
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        q = []  # 易错点：先要定义一个空
+        dummy = ListNode(0)
+        cur = dummy
+        for i in range(len(lists)):
+            if lists[i]:
+                heapq.heappush(q,(lists[i].val,i))  # 易错点：要可以排序的
+                lists[i] = lists[i].next # 易错点：注意，向后一位
+        while q: # 易错点：注意这个循环条件
+            val, idx = heapq.heappop(q)
+            cur.next = ListNode(val)
+            cur = cur.next
+            if lists[idx]:
+                heapq.heappush(q,(lists[idx].val,idx))
+                lists[idx] = lists[idx].next # 易错点：注意，向后一位
+        return dummy.next
+```
 
 两两合并：
 
@@ -1341,26 +1379,29 @@ class Solution:
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
 
 ```py
-class Solution(object):
-    def mergeKLists(self, lists):
-        """
-        :type lists: List[ListNode]
-        :rtype: ListNode
-        """
-        import heapq
-        h = []
-        for lst_head in lists:
-            if lst_head:
-                heapq.heappush(h, (lst_head.val, lst_head))
-        cur = ListNode(-1)
-        dummy = cur
-        while h:
-            smallest_node = heapq.heappop(h)[1]
-            cur.next = smallest_node
-            cur = cur.next
-            if smallest_node.next:
-                heapq.heappush(h, (smallest_node.next.val, smallest_node.next))
+class Solution:
+    def merge2Lists(self, list1, list2):
+        dummy = ListNode(0)
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 这里是and
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
         return dummy.next
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
+        amount = len(lists)
+        interval = 1
+        while amount > interval:
+            for i in range(0,amount-interval,2*interval):
+                lists[i] = self.merge2Lists(lists[i], lists[i+interval]) # 易错点：方括号和小括号不要用错
+            interval *= 2
+        return lists[0] if amount>0 else None
 ```
 
 ### 24-Swap Nodes in Pairs
@@ -1374,12 +1415,16 @@ class Solution(object):
 [洛阳](https://www.bilibili.com/video/BV1VC4y1s75E?spm_id_from=333.999.0.0)
 
 ```py
+# 方法一：递归
 class Solution(object):
     def swapPairs(self, head):
         """
         :type head: ListNode
         :rtype: ListNode
         """
+        # 这样写也可以：
+        # if not head or not head.next:
+        #     return head
         if not head:
             return None
         if not head.next:
@@ -1387,56 +1432,28 @@ class Solution(object):
         tmp = head.next
         head.next = self.swapPairs(head.next.next)
         tmp.next = head
-        return tmp
-```
-
-```py
-# 方法一：递归
-class Solution:
-    def swapPairs(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        newHead = head.next
-        head.next = self.swapPairs(newHead.next)
-        newHead.next = head
-        return newHead
-```
+        return tmp # 易错点：注意，新的头已经变成了tmp
+``` 
 
 ```py
 # 方法二：迭代
 class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
-        dummyHead = ListNode(0)
-        dummyHead.next = head
-        temp = dummyHead
-        while temp.next and temp.next.next:
-            node1 = temp.next
-            node2 = temp.next.next
-            temp.next = node2
-            node1.next = node2.next
-            node2.next = node1
-            temp = node1
-        return dummyHead.next
-```
+        dummy = ListNode(0)
+        dummy.next = head # 易错点：这句话不要漏
+        cur = dummy
+        while cur.next and cur.next.next:
 
-```py
-class Solution:
-    def swapPairs(self, head: ListNode) -> ListNode:
-        res = ListNode(next=head)
-        pre = res
-        
-        # 必须有pre的下一个和下下个才能交换，否则说明已经交换结束了
-        while pre.next and pre.next.next:
-            cur = pre.next
-            post = pre.next.next
+            first = cur.next
+            second = cur.next.next
             
-            # pre，cur，post对应最左，中间的，最右边的节点
-            cur.next = post.next
-            post.next = cur
-            pre.next = post
+            # 把图画出来
+            first.next = second.next
+            second.next = first
+            cur.next = second
 
-            pre = pre.next.next
-        return res.next
+            cur = cur.next.next
+        return dummy.next
 ```
 
 ### 26-Remove duplicates from sorted array
