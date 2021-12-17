@@ -969,7 +969,7 @@ class Solution:
 
 * 时间复杂度:O(n)
 
-* 时间复杂度:O(n))
+* 时间复杂度:O(n)
 
 ```py
 # 这道题背一背！
@@ -999,56 +999,53 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1ck4y1k7J9?spm_id_from=333.999.0.0)
 
-```py
-class Solution21(object):
-    def mergeTwoLists(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-        if l1 == None:
-            return l2
-        if l2 == None:
-            return l1
-        
-        dummy = ListNode(-1)
-        cur = dummy
-        
-        while l1 and l2:
-            if l1.val < l2.val:
-                cur.next = l1
-                l1 = l1.next
-            else:
-                cur.next = l2
-                l2 = l2.next
-            cur = cur.next
-        
-        if l1:
-            cur.next = l1
-        else:
-            cur.next = l2
-        return dummy.next
-```
+暴力解法：
+
+* 时间复杂度:O(M+N)
+
+* 时间复杂度:O(1)
 
 ```py
 class Solution:
-    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-        if l1 is None:
-            return l2
-        elif l2 is None:
-            return l1
-        elif l1.val < l2.val:
-            l1.next = self.mergeTwoLists(l1.next, l2)
-            return l1
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(0)
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 这里是and
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
+        # 等效于：
+        # if list1:
+        #     cur.next = list1
+        # else:
+        #     cur.next = list2
+        return dummy.next
+```
+
+递归解法：
+
+* 时间复杂度:O(M+N)
+
+* 时间复杂度:O(M+N)
+
+```py
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        if not list1:
+            return list2
+        elif not list2:
+            return list1
+        elif list1.val < list2.val:
+            list1.next = self.mergeTwoLists(list1.next,list2) # 找到较小头结点，提取出来
+            return list1
         else:
-            l2.next = self.mergeTwoLists(l1, l2.next)
-            return l2
+            list2.next = self.mergeTwoLists(list1,list2.next) # 找到较小头结点，提取出来
+            return list2
 ```
 
 ### 22. Generate Parentheses
@@ -1056,6 +1053,76 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1hb411i7t7?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1vK4y1b744?spm_id_from=333.999.0.0)
+
+回溯法：
+
+* 时间复杂度:O($\frac{4^n}{\sqrt{n}}$)
+
+* 时间复杂度:O($\frac{4^n}{\sqrt{n}}$)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.ud5vx6kpbvk.png" width="50%">
+
+```py
+# 基于小梦想家
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        def helper(left,right,itm,res):
+            if left == 0 and right == 0:
+                res.append(itm)
+                # 错误写法：return res = res.append(itm)，这里不需要return
+            if left > right: # 相当于n-left<n-right,表示残余的部分
+                return
+            if left > 0:
+                helper(left-1,right,itm + '(',res)
+                # 错误写法：return item = '(' + helper(left-1,right,itm,res)，这里不需要return
+            if right > 0:
+                helper(left,right-1,itm + ')',res)
+                # 错误写法：return item = ')' + helper(left,right-1,itm,res)，这里不需要return
+        
+        res = []
+        helper(n,n,'',res)
+        return res
+```
+
+```py
+# 基于上方答案修改
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        def helper(left,right,itm,res):
+            if left == 0 and right == 0:
+                res.append(itm)
+                return # 这里return写不写居然都ac了，可能是因为没有循环吧
+            if left > 0:
+                helper(left-1,right,itm + '(',res)
+            if right > left:
+                helper(left,right-1,itm + ')',res)
+        
+        res = []
+        helper(n,n,'',res)
+        return res
+```
+
+```py
+# 基于上方答案修改，helper中的删除res
+
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        def helper(left,right,itm):
+            if left == 0 and right == 0:
+                res.append(itm)
+                return # 这里return写不写居然都ac了，可能是因为没有循环吧
+            if left > 0:
+                helper(left-1,right,itm + '(')
+            if right > left:
+                helper(left,right-1,itm + ')')
+        
+        res = []
+        helper(n,n,'')
+        return res
+```
 
 ```py
 class Solution:
@@ -1069,6 +1136,7 @@ class Solution:
                 S.append('(')
                 backtrack(S, left+1, right)
                 S.pop()
+                # 参考上方，可以直接把'('写到递归函数里面，这样就不需要还原现场。
             if right < left:
                 S.append(')')
                 backtrack(S, left, right+1)
@@ -1076,10 +1144,32 @@ class Solution:
 
         backtrack([], 0, 0)
         return ans
+# 上方答案，修改后如下：
 ```
 
 ```py
-# 头皮发麻。我感觉我是天才，你们不知道用最基本的单位“()”进行组装吗。绝对是原创一次过
+# 上方答案，修改后如下：
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        def backtrack(S, left, right):
+            if len(S) == 2 * n:
+                ans.append(S)
+                return
+            if left < n:
+                backtrack(S + '(', left+1, right)
+            if right < left:
+                backtrack(S + ')', left, right+1)
+
+        ans = []
+        backtrack('', 0, 0)
+        return ans
+```
+
+```py
+# 作者说：头皮发麻。我感觉我是天才，
+# 作者说：你们不知道用最基本的单位“()”进行组装吗。
+# 作者说：绝对是原创一次过
 
 class Solution:
     def generateParenthesis(self, n):
@@ -1090,76 +1180,34 @@ class Solution:
             for j in range(len(i) + 2):
                 res.add(i[0:j] + '()' + i[j:])
         return list(res)
-```
 
-```py
-# python版递归思路：
+
+# 我的模仿😐
 class Solution:
-    def generateParenthesis(self, n):
-        """
-        :type n: int
-        :rtype: List[str]
-        """
-        res = []
+    def generateParenthesis(self, n: int) -> List[str]:
+        # 这是我写的愚蠢的结束条件：
+        # if len(res[0]) == n:
+        #     return
+        if n == 1:
+            return ['()']
 
-        def dfs(s, left, right):
-            if left == n == right:
-                # 终止条件是括号数都是n
-                res.append(s)
-                return
-            if right <= left <= n:
-                # 如果左边的括号数大于右边的括号数且小于n则可以继续递归
-                # 只要满足上述条件就一定还有分支有解
-                dfs(s + '(', left+1, right)
-                dfs(s + ')', left, right + 1)
-        dfs('', 0, 0)
-        return res
+        res = set()
+        for itm in self.generateParenthesis(n-1):
+            for j in range(len(itm)+1): # 如果item的长度为4，那么就有5个可以插入的位置
+                # 错误写法：
+                # itm = itm[:j] + '()' + itm[j:]
+                # res = res.add(itm)
+                # 错误写法：
+                # res = res.add(itm[:j] + '()' + itm[j:])
+                # 正确写法：
+                res.add(itm[:j] + '()' + itm[j:])
+        return list(res)
 ```
 
 ```py
-class Solution:
-    def generateParenthesis(self, n):
-        # (parentheses, #left, #right)
-        stack=[('',0,0)]
-        ans=[]
-        while stack:
-            p,left,right=stack.pop()
-            if left==right==n:
-                ans.append(p)
-                continue
-            
-            if left<n:
-                stack.append((p+'(',left+1,right))
-            if right<n and right<left:
-                stack.append((p+')',left,right+1))
-        return ans
-```
-
-```py
-class Solution:
-    def generateParenthesis(self, n):
-        if n == 0:
-            return [""]
-        elif n == 1:
-            return ["()"]
-        elif n == 2:
-            return ["()()", "(())"]
-        result = []
-        for i in range(n):
-            j = n - 1 - i
-            temp1 = self.generateParenthesis(i)
-            temp2 = self.generateParenthesis(j)
-            result.extend(["(%s)%s" % (p, q) for p in temp1 for q in temp2])
-        return result
-# 请问兄弟是怎么想出来的，太厉害了吧！
-# result.extend(["(%s)%s" % (p, q) for p in temp1 for q in temp2]) 这句是什么意思呀？大佬们帮忙解答一下好吗？小白看不懂
-# 不好意思才刚刚注意到，%是格式化字符串输出，extend是把结果凑起来。这行代码干的事其实是递归生成括号。
-# 如果把所有的情况分解拆开，发现最底层的形式无非n=0, 1, 2这三种情况，那么我们其实可以让括号一层一层包裹起来。这行代码其实就是一层一层包裹括号。
-# for循环里面存在重复计算吧，比如说n=7的时候，i=2,j=4计算了2和4个括号的全排列，i=4，j=2的时候又计算了一遍，其实可以只计算一半，然后全排列的时候p和q调一下位置就行了。
-```
-
-```py
-# 不懂是不是动态规划，每新增一对括号，就是在上一次的结果的各个位置插入一个"()"，用集合防止重复
+# 相当于比上一层少了一层循环。
+# 不懂是不是动态规划，每新增一对括号，
+# 就是在上一次的结果的各个位置插入一个"()"，用集合防止重复
 
 class Solution:
     def generateParenthesis(self, n):
@@ -1173,6 +1221,93 @@ class Solution:
         return list(result)
 ```
 
+```py
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        stack=[('',0,0)]
+        ans=[]
+        while stack:
+            print("stack: ",stack)
+
+            p,left,right=stack.pop() # 先把p弹出来
+            
+            if left==right==n: #如果符合条件,就回收
+                ans.append(p)
+                continue
+            
+            if left<n: #如果符合条件,就加left
+                stack.append((p+'(',left+1,right))
+            if right<n and right<left: #如果符合条件,就加right
+                stack.append((p+')',left,right+1))
+        return ans
+
+# 我的模仿😐 
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        stack = [('',0,0)]
+        res = []
+        while stack:
+            itm, left, right = stack.pop()
+            if left == right == n:
+                # 错误写法：res = res.append(itm)
+                res.append(itm)
+                # continue 写或者不写都能ac，我迷惑了
+
+            if left < n:
+                # 错误写法：itm, left, right = itm + '(', left + 1, right
+                # 错误写法：stack.append(itm + '(', left + 1, right),应该要有双层括号
+                stack.append((itm + '(', left + 1, right))
+            if right < left:
+                # 错误写法：itm, left, right = itm + ')', left, right + 1
+                # 错误写法：stack.append(itm + ')', left, right + 1),应该要有双层括号
+                stack.append((itm + ')', left, right + 1))
+        return res
+```
+
+```py
+# 比较费脑子，可以不看😐 
+class Solution:
+    def generateParenthesis(self, n):
+        if n == 0:
+            return [""]
+        if n == 1:
+            return ["()"]
+        # 这两行其实可有可无：
+        # elif n == 2: 
+        #     return ["()()", "(())"] 
+        result = []
+        for i in range(n):
+            j = n - 1 - i
+            temp1 = self.generateParenthesis(i)
+            temp2 = self.generateParenthesis(j)
+            result.extend(["(%s)%s" % (p, q) for p in temp1 for q in temp2])
+        return result
+# result.extend(["(%s)%s" % (p, q) for p in temp1 for q in temp2]) 这句是什么意思呀？
+# %是格式化字符串输出，extend是把结果凑起来。这行代码干的事其实是递归生成括号。
+# 如果把所有的情况分解拆开，发现最底层的形式无非n=0, 1这2种情况，
+# 那么我们其实可以让括号一层一层包裹起来。这行代码其实就是一层一层包裹括号。
+# for循环里面存在重复计算吧，比如说n=7的时候，i=2,j=4计算了2和4个括号的全排列，i=4，j=2的时候又计算了一遍，其实可以只计算一半，然后全排列的时候p和q调一下位置就行了。
+
+# 我的模仿😐 
+class Solution:
+    def generateParenthesis(self, n):
+        res = []
+        if n == 0:
+            return ['']
+        if n == 1:
+            return ['()']
+        for i in range(n):
+            j = n-1-i
+            tmplist1 = self.generateParenthesis(i)
+            tmplist2 = self.generateParenthesis(j)
+            # 错误写法：return res.extend(['(%s)%s' for item1 in tmplist1 for item2 in temlist2])
+            res.extend(['(%s)%s' % (item1,item2) for item1 in tmplist1 for item2 in tmplist2])
+        return res
+```
+
+
+
 ### 23. Merge k Sorted Lists
 
 [花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
@@ -1180,6 +1315,30 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Ty4y1178e?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1GK41157mu?spm_id_from=333.999.0.0)
+
+暴力求解法：
+
+* 时间复杂度: O(N) + O(N logN) + O(N)
+
+* 空间复杂度: O(N) + O(N)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.65tcjjz2oy80.png" width="50%">
+
+优先队列：
+
+* 时间复杂度: O(N logk) 
+
+* 空间复杂度: O(N) + O(1)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
+
+两两合并：
+
+* 时间复杂度: O(N logk) 
+
+* 空间复杂度: O(1)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
 
 ```py
 class Solution(object):
