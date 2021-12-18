@@ -1464,6 +1464,8 @@ class Solution:
 
 [图灵](https://www.bilibili.com/video/BV13V41177Mq?spm_id_from=333.999.0.0)
 
+> for循环法：
+
 ```py
 class Solution(object):
     def removeDuplicates(self, nums):
@@ -1479,9 +1481,21 @@ class Solution(object):
                 left += 1
                 nums[left] = nums[right]
         return left + 1
+
+# 😁我的模仿
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        count = 0 #注意：count是从0开始的
+        for i in range(len(nums)):
+            if nums[i] != nums[count]:
+                count += 1
+                nums[count] = nums[i]
+        return count + 1
 ```
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.xxd39w8j94g.png" width="30%">
+
+> while循环法
 
 ```py
 class Solution(object):
@@ -1494,8 +1508,20 @@ class Solution(object):
         while i < (len(nums) - 1):
             if nums[i] == nums[i+1]:
                 nums.remove(nums[i])
+                等效于：nums.pop(i)
             else:
                 i += 1
+        return len(nums)
+
+# 😁我的模仿：
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        i = 0
+        while i < len(nums) - 1:
+            if nums[i] == nums[i+1]:
+                nums.pop(i)
+                i -= 1 # 当pop以后，i指针不应该变化
+            i += 1
         return len(nums)
 ```
 
@@ -1507,6 +1533,20 @@ class Solution(object):
 
 [小梦想家](https://www.bilibili.com/video/BV1hb411i7hZ?spm_id_from=333.999.0.0)
 
+和上面一体差不多，很简单
+
+```py
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        i = 0
+        while i < len(nums):
+            if nums[i] == val:
+                nums.pop(i)
+            else:
+                i += 1
+        return len(nums)
+```
+
 ### 28-Implement str
 
 [哈哈哈](https://www.bilibili.com/video/BV1eL411n7YS?spm_id_from=333.999.0.0)
@@ -1517,11 +1557,89 @@ class Solution(object):
 
 [小梦想家](https://www.bilibili.com/video/BV1hb411i7cG?spm_id_from=333.999.0.0)
 
+解法一：直接用.index()
+
+```py
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        if needle == "":
+            return 0
+        if needle in haystack:
+            return haystack.index(needle)
+        else:
+            return -1
+```
+
+解法二：在对整个needle字符串比较
+
+```py
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        for i in range(len(haystack)-len(needle)+1):
+            if haystack[i:i+len(needle)] == needle:
+                return i 
+        return -1
+```
+
 ### 31 Next Permutation
 
 [小明](https://www.bilibili.com/video/BV1Uz4y1m72N?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV1SK4y1V7ch?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def nextPermutation(self, nums):
+        i = len(nums) - 2
+        while i >= 0 and nums[i] >= nums[i + 1]:
+            # 从后往前查找->递增
+            # 如果递减，则i-1，继续查找
+            i -= 1
+            # print("存在递减(由大到小),","找到递增",i,"",i+1)
+        if i >= 0:
+            j = len(nums) - 1
+            while j >= 0 and nums[i] >= nums[j]:
+                j -= 1
+                # print("从后往前，找到比",i,"大的数字:",j)
+            nums[i], nums[j] = nums[j], nums[i]
+            # print("把",i,"和",j,"交换次序")
+        
+        left, right = i + 1, len(nums) - 1
+        while left < right:
+            # print("存在递增,交换",left,"和",right,"次序","使得",nums[left:right],"由小到大排列")
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+            right -= 1
+        return nums
+```
+
+```py
+class Solution:
+    def nextPermutation(self, nums):
+            """
+            Do not return anything, modify nums in-place instead.
+            """
+            i = len(nums) - 2
+            while i >= 0 and nums[i] >= nums[i+1]:
+                i -= 1
+                # print("存在递减(由大到小),","找到递增",i,"",i+1)
+
+            # i<0时已经为最大的排列
+            if i >= 0:
+                j = len(nums) - 1
+                while j >= 0 and nums[j] <= nums[i]:
+                    j -= 1
+                    # print("从后往前，找到比",i,"大的数字:",j)
+
+                nums[i], nums[j] = nums[j], nums[i]
+                # print("把",i,"和",j,"交换次序")
+
+            # print("存在递增,交换",nums[i+1:],"次序","使得",nums[i+1:],"由小到大排列")
+            l = nums[i+1:]
+            l.reverse()
+            nums[i+1:] = l 
+            return nums
+```
 
 ### 32 Longest Valid Parentheses
 
@@ -1537,6 +1655,73 @@ class Solution(object):
 
 [官方](https://www.bilibili.com/video/BV16A41147Fp?spm_id_from=333.999.0.0)
 
+```py
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        # 定义第一个元素和最后一个元素
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            print("😁每次打印，总有一半是上升序列！")
+            # 找到二分的位置：
+            # mid = l + ((r - l) >> 2)
+            # mid = (l + r) // 2
+            mid = left + (right - left) // 2
+            print("left:",left," mid:",mid," right:",right)
+
+            # 第一步
+            if nums[mid] == target:
+                return mid
+
+            
+
+            # --------------第二步：核心代码--------------
+            # 只存在一个上升序列
+            if nums[mid] < nums[right]:
+                print("看那里！那里才是上升序列！")
+                if nums[mid] < target <= nums[right]:
+                    print("上升序列中有目标！")
+                    left = mid + 1
+                else:
+                    print("上升序列中没有目标！嘤嘤嘤")
+                    right = mid - 1
+            else:
+                print("看这里！这里才是上升序列！")
+                if nums[left] <= target < nums[mid]:
+                    print("上升序列中有目标！")
+                    right = mid - 1
+                else:
+                    print("上升序列中没有目标！嘤嘤嘤")
+                    left = mid + 1
+            # --------------第二步：核心代码--------------
+        return -1
+```
+
+```py
+# 这道题简直是在跟我开玩笑（狗头）
+
+class Solution(object):
+    def search(self, nums, target):
+        return nums.index(target) if target in nums else -1
+```
+
+```py
+# python版本，为方便理解
+
+class Solution(object):
+    def search(self, nums, target):
+        if len(nums) == 0:
+            return -1
+        if target in nums:
+            return [i for i, x in enumerate(nums) if x == target][0]
+        else:
+            return -1
+```
+
 ### 34-在排序数组中查找元素的第一个
 
 [哈哈哈](https://www.bilibili.com/video/BV1Zv411y71t?spm_id_from=333.999.0.0)
@@ -1544,6 +1729,73 @@ class Solution(object):
 [图灵](https://www.bilibili.com/video/BV1GU4y1j7dq?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1ef4y1v7Vz?spm_id_from=333.999.0.0)
+
+```py
+# Python 二分法
+
+class Solution:
+    def searchRange(self, nums, target):
+        left = 0
+        right = len(nums)-1
+        res = [0,0]
+        
+        if target not in nums:
+            return [-1,-1]
+
+        # 寻找左侧边界
+        while(left<=right):
+            mid = left + (right-left)//2
+            if nums[mid] == target:
+                right = mid - 1 # 结束条件
+            elif nums[mid] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        if left>=len(nums) or nums[left]!=target:
+            res[0] = -1
+        res[0] = left
+
+        # 寻找右侧边界
+        right = len(nums)-1
+        while left<=right:
+            mid = left+(right-left)//2
+            if nums[mid] == target:
+                left = mid + 1 # 结束条件
+            elif nums[mid] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        if right<0 or nums[right]!=target:
+            res[1] = -1
+        res[1] = right
+
+        return res
+```
+
+```py
+# 二分搜索算法返回首个不小于（即：等于或大于）target的元素的下标，这样只需进行两次相似的二分搜索即可
+
+class Solution:
+    def searchRange(self, nums, target):
+        start = self.binarySearch(nums, target)
+        end = self.binarySearch(nums, target + 1)
+        print("start,end:",start,end)
+        if start < end:
+            return [start, end - 1]
+        else:
+            return [-1, -1]
+
+    def binarySearch(self, nums, target):
+        left = 0
+        right = len(nums)
+        while left < right:
+            mid = left + (right - left) // 2
+            if nums[mid] < target:
+                left = mid + 1
+            else:
+                right = mid
+        return left
+```
 
 ### 35-搜索插入位置
 
@@ -1575,6 +1827,78 @@ class Solution(object):
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411i717?spm_id_from=333.999.0.0)
 
+```py
+import itertools
+class Solution(object):
+    def countAndSay(self, n):
+        """
+        :type n: int
+        :rtype: str
+        """
+        res = '1'
+        for i in range(n-1):
+            res = ''.join([str(len(list(group))) + key for key, group in itertools.groupby(res)])
+        return res
+```
+
+```py
+class Solution(object):
+    def countAndSay(self, n):
+        """
+        :type n: int
+        :rtype: str
+        """
+        if n == 1:
+            return '1'
+        # 推断基础：s
+        s = self.countAndSay(n-1) + '*'
+        res, count = '', 1
+        for i in range(len(s)-1):
+            if s[i] == s[i+1]:
+                count += 1
+            else:
+                # 终止条件：
+                res += str(count) + str(s[i])
+                count = 1
+        return res
+```
+
+```py
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        temp = '1#'
+        for i in range(1, n):
+            newtemp, count = '', 1
+            for j in range(1, len(temp)):
+                if temp[j] == temp[j - 1]:
+                    count += 1
+                else:
+                    newtemp += (str(count) + temp[j - 1])
+                    count = 1
+            newtemp += '#'
+            temp = newtemp
+        return temp[:-1]
+```
+
+```py
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        temp = "1"
+        for i in range(n-1):
+            newtemp = ""
+            i = 0
+            count = 0
+
+            while i < len(temp):
+                while i < len(temp) and temp[i] == temp[count]:
+                    i += 1
+                newtemp += str(i - count) + temp[count]
+                count = i
+            temp = newtemp
+        
+        return temp
+```
+
 ### 39. Combination Sum 39-组合总和
 
 [花花酱](https://www.bilibili.com/video/BV1gb411u7dy?spm_id_from=333.999.0.0)
@@ -1583,11 +1907,256 @@ class Solution(object):
 
 [小明](https://www.bilibili.com/video/BV12Z4y157nE?spm_id_from=333.999.0.0)
 
+```py
+# 标准回溯
+
+def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        path, listList, num = list(), list(), 0
+        def backtrack(firstIndex, sum):
+            if sum == target:
+                listList.append(path[:])
+                return 
+            if sum > target:
+                return
+            for i in range(firstIndex, len(candidates)):
+                path.append(candidates[i])
+                # ------------🎨和下面的一个等效🎨------------
+                sum += candidates[i] 
+                backtrack(i, sum)
+                sum -= candidates[i] 
+                # ------------🎨和下面的一个等效🎨------------
+                
+                path.pop()
+        backtrack(0, 0)
+        return listList 
+```
+
+```py
+# Python代码供参考
+
+class Solution:
+    def combinationSum(self, candidates, target):
+        listList = []
+        list = []
+        def recursion(idx, sum):
+            if idx >= len(candidates) or sum >= target:
+                if sum == target:
+                    listList.append(list[:])
+                return
+            list.append(candidates[idx])
+            # ------------🎨和上面的一个等效🎨------------
+            recursion(idx, sum + candidates[idx]) 
+            # ------------🎨和上面的一个等效🎨------------
+            list.pop()
+            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
+            recursion(idx + 1, sum)
+            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
+        recursion(0, 0)
+        return listList
+```
+
+```py
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
+        def backtrack(i, tmp_sum, tmp):
+            if  tmp_sum > target or i == n:
+                return 
+            if tmp_sum == target:
+                res.append(tmp)
+                return 
+            for j in range(i, n):
+                if tmp_sum + candidates[j] > target:
+                    break
+                backtrack(j,tmp_sum + candidates[j],tmp+[candidates[j]])
+        backtrack(0, 0, [])
+        return res
+```
+
+```py
+# Python版本
+
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        combine = []
+        self.dfs(candidates, combine, target, 0, res)
+        return res
+
+    def dfs(self, candidates, combine, target, idx, res):
+        if idx == len(candidates):
+            return
+        if target == 0:
+            # 需要复制数组!!!
+            res.append(combine[:])
+            return
+        self.dfs(candidates, combine, target, idx+1, res)
+        tmp = target - candidates[idx]
+        if tmp >= 0:
+            combine.append(candidates[idx])
+            self.dfs(candidates, combine, tmp, idx, res)
+            combine.pop()
+```
+
+```py
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        if len(candidates) == 0:
+            return []
+        candidates.sort()
+        path = []
+        res = []
+        '''
+        ！！！重点！！！
+        在python中，如果传参是mutable var, 那么传参相当于引用，因此调用后，如果调用函数的内部对该传入变量进行修改，就会导致直接改变原始对象。这就是典型的privacy leak！！发生了。
+        例如在这个，list就是该mutable var，而如果以path或res 为传参，放在__DFS 中， 那么就相当于在__DFS内部，实际上用的都是一个物理地址下的res和path，类似于全局变量。
+        因此combinationSum下的局部变量path和res也在——DFS运行的过程中发生了改变。
+        
+        利用这个性质，我们可以把mutable var当成传入参数，从而实现全局变量的效果。
+        '''
+        self.__DFS(candidates, target, 0, path, res)
+        return res
+    '''
+        DFS的实现
+    '''
+    def __DFS(self, candidates, target, begin, path, res):
+        path = path.copy()
+        # 递归出口 就是余数为0
+        if target == 0:
+            res.append(path)   #记录该符合条件的结果
+            return
+        
+        #若当前路径有可能可行。
+        for i in range(begin, len(candidates)):  # 我们现在到begin的节点上了
+            if target - candidates[i] < 0:  # 剪枝条件
+                return                      # 如果当前节点就不行了，就不用继续了,这里到不用继续了即包括该depth不用继续了，也包括该节点更大到child也不用继续了，该节点pop出来
+            
+            path.append(candidates[i])  #记录当前为止
+            self.__DFS(candidates, target - candidates[i], i, path, res)# 向下继续走，记住递归不是return，递归到实现是调用！一旦return发生，递归停止。
+            path.pop()  # 回朔清理。当前节点下的所有情况都进行完了，该节点也不应该在path里面了。
+```
+
 ### 40. Combination Sum II 40-组合总和 II
 
 [花花酱](https://www.bilibili.com/video/BV1Pb411u7Yd?spm_id_from=333.999.0.0)
 
 [哈哈哈](https://www.bilibili.com/video/BV1gT4y1J7JE?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        listList = []
+        path = []
+        def backtrack(sum,startIndex):
+            if sum == target: listList.append(path[:])
+            for i in range(startIndex,len(candidates)):  #要对同一树层使用过的元素进行跳过
+                if sum + candidates[i] > target: return 
+                if i > startIndex and candidates[i] == candidates[i-1]: continue  
+                #直接用startIndex来去重,要对同一树层使用过的元素进行跳过
+                path.append(candidates[i])
+                # ------------🎨和下面的一个等效🎨------------
+                backtrack(sum + candidates[i],i+1)  #i+1:每个数字在每个组合中只能使用一次
+                # ------------🎨和下面的一个等效🎨------------
+                path.pop()  #回溯
+        candidates = sorted(candidates)  #首先把给candidates排序，让其相同的元素都挨在一起。
+        backtrack(0,0)
+        return listList
+```
+
+```py
+# Python代码供参考
+
+class Solution:
+    def combinationSum2(self, candidates, target):
+        listList = []
+        path = []
+        candidates = sorted(candidates)  #首先把给candidates排序，让其相同的元素都挨在一起。
+        def recursion(idx, sum):
+            if idx >= len(candidates) or sum >= target:
+                if sum == target and path not in listList: # 去重
+                    listList.append(path[:])
+                return
+            path.append(candidates[idx])
+            # ------------🎨和上面的一个等效🎨------------
+            recursion(idx + 1, sum + candidates[idx]) 
+            # ------------🎨和上面的一个等效🎨------------
+            path.pop()
+            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
+            recursion(idx + 1, sum)
+            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
+        recursion(0, 0)
+        return listList 
+```
+
+```py
+class Solution(object):
+    def combinationSum2(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        def dfs(sum, path, index):
+            if sum == 0 and path not in listList:
+                listList.append(path)
+                return
+            for i in range(index, len(candidates)):
+                if candidates[i] > sum:
+                    break          
+                dfs(sum - candidates[i], path + [candidates[i]], i+1)
+        candidates.sort()
+        listList = []
+        dfs(target, [], 0)
+        return listList
+```
+
+```py
+# 排序后递归求解
+
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        res=[]
+        n=len(candidates)
+        def dfs(k,t,index):
+            if k<0:
+                return 
+            if k==0:
+                res.append(t)
+            for i in range(index,n):
+                if i>index and candidates[i]==candidates[i-1]: # 剪枝
+                    continue # 剪枝
+                dfs(k-candidates[i],t+[candidates[i]],i+1)
+        dfs(target,[],0)
+        return res
+```
+
+```py
+# python版本-回溯法
+
+class Solution(object):
+    def combinationSum2(self, candidates, target):
+        res = []
+        candidates.sort()
+        def dfs(candidates, target, idx, combine):
+            if target == 0:
+                if combine not in res:
+                    res.append(combine[:])
+                return
+
+            for i in range(idx, len(candidates)):
+                if i > idx and candidates[i] == candidates[i-1]: # 剪枝
+                    continue # 剪枝
+                if target < candidates[i]:
+                    return
+                combine.append(candidates[i])
+                dfs(candidates, target - candidates[i] , i + 1, combine)
+                combine.pop()
+        dfs(candidates, target, 0, [])
+        return res
+```
 
 ### 41 First Missing Positive
 
