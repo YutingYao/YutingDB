@@ -2314,56 +2314,24 @@ class Solution:
 
 ```py
 class Solution:
-    def nextPermutation(self, nums):
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # 关键在于从后往前，找到非递减序列
         i = len(nums) - 2
-        while i >= 0 and nums[i] >= nums[i + 1]:
-            # 从后往前查找->递增
-            # 如果递减，则i-1，继续查找
-            i -= 1
-            # print("存在递减(由大到小),","找到递增",i,"",i+1)
-        if i >= 0:
-            j = len(nums) - 1
-            while j >= 0 and nums[i] >= nums[j]:
-                j -= 1
-                # print("从后往前，找到比",i,"大的数字:",j)
-            nums[i], nums[j] = nums[j], nums[i]
-            # print("把",i,"和",j,"交换次序")
-        
-        left, right = i + 1, len(nums) - 1
-        while left < right:
-            # print("存在递增,交换",left,"和",right,"次序","使得",nums[left:right],"由小到大排列")
-            nums[left], nums[right] = nums[right], nums[left]
-            left += 1
-            right -= 1
-        return nums
-```
-
-```py
-class Solution:
-    def nextPermutation(self, nums):
-            """
-            Do not return anything, modify nums in-place instead.
-            """
-            i = len(nums) - 2
-            while i >= 0 and nums[i] >= nums[i+1]:
+        while i >= 0:
+            if nums[i] >= nums[i+1]:
                 i -= 1
-                # print("存在递减(由大到小),","找到递增",i,"",i+1)
-
-            # i<0时已经为最大的排列
-            if i >= 0:
-                j = len(nums) - 1
-                while j >= 0 and nums[j] <= nums[i]:
-                    j -= 1
-                    # print("从后往前，找到比",i,"大的数字:",j)
-
-                nums[i], nums[j] = nums[j], nums[i]
-                # print("把",i,"和",j,"交换次序")
-
-            # print("存在递增,交换",nums[i+1:],"次序","使得",nums[i+1:],"由小到大排列")
-            l = nums[i+1:]
-            l.reverse()
-            nums[i+1:] = l 
-            return nums
+            else:
+                # 寻找i后面比i大的数，交换位置,并且排序
+                for j in range(len(nums)-1,i,-1): # 易错点:len(nums)-1,i的区间
+                    # 12(3)5(4)
+                    if nums[j] > nums[i]:
+                        nums[i],nums[j] = nums[j],nums[i]
+                        nums[i+1:] = sorted(nums[i+1:])
+                        return
+        nums.reverse() # 易错点:对于[3,2,1]这种情况，i = 0
 ```
 
 ###  3.28. <a name='LongestValidParentheses'></a>32 Longest Valid Parentheses
