@@ -2340,6 +2340,54 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1yi4y1G74d?spm_id_from=333.999.0.0)
 
+动态规划：
+
+* 时间复杂度: O(n) 
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6dkova4yjvk0.png)
+
+```py
+# 背一背吧，好难。
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        n = len(s)
+        dp = [0]*n
+        if n == 0: return 0
+        for i in range(n):
+            if s[i] == ')' and s[i-dp[i-1]-1] == '(' and i - dp[i-1] - 1 >= 0:
+                dp[i] = 2 + dp[i-1] + dp[i-dp[i-1]-2]
+        return max(dp)
+```
+
+栈：
+
+* 时间复杂度: O(n) 
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1dgqk0ervhb4.png)
+
+```py
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        stack = [-1]
+        length = maxlength = 0
+        for i,c in enumerate(s):
+            if c == '(':
+                stack.append(i)
+            if c == ')':
+                stack.pop()
+                if not stack:
+                    stack.append(i)
+                else:
+                    length = i - stack[-1]
+                    maxlength = max(maxlength,length)
+        return maxlength
+
+```
+
 ###  3.29. <a name='SearchinRotatedSortedArray'></a>33. Search in Rotated Sorted Array
 
 [小梦想家](https://www.bilibili.com/video/BV1gJ411V7Sq?spm_id_from=333.999.0.0)
@@ -2359,38 +2407,51 @@ class Solution(object):
         # 定义第一个元素和最后一个元素
         left, right = 0, len(nums) - 1
         while left <= right:
-            print("😁每次打印，总有一半是上升序列！")
             # 找到二分的位置：
             # mid = l + ((r - l) >> 2)
             # mid = (l + r) // 2
-            mid = left + (right - left) // 2
-            print("left:",left," mid:",mid," right:",right)
-
+            mid = (right + left) // 2
             # 第一步
             if nums[mid] == target:
                 return mid
 
-            
-
             # --------------第二步：核心代码--------------
             # 只存在一个上升序列
             if nums[mid] < nums[right]:
-                print("看那里！那里才是上升序列！")
                 if nums[mid] < target <= nums[right]:
-                    print("上升序列中有目标！")
                     left = mid + 1
                 else:
-                    print("上升序列中没有目标！嘤嘤嘤")
                     right = mid - 1
             else:
-                print("看这里！这里才是上升序列！")
                 if nums[left] <= target < nums[mid]:
-                    print("上升序列中有目标！")
                     right = mid - 1
                 else:
-                    print("上升序列中没有目标！嘤嘤嘤")
                     left = mid + 1
             # --------------第二步：核心代码--------------
+        return -1
+
+# 我的模仿！啊😋
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l = 0
+        r = len(nums) - 1
+
+        while l <= r:
+            m = (l+r) // 2
+            if nums[m] == target:
+                return m
+            if nums[l] <= nums[m]:
+                if nums[l] <= target < nums[m]:
+                    r = m - 1
+                else: 
+                    l = m + 1
+            else:
+                if nums[m] < target <= nums[r]:
+                    l = m + 1
+                else: 
+                    r = m - 1
+        
         return -1
 ```
 
@@ -2400,19 +2461,6 @@ class Solution(object):
 class Solution(object):
     def search(self, nums, target):
         return nums.index(target) if target in nums else -1
-```
-
-```py
-# python版本，为方便理解
-
-class Solution(object):
-    def search(self, nums, target):
-        if len(nums) == 0:
-            return -1
-        if target in nums:
-            return [i for i, x in enumerate(nums) if x == target][0]
-        else:
-            return -1
 ```
 
 ###  3.30. <a name='-1'></a>34-在排序数组中查找元素的第一个
@@ -2437,29 +2485,25 @@ class Solution:
 
         # 寻找左侧边界
         while(left<=right):
-            mid = left + (right-left)//2
+            mid = (right + left) // 2
             if nums[mid] == target:
                 right = mid - 1 # 结束条件
             elif nums[mid] > target:
                 right = mid - 1
             else:
                 left = mid + 1
-        if left>=len(nums) or nums[left]!=target:
-            res[0] = -1
         res[0] = left
 
         # 寻找右侧边界
         right = len(nums)-1
         while left<=right:
-            mid = left+(right-left)//2
+            mid = (right + left) // 2
             if nums[mid] == target:
                 left = mid + 1 # 结束条件
             elif nums[mid] > target:
                 right = mid - 1
             else:
                 left = mid + 1
-        if right<0 or nums[right]!=target:
-            res[1] = -1
         res[1] = right
 
         return res
@@ -2468,26 +2512,30 @@ class Solution:
 ```py
 # 二分搜索算法返回首个不小于（即：等于或大于）target的元素的下标，这样只需进行两次相似的二分搜索即可
 
-class Solution:
-    def searchRange(self, nums, target):
-        start = self.binarySearch(nums, target)
-        end = self.binarySearch(nums, target + 1)
-        print("start,end:",start,end)
-        if start < end:
-            return [start, end - 1]
-        else:
-            return [-1, -1]
+# 这种方法很漂亮，但是很容易出错，不推荐。
 
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        start = self.binarySearch(nums, target)
+        end = self.binarySearch(nums, target+1)
+        if start < end:
+            return [start,end-1]
+        else:
+            return [-1,-1]
+    
     def binarySearch(self, nums, target):
-        left = 0
-        right = len(nums)
-        while left < right:
-            mid = left + (right - left) // 2
-            if nums[mid] < target:
-                left = mid + 1
+        l = 0
+        r = len(nums)  # 精华,千万不能-1，
+        while l < r: # 精华,千万不能包括==，
+            m = (l + r) // 2
+            # 由于这里存在多个重复数字，所以简单的二分查找不顶用
+            # 这里的思想是找到left
+            if target > nums[m]: # 精华,千万不能包括==，不然left不能移动
+                l = m + 1 # 精华
             else:
-                right = mid
-        return left
+                r = m
+        return l
+
 ```
 
 ###  3.31. <a name='-1'></a>35-搜索插入位置
@@ -2500,6 +2548,26 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1wf4y1m7Ue?spm_id_from=333.999.0.0)
 
+* 时间复杂度: O(logn) 
+
+* 空间复杂度: O(1)
+
+```py
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        l = 0
+        r = len(nums) - 1
+        while l <= r:
+            m = (l + r) // 2
+            if target == nums[m]:
+                return m
+            elif target < nums[m]:
+                r = m - 1
+            else: 
+                l = m + 1
+        return l #易错点：记住，这里需要输出，且输出left
+```
+
 ###  3.32. <a name='-1'></a>36-有效的数独
 
 [哈哈哈](https://www.bilibili.com/video/BV1Cf4y1R7PR?spm_id_from=333.999.0.0)
@@ -2508,11 +2576,33 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1ZL4y1e7oo?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        cols = [set() for _ in range(9)]
+        rows = [set() for _ in range(9)]
+        grids = [[set() for _ in range(3)] for _ in range(3)]
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    if board[i][j] in cols[j] or \
+                    board[i][j] in rows[i] or \
+                    board[i][j] in grids[i//3][j//3]:
+                        return False
+                    else:
+                        cols[j].add(board[i][j])
+                        rows[i].add(board[i][j])
+                        grids[i//3][j//3].add(board[i][j])
+        return True
+```
+
 ###  3.33. <a name='SudokuSolver'></a>37. Sudoku Solver 解数独
 
 [花花酱](https://www.bilibili.com/video/BV1Tt41137Xr?spm_id_from=333.999.0.0)
 
 [哈哈哈](https://www.bilibili.com/video/BV1f5411h7er?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3k462gpgb5k0.png)
 
 ###  3.34. <a name='Countandsay'></a>38-Count and say
 
@@ -2522,75 +2612,51 @@ class Solution:
 
 ```py
 import itertools
-class Solution(object):
-    def countAndSay(self, n):
-        """
-        :type n: int
-        :rtype: str
-        """
+class Solution:
+    def countAndSay(self, n: int) -> str:
         res = '1'
-        for i in range(n-1):
-            res = ''.join([str(len(list(group))) + key for key, group in itertools.groupby(res)])
+        for _ in range(n-1):
+            res = ''.join([str(len(list(g))) + k for k,g in itertools.groupby(res)])
         return res
 ```
 
 ```py
-class Solution(object):
-    def countAndSay(self, n):
-        """
-        :type n: int
-        :rtype: str
-        """
-        if n == 1:
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        if n == 1: 
             return '1'
-        # 推断基础：s
-        s = self.countAndSay(n-1) + '*'
-        res, count = '', 1
-        for i in range(len(s)-1):
-            if s[i] == s[i+1]:
+
+        res = ''
+        count = 1
+        s = self.countAndSay(n-1)
+        for i in range(len(s)):
+            if i+1 < len(s) and s[i] == s[i+1]:
                 count += 1
             else:
-                # 终止条件：
-                res += str(count) + str(s[i])
+                res += str(count) + s[i]
                 count = 1
         return res
 ```
 
 ```py
+# 我的模仿😋
+
 class Solution:
     def countAndSay(self, n: int) -> str:
-        temp = '1#'
-        for i in range(1, n):
-            newtemp, count = '', 1
-            for j in range(1, len(temp)):
-                if temp[j] == temp[j - 1]:
+        s = '1'
+        for _ in range(n-1):
+            tmp = ''
+            count = 1  # 易错点：count的位置
+            for j in range(len(s)):
+                if j+1 < len(s) and s[j] == s[j+1]:
                     count += 1
                 else:
-                    newtemp += (str(count) + temp[j - 1])
-                    count = 1
-            newtemp += '#'
-            temp = newtemp
-        return temp[:-1]
+                    tmp += str(count) + s[j]
+                    count = 1  # 易错点：count重新置为1
+            s = tmp
+        return s
 ```
 
-```py
-class Solution:
-    def countAndSay(self, n: int) -> str:
-        temp = "1"
-        for i in range(n-1):
-            newtemp = ""
-            i = 0
-            count = 0
-
-            while i < len(temp):
-                while i < len(temp) and temp[i] == temp[count]:
-                    i += 1
-                newtemp += str(i - count) + temp[count]
-                count = i
-            temp = newtemp
-        
-        return temp
-```
 
 ###  3.35. <a name='CombinationSum39-'></a>39. Combination Sum 39-组合总和
 
