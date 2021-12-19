@@ -2666,6 +2666,8 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV12Z4y157nE?spm_id_from=333.999.0.0)
 
+![Snipaste_2021-12-18_11-30-10](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/Snipaste_2021-12-18_11-30-10.5b1q5zh7t4w0.png)
+
 ```py
 # 标准回溯
 
@@ -2921,21 +2923,204 @@ class Solution(object):
 
 [小明](https://www.bilibili.com/video/BV1fy4y1k7pV?spm_id_from=333.999.0.0)
 
+```py
+# python3 实现
+class Solution:
+    def firstMissingPositive(self, nums):
+        n = len(nums)
+        for i in range(n):
+            if nums[i] <= 0:
+                nums[i] = n + 1
+        
+        for i in range(n):
+            num = abs(nums[i])
+            if num <= n:
+                nums[num - 1] = -abs(nums[num - 1])
+            print("看不懂系列,其实就是遍历一遍，用正负号表示true或者false：",nums)
+        
+        for i in range(n):
+            if nums[i] > 0:
+                return i + 1
+        
+        return n + 1
+```
+
+```py
+# 改进了一下 2**31-1算常数变量 hash set算O(1) 那我这算法岂不是O(1)复杂度？
+
+class Solution:
+    def firstMissingPositive(self, nums):
+        nums = set(nums)
+        for j in range(1, 2 ** 31 - 1):
+            if j not in nums:
+                return j
+```
+
+```py
+# 视频中是将小于等于0以及大于n的数替换为1，
+# 而文字版解法直接将小于等于0的数替换成n+1，这样就省掉了一开始对1的判断，减少了一轮循环。
+# 视频最后提到的“正确的元素放在正确的位置”也就是文字版的方法二。
+# 如果对法二有疑问的同学可以配合wei哥的视频食用（也就是紧挨着官方题解下面的那篇），
+# 视频中详细讲解了方法二和它的复杂度的分析。
+
+# 附上视频中的python程序：
+class Solution:
+    def firstMissingPositive(self, nums):
+        n = len(nums)
+        
+        if 1 not in nums:
+            return 1
+        print(nums)
+        for i in range(n):
+            if nums[i] <= 0 or nums[i] > n: #排除掉哪些很大的数
+                nums[i] = 1
+        print(nums)
+        
+        for i in range(n): 
+            a = abs(nums[i])-1
+            nums[a] = - abs(nums[a])
+            print("看不懂系列,其实就是遍历一遍，用正负号表示true或者false：",nums)
+
+        for i in range(n):
+            if nums[i] > 0:
+                return i+1
+        print(nums)
+            
+        return n + 1
+```
+
 ###  3.38. <a name='TrappingRainWater'></a>42. Trapping Rain Water
 
 [花花酱](https://www.bilibili.com/video/BV1hJ41177gG?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1fi4y1t7BP?spm_id_from=333.999.0.0)
 
+动态规划：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(n)
+
+```py
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+        
+        n = len(height)
+        leftMax = [height[0]] + [0] * (n - 1)
+        for i in range(1, n):
+            leftMax[i] = max(leftMax[i - 1], height[i])
+
+        rightMax = [0] * (n - 1) + [height[n - 1]]
+        for i in range(n - 2, -1, -1):
+            rightMax[i] = max(rightMax[i + 1], height[i])
+
+        ans = sum(min(leftMax[i], rightMax[i]) - height[i] for i in range(n))
+        return ans
+```
+
+栈：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(n)
+
+```py
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        ans = 0
+        stack = list()
+        n = len(height)
+        
+        for i, h in enumerate(height):
+            while stack and h > height[stack[-1]]:
+                top = stack.pop()
+                if not stack:
+                    break
+                left = stack[-1]
+                currWidth = i - left - 1
+                currHeight = min(height[left], height[i]) - height[top]
+                ans += currWidth * currHeight
+            stack.append(i)
+        
+        return ans
+```
+
+双指针：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(1)
+
+```py
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        ans = 0
+        left, right = 0, len(height) - 1
+        leftMax = rightMax = 0
+
+        while left < right:
+            leftMax = max(leftMax, height[left])
+            rightMax = max(rightMax, height[right])
+            if height[left] < height[right]:
+                ans += leftMax - height[left]
+                left += 1
+            else:
+                ans += rightMax - height[right]
+                right -= 1
+        
+        return ans
+
+```
+
 ###  3.39. <a name='JumpGameII'></a>45 Jump Game II
 
 [小明](https://www.bilibili.com/video/BV1fb4y1Z77x?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        n = len(nums)
+        maxPos, end, step = 0, 0, 0
+        for i in range(n - 1):
+            if maxPos >= i:
+                maxPos = max(maxPos, i + nums[i])
+                if i == end:
+                    end = maxPos
+                    step += 1
+        return step
+```
 
 ###  3.40. <a name='-1'></a>46-把数字翻译成字符串
 
 [哈哈哈](https://www.bilibili.com/video/BV1Bz411i7cs?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV125411W7eC?spm_id_from=333.999.0.0)
+
+动态规划：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.66thg6sgm600.png)
+
+```py
+class Solution:
+    def translateNum(self, num: int) -> int:
+        s = str(num)
+        n = len(s)
+        dp = [1]*n
+        if '10' <= s[0:2] <= '25':
+            dp[1] = 2
+        for i in range(2,n):
+            if '10' <= s[i-1:i+1] <= '25':
+                dp[i] = dp[i-1] + dp[i-2]
+            else:
+                dp[i] = dp[i-1]
+        return dp[-1]
+```
 
 ###  3.41. <a name='-1'></a>46-全排列
 
@@ -2945,6 +3130,23 @@ class Solution(object):
 
 [官方](https://www.bilibili.com/video/BV1oa4y1v7Kz?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def permute(self, nums):
+        res = []
+        def backtrack(nums, tmp, depth):
+            if not nums:
+                res.append(tmp)
+                return 
+            for i in range(len(nums)):
+                # print("i:",i,"depth:",depth,"len(nums):",len(nums))
+                # print("以",[nums[i]],"为首，以",nums[:i]+nums[i+1:],"为尾的排列组合")
+                backtrack(nums[:i] + nums[i+1:], tmp + [nums[i]],depth+1)
+                # [nums[i]
+        backtrack(nums, [], 1)
+        return res
+```
+
 ###  3.42. <a name='II-'></a>47-全排列 II-剪枝版
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ev411672A?spm_id_from=333.999.0.0)
@@ -2953,17 +3155,118 @@ class Solution(object):
 
 [小梦想家](https://www.bilibili.com/video/BV1z54y1a7rQ?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def permuteUnique(self, nums):
+        res = []
+        def backtrack(nums, tmp, depth):
+            if not nums:
+                res.append(tmp)
+                return 
+            for i in range(len(nums)):
+                # print("i:",i,"depth:",depth,"len(nums):",len(nums))
+                # print("以",[nums[i]],"为首，以",nums[:i]+nums[i+1:],"为尾的排列组合")
+                backtrack(nums[:i] + nums[i+1:], tmp + [nums[i]],depth+1)
+                # [nums[i]
+        backtrack(nums, [], 1)
+        return res
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.64smd9q0fj00.png)
+
 ###  3.43. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
 
 [官方](https://www.bilibili.com/video/BV1mf4y1e7ox?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Wy4y1s7fs?spm_id_from=333.999.0.0)
 
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5qtynjhcg1k0.png)
+
+```py
+class Solution:
+    def rotate(self, matrix):
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)  # 求出矩阵长度
+        m = (n+1)//2     # 求出层数
+        for k in range(m):
+            t = n-2*k-1 # 需旋转的次数
+            for i in range(t):
+                # d1，行与k成正比，列与k成正比且与i成正比
+                # d2，行与k成反比且与i成反比，列与k成正比
+                # d3，行与k成反比，列与k成反比且与i成反比
+                # d4，行与k成正比且与i成正比，列与k成反比
+                temp = matrix[k][k+i]
+                matrix[k][k+i] = matrix[n-1-k-i][k]  
+                matrix[n-1-k-i][k] = matrix[n-1-k][n-1-k-i]
+                matrix[n-1-k][n-1-k-i] = matrix[k+i][n-1-k]
+                matrix[k+i][n-1-k] = temp
+        return matrix
+```
+
+```py
+class Solution:
+    def rotate(self, matrix):
+        n = len(matrix)
+        for i in range(n // 2):
+            for j in range((n + 1) // 2):
+                matrix[i][j], matrix[n - j - 1][i], matrix[n - i - 1][n - j - 1], matrix[j][n - i - 1] \
+                    = matrix[n - j - 1][i], matrix[n - i - 1][n - j - 1], matrix[j][n - i - 1], matrix[i][j]
+        return matrix
+```
+
 ###  3.44. <a name='GroupAnagrams'></a>49 Group Anagrams
 
 [小明](https://www.bilibili.com/video/BV1n5411t79G?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Yf4y1e7gJ?spm_id_from=333.999.0.0)
+
+```py
+# 质数对应字母 乘积哈希
+from functools import reduce
+class Solution:
+    def groupAnagrams(self, strs):
+        ans_dict = {}
+        prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]
+        chars = "abcdefghijklmnopqrstuvwxyz"
+        ch_pr = {chars[i]:prime[i] for i in range(26)}
+        for s in strs:
+            res = reduce(lambda x,y :x*y,[ch_pr[i] for i in s], 1)
+            if res in ans_dict:
+                ans_dict[res].append(s)
+            else:
+                ans_dict[res] = [s]
+        return [i for i in ans_dict.values()]
+```
+
+```py
+# python3 : 常规做法
+
+class Solution:
+    def groupAnagrams(self, strs):
+        res = []
+        dic = {}
+        for s in strs:
+            keys = "".join(sorted(s))
+            if keys not in dic:
+                dic[keys] = [s]
+            else:
+                dic[keys].append(s)
+        return list(dic.values())
+```
+
+```py
+class Solution:
+    def groupAnagrams(self, strs):
+        mp = collections.defaultdict(list)
+
+        for st in strs:
+            key = "".join(sorted(st))
+            mp[key].append(st)
+        
+        return list(mp.values())
+```
 
 ###  3.45. <a name='Powxn'></a>50 Pow(x, n)
 
@@ -2989,11 +3292,98 @@ class Solution(object):
 
 [小梦想家](https://www.bilibili.com/video/BV1N7411h7i1?spm_id_from=333.999.0.0)
 
+```py
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        # print(list(matrix.pop(0)))
+        print(list(zip(*matrix)))
+        print(list(zip(*matrix))[::-1])
+        return matrix and list(matrix.pop(0)) + self.spiralOrder(list(zip(*matrix))[::-1])
+```
+
+```py
+# 看到评论里又人发的这段代码，加了两行注释，方便大家了解！
+
+class Solution:
+    def spiralOrder(self, matrix):
+            res = []
+            while matrix:
+                # 削头（第一层）
+                res += matrix.pop(0)
+                # 将剩下的逆时针转九十度，等待下次被削
+                matrix = list(zip(*matrix))[::-1]
+            return res
+```
+
 ###  3.49. <a name='JumpGame'></a>55 Jump Game
 
 [小明](https://www.bilibili.com/video/BV14K4y1b7Fw?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1be411s7XX?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def canJump(self, nums):
+        cover = 0
+        if len(nums) == 1: return True
+        i = 0
+        # python不支持动态修改for循环中变量,使用while循环代替
+        while cover >= i: # 能够到达i
+            cover = max(i + nums[i], cover) # 能够到达的最远距离
+            print(cover)
+            if cover >= len(nums) - 1: return True 
+            # 只要有一个能够满足到达最后
+            i += 1
+        return False
+
+class Solution:
+    def canJump(self, nums):
+        n, rightmost = len(nums), 0
+        for i in range(n):
+            if i <= rightmost:
+                rightmost = max(rightmost, i + nums[i])
+                if rightmost >= n - 1:
+                    return True
+        return False
+```
+
+```py
+# 双指针法，从后往前便遍历。左指针指向的值需要不小于左右指针之间的距离，符合要求即代表可以从左指针处跳跃到右指针处。
+
+class Solution:
+    def canJump(self, nums):
+        size = len(nums)
+        right = size -1
+        for left in range(size-2,-1,-1):
+            step = right-left
+            print("right:",right," left:",left)
+            if nums[left] >= step:
+                print("在",left,"处为",nums[left],"可以到达",right,"处的",nums[right])
+                right = left 
+        return (not right)
+```
+
+```py
+class Solution(object):
+    def canJump(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        # 只有碰到0的时候才有可能过不去，而当前面允许我们在这跳一格，就能顺利到达终点
+        rest = 0 # 前面的允许我们跳多少格
+        print("nums[:-1]:",nums[:-1])
+        for n in nums[:-1]:
+            rest = max(rest - 1, n - 1) # 前面的允许我们跳多少格
+            print("在",n,"处的rest为",rest)
+            if rest < 0:
+                return False
+        return True
+```
 
 ###  3.50. <a name='I.'></a>56-I. 数组中数字出现的次数
 
@@ -3006,6 +3396,43 @@ class Solution(object):
 [小梦想家](https://www.bilibili.com/video/BV1w7411a7Wo?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1pV411a7t4?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def merge(self, intervals):
+        intervals.sort(key=lambda x: x[0]) # 按照左边界排序
+
+        merged = []
+        for interval in intervals:
+            # 如果列表为空，或者当前区间与上一区间不重合，直接添加
+            # merged最后一位的右边界 < 新来的坐边界
+            if not merged or merged[-1][1] < interval[0]:
+                merged.append(interval)
+            else:
+                # 否则的话，我们就可以与上一区间进行合并
+                merged[-1][1] = max(merged[-1][1], interval[1])
+
+        return merged
+```
+
+```py
+# 不使用额外的储存空间，直接在原矩阵上面修改的原地算法（反正排序的时候已经修改了原矩阵）：
+# pop(i)操作和append()操作耗时一样吗。
+# 如果你直接intervals.pop()而不是intervals.pop(i) ，那耗时一样，都是o(1)，
+# 但是你指定位置pop，那就是o(n)了。
+
+class Solution:
+    def merge(self, intervals):
+        intervals.sort()
+        i = 1
+        while(i < len(intervals)):
+            if intervals[i][0] > intervals[i-1][1]:
+                i += 1
+            else:
+                intervals[i-1][1] = max(intervals[i-1][1], intervals[i][1])
+                intervals.pop(i)       
+        return intervals
+```
 
 ###  3.52. <a name='InsertInterval'></a>57. Insert Interval 
 
@@ -3023,11 +3450,70 @@ class Solution(object):
 
 [官方](https://www.bilibili.com/video/BV1L54y1z7ae?spm_id_from=333.999.0.0)
 
+
 ###  3.55. <a name='SpiralMatrixII'></a>59. Spiral Matrix II 
 
 [小梦想家](https://www.bilibili.com/video/BV1J741157Kt?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1q5411G7MY?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4xjpi8iq5p80.png)
+
+```py
+# python 模拟
+
+# 选定四个方向：[(0,1), (1,0), (0,-1), (-1,0)]。
+
+# 用矩阵 res 来存储结果，从res[0][0]即左上角开始，
+
+# 沿着第一个方向(0,1) 依次填充，如果碰到超出边界或者已经填充过的值，
+
+# 就换下一个方向(1,0)，如此循环，直到填满n**2个数。
+
+# 可以把res初始置0，这样，如果 res[i][j] > 0 则已经被填充过。
+
+# 代码如下：
+
+class Solution:
+    def generateMatrix(self, n):
+        dirs = [(0,1), (1,0), (0,-1), (-1,0)]
+
+        res = [[0]*n for _ in range(n)]
+        row = 0
+        col = 0
+        dir = 0
+
+        for i in range(n**2):
+            res[row][col] = i+1
+            dx, dy = dirs[dir]
+            r = row + dx
+            c = col + dy
+            if r<0 or r>=n or c<0 or c>=n or res[r][c]>0:
+                dir = (dir+1)%4
+                dx, dy = dirs[dir]
+            row += dx
+            col += dy 
+
+        return res
+```
+
+```py
+class Solution:
+    def generateMatrix(self, n):
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        matrix = [[0] * n for _ in range(n)]
+        row, col, dirIdx = 0, 0, 0
+        for i in range(n * n):
+            matrix[row][col] = i + 1
+            dx, dy = dirs[dirIdx]
+            r, c = row + dx, col + dy
+            if r < 0 or r >= n or c < 0 or c >= n or matrix[r][c] > 0:
+                dirIdx = (dirIdx + 1) % 4   # 顺时针旋转至下一个方向
+                dx, dy = dirs[dirIdx]
+            row, col = row + dx, col + dy
+        
+        return matrix
+```
 
 ###  3.56. <a name='RotateList'></a>61. Rotate List
 
