@@ -2604,6 +2604,68 @@ class Solution:
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3k462gpgb5k0.png)
 
+```py
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        rows = [set() for _ in range(9)]
+        cols = [set() for _ in range(9)]
+        grids = [[set() for _ in range(3)] for _ in range(3)]
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    if  board[i][j] not in rows[i] and \
+                        board[i][j] not in cols[j] and \
+                        board[i][j] not in grids[i//3][j//3]:
+                        rows[i].add(board[i][j])
+                        cols[j].add(board[i][j])
+                        grids[i//3][j//3].add(board[i][j])
+
+        def dfs(i,j):
+            if board[i][j] != '.': # 被数字填满
+
+                if i == 8 and j == 8:
+                    self.flag = True
+                    return
+                if j < 8:
+                    dfs(i,j+1)
+                if j == 8:
+                    dfs(i+1,0)
+                    
+            else:
+                for num in range(1,10):
+                    item = str(num)
+                    if  item not in rows[i] and \
+                        item not in cols[j] and \
+                        item not in grids[i//3][j//3]:
+                        board[i][j] = item
+                        rows[i].add(item)
+                        cols[j].add(item)
+                        grids[i//3][j//3].add(item)
+
+                        # 易错点:注意缩进关系
+                        if i == 8 and j == 8:
+                            self.flag = True
+                            return
+                        if j < 8:
+                            dfs(i,j+1)
+                        if j == 8:
+                            dfs(i+1,0)
+                        if self.flag:
+                            return
+                            
+                        board[i][j] = '.'
+                        rows[i].remove(item)
+                        cols[j].remove(item)
+                        grids[i//3][j//3].remove(item)
+
+        self.flag = False
+        dfs(0,0)
+
+```
+
 ###  3.34. <a name='Countandsay'></a>38-Count and say
 
 [哈哈哈](https://www.bilibili.com/video/BV1QJ411R7MF?spm_id_from=333.999.0.0)
@@ -2669,134 +2731,25 @@ class Solution:
 ![Snipaste_2021-12-18_11-30-10](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/Snipaste_2021-12-18_11-30-10.5b1q5zh7t4w0.png)
 
 ```py
-# 标准回溯
-
-def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        path, listList, num = list(), list(), 0
-        def backtrack(firstIndex, sum):
-            if sum == target:
-                listList.append(path[:])
-                return 
-            if sum > target:
-                return
-            for i in range(firstIndex, len(candidates)):
-                path.append(candidates[i])
-                # ------------🎨和下面的一个等效🎨------------
-                sum += candidates[i] 
-                backtrack(i, sum)
-                sum -= candidates[i] 
-                # ------------🎨和下面的一个等效🎨------------
-                
-                path.pop()
-        backtrack(0, 0)
-        return listList 
-```
-
-```py
-# Python代码供参考
-
-class Solution:
-    def combinationSum(self, candidates, target):
-        listList = []
-        list = []
-        def recursion(idx, sum):
-            if idx >= len(candidates) or sum >= target:
-                if sum == target:
-                    listList.append(list[:])
-                return
-            list.append(candidates[idx])
-            # ------------🎨和上面的一个等效🎨------------
-            recursion(idx, sum + candidates[idx]) 
-            # ------------🎨和上面的一个等效🎨------------
-            list.pop()
-            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
-            recursion(idx + 1, sum)
-            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
-        recursion(0, 0)
-        return listList
-```
-
-```py
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        candidates.sort()
-        n = len(candidates)
-        res = []
-        def backtrack(i, tmp_sum, tmp):
-            if  tmp_sum > target or i == n:
-                return 
-            if tmp_sum == target:
-                res.append(tmp)
-                return 
-            for j in range(i, n):
-                if tmp_sum + candidates[j] > target:
-                    break
-                backtrack(j,tmp_sum + candidates[j],tmp+[candidates[j]])
-        backtrack(0, 0, [])
-        return res
-```
-
-```py
-# Python版本
-
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         res = []
-        combine = []
-        self.dfs(candidates, combine, target, 0, res)
-        return res
-
-    def dfs(self, candidates, combine, target, idx, res):
-        if idx == len(candidates):
-            return
-        if target == 0:
-            # 需要复制数组!!!
-            res.append(combine[:])
-            return
-        self.dfs(candidates, combine, target, idx+1, res)
-        tmp = target - candidates[idx]
-        if tmp >= 0:
-            combine.append(candidates[idx])
-            self.dfs(candidates, combine, tmp, idx, res)
-            combine.pop()
-```
-
-```py
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        if len(candidates) == 0:
-            return []
-        candidates.sort()
         path = []
-        res = []
-        '''
-        ！！！重点！！！
-        在python中，如果传参是mutable var, 那么传参相当于引用，因此调用后，如果调用函数的内部对该传入变量进行修改，就会导致直接改变原始对象。这就是典型的privacy leak！！发生了。
-        例如在这个，list就是该mutable var，而如果以path或res 为传参，放在__DFS 中， 那么就相当于在__DFS内部，实际上用的都是一个物理地址下的res和path，类似于全局变量。
-        因此combinationSum下的局部变量path和res也在——DFS运行的过程中发生了改变。
-        
-        利用这个性质，我们可以把mutable var当成传入参数，从而实现全局变量的效果。
-        '''
-        self.__DFS(candidates, target, 0, path, res)
+
+        def dfs(firstIdx):
+            if sum(path) == target:
+                res.append(path[:]) 
+                # 易错点，这里是res.append(path[:])，而不是res.append(path)
+                return
+            if sum(path) > target:
+                return
+            if sum(path) < target:
+                for i in range(firstIdx,len(candidates)):
+                    path.append(candidates[i])
+                    dfs(i)
+                    path.pop()
+        dfs(0)
         return res
-    '''
-        DFS的实现
-    '''
-    def __DFS(self, candidates, target, begin, path, res):
-        path = path.copy()
-        # 递归出口 就是余数为0
-        if target == 0:
-            res.append(path)   #记录该符合条件的结果
-            return
-        
-        #若当前路径有可能可行。
-        for i in range(begin, len(candidates)):  # 我们现在到begin的节点上了
-            if target - candidates[i] < 0:  # 剪枝条件
-                return                      # 如果当前节点就不行了，就不用继续了,这里到不用继续了即包括该depth不用继续了，也包括该节点更大到child也不用继续了，该节点pop出来
-            
-            path.append(candidates[i])  #记录当前为止
-            self.__DFS(candidates, target - candidates[i], i, path, res)# 向下继续走，记住递归不是return，递归到实现是调用！一旦return发生，递归停止。
-            path.pop()  # 回朔清理。当前节点下的所有情况都进行完了，该节点也不应该在path里面了。
 ```
 
 ###  3.36. <a name='CombinationSumII40-II'></a>40. Combination Sum II 40-组合总和 II
@@ -2808,114 +2761,25 @@ class Solution:
 ```py
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        listList = []
-        path = []
-        def backtrack(sum,startIndex):
-            if sum == target: listList.append(path[:])
-            for i in range(startIndex,len(candidates)):  #要对同一树层使用过的元素进行跳过
-                if sum + candidates[i] > target: return 
-                if i > startIndex and candidates[i] == candidates[i-1]: continue  
-                #直接用startIndex来去重,要对同一树层使用过的元素进行跳过
-                path.append(candidates[i])
-                # ------------🎨和下面的一个等效🎨------------
-                backtrack(sum + candidates[i],i+1)  #i+1:每个数字在每个组合中只能使用一次
-                # ------------🎨和下面的一个等效🎨------------
-                path.pop()  #回溯
-        candidates = sorted(candidates)  #首先把给candidates排序，让其相同的元素都挨在一起。
-        backtrack(0,0)
-        return listList
-```
-
-```py
-# Python代码供参考
-
-class Solution:
-    def combinationSum2(self, candidates, target):
-        listList = []
-        path = []
-        candidates = sorted(candidates)  #首先把给candidates排序，让其相同的元素都挨在一起。
-        def recursion(idx, sum):
-            if idx >= len(candidates) or sum >= target:
-                if sum == target and path not in listList: # 去重
-                    listList.append(path[:])
-                return
-            path.append(candidates[idx])
-            # ------------🎨和上面的一个等效🎨------------
-            recursion(idx + 1, sum + candidates[idx]) 
-            # ------------🎨和上面的一个等效🎨------------
-            path.pop()
-            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
-            recursion(idx + 1, sum)
-            # ------------🎨和上面的一个等效🎨相当于一个len循环，退出条件是：idx >= len(candidates)------------
-        recursion(0, 0)
-        return listList 
-```
-
-```py
-class Solution(object):
-    def combinationSum2(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-        def dfs(sum, path, index):
-            if sum == 0 and path not in listList:
-                listList.append(path)
-                return
-            for i in range(index, len(candidates)):
-                if candidates[i] > sum:
-                    break          
-                dfs(sum - candidates[i], path + [candidates[i]], i+1)
-        candidates.sort()
-        listList = []
-        dfs(target, [], 0)
-        return listList
-```
-
-```py
-# 排序后递归求解
-
-class Solution:
-    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        candidates.sort()
-        res=[]
-        n=len(candidates)
-        def dfs(k,t,index):
-            if k<0:
-                return 
-            if k==0:
-                res.append(t)
-            for i in range(index,n):
-                if i>index and candidates[i]==candidates[i-1]: # 剪枝
-                    continue # 剪枝
-                dfs(k-candidates[i],t+[candidates[i]],i+1)
-        dfs(target,[],0)
-        return res
-```
-
-```py
-# python版本-回溯法
-
-class Solution(object):
-    def combinationSum2(self, candidates, target):
         res = []
+        path = []
         candidates.sort()
-        def dfs(candidates, target, idx, combine):
-            if target == 0:
-                if combine not in res:
-                    res.append(combine[:])
+        # candidates.reverse()
+        def dfs(firstIdx):
+            if sum(path) == target:
+                res.append(path[:])
                 return
-
-            for i in range(idx, len(candidates)):
-                if i > idx and candidates[i] == candidates[i-1]: # 剪枝
-                    continue # 剪枝
-                if target < candidates[i]:
-                    return
-                combine.append(candidates[i])
-                dfs(candidates, target - candidates[i] , i + 1, combine)
-                combine.pop()
-        dfs(candidates, target, 0, [])
+            if sum(path) > target:
+                return
+            if sum(path) < target:
+                for i in range(firstIdx,len(candidates)):
+                    # 易错点：需要剪枝
+                    if i > firstIdx and candidates[i] == candidates[i-1]: continue
+                    # [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]会超时
+                    path.append(candidates[i])
+                    dfs(i+1)
+                    path.pop()
+        dfs(0)
         return res
 ```
 
@@ -2924,69 +2788,28 @@ class Solution(object):
 [小明](https://www.bilibili.com/video/BV1fy4y1k7pV?spm_id_from=333.999.0.0)
 
 ```py
-# python3 实现
 class Solution:
-    def firstMissingPositive(self, nums):
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        nums.append(0)
         n = len(nums)
         for i in range(n):
-            if nums[i] <= 0:
-                nums[i] = n + 1
+            if nums[i] <= 0 or nums[i] >= n:
+                nums[i] = 0
+        # for num in nums:
+            # if num >= n or num <= 0:
+            #     num = 0
+            # 易错点：for num in nums,其中num只能进行读操作，不能进行写操作。
+            # 容易出错
         
-        for i in range(n):
-            num = abs(nums[i])
-            if num <= n:
-                nums[num - 1] = -abs(nums[num - 1])
-            print("看不懂系列,其实就是遍历一遍，用正负号表示true或者false：",nums)
-        
-        for i in range(n):
-            if nums[i] > 0:
-                return i + 1
-        
-        return n + 1
-```
+        for num in nums:
+            nums[num % n] += n  
+            # 易错点：% n,一定要取余数，不然会index out of range
 
-```py
-# 改进了一下 2**31-1算常数变量 hash set算O(1) 那我这算法岂不是O(1)复杂度？
+        for i,num in enumerate(nums):
+            if num < n:
+                return i
 
-class Solution:
-    def firstMissingPositive(self, nums):
-        nums = set(nums)
-        for j in range(1, 2 ** 31 - 1):
-            if j not in nums:
-                return j
-```
-
-```py
-# 视频中是将小于等于0以及大于n的数替换为1，
-# 而文字版解法直接将小于等于0的数替换成n+1，这样就省掉了一开始对1的判断，减少了一轮循环。
-# 视频最后提到的“正确的元素放在正确的位置”也就是文字版的方法二。
-# 如果对法二有疑问的同学可以配合wei哥的视频食用（也就是紧挨着官方题解下面的那篇），
-# 视频中详细讲解了方法二和它的复杂度的分析。
-
-# 附上视频中的python程序：
-class Solution:
-    def firstMissingPositive(self, nums):
-        n = len(nums)
-        
-        if 1 not in nums:
-            return 1
-        print(nums)
-        for i in range(n):
-            if nums[i] <= 0 or nums[i] > n: #排除掉哪些很大的数
-                nums[i] = 1
-        print(nums)
-        
-        for i in range(n): 
-            a = abs(nums[i])-1
-            nums[a] = - abs(nums[a])
-            print("看不懂系列,其实就是遍历一遍，用正负号表示true或者false：",nums)
-
-        for i in range(n):
-            if nums[i] > 0:
-                return i+1
-        print(nums)
-            
-        return n + 1
+        return n
 ```
 
 ###  3.38. <a name='TrappingRainWater'></a>42. Trapping Rain Water
@@ -3072,6 +2895,27 @@ class Solution:
         
         return ans
 
+#   😋我的模仿
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        left = 0
+        right = len(height)-1
+        leftmax = 0
+        rightmax = 0
+        res = 0
+        while left < right:
+            if height[left] < height[right]:
+                leftmax = max(leftmax,height[left])
+                # 易错点：注意res和left的次序：先res，后left
+                res += leftmax-height[left] 
+                left += 1
+            else:
+                rightmax = max(rightmax,height[right])
+                # 易错点：注意res和right的次序：先res，后right
+                res += rightmax-height[right]
+                right -= 1
+        return res
 ```
 
 ###  3.39. <a name='JumpGameII'></a>45 Jump Game II
@@ -3090,6 +2934,24 @@ class Solution:
                     end = maxPos
                     step += 1
         return step
+
+#   😋我的模仿
+
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        n = len(nums)
+        jump = 0
+        cover = 0
+        stop = 0
+        i = 0
+        while cover >= i and i < n-1: 
+            #易错点：是n-1，不是n，只要调到最后一格就算成功
+            cover = max(cover,i + nums[i])
+            if i == stop:
+                jump += 1
+                stop = cover
+            i += 1
+        return jump
 ```
 
 ###  3.40. <a name='-1'></a>46-把数字翻译成字符串
@@ -3132,18 +2994,35 @@ class Solution:
 
 ```py
 class Solution:
-    def permute(self, nums):
+    def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
-        def backtrack(nums, tmp, depth):
-            if not nums:
-                res.append(tmp)
-                return 
-            for i in range(len(nums)):
-                # print("i:",i,"depth:",depth,"len(nums):",len(nums))
-                # print("以",[nums[i]],"为首，以",nums[:i]+nums[i+1:],"为尾的排列组合")
-                backtrack(nums[:i] + nums[i+1:], tmp + [nums[i]],depth+1)
-                # [nums[i]
-        backtrack(nums, [], 1)
+        path = []
+        # n = len(nums)
+        def dfs(nums):
+            # 易错点：if len(path) == n:
+            if not nums: # 判断条件应该是这个
+                res.append(path[:]) # 易错点：path[:]
+                return
+            else:
+                for i in range(len(nums)):
+                    path.append(nums[i])
+                    dfs(nums[:i]+nums[i+1:]) # 易错点：n是不断变小的
+                    path.pop()
+        dfs(nums)
+        return res
+
+# 另一种写法😋
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        def dfs(nums,path):
+            if not nums: 
+                res.append(path[:]) 
+                return
+            else:
+                for i in range(len(nums)):
+                    dfs(nums[:i]+nums[i+1:],path + [nums[i]]) 
+        dfs(nums,[])
         return res
 ```
 
@@ -3157,22 +3036,21 @@ class Solution:
 
 ```py
 class Solution:
-    def permuteUnique(self, nums):
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         res = []
-        def backtrack(nums, tmp, depth):
+        nums.sort()
+        def dfs(nums,path):
             if not nums:
-                res.append(tmp)
-                return 
-            for i in range(len(nums)):
-                # print("i:",i,"depth:",depth,"len(nums):",len(nums))
-                # print("以",[nums[i]],"为首，以",nums[:i]+nums[i+1:],"为尾的排列组合")
-                backtrack(nums[:i] + nums[i+1:], tmp + [nums[i]],depth+1)
-                # [nums[i]
-        backtrack(nums, [], 1)
+                res.append(path[:])
+            else:
+                for i in range(len(nums)):
+                    if i>0 and nums[i] == nums[i-1]:
+                        continue
+                    dfs(nums[:i]+nums[i+1:],path + [nums[i]])
+
+        dfs(nums,[])
         return res
 ```
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.64smd9q0fj00.png)
 
 ###  3.43. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
 
@@ -3326,63 +3204,39 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1be411s7XX?spm_id_from=333.999.0.0)
 
 ```py
+# 首选while循环😁
 class Solution:
-    def canJump(self, nums):
+    def canJump(self, nums: List[int]) -> bool:
+
         cover = 0
-        if len(nums) == 1: return True
+        n = len(nums)
         i = 0
-        # python不支持动态修改for循环中变量,使用while循环代替
-        while cover >= i: # 能够到达i
-            cover = max(i + nums[i], cover) # 能够到达的最远距离
-            print(cover)
-            if cover >= len(nums) - 1: return True 
-            # 只要有一个能够满足到达最后
+
+        while cover >= i:
+            cover = max(cover, i+nums[i])
+            if cover >= n -  1:
+                return True
             i += 1
         return False
 
+
+
+# 精简一下的for循环😁
 class Solution:
-    def canJump(self, nums):
-        n, rightmost = len(nums), 0
+    def canJump(self, nums: List[int]) -> bool:
+
+        cover = 0
+        n = len(nums)
+
         for i in range(n):
-            if i <= rightmost:
-                rightmost = max(rightmost, i + nums[i])
-                if rightmost >= n - 1:
+            if i <= cover: # 易错点：在判断下一个cover前，先要判断i是否能够到达
+                cover = max(cover, i+nums[i])
+                # if cover == i:
+                    # return False # 易错点：应该考虑特殊情况[0,1,2]
+
+                if cover >= n -  1:
                     return True
         return False
-```
-
-```py
-# 双指针法，从后往前便遍历。左指针指向的值需要不小于左右指针之间的距离，符合要求即代表可以从左指针处跳跃到右指针处。
-
-class Solution:
-    def canJump(self, nums):
-        size = len(nums)
-        right = size -1
-        for left in range(size-2,-1,-1):
-            step = right-left
-            print("right:",right," left:",left)
-            if nums[left] >= step:
-                print("在",left,"处为",nums[left],"可以到达",right,"处的",nums[right])
-                right = left 
-        return (not right)
-```
-
-```py
-class Solution(object):
-    def canJump(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: bool
-        """
-        # 只有碰到0的时候才有可能过不去，而当前面允许我们在这跳一格，就能顺利到达终点
-        rest = 0 # 前面的允许我们跳多少格
-        print("nums[:-1]:",nums[:-1])
-        for n in nums[:-1]:
-            rest = max(rest - 1, n - 1) # 前面的允许我们跳多少格
-            print("在",n,"处的rest为",rest)
-            if rest < 0:
-                return False
-        return True
 ```
 
 ###  3.50. <a name='I.'></a>56-I. 数组中数字出现的次数
@@ -6308,6 +6162,171 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV13y4y1q7Gi?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        if arr[start] == 0:
+            return True
+
+        n = len(arr)
+        used = {start}
+        q = collections.deque([start])
+
+        while len(q) > 0:
+            u = q.popleft()
+            for v in [u + arr[u], u - arr[u]]:
+                if 0 <= v < n and v not in used:
+                    if arr[v] == 0:
+                        return True
+                    q.append(v)
+                    used.add(v)
+        
+        return False
+
+```
+
+```py
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        def dfs(site, n):
+            if flag[0]:
+                return
+            if arr[site] == 0:
+                flag[0] = True
+                return
+            see[site] = True
+            for next_site in (site+arr[site], site-arr[site]):
+                if 0 <= next_site < n and see[next_site] == False:
+                    dfs(next_site, n)
+        n = len(arr)
+        flag = [False]
+        see = [False] * n
+        dfs(start, n)
+        return flag[0]
+```
+
+```py
+from typing import List
+
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+
+        seen = set()
+
+        def dfs(index):
+            if index in seen:
+                return False
+
+            seen.add(index)
+            if index < 0 or index >= len(arr):
+                return False
+
+            if arr[index] == 0:
+                return True
+
+            return dfs(index + arr[index]) or dfs(index - arr[index])
+
+        return dfs(start)
+```
+
+```py
+from typing import List
+
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+
+        seen = set()
+        queue = [(start, 0)]
+
+        while queue:
+            index, step = queue.pop(0)
+
+            if index in seen:
+                continue
+
+            seen.add(index)
+
+            if index < 0 or index >= len(arr):
+                continue
+
+            if arr[index] == 0:
+                return True
+
+            queue.extend([(index + arr[index], step+1), (index - arr[index], step+1)])
+
+        return False
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        def dfs(index,d):
+            if index<0 or index>=len(arr) or len(d)!=len(set(d)):return False
+            if arr[index]==0:return True
+            return dfs(index+arr[index],d+[index+arr[index]]) or  dfs(index-arr[index],d+[index-arr[index]])
+        return dfs(start,[start])
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        if arr[start]==0:return True
+        q=collections.deque([start])
+        visited={start}
+        while q:
+            node=q.popleft()
+            for n in [node+arr[node],node-arr[node]]:
+                if 0<=n<len(arr) and n not in visited:
+                    if arr[n]==0:return True
+                    q.append(n)
+                    visited.add(n)
+        return False
+
+bfs
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        q, v, n = [start], {start}, len(arr)
+        while q:
+            p = []
+            for i in q:
+                if not arr[i]:
+                    return True
+                for j in i - arr[i], i + arr[i]:
+                    if 0 <= j < n and j not in v:
+                        p.append(j)
+                        v.add(j)
+            q = p
+        return False
+dfs
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        n, v = len(arr), set()
+        def f(i):
+            if not arr[i]:
+                return True
+            elif i not in v:
+                v.add(i)
+                return 0 <= i - arr[i] < n and f(i - arr[i]) or 0 <= i + arr[i] < n and f(i + arr[i])
+        return f(start)
+
+python bfs
+
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        l, mark, queue= len(arr), [1 for i in range(len(arr))], [start]
+        while len(queue)!=0:
+            n = len(queue)
+            for i in range(n):
+                tmp = queue.pop()
+                if arr[tmp]==0:
+                    return True
+                mark[tmp] = 0
+                for cur in tmp+arr[tmp], tmp-arr[tmp]:
+                    if 0<=cur<l and mark[cur]:
+                        queue.insert(0, cur)
+        return False
+```
+
 ###  4.529. <a name='XORQueriesofaSubarray'></a>1310. XOR Queries of a Subarray
 
 [花花酱](https://www.bilibili.com/video/BV1oJ411L78Y?spm_id_from=333.999.0.0)
@@ -6344,9 +6363,163 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ch411i7yS?spm_id_from=333.999.0.0)
 
-###  4.538. <a name='JumpGameV'></a>1344. Jump Game V
+###  4.538. <a name='JumpGameV'></a>1340. Jump Game V
 
 [花花酱](https://www.bilibili.com/video/BV1h7411W7wS?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        pathdic = defaultdict(list)
+        n = len(arr)
+        if n<=1: return n
+        indegrees = [0]*n
+        for i in range(n):
+            for j in range(i+1,n):
+                if arr[j]<arr[i] and j-i<=d:
+                    pathdic[i].append(j)
+                    indegrees[j] += 1
+                else:
+                    break
+            for j in range(i-1, -1, -1):
+                if arr[j]<arr[i] and i-j<=d:
+                    pathdic[i].append(j)
+                    indegrees[j] += 1
+                else:
+                    break
+        # 拓扑排序
+        queue = Deque()
+        for i,degree in enumerate(indegrees):
+            if degree == 0:
+                queue.append((i,1))
+        ans = 1
+        while queue:
+            node, level = queue.popleft()
+            for nx_node in pathdic[node]:
+                ans = max(ans, level+1)
+                indegrees[nx_node] -= 1
+                if indegrees[nx_node] == 0:
+                    queue.append((nx_node, level+1))
+        return ans
+
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        D = {}
+        l = len(arr)
+        def P(n):
+            if n in D:
+                return D[n]
+            t = 1
+            for i in range(1, d + 1):
+                if n + i >= l or arr[n] <= arr[n + i]:
+                    break
+                t = max(t, 1 + P(n + i))
+            for i in range(1, d + 1):
+                if n - i < 0 or arr[n] <= arr[n - i]:
+                    break
+                t = max(t, 1 + P(n - i))
+            D[n] = t
+            return t
+        return max(P(i) for i in range(l))
+```
+
+```py
+记忆化 DFS
+
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        n = len(arr)
+        @lru_cache(None)
+        def helper(i):
+            res = 0
+            for j in range(i + 1, i + d + 1):
+                if j >= n or arr[j] >= arr[i]:
+                    break
+                res = max(res, helper(j))
+            for j in range(i - 1, i - d - 1, -1):
+                if j < 0 or arr[j] >= arr[i]:
+                    break
+                res = max(res, helper(j))
+            return res + 1
+        return max(helper(i) for i in range(n))
+```
+
+```py
+排序之后对向两边进行拓展
+
+#python3
+class Solution:
+	def maxJumps(self,arr,d):
+		fans=1
+		size=len(arr)
+		has,dp=[[0]*size for _ in range(2)]
+		for i in sorted(range(size),key=arr.__getitem__):
+			tans=has[i]=1
+			for j in range(i+1,min(size,i+d+1)):
+				if not has[j] or arr[j]==arr[i]:
+					break
+				tans=max(tans,dp[j]+1)
+			for j in range(i-1,max(-1,i-d-1),-1):
+				if not has[j] or arr[j]==arr[i]:
+					break
+				tans=max(tans,dp[j]+1)
+			dp[i]=tans
+			fans=max(fans,tans)
+		return fans
+
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        # 不能往比自己的高的跳
+        # 能跳的区间内不能有比自己高的
+        # dp[i]从 i开始的最大跳跃
+        n = len(arr)
+        height = [(jump,i) for i, jump in enumerate(arr)]
+        height = sorted(height, key=lambda x: x[0])
+        dp = [1 for _ in range(n)]
+        #print(idx)
+        #idx1 = map(lambda x: x[1], idx)
+        for jump, i in height:
+            cur = 1
+            for j in range(i-1, max(-1, i - d) - 1, -1): # 向左跳
+                if arr[j] >= jump: break
+                cur = max(dp[j] + 1,cur)
+
+            for j in range(i + 1, min(n, i + d + 1)):
+                if arr[j] >= jump: break
+                cur = max(dp[j] + 1, cur)
+            dp[i] = cur
+        return max(dp)
+
+class Solution:
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        seen = dict()
+
+        def dfs(pos):
+            if pos in seen:
+                return
+            seen[pos] = 1
+
+            i = pos - 1
+            while i >= 0 and pos - i <= d and arr[pos] > arr[i]:
+                dfs(i)
+                seen[pos] = max(seen[pos], seen[i] + 1)
+                i -= 1
+            i = pos + 1
+            while i < len(arr) and i - pos <= d and arr[pos] > arr[i]:
+                dfs(i)
+                seen[pos] = max(seen[pos], seen[i] + 1)
+                i += 1
+
+        for i in range(len(arr)):
+            dfs(i)
+        print(seen)
+        return max(seen.values())
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/jump-game-v/solution/tiao-yue-you-xi-v-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ###  4.539. <a name='MaximumStudentsTakingExam'></a>1349. Maximum Students Taking Exam
 
@@ -6721,6 +6894,62 @@ class Solution:
 ###  5.53. <a name='JumpGameVI'></a>1696. Jump Game VI
 
 [花花酱](https://www.bilibili.com/video/BV1554y1t7Tz?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def maxResult(self, nums: List[int], k: int) -> int:
+        
+        
+        # dp[i] = max(dp[j])+ nums[i] for j in range(i - k, i)
+        
+        dp = [0] * len(nums)
+        dp[0] = nums[0]
+        
+        q = [0]
+        for i in range(1, len(nums)):
+            while q and i - q[0] > k:
+                q.pop(0)
+            dp[i] = dp[q[0]] + nums[i]
+            while q and dp[q[-1]] <= dp[i]:
+                q.pop(-1)
+            q.append(i)     
+        return dp[-1]
+```
+
+```py
+class Solution:
+    def maxResult(self, nums: List[int], k: int) -> int:
+        from queue import PriorityQueue
+        ans, q = nums[0], PriorityQueue()
+        q.put([-nums[0], 0])
+        for i in range(1, len(nums)):
+            while not q.empty():
+                top = q.get()
+                if i - top[-1] <= k:
+                    q.put(top)
+                    break
+            ans = -top[0] + nums[i]
+            q.put([-ans, i])
+        return ans
+```
+
+```py
+class Solution:
+    def maxResult(self, nums: List[int], k: int) -> int:
+        #维护当前最大值  方法1：最大堆  方法2:单调递减队列（队首）
+        n = len(nums)
+        maxHeap = []
+        heapq.heapify(maxHeap)
+        heapq.heappush(maxHeap, (-nums[0], 0) )
+        res = nums[0]
+
+        for i in range(1, n):
+            while maxHeap and i - maxHeap[0][1] > k:    #index的距离太大，以后i越来越大，top()就没用了
+                heapq.heappop(maxHeap)
+            res = -maxHeap[0][0] + nums[i]
+            heapq.heappush(maxHeap, (-res, i) )         #dp的思想
+        return res
+```
 
 ###  5.54. <a name='DetermineifStringHalvesAreAlike'></a>1704 Determine if String Halves Are Alike
 
