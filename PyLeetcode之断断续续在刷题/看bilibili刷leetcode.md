@@ -3058,39 +3058,19 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Wy4y1s7fs?spm_id_from=333.999.0.0)
 
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5qtynjhcg1k0.png)
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3kl7avrsvhi0.png" width="30%">
 
 ```py
 class Solution:
-    def rotate(self, matrix):
+    def rotate(self, matrix: List[List[int]]) -> None:
         """
         Do not return anything, modify matrix in-place instead.
         """
-        n = len(matrix)  # 求出矩阵长度
-        m = (n+1)//2     # 求出层数
-        for k in range(m):
-            t = n-2*k-1 # 需旋转的次数
-            for i in range(t):
-                # d1，行与k成正比，列与k成正比且与i成正比
-                # d2，行与k成反比且与i成反比，列与k成正比
-                # d3，行与k成反比，列与k成反比且与i成反比
-                # d4，行与k成正比且与i成正比，列与k成反比
-                temp = matrix[k][k+i]
-                matrix[k][k+i] = matrix[n-1-k-i][k]  
-                matrix[n-1-k-i][k] = matrix[n-1-k][n-1-k-i]
-                matrix[n-1-k][n-1-k-i] = matrix[k+i][n-1-k]
-                matrix[k+i][n-1-k] = temp
-        return matrix
-```
-
-```py
-class Solution:
-    def rotate(self, matrix):
         n = len(matrix)
-        for i in range(n // 2):
-            for j in range((n + 1) // 2):
-                matrix[i][j], matrix[n - j - 1][i], matrix[n - i - 1][n - j - 1], matrix[j][n - i - 1] \
-                    = matrix[n - j - 1][i], matrix[n - i - 1][n - j - 1], matrix[j][n - i - 1], matrix[i][j]
+        for i in range(n//2):
+            for j in range((n+1)//2):
+                matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j],matrix[n-1-j][i] = \
+                matrix[n-1-j][i],matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j]
         return matrix
 ```
 
@@ -3102,20 +3082,21 @@ class Solution:
 
 ```py
 # 质数对应字母 乘积哈希
+# 这个思想可以学习！但我还没看
 from functools import reduce
 class Solution:
-    def groupAnagrams(self, strs):
-        ans_dict = {}
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        dic = {}
         prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]
         chars = "abcdefghijklmnopqrstuvwxyz"
         ch_pr = {chars[i]:prime[i] for i in range(26)}
         for s in strs:
-            res = reduce(lambda x,y :x*y,[ch_pr[i] for i in s], 1)
-            if res in ans_dict:
-                ans_dict[res].append(s)
+            keys = reduce(lambda x,y :x*y,[ch_pr[i] for i in s], 1)
+            if keys in dic:
+                dic[keys].append(s)
             else:
-                ans_dict[res] = [s]
-        return [i for i in ans_dict.values()]
+                dic[keys] = [s]
+        return list(dic.values())
 ```
 
 ```py
@@ -3132,18 +3113,33 @@ class Solution:
             else:
                 dic[keys].append(s)
         return list(dic.values())
+
+# 我的模仿😋
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        dic = {}
+        for s in strs:
+            keys = ''.join(sorted(s)) #易错点：s被sorted以后，会变成list
+            if keys not in dic:
+                dic[keys] = [s] #易错点：[s],而不是s
+            else:
+                dic[keys].append(s)
+        # print(dic.values())输出dict_values([['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']])
+        return list(dic.values())
 ```
 
 ```py
+# 更简单的写法：
 class Solution:
     def groupAnagrams(self, strs):
-        mp = collections.defaultdict(list)
+        dic = collections.defaultdict(list)
 
-        for st in strs:
-            key = "".join(sorted(st))
-            mp[key].append(st)
+        for s in strs:
+            keys = "".join(sorted(s))
+            dic[keys].append(s)
         
-        return list(mp.values())
+        return list(dic.values())
 ```
 
 ###  3.45. <a name='Powxn'></a>50 Pow(x, n)
@@ -3151,6 +3147,27 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Ai4y147kr?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        res = 1
+
+        if n < 0:
+            x = 1/x
+            n = -n
+
+        if n == 0:
+            return res
+
+        while n>0:
+            if n % 2 == 1:
+                res *= x
+            n >>= 1
+            # 等价于 n //= 2
+            x *= x
+        return res
+```
 
 ###  3.46. <a name='-1'></a>51. 数组中的逆序对
 
@@ -3165,6 +3182,23 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV11A41187AR?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Ta4y1i7Sh?spm_id_from=333.999.0.0)
+
+贪心
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5qrso4wuc440.png)
+
+```py
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = preSum = nums[0]
+        for num in nums[1:]:
+            preSum = max(preSum + num, num)
+            res = max(res,preSum)
+        return res
+```
+
+时间复杂度：O(n)
+时间复杂度：O(1)
 
 ###  3.48. <a name='SpiralMatrix'></a>54. Spiral Matrix
 
@@ -3181,20 +3215,25 @@ class Solution(object):
         print(list(zip(*matrix)))
         print(list(zip(*matrix))[::-1])
         return matrix and list(matrix.pop(0)) + self.spiralOrder(list(zip(*matrix))[::-1])
+        # 含义是，如果matrix为空，则返回matrix
 ```
 
 ```py
-# 看到评论里又人发的这段代码，加了两行注释，方便大家了解！
+return a and b
+ 
+等价于
+ 
+return b if a else a
+```
 
+```py
 class Solution:
-    def spiralOrder(self, matrix):
-            res = []
-            while matrix:
-                # 削头（第一层）
-                res += matrix.pop(0)
-                # 将剩下的逆时针转九十度，等待下次被削
-                matrix = list(zip(*matrix))[::-1]
-            return res
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        res = []
+        while matrix:
+            res += matrix.pop(0) # 易错点：注意是+=
+            matrix = list(zip(*matrix))[::-1] # 易错点：注意[::-1]的摆放
+        return res
 ```
 
 ###  3.49. <a name='JumpGame'></a>55 Jump Game
@@ -3253,20 +3292,18 @@ class Solution:
 
 ```py
 class Solution:
-    def merge(self, intervals):
-        intervals.sort(key=lambda x: x[0]) # 按照左边界排序
-
-        merged = []
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        # 等价于：intervals.sort(key = lambda x: x[0])
+        res = []
         for interval in intervals:
-            # 如果列表为空，或者当前区间与上一区间不重合，直接添加
-            # merged最后一位的右边界 < 新来的坐边界
-            if not merged or merged[-1][1] < interval[0]:
-                merged.append(interval)
+            if not res or res[-1][1] < interval[0]:
+                res.append(interval[:])
             else:
-                # 否则的话，我们就可以与上一区间进行合并
-                merged[-1][1] = max(merged[-1][1], interval[1])
-
-        return merged
+                res[-1][1] = max(res[-1][1],interval[1])
+                # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
+                # 比如，[[1,4],[2,3]]
+        return res
 ```
 
 ```py
@@ -3294,16 +3331,110 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ja4y1j7cG?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        left, right = newInterval
+        placed = False
+        ans = list()
+        for li, ri in intervals:
+            if li > right:
+                # 在插入区间的右侧且无交集
+                if not placed:
+                    ans.append([left, right])
+                    placed = True
+                ans.append([li, ri])
+            elif ri < left:
+                # 在插入区间的左侧且无交集
+                ans.append([li, ri])
+            else:
+                # 与插入区间有交集，计算它们的并集
+                left = min(left, li)
+                right = max(right, ri)
+        
+        if not placed:
+            ans.append([left, right])
+        return ans
+```
+
+```py
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        ans = []
+        for i,v in enumerate(intervals):
+            if newInterval[1] < v[0]:
+                ans.append(newInterval)
+                ans.extend(intervals[i:])
+                return ans
+            elif v[1] < newInterval[0]:
+                ans.append(v)
+            elif v[0] <= newInterval[0]:
+                newInterval=[v[0], max(newInterval[1], v[1])]
+            else: #newInterval[0] < v[0]:
+                newInterval=[newInterval[0], max(newInterval[1], v[1])]
+        
+        ans.append(newInterval)
+            
+        return ans
+```
+
+```py
+class Solution(object):
+    def insert(self, intervals, newInterval):
+        """
+        :type intervals: List[List[int]]
+        :type newInterval: List[int]
+        :rtype: List[List[int]]
+        """
+        intervals.append(newInterval)
+        intervals = sorted(intervals, key=lambda x: x[0])
+
+        merge = [intervals[0]]
+        for i in range(1, len(intervals)):
+            mergeleft = merge[-1][0]
+            mergeright = merge[-1][1]
+            interleft = intervals[i][0]
+            interright = intervals[i][1]
+            if interleft > mergeright:
+                merge.append(intervals[i])
+            else:
+                merge[-1][1] = max(mergeright, interright)
+        return merge
+
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3nwn10ugcuu0.png)
+
 ###  3.53. <a name='LenghofLastWords'></a>58. Lengh of Last Words
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411i7so?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1ay4y1y7d2?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        s.strip()
+        return len(s.split()[-1]) if s else 0
+```
+
+```py
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        res = 0
+        tmp = 0
+        for i in range(len(s)):
+            if s[i] == ' ':
+                tmp = 0
+            else:
+                tmp += 1
+                res = tmp # 易错点：用res存储tmp变量，防止末尾的空格
+        return res
+```
+
 ###  3.54. <a name='II.LCOF'></a>59 - II. 队列的最大值 LCOF
 
 [官方](https://www.bilibili.com/video/BV1L54y1z7ae?spm_id_from=333.999.0.0)
-
 
 ###  3.55. <a name='SpiralMatrixII'></a>59. Spiral Matrix II 
 
@@ -3311,62 +3442,22 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1q5411G7MY?spm_id_from=333.999.0.0)
 
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4xjpi8iq5p80.png)
-
 ```py
-# python 模拟
-
-# 选定四个方向：[(0,1), (1,0), (0,-1), (-1,0)]。
-
-# 用矩阵 res 来存储结果，从res[0][0]即左上角开始，
-
-# 沿着第一个方向(0,1) 依次填充，如果碰到超出边界或者已经填充过的值，
-
-# 就换下一个方向(1,0)，如此循环，直到填满n**2个数。
-
-# 可以把res初始置0，这样，如果 res[i][j] > 0 则已经被填充过。
-
-# 代码如下：
-
 class Solution:
-    def generateMatrix(self, n):
-        dirs = [(0,1), (1,0), (0,-1), (-1,0)]
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        res = [[0 for _ in range(n)] for _ in range(n)]
+        x,y,dx,dy = 0,0,0,1 
+        # 0,1 -> 1,0 -> 0,-1 -> -1,0
+        for num in range(1,n*n + 1):
+            res[x][y] = num
 
-        res = [[0]*n for _ in range(n)]
-        row = 0
-        col = 0
-        dir = 0
+            if not 0 <= x+dx < n or not 0 <= y+dy < n or res[x+dx][y+dy] != 0:
+            # 易错点：or res[x+dx][y+dy] != 0 顺序很重要，一定要在最后
+                dx,dy = dy, -dx
 
-        for i in range(n**2):
-            res[row][col] = i+1
-            dx, dy = dirs[dir]
-            r = row + dx
-            c = col + dy
-            if r<0 or r>=n or c<0 or c>=n or res[r][c]>0:
-                dir = (dir+1)%4
-                dx, dy = dirs[dir]
-            row += dx
-            col += dy 
-
+            x += dx
+            y += dy
         return res
-```
-
-```py
-class Solution:
-    def generateMatrix(self, n):
-        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        matrix = [[0] * n for _ in range(n)]
-        row, col, dirIdx = 0, 0, 0
-        for i in range(n * n):
-            matrix[row][col] = i + 1
-            dx, dy = dirs[dirIdx]
-            r, c = row + dx, col + dy
-            if r < 0 or r >= n or c < 0 or c >= n or matrix[r][c] > 0:
-                dirIdx = (dirIdx + 1) % 4   # 顺时针旋转至下一个方向
-                dx, dy = dirs[dirIdx]
-            row, col = row + dx, col + dy
-        
-        return matrix
 ```
 
 ###  3.56. <a name='RotateList'></a>61. Rotate List
