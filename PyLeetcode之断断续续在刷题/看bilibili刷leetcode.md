@@ -3332,78 +3332,19 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Ja4y1j7cG?spm_id_from=333.999.0.0)
 
 ```py
+# 根据上一问修改。
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        left, right = newInterval
-        placed = False
-        ans = list()
-        for li, ri in intervals:
-            if li > right:
-                # 在插入区间的右侧且无交集
-                if not placed:
-                    ans.append([left, right])
-                    placed = True
-                ans.append([li, ri])
-            elif ri < left:
-                # 在插入区间的左侧且无交集
-                ans.append([li, ri])
-            else:
-                # 与插入区间有交集，计算它们的并集
-                left = min(left, li)
-                right = max(right, ri)
-        
-        if not placed:
-            ans.append([left, right])
-        return ans
-```
-
-```py
-class Solution:
-    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        ans = []
-        for i,v in enumerate(intervals):
-            if newInterval[1] < v[0]:
-                ans.append(newInterval)
-                ans.extend(intervals[i:])
-                return ans
-            elif v[1] < newInterval[0]:
-                ans.append(v)
-            elif v[0] <= newInterval[0]:
-                newInterval=[v[0], max(newInterval[1], v[1])]
-            else: #newInterval[0] < v[0]:
-                newInterval=[newInterval[0], max(newInterval[1], v[1])]
-        
-        ans.append(newInterval)
-            
-        return ans
-```
-
-```py
-class Solution(object):
-    def insert(self, intervals, newInterval):
-        """
-        :type intervals: List[List[int]]
-        :type newInterval: List[int]
-        :rtype: List[List[int]]
-        """
         intervals.append(newInterval)
-        intervals = sorted(intervals, key=lambda x: x[0])
-
-        merge = [intervals[0]]
-        for i in range(1, len(intervals)):
-            mergeleft = merge[-1][0]
-            mergeright = merge[-1][1]
-            interleft = intervals[i][0]
-            interright = intervals[i][1]
-            if interleft > mergeright:
-                merge.append(intervals[i])
+        intervals.sort()
+        res = []
+        for interval in intervals:
+            if not res or res[-1][1] < interval[0]:
+                res.append(interval[:])
             else:
-                merge[-1][1] = max(mergeright, interright)
-        return merge
-
+                res[-1][1] = max(res[-1][1],interval[1])
+        return res
 ```
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3nwn10ugcuu0.png)
 
 ###  3.53. <a name='LenghofLastWords'></a>58. Lengh of Last Words
 
@@ -3470,6 +3411,50 @@ class Solution:
 
 [洛阳](https://www.bilibili.com/video/BV1Xk4y1d7gF?spm_id_from=333.999.0.0)
 
+```py
+# python 解法 思路：先把链表首尾相连，再找到位置断开循环
+
+class Solution(object):
+    def rotateRight(self, head, k):
+        if head is None or head.next is None: return head
+        start, end, len = head, None, 0
+        while head:
+            end = head
+            head = head.next
+            len += 1
+        end.next = start
+        pos = len - k % len
+        while pos > 1:
+            start = start.next
+            pos -= 1
+        ret = start.next
+        start.next = None
+        return ret
+```
+
+```py
+# 思路很简单： 首尾相连，然后计算需要走到有效步数，在对应位置断开即可。
+
+class Solution:
+    def rotateRight(self, head: ListNode, k: int) -> ListNode:
+        if not head: return None
+        orig_head, cnt = head, 1        #cnt如果会遍历到none，就从0开始计数（右开空间），如果遍历到最后有效位，就从1开始（右闭空间）
+        while head.next:                # head遍历到了最后一位
+            head, cnt = head.next, cnt+1   # cnt若从1开始，且紧跟着head，那么pointer最终停到哪，cnt就包括到哪。是完全相同的
+        head.next = orig_head           # 首尾连接上
+
+        step = cnt - k % cnt-1          # 计算有效移动步数
+        while step > 0:
+            orig_head, step = orig_head.next, step - 1
+        
+        new_head, orig_head.next = orig_head.next, None
+        return new_head
+
+        # 你一旦首尾相连，就要以step为循环截止，不要以node作为循环跳出到条件，
+        # step从一个数减小到0就停止循环，以step为循环怎么会有无限循环到可能啊。 
+        # 当然在循环里记得递减step
+```
+
 ###  3.57. <a name='-1'></a>62-不同路径
 
 [哈哈哈](https://www.bilibili.com/video/BV1mC4y1W7Je?spm_id_from=333.999.0.0)
@@ -3478,11 +3463,141 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1cp4y167qx?spm_id_from=333.999.0.0)
 
+```py
+from pprint import pprint
+class Solution: # 动态规划
+    def uniquePaths(self, m, n):
+        """
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        # 初始化
+        dp = [[1 for i in range(n)] for j in range(m)]
+        pprint(dp)
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j]
+                pprint(dp)
+                print(i,j)
+        return dp[m - 1][n - 1
+```
+
+```py
+# 2.动态规划思路：
+
+class Solution(object):
+    def uniquePaths(self, m, n):
+        dp = [[0 for _ in range(n)] for _ in range(m)]
+        
+        dp[0][0] = 0
+        for i in range(m):
+            dp[i][0] = 1
+        for j in range(n):
+            dp[0][j] = 1
+        
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[-1][-1]
+
+# 方法三：动态规划。规律在于f(x,y) = f(x-1,y) + f(x, y-1)
+
+# 执行用时：36 ms, 在所有 Python3 提交中击败了38.22%的用户
+# 内存消耗：15 MB, 在所有 Python3 提交中击败了52.09%的用户
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [[0] * n for _ in range(m)]
+        for i in range(m):
+            for j in range(n):
+                if i == 0 or j == 0:
+                    dp[i][j] = 1
+                else:
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[m-1][n-1]
+
+# 既然第一行和第一列的所有值都应该是1，初始化的时候可以把f数组内的值全部设为1，可以不必像官方题解那么繁琐的初始化。
+
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        f = [[1] * n] * m
+        for i in range(1, m):
+            for j in range(1, n):
+                f[i][j] = f[i - 1][j] + f[i][j - 1]
+        return f[m-1][n-1]
+
+# dp可以很简单的优化为一维
+
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # 一维dp
+        dp = [1] * n
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[j] += dp[j - 1]
+        return dp[-1]
+
+class Solution:
+    def uniquePaths(self, m, n):
+        """
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        if m < 1 or n < 1:
+            return 0
+        dp = [0] *n
+        dp[0] = 1    
+        for i in range(0,m):
+            for j in range(1,n):
+                dp[j] += dp[j-1]
+        return dp[n-1]
+```
+
 ###  3.58. <a name='UniquePathsII'></a>63 Unique Paths II
 
 [小明](https://www.bilibili.com/video/BV1Sv411L7qe?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Pp4y1v7KR?spm_id_from=333.999.0.0)
+
+```py
+# Python3 动态规划，比较简单的写法：
+
+class Solution(object):
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        m, n = len(obstacleGrid), len(obstacleGrid[0])
+        dp = [[0] * (n+1) for _ in range(m+1)]
+        dp[0][1] = 1  # 或 dp[1][0] = 1
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+                if not obstacleGrid[i-1][j-1]:
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[m][n]
+
+
+```
+
+```py
+class Solution(object):
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        dp = [[0 for i in range(len(obstacleGrid[0]))] for i in range(len(obstacleGrid))]
+        dp[0][0] = 1
+        for i in range(len(obstacleGrid)):
+            for j in range(len(obstacleGrid[0])):
+                # 当前位置不是障碍, 障碍为位置对应的dp[i][j]永远为0，因此在下面加上也无所谓
+                if obstacleGrid[i][j] != 1:
+                    if i > 0 and j > 0:
+                        dp[i][j] = dp[i - 1][j] + dp[i][j - 1]  # 非边界位置，因此它可以是从上边来的，可以是从左边来的
+                    elif i > 0:  # 位于左边界  从上一个点过来只能往下走
+                        dp[i][j] = dp[i - 1][j]
+                    elif j > 0:  # 位于上边界 从上一个点过来只能往右走
+                        dp[i][j] = dp[i][j - 1]
+                # 当前位置是障碍的情况
+                else:
+                    dp[i][j] = 0
+
+        return dp[-1][-1]
+```
 
 ###  3.59. <a name='MinimumPathSum64-'></a>64. Minimum Path Sum 64-最小路径和
 
@@ -3493,6 +3608,47 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1JC4y1x7j1?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1vi4y1u7a6?spm_id_from=333.999.0.0)
+
+```py
+# 可以直接在原数组上进行记忆，不需要额外的空间
+
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        # 显然是动态规划
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if i==0 and j==0:
+                    continue
+                elif i==0:
+                    grid[i][j] = grid[i][j-1] + grid[i][j]
+                elif j==0:
+                    grid[i][j] = grid[i-1][j] + grid[i][j]
+                else:
+                    grid[i][j] = min(grid[i-1][j], grid[i][j-1]) + grid[i][j]
+        
+        return grid[-1][-1]
+
+```
+
+```py
+class Solution:
+    def minPathSum(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        m = len(grid)
+        n = len(grid[0])
+        dp = grid.copy()
+        for i in range(1, n):
+            dp[0][i] = dp[0][i-1] + grid[0][i]
+        for i in range(1, m):
+            dp[i][0] = dp[i-1][0] + grid[i][0]
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[i][j] = min(dp[i][j-1] + grid[i][j], dp[i-1][j] + grid[i][j])
+        return dp[m-1][n-1]
+```
 
 ###  3.60. <a name='ValidNumber'></a>65 Valid Number
 
@@ -3506,6 +3662,80 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1gi4y137GW?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        n = len(digits)
+        for i in range(n - 1, -1, -1):
+            if digits[i] != 9:
+                digits[i] += 1
+                for j in range(i + 1, n):
+                    digits[j] = 0
+                return digits
+
+        # digits 中所有的元素均为 9
+        return [1] + [0] * n
+```
+
+```py
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        ans = 0
+        res = list()
+        for i in digits:
+            ans = ans * 10 + i
+        for i in str(ans + 1):
+            res.append(int(i))
+        return res
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        n = len(digits)
+        for i in range(n-1, -1, -1):
+            if digits[i] == 9:
+                digits[i] = 0
+            else:
+                digits[i] += 1
+                return digits
+        return [1] + [0] * n
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        for j in range(len(digits)-1, -1, -1):
+            if digits[j] == 9:
+                digits[j] = 0
+            else:
+                digits[j] += 1
+                return digits
+        return [1] + digits
+
+简单题重拳出击，最后一位加1，等于10就进位，没有进位就输出，进位到头就在output前面加个1，简单易懂
+
+class Solution(object):
+    def plusOne(self, digits):
+        i=1
+        n=len(digits)
+        while i<=n:
+            digits[-i]+=1
+            if digits[-i]==10 :
+                digits[-i]=0
+                if i==n :
+                    digits.insert(0,1)
+                i+=1
+            else :
+                break
+        return digits
+
+python 转成int操作，再转列表
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        a = ''
+        for i in digits:
+            a += str(i)
+        return [int(i) for i in str(int(a) + 1)]
+```
+
 ###  3.62. <a name='AddBinary'></a>67-Add Binary
 
 [哈哈哈（常规方法）](https://www.bilibili.com/video/BV1N7411F73K?spm_id_from=333.999.0.0)
@@ -3516,6 +3746,33 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Q5411h7gc?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def addBinary(self, a, b) -> str:
+        return '{0:b}'.format(int(a, 2) + int(b, 2))
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/add-binary/solution/er-jin-zhi-qiu-he-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def addBinary(self, a, b) -> str:
+        x, y = int(a, 2), int(b, 2)
+        while y:
+            answer = x ^ y
+            carry = (x & y) << 1
+            x, y = answer, carry
+        return bin(x)[2:]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/add-binary/solution/er-jin-zhi-qiu-he-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 ###  3.63. <a name='Sqrtx'></a>69 Sqrt(x)
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7YN?spm_id_from=333.999.0.0)
@@ -3525,6 +3782,94 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Yb411i7TN?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1PK411s72g?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        if x == 0:
+            return 0
+        ans = int(math.exp(0.5 * math.log(x)))
+        return ans + 1 if (ans + 1) ** 2 <= x else ans
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/sqrtx/solution/x-de-ping-fang-gen-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        l, r, ans = 0, x, -1
+        while l <= r:
+            mid = (l + r) // 2
+            if mid * mid <= x:
+                ans = mid
+                l = mid + 1
+            else:
+                r = mid - 1
+        return ans
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/sqrtx/solution/x-de-ping-fang-gen-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        if x == 0:
+            return 0
+        
+        C, x0 = float(x), float(x)
+        while True:
+            xi = 0.5 * (x0 + C / x0)
+            if abs(x0 - xi) < 1e-7:
+                break
+            x0 = xi
+        
+        return int(x0)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/sqrtx/solution/x-de-ping-fang-gen-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+二分法不需要ans
+
+class Solution(object):
+    def mySqrt(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        l,r = 0,x
+        while l <= r:
+            mid = (l+r)//2
+            if mid * mid <= x:
+                l = mid + 1
+            else:
+                r = mid -1
+        return r
+
+牛顿迭代法：https://en.wikipedia.org/wiki/Integer_square_root#Using_only_integer_division
+
+class Solution:
+    def mySqrt(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        if x <= 1:
+            return x
+        r = x
+        while r > x / r:
+            r = (r + x / r) // 2
+        return int(r)
+```
 
 ###  3.64. <a name='ClimbingStairs'></a>70. Climbing Stairs
 
@@ -3540,11 +3885,97 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1ki4y1u7tn?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        b1, b2 = 1, 1
+        for i in range(n-1):
+            b1, b2 = b2, b1 + b2
+        return b2
+```
+
+```py
+Python3 抖个机灵， 设置个缓存竟然过了。。。
+
+class Solution:
+    # 这里加了缓存装饰器！！！
+    @functools.lru_cache(100)
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        return self.climbStairs(n - 1) + self.climbStairs(n - 2) if n > 2 else n
+        
+2020/04/24更新： 再次认真学习了动态规划的内容，意识到其实这也是DP的一种，
+DP可以用递归和迭代的方式实现，我只是没有自己去写缓存，
+而是用切面的方式加了缓存，时间复杂度也基本可以看成是O(n)，
+DP其实就是空间换时间，所以这里空间复杂度会稍微高点！
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        # dp[i]表示爬到第i级楼梯的种数， (1, 2) (2, 1)是两种不同的类型
+        dp = [0] * (n + 1)
+        dp[0] = 1
+        for i in range(n+1):
+            for j in range(1, 3):
+                if i>=j:
+                    dp[i] += dp[i-j]
+        return dp[-1]
+
+和斐波那契数的题目思路一样。
+
+def climbStairs(self, n: int) -> int:
+    if n == 1 or n == 2:
+        return n
+    pre, cur = 1, 2
+    while n > 2:
+        cur, pre = pre + cur, cur
+        n -= 1
+    return cur
+
+def climbStairs(self, n: int) -> int:
+    p = 0
+    q = 0
+    r = 1
+    for i in range(1,n+1):
+        p = q
+        q = r
+        r = p + q
+        i += 1
+    return r
+```
+
 ###  3.65. <a name='SimplifyPath'></a>71. Simplify Path
 
 [小梦想家](https://www.bilibili.com/video/BV1V7411w7jX?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1D5411J72c?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def simplifyPath(self, path):
+        stack = []
+        for i in path.split('/'):
+            if i not in ['', '.', '..']:
+                stack.append(i)
+            elif i == '..' and stack:
+                stack.pop()
+        return "/" + "/".join(stack)
+```
+
+```py
+from os.path import abspath
+
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        return abspath(path)
+
+from functools import reduce
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        return "/"+"/".join(reduce(lambda x, y: x[:-1] if y == ".." else x + [y] if y and y != "." else x, path.split("/"), []))
+```
 
 ###  3.66. <a name='EditDistance72-'></a>72. Edit Distance 72-编辑距离
 
@@ -3556,15 +3987,273 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1ea4y147FK?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        n = len(word1)
+        m = len(word2)
+        
+        # 有一个字符串为空串
+        if n * m == 0:
+            return n + m
+        
+        # DP 数组
+        D = [ [0] * (m + 1) for _ in range(n + 1)]
+        
+        # 边界状态初始化
+        for i in range(n + 1):
+            D[i][0] = i
+        for j in range(m + 1):
+            D[0][j] = j
+        
+        # 计算所有 DP 值
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                left = D[i - 1][j] + 1
+                down = D[i][j - 1] + 1
+                left_down = D[i - 1][j - 1] 
+                if word1[i - 1] != word2[j - 1]:
+                    left_down += 1
+                D[i][j] = min(left, down, left_down)
+        
+        return D[n][m]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/edit-distance/solution/bian-ji-ju-chi-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        m=len(word1)
+        n=len(word2)
+        dp=list(range(n+1))
+        for i in range(m):
+            lu=dp[0]
+            dp[0]=i+1
+            for j in range(n):
+                dp[j+1],lu=min(dp[j]+1,dp[j+1]+1,lu+int(word1[i]!=word2[j])),dp[j+1]
+        return dp[-1]
+```
+
+```py
+#@author:leacoder
+#@des:  动态规划  编辑距离
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        len1 = len(word1)
+        len2 = len(word2)
+        '''
+        动态规划 
+        step1: 状态  
+        首先只定义一维 DP[i] 不能有效简化问题的处理
+        使用 二维 DP[i][j]，表示 word1 的 i 个字母 与 word2 的 第 j 个字母 相同 需要的操作步骤数
+        将最对 word1 处理 转化为 对 word1 和 word2 均处理
+        word1 插入一个字符   DP[i-1][j] + 1 ->  DP[i][j]
+        word1 删除一个字符 = word2 插入一个字符  DP[i][j-1] + 1 -> DP[i][j]
+        word1 替换一个字符 = word1 word2 都替换一个字符 DP[i-1][j-1] + 1 -> DP[i][j]
+        step2: 动态方程
+        DP[i][j]  A、 word1 的 i 个字母 与 word2 的 第 j 个字母 相同
+                     DP[i][j] =  DP[i-1][j-1]  #不操作
+                  B、不相同,需要进行 插入 删除 或者 替换操作
+                     DP[i][j]  =  min(DP[i-1][j] + 1,DP[i][j-1] + 1,DP[i-1][j-1]+1)
+        
+        '''
+        DP = [[0 for _ in range(len2+1)] for _ in range(len1+1)]
+        # 初始
+        for i in range(len1+1):
+            DP[i][0] = i
+        for j in range(len2+1):
+            DP[0][j] = j
+        for i in range(1,len1+1):
+            for j in range(1,len2+1):
+                if word1[i - 1] == word2[j -1]:
+                    DP[i][j] =  DP[i-1][j-1]
+                else:
+                    DP[i][j]  =  min(DP[i-1][j] + 1,DP[i][j-1] + 1,DP[i-1][j-1]+1)
+        return DP[len1][len2]
+```
+
+```py
+比较好理解，but会超时，哭唧唧
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        def dp(i, j) -> int:
+            if i == -1:
+                return j + 1
+            if j == -1:
+                return i + 1
+            # 做出选择
+            if word1[i] == word2[j]:
+                return dp(i - 1, j - 1) # 什么都不做
+            else:
+                return min(
+                    dp(i, j-1) + 1,  # insert
+                    dp(i-1, j) + 1,  # delete
+                    dp(i-1, j-1) + 1 # replace
+                )
+        return dp(len(word1)-1, len(word2)-1)
+```
+
 ###  3.67. <a name='SetMatrixZeroes'></a>73. Set Matrix Zeroes
 
 [小梦想家](https://www.bilibili.com/video/BV1W7411T7rX?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1X64y1Y7kG?spm_id_from=333.999.0.0)
 
+```py
+class Solution(object):
+    def setZeroes(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: void Do not return anything, modify matrix in-place instead.
+        """
+        def setZero(i,j):
+            for m in range(col):
+                matrix[i][m] = 0
+            for n in range(row):
+                matrix[n][j] = 0
+        
+        row = len(matrix)
+        col = len(matrix[0]) if row else 0
+        new_matrix = [matrix[i][:] for i in range(row)]
+        
+        for i in range(row):
+            for j in range(col):
+                if new_matrix[i][j] == 0:
+                    setZero(i,j)
+        return matrix
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3knyjy00lnm0.png)
+
+```py
+class Solution:
+    def setZeroes(self, matrix):
+        m, n = len(matrix), len(matrix[0])
+        flag_col0 = any(matrix[i][0] == 0 for i in range(m))
+        flag_row0 = any(matrix[0][j] == 0 for j in range(n))
+        
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][j] == 0:
+                    matrix[i][0] = matrix[0][j] = 0
+        
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][0] == 0 or matrix[0][j] == 0:
+                    matrix[i][j] = 0
+        
+        if flag_col0:
+            for i in range(m):
+                matrix[i][0] = 0
+        
+        if flag_row0:
+            for j in range(n):
+                matrix[0][j] = 0
+        return matrix
+```
+
 ##  4. <a name='Searcha2DMatrix'></a>74 Search a 2D Matrix
 
 [小明](https://www.bilibili.com/video/BV1aK4y1h7Bb?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6m5rp13uex40.png)
+
+```py
+class Solution:
+    def searchMatrix(self, matrix, target):
+
+        m, n = len(matrix), len(matrix[0])
+        l, r = 0, m*n-1
+
+        while l <= r:
+            mid = l + (r-l)//2
+            mid_row = mid // n
+            mid_col = mid - mid_row*n
+            if matrix[mid_row][mid_col] == target:
+                return True
+            elif matrix[mid_row][mid_col] < target:
+                l = mid + 1
+            else:
+                r = mid - 1
+        return False
+
+
+# 直接二维转一维二分
+
+class Solution:
+    def searchMatrix(self, matrix, target):
+        m = len(matrix)
+        n = len(matrix[0])
+        left = 0
+        right = m * n - 1
+        while left <= right:
+            mid = left + (right - left) // 2
+            if matrix[mid//n][mid%n] > target:
+                right = mid - 1
+            elif matrix[mid//n][mid%n] < target:
+                left = mid + 1
+            else:
+                return True
+        return False
+
+# 二分：时间复杂度logMN
+
+class Solution:
+    def searchMatrix(self, matrix, target):
+        if not matrix: return False
+        def ele(i): return matrix[i//n][i%n]
+
+        m, n = len(matrix), len(matrix[0])
+        l, r = 0, m*n-1
+        while l<=r:
+            mid = (l+r) >> 1
+            if ele(mid) == target: return True
+            elif ele(mid) > target: r = mid-1
+            else: l = mid+1
+        return False
+
+# 解题3.二分查找：
+
+class Solution:
+    def searchMatrix(self, matrix, target):
+        line = len(matrix)
+        row = len(matrix[0])
+        left = 0
+        right = line * row
+        while left < right:
+            i, j = divmod((left + right) // 2, row)
+            if matrix[i][j] == target:
+                return True
+            if matrix[i][j] < target:
+                left = i * row + j + 1
+            else:
+                right = i * row + j
+        return False
+
+# 解题2.贪心算法：
+
+class Solution:
+    def searchMatrix(self, matrix, target):
+        line = len(matrix) - 1
+        row = len(matrix[0]) - 1
+        i = j = 0
+        while True:
+            if matrix[i][j] == target:
+                return True
+            elif i < line and matrix[i + 1][j] <= target:
+                i += 1
+            elif j < row and matrix[i][j + 1] <= target:
+                j += 1
+            else:
+                return False
+
+```
 
 ###  4.1. <a name='SortColors'></a>75. Sort Colors
 
@@ -3574,11 +4263,208 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1tz4y1o7n5?spm_id_from=333.999.0.0)
 
+```py
+class Solution(object):
+    def sortColors(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: void Do not return anything, modify nums in-place instead.
+        """
+        idx, left, right = 0, 0, len(nums) - 1
+        while idx < len(nums):
+            if nums[idx] == 2 and idx < right:
+                nums[idx], nums[right] = nums[right], 2
+                print("把2往后移动:",idx,"和",right,"对换位置后变成：",nums)
+                right -= 1
+            elif nums[idx] == 0 and idx > left:
+                nums[idx], nums[left] = nums[left], 0
+                print("把0往前移动:",idx,"和",left,"对换位置后变成：",nums)
+                left += 1
+                # 把1往前移动
+            else:
+                idx += 1
+                print(idx,"else后面的内容永远都在。")
+```
+
+```py
+class Solution(object):
+    def sortColors(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: void Do not return anything, modify nums in-place instead.
+        """
+        n0, n1, n2 = -1, -1, -1
+        # n0 在 0 时，要后移1位
+        # n1 在 0 和 1 时，要后移1位
+        # n2 在 任何情况 0和1和2 时，都要后移1位
+        for i in range(len(nums)):
+            if nums[i] == 0:
+                n0, n1, n2 = n0+1, n1+1, n2+1
+                nums[n2] = 2
+                nums[n1] = 1
+                nums[n0] = 0
+            elif nums[i] == 1:
+                n1, n2 = n1+1, n2+1
+                nums[n2] = 2
+                nums[n1] = 1
+            else:
+                n2 += 1
+                nums[n2] = 2
+        return nums
+```
+
 ###  4.2. <a name='-1'></a>76-最小覆盖子串
 
 [哈哈哈](https://www.bilibili.com/video/BV1PM4y1K7p6?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1aK4y1t7Qd?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def subsets(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        res = [[]]
+        for num in nums:
+            # 这个添加了一个辅助变量
+            res.extend([tmp+[num] for tmp in res])
+            tmplist = [tmp+[num] for tmp in res]
+            print("结果: ", res, "叠加元素: ", num)
+            print("Extend列表: ", tmplist,"=> 是个List[List[int]]")
+        return res  
+
+class Solution(object):
+    def subsets(self, nums):
+        res = [[]]
+
+        print(range(len(nums)-1, -1, -1),"是：")
+        print( list(range(len(nums)-1, -1, -1)),"=> 2包括，-1不包括" )
+        for i in range(len(nums)-1, -1, -1):
+            print(res[:])
+            for subres in res[:]: 
+                res.append(subres+[nums[i]])
+        return res
+# 直接从后遍历，遇到一个数就把所有子集加上该数组成新的子集
+# 注意代码中res[:]是必须的，因为切片是引用新的对象，此时在循环中res[:]是不更新的，而res是不断有元素push进去的，很trick
+```
+
+```py
+class Solution:
+    def subsets(self, nums):
+        q=[[]]
+        n=len(nums)
+        for i in range(n):
+            for j in range(len(q)):
+
+                # ----------------核心代码----------------
+                print("大循环:",nums[i])
+                print("append前len(q):",len(q))
+                q.append(q[j]+[nums[i]])
+                print("append后len(q):",len(q))
+                # ----------------核心代码----------------
+
+                print("小循环q[j]: ",q[j])
+                print("叠加元素[nums[i]]: ",[nums[i]])
+                print("q[j]+[nums[i]]: ",q[j]+[nums[i]])
+                print("-"*20)
+        return q
+```
+
+### 77
+
+```py
+class Solution:
+    def combine(self, n, k):
+            res = []
+            path = []
+            def backtrack(num_index):
+                if len(path) == k:
+                    res.append(path[:])
+                    return
+                for i in range(num_index, n+1):
+                    path.append(i)
+                    backtrack(i+1)
+                    path.pop()
+            backtrack(1)
+            return res
+```
+
+```py
+class Solution:
+    def combine(self, n, k):
+        res = []
+        path = []
+        def backtrack(n, k, StartIndex):
+            if len(path) == k:
+                res.append(path[:])
+                return
+            for i in range(StartIndex, n-(k-len(path)) + 2):
+                path.append(i)
+                backtrack(n, k, i+1)
+                path.pop()
+        backtrack(n, k, 1)
+        return res
+```
+
+```py
+#  执行用时 : 96 ms, 在Combinations的Python提交中击败了100.00% 的用户
+#  # 终于骄傲一次。这题让我想到了排列组合的性质C(m,n)=C(m-1,n)+C(m-1,n-1)
+
+class Solution(object):
+    def combine(self, n, k):
+        
+        if k>n or k==0:
+            print("结束啦1！")
+            return []
+        if k==1:
+            print("结束啦2！")
+            return [[i] for i in range(1,n+1)]
+        if k==n:
+            print("结束啦3！")
+            return [[i for i in range(1,n+1)]]
+
+        answer=self.combine(n-1,k)
+        print("循环前answer：",answer)
+        for item in self.combine(n-1,k-1):
+            print("n:",n)
+            print("item:",item)
+            print("answer:",answer)
+            item.append(n)
+            answer.append(item)
+        
+        print(4)
+        return answer
+```
+
+```py
+# Python版，未剪枝50%，剪枝后99%。 剪枝条件不太好找，用归纳法： 令n = 4，k = 3：
+
+# 当depth = 0，i 需要 <= 2。如果> 2，则需剪枝
+# 当depth = 1，i 需要 <= 3。如果> 3，则需剪枝
+# 当depth = 2，i 需要 <= 4。如果> 4，则需剪枝
+# 归纳后发现，i 需要始终 <= n - k + 1 + depth = 4 - 3 + 1 + depth = 2 + depth。 配图可以移步weiwei大神的题解。
+
+# 时间复杂度：O(C(n, k) * k)，枚举结果总数为C(n, k)，每次得到一个结果需要O(k)时间。
+# 空间复杂度：O(n)，最大是n层递归栈。这里不计返回值所占空间。
+class Solution:
+    def combine(self, n, k):
+        def dfs(startIdx, depth, path):
+            if depth == k:
+                self.res.append(path[:])
+                return
+            for i in range(startIdx, n + 1): # 注意这里i循环到n
+                if i <= n - k + 1 + depth: # 剪枝。depth为当前path的长度。
+                    dfs(i + 1, depth + 1, path + [i])
+        
+        self.res = []
+        dfs(1, 0, []) # startIdx初始为1，深度初始为0，path初始为[]。
+
+        return self.res
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.g5g24wrgffc.png)
 
 ###  4.3. <a name='Subsets78-'></a>78. Subsets 78-子集
 
@@ -3590,11 +4476,151 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1154y1R72Q?spm_id_from=333.999.0.0)
 
+```py
+bfs
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        q=[[]]
+        n=len(nums)
+        for i in range(n):
+            for j in range(len(q)):
+                q.append(q[j]+[nums[i]])
+        return q
+```
+
+```py
+直接从后遍历，遇到一个数就把所有子集加上该数组成新的子集
+class Solution(object):
+    def subsets(self, nums):
+        res = [[]]
+        for i in range(len(nums)-1, -1, -1):
+            for subres in res[:]: res.append(subres+[nums[i]])
+    
+        return res
+注意代码中res[:]是必须的，因为切片是引用新的对象，此时在循环中res[:]是不更新的，而res是不断有元素push进去的，很trick
+```
+
+```py
+很经典的回溯题型。 每次传递原始列表，外加一个答案列表，答案列表中每次都从原始列表中拿出更大的数字。 具体见代码，比较容易理解
+
+执行用时：32 ms, 在所有 Python3 提交中击败了67.15%的用户
+内存消耗：15 MB, 在所有 Python3 提交中击败了82.44%的用户
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        self.ans = []
+        self.findSubSets(nums, [])
+        return self.ans
+
+    def findSubSets(self, s1, s2):
+        self.ans.append(s2)
+        for num in s1:
+            if len(s2) == 0 or num > s2[-1]:
+                self.findSubSets(s1, s2 + [num])
+```
+
+```py
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []  
+        path = []  
+        def backtrack(nums,startIndex):
+            res.append(path[:])  #收集子集，要放在终止添加的上面，否则会漏掉自己
+            for i in range(startIndex,len(nums)):  #当startIndex已经大于数组的长度了，就终止了，for循环本来也结束了，所以不需要终止条件
+                path.append(nums[i])
+                backtrack(nums,i+1)  #递归
+                path.pop()  #回溯
+        backtrack(nums,0)
+        return res
+```
+
+```py
+参考46 全排列，回溯算法。 时间复杂度为 O(n^2)。
+
+def subsets(self, nums: List[int]) -> List[List[int]]:
+    res = []
+
+    def backtrace(nums, track, start):
+        res.append(list(track))
+
+        for i in range(start, len(nums)):
+            track.append(nums[i])
+            backtrace(nums, track, i + 1)  # 此时从第 i 个往后遍历，避免重复
+            track.pop()
+
+    backtrace(nums, [], 0)
+    return res
+```
+
 ###  4.4. <a name='WordSearch'></a>79. Word Search
 
 [小梦想家](https://www.bilibili.com/video/BV1yE411g7Tb?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1iZ4y1T78D?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def exist(self, board, word):
+        def dfs(i, j, word, visit):
+            # 单词是否出现在以i，j为起点的网格中
+            # word[0] 和 word[1:] 划分
+            print(len(word))
+            if len(word) == 1:
+                return word[0] == board[i][j]
+            elif board[i][j] != word[0]:
+                return False
+                
+            visit[i][j] = True
+            for dire in direction: # 对四个方向进行搜索
+                cur_i, cur_j = i + dire[0], j + dire[1]
+                if 0 <= cur_i < len(board) and 0 <= cur_j < len(board[0]) and not visit[cur_i][cur_j]:
+                    if dfs(cur_i, cur_j, word[1:], visit):
+                        return True
+            visit[i][j] = False
+
+        direction = [(0,1), (0, -1), (1, 0), (-1, 0)]
+        for i in range(len(board)): # 遍历所有格子作为单词起点
+            for j in range(len(board[0])):
+                visit = [[False]*len(board[0]) for _ in range(len(board))]
+                print(len(board))
+                if dfs(i,j,word,visit): 
+                    return True
+        return False
+```
+
+```py
+class Solution:
+    def exist(self, board, word):
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        def check(i: int, j: int, k: int) -> bool:
+            if board[i][j] != word[k]:
+                return False
+            if k == len(word) - 1:
+                return True
+            
+            visited.add((i, j))
+            result = False
+            for di, dj in directions:
+                newi, newj = i + di, j + dj
+                if 0 <= newi < len(board) and 0 <= newj < len(board[0]):
+                    if (newi, newj) not in visited:
+                        if check(newi, newj, k + 1):
+                            result = True
+                            break
+            
+            visited.remove((i, j))
+            return result
+
+        h, w = len(board), len(board[0])
+        visited = set()
+        for i in range(h):
+            for j in range(w):
+                if check(i, j, 0):
+                    return True
+        
+        return False
+```
 
 ###  4.5. <a name='RemoveDuplicatesfromSortedArrayII'></a>80 Remove Duplicates from Sorted Array II
 
