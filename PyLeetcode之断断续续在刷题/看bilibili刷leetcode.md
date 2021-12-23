@@ -4528,113 +4528,55 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
+        # 三个指针
+        cur1 = m - 1
+        cur2 = n - 1
+        i = m + n -1
+        while cur1 >= 0 and cur2 >= 0:
+            if nums1[cur1] < nums2[cur2]:
+                nums1[i] = nums2[cur2]
+                cur2 -= 1
+            else:
+                nums1[i] = nums1[cur1]
+                cur1 -= 1
+            i -= 1
+        if cur2 >= 0:
+            nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
         nums1[m:] = nums2
         nums1.sort()
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/merge-sorted-array/solution/he-bing-liang-ge-you-xu-shu-zu-by-leetco-rrb0/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-双指针
-
-```py
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        """
-        Do not return anything, modify nums1 in-place instead.
-        """
-        sorted = []
-        p1, p2 = 0, 0
-        while p1 < m or p2 < n:
-            if p1 == m:
-                sorted.append(nums2[p2])
-                p2 += 1
-            elif p2 == n:
-                sorted.append(nums1[p1])
-                p1 += 1
-            elif nums1[p1] < nums2[p2]:
-                sorted.append(nums1[p1])
-                p1 += 1
-            else:
-                sorted.append(nums2[p2])
-                p2 += 1
-        nums1[:] = sorted
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/merge-sorted-array/solution/he-bing-liang-ge-you-xu-shu-zu-by-leetco-rrb0/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-逆向双指针
-
-```py
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        """
-        Do not return anything, modify nums1 in-place instead.
-        """
-        p1, p2 = m - 1, n - 1
-        tail = m + n - 1
-        while p1 >= 0 or p2 >= 0:
-            if p1 == -1:
-                nums1[tail] = nums2[p2]
-                p2 -= 1
-            elif p2 == -1:
-                nums1[tail] = nums1[p1]
-                p1 -= 1
-            elif nums1[p1] > nums2[p2]:
-                nums1[tail] = nums1[p1]
-                p1 -= 1
-            else:
-                nums1[tail] = nums2[p2]
-                p2 -= 1
-            tail -= 1
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/merge-sorted-array/solution/he-bing-liang-ge-you-xu-shu-zu-by-leetco-rrb0/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-###  4.13. <a name='-1'></a>89
+###  4.13. <a name='-1'></a> 89. 格雷编码
 
 ```py
 class Solution:
     def grayCode(self, n):
+        # 易错点：递归部分必须是字符串部分
         def recur(i):
-            # 终止条件
-            if i==0:
-                return ['0']
             if i==1:
                 return ['0','1']
-            print("当i是",i)
-            # 循环迭代
-            # dfs(6) -> dfs(5) -> dfs(4) -> dfs(3) -> dfs(2) -> dfs(1)
-            # dfs(6) -> dfs(5) -> dfs(4) -> dfs(3) -> dfs(2) -> last = ['0','1'] return ['00', '01', '11', '10']
-            # dfs(6) -> dfs(5) -> dfs(4) -> dfs(3) -> last = ['00', '01', '11', '10'] return 三位数的
-            # dfs(6) -> last = 5位数的 return 6位数的
-            lastBinaryList = recur(i-1)
-            print("当i是",i,"last:",lastBinaryList)
+            else:
+                lastList = recur(i-1)
+                return ['0'+ x for x in lastList]+['1'+ x for x in lastList[::-1]]
+            
+        res = recur(n)
+        return [int(x,2) for x in res] 
+        # int(a,2)把二进制转化成10进制
 
-            return ['0'+BinStr for BinStr in lastBinaryList]+['1'+l for l in lastBinaryList[::-1]]
-        ans = recur(n)
-        print("ans:",ans)
-        return [int(a,2) for a in ans] # int(a,2)把二进制转化成10进制
-
-class Solution(object):
-    def grayCode(self, n):
-        """
-        :type n: int
-        :rtype: List[int]
-        """
-        result = [(i>>1)^i for i in range(pow(2,n))]
-        print("pow(2,n): ",pow(2,n))
-        for i in range(pow(2,n)):
-            print("(i>>1):",(i>>1)," (i>>1)^i:",(i>>1)^i)
-        return result
+class Solution:
+    def grayCode(self, n: int) -> List[int]:
+        res, head = [0], 1
+        for i in range(n):
+            for subres in res[::-1]: # 逆序，背一背
+                res.append(head + subres)
+            head <<= 1 # head就是2**i
+        return res
 
 class Solution:
     def grayCode(self, n):
@@ -4644,17 +4586,6 @@ class Solution:
                 res.append(head + res[j])
             head <<= 1 # head就是2**i
         return res
-
-class Solution:
-    def grayCode(self, n):
-        if n == 0:
-            return [0]
-        ans = [0, 1]
-        for i in range(1, n):
-            print("ans[::-1]:",ans[::-1])
-            for num in ans[::-1]: # 逆序，背一背，因为最后一位必须是2的n次方
-                ans.append(2**i+num)
-        return ans
 ```
 
 ###  4.14. <a name='II'></a>90-子集 II
@@ -4664,6 +4595,27 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1DD4y1X7Cp?spm_id_from=333.999.0.0)
 
 ```py
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = [[]]
+        n = len(nums)
+        path = []
+        nums.sort()
+        def backtrack(startIndex):
+            if startIndex == n:
+                return
+            else:
+                for i in range(startIndex,n):
+                    if i > startIndex and nums[i] == nums[i-1]: 
+                        # 易错点：不是nums[i] == nums[startIndex]
+                        continue
+                    path.append(nums[i])
+                    res.append(path[:]) # 易错点：一定要是path[:]
+                    backtrack(i+1)
+                    path.pop()
+        backtrack(0)
+        return res
+
 class Solution(object):
     def subsetsWithDup(self, nums):
         """
@@ -4673,15 +4625,15 @@ class Solution(object):
         nums.sort()
         res = [[]]
         for i in range(len(nums)):
-            print([nums[i]])
-            print(res)
-            print([tmp for tmp in res])
-            print("整体判断是否重复：",[nums[i] in res],"=> 如果有一个为true，则返回true")
-            print("单个判断是否重复：",[nums[i] in tmp for tmp in res],"=> 如果有一个为true，则返回true")
+            # print([nums[i]])
+            # print(res)
+            # print([tmp for tmp in res])
+            # print("整体判断是否重复：",[nums[i] in res],"=> 如果有一个为true，则返回true")
+            # print("单个判断是否重复：",[nums[i] in tmp for tmp in res],"=> 如果有一个为true，则返回true")
             # -----------核心算法-----------
             if any(nums[i] in tmp for tmp in res):
-                print("遇到重复的元素，则在重复得最多的元素上，继续叠加")
-                print("index() 函数用于从列表中找出某个值第一个匹配项的索引位置:",i - nums.index(nums[i]))
+                # print("遇到重复的元素，则在重复得最多的元素上，继续叠加")
+                # print("index() 函数用于从列表中找出某个值第一个匹配项的索引位置:",i - nums.index(nums[i]))
                 res.extend([tmp+[nums[i]] for tmp in res if tmp.count(nums[i]) == i - nums.index(nums[i])])
             # -----------核心算法-----------
             else:
@@ -4698,6 +4650,17 @@ class Solution:
             for j in range(len(res)):
                 if res[j] + [nums[i]] not in res:
                     res.append(res[j] + [nums[i]]) 
+        return res
+
+# 另一种写法
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = [[]]
+        nums.sort()
+        for num in nums:
+            for subres in res[:]: # 注意：要写成 res[:]
+                if subres + [num] not in res:
+                    res.append(subres + [num]) 
         return res
 ```
 
