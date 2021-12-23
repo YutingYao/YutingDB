@@ -917,6 +917,50 @@ class Solution:
             dic[target - n] = i
 ```
 
+```scala
+object Solution {
+    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+        
+        val nums_map = scala.collection.mutable.HashMap[Int, Int]()
+        
+        var result: Array[Int] = Array(0,0)
+        
+        var i = 0
+        
+        while(result.sum == 0) {
+            
+            val complement = target - nums(i)
+            
+            if (nums_map.contains(complement)) {
+                result(0) = i
+                result(1) = nums_map(complement)
+            } else {
+                nums_map(nums(i)) = i
+            }
+            
+            i += 1
+        }
+
+        result     
+    }
+}
+
+
+
+// Brute-force method, which takes more than two times of running time than the method above
+object Solution {
+    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+        
+        val result = for {i <- 0 until (nums.length - 1);
+            j <- (i+1) until nums.length
+            if nums(i) + nums(j) == target} yield Array(i, j)
+        
+        result(0)
+        
+    }
+}
+```
+
 ###  3.2. <a name='AddTwoNumbers'></a>2. Add Two Numbers
 
 [花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
@@ -1201,6 +1245,65 @@ class Solution:
             return -res
         else:
             return 0
+```
+
+```scala
+object Solution {
+    def reverse(x: Int): Int = {
+        
+        // METHOD-1
+        if (x == 0) {
+            0
+        } else { 
+            val xx = math.abs(x).toString.reverse
+            var start_to_record = false
+            val temp = collection.mutable.ArrayBuffer[Char]()
+
+            for (x <- xx) {
+
+                if (start_to_record == false && x != '0') {
+                    start_to_record = true
+                }
+
+                if (start_to_record) {
+                    temp += x
+                }
+
+            }
+
+            try {
+                ({if (x >= 0) "" else "-"} + temp.mkString).toInt    
+            } catch {
+                case e: java.lang.NumberFormatException => 0
+            } 
+        }
+        
+        
+        // METHOD-2
+        if (x == 0) {
+            0
+        } else {
+            
+            val xx = math.abs(x).toString.reverse
+            
+            // find the first element not equaling to 0
+            // Here I used method `.find`. It finds and returns the first element of the list satisfying a predicate, if any.
+            // `.find` returns Some(*), so need to use `.get`
+            val intermediate_result = xx.slice(xx.zipWithIndex.find(_._1 != '0').get._2, xx.length)
+            
+            // 1. Use if-else to handle possible negative integers.
+            // 2. use try-catch to handle cases like "1534236469"
+            //      which will cause exception java.lang.NumberFormatException: For input string: "9646324351"
+            //      due to Int.MaxValue is 2147483647
+            try {
+                ({if (x >= 0) "" else "-"} + intermediate_result).toInt    
+            } catch {
+                case e: java.lang.NumberFormatException => 0
+            }
+
+        }  
+    }
+}
 ```
 
 ###  3.8. <a name='StringtoIntegeratoi'></a>8. String to Integer(atoi)
@@ -2255,6 +2358,37 @@ class Solution:
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6zs7v6d4w740.png" width="60%">
 
+```scala
+
+object Solution {
+    def removeDuplicates(nums: Array[Int]): Int = {
+        
+        // Two-pointer idea
+        
+        if (nums.length == 0){
+            0
+        } else {
+            // if the Array is not empty, we start from index 1 rather than 0
+            // since the 1st element (at index 0) will be included for sure.
+            // For the same reason, the initial value of `count` is 1 instead of 0
+            
+            var count = 1
+            
+            // NOTE: start from 1 rathr than 0 here
+            for (i <- 1 until nums.length) {
+                if (nums(i) != nums(count-1)) {
+                    nums(count) = nums(i)
+                    count += 1
+                }
+            }
+            
+            count
+        }
+         
+    }
+}
+```
+
 ###  3.25. <a name='python-Removeelement'></a>27-python-Remove element
 
 [哈哈哈](https://www.bilibili.com/video/BV1mJ411m7ir?spm_id_from=333.999.0.0)
@@ -2597,6 +2731,67 @@ class Solution:
                         rows[i].add(board[i][j])
                         grids[i//3][j//3].add(board[i][j])
         return True
+```
+
+```scala
+object Solution {
+    def isValidSudoku(board: Array[Array[Char]]): Boolean = {
+        
+        
+        import util.control.Breaks._
+        
+        def check_a_single_array(l: Array[Char]): Boolean = {
+            // input: Array of char, an Array of 9 elments to check using the three rules
+            // return: Boolean, if the array given can pass the exam
+            val temp = l.filter(_ != '.')
+            if (temp.length != temp.distinct.length) {
+                false
+            } else {
+                true
+            }
+        }
+        
+        
+        var error_flag = 0
+        
+        breakable {
+            
+            // check rule-1
+            for (i <- 0 until 9) {
+                if (check_a_single_array(board(i)) ==  false) {
+                    error_flag += 1
+                    break
+                }
+              }
+
+            // check rule-2
+            for (i <- 0 until 9) {
+                val temp_list = board.map(_(i))
+                
+                if (check_a_single_array(temp_list) == false) {
+                    error_flag += 1
+                    break
+                }
+            }
+            
+            // check rule-3
+            for (i <- 0 until 3; j <- 0 until 3) {
+                // get each 3x3 sub-boxes and flatten it to a 9-length Array
+                val temp_list = board.slice(i * 3, i * 3 + 3).flatMap(_.slice(j * 3, j*3 + 3))
+                
+                if (check_a_single_array(temp_list) == false) {
+                    error_flag += 1
+                    break
+                }
+            }
+ 
+        }
+
+ 
+        if (error_flag > 0) false else true
+         
+    }
+}
 ```
 
 ###  3.33. <a name='SudokuSolver'></a>37. Sudoku Solver 解数独
@@ -3145,6 +3340,30 @@ class Solution:
         return list(dic.values())
 ```
 
+```scala
+object Solution {
+    def groupAnagrams(strs: Array[String]): List[List[String]] = {
+        
+        import collection.mutable.HashMap
+        import collection.mutable.ListBuffer
+        
+        val mapping = HashMap[String, ListBuffer[String]]()
+        
+        for (s <- strs) {
+            if (mapping.contains(s.sorted)) {
+                mapping(s.sorted) += s
+            } else {
+                mapping(s.sorted) = ListBuffer(s)
+            }
+        }
+        
+
+        mapping.values.map(_.toList).toList
+
+    }
+}
+```
+
 ###  3.45. <a name='Powxn'></a>50 Pow(x, n)
 
 [小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
@@ -3202,6 +3421,28 @@ class Solution:
 
 时间复杂度：O(n)
 时间复杂度：O(1)
+
+```scala
+object Solution {
+    def maxSubArray(nums: Array[Int]): Int = {
+        
+        // IDEA:
+        // Go through the whole Array,
+        // and change each element into the possible maximum sum of the subarray ENDING at its index 
+        
+        // During each iteration, the element at i-th index will be updated into the possible maximum sum of subarray ENDING at i-th index
+        // then for (i+1)th index, if updated i-th value is positive, it can be used to update (i+1)th value as well.
+        
+        for (i <- Range(1, nums.length)) {
+            if (nums(i-1) > 0) {
+                nums(i) += nums(i-1)
+            }
+        }
+        
+        nums.max
+    }
+}
+```
 
 ###  3.48. <a name='SpiralMatrix'></a>54. Spiral Matrix
 
@@ -3279,6 +3520,43 @@ class Solution:
                 if cover >= n -  1:
                     return True
         return False
+```
+
+```py
+object Solution {
+    def canJump(nums: Array[Int]): Boolean = {
+        
+        // We should look at this probelm in REVERSE ORDER:
+        // The target is to check whether we can arrive at the last index,
+        // then we should reversely check the elements,
+        // meanwhile, update the smallest index that we must arrive (`target`) in order to arrive at the last index
+        
+        // For example, if the i-2 index index is 2,
+        // we know we can make it as long as the earlier elements can send us to i-2 index.
+        // My target should be updated to i-2 index rather than the last index.
+        
+        val n = nums.length 
+     
+        var target = n-1 // the initial target
+        var i = n - 2
+        
+        // update the target
+        while (i > 0) {
+            if (nums(i) + i >= target) {
+                target = i
+            }
+            i -= 1
+        }
+        
+        // check if the first element can trigger the "chain effect"
+        if (nums(0) >= target) {
+            true
+        } else {
+            false
+        }
+ 
+    }
+}
 ```
 
 ###  3.50. <a name='I.'></a>56-I. 数组中数字出现的次数
@@ -4151,46 +4429,35 @@ class Solution:
 [洛阳](https://www.bilibili.com/video/BV1Fi4y187pj?spm_id_from=333.999.0.0)
 
 ```py
-class Solution82:
-    def deleteDuplicates(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        if not head:
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
             return head
-        
-        dummy = ListNode(0, head)
-        # 其中，val是0，next是head
-        # 0只能放置在前面,0也可以写成任意元素
-        print("输出 dummy：")
-        printList(dummy)
-
+        dummy = ListNode(0,head)
         cur = dummy
-        # cur变化，dummy也会变化
         while cur.next and cur.next.next:
-            print("-"*20)
-            print("输出 cur.next.val: ",cur.next.val," 和下一个： ",cur.next.next.val)
             if cur.next.val == cur.next.next.val:
-                
-                x = cur.next.val
-                print("  输出 x：",x)
-                print("  输出 cur.next：",cur.next)
-                print("  输出 cur.next.val：",cur.next.val)
-                while cur.next and cur.next.val == x:
-                    print("     输入 cur.next：",cur.next)
-                    print("     输入 cur.next.next：",cur.next.next)
-                    cur.next = cur.next.next
-                    print("     输出 cur.next：",cur.next)
-                    print("     输出 cur.next.next：",cur.next.next)
-                    print("  输出 dummy：")
-                    printList(dummy)
+                while cur.next.next and cur.next.val == cur.next.next.val:
+                    cur.next = cur.next.next # 删去重复节点的前一个
+                cur.next = cur.next.next # 删去重复节点的剩余一个
             else:
-                cur = cur.next
-                print("  输出 cur：")
-                printList(cur)
-                print("  输出 dummy：")
-                printList(dummy)
+                cur =  cur.next
+        return dummy.next
+
+# 另一种写法
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        dummy = ListNode(0,head)
+        cur = dummy
+        while cur.next and cur.next.next:
+            if cur.next.val == cur.next.next.val:
+                x = cur.next.val
+                while cur.next and cur.next.val == x:
+                    cur.next = cur.next.next
+            else:
+                cur =  cur.next
         return dummy.next
 ```
 
@@ -4205,89 +4472,14 @@ class Solution82:
 ```py
 class Solution:
     def deleteDuplicates(self, head: ListNode) -> ListNode:
-        if not head:
+        if not head or not head.next:
             return head
-
         cur = head
         while cur.next:
             if cur.val == cur.next.val:
                 cur.next = cur.next.next
             else:
-                cur = cur.next
-
-        return head
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/solution/shan-chu-pai-xu-lian-biao-zhong-de-zhong-49v5/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-
-        if head is None or head.next is None:
-            return head
-
-        pre, p = head, head.next
-        while p:
-            if p.val == pre.val:
-                pre.next = p.next
-                p = p.next
-            else:
-                pre = p
-                p = p.next
-
-        return head
-```
-
-```py
-首先处理特殊情况
-
-然后开始一前一后双指针，一起走
-
-发现两个节点的val一样时，前面指针不动，后面继续走，直到val不同
-
-此时把前面指针的next指向后面指针，即可把中间重复元素删除
-
-class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-        if head == None or head.next == None:   #处理[],[1]
-            return head
-        while head.next != None and head.next.val == head.val:  #处理[1,1,1],[1,1,2]
-            head = head.next
-
-        h1, h2 = head, head.next  
-        while h2 != None:
-            if h2.val == h1.val:
-                while h2 != None and h2.val == h1.val:
-                    h2 = h2.next
-                h1.next = h2
-            else:
-                h1 = h1.next
-                h2 = h2.next
-        return head
-
-python 思路如下： 
-首先判断链表是否为空 head==None 若为空 则直接范围None。
-然后循环判断链表元素，若 node.val = node.next.val，
-说明下一个元素与当前元素的值相等，则将下一个元素删除即可。
-即：node.next = node.next.next。
-
-class Solution(object):
-    def deleteDuplicates(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        if head == None:
-            return None
-
-        node = head
-        while(node.next!=None):
-            if(node.val == node.next.val):
-                node.next = node.next.next
-            else:
-                node = node.next
+                cur =  cur.next
         return head
 ```
 
@@ -4300,45 +4492,19 @@ class Solution(object):
 [洛阳](https://www.bilibili.com/video/BV1t64y1u7Ei?spm_id_from=333.999.0.0)
 
 ```py
-# 从前向后遍历，有一前一后两个指针将大于等于x的数框起来向前进，一旦遇见小于x的数就把它换到尾巴后面去
-
-class Solution:
-    def partition(self, head: ListNode, x: int) -> ListNode:
-        if not head: return head
-        curr = prehead = ListNode(-1)
-        curr.next = prehead.next = head
-        front = head
-        
-        while front.next:
-            if front.val < x:
-                front = front.next
-                curr = curr.next
-                continue
-            if front.next.val < x:
-                tmp = front.next
-                front.next = front.next.next
-                tmp.next = curr.next              
-                curr.next = tmp
-                curr = tmp
-            else:
-                front = front.next
-        return prehead.next
-```
-
-```py
-class Solution:
-    def partition(self, head: ListNode, x: int) -> ListNode:
-        dummy1, dummy2 = ListNode(), ListNode()
-        cur1,cur2, cur = dummy1, dummy2, head
+        dummy1 = ListNode(0)
+        dummy2 = ListNode(0)
+        slow,fast,cur = dummy1, dummy2, head
         while cur:
             if cur.val < x:
-                cur1.next = cur
-                cur1 = cur1.next
+                slow.next = cur # dummy1 指向第一个小于x的node
+                slow = slow.next
             else:
-                cur2.next = cur
-                cur2 = cur2.next
+                fast.next = cur # dummy2 指向第一个大于x的node
+                fast = fast.next
             cur = cur.next
-        cur1.next, cur2.next = dummy2.next, None
+        slow.next = dummy2.next
+        fast.next = None
         return dummy1.next
 ```
 
@@ -4845,8 +5011,27 @@ class Solution:
         return result
 ```
 
-```py
+```scala
+object Solution {
+    def inorderTraversal(root: TreeNode): List[Int] = {
+   
+        val result = collection.mutable.ArrayBuffer[Int]()
 
+        def FUN_traverse(node: TreeNode): Unit = {
+            if (node != null) {
+                // 1st: LEFT
+                FUN_traverse(node.left)
+                // 2nd: current node value
+                result += node.value
+                // 3rd: RIGHT 
+                FUN_traverse(node.right)
+            }
+        }
+
+        FUN_traverse(root)
+        result.toList
+    }
+}
 ```
 
 ```py
@@ -5058,6 +5243,111 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1vf4y1R7Ue?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if not p and not q:
+            return True
+        elif not p or not q:
+            return False
+        elif p.val != q.val:
+            return False
+        else:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/same-tree/solution/xiang-tong-de-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if not p and not q:
+            return True
+        if not p or not q:
+            return False
+        
+        queue1 = collections.deque([p])
+        queue2 = collections.deque([q])
+
+        while queue1 and queue2:
+            node1 = queue1.popleft()
+            node2 = queue2.popleft()
+            if node1.val != node2.val:
+                return False
+            left1, right1 = node1.left, node1.right
+            left2, right2 = node2.left, node2.right
+            if (not left1) ^ (not left2):
+                return False
+            if (not right1) ^ (not right2):
+                return False
+            if left1:
+                queue1.append(left1)
+            if right1:
+                queue1.append(right1)
+            if left2:
+                queue2.append(left2)
+            if right2:
+                queue2.append(right2)
+
+        return not queue1 and not queue2
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/same-tree/solution/xiang-tong-de-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+
+class Solution:
+    def isSameTree(self, p, q):
+        """
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: bool
+        """
+        if not p and not q:
+            return True
+        elif p is not None and q is not None:
+            if p.val == q.val:
+                return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+            else:
+                return False
+        else:
+            return False
+
+# 递归法
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if not p and not q: return True
+        elif not p or not q: return False
+        elif p.val != q.val: return False
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+# 迭代法
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if not p and not q: return True
+        if not p or not q: return False
+        que = collections.deque()
+        que.append(p)
+        que.append(q)
+        while que:
+            leftNode = que.popleft()
+            rightNode = que.popleft()
+            if not leftNode and not rightNode: continue 
+            if not leftNode or not rightNode or leftNode.val != rightNode.val: return False 
+            que.append(leftNode.left)
+            que.append(rightNode.left)
+            que.append(leftNode.right)
+            que.append(rightNode.right)
+        return True
+
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        return str(p)==str(q)
+```
+
 ###  4.23. <a name='Symmetrictree'></a>101-Symmetric tree
 
 [哈哈哈](https://www.bilibili.com/video/BV1VJ41197KD?spm_id_from=333.999.0.0)
@@ -5066,11 +5356,234 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1xv41167z8?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        '''非递归,从root开始,把比较顺序写下,然后考虑如何用队列或栈实现这个顺序'''
+        if root is None:
+            return True
+        s=[root.left,root.right]
+        while s:
+            node1=s.pop()
+            node2=s.pop()
+            if node1 is None and node2 is None:
+                pass
+            elif (node1 and node2 is None) or (node2 and node1 is None):
+                return False
+            else:
+                if node1.val !=node2.val:
+                    return False
+                s.append(node1.left)
+                s.append(node2.right)
+                s.append(node1.right)
+                s.append(node2.left)
+        return True
+
+    def is_symmetric(self, left:TreeNode ,right:TreeNode)->bool:
+        '''左树是否镜像于右树'''
+        if left is None and right is None:
+            return True
+        
+        if left is not None and right is not None and left.val ==right.val and \
+            self.is_symmetric(left.left,right.right) and self.is_symmetric(left.right,right.left):
+            return True
+        
+        return False
+
+    def isSymmetric_1(self, root: TreeNode) -> bool:
+        '''递归'''
+        if root is None:
+            return True
+        return self.is_symmetric(root.left,root.right)
+```
+
+```py
+Python 递归：
+
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        def check(node1, node2):
+            if not node1 and not node2:
+                return True
+            elif not node1 or not node2:
+                return False
+            
+            if node1.val != node2.val:
+                return False
+            return check(node1.left, node2.right) and check(node1.right, node2.left)
+        
+        return check(root, root)
+Python 迭代：其实就是层序遍历，然后检查每一层是不是回文数组
+
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        
+        queue = [root]
+        
+        while(queue):
+            next_queue = list()
+            layer = list()
+            for node in queue:
+                if not node:
+                    layer.append(None)
+                    continue
+                next_queue.append(node.left)
+                next_queue.append(node.right)
+                
+                layer.append(node.val)
+                
+            if layer != layer[::-1]:
+                return False
+            queue = next_queue
+            
+        return True
+
+分别传入左右子节点，主要是递归的 base case 需要理清楚：
+
+要么都为空，要么都不为空
+如果两个节点的值不一样，返回 false
+递归条件就是 node1 的左子节点和 node2 的右子节点比较，node1 的右子节点与 node2 的左子节点比较。
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        return self._isSymmetric(root.left, root.right)
+    
+    def _isSymmetric(self, node1, node2):
+        if not node1 and not node2: # 如果两个节点都为空，返回真
+            return True
+        if not node1 or not node2:
+            return False
+        if node1.val != node2.val:
+            return False
+        return self._isSymmetric(node1.left, node2.right) and self._isSymmetric(node1.right, node2.left)
+```
+
 ###  4.24. <a name='BinaryTreeLevelOrderTraversal'></a>102-Binary Tree Level Order Traversal
 
 [哈哈哈](https://www.bilibili.com/video/BV1W54y197Lc?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV14T4y1u7Wk?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        '''队列'''
+        if root is None:
+            return []
+        q=[root]
+        ret=[]
+        while q:
+            size=len(q)#当前层的个数!!!
+            t=[]
+            for _ in range(size):
+                node=q.pop(0)
+                t.append(node.val)
+
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            ret.append(t)
+        return ret
+```
+
+```py
+# 这个BFS模板真的是万能啊，除了本题，116、117等题也随便套。
+
+class Solution(object):
+    def levelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        ans = []
+        queue = [root] # 队列
+        while queue:
+            temp = []
+            lenQ = len(queue) # 队列
+            for i in range(lenQ):
+                print("lenQ:",lenQ," i:",i)
+                node = queue.pop(0) # 队列,lenQ有几次，就pop几次
+                temp.append(node.val) 
+                if node.left:
+                    queue.append(node.left) # 队列
+                if node.right:
+                    queue.append(node.right) # 队列
+            ans.append(temp)
+        return ans
+
+class Solution:
+    def levelOrder(self, root: TreeNode):
+        from collections import deque
+        queue = deque() # 队列
+        result = []
+        if not root:
+            return []
+        queue.append(root) # 队列
+        while queue: # 队列
+            current_level_size = len(queue) # 队列
+            current_level = [] # level【】
+            for _ in range(current_level_size): # 队列,lenQ有几次，就pop几次
+                node = queue.popleft() # 队列,lenQ有几次，就pop几次
+                current_level.append(node.val) # level【】
+                if node.left:
+                    queue.append(node.left) # 队列
+                if node.right:
+                    queue.append(node.right) # 队列
+            result.append(current_level) # level【】
+        return result
+```
+
+```py
+# py两分钟打完一次提交bug free，go因为尝试了下hash的无序性wa了一次，狗rust编译了10次以上才过，费老jb劲了
+
+# py 用字典存层（py字典是有序的，所以最好用，其他语言都不好写）。
+import collections
+class Solution:
+    def levelOrder(self, root):
+        dic = collections.defaultdict(list)
+        # --------------------- recurHelper ---------------------
+        def recurHelper(node, level):
+            if node:
+                dic[level].append(node.val)
+                recurHelper(node.left, level + 1)
+                recurHelper(node.right, level + 1)
+        recurHelper(root, 0) # 传入 (root, 0)
+        # --------------------- recurHelper ---------------------
+        
+        return [*dic.values()]
+
+# 递归
+
+# ```python
+class Solution(object):
+    def levelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        res = []
+        self.recurHelper(root, 0, res)
+        return res
+    
+    def recurHelper(self, node, level, res):
+        if not node: return
+        if len(res) < level + 1:
+            res.append([])
+        res[level].append(node.val)
+        self.recurHelper(node.left, level+1, res)
+        self.recurHelper(node.right, level+1, res)
+```
 
 ###  4.25. <a name='BinaryTreeZigzagLevelOrderTraversal'></a>103. Binary Tree Zigzag Level Order Traversal
 
@@ -5079,6 +5592,106 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV15h411Z7h5?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1GA411W7NY?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def zigzagLevelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if not root: return []
+
+        que = []
+        res = []
+        que.append(root)
+        index = 1 # flag
+        while que:
+            temp = []
+            for _ in range(len(que)):
+                cur = que.pop(0)
+                temp.append(cur.val)
+                if cur.left:
+                    que.append(cur.left)
+                if cur.right:
+                    que.append(cur.right)
+            index += 1 # flag
+            if not index % 2: # flag
+                res.append(temp[:])
+            else:
+                res.append(temp[::-1])
+        return res
+
+# python 双端duque
+from collections import deque
+class Solution:
+    def zigzagLevelOrder(self, root):
+        q = deque([root])
+        res = []
+        flag = True # flag
+        while q and q[0]:
+            n = len(q)
+            temp = []
+            for i in range(n):
+                node = q.popleft()
+                temp.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            if flag: # flag
+                res.append(temp)
+            else:
+                res.append(temp[::-1])  # [::-1]反转
+            flag = bool(1-flag) # flag
+        return res
+```
+
+```py
+# 先层次遍历，再对相应层数进行翻转。 python 执行用时，在所有python3提交中击败了96.87%的用户。
+
+class Solution:
+    def zigzagLevelOrder(self, root):
+        stack = []
+        def dfs(node, level, res):
+            if not node:
+                return
+            if level >= len(res):
+                res.append([])
+            res[level].append(node.val)
+            dfs(node.left, level + 1, res)
+            dfs(node.right, level + 1, res)
+
+        dfs(root, 0, stack)
+        for i in range(1, len(stack), 2): # flag，各两个逆序
+            stack[i] = stack[i][::-1]
+        return stack
+
+# 递归
+
+class Solution:
+    def zigzagLevelOrder(self, root):
+        res = []
+        if not root:
+            return []
+        
+        def dfs(node, level):
+            if len(res) == level:
+                res.append([])
+            
+            if level % 2:
+                res[level].insert(0, node.val)
+            else:
+                res[level].append(node.val)
+
+            if node.left:
+                dfs(node.left, level+1)
+            if node.right:
+                dfs(node.right, level+1)
+            
+        dfs(root, 0)
+        return res
+```
 
 ###  4.26. <a name='MaximumDepthofBinary'></a>104-Maximum Depth of Binary
 
@@ -5090,6 +5703,19 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1tK41137GM?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        '''树的最大深度,递归。层次遍历也行'''
+        if root is None:
+            return 0
+        return max(self.maxDepth(root.left),self.maxDepth(root.right))+1
+```
+
+```py
+
+```
+
 ###  4.27. <a name='-1'></a>105-从前序与中序遍历序列构
 
 [哈哈哈](https://www.bilibili.com/video/BV1uv411B73D?spm_id_from=333.999.0.0)
@@ -5100,11 +5726,150 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV14A411q7Nv?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        '''可以考虑传递下标，减少数组拷贝的时间'''
+        if len(preorder)==0:
+            return None
+        root_val=preorder[0]
+        i=inorder.index(root_val)
+        left_inorder=inorder[:i]
+        right_inorder=inorder[i+1:]
+        left_preorder=preorder[1:1+i]
+        right_preorder=preorder[1+i:]
+
+        return TreeNode(root_val,self.buildTree(left_preorder,left_inorder),self.buildTree(right_preorder,right_inorder))
+```
+
+```py
+class Solution:
+    def buildTree(self, preorder, inorder):
+        if not preorder:return None
+
+        x = preorder.pop(0) #前序第一个为root
+        root = TreeNode(x)
+        i = inorder.index(x) #中序遍历 root 的index
+
+        root.left = self.buildTree(preorder[:i], inorder[:i])
+        root.right = self.buildTree(preorder[i:], inorder[i+1:])
+        return root
+
+class Solution:
+    def buildTree(self, preorder, inorder):
+        if inorder:
+            t = TreeNode(preorder.pop(0))
+            i = inorder.index(t.val)
+            t.left = self.buildTree(preorder, inorder[: i])
+            t.right = self.buildTree(preorder, inorder[i + 1:])
+            return t
+
+# 递归构造，非常简洁！
+# 改变了参数 preorder
+# 方法一样，但是没用index ，大佬提醒了这个用法，
+# 效率低是因为index函数复杂度是O（n），但是实际可以用哈希表将这个过程优化成O（1）
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        if not preorder: 
+            return None
+        
+        x = preorder.pop(0)
+        node = TreeNode(x)
+        i = inorder.index(x)
+        
+        node.left = self.buildTree(preorder[:i], inorder[:i])
+        node.right = self.buildTree(preorder[i:], inorder[i+1:])
+        return node
+```
+
 ###  4.28. <a name='-1'></a>106-从中序与后序遍历序列构造二叉树
 
 [哈哈哈](https://www.bilibili.com/video/BV1r5411W7d2?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1jh411Z7y8?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+        '''传递下标'''
+        index={}#元素在中序的下标
+        for i in range(len(inorder)):
+            index[inorder[i]]=i
+
+        def build(inorder: List[int], postorder: List[int],i_l,i_r,p_l,p_r) -> TreeNode:
+            if i_l>i_r:
+                return None
+            root_val=postorder[p_r]
+            i=index[root_val]
+
+            return TreeNode(root_val,build(inorder,postorder,i_l,i-1,p_l,p_l+(i-i_l-1)),\
+                    build(inorder,postorder,i+1,i_r,p_l+(i-i_l),p_r-1))
+        return build(inorder,postorder,0,len(inorder)-1,0,len(postorder)-1)
+
+    def buildTree_1(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+        if len(postorder)==0:
+            return None
+        root_val=postorder[-1]
+        i=inorder.index(root_val)
+
+        left_inorder=inorder[:i]
+        right_inorder=inorder[i+1:]
+        left_postorder=postorder[:i]
+        right_postorder=postorder[i:len(postorder)-1]#左闭右开!!
+        return TreeNode(root_val,self.buildTree(left_inorder,left_postorder),self.buildTree(right_inorder,right_postorder))
+```
+
+```py
+# 递归构造，非常简洁！90%
+
+class Solution(object):
+    def buildTree(self, inorder, postorder):
+        """
+        :type inorder: List[int]
+        :type postorder: List[int]
+        :rtype: TreeNode
+        """
+        
+        if not inorder:
+            return None
+        
+        x = postorder.pop()
+        i = inorder.index(x)
+        
+        node = TreeNode(x)
+        node.left = self.buildTree(inorder[:i], postorder[:i])
+        node.right = self.buildTree(inorder[i+1:], postorder[i:])
+        return node
+
+class Solution(object):
+    def buildTree(self, inorder, postorder):
+        """
+        :type inorder: List[int]
+        :type postorder: List[int]
+        :rtype: TreeNode
+        """
+        if not postorder:
+            return None
+        root = TreeNode(postorder[-1])#创建树
+        n = inorder.index(root.val)
+        root.left = self.buildTree(inorder[:n],postorder[:n])
+        root.right = self.buildTree(inorder[n+1:],postorder[n:-1])
+        return root
+
+class Solution(object):
+    def buildTree(self, inorder, postorder):
+        if postorder == inorder == []:
+            return None
+        else:
+            rootVal = postorder[-1]
+            root = TreeNode(rootVal)
+            print("rootVal:",rootVal)
+            print("inorder:",inorder)
+            k = inorder.index(rootVal)
+            root.left = self.buildTree(inorder[:k],postorder[:k])
+            root.right = self.buildTree(inorder[k+1:],postorder[k:-1])
+            return root  
+```
 
 ###  4.29. <a name='BinaryTreeLevelOrderTraversalII'></a>107-Binary Tree Level Order Traversal II
 
@@ -5116,6 +5881,33 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1qA411i7P4?spm_id_from=333.999.0.0)
 
+
+```py
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        '''层次遍历的逆序'''
+        if root is None:
+            return []
+        q=[root]
+        ret=[]
+        while q:
+            size=len(q)# 当前层节点的个数
+            t=[]
+            for _ in range(size):
+                node=q.pop(0)
+                t.append(node.val)
+
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            ret.append(t)
+        return ret[::-1]
+```
+
+```py
+
+```
 ###  4.30. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
 
 [花花酱](https://www.bilibili.com/video/BV1F7411H7tH?spm_id_from=333.999.0.0)
@@ -5126,6 +5918,201 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1Wa411c7tS?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        def helper(left, right):
+            if left > right:
+                return None
+
+            # 总是选择中间位置左边的数字作为根节点
+            mid = (left + right) // 2
+
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid - 1)
+            root.right = helper(mid + 1, right)
+            return root
+
+        return helper(0, len(nums) - 1)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/solution/jiang-you-xu-shu-zu-zhuan-huan-wei-er-cha-sou-s-33/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        def helper(left, right):
+            if left > right:
+                return None
+
+            # 总是选择中间位置右边的数字作为根节点
+            mid = (left + right + 1) // 2
+
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid - 1)
+            root.right = helper(mid + 1, right)
+            return root
+
+        return helper(0, len(nums) - 1)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/solution/jiang-you-xu-shu-zu-zhuan-huan-wei-er-cha-sou-s-33/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        def helper(left, right):
+            if left > right:
+                return None
+
+            # 选择任意一个中间位置数字作为根节点
+            mid = (left + right + randint(0, 1)) // 2
+
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid - 1)
+            root.right = helper(mid + 1, right)
+            return root
+
+        return helper(0, len(nums) - 1)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/solution/jiang-you-xu-shu-zu-zhuan-huan-wei-er-cha-sou-s-33/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+递归法：
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        def buildaTree(left,right):
+            if left > right: return None  #左闭右闭的区间，当区间 left > right的时候，就是空节点,当left = right的时候，不为空
+            mid = left + (right - left) // 2 #保证数据不会越界
+            val = nums[mid]
+            root = TreeNode(val)
+            root.left = buildaTree(left,mid - 1)
+            root.right = buildaTree(mid + 1,right)
+            return root
+        root = buildaTree(0,len(nums) - 1)  #左闭右闭区间
+        return root
+
+简单递归就行
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        if not nums:
+            return None
+        mid = len(nums) // 2
+        root = TreeNode(nums[mid])
+        root.left = self.sortedArrayToBST(nums[:mid])
+        root.right = self.sortedArrayToBST(nums[mid+1:])
+        return root
+```
+
+### 109题. 有序链表转换二叉搜索树
+
+https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
+
+https://www.bilibili.com/video/BV1ff4y197dS?spm_id_from=333.999.0.0
+
+```py
+class Solution:
+    def sortedListToBST(self, head) -> TreeNode:
+        if not head:
+            return None
+        if not head.next:
+            return TreeNode(head.val)
+            
+        fast = slow = pre = head # pre切断
+        while fast and fast.next:
+            pre = slow # pre切断
+            slow = slow.next
+            fast = fast.next.next
+        node = TreeNode(slow.val)
+        # print(head.val,node.val,last.val)
+        node.right = self.sortedListToBST(slow.next) # 从mid+1到tail
+        pre.next = None # pre切断
+        node.left = self.sortedListToBST(head) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
+        return node
+
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        ###找到中间节点 断开   去掉中间节点
+        ### 左子树等于递归 左边那段   右子树等于递归右边那段
+        fast = head
+        slow = head
+        pre =  head
+        if not head:
+            return 
+        while(fast and fast.next):
+            fast = fast.next.next
+            pre = slow
+            slow  = slow.next
+        root = TreeNode(slow.val)
+        if slow==fast:
+            return root 
+        pre.next = None
+        root.left = self.sortedListToBST(head) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
+        root.right = self.sortedListToBST(slow.next) # 从mid+1到tail
+        return root
+```
+
+https://www.bilibili.com/video/BV19K411T73P?p=2&spm_id_from=pageDriver
+
+```py
+# py3 递归+快慢指针法。
+# 不用断开链表，分别用head和tail定义链首和链尾，
+# 链表区间为左闭右开，即 [ head , tail ）。
+
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        return self.helper(head,None)
+
+    def helper(self,head,tail):
+        if head==tail:
+            return
+        slow=head
+        fast=head
+        while fast!=tail and fast.next!=tail:
+            slow=slow.next
+            fast=fast.next.next
+        root=TreeNode(slow.val)
+        root.left=self.helper(head,slow) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
+        root.right=self.helper(slow.next,tail) # 从mid+1到tail
+        return root
+
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        def getMedian(head: ListNode, tail: ListNode) -> ListNode:
+            fast = slow = head
+            while fast != tail and fast.next != tail:
+                fast = fast.next.next
+                slow = slow.next
+            return slow
+        
+        def buildTree(left: ListNode, right: ListNode) -> TreeNode:
+            if left == right:
+                return None
+            mid = getMedian(left, right)
+            root = TreeNode(mid.val)
+            root.left = buildTree(left, mid) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
+            root.right = buildTree(mid.next, right) # 从mid+1到tail
+            return root
+        
+        return buildTree(head, None)
+```
+
+```py
+
+```
+
+```py
+
+```
+
 ###  4.31. <a name='BalancedBinaryTree'></a>110-Balanced Binary Tree
 
 [哈哈哈](https://www.bilibili.com/video/BV1NJ411v7b1?spm_id_from=333.999.0.0)
@@ -5133,6 +6120,83 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Wb411e7Lb?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1sV411b7hR?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def height(root: TreeNode) -> int:
+            if not root:
+                return 0
+            return max(height(root.left), height(root.right)) + 1
+
+        if not root:
+            return True
+        return abs(height(root.left) - height(root.right)) <= 1 and self.isBalanced(root.left) and self.isBalanced(root.right)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/balanced-binary-tree/solution/ping-heng-er-cha-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def height(root: TreeNode) -> int:
+            if not root:
+                return 0
+            leftHeight = height(root.left)
+            rightHeight = height(root.right)
+            if leftHeight == -1 or rightHeight == -1 or abs(leftHeight - rightHeight) > 1:
+                return -1
+            else:
+                return max(leftHeight, rightHeight) + 1
+
+        return height(root) >= 0
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/balanced-binary-tree/solution/ping-heng-er-cha-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+沙发。直接在递归高度的过程中判断每个节点是否平衡不就好了。时间和空间复杂度都是O(n)。
+
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def helper(node):
+            if not node:  return 0
+            left_depth = helper(node.left)
+            right_depth = helper(node.right)
+            if abs(left_depth - right_depth) > 1:
+                flag[0] = False
+            return max(left_depth, right_depth) + 1
+        flag = [True]
+        helper(root)
+        return flag[0]
+
+其实就是二叉树先序遍历和后序遍历的区别，每种遍历方式都有它的用武之地。
+
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+        ans = True
+        
+        def post_order(root):
+            nonlocal ans
+            if not root or not ans:
+                return 0
+            l = post_order(root.left)
+            r = post_order(root.right)
+            if abs(l-r) > 1:
+                ans = False
+            return max(l, r) + 1
+        
+        post_order(root)
+        return ans
+```
+
+```py
+
+```
 
 ###  4.32. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
 
@@ -5142,6 +6206,82 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1XZ4y1G7xM?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if root is None:
+            return 0
+        if root.left is not None and root.right is None:#较高一层的值
+            return 1+self.minDepth(root.left)
+        if root.right is not None and root.left is None:
+            return 1+self.minDepth(root.right)
+        return 1+min(self.minDepth(root.left),self.minDepth(root.right))
+
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if root:
+            if root.left and root.right:
+                return 1+min(self.minDepth(root.left),self.minDepth(root.right))
+            elif root.left:
+                return 1+self.minDepth(root.left)
+            elif root.right:
+                return 1+self.minDepth(root.right)
+            else:
+                return 1
+        else:
+            return 0
+递归
+```
+
+```py
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        
+        if not root.left and not root.right:
+            return 1
+        
+        min_depth = 10**9
+        if root.left:
+            min_depth = min(self.minDepth(root.left), min_depth)
+        if root.right:
+            min_depth = min(self.minDepth(root.right), min_depth)
+        
+        return min_depth + 1
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/solution/er-cha-shu-de-zui-xiao-shen-du-by-leetcode-solutio/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+
+        que = collections.deque([(root, 1)])
+        while que:
+            node, depth = que.popleft()
+            if not node.left and not node.right:
+                return depth
+            if node.left:
+                que.append((node.left, depth + 1))
+            if node.right:
+                que.append((node.right, depth + 1))
+        
+        return 0
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/solution/er-cha-shu-de-zui-xiao-shen-du-by-leetcode-solutio/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 ###  4.33. <a name='PathSum'></a>112-Path Sum
 
 [哈哈哈](https://www.bilibili.com/video/BV1T7411r7Yr?spm_id_from=333.999.0.0)
@@ -5150,11 +6290,256 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1uK411T7kX?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+        '''递归'''
+        if root is None:
+            return False
+        if root.val==targetSum:
+            return True
+        return self.hasPathSum(root.left,targetSum-root.val) or self.hasPathSum(root.right,targetSum-root.val)
+```
+
+```py
+典型的得用DFS做的题目，不断深入每个节点，只要找到一个即可
+
+dfs函数包括当前节点和当前路径总和
+
+如果当前节点为叶子节点，并且路径总和等于目标值，就改变ans为True
+
+否则就继续深入当前节点的左右节点
+
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if root == None:
+            return False
+        self.target = targetSum
+        self.ans = False
+        self.dfs(root, 0)
+        return self.ans
+
+    def dfs(self, r, sumNum):
+        if not r.left and not r.right:
+            if sumNum + r.val == self.target:
+                self.ans = True
+        else:
+            if r.left:
+                self.dfs(r.left,  sumNum + r.val)
+            if r.right:
+                self.dfs(r.right, sumNum + r.val)
+
+class Solution:
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if not root:
+            return False
+        que_node = collections.deque([root])
+        que_val = collections.deque([root.val])
+        while que_node:
+            now = que_node.popleft()
+            temp = que_val.popleft()
+            if not now.left and not now.right:
+                if temp == sum:
+                    return True
+                continue
+            if now.left:
+                que_node.append(now.left)
+                que_val.append(now.left.val + temp)
+            if now.right:
+                que_node.append(now.right)
+                que_val.append(now.right.val + temp)
+        return False
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/path-sum/solution/lu-jing-zong-he-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if not root:
+            return False
+        if not root.left and not root.right:
+            return sum == root.val
+        return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum - root.val)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/path-sum/solution/lu-jing-zong-he-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 ###  4.34. <a name='-1'></a>113. 二叉树中和为某一值的路径
 
 [哈哈哈](https://www.bilibili.com/video/BV1P54y1i73U?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1k54y177fu?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> List[List[int]]:
+        '''dfs+路径记录'''
+        path=[]
+        ret=[]
+        def dfs(root,targetSum):
+            if root is None:
+                return
+            
+            path.append(root.val)
+            if root.val==targetSum and root.left is None and root.right is None:
+                ret.append(path.copy())#!!!!拷贝
+
+            dfs(root.left,targetSum-root.val)
+            dfs(root.right,targetSum-root.val)
+            path.pop()
+        dfs(root,targetSum)
+        return ret
+```
+
+```py
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int):
+        res = []
+        def dfs(root, tmp, sum):
+            nonlocal res
+            if not root:
+                return 
+            
+            sum -= root.val # 对于每一个node，当前node的sum = 总和sum - root的值
+            if not root.left and not root.right and sum == 0: # 结束条件
+                res.append(tmp + [root.val])
+            dfs(root.left, tmp + [root.val], sum)
+            dfs(root.right, tmp + [root.val], sum)
+            return res
+        
+        dfs(root, [], sum)
+        return res
+
+class Solution:
+    def pathSum(self, root, targetSum: int):
+        res = list()
+        path = list()
+        
+        def dfs(node, sum):
+            if not node:
+                return
+            path.append(node.val)
+            sum -= node.val # 对于每一个node，当前node的sum = 总和sum - root的值
+            if not node.left and not node.right and sum == 0: # 结束条件
+                res.append(path[:])
+            dfs(node.left, sum)
+            dfs(node.right, sum)
+            path.pop()
+        
+        dfs(root, targetSum)
+        return res
+```
+
+```py
+# 注意宁愿写几次curList + [root.val] 也不要直接传一个list进去，因为list pass by reference的亏已经吃过了
+
+# ```python
+class Solution(object):
+    def pathSum(self, root, sum):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: List[List[int]]
+        """
+        res = []
+        self.auxPathSum(root, sum, [], res)
+        return res
+    def auxPathSum(self, root, sum, path, res):
+        if not root:
+            return
+        sum -= root.val # 对于每一个node，当前node的sum = 总和sum - root的值
+        if sum == 0 and not root.left and not root.right:
+            res.append(path + [root.val])
+            return 
+        if root.left:
+            self.auxPathSum(root.left, sum, path + [root.val], res) 
+        if root.right:
+            self.auxPathSum(root.right, sum, path + [root.val], res)
+```
+
+### 114题. 二叉树展开为链表
+
+https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=15731266160913668837&spm_id_from=333.337.0.0
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6tma3pncods0.png" width="80%">
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5csg54lu3lw0.png" width="50%">
+
+```py
+class Solution:
+    def flatten(self, root: TreeNode) -> None:
+        if not root:
+            return
+        
+        stack = [root]
+        prev = None
+        
+        while stack:
+            curr = stack.pop()
+            if prev:
+                prev.left = None
+                prev.right = curr
+            left, right = curr.left, curr.right
+            if right:
+                stack.append(right)
+            if left:
+                stack.append(left)
+            prev = curr
+
+        return root
+
+class Solution:
+    def flatten(self, root: TreeNode) -> None:
+        preorderList = list()
+        stack = list()
+        node = root
+
+        while node or stack:
+            while node:
+                preorderList.append(node)
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            node = node.right
+        
+        size = len(preorderList)
+        for i in range(1, size):
+            prev, curr = preorderList[i - 1], preorderList[i]
+            prev.left = None
+            prev.right = curr
+```
+
+```py
+class Solution(object):
+    def flatten(self, root):
+        """
+        :type root: TreeNode
+        :rtype: void Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        #把子树备份一下
+        left_node = root.left
+        right_node = root.right
+        root.left = None #记得把左子树置空
+        #先把左右子树捋直
+        self.flatten(left_node)
+        self.flatten(right_node)
+        if left_node:
+            root.right = left_node #把捋直的左子树放到右边
+            while left_node.right: #找到现在右子树的最后一个node
+                left_node = left_node.right 
+            left_node.right = right_node #左子树接上右子树
+
+
+
+        return root
+```
 
 ###  4.35. <a name='DistinctSubsequences'></a>115. Distinct Subsequences
 
@@ -5162,15 +6547,169 @@ class Solution:
 
 [图灵](https://www.bilibili.com/video/BV185411G7F6?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        m, n = len(s), len(t)
+        if m < n:
+            return 0
+        
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        for i in range(m + 1):
+            dp[i][n] = 1
+        
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                if s[i] == t[j]:
+                    dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j]
+                else:
+                    dp[i][j] = dp[i + 1][j]
+        
+        return dp[0][0]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/distinct-subsequences/solution/bu-tong-de-zi-xu-lie-by-leetcode-solutio-urw3/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        dp = [[0] * (len(t)+1) for _ in range(len(s)+1)]
+        for i in range(len(s)):
+            dp[i][0] = 1
+        for j in range(1, len(t)):
+            dp[0][j] = 0
+        for i in range(1, len(s)+1):
+            for j in range(1, len(t)+1):
+                if s[i-1] == t[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+                else:
+                    dp[i][j] = dp[i-1][j]
+        return dp[-1][-1]
+Python3:
+
+class SolutionDP2:
+    """
+    既然dp[i]只用到dp[i - 1]的状态，
+    我们可以通过缓存dp[i - 1]的状态来对dp进行压缩，
+    减少空间复杂度。
+    （原理等同同于滚动数组）
+    """
+    
+    def numDistinct(self, s: str, t: str) -> int:
+        n1, n2 = len(s), len(t)
+        if n1 < n2:
+            return 0
+
+        dp = [0 for _ in range(n2 + 1)]
+        dp[0] = 1
+
+        for i in range(1, n1 + 1):
+            # 必须深拷贝
+            # 不然prev[i]和dp[i]是同一个地址的引用
+            prev = dp.copy()
+            # 剪枝，保证s的长度大于等于t
+            # 因为对于任意i，i > n1, dp[i] = 0
+            # 没必要跟新状态。 
+            end = i if i < n2 else n2
+            for j in range(1, end + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[j] = prev[j - 1] + prev[j]
+                else:
+                    dp[j] = prev[j]
+        return dp[-1]
+```
+
 ###  4.36. <a name='PopulatingNextRightPointersinEachNode'></a>116. Populating Next Right Pointers in Each Node
 
 [花花酱](https://www.bilibili.com/video/BV1b4411R7G4?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1zQ4y1M75t?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        if root is None:
+            return None
+        
+        q=[root]
+        while q:
+            size=len(q)
+            last=None
+            for _ in range(size):
+                node=q.pop(0)
+                if last:
+                    last.next=node
+                last=node
+
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+        
+        return root
+```
+
+```py
+# BFS版本
+
+class Solution:
+    # 层次遍历
+    def connect(self, root: 'Node') -> 'Node':
+        if not root: return 
+        q = deque([root])
+        while q:
+            sz = len(q)
+            for i in range(sz):
+                cur = q.popleft()
+                if i < sz - 1:
+                    cur.next = q[0]
+                if cur.left:
+                    q.append(cur.left)
+                if cur.right:
+                    q.append(cur.right)
+            
+        return root
+
+# DFS版本，只要关注两棵子树的next指针构建即可
+
+class Solution:
+    # DFS
+    def connect(self, root: 'Node') -> 'Node':
+        if not root: return
+        def dfs(root1, root2):
+            if not (root1 and root2): return 
+            root1.next = root2
+            dfs(root1.left, root1.right)
+            dfs(root1.right, root2.left)
+            dfs(root2.left, root2.right)
+        
+        dfs(root.left, root.right)
+        return root
+
+# Python递归，先序遍历，感觉很容易理解，速度还可以，只是空间复杂度用了递归所以差了点
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        def f(root):
+            if root:
+                p,q=root.left,root.right
+                while p:
+                    p.next=q
+                    p,q=p.right,q.left
+                f(root.left)
+                f(root.right)
+            return
+        f(root)
+        return root
+```
+
 ###  4.37. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea
 
 [小明](https://www.bilibili.com/video/BV1np4y1r7fQ?spm_id_from=333.999.0.0)
+
 
 ###  4.38. <a name='PascalsTriangle'></a>118-Pascal's Triangle
 
@@ -5180,6 +6719,82 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1D54y147NY?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        ret = list()
+        for i in range(numRows):
+            row = list()
+            for j in range(0, i + 1):
+                if j == 0 or j == i:
+                    row.append(1)
+                else:
+                    row.append(ret[i - 1][j] + ret[i - 1][j - 1])
+            ret.append(row)
+        return ret
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/pascals-triangle/solution/yang-hui-san-jiao-by-leetcode-solution-lew9/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+库函数重拳出击！
+
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        return [[comb(i, j) for j in range(i + 1)] for i in range(numRows)]
+```
+
+```py
+class Solution:
+    def generate(self, numRows):
+        """
+        :type numRows: int
+        :rtype: List[List[int]]
+        """
+        result = []
+        for i in range(numRows):
+            now = [1]*(i+1)
+            if i >= 2:
+                for n in range(1,i):
+                    now[n] = pre[n-1]+pre[n]
+            result += [now]
+            pre = now
+        return result
+
+头尾为1，中间的第j个为上一层的第j-1个和j个的和，即：
+
+第i行lst[j] = ans[i-1][j-1] + ans[i-1][j]
+
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        ans = [[1]]
+        for i in range(1, numRows):
+            lst = [0 for _ in range(i+1)]
+            lst[0], lst[-1] = 1, 1
+            for j in range(1,i):  
+                lst[j] = ans[i-1][j-1] + ans[i-1][j]
+            ans.append(lst)
+        return ans
+
+计算好上一层的，用上一层的计算下一层
+
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        ans = []
+        # 遍历每一层
+        for i in range(1,numRows+1):
+            tmp_lis = []
+            # 遍历一层中的每一个元素
+            for j in range(i):
+                if j == 0 or j == i-1:
+                    tmp_lis.append(1)
+                else:
+                    tmp_lis.append(ans[i-2][j-1] + ans[i-2][j])
+            ans.append(tmp_lis)
+        return ans
+```
+
 ###  4.39. <a name='PascalsTriangleII'></a>119-Pascal's Triangle II
 
 [哈哈哈](https://www.bilibili.com/video/BV187411B7Hj?spm_id_from=333.999.0.0)
@@ -5188,9 +6803,143 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ni4y1g7Lv?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        r = [1]
+        for i in range(rowIndex):
+            r.append(0)
+            j = i + 1
+            while j > 0:
+                r[j] = r[j] + r[j - 1]
+                j -= 1
+        return r
+```
+
+```py
+# 方法 1：生成一半，另一半对称生成的一半
+class Solution1:
+    def generate(self, rowIndex):
+        cur = []
+        for i in range(rowIndex + 1):
+            # 每行首个元素为 1
+            temp = [1]
+            # 由上一行生成当前行前一半的元素
+            for j in range(i // 2):
+                temp += [pre[j] + pre[j + 1]]
+            # 对称生成另一半后合并，并组成新杨辉三角
+            cur = temp + temp[::-1][(i + 1) % 2:]
+            pre = cur
+        return cur
+
+
+# 方法 2：直接循环计算生成
+class Solution2:
+    def generate(self, rowIndex):
+        cur = [1]
+        for i in range(1, rowIndex + 1):
+            # 每行首个元素为 1
+            temp = [1]
+            # 由上一行循环生成当前行元素（除两端）
+            for j in range(1, i):
+                temp += [pre[j - 1] + pre[j]]
+            # 添加最后一个元素 1，并组成新杨辉三角
+            cur = temp + [1]
+            pre = cur
+        return cur
+
+
+# 方法 3：先直接生成所需空间（用 1 填充），再循环计算更新生成
+class Solution3:
+    def generate(self, rowIndex):
+        for i in range(rowIndex + 1):
+            # 用 1 先填充每行所有元素
+            cur = [1] * (i + 1)
+            # 由上一行循环生成当前行元素（除两端）
+            for j in range(1, i):
+                cur[j] = pre[j - 1] + pre[j]
+            pre = cur
+        return cur
+
+
+# 方法 4：使用公式
+# 组合公式C(n,i) = n!/(i!*(n-i)!)
+# 则第(i+1)项是第i项的倍数=(n-i)/(i+1)
+class Solution4:
+    def generate(self, rowIndex):
+        temp = 1
+        res = []
+        for i in range(rowIndex + 1):
+            res.append(temp)
+            temp = temp * (rowIndex - i) // (i + 1)
+        return res
+
+
+# 方法 5：使用公式生成一半
+class Solution5:
+    def generate(self, rowIndex):
+        temp = 1
+        res = []
+        # 生成前半部分
+        for i in range((rowIndex) // 2 + 1):
+            res.append(temp)
+            temp = temp * (rowIndex - i) // (i + 1)
+        # 前半部分与其镜像对称的后半部分合并
+        return res + res[::-1][(rowIndex + 1) % 2:]
+
+
+# 方法 6：当前行等于上一行前后添零累加：[1,4,6,4,1] = [0,1,3,3,1] + [1,3,3,1,0]
+class Solution6:
+    def generate(self, rowIndex):
+        res = [1]
+        for i in range(rowIndex + 1):
+            # temp1, temp2 = [0] + res, res + [0]
+            # res = [temp1[j] + temp2[j] for j in range(i + 1)]
+            res = [([0] + res)[j] + (res + [0])[j] for j in range(i + 1)]
+        return res
+
+大伙儿新年好啊
+
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        return [*accumulate(range(rowIndex), lambda x,i: x*(rowIndex-i)//(i+1), initial=1)]
+```
+
 ###  4.40. <a name='Triangle'></a>120 Triangle
 
 [小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def minimumTotal(self, triangle):
+        n = len(triangle)
+        f = [[0] * n for _ in range(n)]
+        f[0][0] = triangle[0][0]
+
+        for i in range(1, n):
+            f[i][0] = f[i - 1][0] + triangle[i][0]
+            for j in range(1, i):
+                f[i][j] = min(f[i - 1][j - 1], f[i - 1][j]) + triangle[i][j]
+            f[i][i] = f[i - 1][i - 1] + triangle[i][i]
+        
+        return min(f[n - 1])
+```
+
+```py
+class Solution:
+    def minimumTotal(self, triangle):
+        n = len(triangle)
+        f = [0] * n
+        f[0] = triangle[0][0]
+
+        for i in range(1, n):
+            f[i] = f[i - 1] + triangle[i][i]
+            for j in range(i - 1, 0, -1):
+                f[j] = min(f[j - 1], f[j]) + triangle[i][j]
+            f[0] += triangle[i][0]
+        
+        return min(f)
+```
 
 ###  4.41. <a name='BestTimetoBuyandSellStock121-'></a>121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
 
@@ -5309,6 +7058,14 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1pa4y1t7tr?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def singleNumber(nums: Array[Int]): Int = {
+        nums.distinct.filter(x => nums.filter(_ == x).length != 2)(0)
+    }
+}
+```
 
 ###  4.57. <a name='SingleNumberII'></a>137 Single Number II
 
