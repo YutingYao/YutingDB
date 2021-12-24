@@ -6726,6 +6726,130 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1hA411t76C?spm_id_from=333.999.0.0)
 
+```py
+# 此方法会超时
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        ans = 0
+        for i in range(len(prices)):
+            for j in range(i + 1, len(prices)):
+                ans = max(ans, prices[j] - prices[i])
+        return ans
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/121-mai-mai-gu-piao-de-zui-jia-shi-ji-by-leetcode-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        inf = int(1e9)
+        minprice = inf
+        maxprofit = 0
+        for price in prices:
+            maxprofit = max(price - minprice, maxprofit)
+            minprice = min(price, minprice)
+        return maxprofit
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/121-mai-mai-gu-piao-de-zui-jia-shi-ji-by-leetcode-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+动态规划
+
+关键在于利润只和价格有关，和天数无关
+
+从后往前遍历（代码里面先把prices reverse了一下所以是从前往后）
+
+遇到更大的值，则更新此值为最高卖出价
+
+遇到更小的值，就用最高卖出价减去其值，则为该位置能获得的最大利润
+
+执行用时：168 ms, 在所有 Python3 提交中击败了84.89%的用户
+内存消耗：22.8 MB, 在所有 Python3 提交中击败了88.83%的用户
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        prices.reverse()
+        m = prices[0]
+        prices[0] = 0
+        for i in range(1,len(prices)):
+            if prices[i] >= m:  #更新最高卖出价
+                m = prices[i]
+                prices[i] = 0
+            else:
+                prices[i] = m - prices[i]  #当前能获利最多
+        return max(prices)
+
+# 动态规划
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        length = len(prices)
+        if len == 0:
+            return 0
+        have = [0] * length  # 表示第i天持有股票所得最多现金
+        no = [0] * length    # 表示第i天不持有股票所得最多现金
+        have[0] = -prices[0] # 此时的持有股票就一定是买入股票了
+        no[0] = 0            # 不持有股票那么现金就是0
+        for i in range(1, length):
+            have[i] = max(have[i-1], -prices[i])
+            no[i] = max(no[i-1], prices[i] + have[i-1])
+        return no[-1]  # 不持有股票状态所得金钱一定比持有股票状态得到的多
+        
+# 空间优化
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        length = len(prices)
+        if len == 0:
+            return 0
+        have = -prices[0] # 此时的持有股票就一定是买入股票了
+        no = 0            # 不持有股票那么现金就是0
+        for i in range(1, length):
+            have = max(have, -prices[i])
+            no = max(no, prices[i] + have)
+        return no  # 不持有股票状态所得金钱一定比持有股票状态得到的多
+
+# 贪心法
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        low = float("inf")
+        result = 0
+        for i in range(len(prices)):
+            low = min(low, prices[i]) # 取最左最小价格
+            result = max(result, prices[i] - low) # 直接取最大区间利润
+        return result
+
+class Solution:
+    def maxProfit(self, prices) -> int:
+
+
+        if len(prices) <= 1:
+            return 0
+
+        min_input = prices[0]
+        max_profit = 0
+        for p in prices[1:]:
+            min_input = min(p, min_input)
+            max_profit = max(max_profit, p - min_input)
+
+        return max_profit
+
+class Solution:
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        min_p, max_p = 999999, 0
+        for i in range(len(prices)):
+            min_p = min(min_p, prices[i])
+            max_p = max(max_p, prices[i] - min_p)
+        return max_p
+```
+
 ###  4.45. <a name='II122-BestTimetoBuyandSellStockII'></a>122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
 
 [哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
@@ -6738,11 +6862,321 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV17i4y1L7LG?spm_id_from=333.999.0.0)
 
+```py
+# 动态规划
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        length = len(prices)
+        if len == 0:
+            return 0
+        have = [0] * length  # 表示第i天持有股票所得最多现金
+        no = [0] * length    # 表示第i天不持有股票所得最多现金
+        have[0] = -prices[0] # 此时的持有股票就一定是买入股票了
+        no[0] = 0            # 不持有股票那么现金就是0
+        for i in range(1, length):
+            have[i] = max(have[i-1], no[i-1] - prices[i]) # 唯一不同之处
+            no[i] = max(no[i-1], prices[i] + have[i-1])
+        return no[-1]  # 不持有股票状态所得金钱一定比持有股票状态得到的多
+
+# 贪心法
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        return sum([prices[i+1]-prices[i] for i in range(len(prices)-1) if prices[i+1]-prices[i] > 0])
+
+第一种方法：深度优先搜索，时间复杂度O(2^n)，这个通过不了LeetCode，不过能work，测试了多组测试样例是正确的
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        self.prices = prices
+        self.profit = []
+        self.helper(0, 0, 0)
+        return max(self.profit)
+        
+    # have 0:未持有  1:持有
+    def helper(self, i, have, profit):
+        if i == len(self.prices):
+            self.profit.append(profit)
+            return
+        if have: # 如果持有中
+            self.helper(i+1, 0, profit + self.prices[i]) # 卖出
+            self.helper(i+1, 1, profit) # 不动
+        else: # 如果未持有
+            self.helper(i+1, 0, profit) # 不动
+            self.helper(i+1, 1, profit - self.prices[i]) # 买入
+第二种方法：贪心算法，一次遍历，只要今天价格小于明天价格就在今天买入然后明天卖出，时间复杂度O(n)
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        ans = 0
+        for i in range(1, len(prices)):
+            if prices[i] > prices[i-1]:
+                ans += prices[i] - prices[i-1]
+        return ans
+第三种方法：DP动态规划，第i天只有两种状态，不持有或持有股票，当天不持有股票的状态可能来自昨天卖出或者昨天也不持有，同理，当天持有股票的状态可能来自昨天买入或者昨天也持有中，取最后一天的不持有股票状态就是问题的解
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        n = len(prices)
+        dp = [[0]*2 for _ in range(n)]
+        # dp[i][0]表示第i天不持有股票, dp[i][1]表示第i天持有股票
+        dp[0][0], dp[0][1] = 0, - prices[0]
+        for i in range(1, n):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+            dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
+        return dp[n-1][0]
+```
+
+```py
+class Solution(object):
+    def maxProfit(self, prices):
+        profit = 0
+        for day in range(len(prices)-1):
+            differ = prices[day+1] - prices[day]
+            if differ > 0:
+                profit += differ
+        return profit
+
+分享一个比较巧妙的思路： 可以将股票的价格画成折线统计图看一看，上升阶段的差值（波峰和波谷的差值）之和就是所能得到的最大价值（如果加入其他下降阶段只会减少收益）， 因此统计上升阶段的值即可
+
+class Solution:
+    def maxProfit(self, prices):
+        if len(prices) == 0:    # 如果股票长度为零， 收益为0
+            return 0
+
+        maxPro = 0
+
+        for i in range(1, len(prices)):
+            if prices[i] > prices[i-1]:
+                maxPro += prices[i] - prices[i-1]
+
+        return maxPro
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        result = 0
+        for i in range(1, len(prices)):
+            result += max(prices[i] - prices[i - 1], 0)
+        return result
+python动态规划
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        length = len(prices)
+        dp = [[0] * 2 for _ in range(length)]
+        dp[0][0] = -prices[0]
+        dp[0][1] = 0
+        for i in range(1, length):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1] - prices[i]) #注意这里是和121. 买卖股票的最佳时机唯一不同的地方
+            dp[i][1] = max(dp[i-1][1], dp[i-1][0] + prices[i])
+        return dp[-1][1]
+```
+
 ###  4.46. <a name='III'></a>123-买卖股票的最佳时机 III
 
 [哈哈哈](https://www.bilibili.com/video/BV1Xp4y1k7aD?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1rk4y117z8?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        buy1 = buy2 = -prices[0]
+        sell1 = sell2 = 0
+        for i in range(1, n):
+            buy1 = max(buy1, -prices[i])
+            sell1 = max(sell1, buy1 + prices[i])
+            buy2 = max(buy2, sell1 - prices[i])
+            sell2 = max(sell2, buy2 + prices[i])
+        return sell2
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-iii-by-wrnt/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+## 未进行空间优化
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        buy1 = [0] * n
+        sell1 = [0] * n
+        buy2 = [0] * n
+        sell2 = [0] * n
+        buy1[0] = buy2[0] = -prices[0]
+        sell1[0] = sell2[0] = 0
+        for i in range(1, n):
+            buy1[i]  = max(buy1[i-1], -prices[i])
+            sell1[i] = max(sell1[i-1], buy1[i-1] + prices[i])
+            buy2[i]  = max(buy2[i-1], sell1[i-1] - prices[i])
+            sell2[i] = max(sell2[i-1], buy2[i-1] + prices[i])
+        return sell2[-1]
+
+## 空间优化
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        buy1 = buy2 = -prices[0]
+        sell1 = sell2 = 0
+        for i in range(1, n):
+            buy1 = max(buy1, -prices[i])
+            sell1 = max(sell1, buy1 + prices[i])
+            buy2 = max(buy2, sell1 - prices[i])
+            sell2 = max(sell2, buy2 + prices[i])
+        return sell2
+
+这题我会，甚至都不用翻之前的代码，至于空间优化什么的，只会让我的代码不够优雅（手动狗头）
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        # dp[i][j][k] 表示
+        # 第i天 持有和不持有 交易k次
+        dp = [[[0]*3 for _ in range(2)] for _ in range(n)]
+        
+        # 初始化 第0天的时候 持有和不持有其实与交易次数无关 和之前的初始化是一样的
+        for i in range(3):
+            dp[0][0][i],dp[0][1][i] = 0,-prices[0]
+
+        # 按照天数和交易次数来遍历
+        for i in range(1,n):
+            for k in range(3):
+                # 和以往的题目一样 卖出的时候算作一次交易 这里用到了k-1 所以k为0要分开讨论
+                # 想一想k为0时候的意思 第i天不持有而且没有卖出过 只能是i-1天的时候也不持有
+                dp[i][0][k] = max(dp[i-1][0][k],dp[i-1][1][k-1]+prices[i]) if k!=0 else dp[i-1][0][k]
+                dp[i][1][k] = max(dp[i-1][1][k],dp[i-1][0][k]  -prices[i])
+        # 和以往的题目一样 最大值出现在最后一天不持有的情况下
+        return max(dp[n-1][0])
+
+# k表示的是交易的次数，这涉及到“进行一次交易”的定义，
+# 可以在买的时候定义为进行了一次交易，也可以在卖的时候定义为进行了一次交易，
+# 这里我们的定义是在卖出的时候视为进行了一次交易，这不但方便代码书写，
+# 也符合常规的思维模式，所以在买入的时候交易次数k不变
+
+更容易理解的写法：
+
+def maxProfit(self, prices: list) -> int:
+    
+   # special case handle
+
+    if len(prices) == 1:
+        return 0
+
+    sell1 = sell2 = 0
+    buy1 = buy2 = prices[0]
+    for p in prices:
+        buy1 = min(buy1, p)
+        sell1 = max(sell1, p - buy1)
+        buy2 = min(buy2, p - sell1)
+        sell2 = max(sell2, p - buy2)
+    return sell2
+小脑袋只能看着答案分析出来怎么运作的，想不出大佬们怎么从无到有创造出这个算法的。
+
+假想价格波动：
+
+单调递减波形： a-递减->b
+在单调递减的阶段：buy2和buy1将保持相等，不断更新最低买进价格。
+（在复杂波形处始的递减波形直到第一个转折点都没有意义）
+
+单调递增波形：a-递增->b
+buy1 保持为当前p价位之前找到的最低价位。
+sell1随着单调递增不断更新最大获益值。
+同时buy2 = min(buy2', p-sell1),假设buy2' < p-sell1：
+则这种情况下，buy2 保持不变，同样为之前找到的最低价位即与buy1相等；
+若buy2' > p- sell1. 
+则buy2 = p-sell1 = p - (p-buy1) = buy1，同样也与buy1相等。
+即在单调递增的情况下，
+buy2，sell2收敛为整场只做一次买卖的buy1,sell1的同等情况。
+
+先单调递增后单调递减的波形：
+单调递增部分同<2>分析，buy2=buy1,sell2=sell1; 
+在转折点开始递减以后，由于p值不断减小，
+sell1 保持为转折点处的最大收益值不变。
+buy2 = min(buy2', p - sell1) 可能有两种取值，若buy2取值buy2'，
+很明显此时buy2、sell2将收敛为与buy1、sell1相等的情况；
+若buy2开始取值p-sell1,由于p的值不断减小(单调递减波段），
+那么从此以后buy2将一直取值p-sell1, 
+在这种情况下，sell2 = max(sell2‘, p - buy2)，
+如sell2 取值sell2'不变则与sell1值相同，
+若sell2取值p-buy2=p-(p-sell1)=sell1, 
+则也必然与sell1相同。
+也就是在先单调递增后单调递减的波段，
+最大收益就是在转折点一次买卖的buy1,sell1情况。
+
+先单调递增后单调递减，
+然后又单调递增的波形：
+a-递增->b-递减->c-递增->d
+在a->c段通<3>分析。c->d段。
+buy2的值将保持c - (b-a)不变 
+sell2 = max(sell2‘, p - buy2) = max( b -a, p - (c- (b-a))) = max (b-a, (p-c + (b-a)))
+
+dp1[i] = max(dp[i-1], prices[i] - minval) 从前往后遍历，表示第1天到第i天之间的最大利润（通过是否在第i天卖出确认）；
+dp2[i] = max(dp[i+1], maxval - prices[i]) 从后往前遍历，表示第i天到最后一天之间的最大利润（通过是否在第i天买进确认）；
+res = max(dp1 + dp2)，(dp1 + dp2)[i] 正好表示从第1天到最后一天经过两次交易的最大利润，我们的目标是找到令总利润最大的i。
+python：
+class Solution:
+    def maxProfit(self, prices):
+        n = len(prices)
+        if n < 2:
+            return 0
+        dp1 = [0 for _ in range(n)]
+        dp2 = [0 for _ in range(n)]
+        minval = prices[0]
+        maxval = prices[-1]
+        #前向   
+        for i in range(1,n):
+            dp1[i] = max(dp1[i-1], prices[i] - minval)
+            minval = min(minval, prices[i])
+        #后向    
+        for i in range(n-2,-1,-1):
+            dp2[i] = max(dp2[i+1], maxval - prices[i])
+            maxval = max(maxval, prices[i])
+        
+        dp = [dp1[i] + dp2[i] for i in range(n)]
+        return max(dp)
+
+第一种方法：标准的三维DP动态规划，三个维度，第一维表示天，第二维表示交易了几次，第三维表示是否持有股票。与下面188题买卖股票4一样的代码，把交易k次定义为2次。当然也可以把内层的for循环拆出来，分别列出交易0次、1次、2次的状态转移方程即可
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        n = len(prices)
+        dp = [[[0]*2 for _ in range(3)] for _ in range(n)]
+        # dp[i][j][0]表示第i天交易了j次时不持有股票, dp[i][j][1]表示第i天交易了j次时持有股票
+        # 定义卖出股票时交易次数加1
+        for i in range(3):
+            dp[0][i][0], dp[0][i][1] = 0, -prices[0]
+        
+        for i in range(1, n):
+            for j in range(3):
+                if not j:
+                    dp[i][j][0] = dp[i-1][j][0]
+                else:
+                    dp[i][j][0] = max(dp[i-1][j][0], dp[i-1][j-1][1] + prices[i])
+                dp[i][j][1] = max(dp[i-1][j][1], dp[i-1][j][0] - prices[i])
+        
+        return max(dp[n-1][0][0], dp[n-1][1][0], dp[n-1][2][0])
+
+第二种方法：用变量而不是多维数组保存迭代的值，优点是省内存空间，缺点是不是标准DP，没法泛化
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        
+        buy1, sell1, buy2, sell2 = -prices[0], 0, -prices[0], 0
+        for i in range(1,len(prices)):
+            buy1 = max(buy1,-prices[i])	#用负值统一变量
+            sell1 = max(sell1,buy1 + prices[i])	#sell1为 0~i(含)天股市中买卖一次的最优利润
+            buy2 = max(buy2,sell1 - prices[i])	#仅当＞0才会更新，保证 第二次买入不会与第一次卖出为同一天。而sell1为历史记录保证第二次买入比第一次卖出晚。
+            sell2 = max(sell2,buy2 + prices[i])	#若第二轮买卖为同一天，则不会更新。此操作自然保证sell2为买卖至多两次的最优利润。
+        return sell2
+```
 
 ###  4.47. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
 
@@ -6751,6 +7185,140 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1CT4y1g7bR?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1qT4y1J71C?spm_id_from=333.999.0.0)
+
+```py
+# python3
+
+class Solution:
+    def maxPathSum(self, root: TreeNode) -> int:
+        self.max_val = -float('inf')
+        self.process(root)
+        return self.max_val
+
+
+    def process(self, root):
+        if not root:
+            return 0
+        left = max(0, self.process(root.left))
+        right = max(0, self.process(root.right))
+        self.max_val = max(self.max_val, root.val + left + right, root.val + max(left, right))# 把 {左中右} + {经过中间} 保存下来
+        return root.val + max(left, right) #  {左中右}的值不会返回 + {经过中间} 会返回
+
+# 不用看官方题解，那么复杂。 
+# 所有树的题目，都想成一颗只有根、左节点、右节点 的小树。
+# 然后一颗颗小树构成整棵大树，所以只需要考虑这颗小树即可。
+# 接下来分情况， 按照题意：一颗三个节点的小树的结果只可能有如下6种情况：
+
+# 根 + 左 + 右
+# 根 + 左
+# 根 + 右
+# 根
+# 左
+# 右
+# 好了，分析上述6种情况， 只有 2,3,4 可以向上累加，
+# 而1,5,6不可以累加（这个很好想，情况1向上累加的话，必然出现分叉，
+# 情况5和6直接就跟上面的树枝断开的，没法累加），
+# 所以我们找一个全局变量存储 1,5,6这三种不可累加的最大值， 
+# 另一方面咱们用遍历树的方法求2,3,4这三种可以累加的情况。 
+# 最后把两类情况得到的最大值再取一个最大值即可。
+
+class Solution(object):
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        self.max_sum = -sys.maxsize - 1
+
+        def scan(root):
+            if root is None:
+                return -sys.maxsize - 1
+            left = scan(root.left)
+            right = scan(root.right)
+            self.max_sum = max(self.max_sum, root.val + left + right, left, right) # 情况1,5,6，不累加直接放变量里暂存
+            return max(root.val, root.val + left, root.val + right)  # 情况2,3,4 ，累加需要递归
+
+        new_max = scan(root)
+        return max(self.max_sum, new_max)  # 两类情况再求最大
+
+import sys
+
+class Solution:
+    
+    result = -sys.maxsize-1
+    
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        self.maxValue(root)
+        return self.result
+    
+    """
+    最大路径和：根据当前节点的角色，路径和可分为两种情况：
+    一：以当前节点为根节点
+    1.只有当前节点
+    2.当前节点+左子树
+    3.当前节点+右子书
+    4.当前节点+左右子树    
+    这四种情况的最大值即为以当前节点为根的最大路径和
+    此最大值要和已经保存的最大值比较，得到整个树的最大路径值
+    
+    二：当前节点作为父节点的一个子节点
+    和父节点连接的话则需取【单端的最大值】
+    1.只有当前节点
+    2.当前节点+左子树
+    3.当前节点+右子书
+    这三种情况的最大值    
+    """
+    def maxValue(self,root):
+        if root == None:            
+            return 0
+        
+        leftValue = self.maxValue(root.left)
+        rightValue = self.maxValue(root.right)
+        
+        value1 = root.val
+        value2 = root.val + leftValue
+        value3 = root.val + rightValue
+        value4 = root.val + rightValue + leftValue
+        
+        #以此节点为根节点的最大值
+        maxValue = max([value1,value2,value3,value4])
+        
+        #当前遍历树的最大值
+        self.result = max(maxValue, self.result)
+        
+        #要和父节点关联，则需要取去除情况4的最大值
+        return max([value1,value2,value3])
+
+class Solution:
+    def __init__(self):
+        self.maxSum = float("-inf")
+
+    def maxPathSum(self, root: TreeNode) -> int:
+        def maxGain(node):
+            if not node:
+                return 0
+
+            # 递归计算左右子节点的最大贡献值
+            # 只有在最大贡献值大于 0 时，才会选取对应子节点
+            leftGain = max(maxGain(node.left), 0)
+            rightGain = max(maxGain(node.right), 0)
+            
+            # 节点的最大路径和取决于该节点的值与该节点的左右子节点的最大贡献值
+            priceNewpath = node.val + leftGain + rightGain
+            
+            # 更新答案
+            self.maxSum = max(self.maxSum, priceNewpath)
+        
+            # 返回节点的最大贡献值
+            return node.val + max(leftGain, rightGain)
+   
+        maxGain(root)
+        return self.maxSum
+```
 
 ###  4.48. <a name='ValidPalindrome'></a>125-Valid Palindrome
 
@@ -6762,17 +7330,387 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        sgood = "".join(ch.lower() for ch in s if ch.isalnum())
+        return sgood == sgood[::-1]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/valid-palindrome/solution/yan-zheng-hui-wen-chuan-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        sgood = "".join(ch.lower() for ch in s if ch.isalnum())
+        n = len(sgood)
+        left, right = 0, n - 1
+        
+        while left < right:
+            if sgood[left] != sgood[right]:
+                return False
+            left, right = left + 1, right - 1
+        return True
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/valid-palindrome/solution/yan-zheng-hui-wen-chuan-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        n = len(s)
+        left, right = 0, n - 1
+        
+        while left < right:
+            while left < right and not s[left].isalnum():
+                left += 1
+            while left < right and not s[right].isalnum():
+                right -= 1
+            if left < right:
+                if s[left].lower() != s[right].lower():
+                    return False
+                left, right = left + 1, right - 1
+
+        return True
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/valid-palindrome/solution/yan-zheng-hui-wen-chuan-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        s = ''.join(filter(str.isalnum,s)).lower()
+        return s==s[::-1]
+
+练习一下正则
+
+import re
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s=re.sub('[^a-zA-Z0-9]','',s)
+        s=s.lower()
+        return s==s[::-1]
+```
+
+```py
+class Solution(object):
+    def isPalindrome(self, s):
+        st = []
+        for i in s:
+            if i.isalpha():
+                st.append(i.lower())
+        return st == st[::-1]
+```
+
 ###  4.49. <a name='WordLadderII'></a>126. Word Ladder II
 
 [花花酱](https://www.bilibili.com/video/BV1yt411Y7gH?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV16K4y1j7hX?spm_id_from=333.999.0.0)
 
+```py
+吐血了，从127而来，自己写了一版本， 击败5%用时3300ms。。。然后看了一下top。 仅68ms， 代码特别美 我的高仿127，单向bfs搞定，比较辣眼睛，可以跳过直接看大神代码。。。
+
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        if endWord not in wordList or not endWord or not beginWord or not wordList:
+            return []
+
+        dictory = defaultdict(list)
+        L = len(beginWord)
+
+        # 准备过程  将字典中其中一位用*代替，建立map    
+        for word in wordList:
+            for i in range(L):
+                dictory[word[:i] + '*' + word[i+1:]].append(word)
+                
+        ans = []
+
+        queue_begin = [(beginWord, 1, [[beginWord]])]
+        visited_begin = {beginWord:[[beginWord]]}
+
+        minLevel = len(wordList) + 1 # 最大长度为字典长度+1
+
+        while queue_begin:
+            current_word,level, paths = queue_begin.pop(0)
+
+            if level > minLevel: continue            
+
+            for i in range(L):
+                tmp = current_word[:i] + '*' + current_word[i+1:]
+                for word in dictory[tmp]:
+                    if word == endWord:
+                        # 拼接路径
+                        for p in paths:
+                            minLevel = level
+                            ans.append(p + [endWord])
+                            
+                    elif word not in visited_begin:
+                        new_paths = [p+[word] for p in paths]
+                        visited_begin[current_word] = new_paths
+                        queue_begin.append((word, level+1, new_paths))
+
+        return ans
+大神代码来了 击败100% 仅68ms
+
+def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        if endWord not in wordList: return []
+        # 定义了从头向后访问的集合，从尾向前访问的集合
+        # 将wordlist转成了set，方便做减法运算。定义了默认首次访问方向为向后
+        forward, backward, wordList, flag = {beginWord}, {endWord}, set(wordList), True  
+        # 所有字符，用于取代通配符，词长度， dic的key和value都是单词，value表示parent，或者说前置节点的意思。这里前置和后置的关系取决于距离beginword和endWord的距离
+        # dic 或者说 指向的是离beginWord距离更近一层的节点。一种BFS的思想。
+        letters, length, dic = 'abcdefghijklmnopqrstuvwxyz', len(beginWord), defaultdict(set)
+        while forward:
+            if len(forward) > len(backward): # 当向后方向的长度大于向前方向长度时，反转以下三个值。 处理了困扰我n久的双向遍历时最大深度问题。。。
+                forward, backward, flag = backward, forward, not flag
+
+            wordList -= forward  # 从wordList移除将要遍历的forward ， 这样顺便将wordList当做了visited用，很棒的想法
+            cur = set()
+            for word in forward:
+                # 这个循环我们将未插入dic的节点中，层数+1的节点全部插入dic。注意两个方向有区别。
+                for i in range(length):
+                    left, right = word[:i], word[i+1:]  #老生常谈的通配符
+                    for l in letters:  # l类似我们之前用的通配符*
+                        w = left + l + right  # 这个用letters处理，免去了构造一整个dict的过程，节约了很多代码和额外空间
+                        if w in wordList:
+                            cur.add(w)
+                            if flag:
+                                dic[w].add(word)    # 单词w可由word变化而来， 这里 w 比 word 离 beginWord远
+                            else:
+                                dic[word].add(w)    # 这个意思是逆序遍历时， 视为word可由w变化而来。这里 w 比word 离 endWord远，就是说离beginWord更近
+            
+            #很酷炫的写法，利用了集合的交集 &计算出的是一个set。
+            if cur & backward:  # 产生交集，最短路径找到  
+                # 用于生成全部路径，开始只放一个尾结点，通过dic不停找前置节点获取全路径
+                # 这是一个二维数组， 第一维表示全部的路径，第二维表示该路径下的全部节点。
+                res = [[endWord]] 
+                while res[0][0] != beginWord:  # 循环结束条件是刚添加进去的节点是beginWord
+                    # 这也是体现算法功底的代码。 遍历的是全部的路径， i代表的是其中一条路径，
+                    # i[0]代表的是每个路径的最前置节点，即第一个点。 注意我们每次都会清空之前的res，进行重新赋值。
+                    # 去除第一个点之后，通过dic[i[0]]获取前置节点x， 拼接路径：[x]+i
+                    # 这个代码干了这么多事，两层循环，但简洁优雅，又透露出算法功底，很佩服原作者！
+                    res = [[x]+i for i in res for x in dic[i[0]]]
+                return res  # 产生交集就return,避免了我写的那个有5层又有6层的情况。很妙
+            # 这个有一种指针向后移动的意味， 其实代表的是该层遍历结束，我们向后/向前移动一层。 类似常写的 cur = cur.next
+            forward = cur
+        return []
+```
+
+```py
+把单词到通配串的路径生成，再把通配串到单词的路径生成，然后再单向宽搜，写双向就更复杂了，单向速度也马马虎虎吧，148ms。 py
+
+class Solution:
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[str]:
+        d = collections.defaultdict(list)
+        for word in wordList + [beginWord]:
+            w = [*word]
+            for i, c in enumerate(word):
+                w[i] = '.'
+                p = ''.join(w)
+                d[p].append(word)
+                d[word].append(p)
+                w[i] = c
+        if endWord in d:
+            q, v = {beginWord: [[beginWord]]}, {beginWord}
+            while q:
+                if endWord in q:
+                    return [*q[endWord]]
+                t = collections.defaultdict(set)
+                for i in q:
+                    for j in d[i]:
+                        for w in d[j]:
+                            if w not in v:
+                                t[w].update((*p, w) for p in q[i])
+                q = t
+                v.update(q.keys())
+        return []
+```
+
 ###  4.50. <a name='WordLadder'></a>127. Word Ladder
 
 [花花酱](https://www.bilibili.com/video/BV1yt411Y7Me?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1BK4y157k1?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        def addWord(word: str):
+            if word not in wordId:
+                nonlocal nodeNum
+                wordId[word] = nodeNum
+                nodeNum += 1
+        
+        def addEdge(word: str):
+            addWord(word)
+            id1 = wordId[word]
+            chars = list(word)
+            for i in range(len(chars)):
+                tmp = chars[i]
+                chars[i] = "*"
+                newWord = "".join(chars)
+                addWord(newWord)
+                id2 = wordId[newWord]
+                edge[id1].append(id2)
+                edge[id2].append(id1)
+                chars[i] = tmp
+
+        wordId = dict()
+        edge = collections.defaultdict(list)
+        nodeNum = 0
+
+        for word in wordList:
+            addEdge(word)
+        
+        addEdge(beginWord)
+        if endWord not in wordId:
+            return 0
+        
+        dis = [float("inf")] * nodeNum
+        beginId, endId = wordId[beginWord], wordId[endWord]
+        dis[beginId] = 0
+
+        que = collections.deque([beginId])
+        while que:
+            x = que.popleft()
+            if x == endId:
+                return dis[endId] // 2 + 1
+            for it in edge[x]:
+                if dis[it] == float("inf"):
+                    dis[it] = dis[x] + 1
+                    que.append(it)
+        
+        return 0
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/word-ladder/solution/dan-ci-jie-long-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        def addWord(word: str):
+            if word not in wordId:
+                nonlocal nodeNum
+                wordId[word] = nodeNum
+                nodeNum += 1
+        
+        def addEdge(word: str):
+            addWord(word)
+            id1 = wordId[word]
+            chars = list(word)
+            for i in range(len(chars)):
+                tmp = chars[i]
+                chars[i] = "*"
+                newWord = "".join(chars)
+                addWord(newWord)
+                id2 = wordId[newWord]
+                edge[id1].append(id2)
+                edge[id2].append(id1)
+                chars[i] = tmp
+
+        wordId = dict()
+        edge = collections.defaultdict(list)
+        nodeNum = 0
+
+        for word in wordList:
+            addEdge(word)
+        
+        addEdge(beginWord)
+        if endWord not in wordId:
+            return 0
+        
+        disBegin = [float("inf")] * nodeNum
+        beginId = wordId[beginWord]
+        disBegin[beginId] = 0
+        queBegin = collections.deque([beginId])
+
+        disEnd = [float("inf")] * nodeNum
+        endId = wordId[endWord]
+        disEnd[endId] = 0
+        queEnd = collections.deque([endId])
+
+        while queBegin or queEnd:
+            queBeginSize = len(queBegin)
+            for _ in range(queBeginSize):
+                nodeBegin = queBegin.popleft()
+                if disEnd[nodeBegin] != float("inf"):
+                    return (disBegin[nodeBegin] + disEnd[nodeBegin]) // 2 + 1
+                for it in edge[nodeBegin]:
+                    if disBegin[it] == float("inf"):
+                        disBegin[it] = disBegin[nodeBegin] + 1
+                        queBegin.append(it)
+
+            queEndSize = len(queEnd)
+            for _ in range(queEndSize):
+                nodeEnd = queEnd.popleft()
+                if disBegin[nodeEnd] != float("inf"):
+                    return (disBegin[nodeEnd] + disEnd[nodeEnd]) // 2 + 1
+                for it in edge[nodeEnd]:
+                    if disEnd[it] == float("inf"):
+                        disEnd[it] = disEnd[nodeEnd] + 1
+                        queEnd.append(it)
+        
+        return 0
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/word-ladder/solution/dan-ci-jie-long-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+(压根没想到用虚拟节点的方法，用了最蠢的遍历a-z的方法。没想到竟然能通过= =)
+
+附上我的低效python代码，仅供参考。
+
+from collections import deque
+class Solution:
+    def ladderLength(self, beginWord, endWord, wordList):
+        word_dict = set(wordList)
+        visited = set(['beginWord'])
+        queue = deque([(beginWord, 1)])
+        while queue:
+            pop, depth = queue.popleft()
+            if pop == endWord:
+                return depth
+            for i in range(len(pop)):
+                for j in range(97, 123):
+                    new_word = pop[:i] + chr(j) + pop[i+1:]
+                    if new_word not in visited and new_word in word_dict:
+                        queue.append((new_word, depth + 1))
+                        visited.add(new_word)
+        return 0
+```
+
+```py
+还有个更巧妙的想法，将 word 的某一位改为 '*' 作为 word 的 key。例如 hit 的 key 为 '*it'、'h*t'、'hi*'。
+
+在 wordList 中找到 key 相同的单词，即是能转换的单词。于是提前将 wordList 的单词按 key 存在哈希表中，就可以进一步减少搜索范围到 len(word)。
+
+def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+    d = defaultdict(list)
+    gen_key = lambda w: [w[:i] + '*' + w[i+1:] for i in range(len(w))]
+    for word in wordList:
+        for key in gen_key(word):
+            d[key].append(word)
+    queue, vis = deque([(beginWord, 1)]), {beginWord}
+    while queue:
+        word, T = queue.popleft()
+        for key in gen_key(word):
+            for w in d[key]:
+                if w not in vis:
+                    if w == endWord:
+                        return T+1
+                    vis.add(w)
+                    queue.append([w, T+1])
+    return 0
+```
 
 ###  4.51. <a name='LongestConsecutiveSequence'></a>128. Longest Consecutive Sequence
 
@@ -6782,6 +7720,192 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1VK411H7o5?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        def dfs(root, prevTotal) -> int:
+            if not root:
+                return 0
+            total = prevTotal * 10 + root.val
+            if not root.left and not root.right:
+                return total
+            else:
+                return dfs(root.left, total) + dfs(root.right, total)
+        return dfs(root, 0)
+
+def sumNumbers(self, root: TreeNode) -> int:
+        nums = []
+        def dfs(root, s):
+            nonlocal nums
+            if not root:
+                return 0
+            s = 10 * s + root.val
+            if not root.left and not root.right:
+                nums.append(s)
+            dfs(root.left, s)
+            dfs(root.right, s)
+        dfs(root, 0)
+        return sum(nums)
+
+
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        def dfs(root, nowVal):
+            nonlocal ans
+            if root.left == None and root.right == None:
+                ans += nowVal
+                return
+            if root.left:
+                dfs(root.left, nowVal*10 + root.left.val)
+            if root.right:
+                dfs(root.right, nowVal*10 + root.right.val)
+        ans = 0
+        if root:
+            dfs(root, root.val)
+        return ans
+
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        ans = 0
+        
+        def dfs(root, acc):
+            nonlocal ans
+            if not root.left and not root.right:
+                ans += acc * 10 + root.val
+                return
+            if root.left:
+                dfs(root.left, acc*10+root.val)
+            if root.right:
+                dfs(root.right, acc*10+root.val)
+        dfs(root, 0)
+        return ans
+
+class Solution:
+    total = 0
+    
+    def dfs(self, p: TreeNode, cur: int) -> None:
+        if p.left == None and p.right == None:
+                self.total += cur * 10 + p.val
+                return
+        next_val = cur * 10 + p.val
+        if p.left: self.dfs(p.left, next_val)
+        if p.right: self.dfs(p.right, next_val)
+    
+    def sumNumbers(self, root: TreeNode) -> int:
+        if not root: return 0
+        self.dfs(root, 0)
+        return self.total
+
+class Solution(object):
+    def sumNumbers(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        return self.dfs(root, 0)
+
+    def dfs(self, root, sum):
+        if root is None:
+            return 0
+        sum  = sum * 10 + root.val
+        if root.left is None and root.right is None:
+            return sum
+        return self.dfs(root.left, sum) + self.dfs(root.right, sum)
+
+# 其实递归不难想到，不过我自己做错在细节方面
+
+# 如果只有单支，每朝下走一层，代表的数字都增加10， 10* 原本的 + 新节点的数字，最终也是用这个来解
+
+# ```
+class Solution(object):
+    def sumNumbers(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        return self.dfs(root,0)
+    
+    
+    def dfs(self,root,curSum):
+        if root == None:
+            return 0
+        else:
+            curSum = curSum * 10 + root.val
+            if root.left == None and root.right == None:
+                return curSum
+            else:
+                return self.dfs(root.left, curSum) + self.dfs(root.right, curSum)
+```
+
+```py
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        import collections
+        ans = 0
+        nq = collections.deque([root])
+        vq = collections.deque([root.val])
+        while nq:
+            root = nq.popleft()
+            val = vq.popleft()
+
+            if root.left:
+                nq.append(root.left)
+                vq.append(val*10+root.left.val)
+            if root.right:
+                nq.append(root.right)
+                vq.append(val*10+root.right.val)
+            if not root.left and not root.right:
+                ans += val
+        return ans
+
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+
+        total = 0
+        nodeQueue = collections.deque([root])
+        numQueue = collections.deque([root.val])
+        
+        while nodeQueue:
+            node = nodeQueue.popleft()
+            num = numQueue.popleft()
+            left, right = node.left, node.right
+            if not left and not right:
+                total += num
+            else:
+                if left:
+                    nodeQueue.append(left)
+                    numQueue.append(num * 10 + left.val)
+                if right:
+                    nodeQueue.append(right)
+                    numQueue.append(num * 10 + right.val)
+
+        return total
+
+# 利用辅助栈的非递归方法
+
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        stack = []
+        p = root
+        sum = 0
+        while(p or stack):
+            if(p):
+                stack.append(p)
+                if(p.left):
+                    p.left.val += p.val*10
+                p = p.left
+            else:
+                p = stack.pop()
+                if(not p.left and not p.right):
+                    sum += p.val
+                if(p.right):
+                    p.right.val += p.val*10
+                p = p.right
+        return sum
+```
+
 ###  4.53. <a name='SurroundedRegions130-'></a>130. Surrounded Regions 130-被围绕的区域
 
 [花花酱](https://www.bilibili.com/video/BV1dE411f7U4?spm_id_from=333.999.0.0)
@@ -6789,6 +7913,152 @@ class Solution:
 [哈哈哈](https://www.bilibili.com/video/BV18y4y1j7JH?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1pV411k7TH?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        if not board:
+            return
+        
+        n, m = len(board), len(board[0])
+
+        def dfs(x, y):
+            if not 0 <= x < n or not 0 <= y < m or board[x][y] != 'O':
+                return
+            
+            board[x][y] = "A"
+            dfs(x + 1, y)
+            dfs(x - 1, y)
+            dfs(x, y + 1)
+            dfs(x, y - 1)
+        
+        for i in range(n):
+            dfs(i, 0)
+            dfs(i, m - 1)
+        
+        for i in range(m - 1):
+            dfs(0, i)
+            dfs(n - 1, i)
+        
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] == "A":
+                    board[i][j] = "O"
+                elif board[i][j] == "O":
+                    board[i][j] = "X"
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/surrounded-regions/solution/bei-wei-rao-de-qu-yu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        if not board:
+            return
+        
+        n, m = len(board), len(board[0])
+        que = collections.deque()
+        for i in range(n):
+            if board[i][0] == "O":
+                que.append((i, 0))
+                board[i][0] = "A"
+            if board[i][m - 1] == "O":
+                que.append((i, m - 1))
+                board[i][m - 1] = "A"
+        for i in range(m - 1):
+            if board[0][i] == "O":
+                que.append((0, i))
+                board[0][i] = "A"
+            if board[n - 1][i] == "O":
+                que.append((n - 1, i))
+                board[n - 1][i] = "A"
+        
+        while que:
+            x, y = que.popleft()
+            for mx, my in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
+                if 0 <= mx < n and 0 <= my < m and board[mx][my] == "O":
+                    que.append((mx, my))
+                    board[mx][my] = "A"
+        
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] == "A":
+                    board[i][j] = "O"
+                elif board[i][j] == "O":
+                    board[i][j] = "X"
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/surrounded-regions/solution/bei-wei-rao-de-qu-yu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+方法一：BFS
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        self.m, self.n = len(board), len(board[0])
+        self.board = board
+        self.connectedToBorder = set()
+        for i in range(self.m):   #把第一行和最后一行的所有O相连的都加入集合
+            if (i, 0) not in self.connectedToBorder and self.board[i][0] == 'O':
+                self.bfs(i, 0)
+            if (i, self.n-1) not in self.connectedToBorder and self.board[i][self.n-1] == 'O':
+                self.bfs(i, self.n-1)
+        for j in range(self.n):   #把第一列和最后一列的所有O相连的都加入集合
+            if (0, j) not in self.connectedToBorder and self.board[0][j] == 'O':
+                self.bfs(0, j)
+            if (self.m-1, j) not in self.connectedToBorder and self.board[self.m-1][j] == 'O':
+                self.bfs(self.m-1, j)
+
+        #把不在集合中的O全变为X
+        for i in range(self.m):
+            for j in range(self.n):
+                if (i,j) not in self.connectedToBorder and self.board[i][j] == 'O':
+                    self.board[i][j] = 'X'
+
+    def bfs(self, k, l):
+        Q = collections.deque([(k,l)])
+        while Q:
+            i, j = Q.popleft()
+            self.connectedToBorder.add((i,j))
+            for x, y in [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]:
+                if (x,y) not in self.connectedToBorder:
+                    if self.m > x >=0 and self.n > y >= 0 and self.board[x][y] == 'O':
+                        self.connectedToBorder.add((x,y))
+                        Q.append((x,y))
+方法二：DFS
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        self.m, self.n = len(board), len(board[0])
+        self.board = board
+        self.connectedToBorder = set()
+        for i in range(self.m):   #把第一行和最后一行的所有O相连的都加入集合
+            if (i, 0) not in self.connectedToBorder and self.board[i][0] == 'O':
+                self.dfs(i, 0)
+            if (i, self.n-1) not in self.connectedToBorder and self.board[i][self.n-1] == 'O':
+                self.dfs(i, self.n-1)
+        for j in range(self.n):   #把第一列和最后一列的所有O相连的都加入集合
+            if (0, j) not in self.connectedToBorder and self.board[0][j] == 'O':
+                self.dfs(0, j)
+            if (self.m-1, j) not in self.connectedToBorder and self.board[self.m-1][j] == 'O':
+                self.dfs(self.m-1, j)
+
+        #把不在集合中的O全变为X
+        for i in range(self.m):
+            for j in range(self.n):
+                if (i,j) not in self.connectedToBorder and self.board[i][j] == 'O':
+                    self.board[i][j] = 'X'
+
+    def dfs(self, i, j):
+        self.connectedToBorder.add((i,j))
+        for x, y in [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]:
+            if (x,y) not in self.connectedToBorder and self.m > x >=0 and self.n > y >= 0 and self.board[x][y] == 'O':
+                self.dfs(x,y)   
+```
 
 ###  4.54. <a name='-1'></a>131-分割回文串
 
@@ -6800,6 +8070,87 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1944y1C71s?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def minCut(self, s: str) -> int:
+        n = len(s)
+        g = [[True] * n for _ in range(n)]
+
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 1, n):
+                g[i][j] = (s[i] == s[j]) and g[i + 1][j - 1]
+
+        f = [float("inf")] * n
+        for i in range(n):
+            if g[0][i]:
+                f[i] = 0
+            else:
+                for j in range(i):
+                    if g[j + 1][i]:
+                        f[i] = min(f[i], f[j] + 1)
+        
+        return f[n - 1]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/palindrome-partitioning-ii/solution/fen-ge-hui-wen-chuan-ii-by-leetcode-solu-norx/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def minCut(self, s: str) -> int:
+
+        isPalindromic=[[False]*len(s) for _ in range(len(s))]
+
+        for i in range(len(s)-1,-1,-1):
+            for j in range(i,len(s)):
+                if s[i]!=s[j]:
+                    isPalindromic[i][j] = False
+                elif  j-i<=1 or isPalindromic[i+1][j-1]:
+                    isPalindromic[i][j] = True
+
+        # print(isPalindromic)
+        dp=[sys.maxsize]*len(s)
+        dp[0]=0
+
+        for i in range(1,len(s)):
+            if isPalindromic[0][i]:
+                dp[i]=0
+                continue
+            for j in range(0,i):
+                if isPalindromic[j+1][i]==True:
+                    dp[i]=min(dp[i], dp[j]+1)
+        return dp[-1]
+```
+
+```py
+记忆化dfs，5%睡了睡了
+
+class Solution:
+    def minCut(self, s: str) -> int:
+        self.memo = [9999]*len(s)
+        self.s = s
+        return self.dfs(0)
+    
+    def dfs(self,pos):
+        if pos >= len(self.memo):
+            return -1
+        elif pos == len(self.memo)-1: 
+            self.memo[pos] = 0
+            return 0
+        
+        if self.memo[pos] < 9999: 
+            return self.memo[pos]
+
+        for i in range(pos,len(self.s)):
+            if self.s[pos:i+1]==self.s[pos:i+1][::-1] :
+                self.memo[pos] = min(self.dfs(i+1),self.memo[pos])
+        self.memo[pos] += 1
+        return self.memo[pos]
+
+```
+
 ###  4.56. <a name='CloneGraph'></a>133. Clone Graph
 
 [小梦想家](https://www.bilibili.com/video/BV1wA411T7SM?spm_id_from=333.999.0.0)
@@ -6808,11 +8159,213 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV12K411A7Zb?spm_id_from=333.999.0.0)
 
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1hzav19bp1wg.png" width="70%">
+
+https://www.bilibili.com/video/BV1Cy4y127Di?from=search&seid=15236791324980694232&spm_id_from=333.337.0.0
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6d4fzq5ov200.png)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2ie91wvv2iu0.png" width="70%">
+
+
+```py
+class Solution:
+    def createNode(self, oldNode):
+        newNode = Node(oldNode.val)
+        self.newNodeDict[newNode.val] = newNode
+        for i in oldNode.neighbors:
+            if i.val not in self.newNodeDict:
+                self.createNode(i)
+            newNode.neighbors.append(self.newNodeDict[i.val])
+        return newNode
+        
+    def cloneGraph(self, node):
+        if not node:
+            return None
+        self.newNodeDict = {}
+        return self.createNode(node)
+```
+
+```py
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        def dfs(u):
+            vis[u] = Node(u.val)
+            vis[u].neighbors = [dfs(v) if v not in vis else vis[v] for v in u.neighbors]
+            return vis[u]
+
+        vis = {}
+        return dfs(node) if node else None
+
+# bfs模板加一个dict记录即可！
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if node is None: return None
+        from collections import deque
+        d = deque([node])
+        visited = set([node.val])
+        has = {node.val: Node(node.val)}
+        while d:
+            onode = d.pop()
+            cnode = has[onode.val]
+            for nd in onode.neighbors:
+                if nd.val not in visited:
+                    d.append(nd)
+                    visited.add(nd.val)
+                if nd.val not in has:
+                    has[nd.val] = Node(nd.val)
+                cnode.neighbors.append(has[nd.val])
+        return has[node.val]
+
+class Solution(object):
+    def cloneGraph(self, node):
+        """
+        :type node: Node
+        :rtype: Node
+        """
+        if node == None: return None
+
+        root = Node(node.val)
+        # must 1 to 1
+        createdNodes = {}
+        createdNodes[root.val] = root 
+
+        stack = []
+        stack.append(node)
+
+        while stack:
+        	cur = stack.pop()
+        	if cur.val in createdNodes:
+        		existNode = createdNodes[cur.val]
+        		for neighbor in cur.neighbors:
+        			if neighbor.val in createdNodes:
+        				existNeighbor = createdNodes[neighbor.val]
+        				existNode.neighbors.append(existNeighbor)
+        			else:
+        				newNode = Node(neighbor.val)
+        				existNode.neighbors.append(newNode)
+        				createdNodes[neighbor.val] = newNode
+        				stack.append(neighbor)
+        return root
+
+class Solution(object):
+
+    def __init__(self):
+        self.visited = {}
+
+    def cloneGraph(self, node):
+        """
+        :type node: Node
+        :rtype: Node
+        """
+        if not node:
+            return node
+
+        # 如果该节点已经被访问过了，则直接从哈希表中取出对应的克隆节点返回
+        if node in self.visited:
+            return self.visited[node]
+
+        # 克隆节点，注意到为了深拷贝我们不会克隆它的邻居的列表
+        clone_node = Node(node.val, [])
+
+        # 哈希表存储
+        self.visited[node] = clone_node
+
+        # 遍历该节点的邻居并更新克隆节点的邻居列表
+        if node.neighbors:
+            clone_node.neighbors = [self.cloneGraph(n) for n in node.neighbors]
+
+        return clone_node
+```
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4t97v5kpwvq0.png" width="50%">
+
 ###  4.57. <a name='GasStation'></a>134. Gas Station
 
 [小梦想家](https://www.bilibili.com/video/BV1BC4y1472f?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1754y1176F?spm_id_from=333.999.0.0)
+
+```py
+啪就打开题解 很快啊
+
+class Solution:
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        i = 0
+        while i<len(cost):
+            soG = 0
+            soC = 0
+            tmp = 0
+            while tmp<len(cost):
+                j = (i+tmp)%len(cost)
+                soC+=cost[j]
+                soG+=gas[j]
+                if soC>soG:
+                    break
+                tmp+=1
+            if tmp == len(cost):
+                return i
+            else:
+                i = i+tmp+1
+        return -1
+
+class Solution:
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        n = len(gas)
+        start = 0
+        surplus = 0
+        i = 0
+        while True:
+            t = (start+i) % n
+            surplus += gas[t] - cost[t]
+            i += 1
+            if surplus < 0:
+                if start == n-1:
+                    return -1
+                surplus = 0
+                start += 1
+                i = 0
+            elif i == n:
+                return start
+算法思路一样，复杂度分析一下应该也是O(n)，但是运行到倒数第二个测试就会超时，很头疼
+```
+
+```py
+class Solution(object):
+    def canCompleteCircuit(self, gas, cost):
+        # a 就是那个数组
+        a = []
+        for i in range(len(gas)):
+            a.append(gas[i] - cost[i])
+
+        if sum(a) < 0:
+            return -1
+
+        start = 0
+        all_money = 0
+        for i in range(len(a)):
+            all_money += a[i]
+            if all_money < 0:
+                all_money = 0
+                start = i+1
+
+        return start
+
+class Solution:
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        start = 0
+        curSum = 0
+        totalSum = 0
+        for i in range(len(gas)):
+            curSum += gas[i] - cost[i]
+            totalSum += gas[i] - cost[i]
+            if curSum < 0:
+                curSum = 0
+                start = i + 1
+        if totalSum < 0: return -1
+        return start
+```
 
 ###  4.58. <a name='CopyListwithRandomPointer'></a>138 Copy List with Random Pointer
 
@@ -6846,9 +8399,187 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
 
+```py
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        ok = [True]
+        for i in range(1, len(s)+1):
+            ok += [any(ok[j] and s[j:i] in wordDict for j in range(i))]
+        return ok[-1]
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        wordDictSet = set(wordDict)
+        dp = [False] * (len(s) + 1)
+        for i in range(1, len(s) + 1):
+            # 找切分点
+            for j in range(i):
+                if dp[j] and s[j: i] in wordDictSet:
+                    dp[i] = True # 说明s[: i] 在wordDict中
+                    break # 剩下的切分点j不用再寻找了
+        return dp[-1]
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        '''排列'''
+        dp = [False]*(len(s) + 1)
+        dp[0] = True
+        # 遍历背包
+        for j in range(1, len(s) + 1):
+            # 遍历单词
+            for word in wordDict:
+                if j >= len(word):
+                    dp[j] = dp[j] or (dp[j - len(word)] and word == s[j - len(word):j])
+        return dp[len(s)]
+
+# python 动态规划
+
+# 从 i = 0 开始分析：i = 0， 遍历 j in range(1, n+1)， 
+
+# 即遍历所有以 s[0]开头的组合，把第一个单词可能的情况全部找出来。
+
+# 此时相当于把打头的单词可能的情况全部找出来了。
+
+# 然后基于第一个单词一个单词一个单词地接上去。
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        n = len(s) 
+
+        flag = [True] + [False]*n
+
+        for i in range(n):
+            for j in range(i+1, n+1):
+                if flag[i] == True and (s[i:j] in wordDict):
+                    flag[j] = True
+        
+        return flag[-1]
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        if not s:
+            return True
+        
+        breakp = [0]
+        
+        for i in range(len(s) + 1):
+            for j in breakp:
+                if s[j:i] in wordDict:
+                    breakp.append(i)
+                    break
+        return breakp[-1] == len(s)
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        if not s:
+            return True
+        
+        breakp = [0]
+        
+        for i in range(len(s) + 1):
+            for j in breakp:
+                if s[j:i] in wordDict:
+                    breakp.append(i)
+                    break
+        return breakp[-1] == len(s)
+
+# 超时了 但是还是想分享一下 一个回溯的方法
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        def dfs(s):
+            if s.isspace():
+                return True
+            for item in wordDict:
+                if item in s:
+                    if dfs(s.replace(item,' ',1)):
+                        return True
+            return False
+        return dfs(s)
+```
+
 ###  4.62. <a name='WordBreakII'></a>140 Word Break II
 
 [小明](https://www.bilibili.com/video/BV1ht4y1X7DJ?spm_id_from=333.999.0.0)
+
+```py
+# 直接回溯过了，这是样例出问题了还是标错难度了。。。
+
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: List[str]
+        """
+        cash = dict()
+        for word in wordDict:
+            cash[word] = 1
+        ans = []
+        def backtract(s, tmp, ans):
+            if len(s) == 0:
+                ans.append(tmp[1:])
+                return
+
+            n = len(s)
+            for i in range(n):
+                if s[:i+1] in cash:
+                    backtract(s[i+1:], tmp+" "+s[:i+1], ans)
+        backtract(s, "", ans)
+        #ans.sort()
+        return ans
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        # @lru_cache(None)
+        def backtrack(index: int):
+            if index == len(s):
+                return [[]]
+            ans = list()
+            for i in range(index + 1, len(s) + 1):
+                word = s[index:i]
+                if word in wordSet:
+                    nextWordBreaks = backtrack(i)
+                    for nextWordBreak in nextWordBreaks:
+                        ans.append(nextWordBreak.copy() + [word])
+            return ans
+        
+        wordSet = set(wordDict)
+        breakList = backtrack(0)
+        return [" ".join(words[::-1]) for words in breakList]
+
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: List[str]
+        """
+        memo = {len(s): ['']}
+        def sentences(i):
+            if i not in memo:
+                memo[i] = [s[i:j] + (tail and ' ' + tail)
+                           for j in range(i+1, len(s)+1)
+                           if s[i:j] in wordDict
+                           for tail in sentences(j)]
+            return memo[i]
+        return sentences(0)
+```
 
 ###  4.63. <a name='LinkedListCycle'></a>141-Linked List Cycle
 
@@ -6860,11 +8591,119 @@ object Solution {
 
 [洛阳](https://www.bilibili.com/video/BV1PA411b7gq?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        seen = set()
+        while head:
+            if head in seen:
+                return True
+            seen.add(head)
+            head = head.next
+        return False
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        if not head or not head.next:
+            return False
+        
+        slow = head
+        fast = head.next
+
+        while slow != fast:
+            if not fast or not fast.next:
+                return False
+            slow = slow.next
+            fast = fast.next.next
+        
+        return True
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+感觉初始时把快慢指针都指向 head 反而更简洁：
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        fast = slow = head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
+        
+```
+
 ###  4.64. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
 
 [小明](https://www.bilibili.com/video/BV1W5411L7AF?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV15e41147EY?spm_id_from=333.999.0.0)
+
+```py
+只有我的代码这么奇葩吗=-=
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        while head:
+            if head.val == 'bjfuvth':
+                return True
+            else:
+                head.val = 'bjfuvth'
+            head = head.next
+        return False
+
+方法一：集合 如果发现节点已在集合内则说明存在环
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        s = set()
+        while h2 != None and head.next != None:
+            s.add(head)
+            head = head.next
+            if head in s:
+                return True
+        return False
+
+方法二：双指针。 快慢指针，如果两个指针相遇则说明存在环
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        h1, h2 = head, head
+        while h2 != None and h2.next != None:
+            h2 = h2.next.next
+            h1 = h1.next
+            if h1 == h2:
+                return True
+        return False
+```
+
+```py
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        if not head: return False
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if fast == slow:
+                return True
+        return False
+```
 
 ###  4.65. <a name='ReorderList'></a>143 Reorder List
 
@@ -6882,6 +8721,128 @@ object Solution {
 
 [洛阳](https://www.bilibili.com/video/BV1RD4y1D7C7?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        def preorder(root: TreeNode):
+            if not root:
+                return
+            res.append(root.val)
+            preorder(root.left)
+            preorder(root.right)
+        
+        res = list()
+        preorder(root)
+        return res
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/er-cha-shu-de-qian-xu-bian-li-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        res = list()
+        if not root:
+            return res
+        
+        stack = []
+        node = root
+        while stack or node:
+            while node:
+                res.append(node.val)
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            node = node.right
+        return res
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/er-cha-shu-de-qian-xu-bian-li-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        res = list()
+        if not root:
+            return res
+        
+        p1 = root
+        while p1:
+            p2 = p1.left
+            if p2:
+                while p2.right and p2.right != p1:
+                    p2 = p2.right
+                if not p2.right:
+                    res.append(p1.val)
+                    p2.right = p1
+                    p1 = p1.left
+                    continue
+                else:
+                    p2.right = None
+            else:
+                res.append(p1.val)
+            p1 = p1.right
+        
+        return res
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/er-cha-shu-de-qian-xu-bian-li-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        ans = []
+        if not root:
+            return ans
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            ans.append(node.val)
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return ans
+```
+
+```py
+Python迭代
+
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        
+        stack = [root]
+        res = []
+        while stack:
+            cur = stack.pop()
+            res.append(cur.val)            
+            if cur.right:
+                stack.append(cur.right)
+            if cur.left:
+                stack.append(cur.left)
+        return res
+Python递归
+
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
+```
+
 ###  4.68. <a name='Postorderwithstack'></a>145-Postorder with stack
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ti4y187jL?spm_id_from=333.999.0.0)
@@ -6894,6 +8855,157 @@ object Solution {
 
 [洛阳](https://www.bilibili.com/video/BV1xZ4y1H7uS?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        def postorder(root: TreeNode):
+            if not root:
+                return
+            postorder(root.left)
+            postorder(root.right)
+            res.append(root.val)
+        
+        res = list()
+        postorder(root)
+        return res
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/er-cha-shu-de-hou-xu-bian-li-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return list()
+        
+        res = list()
+        stack = list()
+        prev = None
+
+        while root or stack:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            if not root.right or root.right == prev:
+                res.append(root.val)
+                prev = root
+                root = None
+            else:
+                stack.append(root)
+                root = root.right
+        
+        return res
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/er-cha-shu-de-hou-xu-bian-li-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        def addPath(node: TreeNode):
+            count = 0
+            while node:
+                count += 1
+                res.append(node.val)
+                node = node.right
+            i, j = len(res) - count, len(res) - 1
+            while i < j:
+                res[i], res[j] = res[j], res[i]
+                i += 1
+                j -= 1
+        
+        if not root:
+            return list()
+        
+        res = list()
+        p1 = root
+
+        while p1:
+            p2 = p1.left
+            if p2:
+                while p2.right and p2.right != p1:
+                    p2 = p2.right
+                if not p2.right:
+                    p2.right = p1
+                    p1 = p1.left
+                    continue
+                else:
+                    p2.right = None
+                    addPath(p1.left)
+            p1 = p1.right
+        
+        addPath(root)
+        return res
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/er-cha-shu-de-hou-xu-bian-li-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+# 前序遍历-递归-LC144_二叉树的前序遍历
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        # 保存结果
+        result = []
+        
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            result.append(root.val) # 前序
+            traversal(root.left)    # 左
+            traversal(root.right)   # 右
+
+        traversal(root)
+        return result
+
+# 中序遍历-递归-LC94_二叉树的中序遍历
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        result = []
+
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            traversal(root.left)    # 左
+            result.append(root.val) # 中序
+            traversal(root.right)   # 右
+
+        traversal(root)
+        return result
+
+# 后序遍历-递归-LC145_二叉树的后序遍历
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        result = []
+
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            traversal(root.left)    # 左
+            traversal(root.right)   # 右
+            result.append(root.val) # 后序
+
+        traversal(root)
+        return result
+
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        from collections import deque
+        res, q = [], deque()
+        q.append(root) if root else None
+        while q:
+            t = q.pop()
+            res.append(t.val)
+            q.append(t.left) if t.left else None
+            q.append(t.right) if t.right else None
+        return res[::-1]
+```
+
 ###  4.70. <a name='LRUCache'></a>146 LRU Cache 
 
 [花花酱](https://www.bilibili.com/video/BV19b411c7ue?spm_id_from=333.999.0.0)
@@ -6904,17 +9016,317 @@ object Solution {
 
 [官方](https://www.bilibili.com/video/BV1ZQ4y1A74H?spm_id_from=333.999.0.0)
 
+```py
+class LRUCache(collections.OrderedDict):
+
+    def __init__(self, capacity: int):
+        super().__init__()
+        self.capacity = capacity
+
+
+    def get(self, key: int) -> int:
+        if key not in self:
+            return -1
+        self.move_to_end(key)
+        return self[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self:
+            self.move_to_end(key)
+        self[key] = value
+        if len(self) > self.capacity:
+            self.popitem(last=False)
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/lru-cache/solution/lruhuan-cun-ji-zhi-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class DLinkedNode:
+    def __init__(self, key=0, value=0):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
+
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.cache = dict()
+        # 使用伪头部和伪尾部节点    
+        self.head = DLinkedNode()
+        self.tail = DLinkedNode()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        self.capacity = capacity
+        self.size = 0
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        # 如果 key 存在，先通过哈希表定位，再移到头部
+        node = self.cache[key]
+        self.moveToHead(node)
+        return node.value
+
+    def put(self, key: int, value: int) -> None:
+        if key not in self.cache:
+            # 如果 key 不存在，创建一个新的节点
+            node = DLinkedNode(key, value)
+            # 添加进哈希表
+            self.cache[key] = node
+            # 添加至双向链表的头部
+            self.addToHead(node)
+            self.size += 1
+            if self.size > self.capacity:
+                # 如果超出容量，删除双向链表的尾部节点
+                removed = self.removeTail()
+                # 删除哈希表中对应的项
+                self.cache.pop(removed.key)
+                self.size -= 1
+        else:
+            # 如果 key 存在，先通过哈希表定位，再修改 value，并移到头部
+            node = self.cache[key]
+            node.value = value
+            self.moveToHead(node)
+    
+    def addToHead(self, node):
+        node.prev = self.head
+        node.next = self.head.next
+        self.head.next.prev = node
+        self.head.next = node
+    
+    def removeNode(self, node):
+        node.prev.next = node.next
+        node.next.prev = node.prev
+
+    def moveToHead(self, node):
+        self.removeNode(node)
+        self.addToHead(node)
+
+    def removeTail(self):
+        node = self.tail.prev
+        self.removeNode(node)
+        return node
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/lru-cache/solution/lruhuan-cun-ji-zhi-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+
+```
+
 ###  4.71. <a name='InsertionSortList'></a>147 Insertion Sort List
 
 [小明](https://www.bilibili.com/video/BV1F54y1k7oU?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1Ti4y187pN?spm_id_from=333.999.0.0)
 
+```py
+class Solution:
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        if not head:
+            return head
+        
+        dummyHead = ListNode(0)
+        dummyHead.next = head
+        lastSorted = head
+        curr = head.next
+
+        while curr:
+            if lastSorted.val <= curr.val:
+                lastSorted = lastSorted.next
+            else:
+                prev = dummyHead
+                while prev.next.val <= curr.val:
+                    prev = prev.next
+                lastSorted.next = curr.next
+                curr.next = prev.next
+                prev.next = curr
+            curr = lastSorted.next
+        
+        return dummyHead.next
+
+class Solution(object):
+    def insertionSortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None:
+            return head
+
+        dummy = ListNode(-1)
+        dummy.next = head
+
+        prev = head 
+        cur = head.next
+
+        while cur:
+            p = dummy
+            while p.next.val <= cur.val and p != prev:
+                p = p.next
+            if p != prev:
+                prev.next = cur.next
+                cur.next = p.next
+                p.next = cur
+            prev = cur
+            cur = cur.next
+
+        return dummy.next
+
+class Solution:
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        if not head:
+            return head
+        dummyHead = ListNode()
+        dummyHead.next = head
+        ppre = head
+        p = head.next
+        while p:
+            #如果前一个节点的值小于当前节点的值，就不需要插入，直接指向下一个节点就可以了
+            if ppre.val <= p.val:
+                ppre = p 
+                p = p.next
+            else:
+                #首先把当前节点摘出来
+                #用tmp来保存要插入的节点
+                tmp = p
+                #将它的前一个节点指向后一个节点,p后移
+                ppre.next = p.next
+                p = p.next
+                #然后接着将tmp插入到之前已经排序好的链表中
+                #定义一个q指针和qpre指针
+                q = head
+                qpre = dummyHead
+                #当当前指针的值小于要插入节点的值，就将当前指针后移 
+                while tmp.val > q.val:
+                    qpre = q
+                    q = q.next
+                #结束循环的时候q指向的是满足q.val >= tmp.val，qpre.val < tmp.val 也就是tmp应该插入到qpre的后面
+                tmp.next = q
+                qpre.next = tmp
+                #至此插入完成
+                #！！！注意插入完成后head节点可能发生了变化，需要更新一下
+                head = dummyHead.next
+        return dummyHead.next
+
+class Solution:
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        dummy = ListNode(0)
+        dummy.next = head
+        while head and head.next:
+            if head.val <= head.next.val:
+                head = head.next
+                continue
+            pre = dummy
+            while pre.next.val < head.next.val:
+                pre = pre.next
+            cur = head.next
+            head.next = cur.next
+            cur.next = pre.next
+            pre.next = cur
+            
+        return dummy.next
+        #  试一下这组数据 [0, 5000]+list(range(1, 5000)) 会超时。只是题目的测试用例没有，所以过了
+
+# 菜鸡版 python
+
+class Solution:
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        dummy = ListNode(-1, head)
+        cur = head.next
+        dummy.next.next = None
+        while cur:
+            node = dummy
+            while node.next and cur.val > node.next.val:
+                node = node.next
+            third = cur.next
+            cur.next = node.next
+            node.next = cur
+            cur = third
+        return dummy.next
+```
+
 ###  4.72. <a name='SortList'></a>148. Sort List
 
 [花花酱](https://www.bilibili.com/video/BV1jW411d7z7?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1VK411A7Gm?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        h_head = ListNode(-1, head)
+        mem = []
+        while(head is not None):
+            next_h = head.next
+            head.next = None
+            mem.append(head)
+            head = next_h
+        mem = sorted(mem, key=lambda x: x.val)
+        n = len(mem)
+        if n == 0:
+            return None
+        h_head.next = mem[0]
+        for i in range(n-1):
+            mem[i].next = mem[i+1]
+        
+        return h_head.next
+```
+
+```py
+# py3 归并排序，递归实现。空间复杂度主要在递归栈深度：O( log(n) )，整个递归过程有点像后序遍历
+
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        mid=self.findmid(head)
+        left=head # 指定左右
+        right=mid.next # 指定左右
+        mid.next=None # 断开链接
+        l=self.sortList(left)
+        r=self.sortList(right)
+        return self.merge(l,r)
+
+    def findmid(self,head):
+        slow=head
+        fast=head
+        while fast.next and fast.next.next:
+            slow=slow.next
+            fast=fast.next.next
+        return slow
+
+    def merge(self,l,r):
+        dummy=ListNode(None)
+        cur=dummy
+        while l and r:
+            if l.val<=r.val:
+                cur.next=l
+                l=l.next # 下一个
+            else:
+                cur.next=r
+                r=r.next # 下一个
+            cur=cur.next # 下一个
+        cur.next=l or r
+        return dummy.next
+
+        # 基本用法：
+        # v = p1 or p2
+
+        # 它完成的效果等同于：
+        # if p1:
+        #     v = p1
+        # else:
+        #     v = p2
+```
 
 ###  4.73. <a name='MaxPointsonaLine'></a>149. Max Points on a Line
 
@@ -6925,6 +9337,59 @@ object Solution {
 [花花酱](https://www.bilibili.com/video/BV14f4y127K8?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV16B4y1P7Nx?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def evalRPN(self, tokens):
+        f1 = lambda a,b:a+b
+        f2 = lambda a,b:a-b
+        f3 = lambda a,b:a*b
+        f4 = lambda a,b:int(a/b)
+        maps = {'+':f1,'-':f2,'*':f3,'/':f4}
+        stack = []
+        for i in tokens:
+            if i in maps:
+                a = stack.pop()
+                b = stack.pop()
+                stack.append(maps[i](b,a))
+            else:
+                i = int(i)
+                stack.append(i)
+        return stack[-1]
+
+class Solution:
+    def evalRPN(self, tokens):
+        stack = []
+        for item in tokens:
+            if item not in {"+", "-", "*", "/"}:
+                stack.append(item)
+            else:
+                first_num, second_num = stack.pop(), stack.pop()
+                stack.append(
+                    int(eval(f'{second_num} {item} {first_num}'))   # 第一个出来的在运算符后面
+                )
+        return int(stack.pop()) # 如果一开始只有一个数，那么会是字符串形式的
+
+class Solution:
+    def evalRPN(self, tokens):
+        """
+        解题思路:数字入栈，算数符号出栈两个数字栈并计算，计算结果入栈
+        """
+        stack = []
+        
+        for item in tokens:
+
+            if item not in ['+', '-', '*', '/']:
+                stack.append(int(item))
+            else:
+                a = stack.pop()
+                b = stack.pop()
+                if item == '+': stack.append(a + b)
+                elif item == '-': stack.append(b - a)
+                elif item == '*': stack.append(a * b)
+                elif item == '/': stack.append(int(b / float(a)))   # 注意如何取整
+        return stack[0]
+```
 
 ###  4.75. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
 
