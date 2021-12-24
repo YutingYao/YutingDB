@@ -923,27 +923,19 @@ class Solution:
 ```scala
 object Solution {
     def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-        
         val nums_map = scala.collection.mutable.HashMap[Int, Int]()
-        
         var result: Array[Int] = Array(0,0)
-        
         var i = 0
-        
         while(result.sum == 0) {
-            
             val complement = target - nums(i)
-            
             if (nums_map.contains(complement)) {
                 result(0) = i
                 result(1) = nums_map(complement)
             } else {
                 nums_map(nums(i)) = i
             }
-            
             i += 1
         }
-
         result     
     }
 }
@@ -962,6 +954,103 @@ object Solution {
         
     }
 }
+
+/**
+* chosen solution
+* time complexity: O(N)
+*/
+
+
+object Solution0 {
+  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+    val value2Idx = nums.zipWithIndex.toMap
+    nums.zipWithIndex.collectFirst {
+      case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
+        Array(index, value2Idx(target - value))
+    }.get
+  }
+}
+
+/**
+* HashTable
+* time complexity: O(N)
+*/
+
+object Solution1 {
+  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+    val value2Idx = nums.zipWithIndex.toMap
+    val ret = collection.mutable.ArrayBuffer[Int]()
+
+    for ((n, idx) <- nums.zipWithIndex; if ret.length < 2) {
+      val v2 = target - n
+      value2Idx.get(v2) match {
+        case Some(v2Idx) if v2Idx != idx =>
+          ret ++= Array(idx, v2Idx)
+        case _ =>
+      }
+    }
+    ret.toArray
+  }
+}
+
+
+/**
+* more elegant
+*/
+
+
+object Solution1-2 {
+  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+    val value2Idx = nums.zipWithIndex.toMap
+    nums.zipWithIndex.collectFirst {
+      case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
+        Array(index, value2Idx(target - value))
+    }.get
+  }
+}
+```
+
+```scala
+object leetcode01_two_sum extends App {
+  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+    val sorted = nums.zipWithIndex.sortWith(_._1 < _._1)
+    var left = 0
+    var right = sorted.length - 1
+    while(left < right) {
+      val cal = sorted(left)._1 + sorted(right)._1
+      if(cal > target) {
+        right = right - 1
+      } else if (cal < target) {
+        left = left + 1
+      } else {
+        return Array(sorted(left)._2, sorted(right)._2)
+      }
+    }
+    return Array.emptyIntArray
+  }
+
+  twoSum(Array(3,2,4), 6)
+}
+
+
+object Solution {
+    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+        var map = Map.empty[Int, Int]
+        var result = Array.empty[Int]
+        (0 until nums.length) foreach { i =>
+            val v = nums(i)
+            map.get(target - v) match {
+                case Some(x)  =>
+                    if (x != i){
+                    result = Array(x, i)
+                    }
+                case _ => map += v -> i
+            }
+        }
+        result
+    }
+}
+
 ```
 
 ###  3.2. <a name='AddTwoNumbers'></a>2. Add Two Numbers
@@ -1008,6 +1097,84 @@ class Solution:
             l1 = l1.next if l1 else None
             l2 = l2.next if l2 else None
         return dummy.next
+```
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+
+ /**
+ * my first commitment
+ * time complexity O(max(l1.length, l2.length))
+ */
+object Solution1 {
+    def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {
+      val dummyHead = ListNode()
+      var current = dummyHead
+      var (p1, p2) = (l1, l2)
+      var carry = 0
+      while(p1 != null && p2 != null) {
+        val sum = carry + p1.x + p2.x
+        carry = sum / 10
+        
+        current.next = ListNode(sum % 10)
+        current = current.next
+        p1 = p1.next
+        p2 = p2.next
+      }
+      
+      while(p1 != null) {
+        val sum = carry + p1.x
+        carry = sum / 10
+        current.next = ListNode(sum % 10)  
+        current = current.next
+        p1 = p1.next
+      }
+      while(p2 != null) {
+        val sum = carry + p2.x
+        carry = sum / 10
+        current.next = ListNode(sum % 10)
+        current = current.next
+        p2 = p2.next
+      }
+      if (carry > 0)
+        current.next = ListNode(carry)
+      dummyHead.next
+    }
+}
+
+object Solution {
+    def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {
+      var cur1 = l1
+      var cur2 = l2
+      val dummy = ListNode(0)
+      var prev=dummy
+      var carry = 0
+      while (cur1!=null ||  cur2!=null || carry !=0) {
+        val (s1,next1) = cur1 match {
+          case null => (0,null)
+          case _=> (cur1.x, cur1.next)
+        }
+        val (s2,next2) = cur2 match {
+          case null => (0,null)
+          case _=> (cur2.x,cur2.next)
+        }
+        val s = s1+s2+carry
+        val node = ListNode(s % 10)
+        prev.next = node
+        prev=node
+        carry=s/10
+        cur1 = next1
+        cur2=next2
+      }
+      dummy.next
+    }
+  }
 ```
 
 ###  3.3. <a name='LongestSubstringWithoutRepeatingCharacters'></a>3. 数组中重复的数字 Longest Substring Without Repeating Characters
@@ -1058,6 +1225,186 @@ class Solution:
                 res = max(res,i-start+1) # 易错点: +1
             dic[char] = i # 易错点: dic[char]滞后更新
         return res
+```
+
+```scala
+/**
+* chosen solution
+* two pointer to control sliding window
+*   1. two pointer: left and right to control substring window
+*   2. counter and hashmap to record whether current window is valid or not
+* time  complexity: O(N), worst: O(2N) -> each char was visited twice
+*/
+
+object Solution0 {
+  def lengthOfLongestSubstring(s: String): Int = {
+    val sMap = scala.collection.mutable.Map[Char, Int]() ++ s.distinct.map(c => (c, 0)).toMap
+    var left = 0
+    var right = 0
+    var counter = 0
+    var length = 0
+    while (right < s.length) {
+      val rightChar = s(right)
+      sMap.get(rightChar) match {
+        case Some(v) if v >= 1 =>
+          sMap.update(rightChar, v + 1)
+          counter += 1
+        case Some(v) =>
+          sMap.update(rightChar, v + 1)
+      }
+      right += 1
+      while (counter > 0) {
+        val leftChar = s(left)
+        sMap.get(leftChar) match {
+          case Some(v) if v > 1 =>
+            sMap.update(leftChar, v - 1)
+            counter -= 1
+          case Some(v) =>
+            sMap.update(leftChar, v - 1)
+        }
+
+        left += 1
+
+      }
+      length = length max (right - left)
+    }
+    length
+  }
+}
+
+
+/**
+* my first commit
+* sliding windows
+*  time  complexity: O(N), worst: O(2N) -> each char was visited twice
+*/
+object Solution1 {
+    def lengthOfLongestSubstring(s: String): Int = {
+        var right = 0
+        var left = 0
+        var current = ""
+        var ret = ""
+        
+        while(right < s.length) {
+            val char = s(right)
+            if (current.contains(char)){
+                current = current.drop(1)
+                left += 1
+                 
+            }else {
+                right += 1
+                current += char
+            }     
+            if(current.length > ret.length) ret = current
+        }
+        ret.length
+    }
+}
+
+
+/**
+* sliding windows, slower than solution1
+*   memo
+*     1. using hashmap to record whether the current right char is duplicated or not
+*/
+object Solution1-2 {
+    def lengthOfLongestSubstring(s: String): Int = {
+        val map = scala.collection.mutable.Map[Char, Int]() ++ s.distinct.map(c => (c, 0))
+        var left = 0
+        var right = 0
+        var length = 0
+        
+        while(right < s.length){
+            val rightChar = s(right)
+        
+            map.update(rightChar, map(rightChar) + 1)
+            right += 1
+            
+            /* iterate until meet condition */
+            while(map(rightChar) > 1){
+                val leftChar = s(left)
+                
+                map.get(leftChar) match {
+                    case Some(v) if v > 0 =>  map.update(leftChar,  v - 1)
+                    case _ =>
+                }
+                
+                left += 1
+            }
+
+            length = length max (right - left)  // update minimum
+               
+        }
+        length
+    }
+}
+
+/**
+* using substring problem template
+*   1. two pointer: left and right to control substring window
+*   2. counter and hashmap to record whether current window is valid or not
+*/
+object Solution1-3 {
+  def lengthOfLongestSubstring(s: String): Int = {
+    val sMap = scala.collection.mutable.Map[Char, Int]() ++ s.distinct.map(c => (c, 0)).toMap
+    var left = 0
+    var right = 0
+    var counter = 0
+    var length = 0
+    while (right < s.length) {
+      val rightChar = s(right)
+      sMap.get(rightChar) match {
+        case Some(v) if v >= 1 =>
+          sMap.update(rightChar, v + 1)
+          counter += 1
+        case Some(v) =>
+          sMap.update(rightChar, v + 1)
+      }
+      right += 1
+      while (counter > 0) {
+        val leftChar = s(left)
+        sMap.get(leftChar) match {
+          case Some(v) if v > 1 =>
+            sMap.update(leftChar, v - 1)
+            counter -= 1
+          case Some(v) =>
+            sMap.update(leftChar, v - 1)
+        }
+
+        left += 1
+
+      }
+      length = length max (right - left)
+    }
+    length
+  }
+}
+
+object Solution {
+    //s.zipWithIndex.foreach(println) // =>tuple
+    //   def foldLeft[B](z: B)(op: (B, A) => B): B = {
+    // 解释 z: 初始值,
+    // op (B,A) => B前一个结果，A本次输入,返回作为下一个输入
+    def lengthOfLongestSubstring(s: String): Int = {
+      s.zipWithIndex.foldLeft((0, -1, Map[Char, Int]())) {
+        case ((len, start_pos, map), (char, i)) => {
+          // 初始值len=0,start_pos=-1,map为空; case A,B; 前者为累加值，后者为index
+          // 如果char不存在,last_pos=-1,更新map中的idx,len=i-start_pos
+          // 如果last_pos已存在,例如abca,第一个a为0,第二个a为3,则len=3-0,跟新start_pos
+          val last_pos = map.getOrElse(char, -1)
+          if (last_pos >= start_pos) (len.max(i - last_pos), last_pos, map + (char -> i))
+          else (len.max(i - start_pos), start_pos, map + (char -> i))
+        }
+      }._1
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      println(Solution.lengthOfLongestSubstring("abcabcbb")==3)
+    }
+    val name = "003 Longest Non repeat str"
+  }
 ```
 
 ###  3.4. <a name='MedianofTwoSortedArrays'></a>4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays
@@ -1212,6 +1559,252 @@ Manacher算法：
 
 不要求
 
+```scala
+/**
+* chosen solution
+* expand around center
+* time complexity: O(N * 2 * N) = O(N^2)
+*        expandLengths: O(N)
+* space complexity: O(1)
+*/
+
+object Solution0 {
+    def longestPalindrome(s: String): String = {
+        if(s == null || s.isEmpty) return ""
+        
+        // 0 1 2 3 4 5 6 7
+        // r a c e c a r
+        // r a c e e c a r
+        // b b c e c a a
+        val (head, maxlen) = s.indices.foldLeft((0, 1)){
+            case ((h, maxlen), i) => 
+                val oddlen =  expandLengths(s, i, i)
+                val evenlen = expandLengths(s, i, i + 1)
+                val len = oddlen max evenlen
+                if(len > maxlen)  (i -  (len - 1) / 2, len)
+                else (h, maxlen)
+        }
+        s.slice(head, head + maxlen)
+    }
+    // return length
+    @annotation.tailrec
+    def expandLengths(s: String, left: Int, right: Int): Int = {
+        if(0 <= left && right < s.length && s(left) == s(right)) expandLengths(s, left - 1, right + 1)
+        else right - left - 1
+    }
+}
+
+/**
+* my first commitment
+* it's kind of brute force
+* time complexity: O(N^3):
+*    getPalindromeLength: O(N^2)
+* space complexity: O(N)
+*/
+
+object Solution1 {
+  def longestPalindrome(s: String): String = {
+    /* palindromeLength(i) means  the maximum palindrome length ending at string s's index i
+    *   ex:
+    *     input
+    *         "b a b a d"
+    *          0 1 2 3 4
+    *     palindromeLength(0) = 1: "b"'s max palindrome length must contains the last char => "b"
+    *     palindromeLength(1) = 2: "ba"'s max palindrome length must contains the last char => "a"
+    *     palindromeLength(2) = 3: "bab"'s max palindrome length must contains the last char => "bab"
+    *     palindromeLength(3) = 3: "baba"'s max palindrome length must contains the last char => "baba"
+    *     palindromeLength(4) = 1: "babad"'s max palindrome length must contains the last char => "babad"
+    * 
+    * */
+    val palindromeLength = Array.ofDim[Int](s.length)
+    for(right <- s.indices){
+
+      palindromeLength(right) = getPalindromeLength(s.slice(0, right + 1))
+      // println("---", right, s.slice(0, right + 1).mkString(""), cache(right))
+    }
+    // println(cache.mkString(","))
+    val maxIdx = palindromeLength.indices.maxBy(palindromeLength)
+
+    s.slice(maxIdx - palindromeLength(maxIdx) + 1, maxIdx + 1)
+
+  }
+
+  /**
+    * find the letter part may contains palindrome
+    * iterate left2right from 0 s.length. right2left decreases 1 if s(left2right) == s(right2left)
+    * the result value of right2left is the index dividing s into two part, the latter part may contains palindrome
+    * ex:
+    *    input:
+    *         "b a a c b a b c"
+    *          0 1 2 3 4 5 6 7
+    *    the splitIdx would be 2, so s[3: 7) may contains palindrome and we should recursively input s[3: 7) to check it
+    */
+  @annotation.tailrec
+  def getPalindromeLength(s: String): Int = {
+    if(s == null || s.isEmpty) return 0
+
+    val splitIdx = s.indices.foldLeft(s.length - 1){
+      case (right2left, left2right) =>
+        if(s(right2left) == s(left2right)) right2left - 1
+        else right2left
+    }
+    // println(s, splitIdx)
+    if(splitIdx == -1) /* find the palindrome! */
+      s.length
+    else
+      getPalindromeLength(s.slice(splitIdx + 1, s.length))
+  }
+}
+
+
+/**
+* brute force
+* time complexity: O(N^3)
+* space complexity: O(M) M is the length of longest palindrome
+*/
+
+object Solution2 {
+    def longestPalindrome(s: String): String = {
+        (for(i <- s.indices; j <- i until s.length) yield (i, j)).foldLeft("") {
+            // pruning
+            case (best, (i, j)) if best.length < (j - i + 1) && isPalindrome(s, i, j) => s.slice(i, j + 1)
+            case (best, _) => best
+        }
+
+    }
+    // r a c e e c a r
+    // 0 1 2 3 4 5 6 7
+    
+    @annotation.tailrec
+    def isPalindrome(s: String, l: Int, r: Int): Boolean = {
+    
+        if(s == null || s.isEmpty) false
+        else if(l >= r) true
+        else { // l < r
+            // println(l, s(l), r, s(r))
+            if(s(l) != s(r)) false
+            else isPalindrome(s, l + 1, r - 1)
+        }
+        
+    } 
+}
+
+/**
+* dynamic programming
+* state definition
+*     dp(i)(j) represents wether substring s(i: j) is palindromic
+*     ex: 
+*       s: "r a c e c a r"
+*           0 1 2 3 4 5 6
+*       dp(1)(5) is true due to "a c e c a" is palindrome
+* state transformation
+*      1.dp(i)(j) = (s(i) == s(j)) && dp(i + 1)(j - 1) if  (j - i) - (i + 1) + 1 < 2 
+*         due to dp(i + 1)(j - 1) exceeds the edge 
+*         ex:
+*         s: "l e e t c o d e"
+*             0 1 2 3 4 5 6 7
+*         let i = 3, j = 4 => i + 1 = 4, j - 1 = 3 => dp(i + 1)(j - 1) = dp(4)(3) => it doesn't make sense
+*   
+* time complexity: O(N^2)
+* space complexity: O(N^2)
+*/
+object Solution3 {
+    def longestPalindrome(s: String): String = {
+        if(s == null || s.isEmpty ) return ""
+        if(s.length < 2) return s
+        
+        /**
+        * if we initial the dp table dp(i)(j) with iterating all of element, it's time consuming
+        */
+        // val dp = Array.tabulate(s.length, s.length){
+        //     case (i, j) if i == j => true
+        //     case _ => false
+        // }
+        val dp = Array.ofDim[Boolean](s.length, s.length)
+        var maxLen = 1
+        var head = 0
+        /** dp(i)(j) = (s(i) == s(j)) && dp(i + 1)(j - 1)
+        * dp(i)(j)  depends on dp(i + 1)(j - 1), so we need calculate dp(i + 1)(j - 1) before we calculate dp(i)(j)
+        *    0 1 2 3 4 5 6
+        *          j
+        *   0  A B D G K P
+        *   1    C E H L Q
+        *   2      F I M R
+        * i 3        J N S
+        *   4          O T
+        *   5            U 
+        *   6
+        *  the iterative order would be 
+        *     * A -> B -> C -> D -> E -> F .... => (0, 1) -> (0, 2) -> (1, 2) -> (0, 3) -> (1, 3) -> (2, 3) ... and so on
+        *      
+        *     
+        */
+        for(j <- 1 until s.length; i <- 0 until j){
+            val currentLen = j - i + 1
+            if(s(i) != s(j))  dp(i)(j) = false
+            else if(currentLen < 4)  dp(i)(j) = true // currentLen - 2 < 2
+            else dp(i)(j) = dp(i + 1)(j - 1)
+            
+            
+            if(dp(i)(j) && currentLen > maxLen){
+                maxLen = currentLen
+                head = i
+
+            }
+        }
+        
+        s.slice(head, head + maxLen)
+    }
+}
+
+
+/**
+* expand around center
+* time complexity: O(N^2)
+*        expandLengths: O(N)
+* space complexity: O(1)
+*/
+
+object Solution4 {
+    def longestPalindrome(s: String): String = {
+        if(s == null || s.isEmpty) return ""
+        
+        // 0 1 2 3 4 5 6 7
+        // r a c e c a r
+        // r a c e e c a r
+        // b b c e c a a
+
+        // var head = 0
+        // var maxlen = 1
+        // for(i <- s.indices) {
+        //     val oddlen =  expand(s, i, i)
+        //     val evenlen = expand(s, i, i + 1)
+        //     val len = oddlen max evenlen
+        //     if(len > maxlen){
+        //         head = i -  (len - 1) / 2
+        //         maxlen = len
+        //     }
+        // }
+        val (head, maxlen) = s.indices.foldLeft((0, 1)){
+            case ((h, maxlen), i) => 
+                val oddlen =  expandLengths(s, i, i)
+                val evenlen = expandLengths(s, i, i + 1)
+                val len = oddlen max evenlen
+                if(len > maxlen)  (i - (len - 1) / 2, len)
+                else (h, maxlen)
+        }
+        s.slice(head, head + maxlen)
+    }
+    // return length
+    @annotation.tailrec
+    def expandLengths(s: String, left: Int, right: Int): Int = {
+        if(0 <= left && right < s.length && s(left) == s(right)) expandLengths(s, left - 1, right + 1)
+        else right - left - 1
+    }
+}
+
+```
+
 ###  3.6. <a name='ZigZagConversion'></a>6. ZigZag Conversion
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7uH?spm_id_from=333.999.0.0)
@@ -1305,6 +1898,42 @@ object Solution {
             }
 
         }  
+    }
+}
+```
+
+```scala
+object Solution {
+    def reverse(x: Int): Int = {
+        if(x == 0){
+            0
+        }else{
+            var output = 0L
+            var num = x
+            var flag = false
+            
+            if(x < 0){
+                num = Math.abs(num)
+                flag = true
+            }
+            
+        
+            while(num!=0){
+                var mod = num%10
+            
+                output = (output*10) + mod
+            
+                num = num/10
+            }
+            
+            val res = if(flag){
+                output * (-1)
+            }else{
+                output
+            }
+            //To avoid overflow
+            if(res < Int.MinValue || res > Int.MaxValue) 0 else res.toInt
+        }
     }
 }
 ```
@@ -1415,6 +2044,20 @@ class Solution:
         return x == res or x == res//10
 ```
 
+```scala
+package lc009 {
+  object Solution {
+    def isPalindrome(x: Int): Boolean = {
+      if (x<0) return false
+      if (x==0) return true
+      if (x%10==0) return false
+      val y=x.toString.reverse
+      return y==x.toString
+    }
+  }
+}
+```
+
 ###  3.10. <a name='ContainerWithMostWater'></a>11. Container With Most Water 
 
 [花花酱](https://www.bilibili.com/video/BV1CW41167qB?spm_id_from=333.999.0.0)
@@ -1457,6 +2100,82 @@ class Solution:
                 right -= 1
             maxRes = max(maxRes,res)
         return maxRes
+```
+
+```scala
+/**
+* brute force not AC
+* time complexity: O(n^2)
+*/
+
+object Solution1 {
+    def maxArea(height: Array[Int]): Int = {
+      
+      var currentMax = 0
+
+      for(left <- height.indices; right <- (left + 1) until height.length) {
+        val limit = height(right) min height(left)
+        val width =  (right - left)
+        val volume = limit * width
+
+        currentMax = currentMax max volume
+      }
+      currentMax
+    }  
+}
+
+
+/**
+* two pointer version
+* memo
+*  1. fix left side,, the volume is bounded by left side if left side is shorter 
+*  2. fix right side. the volume is bounded by right side if right side is shorter
+*/
+
+object Solution2 {
+    def maxArea(height: Array[Int]): Int = {
+      
+      var left = 0
+      var right = height.length - 1
+      var volume = 0
+      
+      while(left < right) {
+        val current = (right - left) * (height(right) min height(left))
+        volume = volume max current
+        
+        if (height(left) < height(right)) // left is shorter
+          left += 1
+        else // right is shorter
+          right -= 1
+      }
+      volume
+    }
+         
+}
+
+/**
+* two - pointer version recursive version
+*/
+object Solution2-1 {
+    def maxArea(height: Array[Int]): Int = {
+  
+     maxArea(height, 0, height.length - 1, 0)
+    }
+  
+    @annotation.tailrec
+    def maxArea(height: Array[Int], left: Int, right: Int, maxVolume: Int): Int = {
+      if (left >= right)  maxVolume
+      else {
+        val currentVolume = (right - left) * (height(right) min height(left))
+        var newMaxVolume = currentVolume max maxVolume
+        
+        if (height(right) > height(left)) 
+          maxArea(height, left + 1, right, newMaxVolume)
+        else
+          maxArea(height, left, right - 1, newMaxVolume)
+      }
+    }
+}
 ```
 
 ###  3.11. <a name='IntegertoRoman'></a>12. Integer to Roman
@@ -1514,6 +2233,95 @@ class Solution:
         return "".join(roman)
 ```
 
+```scala
+package com.zhourui.leetcode
+
+//class Solution {
+//  public:
+//    string intToRoman(int num) {
+//      vector<int> t1{1000,900,500,400,100,90,50,40,10,9,5,4,1};
+//      vector<string> t2{"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+//      string ret="";
+//      for (int i=0;i<t1.size();i++) {
+//      if (num>=t1[i]) {
+//      int c = num/t1[i];
+//      for (int j=0;j<c;j++) {
+//      ret+=t2[i];
+//    }
+//      num=num%t1[i];
+//    } else if (num==0) {
+//      break;
+//    }
+//    }
+//      return ret;
+//    }
+//};
+
+
+//object Solution {
+//  case class RomanNumber(decValue: Int, romanStr: String)
+//  val numbers = Seq(
+//    RomanNumber(1000, "M"),
+//    RomanNumber(900, "CM"),
+//    RomanNumber(500, "D"),
+//    RomanNumber(400, "CD"),
+//    RomanNumber(100, "C"),
+//    RomanNumber(90, "XC"),
+//    RomanNumber(50, "L"),
+//    RomanNumber(40, "XL"),
+//    RomanNumber(10, "X"),
+//    RomanNumber(9, "IX"),
+//    RomanNumber(5, "V"),
+//    RomanNumber(4, "IV"),
+//    RomanNumber(1, "I")
+//  )
+//  def intToRoman(num: Int): String = {
+//    def loop(num:Int, romans: Seq[RomanNumber]): String = {
+//      romans match {
+//        case RomanNumber(x, romanStr) :: _ if x < num => romanStr + loop(num-x, romans)
+//        case RomanNumber(x, romanStr) :: _ if x == num => romanStr
+//        case RomanNumber(x, _) :: tail if x > num => loop(num, tail)
+//      }
+//    }
+//    loop(num, numbers)
+//  }
+//}
+package lc0012_integertoroman {
+  object Solution {
+    case class RomanNumber(s:String, i: Int)
+    def intToRoman(num: Int): String = {
+      val numbers:Seq[RomanNumber] = Seq(
+        RomanNumber("M",1000),
+        RomanNumber("CM",900),
+        RomanNumber("D",500),
+        RomanNumber("CD",400),
+        RomanNumber("C",100),
+        RomanNumber("XC",90),
+        RomanNumber("L",50),
+        RomanNumber("XL",40),
+        RomanNumber("X",10),
+        RomanNumber("IX",9),
+        RomanNumber("V",5),
+        RomanNumber("IV",4),
+        RomanNumber("I",1)
+      )
+      // 很巧妙 利用seq的head 和tail 递归调用
+      // :: 相当于拼接
+
+      def loop(num:Int, romans:Seq[RomanNumber]): String = {
+        romans match {
+          case RomanNumber(romanStr, v) :: lst if v == num => romanStr
+          case RomanNumber(romanStr, v) :: lst if v < num => romanStr+loop(num-v,romans)
+          case RomanNumber(romanStr, v) :: tail => loop(num,tail)
+        }
+      }
+      loop(num, numbers)
+    }
+  }
+}
+
+```
+
 ###  3.12. <a name='-1'></a>13. 机器人的运动范围 
 
 [官方](https://www.bilibili.com/video/BV1dz411B7rt?spm_id_from=333.999.0.0)
@@ -1541,6 +2349,142 @@ class Solution:
                 res += dic[s[i]]
         res += dic[s[-1]]
         return res
+```
+
+```scala
+object Solution {
+    def romanToInt(s: String): Int = {
+        val exceptionsMap = Map(
+            ('I' -> List('V', 'X')),
+            ('X' -> List('L', 'C')),
+            ('C' -> List('D', 'M'))
+                     )
+        
+        val valuesMap = Map(
+            ('I' -> 1),
+            ('V' -> 5),
+            ('X' -> 10),
+            ('L' -> 50),
+            ('C' -> 100),
+            ('D' -> 500),
+            ('M' -> 1000)
+        )
+        
+        val exceptionalValues = Map(
+            ("IV" -> 4),
+            ("IX" -> 9),
+            ("XL" -> 40),
+            ("XC" -> 90),
+            ("CD" -> 400),
+            ("CM" -> 900)
+        )
+        
+        var sum = 0
+        var i = 0
+        val len = s.length
+        while(i < len){
+            var c1 = s.charAt(i) 
+            c1 match{
+                case 'I' | 'X' | 'C' => {
+                    if(i+1 < s.size && exceptionsMap.get(c1).get.contains(s.charAt(i+1))){
+                        sum += exceptionalValues.get(c1.toString + s.charAt(i+1)).get
+                        i+=2
+                    }else{
+                        sum += valuesMap.get(c1).get
+                        i += 1
+                    }
+                }
+                case _ => {
+                    sum += valuesMap.get(c1).get
+                    i += 1
+                }
+            }
+        }
+        sum
+    }
+}
+
+
+//Alternate SCALA solution
+object Solution {
+	def convert(c: Char) = c match{
+		case 'I' => 1
+		case 'V' => 5
+		case 'X' => 10
+		case 'L' => 50
+		case 'C' => 100
+		case 'D' => 500
+		case 'M' => 1000
+		case _ => throw new UnsupportedOperationException("This case should not be called unless the input is invalid")
+	}
+
+	def romanToInt(s: String): Int = s.foldRight(0){
+		(v, sum) => (convert(v), sum) match{
+			case (add, _) if sum < 5*add => add + sum
+			case (sub, _) => sum - sub
+		}
+	}
+	
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+/*
+Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+
+Symbol       Value
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+For example, two is written as II in Roman numeral, just two one's added together. Twelve is written as, XII, which is simply X + II. The number twenty seven is written as XXVII, which is XX + V + II.
+
+Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+
+I can be placed before V (5) and X (10) to make 4 and 9.
+X can be placed before L (50) and C (100) to make 40 and 90.
+C can be placed before D (500) and M (1000) to make 400 and 900.
+Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
+ */
+package lc0013_romantointeger {
+
+  object Solution {
+    def romanToInt(s: String): Int = {
+      val m:Map[Char,Int] = Map(
+        'I' -> 1,
+        'V' -> 5,
+        'X' -> 10,
+        'L' -> 50,
+        'C' -> 100,
+        'D' -> 500,
+        'M' -> 1000
+      )
+
+      def loop(p:Seq[Char], m:Map[Char,Int]): Int = p match {
+        case Seq(a, b, t@_*) if m(a) < m(b) => m(b) - m(a) + loop(t, m)
+        case Seq(a, t@_*) => m(a) + loop(t,m)
+        case _ => 0
+      }
+      return loop(s,m)
+    }
+  }
+}
+
+
+/*
+//case Seq(xs @ _*) // Identifier xs is bound to the whole matched sequence.
+ def romanToInt(s: Seq[Char]): Int = s match {
+      case Seq(a, b, t@_*) if dict(a) < dict(b)  =>  dict(b) - dict(a) + romanToInt(t)
+      case Seq(a, t@_*) => dict(a) + romanToInt(t)
+      case _ => 0
+    }
+ */
 ```
 
 ###  3.14. <a name='Longestcommonprefix'></a>14-Longest common prefix
@@ -1594,6 +2538,61 @@ class Solution:
             else:
                 break
         return res
+```
+
+```scala
+object Solution {
+    def longestCommonPrefix(strs: Array[String]): String = {
+        if(strs.isEmpty){
+            ""
+        }else{
+            var flag = true
+            var count = 1
+            var output = ""
+        
+            var minLength = strs.map(_.length).min
+        
+        while(flag && count <= minLength){
+            
+            /**
+            lst.forall(_ == lst.head)  // true  if empty or all the same
+            lst.exists(_ != lst.head)  // false if empty or all the same
+            */
+            
+            if(strs.map(s => s.substring(0, count)).distinct.length == 1){
+                output = strs(0).substring(0, count)
+                count += 1
+            }else{
+                flag = false
+            }
+        }
+        
+        output
+        }
+    }
+}
+
+//Alternate solution (better complexity)
+object Solution {
+    def longestCommonPrefix(strs: Array[String]): String = {
+        if(strs.isEmpty){
+            ""
+        }else{
+            var prefix = strs(0)
+            
+            (1 until strs.length).map(i => {
+                
+                while(strs(i).indexOf(prefix) != 0){
+                    prefix = prefix.substring(0, prefix.length - 1)
+                }
+                
+            })
+            
+            prefix
+        }
+    }
+}
+
 ```
 
 ###  3.15. <a name='Sum'></a>15. 3Sum
@@ -1652,6 +2651,244 @@ class Solution:
         return res
 ```
 
+```scala
+/**
+* chosen solution
+* 1. two pointer in twoSum
+* 2. result storing in hashSet to avoid duplicate pairs
+* time complexity: O(N^2)
+* space complexity: O(N): due to sorted list 
+*/
+object Solution0 {
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+    val l = nums.sorted
+    l.indices.foldLeft(Set[List[Int]]()) {
+          /* only send value less than zero and those num which was duplicated only once into twoSum */
+      case (ans, idx) if l(idx) <= 0 && (idx == 0 || (idx >= 1 && l(idx) != l(idx - 1))) =>
+        twoSum(-l(idx), l, idx + 1, ans)
+      case (set, _) => set
+
+    }.toList
+
+  }
+
+  def twoSum(target: Int, nums: Array[Int], from: Int, ans: Set[List[Int]]): Set[List[Int]] = {
+
+    @annotation.tailrec
+    def loop(i: Int, j: Int, ans: Set[List[Int]]): Set[List[Int]] = {
+
+      if(i < j) {
+        val sum = nums(i) + nums(j)
+        if(sum > target) loop(i, j - 1, ans)
+        else if(sum < target) loop(i + 1, j, ans)
+        else loop(i + 1, j - 1, ans + List(-target, nums(i), nums(j)))
+      }else {
+        ans
+      }
+    }
+    loop(from, nums.length - 1, ans)
+  }
+}
+/**
+* my first commit
+* hashset in twoSum
+* a very time consuming version
+* O(N^2)
+*/
+object Solution1 {
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+
+      val l = nums.groupBy(identity).mapValues(aa => if(aa.length >=3) aa.take(3) else aa ).values.flatten.toList
+
+     l.zipWithIndex.flatMap {
+      case (value, index) =>
+        val ll = collection.mutable.ListBuffer(l: _*)
+        ll.remove(index)
+
+        twoSum(ll.toList, -value).filter(_.nonEmpty)
+          .map(_ :+ value)
+    }.map(pair => (pair.toSet, pair)).toMap.values.toList
+
+  }
+
+   def twoSum(nums: List[Int], target: Int): List[List[Int]] = {
+    val valueCounter = nums.groupBy(identity).mapValues(_.length)
+
+    nums.collect {
+      case value if target - value == value && valueCounter.get(target - value).exists(_ >= 2) =>
+        List(value, target - value)
+      case value if target - value != value && valueCounter.contains(target - value) =>
+        List(value, target - value)
+
+    }
+  }
+
+}
+
+/**
+* hashset in twoSum
+* sorted nums and not to run duplicate num twice into twoSum
+* O(N^2)
+*/
+object Solution1-2 {
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+   
+    val l = nums.sorted
+    val ret = for((value, index) <- l.zipWithIndex; if index >= 1 && l(index) != l(index - 1)) yield  {
+      val ll = l.toBuffer
+      ll.remove(index)
+      twoSum(ll.toArray, -value).filter(_.nonEmpty).map(_ :+ value)
+    }
+
+    l.slice(0, 3) match {
+      case Array(0, 0, 0 ) =>  ret.flatten.map(l => (l.toSet, l)).toMap.values.toList :+ List(0, 0, 0) // edge case (0, 0, 0)
+      case _ => ret.flatten.map(l => (l.toSet, l)).toMap.values.toList
+    }
+
+  }
+
+  def twoSum(nums: Array[Int], target: Int): List[List[Int]] = {
+    val value2Idx = nums.zipWithIndex.toMap
+    nums.zipWithIndex.collect {
+      case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
+
+        List(value, target - value)
+    }.map(l => (l.toSet, l)).toMap.values.toList
+  }
+
+/**
+* improvement:
+*   1. only call twoSum when  l(idx) under zero,  because the array was sorted, there won't be any chance the next entries sum to 0.
+*   2. only send the remaining nums which were after idx into twoSum
+* O(N^2)
+*/
+
+  object Solution1-3 {
+    def threeSum(nums: Array[Int]): List[List[Int]] = {
+        val l = nums.sorted
+        l.indices.foldLeft(collection.mutable.ListBuffer.empty[List[Int]]){
+        case (r, idx) if l(idx) <=0 && (idx == 0 || (idx > 0 && l(idx) != l(idx-1))) =>
+            r ++= twoSum(l.slice(idx + 1, l.length), -l(idx)).map(_ :+ l(idx))
+        case (r, idx)  => r
+
+        }.toList
+        
+    }
+
+    def twoSum(nums: Array[Int], target: Int): List[List[Int]] = {
+
+        val value2Idx = nums.zipWithIndex.toMap
+        nums.zipWithIndex.collect {
+        case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
+            List(value, target - value)
+        }.map(l => (l.toSet, l)).toMap.values.toList
+    }
+  
+}
+
+
+/**
+*  Using a hashset to erase duplicate in twoSum
+*/
+object Solution1-3-2 {
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+    val l = nums.sorted
+    l.indices.foldLeft(collection.mutable.ListBuffer.empty[List[Int]]){
+      case (r, idx) if l(idx) <=0 && (idx == 0 || (idx > 0 && l(idx) != l(idx-1))) =>
+        r ++= twoSum(l.slice(idx + 1, l.length), -l(idx))
+      case (r, idx)  => r
+
+    }.toList
+
+  }
+
+  def twoSum(nums: Array[Int], target: Int): List[List[Int]] = {
+
+    val value2Idx = nums.zipWithIndex.toMap
+    nums.zipWithIndex.foldLeft(Set[List[Int]]()) {
+      case (s, (value, index)) if value2Idx.get(target - value).exists(_ != index) =>
+        val t_sub_v = target - value
+        if(index < value2Idx(t_sub_v)) {
+          s + List(-target, value, t_sub_v)
+        } else {
+          s + List(-target, t_sub_v, value)
+        }
+      case (s, _) => s
+
+    }.toList
+  }
+}
+/**
+* more readable and simpler
+*/
+object Solution1-3-3 {
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+    val l = nums.sorted
+
+    l.zipWithIndex.foldLeft(Set[List[Int]]()) {
+      /* only send value less than zero and those num which was duplicated only once into twoSum */
+      case (set, (v, idx)) if v <=0 && (idx == 0 || (idx > 0 && l(idx) != l(idx - 1)))  =>
+        set ++ twoSum(-v, l.slice(idx + 1, l.length))
+      case (set, _) => set
+    }.toList
+
+  }
+
+  def twoSum(target: Int, nums: Array[Int]): List[List[Int]] = {
+    val map = nums.zipWithIndex.toMap
+    nums.zipWithIndex.foldLeft(Set[List[Int]]()){
+      case (set, (n, idx)) =>
+        val n2 = target - n
+        map.get(n2) match {
+          case Some(e) if e != idx =>
+            /* using  n n2 order to help hashset to eliminate duplicate */
+            if(n < n2)
+              set + List(-target, n, n2)
+            else
+              set + List(-target, n2, n)
+          case _ => set
+        }
+    }.toList
+  }
+}
+
+/**
+* two pointer in twoSum
+* time complexity: O(N^2)
+* space complexity: O(N): due to sorted list 
+*/
+
+object Solution2 {
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+    val l = nums.sorted
+    l.indices.foldLeft(Set[List[Int]]()) {
+      case (ans, idx) if l(idx) <= 0 && (idx == 0 || (idx >= 1 && l(idx) != l(idx - 1))) =>
+        twoSum(-l(idx), l, idx + 1, ans)
+      case (set, _) => set
+
+    }.toList
+
+  }
+
+  def twoSum(target: Int, nums: Array[Int], from: Int, ans: Set[List[Int]]): Set[List[Int]] = {
+
+    @annotation.tailrec
+    def loop(i: Int, j: Int, ans: Set[List[Int]]): Set[List[Int]] = {
+
+      if(i < j) {
+        val sum = nums(i) + nums(j)
+        if(sum > target) loop(i, j - 1, ans)
+        else if(sum < target) loop(i + 1, j, ans)
+        else loop(i + 1, j - 1, ans + List(-target, nums(i), nums(j)))
+      }else {
+        ans
+      }
+    }
+    loop(from, nums.length - 1, ans)
+  }
+}
+```
+
 ###  3.16. <a name='SumClosest'></a>16. 3Sum Closest
 
 [小梦想家](https://www.bilibili.com/video/BV11441187Rr?spm_id_from=333.999.0.0)
@@ -1692,6 +2929,51 @@ class Solution:
                         result=abs(a)
                         end=nums[i]+nums[j]+nums[k]
         return end
+```
+
+```scala
+
+/**
+* my first commitment
+* two pointer approximate
+* 
+* time complexity: O(N^2)
+*/
+object Solution1 {
+  def threeSumClosest(nums: Array[Int], target: Int): Int = {
+    val l = nums.sorted
+    // slice(0, 3) is slower 
+    l.indices.foldLeft(l.take(3).sum){
+      case (closestSum, idx) => twoSum(l, target, idx, closestSum)
+    }
+
+  }
+
+  def twoSum(nums: Array[Int], target: Int, from: Int, closestSum: Int): Int = {
+    val fromValue = nums(from)
+
+    @annotation.tailrec
+    def _twoSum(left: Int, right: Int, previousSum: Int): Int = {
+      if(left >= right) return previousSum
+
+
+      val currentSum = fromValue + nums(left) + nums(right)
+
+      val currentDiff = math.abs(target - currentSum)
+      val previousDiff = math.abs(target - previousSum)
+
+      val newClosest = if(currentDiff > previousDiff) previousSum else currentSum
+
+
+      if(currentSum < target) _twoSum(left + 1, right, newClosest)
+      else if(currentSum > target) _twoSum(left, right - 1, newClosest)
+      else _twoSum(left + 1, right - 1, newClosest)
+
+    }
+
+    _twoSum(from + 1, nums.length - 1, closestSum)
+  }
+}
 ```
 
 ###  3.17. <a name='LetterCombinationsofaPhoneNumber'></a>17. Letter Combinations of a Phone Number 
@@ -1787,6 +3069,88 @@ class Solution:
         return head
 ```
 
+```scala
+/**
+* my first commitment - fast & slow pointer
+* time complexity O(N + N / 2)
+*/
+
+object Solution1 {
+    def removeNthFromEnd(head: ListNode, n: Int): ListNode = {
+      val dummyHead = ListNode(0, head)
+      var slow = dummyHead
+      var fast = dummyHead
+      var counter = 0
+      
+      while(fast != null && fast.next != null) {
+        slow = slow.next
+        fast = fast.next.next
+        counter += 1
+      }
+      
+      val length = if (fast == null) counter * 2 - 1 else counter * 2
+      val targetNodeIndex = length - n + 1
+      val slowNodeIndex = counter
+      // println(length, targetNodeIndex, slowNodeIndex)
+      if (counter < targetNodeIndex) {
+        removeIdx(slow, slowNodeIndex, targetNodeIndex)
+      }else {
+        removeIdx(dummyHead, 0, targetNodeIndex)
+      }
+      dummyHead.next
+    }
+  
+    def removeIdx(node: ListNode, nodeIdx: Int, targetIdx: Int) {
+      var nodeT = node
+      var nodeIdxV = nodeIdx
+      var preNodeindex = targetIdx - 1
+     
+      while (nodeIdxV < preNodeindex) {
+        nodeIdxV += 1
+        nodeT = nodeT.next
+      }
+      var preNode = nodeT
+      var nextNode = nodeT.next.next
+      preNode.next = nextNode
+    }
+}
+
+
+/**
+* two pointer fast & slow 
+* memo
+*   1. keep fast pointer is n + 1 ahead to slow pointer
+*   2. if fast == null, slow pointer would points to the  preNode of target removing node
+*
+*           t 
+*   0 1 2 3 4 5
+*   s     f
+*     s     f
+*       s     f
+*         s     f
+*/
+object Solution1-2 {
+    def removeNthFromEnd(head: ListNode, n: Int): ListNode = {
+      val dummyHead = ListNode(0, head)
+      var slow = dummyHead
+      var fast = dummyHead
+      
+      for (i <- 0 until (n + 1) if fast != null) {
+        fast = fast.next
+      }
+      
+      while(fast != null) {
+        slow = slow.next
+        fast = fast.next
+      }
+      
+      slow.next = slow.next.next
+      dummyHead.next
+    }
+  
+}
+```
+
 ###  3.19. <a name='Validparentheses'></a>20-Valid parentheses
 
 [哈哈哈](https://www.bilibili.com/video/BV1DJ41127uA?spm_id_from=333.999.0.0)
@@ -1819,6 +3183,157 @@ class Solution:
                 # 如果这一步不匹配也是不对的
                 return False
         return not stack # 如果append上了，但没有被完全pop也是不对的
+```
+
+```scala
+/**
+* chosen solution
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution0 {
+    def isValid(s: String): Boolean = {
+
+        val parenthesesMap = Map('(' -> ')', '{' -> '}', '[' -> ']')
+        
+        val stack = scala.collection.mutable.ArrayStack[Char]()
+        s.forall{ c =>
+            if(parenthesesMap.contains(c)){
+              stack.push(c)
+              true
+            }else{
+               stack.nonEmpty && parenthesesMap(stack.pop).equals(c)
+            }
+        } && stack.isEmpty
+    }
+}
+
+
+/**
+* my first commitment
+* using stack
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def isValid(s: String): Boolean = {
+        if(s.isEmpty || s.length % 2 != 0) return false
+        val stack = scala.collection.mutable.Stack[Char]()
+        
+        val mapping = Map('(' -> ')', '{' -> '}', '[' -> ']')
+
+        s.foreach{c => 
+            
+            if (mapping.contains(c)){
+                stack push c
+            }else{
+                if(stack.isEmpty || mapping(stack.pop) != c) return false 
+             
+            }
+        }
+        stack.isEmpty
+        
+    }
+}
+
+/**
+* stack and avoid return in foreach block
+*/
+object Solution1-2 {
+    def isValid(s: String): Boolean = {
+
+        val parenthesesMap = Map('(' -> ')', '{' -> '}', '[' -> ']')
+        
+        val stack = scala.collection.mutable.ArrayStack[Char]()
+        s.forall{ c =>
+            if(parenthesesMap.contains(c)){
+              stack.push(c)
+              true
+            }else{
+               stack.nonEmpty && parenthesesMap(stack.pop).equals(c)
+            }
+        } && stack.isEmpty
+    }
+}
+
+/**
+* using stack X FP
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1-3 {
+    def isValid(s: String): Boolean = {
+        val mapping = Map('(' -> ')', '{' -> '}', '[' -> ']')
+        
+        s.foldLeft(List.empty[Char]){ (stack, c) => 
+            stack match {
+                case pop :: stackAfterPop if  c.equals(mapping.getOrElse(pop, None)) => stackAfterPop
+                case _ => c +: stack
+            }
+           
+        }.isEmpty
+        
+    }
+}
+
+```
+
+```scala
+object Solution {
+    def isValid(s: String): Boolean = {
+        if(s.length % 2 != 0){
+            false
+        }else{
+        import scala.collection.mutable._
+        val openingHashSet: HashSet[Char] = HashSet('(', '{', '[')
+        val closingMap: Map[Char, Char] = Map(
+             (')' -> '('),
+             ('}' -> '{'),
+             (']' -> '[')
+         )                                                       
+        val stack = Stack.empty[Char]
+                       
+        var output = true               
+        import scala.util.control.Breaks._
+        
+        breakable{
+            for(c <- s){
+                if(stack.isEmpty){
+                    if(openingHashSet.contains(c)){
+                        stack.push(c)
+                    }else{
+                        output = false
+                        break
+                    }
+                }else{
+                    if(openingHashSet.contains(c)){
+                        stack.push(c)
+                    }else{
+                        closingMap.get(c) match{
+                            case Some(v) =>{
+                                val top = stack.top
+                                if(v == top){
+                                    stack.pop()
+                                }else{
+                                    output = false
+                                    break
+                                }
+                            }
+                            case None =>{
+                                output = false
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        }               
+        
+        if(stack.isEmpty) output else false
+    }
+    }
+}
+
 ```
 
 ###  3.20. <a name='Mergetwosortedlists'></a>21-Merge two sorted lists
@@ -1880,6 +3395,170 @@ class Solution:
         else:
             list2.next = self.mergeTwoLists(list1,list2.next) # 找到较小头结点，提取出来
             return list2
+```
+
+```scala
+/**
+* chosen solution
+* time complexity: O(N + M), N is the length of l1, M is the length of l2
+*/
+
+object Solution0 {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+        val headNode = new ListNode(-1, null)
+        var cur = headNode
+        
+        var no1 = l1;
+        var no2 = l2;
+        
+        while(no1 != null && no2 != null) {
+            if (no1.x >= no2.x){
+                
+                cur.next = no2
+                no2 = no2.next
+            }else {
+                cur.next = no1
+                no1 = no1.next
+            }
+            cur = cur.next
+        }
+        (no1, no2) match {
+            case (_, null) => cur.next = no1
+            case (null, _) => cur.next = no2
+            case _ => throw new RuntimeException()
+        }
+        
+        headNode.next
+    }
+}
+
+
+
+/**
+* iterative version
+* time complexity: O(N + M), N is the length of l1, M is the length of l2
+*/
+object Solution1 {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+        val headNode = new ListNode(-1, null)
+        var cur = headNode
+        
+        var no1 = l1;
+        var no2 = l2;
+        
+        while(no1 != null && no2 != null) {
+            if (no1.x >= no2.x){
+                
+                cur.next = no2
+                no2 = no2.next
+            }else {
+                cur.next = no1
+                no1 = no1.next
+            }
+            cur = cur.next
+        }
+        (no1, no2) match {
+            case (_, null) => cur.next = no1
+            case (null, _) => cur.next = no2
+            case _ => throw new RuntimeException()
+        }
+        
+        headNode.next
+    }
+}
+
+
+
+/**
+* recursive version
+*/
+
+object Solution1-2 {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+        (l1, l2) match {
+            case (null, _) => l2
+            case (_, null) => l1
+            case (a, b) => 
+                if (a.x >= b.x){
+                    b.next = mergeTwoLists(b.next, a)
+                    b
+                } else {
+                    a.next = mergeTwoLists(a.next, b)
+                    a   
+                }
+        }
+    }
+}
+```
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+object Solution {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+        if(l1 == null){
+            l2
+        } else if(l2 == null){
+            l1
+        }else{
+            var (ll1, ll2) = (l1, l2)
+            var firstNext = if(ll1.x < ll2.x) ll1 else ll2
+            var head = ListNode(0, firstNext)
+            var curr = head
+            
+            
+            while(ll1 != null && ll2 != null){
+                if(ll1.x < ll2.x){
+                    curr.next = ll1
+                    curr = ll1
+                    ll1 = ll1.next
+                } else{
+                    curr.next = ll2
+                    curr = ll2
+                    ll2 = ll2.next
+                }
+            }
+            
+            if(ll1 == null){
+                curr.next = ll2
+            }else{
+                curr.next = ll1
+            }
+            
+            head.next
+        }
+    }
+}
+
+
+//Alternate & Simpler solution
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+object Solution {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+    if(l1 == null) return l2
+    if(l2 == null) return l1
+
+    if (l1.x < l2.x) {
+      l1.next = mergeTwoLists(l1.next, l2)
+      l1
+    } else {
+      l2.next = mergeTwoLists(l1, l2.next)
+      l2
+    }
+  }
+}
+
 ```
 
 ###  3.21. <a name='GenerateParentheses'></a>22. Generate Parentheses
@@ -2140,7 +3819,157 @@ class Solution:
         return res
 ```
 
+```scala
+/**
+* my first commitment 
+* DFS + backtracking
+* time complexity： O(4^n / square(n))
+*     n-th Catalan number
+*/
 
+object Solution1 {
+  def generateParenthesis(n: Int): List[String] = {
+    val buffer = scala.collection.mutable.ListBuffer[String]()
+    val l = "("
+    val r = ")"
+
+    def _generateParenthesis(right: Int, left: Int, n: Int, pair: String) {
+
+      if (right == n && left == n) {
+        buffer += pair
+      } else {
+        if (left < n) _generateParenthesis(right, left + 1, n, pair + l) // you can add open whenever you want if it's smaller then n
+        if (left > right && right < n) _generateParenthesis(right + 1, left, n, pair + r)
+      }
+    }
+    _generateParenthesis(0, 0, n, "")
+    buffer.toList
+  }
+}
+
+/**
+* closure number
+* a very genius and beautiful sol
+*/
+object Solution2 {
+  def generateParenthesis(n: Int): List[String] =
+    n match {
+      case 0 => List("")
+      case _ =>
+        for{
+          m <- (0 until n).toList  // ensure yield type is List instead of indexSeq
+          leftString <- generateParenthesis(m)
+          rightString <- generateParenthesis(n - m - 1)
+        } yield "(" ++ leftString ++ ")" ++ rightString
+    }
+}
+
+```
+
+```scala
+//Backtracking approach
+//Memory limit exceeds from n=6
+//works till n=5
+
+object Solution {
+    var output = scala.collection.mutable.Set.empty[String]
+    var qualified = scala.collection.mutable.Set.empty[String]
+    
+    def isBalanced(chars: Array[Char]): Boolean = {
+        var count = 0
+        var flag = true
+        var stack = scala.collection.mutable.Stack[Char]()
+        
+        stack.pushAll(chars)
+        
+        import scala.util.control.Breaks._
+        
+        breakable{
+            while(!stack.isEmpty){
+                val pop = stack.pop()
+                if(count <= 0 && pop == '('){
+                    flag = false
+                    break
+                }else if(pop == ')'){
+                    count += 1
+                }else{
+                    count -= 1
+                }
+            }
+        }
+         
+        if(flag && count == 0){
+            true
+        }else{
+            false
+        }
+    }
+    
+    def backtrack(chars: Array[Char], l: Int, r: Int): Unit = {
+        
+        def swap(a: Int, b: Int) = {
+            val temp = chars(a)
+            chars(a) = chars(b)
+            chars(b) = temp
+        }
+        
+        
+        if(l == r){
+            val str = chars.mkString
+            if(! qualified.contains(str)){
+                qualified.add(str)
+                if(isBalanced(chars)){
+                    output.add(str)
+                }
+            }
+        }else{
+                (l to r).map(i => {
+                swap(l, i)
+                backtrack(chars, l+1, r)
+                swap(l, i) //backtrack step
+                })
+        }
+    }
+    
+    def generateParenthesis(n: Int): List[String] = {
+        output = scala.collection.mutable.Set.empty[String]
+        qualified = scala.collection.mutable.Set.empty[String]
+        
+        val inputString = (1 to n).map(_ => '(').mkString + (1 to n).map(_ => ')').mkString
+        var inputCharArray = inputString.toCharArray
+        
+        backtrack(inputCharArray, 0, n+n-1)
+        
+        output.toList
+    }
+}
+
+
+/**
+In the above approach, what we are basically doing is getting all possible combinations and then filtering the ones that are balanced.
+that is kinda brute force actually
+In the below approach (also backtracking), we apply constraints, during forming the string itself
+*/
+
+object Solution {
+    
+    def generateParenthesis(n: Int): List[String] = {
+        import scala.collection.mutable._
+        def backtrack(acc: ListBuffer[String], curr: String, left: Int, right: Int): Unit = {
+            if (left == 0 && right == 0) acc.append(curr)
+            else {
+                if (left > 0) backtrack(acc, curr + "(", left-1, right)
+                if (right > left) backtrack(acc, curr + ")", left, right-1)
+            }
+        }
+      
+        val acc = ListBuffer[String]()
+        backtrack(acc, "", n, n)
+        acc.toList
+    }
+}
+
+```
 
 ###  3.22. <a name='MergekSortedLists'></a>23. Merge k Sorted Lists
 
@@ -2290,6 +4119,97 @@ class Solution:
         return dummy.next
 ```
 
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+
+/**
+* chosen solution
+* iterative version
+* memo
+*   1. dummyHead
+*   2. need two pointer: pre node and current node
+*  time complexity: O(N), each node only visit once
+*/
+object Solution0 {
+    def swapPairs(head: ListNode): ListNode = {
+        val nHead = new ListNode(0, head)
+        var pre: ListNode  = nHead
+        var curr = pre.next
+
+        while (curr != null && curr.next != null) {
+            val (pos1, pos2, next) = (curr, curr.next, curr.next.next)
+            pre.next = pos2
+            pos2.next = pos1
+            pos1.next = next
+
+            pre = pre.next.next
+            curr = pre.next  
+        }
+        
+        nHead.next
+    }
+}
+
+
+/**
+* iterative version
+* memo
+*   1. dummyHead
+*   2. need two pointer: pre node and current node
+*  time complexity: O(N), each node only visit once
+*/
+object Solution1 {
+    def swapPairs(head: ListNode): ListNode = {
+        val nHead = new ListNode(0, head)
+        var pre: ListNode  = nHead
+        var curr = pre.next
+
+        while (curr != null && curr.next != null) {
+            val (pos1, pos2, next) = (curr, curr.next, curr.next.next)
+            pre.next = pos2
+            pos2.next = pos1
+            pos1.next = next
+
+            pre = pre.next.next
+            curr = pre.next  
+        }
+        
+        nHead.next
+    }
+}
+
+
+/**
+* recursive version
+*/
+object Solution2 {
+    def swapPairs(head: ListNode): ListNode = {
+        _swap(head)
+    }   
+    
+    def _swap(n: ListNode): ListNode = {
+        if(n == null) n
+        else {
+            (n, n.next) match {
+                case (a, null) => a
+                case (a: ListNode, b: ListNode) => 
+                    /** a b 要交換位子
+                     */
+                    a.next = _swap(b.next) // a 指向 b 的 next (已交換完成）
+                    b.next = a // b 的 next 接上 a 就交換完成
+                    b
+            }
+        } 
+    }
+}
+```
+
 ###  3.24. <a name='Removeduplicatesfromsortedarray'></a>26-Remove duplicates from sorted array
 
 [哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
@@ -2392,6 +4312,28 @@ object Solution {
 }
 ```
 
+```scala
+object Solution {
+    def removeDuplicates(nums: Array[Int]): Int = {
+        if(nums.length == 0){
+            0
+        }else{
+            var head = 0
+            var find = 1
+            while(find < nums.length){
+                if(nums(find) != nums(head)){
+                    head += 1
+                    nums(head) = nums(find)
+                }
+                find += 1
+            }
+            head + 1
+        }
+    }
+}
+
+```
+
 ###  3.25. <a name='python-Removeelement'></a>27-python-Remove element
 
 [哈哈哈](https://www.bilibili.com/video/BV1mJ411m7ir?spm_id_from=333.999.0.0)
@@ -2446,6 +4388,35 @@ class Solution:
         return -1
 ```
 
+```scala
+object Solution {
+    def strStr(haystack: String, needle: String): Int = {
+        if(needle.isEmpty){
+            0
+        }else if(haystack.isEmpty){
+            -1
+        }else{
+            var needleLength = needle.length
+            var head = 0
+            var end = head + needleLength
+            var flag = true
+            
+            while(flag && (end <= haystack.length)){
+                if(needle.equals(haystack.substring(head, end))){
+                    flag = false
+                }else{
+                    head += 1
+                    end += 1
+                }
+            }
+            
+            if(flag) -1 else head
+        }
+    }
+}
+
+```
+
 ###  3.27. <a name='NextPermutation'></a>31 Next Permutation
 
 [小明](https://www.bilibili.com/video/BV1Uz4y1m72N?spm_id_from=333.999.0.0)
@@ -2472,6 +4443,54 @@ class Solution:
                         nums[i+1:] = sorted(nums[i+1:])
                         return
         nums.reverse() # 易错点:对于[3,2,1]这种情况，i = 0
+```
+
+```scala
+/**
+* my first commitment
+* memo
+* 1. find the first index i which breaks the increasing order
+* 2. find the last index  j which is larger than index i
+* 3. swap(i, j)
+* 4. sorting: reverse sequence from i + 1 to the end 
+* time complexity: O(n)
+*/
+
+object Solution1 {
+    def nextPermutation(nums: Array[Int]): Unit = {
+        /**
+        * find the first index i which breaks the increasing order
+        * 0 1 2 3 4 5 6
+        * 5 4 7 6 5 4 3
+        *   i     j 
+        */
+      ((nums.length - 2) to 0 by -1).find(idx => nums(idx) < nums(idx + 1)) match {
+        case Some(idx) => 
+          /* 
+          * find the last index  j which  is larger than index i
+          */
+          val j = ((idx + 1) until nums.length).findLast(i => nums(idx) < nums(i)).getOrElse(idx)
+          swap(nums, idx, j)
+          reverse(nums, idx + 1, nums.length - 1)
+        case None => reverse(nums, 0, nums.length - 1)
+      }
+    }
+    @annotation.tailrec
+    def reverse(nums: Array[Int], from: Int, to: Int) {
+      if (from < to) {
+        swap(nums, from, to)
+        reverse(nums, from + 1, to - 1)
+      }
+    }
+  
+    def swap(nums: Array[Int], index1: Int, index2: Int) {
+      val tmp = nums(index2)
+      nums(index2) = nums(index1)
+      nums(index1) = tmp
+    }
+}
+
+
 ```
 
 ###  3.28. <a name='LongestValidParentheses'></a>32 Longest Valid Parentheses
@@ -2526,6 +4545,45 @@ class Solution:
                     maxlength = max(maxlength,length)
         return maxlength
 
+```
+
+```scala
+
+
+
+/**
+* using stack to record the char index in oder to calculate the valid length
+* memo:
+* 1. always only have one invalid symbol at stack and its position index is 0
+* time complexity O(n)
+* space complexity O(n)
+*/
+object Solution1 {
+
+  import collection.mutable
+
+  def longestValidParentheses(s: String): Int = {
+    val mapping = Map('(' -> ')')
+    val stack = mutable.Stack[Int]()
+    stack.push(-1)
+    s.indices.foldLeft(0) {
+      case (maxLength, idx) =>
+        val char = s(idx)
+        if (mapping.contains(char)) {
+          stack push idx
+          maxLength
+        } else {
+          stack.pop()
+          if (stack.isEmpty) {
+            stack push idx
+            maxLength
+          } else {
+            (idx - stack.head) max maxLength
+          }
+        }
+    }
+  }
+}
 ```
 
 ###  3.29. <a name='SearchinRotatedSortedArray'></a>33. Search in Rotated Sorted Array
@@ -2603,6 +4661,93 @@ class Solution(object):
         return nums.index(target) if target in nums else -1
 ```
 
+```scala
+
+
+/**
+* my first commitment
+* binary search
+* memo
+* 1. check if it is sorted side first. if side is sorted, using the normal binary search function , or else using the search function 
+*/
+
+object Solution1 {
+    def search(nums: Array[Int], target: Int): Int = {
+        search(nums, target, 0 , nums.length - 1)
+    }
+    def search(nums: Array[Int], target: Int, left: Int, right: Int): Int = {
+      if(left > right) return -1
+      
+      val mid = left + (right - left) / 2
+      val midValue = nums(mid)
+      
+      if (midValue == target) return mid
+      
+      val leftAns = if (nums(left) < midValue)  
+        searchOrder(nums, target, left, mid - 1)
+      else 
+        search(nums, target, left, mid - 1)
+      
+      if (leftAns != -1) 
+        leftAns
+      else {
+        if (midValue < nums(right))
+           searchOrder(nums, target, mid + 1, right)
+        else
+          search(nums, target, mid + 1, right)
+      } 
+    }
+  
+    def searchOrder (nums: Array[Int], target: Int, left: Int, right: Int): Int = {
+      if(left > right) return -1
+      val mid = left + (right - left) / 2
+      val midValue = nums(mid)
+      if (midValue == target) 
+       mid
+      else if (target > midValue)
+        searchOrder(nums, target, mid + 1, right)
+      else 
+        searchOrder(nums, target, left, mid - 1)
+    }
+}
+
+
+/**
+* binary search - iterative version
+*/
+object Solution1-2 {
+    def search(nums: Array[Int], target: Int): Int = {
+      var left = 0
+      var right = nums.length - 1
+      
+      var ans = -1
+      while(ans == -1 && left <= right) {
+        val mid = left + (right - left) / 2
+
+        if (target == nums(mid) ){
+          ans = mid
+
+        } else if (nums(left) <= nums(mid)){ // left part is in order
+          if (nums(mid) > target && target >= nums(left)) { // target is in left part
+            right = mid - 1
+          } else {
+            left = mid + 1
+          }
+        } else { // right part is in order
+          if (nums(mid) < target && target <= nums(right)) { // target is in right part
+            left = mid + 1
+          } else {
+            right = mid - 1
+          }
+        } 
+      }
+      ans
+    }
+}
+
+
+```
+
 ###  3.30. <a name='-1'></a>34-在排序数组中查找元素的第一个
 
 [哈哈哈](https://www.bilibili.com/video/BV1Zv411y71t?spm_id_from=333.999.0.0)
@@ -2678,6 +4823,141 @@ class Solution:
 
 ```
 
+```scala
+
+
+/**
+* my first commitment
+*
+*/
+object Solution1 {
+    def searchRange(nums: Array[Int], target: Int): Array[Int] = {
+      val hit = search(nums, target, 0, nums.length - 1)
+      if (hit == -1)
+        Array(-1, -1)
+      else  {
+        var left = hit
+        while (left - 1 >= 0 && nums(left) == nums(left - 1)){
+          left -= 1
+        }
+        var right = hit
+        while(right + 1 < nums.length && nums(right) == nums(right + 1)){
+          right += 1
+        }
+        Array(left, right)
+      }
+    }
+  
+    @annotation.tailrec
+    def search(nums: Array[Int], target: Int, left: Int, right: Int): Int = {
+      if (left > right) return -1
+      
+      val mid = left + (right - left) / 2
+       
+      if (nums(mid) == target)
+        mid
+      else if (nums(mid) > target)
+        search(nums, target, left, mid - 1)
+      else 
+        search(nums, target, mid + 1, right)
+      
+      
+    }
+ }
+
+/**
+* function programming
+*/
+
+ object Solution1-2 {
+    def searchRange(nums: Array[Int], target: Int): Array[Int] = {
+      val hit = search(nums, target, 0, nums.length - 1)
+      if (hit == -1)
+        Array(-1, -1)
+      else {
+        val left = (hit to 0 by -1 ).findLast(l => nums(l) == nums(hit)).getOrElse(-1)
+        val right = (hit to (nums.length - 1)).findLast(r => nums(r) == nums(hit)).getOrElse(-1)
+        Array(left, right)
+      } 
+    }
+    @annotation.tailrec
+    def search(nums: Array[Int], target: Int, left: Int, right: Int): Int = {
+      if (left > right) return -1
+      val mid = left + (right - left) / 2
+       
+      if (nums(mid) == target)
+        mid
+      else if (nums(mid) > target)
+        search(nums, target, left, mid - 1)
+      else 
+        search(nums, target, mid + 1, right)
+    }
+ }
+
+/**
+* modify binary search template
+* memo
+*  1. search first and last the the same function
+*  2. if nums(mid) == target we could move left to check if left part exists target number
+*  3. finding last by target + 1,  then we could get last position of target by first position of (target + 1) - 1
+* tricky:
+*  1. ans = nums.length
+*  2. first > last  means that target doesn't exists
+*
+* time complexity: O(2logN)
+*/
+ 
+ object Solution2 {
+    def searchRange(nums: Array[Int], target: Int): Array[Int] = {
+        val first = search(nums, target)
+        val last = search(nums, target + 1) - 1
+        if (first > last) Array(-1, -1) else Array(first, last)
+    }
+
+    def search(nums: Array[Int], target: Int): Int = {
+      var ans = nums.length
+      var left = 0
+      var right = nums.length - 1
+      while (left <= right) {
+        val mid = left + (right - left) / 2
+        if (nums(mid) >= target) {
+          ans = mid
+          right = mid - 1
+        }else {
+          left = mid + 1
+        } 
+      }
+      ans
+    }
+}
+
+/**
+* recursive version
+*/
+object Solution2-1 {
+    def searchRange(nums: Array[Int], target: Int): Array[Int] = {
+      val first = search(nums, target, 0, nums.length - 1, nums.length)
+      val last = search(nums, target + 1, 0, nums.length - 1, nums.length) - 1
+      if (first > last) Array(-1, -1) else Array(first, last)
+    }
+  
+    @annotation.tailrec
+    def search(nums: Array[Int], target: Int, left: Int, right: Int, ans: Int): Int = {
+      if (left > right) return ans
+      val mid = left + (right - left) / 2
+      
+      if (nums(mid) == target)
+        search(nums, target, left, mid - 1, mid)
+      else if (nums(mid) > target)
+        search(nums, target, left, mid - 1, mid)
+      else
+        search(nums, target, mid + 1, right, ans)
+      
+    }
+}
+
+```
+
 ###  3.31. <a name='-1'></a>35-搜索插入位置
 
 [哈哈哈](https://www.bilibili.com/video/BV1HD4y1m7U2?spm_id_from=333.999.0.0)
@@ -2706,6 +4986,36 @@ class Solution:
             else: 
                 l = m + 1
         return l #易错点：记住，这里需要输出，且输出left
+```
+
+```scala
+
+/**
+* my first commitment
+*/
+object Solution1 {
+    def searchInsert(nums: Array[Int], target: Int): Int = {
+        search(nums, target)
+    }
+    
+    def search(nums: Array[Int], target: Int): Int = {
+      var left = 0
+      var right = nums.length - 1
+      var ans = -1
+      while(ans == -1 && left <= right) {
+        val mid = left + (right - left) / 2
+        
+        if (nums(mid) == target)
+          ans = mid
+        else if (nums(mid) > target)
+          right = mid - 1
+        else
+          left = mid + 1
+        
+      }
+      if (ans == -1) left else ans
+    }
+}
 ```
 
 ###  3.32. <a name='-1'></a>36-有效的数独
@@ -2797,6 +5107,181 @@ object Solution {
 }
 ```
 
+```scala
+
+/**
+* chosen solution
+* memo
+*   1. three array recording whether current value is valid
+*        1. rows array
+*        2. columns array
+*        3. blocks array
+* time complexity: O(1), just one iteration
+* space complexity: O(3), all sudoku are 9 x 9 
+*/
+object Solution0 {
+  def isValidSudoku(board: Array[Array[Char]]): Boolean = {
+      val size = board.length
+      val rows = Array.ofDim[Boolean](size, size)
+      val cols =  Array.ofDim[Boolean](size, size)
+      val blocks =  Array.ofDim[Boolean](size, size)
+      
+      val coords = for(i <- board.indices.view; j <- board.indices.view; if board(i)(j) != '.') yield (i, j)
+      
+      coords.forall{ case (i, j) => 
+          val num = board(i)(j).asDigit - 1
+          val blockIdx = (i / 3) * 3 + (j / 3)
+          if(!rows(i)(num) && !cols(j)(num) && !blocks(blockIdx)(num)){
+            rows(i)(num) = true
+            cols(j)(num) = true
+            blocks(blockIdx)(num) = true
+            true
+        
+          } else false
+      }
+  }
+}
+
+  
+  /**
+  *  recursive version : DFS
+  *  memo
+  *    1. three array recording whether current value is valid
+  *        1. rows array
+  *        2. columns array
+  *        3. blocks array
+  * time complexity: O(1), just one iteration
+  * space complexity: O(3), all sudoku are 9 x 9
+  */
+  object Solution1 {
+
+    def isValidSudoku(board: Array[Array[Char]]): Boolean = {
+      def _isValidSudoku(currentRow: Int, currentCol: Int, cols: Array[collection.mutable.Set[Char]], rows: Set[Char], blocks: Array[collection.mutable.Set[Char]]): Boolean = {
+        (currentRow < board.length, currentCol < board.length) match {
+          case (false, _) => true
+          case (true, true) => // current line next position
+            val v = board(currentRow)(currentCol)
+            val blockIndex = 3 * (currentRow / 3) + currentCol / 3
+            if (v == '.') {
+              _isValidSudoku(currentRow, currentCol + 1, cols, rows, blocks)
+
+            } else {
+              if (cols(currentCol).contains(v) || rows.contains(v) || blocks(blockIndex).contains(v)) {
+                false
+              }
+              else {
+                blocks(blockIndex) += v
+                cols(currentCol) += v
+                _isValidSudoku(currentRow, currentCol + 1, cols, rows + v, blocks)
+              }
+            }
+          case (true, false) => _isValidSudoku(currentRow + 1, 0, cols, Set[Char](), blocks) // next line
+        }
+      }
+      _isValidSudoku(0, 0, Array.fill(board.length)(collection.mutable.Set[Char]()), Set[Char](), Array.fill(board.length)(collection.mutable.Set[Char]()))
+    }
+
+  }
+
+
+
+/**
+* iterative
+* memo
+*   1. three array recording whether current value is valid
+*        1. rows array
+*        2. columns array
+*        3. blocks array
+* time complexity: O(1), just one iteration
+* space complexity: O(3), all sudoku are 9 x 9
+*/
+object Solution2 {
+    def isValidSudoku(board: Array[Array[Char]]): Boolean = {
+        val rows = Array.ofDim[Boolean](board.length, board.length)
+        val cols = Array.ofDim[Boolean](board.length, board.length)
+        val blocks = Array.ofDim[Boolean](board.length, board.length)
+        var result = true
+        for {
+            (row, rowIndex) <- board.zipWithIndex
+            (v, colIndex) <- row.zipWithIndex
+            if result
+        } {
+            if (v != '.') {
+            val blockIndex = 3 * (rowIndex / 3) + (colIndex / 3)
+            val value = v.asDigit - 1
+            if (rows(rowIndex)(value) || cols(colIndex)(value) || blocks(blockIndex)(value)) {
+                result = false
+            } else {
+                rows(rowIndex)(value) = true
+                cols(colIndex)(value) = true
+                blocks(blockIndex)(value) = true
+            }
+            }
+
+        }
+            result
+        }
+}
+
+/**
+* it's no need for zipWithIndex: faster
+*/
+object Solution2-2 {
+  def isValidSudoku(board: Array[Array[Char]]): Boolean = {
+    val size = board.length
+    val rows = Array.ofDim[Boolean](size, size)
+    val cols =  Array.ofDim[Boolean](size, size)
+    val blocks =  Array.ofDim[Boolean](size, size)
+
+
+    var result = true
+    for(i <- 0 until size; j <- 0 until size; if board(i)(j) != '.' && result) {
+       val num = board(i)(j).asDigit - 1
+       val blockIdx = (i / 3) * 3 + (j / 3)
+      if(!rows(i)(num) && !cols(j)(num) && !blocks(blockIdx)(num)){
+          rows(i)(num) = true
+          cols(j)(num) = true
+          blocks(blockIdx)(num) = true
+          
+      }else {
+          result = false
+      }
+
+    }
+    result
+  }
+}
+
+/**
+* function programming way without key word return in loop block
+*/
+
+object Solution2-3 {
+    def isValidSudoku(board: Array[Array[Char]]): Boolean = {
+        val size = board.length
+        val rows = Array.ofDim[Boolean](size, size)
+        val cols =  Array.ofDim[Boolean](size, size)
+        val blocks =  Array.ofDim[Boolean](size, size)
+        
+        val coords = for(i <- board.indices.view; j <- board.indices.view; if board(i)(j) != '.') yield (i, j)
+        
+        coords.forall{ case (i, j) => 
+            val num = board(i)(j).asDigit - 1
+            val blockIdx = (i / 3) * 3 + (j / 3)
+            if(!rows(i)(num) && !cols(j)(num) && !blocks(blockIdx)(num)){
+              rows(i)(num) = true
+              cols(j)(num) = true
+              blocks(blockIdx)(num) = true
+              true
+          
+            } else false
+        }
+    }
+}
+
+
+```
+
 ###  3.33. <a name='SudokuSolver'></a>37. Sudoku Solver 解数独
 
 [花花酱](https://www.bilibili.com/video/BV1Tt41137Xr?spm_id_from=333.999.0.0)
@@ -2867,6 +5352,507 @@ class Solution:
 
 ```
 
+```scala
+/**
+* chosen solution
+* DFS + pruning + queue
+* time complexity: O(N^2)
+*/
+
+object Solution0 {
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+
+    val coords = for(i <- board.indices.toList; j <- board.indices; if board(i)(j) == '.') yield (i, j)
+    if (!solveSudoku(board.map(_.clone), coords, board))
+      println("cannot solve under this condition")
+  }
+
+  private def solveSudoku(board: Array[Array[Char]], coordQueue: List[(Int, Int)] , ansBoard: Array[Array[Char]]): Boolean = {
+    coordQueue match {
+      case coord :: newQueue if coordQueue.nonEmpty =>
+        ('1' to '9').filter(isValid(board, coord, _)).exists{ char =>
+          board(coord._1)(coord._2) = char
+          val ret = solveSudoku(board, newQueue, ansBoard)
+          board(coord._1)(coord._2) = '.'
+          ret
+        }
+      case _ if coordQueue.isEmpty =>
+        board.zipWithIndex.foreach{case (arr: Array[Char], idx: Int) => ansBoard(idx) = arr.clone()}
+        true
+      case _ =>
+        false
+    }
+  }
+
+  private def isValid(board: Array[Array[Char]], coord: (Int, Int), value: Char): Boolean = {
+    val (rowIdx, colIdx) = coord
+    val rowValid = ! board(rowIdx).contains(value)
+    val columnValid = board.forall(row => row(colIdx) != value)
+    val blockValid = generateBlockIdx(rowIdx, colIdx) forall  {case (r, c) => board(r)(c) != value}
+
+    rowValid && columnValid && blockValid
+  }
+
+  private def generateBlockIdx(rowIdx: Int, colIdx: Int): Iterator[(Int, Int)] = {
+    val blockRowIdx = (rowIdx / 3) * 3
+    val blockColIdx = (colIdx / 3) * 3
+    for(i <- (blockRowIdx until blockRowIdx + 3).toIterator ; j <- blockColIdx until blockColIdx + 3) yield (i,j)
+  }
+}
+
+
+
+/**
+* my first commitment
+* DFS + pruning
+*/
+object Solution1 {
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+
+    _solveSudoku(board)
+  }
+  def _solveSudoku(board: Array[Array[Char]]): Boolean = {
+
+    for {
+      (rows, rowIdx) <- board.zipWithIndex
+      (v, colIdx) <- rows.zipWithIndex
+    } {
+      if (v == '.') {
+        for (c <- '1' to '9') {
+
+          if (_isValid(rowIdx, colIdx, c, board)) {
+            board(rowIdx)(colIdx) = c
+            if (_solveSudoku(board)) return true
+            else board(rowIdx)(colIdx) = '.'
+          }
+        }
+        return false
+      }
+    }
+    true
+  }
+
+  def _isValid(row: Int, col: Int, char: Char, board: Array[Array[Char]]): Boolean = {
+
+    val boardRowIndex = 3 * (row / 3)
+    val boardColIndex = 3 * (col / 3)
+    if (board(row).contains(char)
+      || board.exists(r => r(col) == char)
+      || board.slice(boardRowIndex, boardRowIndex + 3).map(_.slice(boardColIndex, boardColIndex + 3)).exists(r => r.contains(char))) false
+    else true
+  }
+}
+
+
+
+/**
+*  DFS + pruning + queue
+*  memo:
+*    using a queue storing unfilled index
+*/
+object Solution1-2 {
+
+  import scala.collection.immutable.Queue
+
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+
+    val indexes = scala.collection.mutable.Queue[(Int, Int)]()
+    for {
+      (row, rowIdx) <- board.zipWithIndex
+      (value, colIdx) <- row.zipWithIndex
+    } {
+      if (value == '.') {
+        indexes.enqueue((rowIdx, colIdx))
+      }
+    }
+    _solveSudoku(Queue(indexes.dequeueAll(_  => true): _*), board.map(_.clone()), board)
+  }
+
+
+  def _solveSudoku(indexes: Queue[(Int, Int)], currentBoard: Array[Array[Char]], finalBoard: Array[Array[Char]]): Boolean = {
+    if (indexes.isEmpty) {
+      // end condition
+      currentBoard.zipWithIndex.foreach { case (a, idx) => a.copyToArray(finalBoard(idx)) }
+      true
+    } else {
+      val ((row, col), newIndexes) = indexes.dequeue
+      ('1' to '9').filter(_isValid(row, col, _, currentBoard)).find ( c =>_solveSudoku(newIndexes, copyBoard(currentBoard)(row, col, c), finalBoard))
+       match {
+        case Some(_) => true
+        case None => false
+      }
+    }
+
+  }
+  def _isValid(row: Int, col: Int, char: Char, board: Array[Array[Char]]): Boolean = {
+
+    val checkBoardExits = (rr: Int, cc: Int, c: Char) => {
+      var result = false
+      for {
+        i <- 0 until 3
+        j <- 0 until 3
+        if !result
+      } {
+        if (board(i + rr)(j + cc) == c) result = true
+      }
+      result
+    }
+    val boardRowIndex = 3 * (row / 3)
+    val boardColIndex = 3 * (col / 3)
+    if (board(row).contains(char)
+      || board.exists(r => r(col) == char)
+      || checkBoardExits(boardRowIndex, boardColIndex, char)) {
+      false
+    } else {
+      true
+    }
+  }
+
+  val copyBoard = (b: Array[Array[Char]]) => (row: Int, col: Int, c: Char) => {
+    val newB = b.map(_.clone())
+    newB(row)(col) = c
+    newB
+  }
+}
+
+
+/**
+*  DFS + pruning + queue
+*/
+object Solution1-3 {
+
+  import scala.collection.immutable.Queue
+
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+    val indices = scala.collection.mutable.Queue[(Int, Int)]()
+
+    for (i <- 0 until board.length; j <- 0 until board.length) {
+      val v = board(i)(j)
+      if (v == '.') indices.enqueue((i, j))
+    }
+    _solveSudoku(Queue(indices.dequeueAll(_ => true): _*), board.map(_.clone()), board)
+  }
+
+
+  def _solveSudoku(indices: Queue[(Int, Int)], currentBoard: Array[Array[Char]], finalBoard: Array[Array[Char]]): Boolean = {
+    if (indices.isEmpty) {
+      currentBoard.zipWithIndex.foreach { case (a, idx) => a.copyToArray(finalBoard(idx)) }
+      return true
+    }
+
+    val ((row, col), newIndices) = indices.dequeue
+    ('1' to '9').filter(_checkValid(_, (row, col), currentBoard)).find { // find: 找出第一個合法數字，代表其後的迭代有解
+      c =>
+        currentBoard(row)(col) = c
+        if (_solveSudoku(newIndices, currentBoard, finalBoard)) true
+        else {
+          currentBoard(row)(col) = '.'
+          false
+        }
+    } match {
+      case Some(_) => true
+      case None => false  // 這個盤勢不管填什麼後續都無解
+    }
+  }
+
+  def _checkValid(c: Char, index: (Int, Int), currentBoard: Array[Array[Char]]): Boolean = {
+    val (row, col) = index
+    val blockRowIdx = 3 * (row / 3)
+    val blockColIdx = 3 * (col / 3)
+    val checkBoard = (rowAnchar: Int, colAnchar: Int) => {
+      val pairs = for (i <- 0 until 3; j <- 0 until 3) yield (rowAnchar + i, colAnchar + j)
+      pairs.exists { case (i, j) => currentBoard(i)(j) == c }
+    }
+    if (currentBoard(row).contains(c) || currentBoard.exists(a => a(col) == c) || checkBoard(blockRowIdx, blockColIdx)) false
+    else true
+  }
+}
+
+/**
+*  DFS + pruning + queue
+*    improvement: isValid is more concise
+*/
+object Solution1-4 {
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+
+    val coords = for(i <- board.indices.toList; j <- board.indices; if board(i)(j) == '.') yield (i, j)
+    if (!solveSudoku(board.map(_.clone), coords, board))
+      println("cannot solve under this condition")
+  }
+
+  private def solveSudoku(board: Array[Array[Char]], coordQueue: List[(Int, Int)] , ansBoard: Array[Array[Char]]): Boolean = {
+    coordQueue match {
+      case coord :: newQueue if coordQueue.nonEmpty =>
+        ('1' to '9').filter(isValid(board, coord, _)).exists{ char =>
+          board(coord._1)(coord._2) = char
+          val ret = solveSudoku(board, newQueue, ansBoard)
+          board(coord._1)(coord._2) = '.'
+          ret
+        }
+      case _ if coordQueue.isEmpty =>
+        board.zipWithIndex.foreach{case (arr: Array[Char], idx: Int) => ansBoard(idx) = arr.clone()}
+        true
+      case _ =>
+        false
+    }
+  }
+
+  private def isValid(board: Array[Array[Char]], coord: (Int, Int), value: Char): Boolean = {
+    val (rowIdx, colIdx) = coord
+    val rowValid = ! board(rowIdx).contains(value)
+    val columnValid = board.forall(row => row(colIdx) != value)
+    val blockValid = generateBlockIdx(rowIdx, colIdx) forall  {case (r, c) => board(r)(c) != value}
+
+    rowValid && columnValid && blockValid
+  }
+
+  private def generateBlockIdx(rowIdx: Int, colIdx: Int): Iterator[(Int, Int)] = {
+    val blockRowIdx = (rowIdx / 3) * 3
+    val blockColIdx = (colIdx / 3) * 3
+    for(i <- (blockRowIdx until blockRowIdx + 3).toIterator ; j <- blockColIdx until blockColIdx + 3) yield (i,j)
+  }
+}
+
+
+
+object Solution2 {
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+
+    _solveSudoku(0, 0, board.map(_.clone()), board)
+  }
+
+  def _solveSudoku(currentRow: Int, currentCol: Int, currenBboard: Array[Array[Char]], finalBoard: Array[Array[Char]]): Boolean = {
+    (currentRow < finalBoard.length, currentCol < finalBoard.length) match {
+      case (false, _) => // end condition
+        currenBboard.zipWithIndex.foreach { case (a, idx) => a.copyToArray(finalBoard(idx)) }
+        true
+      case (true, false) => // next line (row)
+        _solveSudoku(currentRow + 1, 0, currenBboard, finalBoard)
+      
+      case (true, true) if currenBboard(currentRow)(currentCol) == '.' => 
+        ('1' to '9').filter(c => _isValid(currentRow, currentCol, c, currenBboard))
+          .find(c => _solveSudoku(currentRow , currentCol + 1, copyBoard(currenBboard)(currentRow, currentCol, c), finalBoard)) match { // fix row shift col
+          case Some(_) => true
+          case None => false
+        }
+
+      case _ => _solveSudoku(currentRow, currentCol + 1, currenBboard, finalBoard) // fix row, next col 
+    }
+  }
+
+  val copyBoard = (b: Array[Array[Char]]) => (row: Int, col: Int, c: Char) => {
+    val newB = b.map(_.clone())
+    newB(row)(col) = c
+    newB
+  }
+
+  def _isValid(row: Int, col: Int, char: Char, board: Array[Array[Char]]): Boolean = {
+
+    val checkBoardExits = (rr: Int, cc: Int, c: Char) => {
+      var result = false
+      for {
+        i <- 0 until 3
+        j <- 0 until 3
+        if !result
+      } {
+        if (board(i + rr)(j + cc) == c) result = true
+      }
+      result
+    }
+    val boardRowIndex = 3 * (row / 3)
+    val boardColIndex = 3 * (col / 3)
+    if (board(row).contains(char)
+      || board.exists(r => r(col) == char)
+      || checkBoardExits(boardRowIndex, boardColIndex, char)) {
+      false
+    } else {
+      true
+    }
+  }
+
+}
+
+
+/**
+* DFS + pruning + extra space
+* using extra three two dimension array to store col row and block's information
+* a mutable collection method
+*/
+
+
+object Solution4 {
+  import scala.reflect.ClassTag
+  import scala.collection.immutable.Queue
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+    val indexes = scala.collection.mutable.Queue[(Int, Int)]()
+    val rows = Array.ofDim[Boolean](board.length, board.length)
+    val cols = Array.ofDim[Boolean](board.length, board.length)
+    val blocks = Array.ofDim[Boolean](board.length, board.length)
+    for {
+      (row, rowIdx) <- board.zipWithIndex
+      (value, colIdx) <- row.zipWithIndex
+    } {
+      if (value == '.') {
+        indexes.enqueue((rowIdx, colIdx))
+      } else {
+        val blockIdx = 3 * (rowIdx / 3) + (colIdx / 3)
+        val v = value.asDigit - 1
+        rows(rowIdx)(v) = true
+        cols(colIdx)(v) = true
+        blocks(blockIdx)(v) = true
+
+      }
+
+    }
+
+    _solveSudoku( Queue(indexes.dequeueAll(_ => true): _*),
+      rows,
+      cols,
+      blocks,
+      board
+    )
+
+  }
+
+  def _solveSudoku(indexes: Queue[(Int, Int)],
+                   rows: Array[Array[Boolean]],
+                   cols: Array[Array[Boolean]],
+                   blocks: Array[Array[Boolean]],
+                   currentBoard: Array[Array[Char]]
+                  ): Boolean = {
+    if (indexes.isEmpty) {
+//      currentBoard.zipWithIndex.foreach { case (a, idx) => a.copyToArray(finalBoard(idx)) }
+      true
+    } else {
+      val ((row, col), newIndexes) = indexes.dequeue
+      ('1' to '9').filter(_isValid((row, col), _, rows, cols, blocks))
+        .find { c =>
+          val v = c.asDigit - 1
+          rows(row).update(v, true)
+          cols(col).update(v, true)
+          blocks( 3 * (row / 3) + (col / 3)).update(v, true)
+          currentBoard(row)(col) = c
+          if (_solveSudoku(newIndexes,
+            rows,
+            cols,
+            blocks,
+            currentBoard
+            //            copyBoard(rows)(row, v, true),
+            //            copyBoard(cols)(col, v, true),
+            //            copyBoard(blocks)(3 * (row / 3) + (col / 3), v, true),
+            //            copyBoard(currentBoard)(row, col, c),
+          //  finalBoard
+          )) {
+            true
+          } else {
+            rows(row).update(v, false)
+            cols(col).update(v, false)
+            blocks( 3 * (row / 3) + (col / 3)).update(v, false)
+            currentBoard(row)(col) = '.'
+            false
+          }
+        } match {
+        case Some(_) => true
+        case None => false
+      }
+    }
+  }
+  def _isValid(index: (Int, Int),
+               char: Char,
+               rows: Array[Array[Boolean]],
+               cols: Array[Array[Boolean]],
+               blocks: Array[Array[Boolean]]): Boolean = {
+
+
+    val (row, col) = index
+    val v = char.asDigit - 1
+    val blockIdx = 3 * (row / 3) + (col / 3)
+
+    if (rows(row)(v) || cols(col)(v) || blocks(blockIdx)(v)) false
+    else true
+  }
+
+//  def copyBoard[T](b: Array[Array[T]])(row: Int, col: Int, c: T)(implicit ctg: ClassTag[T]): Array[Array[T]] = {
+//    val newB = b.map(_.clone())
+//    newB(row)(col) = c
+//    newB
+//  }
+}
+
+object Solution4-2 {
+  def solveSudoku(board: Array[Array[Char]]): Unit = {
+    /* three extra tables to record whether coordinate is occupied */
+    val columns = Array.ofDim[Boolean](board.length, board.length)
+    val rows = Array.ofDim[Boolean](board.length, board.length)
+    /**
+      * block index:
+      *     1 2 3
+      *     4 5 6
+      *     7 8 9
+      * convert (rowIndex, columnIndex) to blockIndex:  ( rowIndex / 3 ) * 3 + ( columnIndex / 3)
+      */
+    val blocks = Array.ofDim[Boolean](board.length, board.length)
+
+    /* DFS worker*/
+    def _solveSudoku(board: Array[Array[Char]], coordQueue: List[(Int, Int)], ans: Array[Array[Char]], checkValid: ((Int, Int), Char) => Boolean): Boolean = {
+      coordQueue match {
+          /* DFS not complete case : coordinate queue non empty */
+        case coord :: newQueue if coordQueue.nonEmpty =>
+          ('1' to '9').filter(checkValid(coord, _)).exists { char =>
+            val (rowIdx, colIdx) = coord
+
+            /* set board with char value by coordinate */
+            board(rowIdx)(colIdx) = char
+            rows(rowIdx)(char.asDigit - 1) = true
+            columns(colIdx)(char.asDigit - 1) = true
+            blocks((rowIdx / 3) * 3 + (colIdx / 3))(char.asDigit - 1) = true
+
+            val ret = _solveSudoku(board, newQueue, ans, checkValid)
+
+            /* recover to status before calling  _solveSudoku 
+            *  reset board table, rows table, columns table and blocks table
+            * */
+            board(rowIdx)(colIdx) = '.'
+            rows(rowIdx)(char.asDigit - 1) = false
+            columns(colIdx)(char.asDigit - 1) = false
+            blocks((rowIdx / 3) * 3 + (colIdx / 3))(char.asDigit - 1) = false
+            ret
+          }
+
+          /* coordinate queue ran out, answer should shows up */
+        case _ if coordQueue.isEmpty =>
+          board.zipWithIndex.foreach { case (r, idx) => ans(idx) = r.clone }
+          true
+
+        case _ => false
+      }
+    }
+
+    /* generate all empty coordinates */
+    val coords = for (i <- board.indices.toList; j <- board.indices; if board(i)(j) == '.') yield (i, j)
+
+    /* initial rows table, columns table, blocks table */
+    for (i <- board.indices.toList; j <- board.indices; if board(i)(j) != '.') {
+      val charIdx = board(i)(j).asDigit - 1  // index range from 0 to 9
+      rows(i)(charIdx) = true
+      columns(j)(charIdx) = true
+      blocks((i / 3) * 3 + (j / 3))(charIdx) = true
+    }
+    val isValidFunc = isValid(_, _, rows, columns, blocks)
+
+    _solveSudoku(board.map(_.clone), coords, board, isValidFunc)
+  }
+
+  /* check input char value is valid at the coordinate */
+  def isValid(coord: (Int, Int), value: Char, rows: Array[Array[Boolean]], columns: Array[Array[Boolean]], blocks: Array[Array[Boolean]]): Boolean = {
+    val (row, col) = coord
+    val charIdx = value.asDigit - 1
+    val blockIdx = (row / 3) * 3 + (col / 3)
+    !rows(row)(charIdx) && !columns(col)(charIdx) && !blocks(blockIdx)(charIdx)
+  }
+}
+```
+
 ###  3.34. <a name='Countandsay'></a>38-Count and say
 
 [哈哈哈](https://www.bilibili.com/video/BV1QJ411R7MF?spm_id_from=333.999.0.0)
@@ -2920,6 +5906,74 @@ class Solution:
         return s
 ```
 
+```scala
+object Solution {
+    def countAndSay(n: Int): String = {
+        if(n == 1){
+            "1"
+        }else{
+            val prev = countAndSay(n-1)
+            val prevIntArray = prev.toCharArray.map(x => x - '0')
+            
+            var output = ""
+            var count = 0
+            if(!prevIntArray.isEmpty){
+                var element = prevIntArray(0)
+            
+                for(elem <- prevIntArray){
+                    if(elem == element){
+                        count += 1
+                    }else{
+                        output = output + count + element
+                        element = elem
+                        count = 1
+                    }
+                }
+                output = output + count + element
+            }
+            
+            output
+        }
+    }
+}
+
+
+//Just using StringBuilder put the solution from 16% -> 93.5% in terms of time efficiency
+
+object Solution {
+    def countAndSay(n: Int): String = {
+        if(n == 1){
+            "1"
+        }else{
+            val prev = countAndSay(n-1)
+            val prevIntArray = prev.toCharArray.map(x => x - '0')
+            
+            var output = new scala.collection.mutable.StringBuilder()
+            var count = 0
+            if(!prevIntArray.isEmpty){
+                var element = prevIntArray(0)
+            
+                for(elem <- prevIntArray){
+                    if(elem == element){
+                        count += 1
+                    }else{
+                        output.append(count)
+                        output.append(element)
+                        element = elem
+                        count = 1
+                    }
+                }
+                output.append(count)
+                output.append(element)
+            }
+            
+            output.toString
+        }
+    }
+}
+
+```
+
 
 ###  3.35. <a name='CombinationSum39-'></a>39. Combination Sum 39-组合总和
 
@@ -2951,6 +6005,173 @@ class Solution:
                     path.pop()
         dfs(0)
         return res
+```
+
+```scala
+/**
+* chosen solution - backtracking + dfs + pruning
+* time complexity: O(N^target)
+* space complexity: O(target)
+*/
+
+object Solution0 {
+    import collection.mutable
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      
+      def dfs(arr: Array[Int], idx: Int, currentSum: Int, list: List[Int], ans: mutable.ListBuffer[List[Int]]): Unit = {
+        if (currentSum == target) {
+          ans += list
+          return
+        }
+        val diff = target - currentSum
+        (idx until arr.length).filter(i => arr(i) <= diff).foreach(i => dfs(arr, i, currentSum + arr(i), list :+ arr(i), ans)) 
+      }
+      
+      val ans = mutable.ListBuffer.empty[List[Int]]
+      
+      dfs(candidates, 0, 0, List.empty, ans)
+      ans.toList
+        
+    }
+}
+
+/**
+* my first commitment: dfs - backtracking
+*/
+
+object Solution1-1 {
+    import collection.mutable
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      
+      def dfs(combination: List[Int], ans: mutable.Set[List[Int]]): Unit = {
+        val currentSum = combination.sum
+        
+        if (currentSum == target) {
+          ans += combination.toList
+          
+        } else if (currentSum < target){
+          val diff = target - currentSum
+          candidates.filter(n => n <= diff).foreach{ case n => dfs(n :: combination, ans)}
+        }
+      }
+      val ans = mutable.Set.empty[List[Int]]
+      dfs(List.empty[Int], ans)
+      ans.map(l => l.groupBy(identity).mapValues(_.length).toMap -> l).toMap.values.toList // distinct 
+    }
+}
+
+/**
+* optimize from 1-1: sort combination before appending to ans
+*/
+object Solution1-2 {
+    import collection.mutable
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      
+      def dfs(combination: List[Int], currentSum: Int, ans: mutable.Set[List[Int]]): Unit = {
+        
+        if (currentSum == target) {
+          ans += combination.sorted.toList
+          
+        } else if (currentSum < target){
+          val diff = target - currentSum
+          candidates.filter(n => n <= diff).foreach{ case n => dfs(n :: combination, currentSum + n, ans)}
+        }
+      }
+      val ans = mutable.Set.empty[List[Int]]
+      dfs(List.empty[Int], 0, ans)
+      ans.toList
+    }
+}
+
+/**
+* optimize from 1-2: pruning some case- recording candidates array index i 
+*/
+object Solution1-3{
+    import collection.mutable
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      
+      def dfs(i: Int, combination: List[Int], currentSum: Int, ans: mutable.Set[List[Int]]): Unit = {
+        if (currentSum == target) {
+          ans += combination.sorted.toList
+          
+        } else if (currentSum < target){
+          val diff = target - currentSum
+          (i until candidates.length).filter(idx => candidates(idx) <= diff).foreach{ case idx => dfs(idx, candidates(idx) :: combination, currentSum + candidates(idx), ans)}
+        }
+      }
+      
+      val ans = mutable.Set.empty[List[Int]]
+      dfs(0, List.empty[Int], 0, ans)
+      ans.toList
+    }
+}
+
+/**
+* using ListBuffer instead of Set
+* memo
+* 1.candidates array should be in ascending order
+* time complexity: O(N^target)
+* space complexity: O(target)
+*/
+object Solution1-4 {
+    import collection.mutable
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      
+      def dfs(arr: Array[Int], idx: Int, currentSum: Int, list: List[Int], ans: mutable.ListBuffer[List[Int]]): Unit = {
+        if (currentSum == target) {
+          ans += list
+          return
+        }
+        val diff = target - currentSum
+        (idx until arr.length).filter(i => arr(i) <= diff).foreach(i => dfs(arr, i, currentSum + arr(i), list :+ arr(i), ans)) 
+      }
+      
+      val ans = mutable.ListBuffer.empty[List[Int]]
+      
+      dfs(candidates, 0, 0, List.empty, ans)
+      ans.toList
+        
+    }
+}
+```
+
+```scala
+package com.zhourui.leetcode
+import scala.util.control.Breaks._
+import scala.collection.mutable.Stack
+
+package lc0039_combinationsum {
+  object Solution {
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      var arr = candidates
+      scala.util.Sorting.quickSort(arr)
+      var ans = Vector[List[Int]]()
+      var subset  = Stack[Int]()
+
+      def helper(nums:Array[Int], start:Int, rest:Int): Unit = {
+        if (rest == 0) {
+          ans = ans :+ subset.toList
+          return
+        }
+        breakable {
+          for (i<- start until nums.length) {
+            if (rest>=nums(i)) {
+              subset.push(nums(i))
+              helper(nums,i,rest-nums(i))
+              subset.pop
+            } else {
+              break()
+            }
+          }
+        }
+      }
+      helper(arr,0,target)
+      ans.toList
+    }
+  }
+}
+
+
 ```
 
 ###  3.36. <a name='CombinationSumII40-II'></a>40. Combination Sum II 40-组合总和 II
@@ -3227,6 +6448,44 @@ class Solution:
         return res
 ```
 
+```scala
+object Solution {
+    var output = List.empty[List[Int]]
+    
+    def backtrack(nums: Array[Int], l: Int, r: Int): Unit = {
+        def swap(a: Int, b: Int) = {
+            val temp = nums(a)
+            nums(a) = nums(b)
+            nums(b) = temp
+        }
+        
+        /**
+        In backtracking, we collect all the leaf nodes of the tree
+        In this question, we fix the first letter and swap the others till we reach (l==r), i.e. no swap needed since its the leaf node
+        So we add it to output
+        */
+        
+        if(l == r){
+            output = output :+ nums.toList
+        }else{
+            (l to r).map(i => {
+                swap(l, i)
+                backtrack(nums, l+1, r)
+                swap(l, i) //backtrack step
+            })
+        }
+    }
+    
+    def permute(nums: Array[Int]): List[List[Int]] = {
+        output = List.empty[List[Int]]
+        var input = nums
+        backtrack(input, 0, input.length - 1)
+        output
+    }
+}
+
+```
+
 ###  3.42. <a name='II-'></a>47-全排列 II-剪枝版
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ev411672A?spm_id_from=333.999.0.0)
@@ -3273,6 +6532,113 @@ class Solution:
                 matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j],matrix[n-1-j][i] = \
                 matrix[n-1-j][i],matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j]
         return matrix
+```
+
+```scala
+/**
+* my first commitment
+* rotate 4 cell in each iteration
+*
+*   pattern:  (row, col) -> (col, n - 1- row)
+*       1. (i, j) - > (j, n - 1 -i)
+*       2. (j, n - 1 -i) -> (n - 1 - i, n - 1 - j)
+*       3. (n - 1 - i, n - 1 - j) -> (n -1 -j, n - 1 - (n -1 - i) ) =  (n - 1 -j, i)
+*       4. (n - 1 -j, i) -> (i, n - 1 - (n - 1 - j)) = (i, j)
+*
+* ((0,0) -> (0,3) -> (3,3) -> (3,0))
+* ((0,1) -> (1,3) -> (3,2) -> (2,0))
+* ((1,0) -> (0,2) -> (2,3) -> (3,1))
+* ((1,1) -> (1,2) -> (2,2) -> (2,1))
+* 
+*/
+object Solution1 {
+    def rotate(matrix: Array[Array[Int]]): Unit = {
+      val n = matrix.size
+      printMatrix(n)
+      
+      for (i <- 0 until (n / 2).toInt + n % 2; j <- 0 until (n / 2).toInt){      
+        val tmp = matrix(n - 1 -j)(i)
+        matrix(n - 1 - j)(i) = matrix(n - 1 - i)(n - j - 1)
+        matrix(n - 1 - i)(n - j - 1) = matrix(j)(n - 1 - i)
+        matrix(j)(n - 1 - i) = matrix(i)(j)
+        matrix(i)(j) = tmp
+      }
+    }
+    def printMatrix(size: Int): Unit = {
+      for (i <- 0 until size) {
+        for (j <- 0 until size) {
+          print(s"($i, $j) ")
+        }
+        println(" ")
+      }
+    }
+    /**
+        (0, 0) (0, 1) (0, 2) (0, 3)  
+        (1, 0) (1, 1) (1, 2) (1, 3)  
+        (2, 0) (2, 1) (2, 2) (2, 3)  
+        (3, 0) (3, 1) (3, 2) (3, 3)  
+    */
+}
+/**
+* clockwise rotate = transpose + horizontal flip
+*/
+object Solution2 {
+    def rotate(matrix: Array[Array[Int]]): Unit = {
+        transpose(matrix)
+        horizontalFlip(matrix)
+    }
+  
+    def transpose(matrix: Array[Array[Int]]): Unit = {
+      for (i <- matrix.indices; j <- i until matrix(i).length; if i != j) {
+        val tmp = matrix(i)(j)
+        matrix(i)(j) = matrix(j)(i)
+        matrix(j)(i) = tmp
+      }
+    }
+    def horizontalFlip(matrix: Array[Array[Int]]): Unit = {
+      for(row <- matrix) {
+        var from = 0 
+        var to = row.length - 1 
+        while(from < to) { // reverse row elements
+          val tmp = row(to)
+          row(to) = row(from)
+          row(from) = tmp
+          from += 1
+          to -= 1
+        }
+      }
+    }
+}
+
+/**
+* optimize: reversArray by recursion
+*/
+object Solution2-1{
+    def rotate(matrix: Array[Array[Int]]): Unit = {
+        transpose(matrix)
+        horizontalFlip(matrix)
+    }
+  
+    def transpose(matrix: Array[Array[Int]]): Unit = {
+      for (i <- matrix.indices; j <- i until matrix(i).length; if i != j) {
+        val tmp = matrix(i)(j)
+        matrix(i)(j) = matrix(j)(i)
+        matrix(j)(i) = tmp
+      }
+    }
+    def horizontalFlip(matrix: Array[Array[Int]]): Unit = {
+      matrix.foreach(row => reverseArray(row, 0, row.length  - 1))
+    }
+  
+    @annotation.tailrec
+    def reverseArray(arr: Array[Int], from: Int, to: Int) {
+      if (from > to) return
+      val tmp = arr(to)
+      arr(to) = arr(from)
+      arr(from) = tmp
+      reverseArray(arr, from + 1, to - 1)
+    }
+}
 ```
 
 ###  3.44. <a name='GroupAnagrams'></a>49 Group Anagrams
@@ -3367,6 +6733,78 @@ object Solution {
 }
 ```
 
+```scala
+/**
+* chosen solution
+* time complexity: O(N KLogK) : N: strs.length, K: the longest string in strs 
+*/
+object Solution0 {
+    def groupAnagrams(strs: Array[String]): List[List[String]] =
+        strs.groupBy(_.sorted.hashCode).values.map(_.toList).toList
+}
+
+/**
+* my first commit
+* convert all strs into hashmap and group them by the hash value
+* time complexity:  O(N K) , but groupBy op is slower
+*/
+object Solution1 {
+  def groupAnagrams(strs: Array[String]): List[List[String]] = {
+    strs.groupBy(str => str.groupBy(identity).mapValues(_.length).toMap).values.map(_.toList).toList
+  }
+}
+
+/**
+* inner groupBy is hands-on
+* memo:
+*   1. categorize by count
+*/
+object Solution1-2{
+  def groupAnagrams(strs: Array[String]): List[List[String]] = {
+        strs.toList.groupBy{str => 
+            val hashmap = scala.collection.mutable.Map.empty[Char, Int]
+            str.foreach(char => hashmap.update(char, hashmap.getOrElse(char, 0) + 1))
+            hashmap.hashCode
+        }.values.toList
+        
+    }
+}
+
+/**
+* sort each string and groupby the sorted list's hashvalue
+* time complexity: O(N KLogK) : N: strs.length, K: the longest string in strs
+*/
+object Solution2 {
+    def groupAnagrams(strs: Array[String]): List[List[String]] =
+        strs.groupBy(_.sorted.hashCode).values.map(_.toList).toList
+}
+
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+import scala.collection.mutable._
+//import scala.collection.immutable.{HashMap, HashSet}
+package lc0049_groupanagram {
+
+
+
+  object Solution {
+    def groupAnagrams(strs: Array[String]):List [List[String]] = {
+      val hm = HashMap[String,List[String]]()
+      strs.foreach{
+          case s if hm.contains(s.sorted) => hm(s.sorted) = hm(s.sorted) :+(s)
+          case s => hm(s.sorted)=List[String](s)
+      }
+      hm.values.toList
+    }
+  }
+}
+
+```
+
 ###  3.45. <a name='Powxn'></a>50 Pow(x, n)
 
 [小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
@@ -3392,6 +6830,149 @@ class Solution:
             # 等价于 n //= 2
             x *= x
         return res
+```
+
+```scala
+/**
+* chosen solution
+* recursive - bottom-up
+* memo
+*   1. n may be negative or positive
+*   2. n may be odd or even
+*   3. do not care n during recursive
+* time complexity: O(logN)
+*/
+
+object Solution0 {
+    def myPow(x: Double, n: Int): Double = {
+      if (n == 0) return 1
+      val ans = _myPow(x, math.abs(n))
+      if (n < 0) 1 / ans else ans 
+    }
+    
+    def _myPow(x: Double, n: Int): Double = {
+      if (n == 1 || n == 0) x
+      else if ((n & 1) == 1) _myPow(x * x, n / 2) * x
+      else _myPow(x * x, n / 2)
+    }
+}
+
+
+/**
+* recursive version : bottom-up
+* memo
+*   1. n may be negative or positive
+*   2. n may be odd or even
+* O(logN) in time
+*/
+object Solution1 {
+  def myPow(x: Double, n: Int): Double = {
+    if (n == 0) 1
+    else if(n > 0) {
+      n % 2 match{
+        case 1 => myPow(x * x, n / 2) * x
+        case 0 => myPow(x * x, n / 2)
+      }
+    }else{
+      val t = myPow(x, n / 2)
+      math.abs(n % 2) match{
+        case 1 => t * t * (1 / x)
+        case 0 => t * t
+      }
+    }
+
+  }
+}
+/**
+* recursive version : bottom-up
+*/
+object Solution1-2 {
+    def myPow(x: Double, n: Int): Double = {
+        if(n == 0) return 1
+        
+        val t = myPow(x, n / 2)
+        
+        if(n % 2  == 0){
+            t * t
+        }else{
+            if(n < 0) t * t * (1 / x)
+            else t * t * x
+        }
+    }
+}
+
+/**
+*  bottom-up -recursive,
+*   do not care n during recursive
+*/
+object Solution1-3 {
+    def myPow(x: Double, n: Int): Double = {
+      if (n == 0) return 1
+      val ans = _myPow(x, math.abs(n))
+      if (n < 0) 1 / ans else ans 
+    }
+    
+    def _myPow(x: Double, n: Int): Double = {
+      if (n == 1 || n == 0) x
+      else if ((n & 1) == 1) _myPow(x * x, n / 2) * x
+      else _myPow(x * x, n / 2)
+    }
+}
+
+
+/**
+* top-down - iterative version 
+* Binary Exponentiation with negative n
+*
+* each iteration is calculate pow(base, nn) * ans
+*   ex: input x = 2, n = 10
+*    0. base: 2.0, nn: 10 ans: 1.0 => pow(2, 10) * 1 =  1024
+*    1. base: 4.0, nn: 5, ans: 1.0  => pow(4, 5) * 1 = 1024
+*    2. base: 16.0, nn: 2, ans: 4.0 => pow(16, 2) * 4 = 1024
+*    3. base: 256.0, nn: 1, ans: 4.0 => pow(256, 1) * 4 = 1024
+*    4. base: 65536.0, nn: 0, ans: 1024.0 => pow(65536, 0) * 1024 = 1024
+*
+* time complexity: O(logN)
+*/
+
+object Solution2 {
+  def myPow(x: Double, n: Int): Double = {
+    if (n == 0) return 1
+    var ans = 1.0
+    var nn = n
+    var base = x
+
+    while (nn != 0) {
+     /* nn could be -1 if nn < 0 and run nn % 2, so using nn & 1 here */
+      if((nn & 1) == 1)  ans = ans * base
+      nn = nn / 2
+      base = base * base
+    }
+    // judge n to decide whether reverse ans
+    if (n < 0) 1.0 / ans else ans  
+  }
+}
+
+/**
+*  top-down - recursive with tail recursive
+*/
+object Solution2-1 {
+    def myPow(x: Double, n: Int): Double = {
+      val ans = _myPow(1, x, n)
+      if(n < 0) 1 / ans else ans
+    }
+    
+    @annotation.tailrec
+    def _myPow(current: Double, base: Double, pow: Int): Double = {
+        if(pow == 0) current
+        else{
+            if((pow & 1) == 1) _myPow(current * base, base * base, pow / 2)
+            else _myPow(current, base * base, pow / 2)
+        }
+    }
+}
+
+
 ```
 
 ###  3.46. <a name='-1'></a>51. 数组中的逆序对
@@ -3447,6 +7028,225 @@ object Solution {
 }
 ```
 
+```scala
+/**
+* chosen solution
+* dynamic programming
+*    dp[i] defined as the sum of subarray that ending with ith element and must contains i-th element number   *
+* actually, we don't need storing all previous status of nums.length
+* we just need two status: one for maximum so far, the other one for the maximum accumulated value which containing with nums[i]
+*
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution0{
+    def maxSubArray(nums: Array[Int]): Int = {
+        if (nums == null || nums.isEmpty) return 0
+        var maxSoFar = nums(0)
+        var maxEndingHere = nums(0)
+
+        for(i <- 1 until nums.length) {
+           maxEndingHere = (maxEndingHere +  nums(i))  max nums(i)
+           maxSoFar = maxEndingHere max  maxSoFar
+        }
+        maxSoFar
+        
+    }
+}
+
+/**
+* my first commit version
+* time complexity: O(N^2)
+* space complexity: O(N)
+*/
+
+object Solution1 {
+    def maxSubArray(nums: Array[Int]): Int = {
+     
+        (1 to nums.length).map(n => _maxSubArray(nums, nums(n - 1), n)).max
+        
+    }
+    
+    def _maxSubArray(nums: Array[Int], preSum: Int, currentIdx: Int): Int = {
+        if(nums.length == currentIdx) return preSum
+        
+        val currentSum = preSum + nums(currentIdx)
+        val nexLevelSum = _maxSubArray(nums, currentSum, currentIdx + 1)
+        preSum max currentSum max nexLevelSum
+    }
+    
+}
+
+/**
+* dynamic programming
+* memo:
+*    1. dp[i] defined as the sum of subarray that ending with ith element and must contains i-th element number   
+* time complexity: O(N)
+* space complexity: O(N)  due to dp array
+*/
+
+object Solution2 {
+    def maxSubArray(nums: Array[Int]): Int = {
+        if(nums == null || nums.isEmpty) return 0
+        val dp = Array.ofDim[Int](nums.length, 2)  // dp(0) ... dp(i) storing each status corresponding to  nums' index, means max subarray sum ending with nums[i]
+        dp(0)(0) = nums(0)  // dim0: accumulate calculator which reset while new element is larger value inside,
+        dp(0)(1) = nums(0) // dim1: maximum so far
+        
+        for(i <- 1 until nums.length) {
+            
+            dp(i)(0) = (dp(i - 1)(0) + nums(i))  max nums(i)
+            dp(i)(1) = dp(i)(0) max dp(i - 1)(1) 
+        }
+        dp.last.last
+    }
+}
+
+/**
+* dynamic programming
+* memo
+*   1. one dimension array
+* time complexity O(N)
+* space complexity O(N)
+*/
+object Solution2-1 {
+    def maxSubArray(nums: Array[Int]): Int = {
+      val dp  = Array.ofDim[Int](nums.length)
+      dp(0) = nums(0)
+      for (i <- 1 until nums.size) {
+        dp(i) = nums(i) max (nums(i) + dp(i - 1))
+      }
+      
+      dp.max
+    }
+}
+
+/**
+* dynamic programming
+* actually, we don't need storing all previous status of nums.length
+* we just need two status: one for maximum so far, the other one for the maximum accumulated value which containing with nums[i]
+*
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+
+object Solution2-2 {
+    def maxSubArray(nums: Array[Int]): Int = {
+        if (nums == null || nums.isEmpty) return 0
+        var maxSoFar = nums(0)
+        var maxEndingHere = nums(0)
+
+        for(i <- 1 until nums.length) {
+           maxEndingHere = (maxEndingHere +  nums(i))  max nums(i)
+           maxSoFar = maxEndingHere max  maxSoFar
+        }
+        maxSoFar
+        
+    }
+}
+/**
+*  functional programming: foldLeft
+*/
+object Solution2-3 {
+    def maxSubArray(nums: Array[Int]): Int = {
+      if(nums == null || nums.isEmpty) return 0
+      (1 until nums.length).foldLeft((nums(0), nums(0))){
+          case ((maxEndingI, maxSofar), i) => 
+            val maxEndingT = nums(i) max (nums(i) + maxEndingI)
+            (maxEndingT, maxSofar max maxEndingT )
+      }._2
+    }
+}
+```
+
+```scala
+object Solution {
+    def maxSubArray(nums: Array[Int]): Int = {
+        if(nums.length == 1){
+            nums(0)
+        }else{
+            var sum = nums(0)
+            var max = nums(0)
+            var i = 1
+            while (i < nums.length){
+                val elem = nums(i)
+                sum = sum + elem
+                if(sum > max){
+                    max = sum
+                    i += 1
+                }else if(sum < elem){
+                    sum = elem
+                    i += 1
+                }else{
+                    i += 1
+                }
+                
+                if(elem > max){
+                    max = elem
+                    sum = elem
+                }
+            }
+            max
+        }
+    }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+import scala.math.{abs, max}
+import com.zhourui.codech.BaseExtension
+
+package lc0053_maxsubarr {
+
+
+
+
+  object Solution {
+    def maxSubArray(nums: Array[Int]): Int = {
+      var maxsum:Int=Int.MinValue
+      nums.foldLeft(0) {
+        case (a,b) => { // 第一次进入时,a=0
+          val cursum = max(a+b,b)
+          maxsum = max(maxsum, cursum)
+          cursum
+        }
+      }
+      return maxsum
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val arr = Array(-2, 1, -3, 4, -1, 2, 1, -5,4)
+      println(Solution.maxSubArray(arr) == 6)
+
+    }
+    val name = "053 max sub array"
+  }
+}
+
+
+
+/*
+[-2,1,-3,4,-1,2,1,-5,4]
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int cursum = nums[0];
+        int maxsum = cursum;
+
+        for (int i=1;i<nums.size();i++) {
+            cursum = max(cursum+nums[i],nums[i]);
+            maxsum = max(maxsum, cursum);
+        }
+        return maxsum;
+    }
+};
+ */
+```
+
 ###  3.48. <a name='SpiralMatrix'></a>54. Spiral Matrix
 
 [小梦想家](https://www.bilibili.com/video/BV1N7411h7i1?spm_id_from=333.999.0.0)
@@ -3481,6 +7281,177 @@ class Solution:
             res += matrix.pop(0) # 易错点：注意是+=
             matrix = list(zip(*matrix))[::-1] # 易错点：注意[::-1]的摆放
         return res
+```
+
+```scala
+/**
+* my first commitment: using extra seen matrix
+* memo:
+*  1. check next coordination, if have seen it, increase the direction index
+* time complexity : O(N)
+* space complexity: O(2N): seen matrix + output list
+*/
+object Solution1 {
+    import collection.mutable
+    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = {
+      val n = matrix.length
+      val m = matrix(0).length
+      val seen = Array.ofDim[Boolean](n, m)
+      val ans = mutable.ListBuffer.empty[Int]
+      
+      @annotation.tailrec
+      def run(directionIdx: Int, coord: (Int, Int), ans: mutable.ListBuffer[Int], targetSize: Int): Unit = {
+        if (ans.size == targetSize) return
+
+        val (row, col) = coord
+        ans += matrix(row)(col)  
+        seen(row)(col) = true
+
+
+        if (checkNextCoordAvailable(coord, directionIdx, seen)) {
+          val direction = getDirection(directionIdx)
+          val nextCoord = (row + direction._1, col + direction._2)
+          run(directionIdx, nextCoord, ans, targetSize)
+        }else {
+          val newD = (d + 1) % 4
+          val direction = getDirection(newD)
+          val nextCoord = (row + direction._1, col + direction._2)
+          run(newD, nextCoord, ans, targetSize)
+        }
+
+      }
+
+      run(0, (0, 0), ans, n * m)
+      ans.toList
+    }
+  
+    
+    def checkNextCoordAvailable(coord: (Int, Int), directionIdx: Int, seen: Array[Array[Boolean]]): Boolean = {
+      val (row, col) = coord
+      val direction = getDirection(directionIdx)
+      val nextCoord = (row + direction._1, col + direction._2)
+
+      
+      0 <= nextCoord._1 && nextCoord._1 < seen.length && 0 <= nextCoord._2 && nextCoord._2 < seen(0).length && !seen(nextCoord._1)(nextCoord._2)
+    }
+   
+    def getDirection(idx: Int): (Int, Int) = {
+      val direction = List (
+        (0, 1), // right
+        (1, 0), // go down
+        (0, -1), // go left
+        (-1, 0) // go up
+      )
+      direction(idx)
+    }
+}
+
+
+/**
+* counterclockwise rotate matrix
+* step:
+*  1. add first line to list
+*  2. counter-clockwise rotate remaining matrix: transpose + entire reverse
+*  
+*  remaining:
+*  4 5 6
+*  7 8 9
+* 
+* transpose:
+*   4 7
+*   5 8
+*   6 9
+* 
+* reverse:
+*   6 9
+*   5 8
+*   4 7
+*/
+
+object Solution2-1 {
+    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = { 
+        def dfs(mx: Array[Array[Int]]): List[Int] = mx match {
+            case mx if mx.isEmpty => List()
+            case mx if mx.length == 1 => mx.head.toList
+            case _ => mx.head.toList ::: spiralOrder(mx.tail.transpose.reverse)  // counter-clockwise
+        }
+        dfs(matrix)
+
+    }    
+}
+
+
+
+/**
+* bounded range: 
+*  memo:
+*    1. direction pattern: right -> down -> left -> up
+* time complexity O(N)
+* space complexity O(N) : output list
+*/
+object Solution3-1 {
+    import collection.mutable
+  
+    sealed trait Direction
+    case object Right extends Direction
+    case object Down extends Direction
+    case object Left extends Direction
+    case object Up extends Direction
+  
+    def getNextDirection(direction: Direction): Direction = 
+      direction match {
+        case Right => Down
+        case Down => Left
+        case Left => Up
+        case Up => Right
+      }
+
+  
+    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = {
+      if (matrix.isEmpty) List.empty
+      val n = matrix.length
+      val m = matrix(0).length
+      val ans = mutable.ListBuffer.empty[Int]
+      run(matrix, ans, Right, 0, m - 1, 0, n - 1, n * m)
+      ans.toList
+    }
+  
+    def run(matrix: Array[Array[Int]], ans: mutable.ListBuffer[Int], direction: Direction, colLo: Int, colHi: Int, rowLo: Int, rowHi: Int, targetSize: Int): Unit = {
+      if (ans.size < targetSize) {
+        
+        direction match {
+          
+          case Right => 
+          /** 
+          * fix rowLo and increase rowLo after traversing right
+          */
+            (colLo to colHi).foreach(colIdx => ans += matrix(rowLo)(colIdx))
+            run(matrix, ans, getNextDirection(direction), colLo, colHi, rowLo + 1, rowHi, targetSize)
+          case Down =>
+           /** 
+          * fix colHi and decrease colHi after traversing down
+          */
+            (rowLo to rowHi).foreach(rowIdx => ans += matrix(rowIdx)(colHi))
+            run(matrix, ans, getNextDirection(direction), colLo, colHi - 1, rowLo, rowHi, targetSize)
+          case Left =>
+          /** 
+          * fix rowHi and decrease rowHi after traversing left
+          */
+          
+            (colHi to colLo by -1).foreach(colIdx => ans += matrix(rowHi)(colIdx))
+            run(matrix, ans, getNextDirection(direction), colLo, colHi, rowLo, rowHi - 1, targetSize)
+          case Up => 
+
+            /** 
+          * fix colLo and increase colLo after traversing up
+          */
+            (rowHi to rowLo by -1).foreach(rowIdx => ans += matrix(rowIdx)(colLo))
+            run(matrix, ans, getNextDirection(direction), colLo + 1, colHi, rowLo, rowHi, targetSize)
+          
+        }
+      }
+    }
+}
 ```
 
 ###  3.49. <a name='JumpGame'></a>55 Jump Game
@@ -3562,6 +7533,117 @@ object Solution {
 }
 ```
 
+```scala
+
+
+/**
+* my first commitment: backtracking + dp - top-down
+* memo:
+*   1. cache array record which position could jump to destination
+*   2. run the loop of jump step size  backward
+*/
+
+object Solution1-1 {
+    sealed trait Index
+    case object Good extends Index 
+    case object Bad extends Index
+    case object Unknown extends Index
+  
+    def canJump(nums: Array[Int]): Boolean = {
+        val cache = Array.fill[Index](nums.length)(Unknown)
+        cache(cache.length-1) = Good
+        dfs(nums, 0, cache)
+
+    }
+  
+    def dfs(nums: Array[Int], pos: Int, cache: Array[Index]): Boolean = {
+      if (cache(pos) != Unknown) {
+        return cache(pos) == Good
+      }
+      
+      val furthestJump = ((nums.length - 1) - pos) min nums(pos) // don't jump exceed array's length
+      val ret = (furthestJump to 1 by -1).collectFirst {  // 1 to  furthestJump would lead to TLE
+        case j if dfs(nums, pos + j, cache) =>  true
+      }.getOrElse(false)
+      
+      
+      if (ret) cache(pos) = Good else cache(pos) = Bad
+      ret
+    }
+}
+
+/**
+* backtracking: DP bottom-up: more simpler
+* memo
+* 1. solve problem from tail to head
+* 2. cache value: true for GOOD position, false for Bad position
+* 3. if cache(0) is true, we could jump to last position from position zero
+*/
+
+object Solution1-2 {
+    def canJump(nums: Array[Int]): Boolean = {
+      val cache = Array.ofDim[Boolean](nums.length)
+      cache(cache.length - 1) = true
+      
+      (nums.length - 2 to 0 by -1).foreach { pos =>
+        val furthestJump = ((nums.length - 1) - pos) min nums(pos)
+        (furthestJump to 1 by -1).collectFirst {
+          case step if cache(pos + step) => 
+          cache(pos) = true
+          cache(pos)
+        }.getOrElse(false)
+      }
+      cache(0)
+    }
+}
+
+
+/**
+* Greedy - check each position could jump to last good position
+* memo:
+*  1. solve problem backward
+*  2. record last good position which could jump to last position within multi-hop
+*  3. check zero position could jump to last position by checking last position equals to zero
+* time complexity: O(N)
+*/
+
+object Solution2-1 {
+    def canJump(nums: Array[Int]): Boolean = {
+      var lastPosition = nums.length - 1
+      
+      (nums.length - 2 to 0 by -1).foreach{ pos =>
+        if((nums(pos) +  pos) >= lastPosition) {
+          lastPosition = pos
+        }
+        
+      }
+      lastPosition == 0
+    }
+}
+
+
+/**
+* Greedy: check max reach position
+* memo
+*  1. record max reach position: if current position is larger than max reach position, it means we couldn't jump to current position and it wouldn't be able to jump to last position
+* time complexity: O(N)
+*/
+
+object Solution3-1 {
+    def canJump(nums: Array[Int]): Boolean = {
+      var maxReachPos = nums(0)
+      nums.indices.forall { pos =>  
+          if (pos > maxReachPos) false  
+          else {
+            maxReachPos = maxReachPos max (pos + nums(pos))
+            true
+          }
+        }        
+    }
+}
+
+```
+
 ###  3.50. <a name='I.'></a>56-I. 数组中数字出现的次数
 
 [官方](https://www.bilibili.com/video/BV1Qe411s7Kc?spm_id_from=333.999.0.0)
@@ -3609,6 +7691,57 @@ class Solution:
         return intervals
 ```
 
+```scala
+
+/**
+*  my first commitment: sort array
+*  time complexity: O(nlogn) + O(n) = O(nlogn) 
+*  space complexity: O(n): sorted array
+*/
+
+object Solution1-1 {
+    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
+      val sortedL = intervals.sortBy(_(0))
+      val ans = collection.mutable.Set.empty[Array[Int]]
+      
+      var begin = sortedL(0)(0)
+      var end = sortedL(0)(1)
+      (1 to sortedL.length - 1).foreach { idx =>
+        val l = sortedL(idx)
+        if (end < l(0)){
+          ans += Array(begin, end)
+          begin = l(0)
+          end = l(1) 
+        }else {
+          end = l(1) max end
+        }
+      }
+      ans += Array(begin, end)
+      ans.toArray
+    }
+}
+
+/**
+* simplify 1-1
+* 1.not using Set
+* 2. record uncertain (begin, end) pair in answer list
+*/
+
+object Solution1-2 {
+    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
+      intervals.sortBy(_(0)).foldLeft(List.empty[Array[Int]]){
+        case (last::ans, arr) =>
+          if (last.last < arr.head) {
+            arr::last::ans
+          } else {
+            Array(last.head, last.last max arr.last)::ans
+          }
+        case (ans, arr) => arr::ans // for empty ans list
+      }.toArray
+    }
+}
+```
+
 ###  3.52. <a name='InsertInterval'></a>57. Insert Interval 
 
 [花花酱](https://www.bilibili.com/video/BV11t411J74e?spm_id_from=333.999.0.0)
@@ -3628,6 +7761,60 @@ class Solution:
             else:
                 res[-1][1] = max(res[-1][1],interval[1])
         return res
+```
+
+```scala
+/**
+* my first commitment
+* memo
+*  1. insert newInterval to intervals according to its first element value
+*  2. combine overlapping range 
+* time complexity: O(2N) = O(N)
+* space complexity: O(N)
+*/
+
+object Solution1-1 {
+    def insert(intervals: Array[Array[Int]], newInterval: Array[Int]): Array[Array[Int]] = {
+      if (intervals.isEmpty) return Array(newInterval)
+      (_insert(_, newInterval)).andThen(combine).apply(intervals).reverse.toArray
+    }  
+    val _insert = (intervals: Array[Array[Int]], newInterval: Array[Int]) => {
+    /**
+    * find the position to split intervals into two parts
+    */
+      val pos = intervals.indices.find(idx => intervals(idx).head > newInterval.head).getOrElse(intervals.length)
+      intervals.slice(0, pos).toList ::: List(newInterval) ::: intervals.slice(pos, intervals.length).toList
+    }
+  
+    val combine = (input: List[Array[Int]])  => input.foldLeft(List.empty[Array[Int]]) {
+        case (last::ans, arr) =>
+          if (last.last < arr.head) arr::last::ans
+          else Array(last.head, arr.last max last.last)::ans
+        case (ans, arr) => //for empty ans
+            arr::ans
+      }
+}
+
+/**
+* optimize from 1-1
+* 1.span
+*/
+object Solution1-2 {
+    def insert(intervals: Array[Array[Int]], newInterval: Array[Int]): Array[Array[Int]] = {
+      // if (intervals.isEmpty) return Array(newInterval)
+      (insert(_, newInterval)).andThen(combine).apply(intervals.toList).reverse.toArray
+    }
+  
+    val insert = (intervals: List[Array[Int]], newInterval: Array[Int]) => {
+      val (a, b) = intervals.span(arr => arr.head < newInterval.head)
+      a:::List(newInterval):::b
+    }
+  
+    val combine = (input: List[Array[Int]])  => input.foldLeft(List.empty[Array[Int]]) {
+        case (last::ans, arr) => if (last.last < arr.head) arr::last::ans else Array(last.head, arr.last max last.last)::ans
+        case (ans, arr) => arr::ans //for empty ans
+      }
+}
 ```
 
 ###  3.53. <a name='LenghofLastWords'></a>58. Lengh of Last Words
@@ -3769,6 +7956,82 @@ class Solution:
         return dp[-1]
 ```
 
+```scala
+
+/**
+* my first commitment: math combination
+* memo:
+*  1. the total walk steps is (m-1) + (n -1) : (m-1) steps go down and (n-1) steps go right
+*  2. unique paths is calculated by C^{m - 1 + n - 1}_{ m - 1} * C^{n-1}_{n-1}
+*/
+object Solution1 {
+    def uniquePaths(m: Int, n: Int): Int = {
+      val allStep = (m - 1)  +  (n - 1)
+      calCombination(allStep, (m - 1))     
+    }
+    def calCombination(a: Int, b: Int): Int = {
+      val c = a - b
+      val max = c max b
+      val min = c min b
+      val numerator = (BigInt(a) until max by -1).product
+      val denominator = (BigInt(min) to 1 by -1).product
+      (numerator / denominator).toInt
+    }
+}
+
+/**
+* long type
+*/
+object Solution1-2 {
+    def uniquePaths(m: Int, n: Int): Int = {
+      val allStep = (m - 1)  + (n - 1)
+      calCombination(allStep.toLong, (m - 1).toLong).toInt 
+    }
+    def calCombination(a: Long, b: Long): Long = {
+      val c = a - b
+      val max = c max b
+      val min = c min b
+      val numerator = (a until max by -1).product
+      val denominator = (min to 1 by -1).product
+      (numerator / denominator)
+    }
+}
+
+/**
+* dynamic programming
+* time complexity: O(N *M)
+* space complexity: O(N * M)
+*/
+object Solution2 {
+    def uniquePaths(m: Int, n: Int): Int = {
+      val dp = Array.tabulate[Int](m, n) {
+        case (0, j) => 1
+        case (i, 0) => 1
+        case _ => 0
+      }
+      for (i <- 1 until m; j <- 1 until n) {
+        dp(i)(j) = dp(i - 1)(j) + dp(i)(j - 1)
+      }
+      
+      dp.last.last
+    }
+}
+
+/**
+* fill dp array with 1
+*/
+object Solution2-1{
+    def uniquePaths(m: Int, n: Int): Int = {
+      val dp = Array.fill[Int](m, n)(1)
+      for (i <- 1 until m; j <- 1 until n) {
+        dp(i)(j) = dp(i - 1)(j) + dp(i)(j - 1)
+      }
+      
+      dp.last.last
+    }
+}
+```
+
 ###  3.58. <a name='UniquePathsII'></a>63 Unique Paths II
 
 [小明](https://www.bilibili.com/video/BV1Sv411L7qe?spm_id_from=333.999.0.0)
@@ -3848,6 +8111,37 @@ class Solution:
 # 简单题重拳出击，最后一位加1，
 # 等于10就进位，没有进位就输出，
 # 进位到头就在output前面加个1，简单易懂
+```
+
+```scala
+object Solution {
+    def plusOne(digits: Array[Int]): Array[Int] = {
+        var size = digits.length
+        var add = 1
+        
+        var output = List.empty[Int]
+        
+        (0 to (size-1)).reverse.map(i => {
+            
+            val x = digits(i)
+            
+            if(x == 9 && add == 1 && i == 0){
+                output = List(1, 0) ++ output
+            }else if(x == 9 && add == 1){
+                output = 0 +: output
+            }else{
+                if(add == 1){
+                    output = (x+1) +: output
+                    add = 0
+                }else{
+                    output = x +: output
+                }
+            }
+        })
+        output.toArray
+    }
+}
+
 ```
 
 ###  3.62. <a name='AddBinary'></a>67-Add Binary
@@ -3978,11 +8272,218 @@ class Solution:
         return int(res)
 ```
 
-```py
+```scala
+/**
+* chosen solution
+* binary search - recursive
+* memo:
+*   1. maintain max and min
+* time complexity: O(logN)
+*/
+object Solution0 {
+    def mySqrt(x: Int): Int = {
+        if(x == 0 || x == 1) return x
+        _mySqrt(0, x, x, math.pow(10, -5)).toInt
+    }
+    
+    @annotation.tailrec
+    def _mySqrt(min:Double, max: Double, target:Int, precision: Double): Double = {
+        val guess = min + (max - min) / 2
+        val estimate = guess * guess
+        if(math.abs(estimate - target) < precision) guess
+        else{ 
+            if(estimate > target) _mySqrt(min, guess, target, precision)
+            else _mySqrt(guess, max, target, precision)
+        } 
+    }
+}
 
 
-牛顿迭代法：https://en.wikipedia.org/wiki/Integer_square_root#Using_only_integer_division
+/**
+* my first commitment
+* binary search- iterative
+* time complexity: O(LogN)
+*/
+object Solution1 {
+  def mySqrt(x: Int): Int = {
+    if(x == 0 || x== 1) return x
 
+    val precision = math.pow(10, -5)
+    var high: Double = if (x > 1) x else 1
+    var low: Double = 0
+
+    while(true) {
+      val mid: Double = low + ((high - low) / 2)
+      val estimate = mid * mid
+
+      if(math.abs(estimate - x) < precision){
+        return mid.toInt
+
+      }else if(estimate > x) {
+        high = mid
+      }else {
+        low = mid
+      }
+    }
+    x
+  }
+}
+/**
+* binary search - iterative
+* not return while in while block
+*/
+object Solution1-2 {
+    def mySqrt(x: Int): Int = {
+        if(x == 0 || x == 1) return x
+        val precision = math.pow(10, -5)
+        var max: Double = if(x > 1) x.toDouble else 1.0
+        var min = 0.0
+        var mid = min + (max - min) / 2 
+        var condition = true
+        
+        while(condition){
+            mid = min + (max - min) / 2 
+            val estimate = mid * mid
+            
+            if(math.abs(estimate - x) < precision){
+                condition = false
+            }else if(estimate > x){
+              max = mid  
+            } else {
+              min = mid
+            }
+        }
+        mid.toInt
+    }
+}
+
+
+/**
+* binary search - recursive - top-down
+* memo:
+*   1. maintain max and min
+*/
+object Solution1-3 {
+    def mySqrt(x: Int): Int = {
+        if(x == 0 || x == 1) return x
+        _mySqrt(0, x, x, math.pow(10, -5)).toInt
+    }
+    
+    @annotation.tailrec
+    def _mySqrt(min:Double, max: Double, target:Int, precision: Double): Double = {
+        val guess = min + (max - min) / 2
+        val estimate = guess * guess
+        if(math.abs(estimate - target) < precision) guess
+        else{
+            if(estimate > target) _mySqrt(min, guess, target, precision)
+            else _mySqrt(guess, max, target, precision)
+        } 
+    }
+}
+
+/**
+* Newton's method - iterative
+* y = x^2 => f(x) = x^2 - y
+* x_{k+1} = x_k - f(x_k) / f'(x_k)
+* x_{k+1} = x_k - (x_k^2 - y) / (2x_k) = (x_k + y / x_k) / 2
+* time complexity: O(logN)
+*/
+
+object Solution2 {
+     def mySqrt(x: Int): Int = {
+        val precision = math.pow(10, -5)
+        
+        var ans: Double = x
+        while(math.abs(ans * ans - x) > precision){
+            ans = (ans + x / ans) / 2
+            // println(ans)
+        }
+        ans.toInt
+    }
+}
+
+/**
+*  newton-method - recursive - top-down
+*/
+
+object Solution2-1 {
+    def mySqrt(x: Int): Int = {
+        _mySqrt(x, x, math.pow(10, -5)).toInt
+    }
+
+    @annotation.tailrec
+    def _mySqrt(guess: Double, target: Int, precision: Double): Double = {
+        /* see? (guess * guess - target) is just our f(x) =  x^2 - y */
+        if(math.abs(guess * guess - target) < precision) guess
+        else _mySqrt((guess + (target / guess)) / 2, target, precision)
+    }
+}
+
+
+```
+
+```scala
+object Solution {
+    def mySqrt(x: Int): Int = {
+        if(x == 0){
+            0
+        }else if(x == 1){
+            1
+        }else{
+            var num: Int = x/2
+            var flag = true
+            
+            while(flag){
+                // val sqr = num*num
+                // if(sqr == x)
+                
+                //If we do num*num it may exceed Int range
+                //Since we want to check: num*num < x
+                //we can instead do num < x/num
+                
+                if(num > x/num){
+                    num = num/2
+                }else{
+                    val temp = num + 1
+                    if(temp > x/temp){
+                        flag = false
+                    }else{
+                        num += 1
+                    }
+                }
+            }
+            num
+        }
+    }
+}
+
+//Better solution: in the above solution we are only decreasing the range on 1 side by half, but other side by only 1 number
+//This solution decreases by half for both side (binary search pattern)
+
+object Solution {
+    def mySqrt(x: Int): Int = {
+        if(x == 0){
+            0
+        }else if(x == 1){
+            1
+        }else{
+            var start = 1
+            var end = x
+            var result = 0
+            
+            while(start <= end){
+                var mid = start + (end - start)/2
+                if(mid <= x/mid){
+                    result = mid
+                    start = mid+1
+                }else{
+                    end = mid-1
+                }
+            }
+            result
+        }
+    }
+}
 
 ```
 
@@ -4018,6 +8519,171 @@ class Solution:
             dp1, dp0 = dp0 + dp1, dp1
             # 用2个数字分别存储
         return dp1
+```
+
+```scala
+/**
+* chosen solution
+* dynamic programming
+* memo
+*   1. dp(i) represent climb to i floor's distinct ways
+*   2. dp(i) could be calculate from dp(i - 1) + dp(i - 2)
+*           (1) taking a single step from dp(i - 1)
+*           (2) taking a step of two from dp(i - 2)
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution0 {
+    def climbStairs(n: Int): Int = {
+        val dp = Array.ofDim[Int](n + 1)
+        dp(0) = 1
+        dp(1) = 1
+        (2 to n).foreach(i => dp(i) = dp(i - 1) + dp(i - 2))
+        dp(n)
+    }
+}
+
+/**
+* my first commitment
+* dynamic programming
+* memo:
+*   1. dp(i) represent climb to i floor's distinct ways
+*   2. dp(i) could be calculate from dp(i - 1) + dp(i - 2)
+*           (1) taking a single step from dp(i - 1)
+*           (2) taking a step of two from dp(i - 2)
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def climbStairs(n: Int): Int = {
+        if(n <= 2) n
+        else {
+            val cache = Array.ofDim[Int](n + 1)
+            cache(0) = 1
+            cache(1) = 1
+            (2 to n).foreach{ nn =>
+                cache(nn) = cache(nn - 1) + cache(nn - 2)
+            }
+            cache(n)
+        }
+    }
+}
+
+/**
+*  simplify from 1
+*/
+object Solution1-2 {
+    def climbStairs(n: Int): Int = {
+        val dp = Array.ofDim[Int](n + 1)
+        dp(0) = 1
+        dp(1) = 1
+        (2 to n).foreach(i => dp(i) = dp(i - 1) + dp(i - 2))
+        dp(n)
+    }
+}
+
+
+
+/**
+* DP: only use two extra space to keep previous two value
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+
+object Solution1-3 {
+    def climbStairs(n: Int): Int = {
+        if(n <= 2) n
+        else {
+            var a = 1
+            var b = 2
+            (3 to n).foreach{ nn =>
+                val c = a + b
+                a = b
+                b = c    
+            }
+            b
+        }
+    }
+}
+
+/**
+* dp: index from 0 until n
+*   it would be confusing with index i original meaning which is the ways of climbing to stair i
+* memo:
+*  1. keep two previous status
+*/
+object Solution1-4 {
+    def climbStairs(n: Int): Int = {
+        var a = 0
+        var b = 1
+        for (_ <- 0 until n) {
+            val c = a + b
+            a = b
+            b = c
+        }
+        b
+    }
+}
+```
+
+```scala
+object Solution {
+    
+    def climbStairs(n: Int): Int = {
+        if(n==1){
+            1
+        }else if(n == 2){
+            2
+        }else{
+            climbStairs(n-1) + climbStairs(n-2)
+        }
+    }
+}
+
+/**
+n = 3
+1 1 1
+1 2
+-------
+2 1
+==================> 2 + 1
+n = 4
+ 1 1 1 1
+ 1 1 2
+ 1 2 1
+ --------
+ 2 1 1
+ 2 2
+ =================> 3 + 2
+*/
+
+/**Alternate approach:
+In the above approach we are doing repeated call for some numbers
+example: 
+climbStairs(5) -> 4 & 3
+climbStairs(4) -> 3 & 2 | climbStairs(3) -> 2 & 1
+climbStairs(3) -> 2 & 1 | climbStairs(2) | climbStairs(2) | climbStairs(1)
+climbStairs(2) | climbStairs(1) | climbStairs(1)
+
+To avoid recalculation again & again we can just store the results for the previous numbers at their indexes
+*/
+object Solution {
+    
+    def climbStairs(n: Int): Int = {
+        if(n == 1){
+            1
+        }else{
+            var dpArray = Array.fill(n+1)(0)
+            dpArray(1) = 1
+            dpArray(2) = 2
+            (3 to n).map(i => {
+                dpArray(i) = dpArray(i-1) + dpArray(i-2)
+            })
+            dpArray(n)
+        }
+    }
+}
+
 ```
 
 ###  3.65. <a name='SimplifyPath'></a>71. Simplify Path
@@ -4151,6 +8817,53 @@ class Solution:
         return dp(len(word1)-1, len(word2)-1)
 ```
 
+```scala
+/**
+* dynamic programming  - Levenshtein distance
+* memo
+*    1. dp(i)(j) represent the minimum edit distance from the length i substring from word1 to the length j substring from word2
+*    2. dp(i)(j) is solved by its sub-optimal problem 
+*         1, delete op: dp(i -1)(j)
+*         2. replacement op: dp(i -1)(j - 1)
+*         3. insertion op: dp(i)(j - 1)
+* time complexity: O(NM) N is the length of word1, N is the length of word2
+* space complexity: O(NM)
+*/
+object Solution1 {
+  def minDistance(word1: String, word2: String): Int = {
+    val m = word1.length
+    val n = word2.length
+    /* initial  Levenshtein distance table 
+    * dp(i)(j) represent the minimum distance transforming from length i of substring word1 to length j of substring word2
+    */
+    val dp = Array.tabulate(m + 1, n + 1) {
+      case (0, j) => j
+      case (i, 0) => i
+      case _ => 0
+    }
+
+    for (i <- 1 to m; j <- 1 to n) {
+      /* i-1 is word1 index, j-1 is word2 index */
+      if (word1(i - 1) == word2(j - 1)) {
+        // do nothing case
+        dp(i)(j) = dp(i - 1)(j - 1)
+      } else {
+        /**
+        *       i-1,    i
+        * j-1 replace  insertion     
+        *  j   delete  dp(i)(j)
+        */
+        val replace = dp(i - 1)(j - 1)
+        val insert = dp(i)(j - 1)
+        val delete = dp(i - 1)(j)
+        dp(i)(j) = (replace min insert min delete) + 1
+      }
+    }
+    dp(m)(n)
+  }
+}
+```
+
 ###  3.67. <a name='SetMatrixZeroes'></a>73. Set Matrix Zeroes
 
 [小梦想家](https://www.bilibili.com/video/BV1W7411T7rX?spm_id_from=333.999.0.0)
@@ -4176,7 +8889,81 @@ class Solution:
         return matrix
 ```
 
-##  4. <a name='Searcha2DMatrix'></a>74 Search a 2D Matrix
+```scala
+
+/**
+* my first commitment
+* time complexity: O(N * M)
+* space complexity: O(N + M)
+*/
+object Solution1 {
+    import collection.mutable
+    def setZeroes(matrix: Array[Array[Int]]): Unit = {
+      val cols = mutable.Set.empty[Int]
+      val rows = mutable.Set.empty[Int]
+      
+      for (i <- matrix.indices; j <- matrix(i).indices; if matrix(i)(j) == 0) {
+        rows += i
+        cols += j
+      }
+      
+      rows.foreach(row => matrix(row).indices.foreach(matrix(row)(_) = 0))
+      cols.foreach(col => matrix.indices.foreach(matrix(_)(col) = 0))
+    }
+}
+
+
+
+/**
+* using first column and row to record cell to be set to zero
+* memo:
+*  1. we should set first columns and first row in the last, otherwise we cannot distinguish the zero between set by us and originally is
+* time complexity: O(NM)
+* space complexity: O(1)
+*/
+object Solution2 {
+    import collection.mutable
+    def setZeroes(matrix: Array[Array[Int]]): Unit = {
+      var rowZero = false
+      var colZero = false
+      
+      /**
+      * using first row and first column as flag 
+      */
+      for (i <- matrix.indices; j <- matrix(i).indices; if matrix(i)(j) == 0) {
+        if (i == 0) rowZero = true
+        if (j == 0) colZero = true
+        matrix(i)(0) = 0
+        matrix(0)(j) = 0
+      }
+    
+      /**
+      * set one row to zero except first cell
+      */
+      (1 until matrix.length).foreach {
+        case rowIdx if matrix(rowIdx)(0) == 0 => matrix(rowIdx).indices.foreach(matrix(rowIdx)(_) = 0)
+        case _ =>
+      }
+      
+      /**
+      * set one column to zero except first cell
+      */
+      (1 until matrix(0).length).foreach {
+        case colIdx if matrix(0)(colIdx) == 0 => matrix.indices.foreach(matrix(_)(colIdx) = 0)
+        case _ => 
+      }
+      
+      /**
+      * set first column and first row to zero if true
+      */
+      if(rowZero) matrix(0).indices.foreach(matrix(0)(_) = 0)
+      if(colZero) matrix.indices.foreach(matrix(_)(0) = 0)
+      
+    }
+}
+```
+
+###  4. <a name='Searcha2DMatrix'></a>74 Search a 2D Matrix
 
 [小明](https://www.bilibili.com/video/BV1aK4y1h7Bb?spm_id_from=333.999.0.0)
 
@@ -4273,6 +9060,258 @@ class Solution:
         return res
 ```
 
+```scala
+/**
+* chosen solution
+*   time complexity: O(|S| + |T|)
+*   space complexity: O(|s| + |T|)
+* sliding windows: faster version
+* @param
+* left right : two pointer for enlarging and reducing windows size
+* head and len: storing minWindow
+* count: count = 0 when the range between left index and right index satisfy condition
+*/
+object Solution0{
+    import collection.mutable
+    def minWindow(s: String, t: String): String = {
+      val sMap = mutable.Map.empty[Char, Int] ++ t.groupBy(identity).mapValues(_.length).toMap
+      var counter = sMap.size
+      
+      var left = 0
+      var minLength = s.length + 1
+      var head = 0
+
+      for (right <- s.indices) {
+        val rightChar = s(right)
+        sMap.get(rightChar) match {
+          case Some(v) if v == 1 =>
+            sMap.update(rightChar, v - 1)
+            counter -= 1
+          case Some(v) =>
+            sMap.update(rightChar, v - 1)
+          case None => 
+        }
+        
+        while(counter == 0) {
+
+          val leftChar = s(left)
+          if (minLength > (right - left  + 1)) {
+            head = left
+            minLength = right - left + 1
+          }
+          
+          sMap.get(leftChar) match {
+            case Some(v) if v == 0 =>
+              sMap.update(leftChar, v + 1)
+              counter += 1
+            case Some(v) =>
+              sMap.update(leftChar, v + 1)
+            case None =>
+          }
+          
+          left += 1
+        }
+        
+      }
+      if (minLength == (s.length + 1)) "" else s.slice(head, head + minLength)
+      
+      
+    }
+}
+/**
+* my first commitment
+* sliding windows with two pointer: left and right
+* time complexity: O(|S| + |T|)
+*/
+object Solution1 {
+  def minWindow(s: String, t: String): String = {
+
+    var left = 0
+    val tMap = t.groupBy(identity).mapValues(_.length).toMap
+
+    /**
+    * storing how far to reach t string's anagrams, the element's value could be negative. 
+    * If negative, it means we could drop more char of this key from currentString
+    */
+    val budgetMap = scala.collection.mutable.Map() ++ tMap
+    var currentString = ""
+    var answer = ""
+
+    for (char <- s) {
+        budgetMap.get(char) match {
+
+          case Some(e) => budgetMap.update(char, e - 1)
+          case None =>
+        }
+      
+      currentString += char
+
+      while(!budgetMap.exists{case (_, v) => v > 0}) {
+        /**
+        *  drop first element from currentString if  currentString  still contains t string 
+        */
+        val tempChar = s(left)
+        if(tMap.contains(tempChar)){
+          budgetMap.update(tempChar, budgetMap.getOrElse(tempChar, 0) + 1)
+        }
+
+        if(answer.length > currentString.length || answer.isEmpty) {
+          answer = currentString
+        }
+        currentString = currentString.drop(1)
+        left += 1
+      }
+    }
+
+    answer
+  }
+}
+
+
+/**
+* sliding windows : don't record string during process
+*/
+object Solution1-2 {
+  def minWindow(s: String, t: String): String = {
+
+    var left = 0
+    var head = 0
+    var len = s.length + 1
+
+    val budgetMap = scala.collection.mutable.Map() ++ t.groupBy(identity).mapValues(_.length)
+
+    for ((char, right) <- s.zipWithIndex) {
+      
+        budgetMap.get(char) match {
+          case Some(e) => budgetMap.update(char, e - 1)
+          case None =>
+        }
+      
+      while(!budgetMap.exists{case (_, v) => v > 0}) {
+        val tempChar = s(left)
+        if(budgetMap.contains(tempChar)){
+          budgetMap.put(tempChar, budgetMap(tempChar) + 1)
+        }
+         /* update minWindow */
+        if(len > (right - left)) {
+          len = right - left + 1
+          head  = left
+        }
+        left += 1
+      }
+    }
+    // println(budgetMap)
+    if(len == (s.length + 1)) "" else s.substring(head, head + len)
+  }
+}
+
+/**
+* sliding windows: faster version
+* left right : two pointer for enlarging and reducing windows size
+* head and len: storing minWindow
+* count: count = 0 when the range between left index and right index satisfy condition
+*/
+
+object Solution1-3 {
+  def minWindow(s: String, t: String): String = {
+
+    var left = 0
+    var right = 0
+    var head = 0
+    var len = s.length + 1
+    val budgetMap = scala.collection.mutable.Map() ++ t.groupBy(identity).mapValues(_.length)
+    var count = budgetMap.size
+
+    while (right < s.length) {
+      val char = s(right)
+     
+        budgetMap.get(char) match {
+            case Some(e) if e == 1 =>
+            budgetMap.update(char, e - 1)
+            count -= 1
+            case Some(e) =>
+            budgetMap.update(char, e - 1)
+            case None =>
+        }
+      
+      right += 1
+      while(count == 0) {
+        val tempChar = s(left)
+        budgetMap.get(tempChar) match {
+          case Some(e) if e == 0 =>
+            budgetMap.update(tempChar, e + 1)
+            count += 1
+          case Some(e) =>
+            budgetMap.update(tempChar, e + 1)
+          case None =>
+        }
+        /* update minWindow*/
+        if(len > (right - left)) {
+          len = right - left
+          head  = left
+        }
+        left += 1
+      }
+    }
+    println(budgetMap)
+    if(len == (s.length + 1)) "" else s.substring(head, head + len)
+  }
+}
+
+/**
+* 1. for loop auto increment right index
+* 2. update minLength and head index before updating counter and left index
+*/
+
+object Solution1-4 {
+    import collection.mutable
+    def minWindow(s: String, t: String): String = {
+      val sMap = mutable.Map.empty[Char, Int] ++ t.groupBy(identity).mapValues(_.length).toMap
+      var counter = sMap.size
+      
+      var left = 0
+      var minLength = s.length + 1
+      var head = 0
+
+      for (right <- s.indices) {
+        val rightChar = s(right)
+        sMap.get(rightChar) match {
+          case Some(v) if v == 1 =>
+            sMap.update(rightChar, v - 1)
+            counter -= 1
+          case Some(v) =>
+            sMap.update(rightChar, v - 1)
+          case None => 
+        }
+        
+        while(counter == 0) {
+
+          val leftChar = s(left)
+          if (minLength > (right - left  + 1)) {
+            head = left
+            minLength = right - left + 1
+          }
+          
+          sMap.get(leftChar) match {
+            case Some(v) if v == 0 =>
+              sMap.update(leftChar, v + 1)
+              counter += 1
+            case Some(v) =>
+              sMap.update(leftChar, v + 1)
+            case None =>
+          }
+          
+          left += 1
+        }
+        
+      }
+      if (minLength == (s.length + 1)) "" else s.slice(head, head + minLength)
+      
+      
+    }
+}
+```
+
 ###  4.3. <a name='-1'></a>77. 组合
 
 ```py
@@ -4352,6 +9391,25 @@ class Solution:
         return res
 ```
 
+```scala
+object Solution {
+    //We either use or don't use the current item at the given index and continue until we are at the end of the array.
+    
+    def subsets(nums: Array[Int]): List[List[Int]] = {
+        def backtrack(nums: List[Int], returnValue: List[Int]): List[List[Int]] = {
+            nums
+            .headOption
+            .map(currentElem => 
+                 backtrack(nums.tail, returnValue) ++ backtrack(nums.tail, currentElem +: returnValue))
+            .getOrElse(List(returnValue))
+        }
+        
+        backtrack(nums.toList, List.empty[Int])
+    }
+}
+
+```
+
 ###  4.5. <a name='WordSearch'></a>79. Word Search
 
 [小梦想家](https://www.bilibili.com/video/BV1yE411g7Tb?spm_id_from=333.999.0.0)
@@ -4421,6 +9479,184 @@ class Solution:
                     return True
         
         return False
+```
+
+```scala
+/**
+* chosen solution
+* directly compare char by char
+* if there are only one word should be checked in board, brute force is a more efficient method
+*/
+
+object Solution0 {
+  private val visitedLabel = '#'
+  def exist(board: Array[Array[Char]], word: String): Boolean = {
+    dfs(word, board)
+  }
+
+  def dfs(word: String, board: Array[Array[Char]]): Boolean = {
+
+    def _dfs(coord: (Int, Int), wordIdx: Int): Boolean = {
+      val char = board(coord._1)(coord._2)
+
+      if(wordIdx >= word.length || char != word.charAt(wordIdx)) false
+      else if(char == word.charAt(wordIdx) && wordIdx == word.length - 1) true
+      else {
+        board(coord._1)(coord._2) = visitedLabel
+        val exists = getNeighbors(coord, (board.length, board(0).length)) exists {
+          case (nr, nc) if board(nr)(nc) != visitedLabel => _dfs((nr, nc), wordIdx + 1)
+          case _ => false
+        }
+        board(coord._1)(coord._2) = char
+        exists
+      }
+    }
+    
+    val coords = for (i <- board.indices.view; j <- board(0).indices.view) yield (i ,j)
+    coords.exists(_dfs(_, 0))
+  }
+
+  val getNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    List(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
+
+/**
+*  my first commitment
+*    using Tries
+*    watch out that uppercase is different from lower case => "POLAND" != "poland"
+*/
+object Solution1 {
+  private val visitedLabel = '#'
+  def exist(board: Array[Array[Char]], word: String): Boolean = {
+    val tries = new Tries()
+    tries.insert(word)
+    dfs(tries, board)
+  }
+
+  def dfs(tries: Tries, board: Array[Array[Char]]): Boolean = {
+
+    def _dfs(coord: (Int, Int), prePrefix: String): Boolean = {
+      val char = board(coord._1)(coord._2)
+      val newPrefix = prePrefix + char
+      if(tries.search(newPrefix)) true
+
+      else if(tries.startsWith(newPrefix)) {
+        board(coord._1)(coord._2) = visitedLabel
+        val exists = getNeighbors(coord, (board.length, board(0).length)) exists {
+          case (nr, nc) if board(nr)(nc) != visitedLabel => _dfs((nr, nc), newPrefix)
+          case _ => false
+        }
+        board(coord._1)(coord._2) = char
+        exists
+      } else false
+    }
+    val coords = for (i <- board.indices.view; j <- board(0).indices.view) yield (i ,j)
+    coords.exists(_dfs(_, ""))
+  }
+
+  val getNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    List(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
+
+/**
+* helper class 
+*   Tries Node is implemented with Map
+*/
+case class Node(child: scala.collection.mutable.Map[Char, Node] = scala.collection.mutable.Map.empty[Char, Node], var isWord: Boolean = false) {
+  def update(char: Char, node: Node): Unit = child(char) = node
+  def apply(char: Char): Option[Node] = child.get(char)
+}
+
+class Tries() {
+  val root = Node()
+
+  def insert(word: String): Unit = {
+    var node = root
+    word.foreach{
+      case c if node(c).isDefined => node = node(c).get
+      case c =>
+        node(c) = Node()
+        node = node(c).get
+    }
+    node.isWord = true
+  }
+
+  def search(word: String): Boolean = searchUtil(word).exists(_.isWord)
+
+  def startsWith(prefix: String): Boolean = searchUtil(prefix).isDefined
+
+  private def searchUtil(string: String): Option[Node] = {
+    var node = root
+
+    string.foreach{
+      case c if node(c).isDefined => node = node(c).get
+      case _ => return None
+    }
+    Some(node)
+  }
+}
+
+
+/**
+* directly compare with char by char
+* if there are only one word should be checked in board, brute force is a more efficient method
+*/
+
+object Solution2 {
+  private val visitedLabel = '#'
+  def exist(board: Array[Array[Char]], word: String): Boolean = {
+    dfs(word, board)
+  }
+
+  def dfs(word: String, board: Array[Array[Char]]): Boolean = {
+
+    def _dfs(coord: (Int, Int), wordIdx: Int): Boolean = {
+      val char = board(coord._1)(coord._2)
+
+      if(wordIdx >= word.length || char != word.charAt(wordIdx)) false
+      else if(char == word.charAt(wordIdx) && wordIdx == word.length - 1) true
+      else {
+        board(coord._1)(coord._2) = visitedLabel
+        val exists = getNeighbors(coord, (board.length, board(0).length)) exists {
+          case (nr, nc) if board(nr)(nc) != visitedLabel => _dfs((nr, nc), wordIdx + 1)
+          case _ => false
+        }
+        board(coord._1)(coord._2) = char
+        exists
+      }
+    }
+    
+    val coords = for (i <- board.indices.view; j <- board(0).indices.view) yield (i ,j)
+    coords.exists(_dfs(_, 0))
+  }
+
+  val getNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    List(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
 ```
 
 ###  4.6. <a name='RemoveDuplicatesfromSortedArrayII'></a>80 Remove Duplicates from Sorted Array II
@@ -4553,6 +9789,48 @@ class Solution:
         """
         nums1[m:] = nums2
         nums1.sort()
+```
+
+```scala
+object Solution {
+    def merge(nums1: Array[Int], m: Int, nums2: Array[Int], n: Int): Unit = {
+        var trail = m+n-1
+        
+        var t1 = m-1
+        var t2 = n-1
+        
+        while(t1 > -1 && t2 > -1){
+            val e1 = nums1(t1)
+            val e2 = nums2(t2)
+            
+            if(e1 > e2){
+                nums1(trail) = e1
+                t1 -= 1
+                trail -= 1
+            }else{
+                nums1(trail) = e2
+                t2 -= 1
+                trail -= 1
+            }
+        }
+        
+        if(t1 == -1){
+            while(t2 > -1){
+                nums1(trail) = nums2(t2)
+                t2 -= 1
+                trail -= 1
+            }
+        }else{
+            while(t1 > -1){
+                nums1(trail) = nums1(t1)
+                t1 -= 1
+                trail -= 1
+            }
+        }
+        
+    }
+}
+
 ```
 
 ###  4.13. <a name='89.'></a> 89. 格雷编码
@@ -4688,6 +9966,105 @@ class Solution:
                 res += dp0
             dp1, dp0 = res, dp1
         return dp1
+```
+
+```scala
+
+
+/**
+* my first commitment dynamic programming
+* memo:
+* 1.subproblem dp(i) represents the decode ways of the sub-string which length is i 
+* 2. dp(i) could be sum from dp(i-1) or dp(i-2) if s(i -1, i) or s(i-2, i) are valid coding
+*  idx:   0 1 2 3 4 5 6 7
+*  length 1 2 3 4 5 6 7 8
+&  value  1 2 1 3 2 5 8 3
+*   
+*   dp(1) => "1"
+*   dp(2) => "12" :
+*            valid("12") + dp(0)
+*            valid("2") + dp(1)
+*   dp(3) => "121" :
+*           valid("21") + dp(1)
+*           valid("1) + dp(2)
+*
+* time complexity: O(2N)
+* space complexity: O(N)
+*/
+
+object Solution1 {
+    def numDecodings(s: String): Int = {
+      if(s == null || s.length == 0) return 0 
+      val dp = Array.ofDim[Int](s.length + 1)
+      dp(0) = 1
+      dp(1) = if (s(0) == '0') 0 else 1
+      (2 to s.length).foreach { idx =>
+        val single = s.slice(idx-1, idx).toInt
+        val tens = s.slice(idx-2, idx).toInt
+        if (0 < single && single <= 9)
+          dp(idx) += dp(idx-1)
+        if (10 <= tens && tens <= 26)
+          dp(idx) += dp(idx-2)
+      
+      }
+      dp.last
+    }
+}
+/**
+* instead of using slice, handle single and tens by hands
+* memo
+*  1. char as digit
+*/
+
+object Solution1-1 {
+    def numDecodings(s: String): Int = {
+      if(s == null || s.length == 0) return 0 
+      val dp = Array.ofDim[Int](s.length + 1)
+      dp(0) = 1
+      dp(1) = if (s(0) == '0') 0 else 1
+      (2 to s.length).foreach { idx =>
+        val single = s(idx-1).asDigit
+        val tens = s(idx-2).asDigit * 10 + single
+        if (0 < single && single <= 9)
+          dp(idx) += dp(idx-1)
+        if (10 <= tens && tens <= 26)
+          dp(idx) += dp(idx-2)
+      }
+      
+      dp.last
+      
+    }
+}
+
+/**
+*  dp - only keep dp(i-1) and dp(i-2)
+* time complexity: O(2N)
+* space complexity: O(1)
+*/
+
+object Solution1-3 {
+    def numDecodings(s: String): Int = {
+      if (s == null && s.isEmpty) return 0
+      (2 to s.length).foldLeft((1, if(s(0) == '0') 0 else 1)) {
+      /**
+      * pre = dp(i-1)
+      * prepre = dp(i-2) 
+      */
+        case ((prepre, pre), idx) =>
+          val decodeOne = if(decodeSingle(s, idx)) pre else 0
+          val decodeTwo = if(decodeTens(s, idx)) prepre else 0
+          (pre, decodeOne + decodeTwo)
+      }._2
+    }
+  
+    def decodeSingle(s: String, idx: Int): Boolean = s(idx - 1) != '0'
+  
+    def decodeTens(s: String, idx: Int): Boolean = (s(idx - 2) == '1' ) || (s(idx - 2) == '2' && s(idx-1) <= '6' )
+    
+}
+
+
+
 ```
 
 ###  4.16. <a name='ReverseLinkedListII'></a>92-Reverse Linked List II
@@ -4851,6 +10228,120 @@ class Solution:
         return res
 ```
 
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+
+/**
+* chosen solution
+* iterative version
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+
+object Solution0 {
+    def inorderTraversal(root: TreeNode): List[Int] = {
+      var node = root
+      val stack = new collection.mutable.Stack[TreeNode]()
+      val result = new collection.mutable.ListBuffer[Int]()
+
+      while(node != null || stack.nonEmpty) {
+        while(node != null){
+          stack.push(node)
+          node = node.left
+        }
+
+        node = stack.pop()
+        result += node.value
+        node = node.right
+
+      }
+      result.toList
+    }
+}
+
+
+/**
+* iterative version
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+
+object Solution1 {
+    def inorderTraversal(root: TreeNode): List[Int] = {
+      var node = root
+      val stack = new collection.mutable.Stack[TreeNode]()
+      val result = new collection.mutable.ListBuffer[Int]()
+
+      while(node != null || stack.nonEmpty) {
+        while(node != null){
+          stack.push(node)
+          node = node.left
+        }
+
+        node = stack.pop()
+        result += node.value
+        node = node.right
+
+      }
+      result.toList
+    }
+}
+
+/**
+* recursive version
+* time complexity: O(N)
+* space complexity: O(logN), worst: O(N)
+*/
+object Solution2 {
+    def inorderTraversal(root: TreeNode): List[Int] = {
+        _inorderTraversal(root)
+    }
+    
+    def _inorderTraversal(node: TreeNode): List[Int] = {
+        if (node == null) Nil
+        else
+            _inorderTraversal(node.left) ::: List(node.value) ::: _inorderTraversal(node.right)
+        
+    }
+}
+```
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+object Solution {
+    
+    def inorderTraversal(root: TreeNode): List[Int] = {
+        if(root == null){
+            List.empty[Int]
+        }
+        else if(root.left == null && root.right == null){
+            List(root.value)
+        }else if(root.left == null){
+            List(root.value) ++ inorderTraversal(root.right)
+        }else if(root.right == null){
+            inorderTraversal(root.left) ++ List(root.value)
+        }else{
+            inorderTraversal(root.left) ++ List(root.value) ++ inorderTraversal(root.right)
+        }
+    }
+}
+
+```
+
 ###  4.20. <a name='II-1'></a>95. 不同的二叉搜索树 II
 
 ```py
@@ -5004,6 +10495,136 @@ class Solution:
         return fun(root, float('-inf'), float('inf'))
 ```
 
+```scala
+/**
+* chosen solution
+* inorder iterative version only keep pre node
+* this is also the inorder-iterative-template
+* 
+* time complexity: O(N)
+*/
+
+object Solution0 {
+   def isValidBST(root: TreeNode): Boolean = {
+    val stack = new collection.mutable.Stack[TreeNode]()
+    var node = root
+    var pre: TreeNode = null
+    var result = true
+    while ((node != null || stack.nonEmpty) && result) {
+      while (node != null) {
+        stack push node
+        node = node.left
+      }
+
+      node = stack.pop
+      if (pre != null && node.value <= pre.value) result = false
+      pre = node
+      node = node.right
+
+    }
+    result
+  }
+}
+
+/**
+* inorder recursive traversal
+* memo:
+*    1. recursive version with all element storing
+* Time complexity O(NlogN)  there are a distinct and sorted operation
+* space complexity O(N)
+*/
+object Solution1 {
+  def isValidBST(root: TreeNode): Boolean = {
+    val inorder = traversal(root)
+    inorder equals inorder.distinct.sorted // why distinct here? [1, 1] is not a BST because left tree should be smaller than root. 
+  }
+  def traversal(node: TreeNode): List[Int] = {
+    if(node == null){
+      List.empty[Int]
+    }else {
+      // (traversal(node.left) :+ node.value) ::: traversal(node.right) 
+      traversal(node.left) ::: List(node.value) ::: traversal(node.right)
+    }
+  }
+}
+
+
+
+/**
+* inorder recursive version only keep pre node
+* time complexity: O(N)
+*  ! Not recommend
+*/
+
+object Solution2 {
+    def isValidBST(root: TreeNode): Boolean = {
+
+    var prev: TreeNode = null
+    def _isValidBST(node: TreeNode): Boolean = {
+      if (node == null) return true
+      if (!_isValidBST(node.left)) return false
+      if (prev != null && node.value <= prev.value) {
+        return false
+      }
+      prev = node
+      _isValidBST(node.right)
+    }
+    _isValidBST(root)
+  }
+}
+
+/**
+* inorder iterative version only keep pre node
+*   inorder iterative template
+* time complexity: O(N)
+*/
+
+object Solution3 {
+   def isValidBST(root: TreeNode): Boolean = {
+    val stack = new collection.mutable.Stack[TreeNode]()
+    var node = root
+    var pre: TreeNode = null
+    var result = true
+    while ((node != null || stack.nonEmpty) && result) {
+      while (node != null) {
+        stack push node
+        node = node.left
+      }
+
+      node = stack.pop
+      if (pre != null && node.value <= pre.value) result = false
+      pre = node
+      node = node.right
+
+    }
+    result
+  }
+}
+
+/**
+* giving min max range when recursive
+* time complexity: O(N)
+*/
+
+object Solution4 {
+  def isValidBST(root: TreeNode): Boolean = {
+
+    def _isValidBST(node: TreeNode, min: TreeNode, max: TreeNode): Boolean = {
+
+      if(node == null) true
+      else {
+        if((min != null && node.value <= min.value) || (max != null  && node.value >= max.value)) false
+        else {
+          _isValidBST(node.lefmt, min, node) && _isValidBST(node.right, node, max)
+        }
+      }
+    }
+    _isValidBST(root, null, null)
+  }
+
+}
+```
+
 ###  4.23. <a name='SameTree'></a>100-Same Tree 
 
 [哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
@@ -5117,6 +10738,84 @@ class Solution:
 class Solution:
     def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
         return str(p)==str(q)
+```
+
+```scala
+
+/**
+* my first commitment: recursive dfs traversal 
+* time complexity: O(N)
+*/
+object Solution1 {
+    def isSameTree(p: TreeNode, q: TreeNode): Boolean = {
+        traversal(p, q)
+    }
+    
+    def traversal(p: TreeNode, q: TreeNode): Boolean = {
+      (p, q) match {
+        case (null, null) => true
+        case (null, _) => false
+        case (_, null) => false
+        case (pp, qq) if pp.value == qq.value =>
+        /**
+        * we could travel one side and decide if it need to tavel the other side
+        */
+          traversal(p.left, q.left) && traversal(p.right, q.right)
+        case _ => false
+      }
+    }
+}
+```
+
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech._
+
+//if (p == null && q == null) {
+//true
+//} else if (p != null && q == null) {
+//false
+//} else if (p == null && q != null) {
+//false
+//} else if (p.value == q.value) {
+//isSameTree(p.left, q.left) && isSameTree(p.right, q.right)
+//} else {
+//false
+//}
+package lc0100 {
+  object Solution {
+//    def isSameTree(p: TreeNode, q: TreeNode): Boolean = {
+//      if (p!=null && q!=null) {
+//        p.value == q.value && isSameTree(p.left,q.left) && isSameTree(p.right,q.right)
+//      } else {
+//        p == q
+//      }
+//    }
+    def isSameTree(p: TreeNode, q: TreeNode): Boolean = {
+        (p,q) match {
+          case (p,q) if (p!=null && q!=null) => p.value == q.value && isSameTree(p.left,q.left) && isSameTree(p.right,q.right)
+          case (p,q) => p==q
+        }
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      {
+        val t1 = Tree.build(IndexedSeq("1","2 3"))
+        val t2 = Tree.build(IndexedSeq("1","2 3"))
+        println(Solution.isSameTree(t1,t2) == true)
+      }
+      {
+        val t1 = Tree.build(IndexedSeq("1","2"))
+        val t2 = Tree.build(IndexedSeq("1","N 2"))
+        println(Solution.isSameTree(t1,t2) == false)
+      }
+    }
+    val name = "100 sametree"
+  }
+}
+
 ```
 
 ###  4.24. <a name='Symmetrictree'></a>101-Symmetric tree
@@ -5237,6 +10936,42 @@ class Solution:
         return self._isSymmetric(node1.left, node2.right) and self._isSymmetric(node1.right, node2.left)
 ```
 
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+object Solution {
+    
+    def symmetric(nodeA: TreeNode, nodeB: TreeNode): Boolean = {
+        if(nodeA == null && nodeB == null){
+            true
+        }else if(nodeA !=null && nodeB != null){
+            if(nodeA.value != nodeB.value){
+                false
+            }else{
+                symmetric(nodeA.left, nodeB.right) && symmetric(nodeA.right, nodeB.left)
+            }
+        }else{
+            false
+        }
+    }
+    
+    def isSymmetric(root: TreeNode): Boolean = {
+        if(root == null){
+            true
+        } else{
+            symmetric(root.left, root.right)
+        }
+    }
+}
+
+```
+
 ###  4.25. <a name='BinaryTreeLevelOrderTraversal'></a>102-Binary Tree Level Order Traversal
 
 [哈哈哈](https://www.bilibili.com/video/BV1W54y197Lc?spm_id_from=333.999.0.0)
@@ -5354,6 +11089,116 @@ class Solution(object):
         res[level].append(node.val)
         self.recurHelper(node.left, level+1, res)
         self.recurHelper(node.right, level+1, res)
+```
+
+```scala
+/**
+* chosen solution
+* BFS iterative
+* time complexity O(N）
+*/
+object Solution0 {
+  def levelOrder(root: TreeNode): List[List[Int]] = {
+    if(root == null) return List[List[Int]]()
+
+    val buffer =  scala.collection.mutable.Queue[TreeNode]()
+    val result =  scala.collection.mutable.ListBuffer[List[Int]]()
+
+    buffer.enqueue(root)
+    while(buffer.nonEmpty) {
+      val currentLevel = scala.collection.mutable.ListBuffer[Int]()
+
+      for (_ <- 0 until buffer.size) {
+
+        val node = buffer.dequeue
+        currentLevel.append(node.value)
+
+        if(node.left != null) buffer.enqueue(node.left)
+        if(node.right != null) buffer.enqueue(node.right)
+      }
+      result += currentLevel.toList
+    }
+
+    result.toList
+
+  }
+}
+/**
+* BFS - iterative
+* time complexity O(N）
+*/
+object Solution1 {
+  def levelOrder(root: TreeNode): List[List[Int]] = {
+    if(root == null) return List[List[Int]]()
+
+    val buffer =  scala.collection.mutable.Queue[TreeNode]()
+    val result =  scala.collection.mutable.ListBuffer[List[Int]]()
+
+    buffer.enqueue(root)
+    while(buffer.nonEmpty) {
+      val currentLevel = scala.collection.mutable.ListBuffer[Int]()
+
+      for (_ <- 0 until buffer.size) {
+
+        val node = buffer.dequeue
+        currentLevel.append(node.value)
+
+        if(node.left != null) buffer.enqueue(node.left)
+        if(node.right != null) buffer.enqueue(node.right)
+      }
+      result += currentLevel.toList
+    }
+
+    result.toList
+
+  }
+}
+/**
+* using hashmap to store level-list mapping
+*/
+
+object Solution2 {
+  def levelOrder(root: TreeNode): List[List[Int]] = {
+    val oderMap = scala.collection.mutable.Map[Int, List[Int]]()
+    mapOrder(root, 1, oderMap)
+    oderMap.values.toList
+  }
+  def mapOrder(node: TreeNode, level: Int, map: scala.collection.mutable.Map[Int, List[Int]]): Unit = {
+    if (node != null) {
+
+      val l = map.get(level)
+        .map(_ :+ node.value)
+        .getOrElse(List(node.value))
+
+      map(level) = l
+      mapOrder(node.left, level + 1, map)
+      mapOrder(node.right, level + 1, map)
+
+    }
+  }
+}
+
+/**
+* BFS - recursive with tail recursion
+*/
+
+object Solution3 {
+  def levelOrder(root: TreeNode): List[List[Int]] = {
+    _levelOrder(if(root == null) List() else List(root), List())
+  }
+
+  @annotation.tailrec
+  def _levelOrder(queue: List[TreeNode], ans: List[List[Int]]): List[List[Int]] = {
+    if(queue.isEmpty) ans
+    else{
+      // val level = queue.map(n => n.value)
+      // val newQueue = queue.flatMap(n => List(n.left, n.right)).filter(_ != null)
+      // _levelOrder(newQueue, ans :+ level)
+      _levelOrder(queue.flatMap(n => List(n.left, n.right)).filter(_ != null), ans :+ queue.map(n => n.value))
+    }
+
+  }
+}
 ```
 
 ###  4.26. <a name='BinaryTreeZigzagLevelOrderTraversal'></a>103. Binary Tree Zigzag Level Order Traversal
@@ -5483,7 +11328,114 @@ class Solution:
         return max(self.maxDepth(root.left),self.maxDepth(root.right))+1
 ```
 
-```py
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+
+/**
+* chosen solution
+* BFS - recursive
+* time complexity: O(N), N is the total node in tree
+* space complexity: O(logN) depending on the depth of tree
+*/
+object Solution0 {
+    def maxDepth(root: TreeNode): Int = {
+        _maxDepth(if(root == null) List() else List(root), 0)
+    }
+    
+    @annotation.tailrec
+    def _maxDepth(queue: List[TreeNode], ans: Int): Int = {
+        if(queue.isEmpty) ans
+        else _maxDepth(queue.flatMap(l => List(l.left, l.right)).filter(_ != null), ans + 1)
+    }
+}
+
+ /**
+* my first commitment
+* DFS traversal - recursive
+* time complexity O(N)
+*/
+object Solution1 {
+    def maxDepth(root: TreeNode): Int = {
+        if (root == null) return 0
+        /**
+        val left =  1 + maxDepth(root.left)
+        val right = 1 + maxDepth(root.right)
+        math.max(left, right)
+        */
+        math.max(maxDepth(root.left), maxDepth(root.right)) + 1
+    }
+}
+
+/**
+* BFS - iterative
+* memo
+*   1. queue: BFS iterative template
+* time complexity: O(N) n is node number in tree
+* space complexity: O(logN) , depending on the depth oof the tree
+*/
+
+
+object Solution2 {
+    def maxDepth(root: TreeNode): Int = {
+        if(root == null) return 0
+        var depth = 0
+        val queue = scala.collection.mutable.Queue[TreeNode]()
+        queue.enqueue(root)
+
+        while(queue.nonEmpty) {
+            depth += 1
+            for(_ <- 0 until queue.size){
+                val node = queue.dequeue
+                if(node.left != null) queue.enqueue(node.left)
+                if(node.right != null) queue.enqueue(node.right)
+            }
+        }   
+        depth
+    }
+}
+
+/**
+* BFS - recursive
+* time complexity: O(N), N is the total node in tree
+* space complexity: O(logN) depending on the depth of tree
+*/
+
+object Solution3 {
+    def maxDepth(root: TreeNode): Int = {
+        _maxDepth(if(root == null) List() else List(root), 0)
+    }
+    
+    @annotation.tailrec
+    def _maxDepth(queue: List[TreeNode], ans: Int): Int = {
+        if(queue.isEmpty) ans
+        else _maxDepth(queue.flatMap(l => List(l.left, l.right)).filter(_ != null), ans + 1)
+    }
+}
+
+```
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+object Solution {
+    def maxDepth(root: TreeNode): Int = root match {
+        case null => 0
+        case x: TreeNode => Math.max((1 + maxDepth(x.left)), (1 + maxDepth(x.right)))
+    }
+}
 
 ```
 
@@ -5551,6 +11503,54 @@ class Solution(object):
         node.left = self.buildTree(preorder[:i], inorder[:i])
         node.right = self.buildTree(preorder[i:], inorder[i+1:])
         return node
+```
+
+```scala
+
+/**
+* my first commitment
+* memo
+*  1. preorder traversal provides us with the placement of the root
+*  2. inorder traversal provides us with the placement of the left and right children
+* time complexity: O(2N)
+*   1. build hashmap O(N)
+*   2. build tree O(N)
+*/
+object Solution1 {
+    def buildTree(preorder: Array[Int], inorder: Array[Int]): TreeNode = {
+      val inorderMap = inorder.zipWithIndex.toMap
+      buildTree(preorder, 0, inorderMap, 0, inorder.length - 1)
+  
+    }
+  
+  
+    def buildTree(preorder: Array[Int], preorderIdx: Int, inorderMap: Map[Int, Int], inorderLeft: Int, inorderRight: Int): TreeNode = {
+      if (inorderLeft > inorderRight || preorderIdx >= preorder.length) return null
+
+      val currentRootValue = preorder(preorderIdx)
+      val node = new TreeNode(currentRootValue)
+     
+      val preorderIdxOfRight = preorderIdx + inorderMap(currentRootValue) - inorderLeft + 1
+
+      node.left = buildTree(preorder, preorderIdx + 1, inorderMap, inorderLeft, inorderMap(currentRootValue) - 1 )
+      
+      /**
+     * right child's preoder index
+     * the problem is how many increment should we have after building the left child tree
+     * the answer above is:  the number of node at left child tree when root node is current preorder index  
+     *  1. current root index: current preorder index
+     *  2. the number nodes of left child tree: 
+     *        the number of node between (inorderLeft, inorderMap(currentRootValue)]  in  inorder array
+     *
+     *  so the child's preorder index is: current preorder index + number of node at left child  + 1 (next)
+     *
+     */
+      
+      node.right = buildTree(preorder, preorderIdxOfRight, inorderMap, inorderMap(currentRootValue) + 1, inorderRight)
+      
+      node
+    }
+}
 ```
 
 ###  4.29. <a name='-1'></a>106-从中序与后序遍历序列构造二叉树
@@ -5781,6 +11781,37 @@ class Solution:
         root.left = self.sortedArrayToBST(nums[:mid])
         root.right = self.sortedArrayToBST(nums[mid+1:])
         return root
+```
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+object Solution {
+    
+    def formTree(nums: Array[Int], begin: Int, end: Int): TreeNode = {
+        var mid = begin + Math.ceil((end - begin)/2).toInt
+        TreeNode(
+            nums(mid), 
+            if(mid <= begin) null else formTree(nums, begin, mid-1), 
+            if(mid >= end) null else formTree(nums, mid+1, end)
+        )
+    }
+    
+    def sortedArrayToBST(nums: Array[Int]): TreeNode = {
+        if(nums.isEmpty){
+            null
+        }else{
+            formTree(nums, 0, nums.size - 1)
+        }
+    }
+}
+
 ```
 
 ###  4.32. <a name='-1'></a>109题. 有序链表转换二叉搜索树
@@ -6051,6 +12082,109 @@ class Solution:
 链接：https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/solution/er-cha-shu-de-zui-xiao-shen-du-by-leetcode-solutio/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```scala
+/**
+* chosen solution
+* 
+* BFS - recursive
+* time complexity
+*    worst case: O(N), all node was visited
+*/
+object Solution0 {
+    def minDepth(root: TreeNode): Int = {
+        _minDepth(if(root == null) List() else List(root), 0)
+    }
+    
+    @annotation.tailrec
+    def _minDepth(queue: List[TreeNode], ans: Int): Int = {
+        if(queue.isEmpty) ans
+        // node has no child 
+        else if(queue.exists(t => t.left == null && t.right == null)) ans + 1
+        else _minDepth(queue.flatMap(t => List(t.left, t.right)).filter(_ != null), ans + 1)
+    }
+}
+
+
+/**
+* DFS traversal - recursive
+* memo
+* 1.edge case: node only have one child
+* time complexity O(N)
+*/
+object Solution1 {
+    def minDepth(root: TreeNode): Int = {
+        if (root == null) return 0
+        val left = minDepth(root.left) 
+        val right = minDepth(root.right) 
+
+        if (left == 0 || right == 0) left + right + 1 else math.min(left, right) + 1
+        
+    }
+}
+
+object Solution1_2 {
+    def minDepth(root: TreeNode): Int = {
+        if(root == null) 0
+        else if(root.left == null) minDepth(root.right) + 1
+        else if(root.right == null) minDepth(root.left) + 1
+        else minDepth(root.right) + 1 min minDepth(root.left) + 1
+    
+    }
+}
+
+/**
+* BFS - iterative
+* memo
+*   1. queue
+*   2. shortcut condition
+* time complexity
+*    worst case: O(N), all node was visited
+*    if the tree was unbalance, BFS may be better
+*/
+object Solution2 {
+    def minDepth(root: TreeNode): Int = {
+        if(root == null) return 0
+        val queue = scala.collection.mutable.Queue[TreeNode]()
+        var depth = 0
+        var condition = true
+        queue.enqueue(root)
+        
+        while(queue.nonEmpty && condition){
+            depth += 1
+            for(_ <- 0 until queue.size; if condition){
+                val node = queue.dequeue
+                if(node.left == null && node.right == null) condition = false
+                else {
+                    if(node.left != null) queue.enqueue(node.left)
+                    if(node.right != null) queue.enqueue(node.right)
+                } 
+            } 
+        }
+        depth
+        
+    }
+}  
+
+
+/**
+* BFS - recursive
+* time complexity
+*    worst case: O(N), all node was visited
+*/
+object Solution3 {
+    def minDepth(root: TreeNode): Int = {
+        _minDepth(if(root == null) List() else List(root), 0)
+    }
+    
+    @annotation.tailrec
+    def _minDepth(queue: List[TreeNode], ans: Int): Int = {
+        if(queue.isEmpty) ans
+        else if(queue.exists(t => t.left == null && t.right == null)) ans + 1
+        else _minDepth(queue.flatMap(t => List(t.left, t.right)).filter(_ != null), ans + 1)
+    }
+}
 ```
 
 ###  4.35. <a name='PathSum'></a>112-Path Sum
@@ -6566,6 +12700,38 @@ class Solution:
         return ans
 ```
 
+```scala
+object Solution {
+    def generate(numRows: Int): List[List[Int]] = {
+        var output = List.empty[List[Int]]
+        var curr = 1
+        if(numRows == 0){
+            output
+        }else{
+            while(curr <= numRows){
+                curr match{
+                    case 1 => output = List(List(1))
+                    case _ => {
+                        val prev = output(curr-2)
+                        val begin = 0
+                        val end = curr - 1
+                        val row = 
+                        (0 to curr-1)
+                        .map(i => if(i == begin || i == end) 1 else prev(i)+prev(i-1))
+                        .toList
+                        
+                        output = output :+ row
+                    }
+                }
+                curr += 1
+            }
+        }
+        output
+    }
+}
+
+```
+
 ###  4.42. <a name='PascalsTriangleII'></a>119-Pascal's Triangle II
 
 [哈哈哈](https://www.bilibili.com/video/BV187411B7Hj?spm_id_from=333.999.0.0)
@@ -6712,6 +12878,105 @@ class Solution:
         return min(f)
 ```
 
+```scala
+/**
+* selection solution
+* dynamic programming - bottom up
+*     state definition: dp(j) represents minimum sum at point triangle(i)(j) during bottom up 
+* time complexity: O(N) N is the height of triangle
+* space complexity: O(N), only create dp array with dimension of last triangle
+*/
+
+object Solution0 {
+    def minimumTotal(triangle: List[List[Int]]): Int = {
+        val depth = triangle.size
+        val dp = triangle.last.toArray
+        for(i <- (depth - 2) to 0 by -1; j <- triangle(i).indices) {
+            dp(j) = triangle(i)(j) + (dp(j) min dp(j + 1)) 
+        }
+        dp(0)
+    }
+}
+
+/**
+* my first commitment
+* memo
+*    dynamic programming from bottom to up
+* time complexity: O(N) N is the height of triangle
+* space complexity: O(N^2) : (1 + N) * N  / 2
+*/
+object Solution1 {
+  import scala.util.Try
+  def minimumTotal(triangle: List[List[Int]]): Int = {
+    val result = Array.ofDim[Array[Int]](triangle.size)
+    triangle.zipWithIndex.foreach { case (ll, idx) => result(idx) = Array.ofDim[Int](ll.size) }
+    for (i <- triangle.size - 1 to 0 by -1) {
+      val inner = triangle(i)
+      inner.zipWithIndex.foreach {
+        case (v, j) =>
+          val left = Try(result(i + 1)(j))
+          val right = Try(result(i + 1)(j + 1))
+          result(i)(j) = (left.getOrElse(0) min right.getOrElse(0)) + v
+      }
+    }
+
+    Try(result.head.head).getOrElse(0)
+  }
+}
+
+
+/**
+* dp dimension is like triangle
+* time complexity: O(N) N is the height of triangle
+* space complexity: O(N^2) : (1 + N) * N  / 2
+*/
+
+object Solution1-1 {
+  def minimumTotal(triangle: List[List[Int]]): Int = {
+    val result = triangle.map(_.toArray).toArray // O(N^2)
+    for (i <- result.length - 2 to 0 by -1) {
+      result(i).indices.foreach (j =>  result(i)(j) = ( result(i + 1)(j) min result(i + 1)(j + 1)) + result(i)(j))
+    }
+    result(0)(0)
+  }
+}
+
+
+/**
+* trick: dp is an array point to copy version of result's last array
+* time complexity: O(N) N is the height of triangle
+* space complexity: O(N^2) : (1 + N) * N  / 2
+*/
+
+object Solution1-2 {
+  def minimumTotal(triangle: List[List[Int]]): Int = {
+    val result = triangle.map(_.toArray).toArray  // O(N^2)
+    val dp = result.last
+    for (i <- result.length - 2 to 0 by -1) {
+      val ll = result(i)
+      ll.indices.foreach (j =>  dp(j) = (dp(j) min dp(j + 1)) + ll(j))
+    }
+    dp(0)
+  }
+}
+
+/**
+* optimize from above: without covert entire list to array
+* time complexity: O(N) N is the height of triangle
+* space complexity: O(N), only create dp array with dimension of last triangle
+*/
+object Solution1-3 {
+    def minimumTotal(triangle: List[List[Int]]): Int = {
+        val depth = triangle.size
+        val dp = triangle.last.toArray
+        for(i <- (depth - 2) to 0 by -1; j <- triangle(i).indices) {
+            dp(j) = triangle(i)(j) + (dp(j) min dp(j + 1)) 
+        }
+        dp(0)
+    }
+}
+```
+
 ###  4.44. <a name='BestTimetoBuyandSellStock121-'></a>121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
 
 [花花酱](https://www.bilibili.com/video/BV1oW411C7UB?spm_id_from=333.999.0.0)
@@ -6850,6 +13115,130 @@ class Solution:
         return max_p
 ```
 
+```scala
+/**
+* dynamic programming
+* time complexity : O(N)
+* space complexity: O(3N)
+*/
+object Solution1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if (prices == null || prices.isEmpty) return 0
+        /* 
+        * state: 0: without holding, 
+        *        1: holding 1 stock, 
+        *        2: already sold stock
+        */
+        val profits = Array.ofDim[Int](prices.length, 3)
+        
+        profits(0)(0) = 0
+        profits(0)(1) = -prices(0)
+        profits(0)(2) = Int.MinValue
+        
+        for (i <- 1 until prices.length) {
+            
+            profits(i)(0) = profits(i - 1)(0)  // state: 0 -> 0
+            profits(i)(1) = profits(i - 1)(1) max (profits(i - 1)(0) - prices(i)) // state: 0 -> 1, 1 -> 1
+            profits(i)(2) = profits(i - 1)(2) max (profits(i - 1)(1) + prices(i)) // state: 2 -> 2, 1 -> 2
+        }
+        profits.last.max
+    }
+}
+/**
+* dynamic programming
+* time complexity: O(N)
+* space complexity: O(1): only create a size 3 of one dimension array
+*/
+object Solution1-2 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if(prices == null || prices.isEmpty) return 0
+       /* 
+       * state: 0: without holding, 
+       *        1: holding 1 stock, 
+       *        2: already sold stock
+       */
+        val dp = Array.ofDim[Int](3)
+        dp(0) = 0
+        dp(1) = -prices(0)
+        dp(2) = Int.MinValue // initial as 0 is acceptable
+        
+        for(i <- 1 until prices.size){
+            dp(0) = dp(0)
+            dp(1) = (dp(0) - prices(i)) max dp(1)
+            dp(2) = (dp(1) + prices(i)) max dp(2)
+        }
+        dp.max
+    }
+}
+
+
+/**
+* Kadane's Algorithm: though of dynamic programming
+* record min price so far and maxProfit during iteration
+* time complexity O(N)
+* space complexity O(1)
+*/
+
+object Solution2 {
+    def maxProfit(prices: Array[Int]): Int = {
+        prices.foldLeft((Int.MaxValue, 0)){
+            case ((minPriceSoFar, maxProfit), price) => (minPriceSoFar min price, maxProfit max (price - minPriceSoFar))
+        }._2
+    }
+}
+```
+
+```scala
+package com.zhourui.leetcode
+
+import com.zhourui.codech._
+import scala.math.{min,max}
+
+//[7,1,5,3,6,4] -> 6-1=5
+package lc121_besttime_sell_stock {
+  object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+      if (prices.isEmpty) return 0
+      var maxProfit = Int.MinValue
+      prices.reduceLeft((a,b)=>{
+        maxProfit = max(maxProfit, b - a)
+        min(a,b)
+      })
+      max(0,maxProfit)
+    }
+  }
+}
+
+```
+
+```scala
+object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+        var buy = 0
+        var sell = 1
+        
+        var maxProfit = 0
+        
+        while(buy < sell && sell < prices.size){
+            if(prices(buy) > prices(sell)){
+                buy = sell
+                sell += 1
+            }else{
+                val profit = prices(sell) - prices(buy)
+                if(profit > maxProfit) {
+                    maxProfit = profit
+                }
+                sell += 1
+            }
+        }
+        
+        maxProfit
+    }
+}
+
+```
+
+
 ###  4.45. <a name='II122-BestTimetoBuyandSellStockII'></a>122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
 
 [哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
@@ -6971,6 +13360,159 @@ class Solution:
             dp[i][0] = max(dp[i-1][0], dp[i-1][1] - prices[i]) #注意这里是和121. 买卖股票的最佳时机唯一不同的地方
             dp[i][1] = max(dp[i-1][1], dp[i-1][0] + prices[i])
         return dp[-1][1]
+```
+
+```scala
+/**
+* my first commitment
+* greedy alg
+* time complexity: O(N)
+*/
+object Solution1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if(prices.length > 1){
+            prices.sliding(2).collect{ case arr: Array[Int] if arr(1) > arr(0)=> arr}
+    .foldLeft(0){(sum, arr) => 
+      sum + arr(1) - arr(0)}
+        } else {
+            0
+        }
+    }
+}
+
+/**
+* greedy alg: one line pass
+*/
+
+object Solution1-2 {
+  def maxProfit(prices: Array[Int]): Int = {
+    if(prices.length > 1) prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum else 0
+  }
+}
+
+/**
+* dynamic programming 
+* time complexity: O(N)
+* space complexity: O(2N) create a two-dimension array
+*/
+
+object Solution2 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if(prices == null || prices.isEmpty) return 0   
+        /* 
+        * state definition: 
+        *    0  without holding,
+        *    1  holding a share
+        */
+        val profits = Array.ofDim[Int](prices.length, 2)
+        
+        profits(0)(0) = 0
+        profits(0)(1) = -prices(0)
+        for(i <- 1 until prices.length) {
+            profits(i)(0) = profits(i - 1)(0) max (profits(i - 1)(1) + prices(i)) //  sell 
+            profits(i)(1) = profits(i - 1)(1) max (profits(i - 1)(0) - prices(i)) // buy and hold
+        }
+        profits.last.max
+    }
+}
+/**
+* dynamic programming : simplify above solution
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+
+object Solution2-1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if(prices == null || prices.isEmpty) return 0
+        val dp = Array.ofDim[Int](2)
+        /* 
+        * state definition: 
+        *    0  without holding,
+        *    1  holding a share
+        */
+        dp(0) = 0
+        dp(1) = -prices(0)
+        for(i <- 1 until prices.size) {
+        /*
+        * it may causes a problem here, because we overwrite the previous dp(0) by new state i value and dp(1) would utilizes dp(0) which was overwritten 
+        * in this problem, a stock can be bought or sold for multiple times in one day, so overwriting is not matter
+        */
+            dp(0) = dp(0) max (dp(1) + prices(i))
+            dp(1) = dp(1) max (dp(0) - prices(i))
+        }
+        
+        dp.max
+        
+    }
+}
+```
+
+
+```scala
+object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+        var buy = 0
+        var sell = 1
+        var profitNow = 0
+        var maxProfit = 0
+        var maxSell = 0
+        
+        var buyPrice = 0
+        var sellPrice = 0
+        
+        while(buy < prices.size && sell < prices.size){
+            
+            buyPrice = prices(buy)
+            sellPrice = prices(sell)
+            
+            if(buyPrice < sellPrice && sellPrice >= maxSell){
+                maxSell = sellPrice
+                profitNow = sellPrice - buyPrice
+                sell += 1
+            }else{
+                maxProfit += profitNow
+                maxSell = 0
+                profitNow = 0
+                buy = sell
+                sell += 1
+            }
+        }
+        
+        if(maxProfit == 0) profitNow else maxProfit + profitNow
+    }
+}
+
+//Alternate solution
+object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+        prices
+            .foldLeft(0,Int.MaxValue)((t, current) => (t._1 + 0.max(current-t._2), current))
+            ._1
+    }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+// 归纳为
+// 如果今天价格比昨天高，那么昨天买入，今天卖出(假如昨天已经卖出，那么取消，改为今天卖出)
+// 如果今天比昨天价格低，那么就今天买入(取消昨天的买入)
+
+package lc0122_buynsellstock2 {
+  object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+      if (prices.isEmpty) return 0
+      else (0 until prices.length-1).foldLeft(0)(
+        (profit,i) =>{
+          if (prices(i)<prices(i+1)) profit+prices(i+1)-prices(i) else profit
+        }
+      )
+    }
+  }
+}
+
 ```
 
 ###  4.46. <a name='III'></a>123-买卖股票的最佳时机 III
@@ -7178,6 +13720,224 @@ class Solution:
         return sell2
 ```
 
+```scala
+/**
+* Dynamic programming: three dimension dp array
+*    memo:
+*       dp definition: dp[i][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+*/ 
+object Solution1 {
+  def maxProfit(prices: Array[Int]): Int = {
+    /* 
+    * profits(i)(j)(k)
+    *   dimension i: state sequence
+    *   
+    *   profits()(0)(0) keep observing
+    *   profits()(0)(1) buy first share
+    *   profits()(1)(0) after selling first share
+    *   profits()(1)(1) buy second share
+    *   profits()(2)(0) after selling second share
+    *   profits()(2)(1) non-meaningful
+    */
+    val profits = Array.ofDim[Int](prices.length, 3, 2)
+    
+    profits(0)(0)(0) = 0
+    profits(0)(0)(1) = -prices(0)
+    profits(0)(1)(0) = 0
+    profits(0)(1)(1) = Int.MinValue  // buy state
+    profits(0)(2)(0) = 0
+    profits(0)(2)(1) = Int.MinValue // buy state
+    
+    /* state transition */
+    for(i <- 1 until prices.length) {
+      profits(i)(0)(0) = profits(i - 1)(0)(0)  // actually non-meaningful
+      profits(i)(0)(1) = profits(i - 1)(0)(1) max (profits(i - 1)(0)(0) - prices(i)) // buy
+      profits(i)(1)(0) = profits(i - 1)(1)(0) max (profits(i - 1)(0)(1) + prices(i)) // sell
+      profits(i)(1)(1) = profits(i - 1)(1)(1) max (profits(i - 1)(1)(0) - prices(i)) // buy
+      profits(i)(2)(0) = profits(i - 1)(2)(0) max (profits(i - 1)(1)(1) + prices(i)) // sell        
+    }
+    profits.last.map(_(0)).max
+  }
+}
+/**
+* Dynamic programming: three dimension dp array
+*   shift state definition
+*/ 
+object Solution1-2 {
+    def maxProfit(prices: Array[Int]): Int = {
+            /* 
+            * profits(i)(j)(k)
+            *   dimension i: state sequence
+            *   
+            *   profits()(0)(0) dummy state
+            *   profits()(0)(0) dummy state
+            *   profits()(1)(0) buying first share
+            *   profits()(1)(1) after sold first share
+            *   profits()(2)(0) buying second share
+            *   profits()(2)(1) after sold second share
+            */
+        val dp = Array.tabulate(prices.length, 3, 2){
+            case (0, 1, 0) => -prices(0)  // buy state
+            case (0, 1, 1) => 0  // sell state
+            case (0, 2, 0) => Int.MinValue // buy state
+            case (0, 2, 1) => 0 // sell state
+            case _ => 0
+        }
+        for(i <- 1 until prices.length; j <- 1 to 2) {
+            dp(i)(j)(0) = dp(i - 1)(j)(0) max (dp(i - 1)(j - 1)(1)  - prices(i)) // buy
+            dp(i)(j)(1) = dp(i - 1)(j)(1) max (dp(i - 1)(j)(0) + prices(i))  // sell
+        }
+        dp.last.map(_(1)).max
+    }
+}
+/**
+* dynamic programming: tree dimension array
+*   drop dummy state
+*/
+
+object Solution1-3 {
+    def maxProfit(prices: Array[Int]): Int = {
+        val transactionLimit = 2
+            /* 
+            * profits(i)(j)(k)
+            *   dimension i: state sequence
+            *   profits()(0)(0) buying first share
+            *   profits()(0)(1) after sold first share
+            *   profits()(1)(0) buying second share
+            *   profits()(1)(1) after sold second share
+            */
+        val dp = Array.tabulate(prices.length, transactionLimit, 2){
+            case (0, 0, 0) => -prices(0)  // buy
+            case (0, _, 1) => 0  // sell
+            case (0, _, 0) => Int.MinValue // buy
+            case _ => 0
+        }
+        
+        for(i <- 1 until prices.length; j <- 0 until transactionLimit) {
+            /*
+            * 0 buy, 1 sell
+            */
+            dp(i)(j)(0) = dp(i - 1)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(i - 1)(j - 1)(1) - prices(i)
+            }    
+            dp(i)(j)(1) = dp(i - 1)(j)(1) max (dp(i - 1)(j)(0) + prices(i))
+        }
+        dp.last.map(_(1)).max
+    }
+}
+
+/**
+* Dynamic programming with only keeping two time state: current and previous
+* this version is more elegant than above one
+* time complexity: O(N)
+* space complexity: O(2 * 2 * 2) = O(8) = O(1)
+*/
+object Solution2 {
+    def maxProfit(prices: Array[Int]): Int = {
+        val transactions = 2
+        val profits = Array.ofDim[Int](2, transactions, 2)
+        
+        for (i <- profits.indices; j <- 0 until transactions) {
+            profits(i)(j)(0) = Int.MinValue // buy
+            profits(i)(j)(1) = 0 // sell
+        }
+     
+        /** iterate from index 0 */
+        for (i <- prices.indices; j <- 0 until transactions) {
+            val currentStatus = i % 2
+            val previousStatus = (i + 1) % 2
+            profits(currentStatus)(j)(1) =  profits(previousStatus)(j)(1) max  (profits(previousStatus)(j)(0) + prices(i)) // sell
+
+            if(j == 0)  
+                profits(currentStatus)(j)(0) =  profits(previousStatus)(j)(0) max - prices(i) // buy
+            else 
+                profits(currentStatus)(j)(0) =  profits(previousStatus)(j)(0) max (profits(previousStatus)(j - 1)(1) - prices(i)) // buy from previous (j - 1) sell status
+
+        }
+
+        profits((prices.length - 1) % 2).map(_.max).max
+        
+    }
+     private def debugProfits(profits: Array[Array[Array[Int]]]): Unit = {
+        profits.zipWithIndex.foreach{
+          case (p, i) =>
+            println(s"status: $i")
+            p.zipWithIndex.foreach{
+            case (pp, j) =>
+                println(s"transaction $j: hold: ${pp(0)}, sell: ${pp(1)}")
+          }
+            println(" ")
+        }
+  }
+}
+
+/**
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution2-1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        val transactionLimit = 2
+        val dp = Array.tabulate(2, transactionLimit, 2) {
+            case (_, _, 0) => Int.MinValue
+            case (_, _, 1) => 0
+            case _ => 0
+        }
+        
+        for(i <- prices.indices; j <- 0 until transactionLimit) {
+            val currentIdx = i & 1  // bit op: AND op
+            val previousIdx = currentIdx ^1 // bit op: XOR op
+
+            // 0 buy; 1 sell
+            dp(currentIdx)(j)(0) = dp(previousIdx)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(previousIdx)(j - 1)(1) - prices(i)
+            }
+            dp(currentIdx)(j)(1) = dp(previousIdx)(j)(1) max (dp(previousIdx)(j)(0) + prices(i))
+        }
+        
+        dp((prices.length - 1) & 1).map(_(1)).max
+        
+    }
+}
+
+/**
+* Kadane's Algorithm:  dynamic programming only keep one previous status
+* time complexity: O(N)
+* space complexity: O(1)
+*/ 
+object Solution3{
+    def maxProfit(prices: Array[Int]): Int = {
+        val r = prices.foldLeft((Int.MinValue, 0, Int.MinValue, 0)){
+            case (acc, px) =>
+                val (buy1, sell1, buy2, sell2) = acc
+                val newBuy1 = buy1 max - px
+                val newSell1 =  sell1 max (buy1 + px)
+                val newBuy2 = buy2 max (sell1 - px)
+                val newSell2 = sell2 max (buy2 + px)
+                (newBuy1, newSell1, newBuy2, newSell2)
+        }
+        r._2 max r._4
+    }
+}
+
+object Solution3-1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        val (buy1, sell1, buy2, sell2) = prices.foldLeft((Int.MinValue, 0, Int.MinValue, 0)){
+            case ((buy1, sell1, buy2, sell2), cost) =>
+                (
+                    buy1 max -cost,
+                    sell1 max (buy1 + cost),
+                    buy2 max (sell1 - cost),
+                    sell2 max (buy2 + cost)
+                )
+        }
+        sell1 max.sell2
+    }
+}
+```
+
 ###  4.47. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
 
 [花花酱](https://www.bilibili.com/video/BV1ct411r7qw?spm_id_from=333.999.0.0)
@@ -7320,6 +14080,36 @@ class Solution:
         return self.maxSum
 ```
 
+```scala
+/**
+* my first commitment: variation of Kadane's algorithm.
+*/
+
+object Solution1 {
+    def maxPathSum(root: TreeNode): Int = {
+        dfs(root)._1
+    }
+     /**
+      * maxEndingHere records the path maximum summation which ending at current node
+      * maxSoFar records the maximum sum globally
+      */
+    def dfs(node: TreeNode): (Int, Int) = {
+      if (node == null) return (Int.MinValue, 0)
+      
+      val (leftSoFar, leftEndingHere) = dfs(node.left)
+      val (rightSoFar, rightEndingHere) = dfs(node.right)
+
+      val maxSoFar = leftSoFar max rightSoFar max (node.value + leftEndingHere + rightEndingHere)
+      /**
+      * we should choose one path witch makes summation maximum ending at current node
+      * maxEndingHere is not charge for node.value + leftEndingHere + rightEndingHere
+      */
+      val maxEndingHere = 0 max (node.value + (leftEndingHere max rightEndingHere))
+      (maxSoFar, maxEndingHere)
+    }
+}
+```
+
 ###  4.48. <a name='ValidPalindrome'></a>125-Valid Palindrome
 
 [哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
@@ -7407,6 +14197,60 @@ class Solution(object):
             if i.isalpha():
                 st.append(i.lower())
         return st == st[::-1]
+```
+
+```scala
+
+/**
+* two pointer comparison
+* memo
+*  1. alphanumeric = letters + numerals
+* time complexity: O(2N)
+* space complexity: O(N)
+*/
+
+object Solution1 {
+    def isPalindrome(s: String): Boolean = {
+      val newString = s.filter(_.isLetterOrDigit).toLowerCase
+      isPalindrome(newString, 0, newString.length - 1)
+    }
+    @annotation.tailrec
+    def isPalindrome(s: String, left: Int, right: Int): Boolean = {
+      if (left > right) return true
+      if (s(left) == s(right)) isPalindrome(s, left + 1, right - 1)
+      else false
+    }
+}
+```
+
+```scala
+object Solution {
+    def isPalindrome(s: String): Boolean = {
+        val str = s.filter(c => c.isLetter || c.isDigit).toUpperCase
+        if(str.isEmpty){
+            true
+        }else{
+            var flag = true
+            var head = 0
+            var tail = str.length - 1
+            
+            import scala.util.control.Breaks._
+            breakable{
+            while(head <=  tail){
+                if(str(head) != str(tail)){
+                    flag = false
+                    break
+                }
+                head +=1
+                tail -=1
+            }
+            }
+            flag
+        }
+        
+    }
+}
+
 ```
 
 ###  4.49. <a name='WordLadderII'></a>126. Word Ladder II
@@ -8391,6 +15235,57 @@ object Solution {
 }
 ```
 
+```scala
+object Solution {
+    def singleNumber(nums: Array[Int]): Int = {
+        var hashSet = scala.collection.mutable.HashSet.empty[Int]
+        for(num <- nums){
+            if(hashSet.contains(num)){
+                hashSet.remove(num)
+            }else{
+                hashSet.add(num)
+            }
+        }
+        
+        hashSet.head
+    }
+}
+
+//Alternate solution (not much time improvement)
+/**
+scala> 3 ^ 3
+res0: Int = 0
+
+scala> 3 ^ 4
+res1: Int = 7
+
+scala> 3 ^ 4 ^ 3
+res2: Int = 4
+*/
+object Solution {
+    def singleNumber(nums: Array[Int]): Int = {
+        nums.reduce(_ ^ _)
+    }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+package lc0136_singlenumber {
+  object Solution {
+    def singleNumber(nums: Array[Int]): Int = {
+      val ret = nums.foldLeft(0) ( _ ^ _)
+      return ret
+
+    }
+  }
+
+}
+
+```
+
 ###  4.60. <a name='SingleNumberII'></a>137 Single Number II
 
 [小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
@@ -8644,6 +15539,236 @@ class Solution:
         
 ```
 
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(var _x: Int = 0) {
+ *   var next: ListNode = null
+ *   var x: Int = _x
+ * }
+ */
+
+/**
+* chosen solution
+* memo
+*      1. create two pointers one work faster with two step the other work slower with a step
+*         if there is a cycle in linked list, the faster pointer will equal to  slower pointer sooner or later
+*
+* time complexity: 
+*       no cycle: O(N)
+*       has cycleL O(N + K) K is the cycle length
+* space complexity: O(1) )
+*/
+
+object Solution0 {
+    def hasCycle(head: ListNode): Boolean = {
+        if(head != null && head.next != null) 
+            _hasCycle(head.next.next, head.next)
+        else false
+    }
+    
+    @annotation.tailrec
+    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
+        if(fast == null || fast.next == null || slow == null) return false
+        else if(fast == slow) return true
+        else _hasCycle(fast.next.next, slow.next)
+    }
+}
+
+
+/**
+* seen set  iterative version
+* memo
+*     using a set to record the node which was seen
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def hasCycle(head: ListNode): Boolean = {
+        
+        var p = head
+        val seenSet = new scala.collection.mutable.HashSet[ListNode]()
+        
+        var result: Boolean = false
+        while (p != null && result != true) {
+
+            if(seenSet.contains(p))  
+                result = true
+            else {
+                seenSet += p
+                p = p.next
+            
+            }
+        }
+        result
+    }
+}
+/**
+* seen set - recursive version
+* memo
+*     using a set to record the node which was seen
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution2 {
+    def hasCycle(head: ListNode): Boolean = {
+        val seenSet = new scala.collection.mutable.HashSet[ListNode]()
+        _hasCycle(head, seenSet)
+     
+    }
+    
+    def _hasCycle(n: ListNode, seenSet: scala.collection.mutable.HashSet[ListNode]): Boolean = {
+        (n, seenSet.contains(n)) match {
+            case (null, _) => false
+            case (_, true) => true
+            case (_, false) => 
+                 seenSet += n
+                _hasCycle(n.next, seenSet)
+        }
+    }
+    
+}
+
+/**
+* two pointer - iterative version
+* memo
+*      1. create two pointers one work faster with two step the other work slower with a step
+*         if there is a cycle in linked list, the faster pointer will equal to  slower pointer sooner or later
+*
+* time complexity: 
+*       no cycle: O(N)
+*       has cycleL O(N + K) K is the cycle length
+* space complexity: O(1) 
+*/
+object Solution3 {
+    def hasCycle(head: ListNode): Boolean = {
+        var pointerA = head
+        var pointerB = head
+        
+        
+        var result = false
+        while (pointerA != null && pointerA.next != null && result != true) {
+            pointerA = pointerA.next.next
+            pointerB = pointerB.next
+        
+            if(pointerA == pointerB) result = true
+        }
+        result
+    }
+}
+
+/**
+* two pointer - recursive version
+* time complexity: 
+*       no cycle: O(N)
+*       has cycleL O(N + K) K is the cycle length
+* space complexity: O(1)     
+*/
+object Solution4 {
+    def hasCycle(head: ListNode): Boolean = {
+        if( head != null && head.next != null) 
+            _hasCycle(head.next, head)
+        else 
+            false
+    }
+    
+    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
+        (fast, slow, fast == slow) match {
+            case (null, _, _) => false
+            case (_, null, _) => false
+            case (_, _, true) => true
+            case (_, _, false) => 
+                if (fast.next == null) false
+                else _hasCycle(fast.next.next, slow.next)   
+        }  
+    } 
+}
+/**
+* two pointer - tail recursive
+*/
+object Solution4-1 {
+    def hasCycle(head: ListNode): Boolean = {
+        if(head != null && head.next != null) 
+            _hasCycle(head.next.next, head.next)
+        else false
+    }
+    
+    @annotation.tailrec
+    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
+        if(fast == null || fast.next == null || slow == null) return false
+        else if(fast == slow) return true
+        else _hasCycle(fast.next.next, slow.next)
+    }
+}
+
+```
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(var _x: Int = 0) {
+ *   var next: ListNode = null
+ *   var x: Int = _x
+ * }
+ */
+
+object Solution {
+    def hasCycle(head: ListNode): Boolean = {
+        var ha = head
+        if(ha == null){
+            false
+        }else if(ha.next == null){
+            false
+        }else{
+            var hs = scala.collection.mutable.HashSet.empty[ListNode]
+            var flag = true
+            var output = false
+            while(flag){
+                if(hs.contains(ha)){
+                    flag = false
+                    output = true
+                }else if(ha.next == null){
+                    flag = false
+                }else{
+                    hs.add(ha)
+                    ha = ha.next
+                }
+            }
+            output
+        }
+    }
+}
+
+//Alternate solution: Slow & Fast pointer
+object Solution {
+    def hasCycle(head: ListNode): Boolean = {
+        
+        if(head == null){
+            false
+        }else{
+        
+        var slow = head
+        var fast = head.next
+        var output = true
+        
+        import scala.util.control.Breaks._
+        breakable{
+            while(slow != fast){
+                if(fast == null || fast.next == null){
+                    output=false
+                    break
+                }
+                slow = slow.next
+                fast = fast.next.next
+            }
+        }
+        output
+    }
+    }
+}
+
+```
+
 ###  4.64. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
 
 [小明](https://www.bilibili.com/video/BV1W5411L7AF?spm_id_from=333.999.0.0)
@@ -8703,6 +15828,184 @@ class Solution:
             if fast == slow:
                 return True
         return False
+```
+
+```scala
+/**
+* chosen solution 
+* two pointer: tail recursive
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution0 {
+    def detectCycle(head: ListNode): ListNode = {
+        if(head == null || head.next == null || head.next.next == null) return null
+        val meetNode =  _findMeetNode(head.next, head.next.next)
+        
+        meetNode match {
+            case null => null
+            case _ => _findStartNode(head, meetNode)
+        }
+    }
+    
+    @annotation.tailrec
+    def _findStartNode(nodeA: ListNode, nodeB: ListNode): ListNode = {
+       if(nodeA == nodeB) nodeA
+        else _findStartNode(nodeA.next, nodeB.next)
+        
+    }
+    
+    @annotation.tailrec
+    def _findMeetNode(slow: ListNode, fast: ListNode): ListNode = {
+        if(fast == null || fast.next == null) return null
+        if(slow == fast) return slow
+        _findMeetNode(slow.next, fast.next.next)
+        
+    }
+}
+
+/**
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def detectCycle(head: ListNode): ListNode = {
+        val seenSet = new scala.collection.mutable.HashSet[ListNode]()
+        var p = head
+        
+        var result: ListNode = null
+
+        while (p != null && result == null) {
+            // println(result)
+            if(seenSet.contains(p))  
+                result = p
+            else {
+                seenSet += p
+                p = p.next
+            }
+        }
+        result
+        
+    }
+}
+
+
+/**
+* two pointer
+* without using extra space
+*/
+object Solution2 {
+    def detectCycle(head: ListNode): ListNode = {
+        val meetPoint = if (head != null && head.next != null)
+            _detectCycle(head.next.next, head.next)
+        else None
+            
+        meetPoint match {
+            case None => null
+            case Some(slow1) => getStartOfLoop(head, meetPoint)   
+        }
+        
+    }
+    
+    def getStartOfLoop(slow1: ListNode, slow2: ListNode): ListNode = {
+        
+        if (slow1 != slow2) 
+            getStartOfLoop(slow1.next, slow2.next)
+        else
+            slow2
+
+    }
+    
+    def _detectCycle(fast: ListNode, slow: ListNode): Option[ListNode] = {
+        
+        (fast, slow, fast == slow) match {
+            case (null, _, _) => None
+            case (_, null, _) => None
+            case (_, _, true) => Some(slow)
+            case (_, _, false) => 
+                if(fast.next != null) _detectCycle(fast.next.next, slow.next)
+                else None
+        }
+        
+    }
+}
+
+/**
+* two pointer
+* iterative version without extra space
+*/
+
+object Solution2-1 {
+    def detectCycle(head: ListNode): ListNode = {
+        val meetNode = _detectCycle(head)
+        
+        if(meetNode == null) {
+            null
+        }else {
+         findStartPoint(head, meetNode)   
+        }
+        
+    }
+    def findStartPoint(head: ListNode, meet: ListNode): ListNode =  {
+        var node1 = head
+        var node2 = meet
+        
+        while(node1 != node2) {
+            node1 = node1.next
+            node2 = node2.next
+        }
+        node1
+    }
+    
+    def _detectCycle(head: ListNode): ListNode = {
+        var fast = head
+        var slow = head
+        
+        var result:ListNode = null
+        while(result == null && fast != null && slow != null && fast.next != null) {
+            fast = fast.next.next
+            slow = slow.next
+            if(fast == slow){
+                result = slow
+            }
+        }
+        
+        result
+    }
+}
+
+/**
+* two pointer: tail recursive
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution2-2 {
+    def detectCycle(head: ListNode): ListNode = {
+        if(head == null || head.next == null || head.next.next == null) return null
+        val meetNode =  _findMeetNode(head.next, head.next.next)
+        
+        meetNode match {
+            case null => null
+            case _ => _findStartNode(head, meetNode)
+        }
+    }
+    
+    @annotation.tailrec
+    def _findStartNode(nodeA: ListNode, nodeB: ListNode): ListNode = {
+       if(nodeA == nodeB) nodeA
+        else _findStartNode(nodeA.next, nodeB.next)
+        
+    }
+    
+    @annotation.tailrec
+    def _findMeetNode(slow: ListNode, fast: ListNode): ListNode = {
+        if(fast == null || fast.next == null) return null
+        if(slow == fast) return slow
+        _findMeetNode(slow.next, fast.next.next)
+        
+    }
+}
+
 ```
 
 ###  4.65. <a name='ReorderList'></a>143 Reorder List
@@ -9116,7 +16419,449 @@ class LRUCache:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-```py
+```scala
+
+/**
+* chosen solution
+* build-in linkedHashMap
+* time complexity: O(1)
+*/
+class LRUCache0(_capacity: Int) {
+
+  private val capacity = _capacity
+  val cache = collection.mutable.LinkedHashMap[Int, Int]()
+
+  def get(key: Int): Int = {
+    cache.get(key) match {
+        case Some(v) => 
+            cache.remove(key)
+            cache.put(key, v)
+            v
+        case None => -1
+    }
+  }
+
+  def put(key: Int, value: Int): Unit = {
+    cache.get(key) match {
+      case Some(_) =>
+        cache.remove(key)
+        cache.update(key, value)
+
+      case None =>
+        if(cache.size >= capacity){
+          cache.remove(cache.head._1)
+        }
+        cache.put(key, value)
+    }
+  }
+}
+
+/**
+* my first commitment
+* implement with linked list
+* time complexity:
+*    get, put, delete: O(N)
+*/
+case class Node(key: Int, var value: Int, var next: Node = null)
+
+class LRUCache1(_capacity: Int) {
+  private val head = Node(Int.MinValue, -1, null)
+  private val capacity = _capacity
+
+
+  def get(key: Int): Int = {
+    var preNode = head
+    var current = head.next
+
+
+    // find the key in linkedList
+    while(current != null && current.key != key) {
+      preNode = current
+      current = current.next
+    }
+
+
+    if(current != null) {
+      deleteNode(preNode)
+      prepend(current)
+      current.value
+    } else {
+      -1
+    }
+
+  }
+
+def put(key: Int, value: Int) {
+    var prepreNode = head
+    var preNode = head
+    var current = preNode.next
+    var count = 0
+
+    while(current != null && current.key != key) {
+      prepreNode = preNode
+      preNode = current
+      current = current.next
+      count += 1
+    }
+    if(current != null) {
+      current.value = value
+      deleteNode(preNode)
+      prepend(current)
+
+    }else {
+
+      if(count >= this.capacity) {
+        // delete node
+        prepreNode.next = null
+//        deleteTail()
+      }
+      prepend(Node(key, value, null))
+    }
+
+  }
+
+  private def deleteNode(preNode: Node) {
+    val deleteOne = preNode.next
+    if(deleteOne != null) {
+      preNode.next = deleteOne.next
+    }
+  }
+  
+  private def deleteTail(): Unit ={
+    var preNode = head
+    var current = preNode.next
+    while(current != null && current.next != null) {
+      preNode = current
+      current = current.next
+    }
+    deleteNode(preNode)
+  }
+
+  private def prepend(newNode: Node) {
+    newNode.next = head.next
+    head.next = newNode
+  }
+
+  private def traversal(): Unit = {
+    var node = head.next
+
+    while(node != null) {
+      print(s"(key: ${node.key} value: ${node.value})")
+      node = node.next
+    }
+    println(" ")
+  }
+  
+}
+
+/**
+* double linked list + hashset
+* time complexity:
+*    get, put, delete: O(1)
+*/
+
+case class Node(key: Option[Int], var value: Int, var pre:Node = null, var next: Node = null)
+class LRUCache2(_capacity: Int) {
+
+  private val capacity = _capacity
+  private var currentSize = 0
+  private val head = Node(None, -1)
+  private var tail = Node(None, -1)
+  head.next = tail
+  tail.pre = head
+
+  private val cache = collection.mutable.HashMap[Int, Node]()
+
+  def get(key: Int): Int = {
+    cache.get(key).map{ node =>
+      removeNode(node)
+      prependNode(node)
+      node.value
+    }.getOrElse(-1)
+  }
+
+  def put(key: Int, value: Int) {
+    val node = cache.get(key) match {
+      case Some(n) =>
+        n.value = value
+        removeNode(n)
+        prependNode(n)
+        n
+      case None =>
+        if(currentSize >= capacity) {
+          cache.remove(tail.pre.key.get)
+          removeTail()
+          currentSize -= 1
+        }
+        currentSize += 1
+        prependNode(Node(Some(key), value))
+        head.next
+    }
+    cache += (key -> node)
+  }
+  private def removeTail(): Unit ={
+    val lastNode = tail.pre
+    removeNode(lastNode)
+  }
+
+  private def prependNode(node: Node): Unit = {
+    node.next = head.next
+    node.pre = head
+
+    head.next.pre = node
+    head.next = node
+  }
+  private def removeNode(node: Node): Unit = {
+    node.pre.next = node.next
+    node.next.pre = node.pre
+  }
+}
+
+
+/**
+* build-in linkedHashMap
+*/
+class LRUCache3(_capacity: Int) {
+
+  private val capacity = _capacity
+  val cache = collection.mutable.LinkedHashMap[Int, Int]()
+
+  def get(key: Int): Int = {
+  /**
+   *cache.get(key).map{
+   *   value =>
+   *     cache.remove(key)
+   *     cache.update(key, value)
+   *     value
+   * }.getOrElse(-1)
+   */
+   cache.get(key) match {
+            case Some(v) => 
+                cache.remove(key)
+                cache.put(key, v)
+                v
+            case None => -1
+        }
+  }
+
+  def put(key: Int, value: Int): Unit = {
+    cache.get(key) match {
+      case Some(_) =>
+        cache.remove(key)
+        cache.update(key, value)
+
+      case None =>
+        if(cache.size >= capacity){
+          cache.remove(cache.head._1)
+        }
+        cache.put(key, value)
+    }
+  }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech._
+import scala.collection.mutable._
+
+package lc0146 {
+  class LRUCache(_capacity: Int) {
+
+    val hm = HashMap[Int, Int]()
+    val lb = ListBuffer.empty[Int]
+    val c = _capacity
+
+    def get(key: Int): Int = {
+      if (hm.contains(key)) {
+        val i = lb.indexOf(key)  // could be slow? O(N)?
+        lb.remove(i)
+        lb += key
+        hm(key)
+      } else {
+        -1
+      }
+
+    }
+
+    def put(key: Int, value: Int) {
+      if (hm.contains(key)) {
+        val i = lb.indexOf(key)  // could be slow? O(N)?
+        lb.remove(i)
+        lb += key
+        hm(key) = value
+      } else {
+        if (hm.size == c) {
+          val lk = lb.head
+          hm.remove(lk)
+          lb.remove(0)
+        }
+        hm(key) = value
+        lb += key
+      }
+    }
+  }
+
+
+  class LRUCache2(_capacity: Int) {
+    case class KV(k:Int,var v:Int)
+    case class Node(v:KV,var prev:Node,var next:Node)
+
+
+    var head:Node = null
+    var tail:Node = null
+    val hm = HashMap[Int, Node]()
+    val c = _capacity
+
+    def addToHead(cur:Node): Unit = {
+      if (head!=null) {
+        head.prev = cur
+      } else {
+        tail = cur
+      }
+      cur.prev = null
+      cur.next = head
+      head = cur
+    }
+
+    // cur not null
+    def remove(cur:Node): Unit = {
+      if (cur.prev!=null) { // it is Not head
+        cur.prev.next = cur.next
+      } else {
+        head = cur.next
+      }
+
+      if (cur.next!=null) { // not tail
+        cur.next.prev = cur.prev
+      } else {
+        tail = cur.prev
+      }
+    }
+
+    def get(key: Int): Int = {
+      if (hm.contains(key)) {
+        val node = hm(key)
+        remove(node)
+        addToHead(node)
+        node.v.v
+      } else { // not found
+        -1
+      }
+    }
+
+    def put(key: Int, value: Int) {
+      if (hm.contains(key)) {
+        val node = hm(key)
+        remove(node)
+        addToHead(node)
+        node.v.v = value
+      } else {
+        if (hm.size == c) {
+          val old = tail
+          if (old!=null) {
+            remove(old)
+            hm.remove(old.v.k)
+          }
+        }
+        val node = Node(KV(key,value),null,null)
+        hm(key) = node
+        addToHead(node)
+      }
+    }
+  }
+
+// test case
+//  ["LRUCache","put","put","put","put","put","get","put","get","get","put","get","put","put","put","get","put","get","get","get","get","put","put","get","get","get","put","put","get","put","get","put","get","get","get","put","put","put","get","put","get","get","put","put","get","put","put","put","put","get","put","put","get","put","put","get","put","put","put","put","put","get","put","put","get","put","get","get","get","put","get","get","put","put","put","put","get","put","put","put","put","get","get","get","put","put","put","get","put","put","put","get","put","put","put","get","get","get","put","put","put","put","get","put","put","put","put","put","put","put"]
+//  [[10],[10,13],[3,17],[6,11],[10,5],[9,10],[13],[2,19],[2],[3],[5,25],[8],[9,22],[5,5],[1,30],[11],[9,12],[7],[5],[8],[9],[4,30],[9,3],[9],[10],[10],[6,14],[3,1],[3],[10,11],[8],[2,14],[1],[5],[4],[11,4],[12,24],[5,18],[13],[7,23],[8],[12],[3,27],[2,12],[5],[2,9],[13,4],[8,18],[1,7],[6],[9,29],[8,21],[5],[6,30],[1,12],[10],[4,15],[7,22],[11,26],[8,17],[9,29],[5],[3,4],[11,30],[12],[4,29],[3],[9],[6],[3,4],[1],[10],[3,29],[10,28],[1,20],[11,13],[3],[3,12],[3,8],[10,9],[3,26],[8],[7],[5],[13,17],[2,27],[11,15],[12],[9,19],[2,15],[3,16],[1],[12,17],[9,1],[6,19],[4],[5],[5],[8,1],[11,7],[5,2],[9,28],[1],[2,2],[7,4],[4,22],[7,24],[9,26],[13,28],[11,26]]
+
+//  [null,null,null,null,null,null,-1,null,19,17,null,-1,null,null,null,-1,null,-1,5,-1,12,null,null,3,5,5,null,null,1,null,-1,null,30,5,30,null,null,null,-1,null,-1,24,null,null,18,null,null,null,null,-1,null,null,18,null,null,-1,null,null,null,null,null,18,null,null,-1,null,4,29,30,null,12,-1,null,null,null,null,29,null,null,null,null,17,22,18,null,null,null,-1,null,null,null,20,null,null,null,-1,18,18,null,null,null,null,20,null,null,null,null,null,null,null]
+  class LRUCache3(_capacity: Int) {
+    val hm = HashMap[Int, Node]()
+    val dl = new DoublyLinkedList()
+    val c = _capacity
+
+    def get(key: Int): Int = {
+      if (hm.contains(key)) {
+        val node = hm(key)
+        dl.erase(node)
+        dl.push_front(node)
+        node.v.v
+      } else { // not found
+        -1
+      }
+    }
+
+    def put(key: Int, value: Int) {
+      if (hm.contains(key)) {
+        val node = hm(key)
+        dl.erase(node)
+        dl.push_front(node)
+        node.v.v = value
+      } else {
+        if (hm.size == c) {
+          val old = dl.tail
+          if (old!=null) {
+            dl.erase(old)
+            hm.remove(old.v.k)
+          }
+        }
+        val node = Node(KV(key,value),null,null)
+        hm(key) = node
+        dl.push_front(node)
+      }
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val lru = new LRUCache(2)
+      lru.put(1,1)
+      lru.put(2,2)
+      println(lru.get(1) == 1)
+    }
+
+    val name = "146 LRU chache"
+  }
+
+//  ["LRUCache","put","put","get","put","get","put","get","get","get"]
+//  [[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
+  class Test2 extends BaseExtension {
+    def init {
+      val lru = new LRUCache2(2)
+      lru.put(2,1)
+      lru.put(1,1)
+      lru.put(2,3)
+      lru.put(4,1)
+      println(lru.get(1) == -1)
+      println(lru.get(2) == 3)
+    }
+    val name = "146 LRU chache xxxx"
+  }
+
+  //  ["LRUCache","put","put","put","put","put","get","put","get","get","put","get","put","put","put","get","put","get","get","get","get","put","put","get","get","get","put","put","get","put","get","put","get","get","get","put","put","put","get","put","get","get","put","put","get","put","put","put","put","get","put","put","get","put","put","get","put","put","put","put","put","get","put","put","get","put","get","get","get","put","get","get","put","put","put","put","get","put","put","put","put","get","get","get","put","put","put","get","put","put","put","get","put","put","put","get","get","get","put","put","put","put","get","put","put","put","put","put","put","put"]
+  //  [[10],[10,13],[3,17],[6,11],[10,5],[9,10],[13],[2,19],[2],[3],[5,25],[8],[9,22],[5,5],[1,30],[11],[9,12],[7],[5],[8],[9],[4,30],[9,3],[9],[10],[10],[6,14],[3,1],[3],[10,11],[8],[2,14],[1],[5],[4],[11,4],[12,24],[5,18],[13],[7,23],[8],[12],[3,27],[2,12],[5],[2,9],[13,4],[8,18],[1,7],[6],[9,29],[8,21],[5],[6,30],[1,12],[10],[4,15],[7,22],[11,26],[8,17],[9,29],[5],[3,4],[11,30],[12],[4,29],[3],[9],[6],[3,4],[1],[10],[3,29],[10,28],[1,20],[11,13],[3],[3,12],[3,8],[10,9],[3,26],[8],[7],[5],[13,17],[2,27],[11,15],[12],[9,19],[2,15],[3,16],[1],[12,17],[9,1],[6,19],[4],[5],[5],[8,1],[11,7],[5,2],[9,28],[1],[2,2],[7,4],[4,22],[7,24],[9,26],[13,28],[11,26]]
+  //  [null,null,null,null,null,null,-1,null,19,17,null,-1,null,null,null,-1,null,-1,5,-1,12,null,null,3,5,5,null,null,1,null,-1,null,30,5,30,null,null,null,-1,null,-1,24,null,null,18,null,null,null,null,-1,null,null,18,null,null,-1,null,null,null,null,null,18,null,null,-1,null,4,29,30,null,12,-1,null,null,null,null,29,null,null,null,null,17,22,18,null,null,null,-1,null,null,null,20,null,null,null,-1,18,18,null,null,null,null,20,null,null,null,null,null,null,null]
+
+  class Test3 extends BaseExtension {
+    def init {
+      val lru = new LRUCache3(10)
+      lru.put(10,13)
+      lru.put(3,17)
+      lru.put(6,11)
+      lru.put(10,5)
+      lru.put(9,10)
+
+      println(lru.get(1) == -1)
+      println(lru.get(2) == 3)
+    }
+    val name = "146 LRU chache xxxx"
+  }
+
+
+
+}
 
 ```
 
@@ -9405,11 +17150,190 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1iK411K7yG?spm_id_from=333.999.0.0)
 
+```scala
+
+/**
+* chosen solution
+* dynamic programming
+* using dp array to record previous max min value ending at index i-th
+*   dp(i)(j) means the maximum and minimum contiguous product ending at i-th position
+*   each state i update 
+*        1. max(current v,  previous state max value * current value,  previous state min value * current value)
+*        2. min(current v,  previous state max value * current value,  previous state min value * current value)
+*
+*  time complexity: O(N)
+*/ 
+
+object Solution0 {
+  def maxProduct(nums: Array[Int]): Int = {
+    val dp = Array.ofDim[Int](nums.length, 2) // record each position n's max product( from 0 to n)
+    var result = nums(0)
+    dp(0)(0) = nums(0)
+    dp(0)(1) = nums(0)
+
+    /* 0 for min, 1 for max */
+    for (i <- 1 until nums.length) {
+      val a = dp(i - 1)(0) * nums(i)
+      val b = dp(i - 1)(1) * nums(i)
+      dp(i)(0) = nums(i) min a min b // record min
+      dp(i)(1) = nums(i) max a max b // record max
+      result = result max dp(i)(1)
+    }
+    result
+  }
+}
+
+/**
+* my first commitment
+* recursive version : correct but may cause memory exceed limit
+* time complexity: O(N^2)
+*/
+object Solution1 {
+  def maxProduct(nums: Array[Int]): Int = {
+    (1 to nums.length).map(n =>  _maxProduct(nums(n - 1), nums.takeRight(nums.length - n))).max
+  }
+
+  def _maxProduct(curr: Int, nums: Array[Int]): Int = {
+      if(nums.isEmpty) return curr          
+      curr max  _maxProduct( curr * nums(0), nums.takeRight(nums.length - 1))
+  }
+}
+
+
+/**
+* optimize above one
+* don't copy subArray during transmit parameters
+* time complexity： O(N^2)
+*/
+object Solution1-2 {
+  def maxProduct(nums: Array[Int]): Int = {
+    (1 to nums.length).map(n =>  _maxProduct(nums(n - 1), n, nums)).max
+  }
+  def _maxProduct(curr: Int, idx: Int, nums: Array[Int]): Int = {
+      if(idx >= nums.length) return curr   
+      curr max  _maxProduct( curr * nums(idx), idx + 1, nums)
+  }
+
+}
+
+/**
+* dynamic programming
+* using dp array to record previous max min value ending at index i-th
+*   dp(i)(j) means the maximum and minimum contiguous product ending at i-th position
+*   each state i update 
+*        1. max(current v,  previous state max value * current value,  previous state min value * current value)
+*        2. min(current v,  previous state max value * current value,  previous state min value * current value)
+*
+*  time complexity: O(N)
+*  space  complexity: O(2N), actually it can be optimized to O(2) which records previous min and max value
+*/
+object Solution2 {
+    def maxProduct(nums: Array[Int]): Int = {
+        // 0:  minimum , 1:  maximum
+        val dp = Array.ofDim[Int](nums.length, 2)
+        dp(0)(0) = nums(0)
+        dp(0)(1) = nums(0)
+        
+        for(i <- 1 until nums.length) {
+            val a = dp(i - 1)(0) * nums(i) 
+            val b = dp(i - 1)(1) * nums(i)
+            dp(i)(0) = a min b min nums(i)
+            dp(i)(1) = a max b max nums(i)
+        }
+        
+        
+        dp.map(_(1)).max
+    }
+}
+
+
+/**
+* dynamic programming
+* memo
+*   1. only keep previous state 
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution2-1 {
+    def maxProduct(nums: Array[Int]): Int = {
+        
+        val (_, _, ans) = (1 until nums.length).foldLeft((nums.head, nums.head, nums.head)){
+            case ((min, max, ans), idx) => 
+                val a = nums(idx) * min 
+                val b = nums(idx) * max
+                val newMin = a min b min nums(idx)
+                val newMax = a max b max nums(idx)
+                (newMin, newMax, ans max newMax)
+        }
+        ans
+    }
+}
+
+
+/**
+* a recursive dp method： not my own 
+* memo
+*   1. only keep the closest state
+* time complexity: O(N)
+* space complexity: O(N) although it don;t create a length of nums array, it convert nums array to list
+*/
+object Solution2-2 {
+    def maxProduct(nums: Array[Int]): Int = {
+        if (nums == null || nums.size == 0) {
+            return 0;
+        }
+        val list: List[Int] = nums.toList
+        val head: Int = list.head
+        val tail: List[Int] = list.tail
+        _MaxProduct(tail, head, head, head)
+    }
+    
+    def _MaxProduct(nums: List[Int], min: Int, max: Int, result: Int): Int = nums match {
+        case Nil => result
+        case x :: xs => {
+            val cur_min = math.min(x, math.min(x * max, x * min))
+            val cur_max = math.max(x, math.max(x * max, x * min))
+            _MaxProduct(xs, cur_min, cur_max, math.max(cur_max, result))
+        }
+    }
+}
+```
+
 ###  4.77. <a name='-1'></a>153-寻找旋转排序数组中的最小值
 
 [哈哈哈](https://www.bilibili.com/video/BV1bT4y1w7yK?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1yK411L7rp?spm_id_from=333.999.0.0)
+
+```scala
+
+/**
+* my first commitment binary search
+*/
+object Solution1 {
+    def findMin(nums: Array[Int]): Int = {
+        search(nums, 0, nums.length - 1)
+    }
+  
+    def search(nums: Array[Int], left: Int, right: Int): Int = {
+      if (left > right) return nums(left)
+      val mid = left + (right - left) / 2
+      val leftAns = if (nums(mid) >= nums(left)){ // left part in order
+        nums(left)
+      } else {
+        search(nums, left, mid - 1)
+      }
+      
+      val rightAns = if (nums(mid) <= nums(right)) { // right part in order
+        nums(mid)
+      } else {
+        search(nums, mid + 1, right)
+      }
+      
+      leftAns min rightAns
+    }
+}
+```
 
 ###  4.78. <a name='FindMinimuminRotatedSortedArr'></a>154 Find Minimum in Rotated Sorted Arr
 
@@ -9423,6 +17347,74 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1ja4y1Y7vY?spm_id_from=333.999.0.0)
 
+
+```scala
+class MinStack() {
+
+    /** initialize your data structure here. */
+    var stack = List.empty[Int]
+    var min = Int.MaxValue
+
+    def push(x: Int) {
+        stack = stack :+ x
+        if(x < min){
+            min = x
+        }
+    }
+
+    def pop() {
+        stack = stack.init
+        min = Int.MaxValue
+        stack.map(x => {
+            if(x < min) min = x
+        })
+    }
+
+    def top(): Int = {
+        stack.last
+    }
+
+    def getMin(): Int = {
+        min
+    }
+
+}
+
+//Alternate solution: much faster
+//Here we are prepending elements to the list instead of appending
+//Note that since List is actually a LinkedList its much easier to deal with "head" of the list
+//There is also another list to maintain min elements of the list
+class MinStack() {
+
+    /** initialize your data structure here. */
+    var stack = List.empty[Int]
+    var mins = List.empty[Int]
+
+    def push(x: Int) {
+        //this line fails if we make second condition as x < mins.head
+        //with NoSuchElementException: head of empty list
+        //why???
+        if(mins.isEmpty || mins.head >= x) mins = x +: mins
+        stack = x +: stack
+    }
+
+    def pop() {
+        if(mins.head == stack.head) mins = mins.tail
+        stack = stack.tail
+    }
+
+    def top(): Int = {
+        stack.head
+    }
+
+    def getMin(): Int = {
+        mins.head
+    }
+
+}
+
+```
+
 ###  4.80. <a name='IntersectionofTwoLinkedLists'></a>160-Intersection of Two Linked Lists
 
 [哈哈哈](https://www.bilibili.com/video/BV1n741187X6?spm_id_from=333.999.0.0)
@@ -9432,6 +17424,110 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV18K4y1J7wx?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1np4y1y789?spm_id_from=333.999.0.0)
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(var _x: Int = 0) {
+ *   var next: ListNode = null
+ *   var x: Int = _x
+ * }
+ */
+
+object Solution {
+    
+    def getIntersectionNode(headA: ListNode, headB: ListNode): ListNode = {
+        if(headA == null){
+            null
+        }else if(headB == null){
+            null
+        }else{
+            var ha = headA
+        var hb = headB
+        
+        var hAsize = 0
+        var hBsize = 0
+        while(ha.next != null){
+            hAsize += 1
+            ha = ha.next
+        }
+        while(hb.next != null){
+            hBsize += 1
+            hb = hb.next
+        }
+        
+        var first: ListNode = null
+        var second: ListNode = null
+        var diff = 0
+        
+        if(hAsize>hBsize){
+            first = headA
+            second = headB
+            diff=hAsize-hBsize
+        }else{
+            first = headB
+            second = headA
+            diff=hBsize-hAsize
+        }
+        
+        while(diff > 0){
+            first = first.next
+            diff -= 1
+        }
+        
+        var result: ListNode = null
+        import scala.util.control.Breaks._
+        breakable{
+        while(first!= null && second!= null){
+            if(first == second){
+                result = first
+                break
+            }
+            first = first.next
+            second = second.next
+        }
+        }
+        
+        result
+        }
+    }
+}
+
+//Alternate solution
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode(var _x: Int = 0) {
+ *   var next: ListNode = null
+ *   var x: Int = _x
+ * }
+ */
+
+object Solution {
+    
+    def getIntersectionNode(headA: ListNode, headB: ListNode): ListNode = {
+        var ha = headA
+        var hb = headB
+        
+        while(ha != hb){
+            if(ha == null){
+                ha = headB
+            }else{
+                ha = ha.next
+            }
+            
+            if(hb == null){
+                hb = headA
+            }else{
+                hb = hb.next
+            }
+        }
+        
+        ha
+    }
+}
+
+```
 
 ###  4.81. <a name='FindPeakElement'></a>162. Find Peak Element
 
@@ -9469,17 +17565,199 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ff4y1U7Vn?spm_id_from=333.999.0.0)
 
+```scala
+
+/**
+* chosen solution
+*
+* Boyer-Moore Voting Algorithm
+* time complexity N(N)
+* space complexity O(1)
+*/
+object Solution {
+    def majorityElement(nums: Array[Int]): Int = {
+      var counter = 1
+      var candidate = nums(0)
+      for (idx <- 1 until nums.length) {
+        val value = nums(idx)
+        if(candidate == value)
+          counter += 1
+        else {
+          if(counter == 1)
+            candidate = value
+          else
+            counter -= 1
+        }
+      }
+      candidate
+    }
+}
+
+
+/**
+* Boyer-Moore Voting Algorithm
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution1 {
+  def majorityElement(nums: Array[Int]): Int = {
+    var num = nums(0)
+    var counter = 0
+    nums.foreach { n =>
+      if (num == n) {
+        counter += 1
+      } else {
+        counter -= 1
+        if (counter == 0) {
+          num = n
+          counter += 1
+        }
+      }
+    }
+    num
+  }
+}
+
+/**
+* immutable during iteration
+*/
+object Solution1-2 {
+    def majorityElement(nums: Array[Int]): Int = {
+       val (ans, accumulate) = (1 until nums.length).foldLeft((nums.head, 1)) {
+            case ((cur, acc), idx) =>
+                val incoming = nums(idx)
+                if(incoming == cur) (cur, acc + 1)
+                else {
+                    if(acc == 1) (incoming, 1)
+                    else (cur, acc - 1)
+                }
+        }
+        ans
+    }
+}
+
+/**
+* HashMap
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+
+object Solution2 {
+    def majorityElement(nums: Array[Int]): Int = {
+        nums.groupBy(identity).mapValues(_.length).maxBy(_._2)._1  
+    }
+}
+
+
+/**
+* sorting array and pick middle element
+* time complexity O(NlogN)
+*/
+
+object Solution3 {
+    def majorityElement(nums: Array[Int]): Int = {
+        nums.sorted(Ordering.Int)(nums.length / 2)
+    }
+}
+
+
+```
+
+```scala
+object Solution {
+    def majorityElement(nums: Array[Int]): Int = {
+        var map = scala.collection.mutable.Map.empty[Int, Int]
+        for(elem <- nums){
+            map.get(elem) match{
+                case Some(count) => map += (elem -> (count+1))
+                case None => map += (elem -> 1)
+            }
+        }
+        
+        map.toList.filter(_._2 > (nums.size / 2)).head._1
+    }
+}
+
+//Alternate solution O(n) but NO EXTRA SPACE
+object Solution {
+    def majorityElement(nums: Array[Int]): Int = {     
+        var current = nums.head
+        var count = 0
+        nums.foreach(num => {
+            if(count == 0) { 
+                current = num
+                count = 0
+            }
+            if(num == current) count+=1;
+            else count-=1;
+        })
+        
+        current
+    }
+}
+
+```
+
 ###  4.87. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7nT?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1h541187Sv?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    def titleToNumber(s: String): Int = {
+        var size = s.size
+        var i = 0
+        var sheetNumber = 0
+        while(i < size){
+            var sum = (s.charAt(i) - 'A' + 1) * Math.pow(26, (size - i-1)).toInt
+            
+            sheetNumber += sum
+            i += 1
+        }
+        sheetNumber
+    }
+}
+
+
+//Alternate solution
+object Solution {
+    def titleToNumber(s: String): Int = 
+        s.foldLeft(0)((acc, ch) => acc * 26 + (ch - 'A' + 1))
+}
+
+```
+
 ###  4.88. <a name='FactorialTrailingZeroes'></a>172-Factorial Trailing Zeroes
 
 [哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7tS?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def trailingZeroes(n: Int): Int = {
+        var count5 = 0
+        var count2 = 0
+        
+        var temp = n
+        while(temp>=5){
+            count5 += temp/5
+            temp = temp/5
+        }
+        
+        temp = n
+        while(temp>=2){
+            count2 += temp/2
+            temp = temp/2
+        }
+        
+        if(count5 < count2) count5 else count2
+    }
+}
+
+```
 
 ###  4.89. <a name='BinarySearchTreeIterator'></a>173 Binary Search Tree Iterator
 
@@ -9505,6 +17783,169 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
 
+```scala
+/**
+* chosen solution
+* dynamic programming
+* memo 
+*    1: using an 3-dim array to record previous state
+*     dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+*  time complexity: O(NK), N: the length of prices; k: transaction's restrictions
+*  space complexity: O(K),  worst case: O(N)N
+*/ 
+object Solution0 {
+    def maxProfit(k: Int, prices: Array[Int]): Int = {
+        if(prices == null || prices.length < 2 || k < 1 ) return 0
+        val kk = if(2 * k > prices.length) prices.length / 2 else k
+        
+        val dp = Array.tabulate(2, kk, 2) {
+            case (_, _, 0) => Int.MinValue
+            case (_, _, 1) => 0
+            case _ => 0
+        }
+        
+        for(i <- prices.indices; j <- 0 until kk){
+            val current = i & 1
+            val previous = current ^1
+            // 0 for buy, 1 for sell
+            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
+            dp(current)(j)(0) = dp(previous)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(previous)(j - 1)(1) - prices(i)
+            }
+            
+        }
+        
+        dp((prices.length - 1) & 1).map(_(1)).max
+        
+    }
+}
+/**
+* my first commitment
+* dynamic programming
+* memo 
+*    1: using an 3-dim array to record all previous state
+*         dp[state index][k times transaction][buy or sell]
+*     dp definition: dp[i][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+*  time complexity: O(NK), N: the length of prices; k: transaction's constraint
+*/
+object Solution1 {
+  def maxProfit(k: Int, prices: Array[Int]): Int = {
+    if(prices == null || prices.length < 2 || k < 1 ) return 0
+    if(k * 2 >=  prices.length) return prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum
+    val profits = Array.ofDim[Int](prices.length, k, 2)
+
+    for{
+      i <- profits.indices
+      j <- 0 until k
+    }{
+      profits(i)(j)(0) = Int.MinValue  // hold
+      profits(i)(j)(1) = 0 // sell
+    }
+
+    for {
+      i <- prices.indices
+      j <- 0 until k
+    } {
+      val ii = (i + prices.length - 1) % prices.length
+      profits(i)(j)(1) = profits(ii)(j)(1)  max ( profits(ii)(j)(0) + prices(i)) // sell
+      if (j > 0)
+        profits(i)(j)(0) = profits(ii)(j)(0)  max ( profits(ii)(j - 1)(1) - prices(i)) // buy
+      else
+        profits(i)(j)(0) = profits(ii)(j)(0)  max  - prices(i) // buy
+    }
+
+    profits(prices.length - 1).map(_.max).max
+  }
+}
+
+/**
+* dp: decrease status array which only keep current and precious status
+* memo
+*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+* time complexity: O(NK), N: the length of prices; k: transaction's constraint
+* space complexity: O(K),  worst case: O(N)
+*/
+
+object Solution1-2 {
+  def maxProfit(k: Int, prices: Array[Int]): Int = {
+    if(prices == null || prices.length < 2 || k < 1 ) return 0
+    if(k * 2 >=  prices.length) return prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum
+
+
+    val profits = Array.ofDim[Int](2, k, 2)
+
+    for{
+      i <- profits.indices
+      j <- 0 until k
+    }{
+      profits(i)(j)(0) = Int.MinValue  // hold
+      profits(i)(j)(1) = 0 // sell
+    }
+
+    for {
+      i <- prices.indices
+      j <- 0 until k
+    } {
+      val currentI = (i + 1) % 2
+      val preciousI = i % 2
+      profits(currentI)(j)(1) = profits(preciousI)(j)(1)  max ( profits(preciousI)(j)(0) + prices(i)) // sell
+      if (j > 0)
+        profits(currentI)(j)(0) = profits(preciousI)(j)(0)  max ( profits(preciousI)(j - 1)(1) - prices(i)) // buy
+      else
+        profits(currentI)(j)(0) = profits(preciousI)(j)(0)  max  - prices(i) // buy
+    }
+    profits(prices.length % 2).map(_.max).max // prices.length % 2: decide the newest status index
+  }
+
+  private def debugProfits(profits: Array[Array[Array[Int]]]): Unit = {
+        profits.zipWithIndex.foreach{
+          case (p, i) =>
+            println(s"status: $i")
+            p.zipWithIndex.foreach{
+            case (pp, j) =>
+                println(s"transaction $j: hold: ${pp(0)}, sell: ${pp(1)}")
+          }
+            println(" ")
+        }
+  }
+}
+/**
+* dp: decrease status array which only keep current and precious status
+* memo
+*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+* time complexity: O(NK), N: the length of prices; k: transaction's constraint
+* space complexity: O(K),  worst case: O(N)
+*/
+object Solution1-3 {
+    def maxProfit(k: Int, prices: Array[Int]): Int = {
+        if(prices == null || prices.length < 2 || k < 1 ) return 0
+        val kk = if(2 * k > prices.length) prices.length / 2 else k
+        
+        val dp = Array.tabulate(2, kk, 2) {
+            case (_, _, 0) => Int.MinValue
+            case (_, _, 1) => 0
+            case _ => 0
+        }
+        
+        for(i <- prices.indices; j <- 0 until kk){
+            val current = i & 1
+            val previous = current ^1
+            // 0 for buy, 1 for sell
+            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
+            dp(current)(j)(0) = dp(previous)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(previous)(j - 1)(1) - prices(i)
+            }
+            
+        }
+        
+        dp((prices.length - 1) & 1).map(_(1)).max
+        
+    }
+}
+```
+
 ###  4.95. <a name='RotateArray'></a>189. Rotate Array 
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7Yy?spm_id_from=333.999.0.0)
@@ -9517,9 +17958,147 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1qv411i7Wg?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    // you need treat n as an unsigned value
+    def reverseBits(x: Int): Int = {
+        var binaryString = x.toBinaryString.toList
+        
+        var additional = (1 to (32 - binaryString.length)).map(_ => '0').toList
+        
+        binaryString = additional ++ binaryString
+        
+        val reversed = reverseBinary(binaryString, "")
+        
+        Integer.parseUnsignedInt(reversed.mkString, 2)
+    }
+    
+    def reverseBinary(x: List[Char], str: String): String = x match{
+        case Nil => str
+        case x::xs => reverseBinary(xs, x + str)
+    }
+}
+
+```
+
 ###  4.97. <a name='Numberof1Bits'></a>191 Number of 1 Bits
 
 [小明](https://www.bilibili.com/video/BV1i5411J7SA?spm_id_from=333.999.0.0)
+
+```scala
+/**
+* chosen solution
+* bit operation - recursive version
+* time complexity: O(1)
+*/
+object Solution0{
+    // you need treat n as an unsigned value
+    def hammingWeight(n: Int): Int = {
+        _hammingWeight(n, 0)
+    }
+    
+    @annotation.tailrec
+    def _hammingWeight(n: Int, counter: Int): Int = {
+        if(n  == 0) counter
+        else _hammingWeight(n & (n - 1), counter + 1 )
+    }
+}
+
+/**
+* my first commitment
+* time complexity: fixed size: 32 bits, so O(1)
+*/
+object Solution0 {
+    // you need treat n as an unsigned value
+    def hammingWeight(n: Int): Int = {
+
+        var mask = 1
+        var counter = 0
+        for (_ <- 0 to 32) {
+
+            if ((n & mask) != 0) {
+                counter += 1
+            }
+            mask  = mask << 1
+        }
+        counter
+    }
+}
+
+
+/**
+* bit operation - iterative version
+* memo
+*    1. using bit operation :  x = x & (x -1)  to set the last non zero pos to zero
+*
+*/
+object Solution1 {
+    // you need treat n as an unsigned value
+    def hammingWeight(n: Int): Int = {
+
+        var nn = n
+        var counter = 0
+        while(nn != 0) {
+            counter += 1
+            nn = nn & (nn -1)
+        }
+        
+        counter
+    }
+}
+
+/**
+* bit operation - recursive version
+*/
+object Solution1-2 {
+    // you need treat n as an unsigned value
+    def hammingWeight(n: Int): Int = {
+        _hammingWeight(n, 0)
+    }
+    
+    @annotation.tailrec
+    def _hammingWeight(n: Int, counter: Int): Int = {
+        if(n  == 0) counter
+        else _hammingWeight(n & (n - 1), counter + 1 )
+    }
+}
+
+```
+
+```scala
+object Solution {
+    // you need treat n as an unsigned value
+    def hammingWeight(n: Int): Int = {
+        n.toBinaryString.toCharArray.filter(_ == '1').length
+    }
+}
+
+//Alternate bit-wise shift and count 1
+def hammingWeight(n: Int): Int = {
+        var count = 0
+        var num   = n
+
+        while (num != 0) {
+            if ((num & 1) > 0) { count = count + 1 }
+            num = num >>> 1
+        }
+    count
+}
+
+//Alternate (need to understand whats happening here) AND of num, num-1
+// num & num-1 returns the last SET bit
+def hammingWeight(n: Int): Int = {
+        println(n)
+        var sum = 0
+        var num = n         
+        while (num != 0) {
+            sum += 1
+            num &= (num-1)                
+        }
+        sum
+    }
+
+```
 
 ###  4.98. <a name='HouseRobber198-'></a>198. House Robber 198-打家劫舍
 
@@ -9534,6 +18113,68 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1gZ4y1N75c?spm_id_from=333.999.0.0)、
 
 [官方](https://www.bilibili.com/video/BV18g4y1i7f9?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def rob(nums: Array[Int]): Int = {
+        if(nums.length == 0){
+            0
+        }else if(nums.length == 1){
+            nums(0)
+        }else if(nums.length == 2){
+            Math.max(nums(0), nums(1))
+        }else{
+            Math.max(
+                nums(0) + rob(nums.drop(2)),
+                nums(1) + rob(nums.drop(3))
+            )
+        }
+    }
+}
+
+//The above solution worked for small input arrays
+//but had MEMORY LIMIT EXCEEDED for large input
+
+//While using DP: we try to store values of repetitive calculations
+object Solution {
+    def rob(nums: Array[Int]): Int = {
+        if(nums.length == 0){
+            0
+        }else{
+            var dp = Array.fill(nums.length+1)(0)
+            
+            dp(0) = 0
+            dp(1) = nums(0)
+            (1 to nums.length-1).map(i => {
+                dp(i+1) = Math.max(dp(i), dp(i-1) + nums(i))
+            })
+            
+            dp(nums.length)
+        }
+    }
+}
+
+//Another way to do the same
+object Solution {
+    def rob(nums: Array[Int]): Int = {
+        if(nums.isEmpty){
+            0
+        }else{
+            var rob = nums(0)
+            var no_rob = 0
+            var prev = rob
+            for(i <- 1 until nums.length){
+                prev = rob
+                rob = no_rob + nums(i)
+                no_rob = Math.max(prev, no_rob)
+                
+            }
+            Math.max(no_rob, rob)
+        }
+    }
+}
+
+```
 
 ###  4.99. <a name='BinaryTreeRightSideView'></a>199 Binary Tree Right Side View
 
@@ -9553,15 +18194,326 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1Np4y1977S?spm_id_from=333.999.0.0)
 
+```scala
+/**
+* chosen solution
+* dfs + floodfill
+* time complexity: O(N * M) N is the grid length, M is the grid width
+*/
+
+object Solution0 {
+    private val endLabel = '0'
+    def numIslands(grid: Array[Array[Char]]): Int = {
+        // val gridReplica = grid.map(_.clone).toArray
+        val coords = for (i <- grid.indices; j <- grid(0).indices) yield (i, j)        
+        coords.foldLeft(0){case (count, coord) => if(_dfs(grid, coord))  count + 1 else count}
+        
+    }
+    
+    def _dfs(grid: Array[Array[Char]], coord: (Int, Int)): Boolean = {
+        val (row, col) = coord
+        if(grid(row)(col) == endLabel) return false
+        
+        grid(row)(col) = endLabel
+        getValidNeighbors(coord, (grid.length, grid(0).length)).foreach {
+            case (nr, nc) if grid(nr)(nc) != endLabel => _dfs(grid, (nr, nc))
+            case _ =>
+        }
+        true
+    }
+    
+    private val getValidNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+        List(
+            (coord._1 + 1, coord._2),
+            (coord._1, coord._2 + 1),
+            (coord._1 - 1, coord._2),
+            (coord._1, coord._2 - 1)
+        ).filter{case (row, col) => 0 <= row  && row < shape._1 && 0 <= col && col < shape._2}
+    }
+}
+
+
+/**
+* my first commit
+* dfs + floodfill
+* time complexity: O(N * M) N is the grid length, M is the grid width
+*/
+object Solution1 {
+    private val endLabel = '0'
+    def numIslands(grid: Array[Array[Char]]): Int = {
+        // val gridReplica = grid.map(_.clone).toArray
+        val coords = for (i <- grid.indices; j <- grid(0).indices) yield (i, j)        
+        coords.foldLeft(0){case (count, coord) => if(_dfs(grid, coord))  count + 1 else count}
+        
+    }
+    
+    def _dfs(grid: Array[Array[Char]], coord: (Int, Int)): Boolean = {
+        val (row, col) = coord
+        if(grid(row)(col) == endLabel) return false
+        
+        grid(row)(col) = endLabel
+        getValidNeighbors(coord, (grid.length, grid(0).length)).foreach {
+            case (nr, nc) if grid(nr)(nc) != endLabel => _dfs(grid, (nr, nc))
+            case _ =>
+        }
+        true
+    }
+    
+    private val getValidNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+        List(
+            (coord._1 + 1, coord._2),
+            (coord._1, coord._2 + 1),
+            (coord._1 - 1, coord._2),
+            (coord._1, coord._2 - 1)
+        ).filter{case (row, col) => 0 <= row  && row < shape._1 && 0 <= col && col < shape._2}
+    }
+}
+
+/**
+* Union & Find 
+* memo
+*    1. without modify original grid's elements
+* time complexity: O(N * M) both N M is the dimension of grid 
+*     both union and find operation's amortized time complexity in UnionFind class are very very close to 1 but not 1
+*/
+
+/**
+* weighted quick-union with path compression
+* all operation's amortized time complexity are very very close to 1
+*/
+class UnionFind(grid: Array[Array[Char]]) {
+  private val n = grid.length
+  private val m = grid(0).length
+  private val roots = Array.tabulate(n * m){i => i}
+  private val rank = Array.fill[Int](n * m)(1)
+  var counter = (for(i <- 0 until n; j <- 0 until m ; if grid(i)(j) == '1' ) yield(i, j)).size
+
+  def findRoot(coord: (Int, Int)): Int = {
+    var idx = coord._2 + coord._1 * m
+    var root = idx
+
+    while(root != roots(root)) {
+      root = roots(root)
+    }
+    /** path compression */
+    while(idx != roots(idx)) {
+      val tmp = roots(idx)
+      roots(idx) = root
+      idx = tmp
+    }
+    root
+  }
+
+  def isConnected(coordA: (Int, Int), coordB: (Int, Int)): Boolean = {
+    findRoot(coordA) == findRoot(coordB)
+  }
+  def union(coordA: (Int, Int), coordB: (Int, Int)): Unit = {
+    val findA  = findRoot(coordA)
+    val findB = findRoot(coordB)
+    if(findA == findB) return
+
+    if(rank(findA) > rank(findB)) {
+      roots(findB) = findA
+    }else if(rank(findA) < rank(findB)) {
+      roots(findA) = findB
+    }else {
+      roots(findA) = findB
+      rank(findB) += 1
+    }
+    counter -= 1
+  }
+
+}
+
+object Solution2 {
+  private val endLabel = '0'
+  def numIslands(grid: Array[Array[Char]]): Int = {
+    val unionFind = new UnionFind(grid)
+    for(i <- grid.indices; j <- grid(0).indices)
+      union((i, j), unionFind, grid)
+    unionFind.counter
+
+  }
+
+  def union(coord: (Int, Int), unionFind: UnionFind, grid: Array[Array[Char]]): Unit = {
+    val (row, col) = coord
+    if(grid(row)(col) == endLabel) return
+
+    neighbors(coord, (grid.length, grid(0).length)).foreach {
+      case (nr, nc) if grid(nr)(nc) != endLabel  =>
+        unionFind.union(coord, (nr, nc))
+      case _ =>
+    }
+  }
+
+  private val neighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    Seq(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{ case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+
+// 思路 
+package lc0200_numberofisland {
+  object Solution {
+    def numIslands(grid: Array[Array[Char]]): Int = {
+      if(grid.isEmpty || grid(0).isEmpty){
+        return 0
+      }
+      val m = grid.size
+      val n = grid(0).size;
+
+      //val dp:Array[Array[Int]];//vector<vector<int>> dp(m,std::vector<int>(n));
+      //val dp = Array.ofDim[Int](m,n)
+      val dp = Array.fill(m,n)(0)
+
+      var count=0;
+      for (i<-0 until m) {
+        for (j<-0 until n) {
+          if (dp(i)(j)==0) {
+            if (bfs(grid,dp,(i,j)))
+              count +=1;
+          }
+        }
+      }
+      count;
+    }
+
+    def bfs(grid:Array[Array[Char]], dp:Array[Array[Int]],pos:(Int,Int)):Boolean = {
+      val m = grid.length
+      val n = grid(0).length
+      if (pos._1>=m || pos._2>=n || pos._1<0 || pos._2<0) {
+        return false
+      }
+      if (dp(pos._1)(pos._2) == 1) {
+        false
+      } else if (dp(pos._1)(pos._2) == 0 && grid(pos._1)(pos._2) == '1') {
+        dp(pos._1)(pos._2) = 1
+        // right
+        bfs(grid, dp, (pos._1, pos._2 + 1))
+        // down
+        bfs(grid, dp, (pos._1 + 1, pos._2))
+        // up
+        bfs(grid, dp, (pos._1 - 1, pos._2))
+        // left
+        bfs(grid, dp, (pos._1, pos._2 - 1))
+        true;
+      } else {
+        false
+      }
+    }
+  }
+}
+
+```
+
 ###  4.101. <a name='BitwiseANDofNumbersRange'></a>201 Bitwise AND of Numbers Range
 
 [小明](https://www.bilibili.com/video/BV1dT4y1g75m?spm_id_from=333.999.0.0)
+
+```scala
+package com.zhourui.leetcode
+
+//看题感觉需要对所有的[m,n]范围内的数字进行遍历一遍吧。。其实不需要的。
+//
+//我们知道，数组的数字是连续的，那么m,n范围内的二进制表示的末尾相同位置一定会出现不同的0,1.我们只要找出m,n的做左边起的最长相同的二进制头部即可呀。
+//
+//如[5, 7]里共有三个数字，分别写出它们的二进制为：
+//
+//101　　110　　111
+//
+//相与后的结果为100，仔细观察我们可以得出，最后的数是该数字范围内所有的数的左边共同的部分（即m,n左边的共同部分），如果上面那个例子不太明显，我们再来看一个范围[26, 30]，它们的二进制如下：
+//
+//11010　　11011　　11100　　11101　　11110
+//
+//也是前两位是11，后面3位在不同数字中一定会出现0和1、相与即为0了。
+//————————————————
+//版权声明：本文为CSDN博主「负雪明烛」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+//原文链接：https://blog.csdn.net/fuxuemingzhu/article/details/79495633
+
+class lc201_bitwiseand {
+  object Solution {
+    def rangeBitwiseAnd(m: Int, n: Int): Int = {
+      var count = 0
+      var m1 = m
+      var n1 = n
+      while (m1!=n1) {
+        m1 >>= 1
+        n1 >>=1
+        count+=1
+      }
+      m1<<count
+    }
+  }
+}
+
+```
 
 ###  4.102. <a name='HappyNumber'></a>202. 快乐数 Happy Number
 
 [官方](https://www.bilibili.com/video/BV1Ca4y1v7Qr?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1CA41187LQ?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    
+    def getDigitSquaresSum(num: Int) = {
+        num.toString.map(_.asDigit).map(x => x*x).foldLeft(0)(_ + _)
+    }
+    
+    def isHappy(n: Int): Boolean = {
+        var num = n
+        var set = scala.collection.mutable.HashSet.empty[Int]
+        var flag = true
+        while(flag){
+            if(num == 1){
+                flag = false
+            }else if(set.contains(num)){
+                flag = false
+            }else{
+                set.add(num)
+                num = getDigitSquaresSum(num)
+            }
+        }
+        
+        num == 1
+    }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+package lc0202_happynumber {
+  object Solution {
+    def isHappy(n: Int): Boolean = {
+      def next(x:Int): Int ={
+        x.toString().map(e=> (e-'0')*(e-'0')).sum
+      }
+
+      def solve(x:Int, m:Set[Int]): Boolean = x match {
+        case 1 => return true
+        case x if m.contains(x) =>return false
+        case x =>solve(next(x), m+x)
+      }
+      solve(n, Set[Int]())
+    }
+  }
+}
+
+```
 
 ###  4.103. <a name='RemoveLinkedListElements'></a>203. Remove Linked List Elements
 
@@ -9571,15 +18523,155 @@ class Solution:
 
 [洛阳](https://www.bilibili.com/video/BV1Sz411b7zw?spm_id_from=333.999.0.0)
 
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech._
+
+//Remove all elements from a linked list of integers that have value val.
+//
+//Example:
+//
+//Input:  1->2->6->3->4->5->6, val = 6
+//Output: 1->2->3->4->5
+
+package lc203_remove_linkedlist_element {
+  /**
+   * Definition for singly-linked list.
+   * class ListNode(var _x: Int = 0) {
+   *   var next: ListNode = null
+   *   var x: Int = _x
+   * }
+   */
+  object Solution {
+    def removeElements(head: ListNode, `val`: Int): ListNode = {
+      val dummy = ListNode(0)
+      dummy.next = head
+      var prev = dummy
+      var cur = head
+      while (cur!=null) {
+        if (cur.x != `val`) {
+          prev.next = cur
+          prev = cur
+        } else {
+          prev.next = null
+        }
+        cur = cur.next
+      }
+      dummy.next
+    }
+  }
+}
+
+```
+
 ###  4.104. <a name='CountPrimes'></a>204-Count Primes
 
 [哈哈哈](https://www.bilibili.com/video/BV167411w7Sf?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7cV?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    def countPrimes(n: Int): Int = {
+        
+        //Sieve of Eratosthenes
+        
+        var primeArray = Array.fill(n)(false)
+        (2 until n).map(i => primeArray(i) = true)
+        
+        //We need to check for all numbers i, where i < sqrt(n)
+        //To avoid doing sqrt operation again & again (since its expensive)
+        //We can do i*i < n
+        
+        var i =2
+        while(i*i < n){
+            if(primeArray(i)){
+                var j = i*i
+                while(j < n){
+                    primeArray(j) = false
+                    j += i //because we are only checking multiple of i for each i in iteration
+                }
+            }
+            i+=1
+        }
+        
+        primeArray.filter(x => x).length
+    }
+}
+
+```
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+object Solution {
+    def reverseList(head: ListNode): ListNode = {
+        if(head == null || head.next == null){
+            head
+        } else{
+            var p = reverseList(head.next)
+            head.next.next = head
+            head.next = null
+            p
+        }
+    }
+}
+
+```
+
 ###  4.105. <a name='isomorphicstrings'></a>205. isomorphic strings
 
 [小梦想家](https://www.bilibili.com/video/BV1ab411H7ZS?spm_id_from=333.999.0.0)
+
+```scala
+package com.zhourui.leetcode
+
+import scala.collection.mutable._
+
+package lc205_lsomorphic {
+  object Solution {
+    def isIsomorphic(s: String, t: String): Boolean = {
+      val m:HashMap[Char,Char] = HashMap[Char,Char]()
+      val n:HashMap[Char,Char] = HashMap[Char,Char]()
+
+      s.indices.foreach(
+        idx=>idx match {
+          case idx if m.contains(s(idx)) && m(s(idx))!=t(idx) => return false
+          case idx if n.contains(t(idx)) && n(t(idx))!=s(idx) => return false
+          case idx =>{
+            m(s(idx))=t(idx)
+            n(t(idx))=s(idx)
+          }
+        }
+      )
+      true
+    }
+  }
+}
+
+/*
+unordered_map<char,char> m;
+unordered_map<char,char> n;
+
+for (int i=0;i<s.length();i++) {
+    if (m.count(s[i])) {
+        if (m[s[i]]!=t[i]) return false;
+    } else if (n.count(t[i])) {
+        if (n[t[i]]!=s[i]) return false;
+    } else {
+        m[s[i]]=t[i];
+        n[t[i]]=s[i];
+    }
+}
+return true;
+
+ */
+```
 
 ###  4.106. <a name='ReverseLinkedList'></a>206-Reverse Linked List
 
@@ -9588,6 +18680,139 @@ class Solution:
 [图灵](https://www.bilibili.com/video/BV1XQ4y1h735?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV16Q4y1M767?spm_id_from=333.999.0.0)
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+/**
+* chosen solution - iterative version
+* time complexity: O(n)
+* space complexity: O(1) 
+*/
+object Solution0 {
+    def reverseList(head: ListNode): ListNode = {        
+        var prev: ListNode = null
+        var curr = head
+
+        while (curr != null) {
+            val hold = curr.next
+            curr.next = prev
+            prev = curr
+            curr = hold
+        }
+        prev
+    }
+}
+
+ /**
+ * iterative version
+ * time complexity: O(n)
+ * space complexity: O(1)
+ */
+object Solution1 {
+    def reverseList(head: ListNode): ListNode = {
+        
+        var prev: ListNode = null
+        var curr = head
+
+        while (curr != null) {
+            val hold = curr.next
+            curr.next = prev
+            prev = curr
+            curr = hold
+        }
+        // printNode(curr)
+        prev
+    }
+    
+    def printNode(node: ListNode) {
+        var n = node
+        while(n != null) {
+            print(s"${n.x} ")
+            n = n.next
+        }
+    }
+}
+
+
+/** recursive version */
+
+object Solution2 {
+    def reverseList(head: ListNode): ListNode = {
+        
+        val curr:ListNode = null
+        
+        _reverseList(curr, head)
+        
+    }
+    
+    @annotation.tailrec
+    def _reverseList(curr: ListNode, next: ListNode): ListNode = {
+        if(next == null) {
+            curr
+        }else{
+            val tmpNode = next.next
+            next.next = curr
+            _reverseList(next, tmpNode)
+        }
+    }
+}
+
+object Solution2-1 {
+    def reverseList(head: ListNode): ListNode = {
+        if(head == null) head
+        else _reverseList(head)
+        
+    }
+    
+    def _reverseList(node: ListNode): ListNode = {
+        if (node == null || node.next == null) {
+            node
+        }else {
+            val newHead = _reverseList(node.next)
+              // reversedHead 是返回原本的尾巴，若一開始輸入是 1 -> 2 -> 3 -> 4 -> 5  -> null , 那 reversedHead 就是 5
+            // 每次 iteration 返回都是同一個 reversedHead 也就是 5
+            node.next.next = node
+            node.next = null
+             // 每次迭代 改變的就是送進每個 function 的 listnode 的 next 與 next.next 指向
+            newHead
+        }
+        
+        
+    }
+}
+/**
+stdout:
+    5 4 
+    5 4 3 
+    5 4 3 2 
+    5 4 3 2 1 
+*/
+
+/**
+The recursive version is slightly trickier and the key is to work backwards.
+Assume that the rest of the list had already been reversed, now how do I reverse the front part?
+Let's assume the list is: n1 → … → nk-1 → nk → nk+1 → … → nm → Ø
+
+Assume from node nk+1 to nm had been reversed and you are at node nk.
+
+n1 → … → nk-1 → nk → nk+1 ← … ← nm
+
+We want nk+1’s next node to point to nk.
+
+So,
+nk.next.next = nk;
+
+Be very careful that n1's next must point to Ø.
+If you forget about this, your linked list has a cycle in it.
+This bug could be caught if you test your code with a linked list of size
+*/
+```
 
 ###  4.107. <a name='-1'></a>207-课程表
 
@@ -9599,11 +18824,331 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1Xp4y1Y7FJ?spm_id_from=333.999.0.0)
 
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech._
+
+// new and apply
+// Use the new keyword when you want to refer to a class's own constructor:
+// 解法是 每个node(node)，1.它依赖的node个数(parent) 2.统计依赖它的node个数(son)，
+// 一个node没有依赖其它节点，放入zeroInDegree
+// 对zeroIndegree的node遍历，对每个依赖它的node都可以直接除去依赖
+
+package lc207_course_schedule {
+
+  import scala.collection.mutable.ArrayBuffer
+
+  object Solution {
+    def canFinish(numCourses: Int, prerequisites: Array[Array[Int]]): Boolean = {
+      val inDegree = new Array[Int](numCourses)
+      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
+
+      prerequisites.foreach(p=> {
+        inDegree(p(0)) += 1
+        neighbour(p(1)) += p(0)
+      })
+
+      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
+      var canFinshNum = zeroInDegree.length
+      while (zeroInDegree.nonEmpty) {
+        val cur = zeroInDegree.head
+        zeroInDegree = zeroInDegree.tail
+        neighbour(cur).foreach(p=>{
+          inDegree(p)-=1
+          if (inDegree(p) == 0) {
+            zeroInDegree :+= p
+            canFinshNum+=1
+          }
+        })
+      }
+      canFinshNum == numCourses
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val input = Array(Array(0,1),Array(1,2))
+      println(Solution.canFinish(3,input) == true)
+      //println(lru.get(1) == 1)
+    }
+
+    val name = "207 course schedule"
+  }
+}
+
+```
+
 ###  4.108. <a name='ImplementTriePrefixTree'></a>208. Implement Trie (Prefix Tree)
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411a74P?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Zz4y1R7j8?spm_id_from=333.999.0.0)
+
+```scala
+/**
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
+
+/**
+* chosen solution
+* Node implement by hashmap
+*/
+case class Node(next: scala.collection.mutable.Map[Char, Node] = scala.collection.mutable.Map(), var isWord: Boolean = false){
+  def update(char: Char, node: Node): Unit = next(char) = node
+  def apply(char: Char): Option[Node] = next.get(char)
+}
+
+class Trie0() {
+  /** Initialize your data structure here. */
+  val root = Node()
+
+  /** Inserts a word into the trie. */
+  def insert(word: String) {
+    var node = root
+    word.foreach{ c =>
+      node(c) match {
+        case Some(n) =>
+          node = n
+        case None =>
+          node(c) = Node()
+          node = node(c).get
+      }
+    }
+    node.isWord = true
+  }
+
+  /** Returns if the word is in the trie. */
+  def search(word: String): Boolean = {
+    searchUtil(word).exists(_.isWord)
+  }
+
+  /** Returns if there is any word in the trie that starts with the given prefix. */
+  def startsWith(prefix: String): Boolean = {
+    searchUtil(prefix).isDefined
+  }
+
+  private def searchUtil(s: String): Option[Node] = {
+    var node = root
+
+    s.foreach{ c =>
+      node(c) match {
+        case Some(n) => node = n
+        case None => return None
+      }
+    }
+    Some(node)
+  }
+
+}
+
+
+
+/**
+* my first commitment
+*/
+case class Node(childNode: Array[Node] = Array.ofDim[Node](26), var isWord: Boolean = false) {
+
+  def apply(c: Char): Node = {
+    this.apply(c.asDigit - 'a'.asDigit)
+  }
+
+  def apply(idx: Int): Node = {
+    childNode(idx)
+  }
+}
+
+class Trie1() {
+
+  /** Initialize your data structure here. */
+  val root = Node()
+
+
+  /** Inserts a word into the trie. */
+  def insert(word: String) {
+    var node = root
+    word.foreach { c =>
+
+      val cIdx = c.asDigit - 'a'.asDigit
+      if (node.childNode(cIdx) == null) {
+        node.childNode(cIdx) = Node()
+      }
+      node = node(cIdx)
+    }
+    node.isWord = true
+
+  }
+
+  /** Returns if the word is in the trie. */
+  def search(word: String): Boolean = {
+    val node = searchUtil(word)
+
+    node != null && node.isWord
+
+  }
+
+  /** Returns if there is any word in the trie that starts with the given prefix. */
+  def startsWith(prefix: String): Boolean = {
+    searchUtil(prefix) != null
+  }
+
+
+   private def searchUtil(s: String): Node = {
+    var node = root
+    var continue = true
+    for {
+      c <- s
+      if continue
+    } {
+      val cIdx = c.asDigit - 'a'.asDigit
+      if (node(cIdx) == null) {
+        continue = false
+      } 
+      node = node(cIdx)
+    }
+    node
+  }
+}
+
+
+/**
+*  more elegant
+*  Node with apply and update
+*/
+
+case class Node(childNode: Array[Node] = Array.ofDim[Node](26), var isWord: Boolean = false) {
+
+  def apply(c: Char): Node = {
+    this.apply(c.asDigit - 'a'.asDigit)
+  }
+
+  def apply(idx: Int): Node = {
+    childNode(idx)
+  }
+  
+  def update(idx: Int, node: Node): Unit = {
+    childNode(idx) = node
+  }
+
+  def update(c: Char, node: Node): Unit = {
+    this.update(c.asDigit - 'a'.asDigit, node)
+  }
+}
+class Trie1-2() {
+
+  /** Initialize your data structure here. */
+  val root = Node()
+
+
+  /** Inserts a word into the trie. */
+  def insert(word: String) {
+    var node = root
+    word.foreach {
+      case c if node(c) == null => 
+        node(c) = Node()
+        node = node(c)
+
+      case c => node = node(c)
+    }
+    node.isWord = true
+      
+  }
+
+  /** Returns if the word is in the trie. */
+  def search(word: String): Boolean = {
+    searchUtil(word).exists(_.isWord)
+  }
+
+  /** Returns if there is any word in the trie that starts with the given prefix. */
+  def startsWith(prefix: String): Boolean = {
+    searchUtil(prefix).isDefined
+  }
+
+
+  private def searchUtil(s: String): Option[Node] = {
+    var node = root
+
+    s.foreach {
+      case c if node(c) != null => node = node(c)
+      case _ => return None
+    }
+    Some(node)
+  }
+  def traversal(): Unit = {
+    val result = scala.collection.mutable.ListBuffer[String]()
+
+    def _traversal(prefix: String, node: Node): Unit = {
+      if (node.isWord) {
+        result += prefix
+      }
+      node.childNode.zipWithIndex.foreach {
+        case (n, idx) if n != null => _traversal(prefix + ('a' + idx).toChar, n)
+        case _ =>
+      }
+
+    }
+
+    _traversal("", root)
+    result.foreach(s => println(s.mkString("")))
+
+  }
+
+}
+
+/**
+* Node implement by hashmap
+*/
+case class Node(next: scala.collection.mutable.Map[Char, Node] = scala.collection.mutable.Map(), var isWord: Boolean = false){
+  def update(char: Char, node: Node): Unit = next(char) = node
+  def apply(char: Char): Option[Node] = next.get(char)
+}
+
+class Trie2() {
+  /** Initialize your data structure here. */
+  val root = Node()
+
+  /** Inserts a word into the trie. */
+  def insert(word: String) {
+    var node = root
+    word.foreach{ c =>
+      node(c) match {
+        case Some(n) =>
+          node = n
+        case None =>
+          node(c) = Node()
+          node = node(c).get
+      }
+    }
+    node.isWord = true
+  }
+
+  /** Returns if the word is in the trie. */
+  def search(word: String): Boolean = {
+    searchUtil(word).exists(_.isWord)
+  }
+
+  /** Returns if there is any word in the trie that starts with the given prefix. */
+  def startsWith(prefix: String): Boolean = {
+    searchUtil(prefix).isDefined
+  }
+
+  private def searchUtil(s: String): Option[Node] = {
+    var node = root
+
+    s.foreach{ c =>
+      node(c) match {
+        case Some(n) => node = n
+        case None => return None
+      }
+    }
+    Some(node)
+  }
+
+}
+```
 
 ###  4.109. <a name='-1'></a>209-长度最小的子数组
 
@@ -9619,6 +19164,48 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1kK411W7rL?spm_id_from=333.999.0.0)
 
+```scala
+package com.zhourui.leetcode
+
+import scala.collection.mutable.ArrayBuffer
+// 与lc207类似，不过要给出顺序
+
+class lc210_courseschedule2 {
+  object Solution {
+    def findOrder(numCourses: Int, prerequisites: Array[Array[Int]]): Array[Int] = {
+      val inDegree = new Array[Int](numCourses)
+      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
+
+      prerequisites.foreach(p=> {
+        inDegree(p(0)) += 1
+        neighbour(p(1)) += p(0)
+      })
+
+      val ans = ArrayBuffer[Int]()
+      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
+      var canFinshNum = zeroInDegree.length
+      while (zeroInDegree.nonEmpty) {
+        val cur = zeroInDegree.head
+        ans += cur
+        zeroInDegree = zeroInDegree.tail
+        neighbour(cur).foreach(p=>{
+          inDegree(p)-=1
+          if (inDegree(p) == 0) {
+            zeroInDegree :+= p
+            canFinshNum+=1
+          }
+        })
+      }
+      canFinshNum match {
+        case canFinshNum if canFinshNum == numCourses => ans.toArray
+        case _ => Array()
+      }
+    }
+  }
+}
+
+```
+
 ###  4.111. <a name='AddandSearchWord'></a>211 Add and Search Word
 
 [小明](https://www.bilibili.com/video/BV1x5411a77S?spm_id_from=333.999.0.0)
@@ -9628,6 +19215,420 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV184411d7i9?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1vi4y1G7NQ?spm_id_from=333.999.0.0)
+
+```scala
+
+/**
+* chosen solution
+* tries + dfs + pruning
+* memo
+*   1. put all words into tries which is implemented by hashmap
+*   2. DFS way searching all char in board composing a word and searching whether the word exists in tries
+*   3. in dfs, we directly input the node from tries instead of tries itself 
+*   4. pruning an edge after matching a word and its children couldn't represent a word
+*/
+import scala.collection.mutable
+case class Node(next: mutable.Map[Char, Node] = mutable.Map.empty, var isWord: Boolean = false){
+  def apply(char: Char): Option[Node] = next.get(char)
+  def update(char: Char, node: Node): Unit = next(char) = node
+}
+
+class Tries(){
+  val root = Node()
+  def insert(word: String): Unit = {
+    var node = root
+    word.foreach { c =>
+      node(c) match {
+        case Some(n) => node = n
+        case None =>
+          node(c) = Node()
+          node = node(c).get
+      }
+    }
+    node.isWord = true
+  }
+
+  def startsWith(prefix: String): Boolean = searchUtil(prefix).isDefined
+  def search(word: String): Boolean =  searchUtil(word).exists(_.isWord)
+
+  def searchUtil(s: String): Option[Node] = {
+    var node = root
+    s.foreach { c =>
+      node(c) match {
+        case Some(n) => node = n
+        case None => return None
+      }
+    }
+    Some(node)
+  }
+}
+
+
+object Solution0 {
+  def findWords(board: Array[Array[Char]], words: Array[String]): List[String] = {
+    val tries = new Tries()
+    words.foreach(tries.insert)
+    dfs(tries, board)
+  }
+
+  def dfs(tries: Tries, board: Array[Array[Char]]): List[String] = {
+    def _dfs(coord: (Int, Int), currentString: String,  node: Node, ans: mutable.Set[String]): Unit = {
+      val (row, col) = coord
+      val char = board(row)(col)
+      node(char) match {
+        case Some(nextNode) =>
+            val newString = currentString + char
+            if(nextNode.isWord) ans += newString
+            board(row)(col) = '#'
+            neighbors(coord, (board.length, board(0).length)).foreach {
+              case (nr, nc) if board(nr)(nc) != '#' => _dfs((nr, nc), newString, nextNode, ans)
+              case _ =>
+           }
+          board(row)(col) = char
+          /** pruning */
+          if(nextNode.next.isEmpty) node.next.remove(char)
+
+        case None =>
+      }
+    }
+    val ans = mutable.Set[String]()
+    for(i <- board.indices; j <- board(0).indices) {
+      _dfs((i, j), "", tries.root, ans)
+    }
+    ans.toList
+  }
+  private val neighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    Seq(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
+
+/**
+* tries + dfs + pruning
+* memo
+*   1. a seenBoard to record which position was visited 
+* time complexity: 
+* 
+*/
+
+object Solution1-1 {
+  val result = scala.collection.mutable.Set[String]()
+
+  def findWords(board: Array[Array[Char]], words: Array[String]): List[String] = {
+    result.clear()
+    val tries = new Trie()
+    tries.insert(words)
+    for{
+      row <- board.indices
+      col <- board(0).indices
+    }{
+      _dfs(board, Array.ofDim[Boolean](board.length, board(0).length), tries, "", (row, col))
+    }
+
+    result.toList
+  }
+
+  private def _dfs(board: Array[Array[Char]], seenBoard:Array[Array[Boolean]], tries: Trie, currentPrefix: String, currentIdx: (Int, Int)) {
+    val (row, col) = currentIdx
+    val newPrefix = currentPrefix + board(row)(col)
+
+    if (tries.search(newPrefix))
+      result += newPrefix
+
+    if(tries.startsWith(newPrefix)){
+      seenBoard(row)(col) = true
+      getNextPosition(currentIdx, seenBoard).foreach{idx =>
+        _dfs(board, seenBoard.map(_.clone()), tries, newPrefix, idx)
+      }
+    }
+  }
+
+  private def getNextPosition(currentIdx: (Int, Int), seenBoard: Array[Array[Boolean]]): Array[(Int, Int)] = {
+
+    def check(row: Int, col: Int): Boolean = {
+      if(row >= seenBoard.length || row < 0 || col >= seenBoard(0).length || col < 0 || seenBoard(row)(col))  false
+      else true
+    }
+    val (row, col) = currentIdx
+    val result = scala.collection.mutable.ArrayBuffer[(Int, Int)]()
+
+    for{
+      i <- -1 to 1
+      j <- -1 to 1
+    }{
+      if((math.abs(i) + math.abs(j) == 1) && check(row + i, col + j)) result.append((row + i, col + j))
+    }
+    result.toArray
+  }
+}
+
+/**
+* simplify : without seen matrix
+*/
+
+object Solution1-2 {
+
+  val result = scala.collection.mutable.Set[String]()
+  private val inBounds = (shape: (Int, Int)) => (coord: (Int, Int)) => coord._1 < shape._1 && coord._1 >= 0 && coord._2 < shape._2 && coord._2 >= 0
+  private val getNeighbors = (coord: (Int, Int), filter: ((Int, Int)) => Boolean) => {
+    List(
+      (coord._1 + 1, coord._2),
+      (coord._1, coord._2 + 1),
+      (coord._1 - 1, coord._2),
+      (coord._1, coord._2 - 1)
+    ).filter(filter)
+  }
+
+  def findWords(board: Array[Array[Char]], words: Array[String]): List[String] = {
+    result.clear()
+    val tries = new Trie()
+    tries.insert(words)
+    for {
+      row <- board.indices
+      col <- board(0).indices
+    } {
+      _dfs(board, tries, "", (row, col))
+    }
+    result.toList
+  }
+
+  private def _dfs(board: Array[Array[Char]], tries: Trie, currentPrefix: String, coord: (Int, Int)) {
+
+    val (row, col) = coord
+    val newPrefix = currentPrefix + board(row)(col)
+
+    if (tries.search(newPrefix))
+      result += newPrefix
+
+    val c = board(row)(col)
+    board(row)(col) = '#'
+    if (tries.startsWith(newPrefix)) {
+
+      getNeighbors(coord, inBounds((board.length, board.head.length))(_))
+        .foreach {
+          case (nr, nc) if board(nr)(nc) != '#' =>
+            _dfs(board, tries, newPrefix, (nr, nc))
+          case _ =>
+        }
+    }
+    board(row)(col) = c
+  }
+}
+
+
+object Solution1-3 {
+  private val visitedLabel = '#'
+  def findWords(board: Array[Array[Char]], words: Array[String]): List[String] = {
+    val tries = new Trie()
+    words.foreach(tries.insert)
+    dfs(tries, board)
+  }
+
+
+  def dfs(tries: Trie, board: Array[Array[Char]]): List[String] = {
+    def _dfs(coord: (Int, Int) ,prePrefix: String, board: Array[Array[Char]], ret: scala.collection.mutable.HashSet[String]): Unit = {
+      val currentChar =  board(coord._1)(coord._2)
+      val newPrefix = prePrefix + currentChar
+      if(tries.search(newPrefix)) ret += newPrefix
+      /* pruning */
+      if(tries.startsWith(newPrefix)){
+        board(coord._1)(coord._2) = visitedLabel
+        getAvailableCoords(coord, (board.length, board(0).length)).foreach {
+          case (r, c) if board(r)(c) != visitedLabel => _dfs((r, c), newPrefix, board, ret)
+          case _ =>
+        }
+        board(coord._1)(coord._2) = currentChar
+      }
+    }
+
+    val coords = for(i <- board.indices; j <- board(0).indices) yield (i, j)
+    val ret = scala.collection.mutable.HashSet[String]()
+    coords.foreach(coord => _dfs(coord, "", board, ret))
+    ret.toList
+
+  }
+
+  private val getAvailableCoords = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    List(
+      (row + 1, col),
+      (row, col + 1),
+      (row - 1, col),
+      (row, col - 1)
+    ).filter{case (r, c) => 0 <= r && r < shape._1 &&  0 <= c && c < shape._2}
+  }
+}
+
+
+/** helper class **/
+case class Node(childNode: Array[Node] = Array.ofDim[Node](26), var isWord: Boolean = false) {
+  def apply(c: Char): Node = this.apply(c.asDigit - 'a'.asDigit)
+  def apply(idx: Int): Node =  childNode(idx)
+  def update(idx: Int, node: Node): Unit = childNode(idx) = node
+  def update(c: Char, node: Node): Unit = this.update(c.asDigit - 'a'.asDigit, node)
+}
+
+
+class Trie() {
+
+  /** Initialize your data structure here. */
+  val root = Node()
+
+
+  /** Inserts a word into the trie. */
+  def insert(word: String) {
+    var node = root
+    word.foreach {
+      case c if node(c) == null =>
+        node(c) = Node()
+        node = node(c)
+
+      case c => node = node(c)
+    }
+    node.isWord = true
+
+  }
+  def insert(words: Array[String]): Unit = {
+    words.foreach(insert)
+  }
+
+  /** Returns if the word is in the trie. */
+  def search(word: String): Boolean = {
+    searchUtil(word).exists(_.isWord)
+  }
+
+  /** Returns if there is any word in the trie that starts with the given prefix. */
+  def startsWith(prefix: String): Boolean = {
+    searchUtil(prefix).isDefined
+  }
+
+
+  private def searchUtil(s: String): Option[Node] = {
+    var node = root
+
+    s.foreach {
+      case c if node(c) != null => node = node(c)
+      case _ => return None
+    }
+    Some(node)
+  }
+  def traversal(): Unit = {
+    val result = scala.collection.mutable.ListBuffer[String]()
+
+    def _traversal(prefix: String, node: Node): Unit = {
+      if(node.isWord) {
+        result += prefix
+      }
+      node.childNode.zipWithIndex.foreach{
+        case (n, idx) if n != null => _traversal(prefix + ('a' + idx).toChar, n)
+        case _ =>
+      }
+
+    }
+    _traversal("", root)
+    result.foreach(s => println(s.mkString("")))
+
+  }
+}
+
+
+/**
+* implement prefix tries by hashmap
+* memo
+*   1. in dfs, we directly input the node from tries instead of tries itself 
+*   2. pruning an edge after matching a word and its children couldn't represent a word
+*   3. this solution is faster than solution1
+*/
+
+import scala.collection.mutable
+case class Node(next: mutable.Map[Char, Node] = mutable.Map.empty, var isWord: Boolean = false){
+  def apply(char: Char): Option[Node] = next.get(char)
+  def update(char: Char, node: Node): Unit = next(char) = node
+}
+
+class Tries(){
+  val root = Node()
+  def insert(word: String): Unit = {
+    var node = root
+    word.foreach { c =>
+      node(c) match {
+        case Some(n) => node = n
+        case None =>
+          node(c) = Node()
+          node = node(c).get
+      }
+    }
+    node.isWord = true
+  }
+
+  def startsWith(prefix: String): Boolean = searchUtil(prefix).isDefined
+  def search(word: String): Boolean =  searchUtil(word).exists(_.isWord)
+
+  def searchUtil(s: String): Option[Node] = {
+    var node = root
+    s.foreach { c =>
+      node(c) match {
+        case Some(n) => node = n
+        case None => return None
+      }
+    }
+    Some(node)
+  }
+}
+
+
+object Solution2 {
+  def findWords(board: Array[Array[Char]], words: Array[String]): List[String] = {
+    val tries = new Tries()
+    words.foreach(tries.insert)
+    dfs(tries, board)
+  }
+
+  def dfs(tries: Tries, board: Array[Array[Char]]): List[String] = {
+    def _dfs(coord: (Int, Int), currentString: String,  node: Node, ans: mutable.Set[String]): Unit = {
+      val (row, col) = coord
+      val char = board(row)(col)
+      node(char) match {
+        case Some(nextNode) =>
+            val newString = currentString + char
+            if(nextNode.isWord) ans += newString
+            board(row)(col) = '#'
+            neighbors(coord, (board.length, board(0).length)).foreach {
+              case (nr, nc) if board(nr)(nc) != '#' => _dfs((nr, nc), newString, nextNode, ans)
+              case _ =>
+           }
+          board(row)(col) = char
+          /** pruning */
+          if(nextNode.next.isEmpty) node.next.remove(char)
+
+        case None =>
+      }
+    }
+    val ans = mutable.Set[String]()
+    for(i <- board.indices; j <- board(0).indices) {
+      _dfs((i, j), "", tries.root, ans)
+    }
+    ans.toList
+  }
+  private val neighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    Seq(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
+
+```
 
 ###  4.113. <a name='HouseRobberII213-II'></a>213. House Robber II 213-打家劫舍II
 
@@ -9648,6 +19649,36 @@ class Solution:
 ###  4.115. <a name='ContainsDuplicate'></a>217. Contains Duplicate
 
 [小梦想家](https://www.bilibili.com/video/BV1ab411H7Zw?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def containsDuplicate(nums: Array[Int]): Boolean = {
+        var hashSet = scala.collection.mutable.HashSet.empty[Int]
+        import scala.util.control.Breaks._
+        var flag = false
+        breakable{
+            for(num <- nums){
+                if(hashSet.contains(num)){
+                        flag = true
+                        break
+                    }else{
+                    hashSet.add(num)
+                }
+                }
+            }
+        flag
+        }
+    }
+    
+  
+//Alternate (SCALA) solution
+object Solution {
+    def containsDuplicate(nums: Array[Int]): Boolean = {
+        return nums.distinctBy(_.self).length != nums.length
+    }
+}
+
+```
 
 ###  4.116. <a name='TheSkylineProblem'></a>218. The Skyline Problem
 
@@ -9687,6 +19718,240 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1ep4y1Y77j?spm_id_from=333.999.0.0)
 
+```scala
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * var obj = new MyStack()
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.empty()
+ */
+
+
+/**
+* chosen solution
+* one queue version
+* time complexity
+*   push: O(2n+1) n is the element in queue1
+*   pop: O(1)
+*   top: O(1)
+*/
+class MyStack0() {
+
+    /** Initialize your data structure here. */
+    val queue1 = scala.collection.mutable.Queue[Int]()
+
+
+    /** Push element x onto stack. */
+    def push(x: Int) {
+        val iter = queue1.indices
+        queue1.enqueue(x)
+        (iter).foreach(e => queue1.enqueue(queue1.dequeue))
+        
+        
+    }
+
+    /** Removes the element on top of the stack and returns that element. */
+    def pop(): Int = {
+       if(queue1.nonEmpty) queue1.dequeue else -1
+        
+    }
+
+    /** Get the top element. */
+    def top(): Int = {
+       queue1.headOption.getOrElse(-1)
+    }
+
+    /** Returns whether the stack is empty. */
+    def empty(): Boolean = {
+        queue1.isEmpty
+    }
+
+}
+
+
+
+
+ /**
+ * my first commit
+ * two queue version
+ * time complexity: 
+ *   push: O(1)
+ *   pop: O(2n - 1)  n is the element in queue1
+ *   top: O(2n - 1)
+ */
+class MyStack1() {
+
+    /** Initialize your data structure here. */
+    var queue1 = scala.collection.mutable.Queue[Int]()
+    var queue2 = scala.collection.mutable.Queue[Int]()
+
+    /** Push element x onto stack. */
+    def push(x: Int) {
+        queue1.enqueue(x)
+        
+    }
+
+    /** Removes the element on top of the stack and returns that element. */
+    def pop(): Int = {
+       while(queue1.size > 1) {
+           queue2.enqueue(queue1.dequeue)
+       }
+    
+        val ret = if(queue1.isEmpty) -1 else queue1.dequeue
+        val tmp = queue1
+        queue1 = queue2
+        queue2 = tmp
+        ret
+        
+    }
+
+    /** Get the top element. */
+    def top(): Int = {
+        while(queue1.size > 1) {
+           queue2.enqueue(queue1.dequeue)
+        }
+        val ret = if(queue1.isEmpty) -1 else queue1.dequeue
+        val tmp = queue1
+        queue1 = queue2
+        queue2 = tmp
+        queue1.enqueue(ret)
+        ret
+    }
+
+    /** Returns whether the stack is empty. */
+    def empty(): Boolean = {
+        queue1.isEmpty && queue2.isEmpty
+    }
+
+}
+
+/**
+* two queue version
+* time complexity
+*   push: O(2n+1) n is the element in queue1
+*   pop: O(1)
+*   top: O(1)
+*/
+class MyStack2() {
+
+   import scala.collection.mutable.Queue
+    /** Initialize your data structure here. */
+    var queue1 = Queue.empty[Int] 
+
+
+    /** Push element x onto stack. */
+    def push(x: Int) {
+        val queue2 = Queue(x)
+        queue2.enqueueAll(queue1.dequeueAll(_ => true))
+        queue1 = queue2
+    }
+
+    /** Removes the element on top of the stack and returns that element. */
+    def pop(): Int = {
+        if(queue1.isEmpty) -1 else queue1.dequeue
+    }
+
+    /** Get the top element. */
+    def top(): Int = {
+       queue1.headOption.getOrElse(-1)
+    }
+
+    /** Returns whether the stack is empty. */
+    def empty(): Boolean = {
+        queue1.isEmpty
+    }
+}
+
+/**
+* one queue version
+* time complexity
+*   push: O(2n+1) n is the element in queue1
+*   pop: O(1)
+*   top: O(1)
+*/
+class MyStack3() {
+
+    /** Initialize your data structure here. */
+    val queue1 = scala.collection.mutable.Queue[Int]()
+
+
+    /** Push element x onto stack. */
+    def push(x: Int) {
+        val iter = queue1.indices
+        queue1.enqueue(x)
+        (iter).foreach(e => queue1.enqueue(queue1.dequeue))
+        
+        
+    }
+
+    /** Removes the element on top of the stack and returns that element. */
+    def pop(): Int = {
+       if(queue1.nonEmpty) queue1.dequeue else -1
+        
+    }
+
+    /** Get the top element. */
+    def top(): Int = {
+       queue1.headOption.getOrElse(-1)
+    }
+
+    /** Returns whether the stack is empty. */
+    def empty(): Boolean = {
+        queue1.isEmpty
+    }
+
+}
+
+/**
+* memo:
+*   1. push entire old queue into a new queue without expanding all elements 
+* time complexity:  
+*     all operation are O(1) after being amortized
+*   
+* start  Queue()
+* push1  Queue(1, Queue())
+* push2  Queue(2, Queue(1, Queue()))
+* push3  Queue(3, Queue(2, Queue(1, Queue())))
+* push4  Queue(4, Queue(3, Queue(2, Queue(1, Queue()))))
+* pop    Queue(3, Queue(2, Queue(1, Queue())))
+* pop    Queue(2, Queue(1, Queue()))
+*/
+
+class MyStack4() {
+  import scala.collection.mutable
+  /** Initialize your data structure here. */
+  var queue: mutable.Queue[Any] = mutable.Queue.empty[Any]
+
+  /** Push element x onto stack. */
+  def push(x: Int) {
+    val queue2: mutable.Queue[Any] = mutable.Queue(x)
+    queue2.enqueue(queue)
+    queue = queue2
+
+  }
+  /** Removes the element on top of the stack and returns that element. */
+  def pop(): Int = {
+
+    if(queue.isEmpty) -1 else {
+      val ret = queue.dequeue.asInstanceOf[Int]
+      queue = queue.dequeue.asInstanceOf[mutable.Queue[Any]]
+      ret
+    }
+  }
+  /** Get the top element. */
+  def top(): Int = {
+    if(queue.isEmpty) -1 else queue.head.asInstanceOf[Int]
+  }
+
+  /** Returns whether the stack is empty. */
+  def empty(): Boolean = {
+    queue.size != 2
+  }
+}
+```
+
 ###  4.123. <a name='-1'></a>226-翻转二叉树
 
 [哈哈哈](https://www.bilibili.com/video/BV1Sh411R7B2?spm_id_from=333.999.0.0)
@@ -9713,11 +19978,180 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1ha4y1i7dZ?spm_id_from=333.999.0.0)
 
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+
+object Solution {
+    def kthSmallest(root: TreeNode, k: Int): Int = {
+
+      val stack = collection.mutable.Stack[TreeNode]()
+      var node = root
+      var counter = 0
+      var ans = 0
+      while ((counter <= k) && (node != null || stack.nonEmpty)) {
+        while(node != null) {
+          stack push node
+          node = node.left
+        }
+        node = stack.pop
+        
+        counter += 1
+        if (counter == 1 || counter <= k) {
+          ans = node.value
+        }
+        
+        node = node.right
+        
+      }
+      ans
+    }
+}
+/**
+* my first commit
+* inorder iterative template
+* time complexity: O(H + K) => H is tree height, H + K = element in stack
+*/
+
+object Solution1 {
+    def kthSmallest(root: TreeNode, k: Int): Int = {
+        
+        val stack = collection.mutable.Stack[TreeNode]()
+        var node = root
+        var counter = 0
+        
+        
+        while(node != null || stack.nonEmpty) {
+            while(node != null) {
+                stack push node
+                node = node.left
+            }
+            node = stack.pop
+            counter += 1
+            if(counter == k) return node.value
+            else node = node.right
+            
+        }
+        -1
+    }
+}
+
+/**
+* inorder traversal - recursive version
+* time complexity: O(H + k)
+*/
+
+object Solution2-1 {
+    import scala.collection.mutable
+    def kthSmallest(root: TreeNode, k: Int): Int = {
+        val ret = _kthSmallest(root, k, mutable.ListBuffer.empty)
+
+        ret(k - 1)
+    }
+    
+    def _kthSmallest(node: TreeNode, k:Int, l: mutable.ListBuffer[Int]): mutable.ListBuffer[Int]  = {
+       if(node == null) l
+       else {
+           _kthSmallest(node.left, k, l)
+           l += node.value
+           if(l.size >= k) l  // shortcut
+           else  _kthSmallest(node.right, k, l)  
+       }
+    }
+}
+
+
+/**
+* a brilliant solution - inorder recursive traversal 
+* memo:
+*   1. using Either, right records numbers of visited node, left record the value when the condition is meet
+* time complexity:
+*      O(H + K) H is the height of the tree calculated by log(N) approximately
+*/
+object Solution2-2 {
+  def go (node: TreeNode, k: Int) : Either[Int, Int] = {
+     val r =for {
+      numElementsLeft <- if (node.left == null) Right (0) else go(node.left, k)
+      numElementsRight <- if (numElementsLeft + 1 == k) Left(node.value)
+      else
+        if (node.right == null) Right(0) else go(node.right, k - (numElementsLeft + 1))
+
+    } yield numElementsLeft + numElementsRight + 1
+      println(r)
+      r
+
+  }
+
+  def kthSmallest(root: TreeNode, k: Int): Int = {
+    go(root, k).left.get
+  }
+}
+
+```
+
+```scala
+
+object Solution {
+    var x = 0
+    var result = 0
+    
+    //Using inorder and maintaining count
+    
+    def findk(root: TreeNode, k: Int): Unit = {
+        if(root == null){
+            ()
+        }
+        else if(root.left == null && root.right == null){
+            x = x+1
+            if(x == k) result = root.value
+        }else if(root.left == null){
+            x = x+1
+            if(x == k) result = root.value
+            findk(root.right, k)
+        }else if(root.right == null){
+            findk(root.left, k)
+            x = x+1
+            if(x == k) result = root.value
+        }else{
+            findk(root.left, k)
+            x = x+1
+            if(x == k) result = root.value
+            findk(root.right, k)
+        }
+    }
+    
+    def kthSmallest(root: TreeNode, k: Int): Int = {
+        x=0
+        result=0
+        findk(root, k)
+        result
+    }
+}
+
+```
+
 ###  4.128. <a name='PowerofTwo'></a>231. Power of Two
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1rV411r7AL?spm_id_from=333.999.0.0)
+
+```scala
+/**
+* time complexity  O(1)
+*/
+object Solution {
+    def isPowerOfTwo(n: Int): Boolean = {
+        n > 0 && (n & (n - 1) ) == 0
+    }
+}
+```
 
 ###  4.129. <a name='ImplementQueueusingStacks'></a>232-Implement Queue using Stacks
 
@@ -9725,19 +20159,292 @@ class Solution:
 
 [图灵](https://www.bilibili.com/video/BV1Gf4y147Vj?spm_id_from=333.999.0.0)
 
+```scala
+/**
+* using two stack to implement
+* one for push, the other for pop
+* time complexity amortized O(1) per operation
+* space complexity
+*/
+
+class MyQueue() {
+
+  /** Initialize your data structure here. */
+  private val inputStack = scala.collection.mutable.ArrayStack[Int]()
+  private val outputStack = scala.collection.mutable.ArrayStack[Int]()
+
+
+  /** Push element x to the back of queue. */
+  def push(x: Int) {
+    inputStack.push(x)
+
+  }
+
+  /** Removes the element from in front of queue and returns that element. */
+  def pop(): Int = {
+    if(outputStack.isEmpty) {
+      while (inputStack.nonEmpty) {
+        outputStack.push(inputStack.pop())
+      }
+    }
+    if(outputStack.isEmpty) -1 else outputStack.pop()
+
+  }
+
+  /** Get the front element. */
+  def peek(): Int = {
+    if(outputStack.isEmpty) {
+      while (inputStack.nonEmpty) {
+        outputStack.push(inputStack.pop())
+      }
+    }
+    if(outputStack.isEmpty) -1 else outputStack.head
+  }
+
+  /** Returns whether the queue is empty. */
+  def empty(): Boolean = {
+    outputStack.isEmpty && inputStack.isEmpty
+  }
+
+}
+
+```
+
 ###  4.130. <a name='PalindromeLinkedList'></a>234. Palindrome Linked List
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7ML?spm_id_from=333.999.0.0)
 
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+ 
+ /**
+ * my first commitment
+ *  using two pointer, one run 2 times faster than the other
+ */
+object Solution1 {
+    def isPalindrome(head: ListNode): Boolean = {
+        if (head == null){
+            true
+        }else {
+            var slowPre: ListNode = null
+            var slow = head
+            var fast = head
+
+            while (fast != null && fast.next != null) {
+                fast = fast.next.next
+
+                val slowNext = slow.next
+                slow.next = slowPre
+                slowPre = slow
+                slow = slowNext
+
+            }
+
+            fast match {
+                case null => checkPalindrome(slowPre, slow)
+                case _ => checkPalindrome(slowPre, slow.next)  // odd case
+            }
+            /**
+                1 2 2 1 null
+                s f
+                    s   f  
+
+                1 2 3 2 1 null
+                s f   
+                    s   f
+            */
+        }
+       
+                
+    }
+    def checkPalindrome(left: ListNode, right: ListNode): Boolean = {
+        (left, right) match {
+            case (null, null) => true
+            case (l, r) if l != null && r != null && l.x == r.x => checkPalindrome(left.next, right.next)
+            case _ => false   
+        }
+        
+    }
+    
+
+    def printNode(node: ListNode) {
+        var n = node
+        
+        while(n != null) {
+            print(s"${n.x}\t")
+            n = n.next
+        }
+    }
+}
+
+
+/**
+* very brilliant solution
+*/
+object Solution2 {
+    def isPalindrome(head: ListNode): Boolean = {
+        if (head == null) {
+            return true
+        }
+        var p = head
+        var result = true
+        def go(node: ListNode): Unit = {
+            if (node.next != null) {
+                go(node.next)
+            }
+            if (p.x != node.x) {
+                result = false
+            }
+            p = p.next
+        }
+        go(head)
+        result
+    }
+}
+```
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(_x: Int = 0, _next: ListNode = null) {
+ *   var next: ListNode = _next
+ *   var x: Int = _x
+ * }
+ */
+object Solution {
+    def isPalindrome(head: ListNode): Boolean = {
+        var flag = true
+        var rev = head
+        var h = head
+        def reverse(n: ListNode): Unit = {
+            if(n == null){
+                ()
+            }else{
+                reverse(n.next)
+                val cond = n.x == h.x
+                flag = flag && cond
+                h = h.next
+            }
+        }
+       
+        reverse(rev)
+        flag
+    }
+}
+
+```
+
 ###  4.131. <a name='LowestCommonAncestorofaBinarySearchTree'></a>235. Lowest Common Ancestor of a Binary Search Tree
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7VY?spm_id_from=333.999.0.0)
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(var _value: Int) {
+ *   var value: Int = _value
+ *   var left: TreeNode = null
+ *   var right: TreeNode = null
+ * }
+ */
+
+/**
+* DFS 
+* 
+* exploit binary search three property:  right > parent value > left
+* time complexity : O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+  def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+    _lowestCommonAncestor(root, p, q)
+  }
+  
+  @annotation.tailrec
+  private def _lowestCommonAncestor(node: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+    (p, q) match {
+      case (pp, qq) if p.value > node.value && q.value > node.value  && node != null => _lowestCommonAncestor(node.right, pp, qq)
+      case (pp, qq) if p.value < node.value && q.value < node.value && node != null => _lowestCommonAncestor(node.left, pp, qq)
+      case _ => node
+    }
+  }
+}
+
+
+/**
+* iterative version
+*/
+object Solution1-2 {
+    def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+      if(root == null) return root
+      var node = root
+      
+      var condition = true
+      while(condition && node != null){
+        if(q.value > node.value && p.value > node.value)
+          node = node.right
+        else if (node.value > q.value && node.value > p.value)
+          node = node.left
+        else 
+          condition = false
+      }
+      node
+    }
+}
+```
 
 ###  4.132. <a name='-1'></a>236-二叉树的最近公共祖先
 
 [哈哈哈](https://www.bilibili.com/video/BV1ov411172r?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV125411p7dr?spm_id_from=333.999.0.0)
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(var _value: Int) {
+ *   var value: Int = _value
+ *   var left: TreeNode = null
+ *   var right: TreeNode = null
+ * }
+ */
+
+/**
+*  chosen solution
+*  DFS with recursive
+*  time complexity O(N), N is the number of node in the tree
+*  space complexity O(N)
+*/
+object Solution0 {
+  def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+    _lowestCommonAncestor(root, p, q)
+  }
+
+  private def _lowestCommonAncestor(node: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+    if (node == null || node == p || node == q) return node
+    /**
+    *  1. if p and q are node 's child, return p q 's LCA 
+    *  2.  if p and q are not node's child return null
+    *  3. if p and q, only one of then ar node's child return that node (p or q)
+    */
+    val left = _lowestCommonAncestor(node.left, p, q)
+    val right = _lowestCommonAncestor(node.right, p, q)
+
+    (left, right) match {
+      case (null, _) => right  // p and q are both not in left
+      case (_, null) => left  // p and q are both not in right
+      case (l, r) =>  node // only lowest common ancestor could return both non null node
+      // p and q, one of then in left and the other one in right
+    }
+  }
+}
+```
 
 ###  4.133. <a name='DeleteNodeinaLinkedList'></a>237. Delete Node in a Linked List
 
@@ -9747,17 +20454,265 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1vt4y1y7eM?spm_id_from=333.999.0.0)
 
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(var _x: Int = 0) {
+ *   var next: ListNode = null
+ *   var x: Int = _x
+ * }
+ */
+
+object Solution {
+    
+    def getNext(node: ListNode): ListNode = {
+        val nextNode = node.next
+        if(nextNode == null)
+            null
+        else{
+            node.x = nextNode.x
+            node.next = getNext(nextNode)
+            node
+        }
+    }
+    
+    def deleteNode(node: ListNode): Unit = {
+        getNext(node)
+    }
+}
+
+//The above solution can be simplified to:
+object Solution {
+    
+    def deleteNode(node: ListNode): Unit = {
+        node.x = node.next.x
+        node.next = node.next.next //These 2 lines are effectively the same as doing the above recursion in scala
+    }
+}
+
+```
+
 ###  4.134. <a name='ProductofArrayExceptSelf'></a>238 Product of Array Except Self
 
 [小明](https://www.bilibili.com/video/BV1oT4y1G78Y?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV16z4y197oQ?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+
+    //pre-compute prefix & suffix products in O(N) time and then multiply them
+    def productExceptSelf(nums: Array[Int]): Array[Int] = {
+        var prefix = Array.fill(nums.length)(1)
+        var suffix = Array.fill(nums.length)(1)
+        
+        (1 until prefix.length).map(i => {
+            prefix(i) = prefix(i-1)*nums(i-1)
+        })
+        
+        (suffix.length-2 to 0 by -1).map(i => {
+            suffix(i) = suffix(i+1)*nums(i+1)
+        })
+        
+        (0 until nums.length).map(i => {
+            nums(i) = prefix(i) * suffix(i)
+        })
+        nums
+    }
+}
+
+```
+
 ###  4.135. <a name='SlidingWindowMaximum'></a>239. Sliding Window Maximum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C763?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Bf4y1v758?spm_id_from=333.999.0.0)
+
+```scala
+
+/**
+* chosen solution 
+* using  array deque (double side queue)  which remove first/last element from collection is O(1)
+* time complexity O(N)
+*/
+object Solution0 {
+    def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+      val deque = collection.mutable.ArrayDeque[Int]()
+      val ret = collection.mutable.ArrayBuffer.empty[Int]
+      
+      nums.indices.foreach { case idx =>
+
+        val upcoming = nums(idx)
+        if (idx >= k && deque.head <= (idx - k)){
+          deque.dropInPlace(1)
+        }
+
+        while(deque.nonEmpty && nums(deque.last) <= upcoming) {
+        // drop the element if  it is smaller than upcoming element
+        //you should always delete elements from right side
+          deque.dropRightInPlace(1)
+        }
+
+        deque.append(idx)
+
+        if(idx + 1  >= k) {
+          ret += nums(deque.head)
+        }
+      }
+      ret.toArray  
+    }
+}
+
+/**
+* using max heap, may not AC
+* pq = pq.filter{case (_v: Int, _idx: Int) => (_v >= v) && (_idx > idx - k)} : keep element's time complexity is O(K)
+* time complexity: O(N log K)
+*/
+
+object Solution1 {
+    def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+        var pq = scala.collection.mutable.PriorityQueue.empty[(Int, Int)](Ordering.by(p  => p._1))
+        val rest = scala.collection.mutable.ArrayBuffer[Int]()
+        
+        nums.zipWithIndex.foreach{case (v: Int, idx: Int) => {
+     
+            pq += ((v, idx))
+            
+            /* keep the elements that is only larger than newest v and the nearest k */
+            pq = pq.filter{case (_v: Int, _idx: Int) => (_v >= v) && (_idx > idx - k)}       
+
+            if (idx + 1 >= k) {
+                rest += pq.head._1
+            }
+          
+        }}        
+        rest.toArray
+    }
+}
+
+
+/**
+* may not AC
+* fold left version, it is worst than for loop version
+*/
+object Solution1-2 {
+    def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+      val pq = scala.collection.mutable.PriorityQueue.empty[(Int, Int)](Ordering.by(p  => p._1))
+  val (_, rest, _) = nums.zipWithIndex.foldLeft((pq, Array.empty[Int], k)){
+    (B, v_id) =>
+      val (_pq, rest: Array[Int], _k) = B
+      var newPq = _pq
+      newPq += v_id
+      if(v_id._2 + 1 >= k) {
+        newPq = newPq.filter{case (_v:Int, _idx: Int) => (_v >= v_id._1) && (_idx > v_id._2 - k) }
+          
+         (newPq, rest :+ newPq.head._1, _k)
+      }else {
+         (newPq, rest, _k)
+      }
+     
+  }
+  rest
+        
+    }
+}
+
+
+/**
+* using scala vector, due to scala vector is immutable, any operation about add update remove is generate a new vector
+* so it's not a proper substitute for deque
+*/
+
+object Solution2 {
+  def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+    var windows = Vector.empty[Int]
+    val ret = scala.collection.mutable.ArrayBuffer.empty[Int]
+
+    nums.zipWithIndex.foreach { case (value: Int, index: Int) =>
+      if (index >= k && windows.head <= index - k)
+        windows = windows.drop(1)
+
+      while (windows.nonEmpty && nums(windows.last) <= value){
+        windows = windows.dropRight(1)
+      }
+      windows = windows :+ index
+      if (index + 1 >= k) {
+        ret += nums(windows.head)
+      }
+    }
+    ret.toArray
+  }
+}
+
+/**
+* using java array deque (double side queue) version which remove first/last element from collection is O(1)
+* time complexity O(N)
+*/
+object Solution3 {
+  def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+    import java.util
+    val windows = new util.ArrayDeque[Int]  // record nums index
+    val ret = scala.collection.mutable.ArrayBuffer.empty[Int]
+
+    nums.zipWithIndex.foreach { case (value: Int, index: Int) =>
+      if (index >= k && windows.peekFirst() <= index - k) {
+        // remove out of date element
+        windows.removeFirst()
+      }
+
+      while (!windows.isEmpty && nums(windows.peekLast()) <= value) {
+        // drop the element if  it is smaller than upcoming element
+        windows.removeLast()
+      }
+      windows.add(index)
+      if (index + 1 >= k) {
+        ret += nums(windows.peekFirst())
+      }
+    }
+    ret.toArray
+  }
+}
+
+/**
+* use scala build-in arrayDeque
+*/
+object Solution3-1 {
+    def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+      val deque = collection.mutable.ArrayDeque[Int]()
+      val ret = collection.mutable.ArrayBuffer.empty[Int]
+      
+      nums.indices.foreach { case idx =>
+
+        val upcoming = nums(idx)
+        if (idx >= k && deque.head <= (idx - k)){
+          deque.dropInPlace(1)
+        }
+
+        while(deque.nonEmpty && nums(deque.last) <= upcoming) {
+        // drop the element if  it is smaller than upcoming element
+          deque.dropRightInPlace(1)
+        }
+
+        deque.append(idx)
+
+        if(idx + 1  >= k) {
+          ret += nums(deque.head)
+        }
+      }
+      ret.toArray  
+    }
+}
+
+/**
+* brute force, not AC
+*/
+object Solution4 {
+    def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
+        nums.sliding(k).map(_.max).toArray
+    }
+}
+```
 
 ###  4.136. <a name='-1'></a>240. 二维数组的查找
 
@@ -9768,6 +20723,138 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Db411s78v?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1hV411i73u?spm_id_from=333.999.0.0)
+
+```scala
+
+/**
+* chosen solution
+* one line version
+* time complexity: O(N)
+*/
+
+object Solution0 {
+  def isAnagram(s: String, t: String): Boolean = {
+   s.groupBy(identity).mapValues(_.length).toMap == t.groupBy(identity).mapValues(_.length).toMap  // toMap: transform MapView to Map
+
+  }
+}
+
+
+/**
+* my first commit
+* time complexity: O(N)
+*/
+
+object Solution1 {
+  def isAnagram(s: String, t: String): Boolean = {
+    charCounter(s) equals charCounter(t)
+  }
+  private def charCounter(str: String): Map[Char, Int] = {
+    str.foldLeft(collection.mutable.Map.empty[Char, Int]) {
+      (map, s) =>
+        map.get(s) match {
+          case Some(e) =>
+            map.update(s, e + 1)
+            map
+          case None =>
+            map.update(s, 1)
+            map
+        }
+    }.toMap
+  }
+}
+
+
+
+```
+
+```scala
+//Time complexity( O(NlogN + N))
+object Solution {
+    def isAnagram(s: String, t: String): Boolean = {
+        var arr1 = s.toArray
+        var arr2 = t.toArray
+        if(arr1.size != arr2.size){
+            false
+        } else{
+            java.util.Arrays.sort(arr1)
+            java.util.Arrays.sort(arr2)
+            
+            var flag = true
+            import scala.util.control.Breaks._
+            var index = 0
+            breakable{
+            while(index < arr1.size){
+                if(arr1(index) != arr2(index)){
+                    flag = false
+                    break
+                }
+                index += 1
+            }
+            }
+            flag
+        }
+    }
+}
+
+//Time complexity O(n)
+object Solution {
+    def isAnagram(s: String, t: String): Boolean = {
+        var arr1 = s.toArray
+        var arr2 = t.toArray
+        
+        if(arr1.size != arr2.size){
+            false
+        } else{
+            var map = scala.collection.mutable.Map.empty[Char, Int]
+            for(elem <- arr1){
+                map.get(elem) match{
+                    case Some(count) => map += (elem -> (count+1))
+                    case None => map += (elem -> 1)
+                }
+            }
+            
+            for(elem <- arr2){
+                map.get(elem) match{
+                    case Some(count) if count == 1 => map.remove(elem)
+                    case Some(count) => map += (elem -> (count-1))
+                    case None => ()
+                }
+            }
+            
+            if(map.keys.isEmpty) true else false
+        }
+    }
+}
+
+//One more: O(N)
+object Solution {
+    def isAnagram(s: String, t: String): Boolean = {
+        if(s.size != t.size){
+            false
+        }else{
+        var arr = Array.fill(26)(0)
+        for(elem <- s){
+            arr(elem - 'a') += 1
+        }
+        
+        import scala.util.control.Breaks._
+        var flag = true
+        breakable{
+        for(elem <- t){
+            arr(elem - 'a') -= 1
+            if(arr(elem - 'a') < 0){
+                flag = false
+                break
+            }
+        }
+        }
+        flag
+    }
+    }
+}
+
+```
 
 ###  4.138. <a name='ShortestWordDistance'></a>243. Shortest Word Distance
 
@@ -9780,6 +20867,70 @@ class Solution:
 ###  4.140. <a name='-1'></a>257-二叉树的所有路径
 
 [哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
+
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech._
+
+//Given a binary tree, return all root-to-leaf paths.
+//
+//Note: A leaf is a node with no children.
+//
+//Example:
+//
+//Input:
+//
+//1
+///   \
+//2     3
+//\
+//5
+//
+//Output: ["1->2->5", "1->3"]
+//
+//Explanation: All root-to-leaf paths are: 1->2->5, 1->3
+
+package lc0257 {
+
+  import scala.collection.mutable.ArrayBuffer
+
+  object Solution {
+    def binaryTreePaths(root: TreeNode): List[String] = {
+      val tmp = ArrayBuffer[Int]()
+      val ret =ArrayBuffer[ArrayBuffer[Int]]()
+      helper(root, tmp, ret)
+      ret.toList.map({
+        x=>x.mkString("->")
+      })
+    }
+
+    def helper(node:TreeNode,tmp:ArrayBuffer[Int],ret:ArrayBuffer[ArrayBuffer[Int]]): Unit = {
+      if (node==null) {
+        return
+      }
+
+      tmp += node.value
+
+      if (node.left == null && node.right==null) {
+          ret += tmp.clone()
+      } else {
+        helper(node.left, tmp, ret)
+        helper(node.right, tmp, ret)
+      }
+      tmp.remove(tmp.length-1)
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val t1 = Tree.build(IndexedSeq("1","2 3","5 N N N"))
+      println(Solution.binaryTreePaths(t1))
+    }
+    val name = "257 binary tree path"
+  }
+}
+
+```
 
 ###  4.141. <a name='AddDigits'></a>258. Add Digits
 
@@ -9809,6 +20960,34 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1LU4y1p7n7?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    def missingNumber(nums: Array[Int]): Int = {
+        val size = nums.size
+        val idealSum = (size * (size + 1))/2
+        
+        val arraySum = nums.foldLeft(0)(_ + _) // can also use nums.sum
+        
+        idealSum - arraySum
+    }
+}
+
+//Removing foldLeft improved time
+object Solution {
+    def missingNumber(nums: Array[Int]): Int = {
+        val size = nums.size
+        var idealSum = (size * (size + 1))/2
+        
+        for(num <- nums){
+            idealSum -= num
+        }
+
+        idealSum
+    }
+}
+
+```
+
 ###  4.146. <a name='ClosestBinarySearchTreeValue'></a>270. Closest Binary Search Tree Value
 
 [哈哈哈](https://www.bilibili.com/video/BV1zy4y1a7mR?spm_id_from=333.999.0.0)
@@ -9826,6 +21005,42 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1cQ4y1N7dc?spm_id_from=333.999.0.0)
 
+```scala
+/* The isBadVersion API is defined in the parent class VersionControl.
+      def isBadVersion(version: Int): Boolean = {} */
+
+
+
+/**
+* my first commitment
+* binary search recursive version
+* time complexity
+*   log(n)
+*/
+class Solution1 extends VersionControl {
+    def firstBadVersion(n: Int): Int = {
+        search(1, n)
+    }
+  
+    def search(left: Int, right: Int): Int  = {
+      if (left > right) return -1
+       /**
+      * it's bad version from mid to n, we could keep right side a bad version
+      * the we return left side index as left index equals to right index
+      */
+      if (left == right) return left
+      
+      val mid = left + (right - left) / 2
+      if (isBadVersion(mid))
+     
+        search(left, mid) 
+      else
+        search(mid + 1, right)
+    }
+}
+
+```
+
 ###  4.149. <a name='PerfectSquares'></a>279 Perfect Squares
 
 [小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
@@ -9841,6 +21056,94 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1ba4y1t7eK?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1Wp4y1y7pT?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def moveZeroes(nums: Array[Int]): Unit = {
+        var p1 = 0
+        var p2 = 0
+        while(p1 < nums.size && p2 < nums.size){
+            if(nums(p1) == 0 && nums(p2) != 0 && p1<p2){
+                nums(p1) = nums(p2)
+                nums(p2) = 0
+                p1 += 1
+                p2 += 1
+            } else if(nums(p1) != 0 && nums(p2) != 0){
+                p1 += 1
+            }else{
+                p2 += 1
+            }
+        }
+    }
+}
+
+//Alternate solution: calculate the number of shifts 
+object Solution {
+    def moveZeroes(nums: Array[Int]): Unit = {
+        
+        var zeroCount = 0
+        //count of zero is amount character is shifted to left
+        //from first zero position traverse array left
+        for(a <- 0 to nums.size-1){   
+            //count zeroes and shift when not zero
+            if(nums(a) == 0){
+                zeroCount = zeroCount + 1
+            }else if(zeroCount>0){
+                //shift left if not 0 by zeroCount
+                nums(a-zeroCount) = nums(a)
+                nums(a) = 0
+            }
+        }
+    }
+}
+
+```
+
+```scala
+package com.zhourui.leetcode
+
+package lc0283_movezero {
+  object Solution {
+    def moveZeroes(nums: Array[Int]): Unit = {
+//      nums.foldLeft(0) {
+//        case (w,b) => {
+//          if (b!=0) {
+//            nums(w) = b
+//
+//            w+1
+//          } else w
+//        }
+//      }
+
+      nums.indices.foldLeft(0) {
+        case (acc, e) => {
+          if (nums(e)!=0) {
+            val tmp = nums(e)
+            nums(e) = nums(acc)
+            nums(acc) = tmp
+            acc+1
+          } else acc
+        }
+      }
+    }
+  }
+}
+
+/*
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int w = 0;
+        for (int i = 0; i< nums.size(); i++) {
+            if (nums[i]!=0) {
+                swap(nums[w++], nums[i]);
+            }
+        }
+    }
+};
+ */
+
+```
 
 ###  4.152. <a name='PeekingIterator'></a>284 Peeking Iterator
 
@@ -9882,6 +21185,122 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV1rT4y1u7jV?spm_id_from=333.999.0.0)
 
+```scala
+
+
+
+/**
+* chosen answer
+* dynamic programming 
+* memo
+*   1. dp[i] represent the max length including index i ending at index i
+*   2. if nums[j] < nums[i] where j < i, we could increase 1 from dp[j]
+*  time complexity: O(N^2)
+*  space  complexity: O(N)
+*/
+
+object Solution0 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+        if(nums == null || nums.isEmpty) return 0
+        val dp = Array.fill[Int](nums.length)(1) // record the LIS of 0 to i sub-array in nums while select i
+        for(i <- nums.indices; j <- 0 until i) {
+            if(nums(i) > nums(j)) {
+                dp(i) = (dp(j) + 1) max dp(i)
+            }
+        }
+        dp.max
+        
+    }
+}
+
+/**
+* brute force : not Ac
+* memo:
+* 1. each position have two choice :
+*    1. take current value if currentIdx value > previousIdx value 
+*    2. do not take current value
+* time complexity: O(2^n)
+*/
+object Solution1 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+        lengthOfLIS(nums, 0, -1)
+    }
+  
+    def lengthOfLIS(nums: Array[Int], currentIdx: Int, previousIdx: Int): Int = {
+      if (currentIdx >= nums.length) return 0
+      
+      val taken = if (previousIdx == -1  ||  (nums(currentIdx) > nums(previousIdx))) {
+        lengthOfLIS(nums, currentIdx + 1, currentIdx) + 1
+      } else {
+        0
+      } 
+      val nonTaken = lengthOfLIS(nums, currentIdx + 1, previousIdx)
+      taken max nonTaken
+    }
+}
+
+/**
+* with memorized: we just fill the nxn dimension memory array
+* time complexity: O(n^2)
+* space complexity: O(n^2)
+*/
+object Solution1-2 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+      val memory = Array.fill[Int](nums.length, nums.length)(-1)
+      lengthOfLIS(nums, 0, -1, memory)
+    }
+  
+    def lengthOfLIS(nums: Array[Int], currentIdx: Int, previousIdx: Int, memory: Array[Array[Int]]): Int  = {
+      // println(currentIdx, previousIdx)
+      if (nums.length == currentIdx) return 0
+      if (memory(currentIdx)(previousIdx + 1) != -1) return memory(currentIdx)(previousIdx + 1)
+      
+      val taken = if (previousIdx == -1 || nums(currentIdx) > nums(previousIdx)) {
+        1 + lengthOfLIS(nums, currentIdx + 1, currentIdx, memory)
+      } else {
+        0
+      }
+      
+      val nonTaken = lengthOfLIS(nums, currentIdx + 1, previousIdx, memory)
+      
+      memory(currentIdx)(previousIdx + 1) = taken max nonTaken
+      
+      memory(currentIdx)(previousIdx + 1) 
+    }
+  
+  
+}
+
+
+
+
+
+/**
+* dynamic programming 
+* memo
+*   1. dp[i] represent the max length including index i ending at index i
+*   2. if nums[j] < nums[i] where j < i, we could increase 1 from dp[j]
+*  time complexity: O(N^2)
+*  space  complexity: O(N)
+*/
+
+object Solution3 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+        if(nums == null || nums.isEmpty) return 0
+        val dp = Array.fill[Int](nums.length)(1) // record the LIS of 0 to i sub-array in nums while select i
+        
+
+        for(i <- nums.indices; j <- 0 until i) {
+            if(nums(i) > nums(j)) {
+                dp(i) = (dp(j) + 1) max dp(i)
+            }
+        }
+        dp.max
+        
+    }
+}
+```
+
 ###  4.159. <a name='RemoveInvalidParentheses'></a>301. Remove Invalid Parentheses
 
 [花花酱](https://www.bilibili.com/video/BV1VW411y7Xd?spm_id_from=333.999.0.0)
@@ -9907,6 +21326,87 @@ class Solution:
 [哈哈哈](https://www.bilibili.com/video/BV1Vy4y1z7pb?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV13D4y1U7iU?spm_id_from=333.999.0.0)
+
+```scala
+
+/**
+* my first commitment
+* dynamic programming
+* memo
+*   1. dp definition: dp[i][j] means the best profit we can have at i-th day in state j of without holding / holding / cooldown 
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if(prices == null || prices.isEmpty) return 0
+        /*
+        * state definition
+        * 0: without holding
+        * 1: holding one
+        * 2: sold than cooldown
+        */
+        val dp = Array.tabulate(prices.length, 3){
+            case (0, 0) => 0
+            case (0, 1) => -prices(0)
+            case (0, 2) => 0
+            case _ => 0
+        }
+        
+        for(i <- 1 until prices.length) {
+            dp(i)(0) = dp(i - 1)(0) max dp(i - 1)(2) // 0 -> 0 or 2 -> 0
+            dp(i)(1) = dp(i - 1)(1) max (dp(i - 1)(0) - prices(i)) // 1 -> 1 or  0 -> 1
+            dp(i)(2) = dp(i - 1)(1) + prices(i) // 1 -> 2
+        }
+        
+        dp.last.max
+    }
+}
+
+/**
+* dynamic programming
+* memo
+*    ok! lets reduce the dp array size without keep all i-th state
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution1-2 {
+    def maxProfit(prices: Array[Int]): Int = {
+        if(prices == null || prices.isEmpty) return 0
+        var withoutHold = 0
+        var hold = Int.MinValue
+        var coolDown = 0
+        
+        for(price <- prices) {
+            val withoutHold_ = withoutHold  // keep value
+            val hold_ = hold // keep value
+            withoutHold = withoutHold max coolDown
+            hold = hold max (withoutHold_ - price)
+            coolDown = hold_ + price  
+        }
+        withoutHold max coolDown
+    }
+}
+
+/**
+* dynamic programming - function programming
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+object Solution1-3 {
+    def maxProfit(prices: Array[Int]): Int = {
+        val (withoutHold, hold, cooldown) = prices.foldLeft(0, Int.MinValue, 0) {
+            case ((withoutHold, hold, cooldown), cost) => 
+             (
+                 withoutHold max cooldown,
+                 hold max (withoutHold - cost),
+                 hold + cost      
+             )
+        }
+        withoutHold max cooldown
+    }
+}
+```
 
 ###  4.163. <a name='MinimumHeightTrees'></a>310 Minimum Height Trees
 
@@ -9937,6 +21437,32 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1tz4y1d7XM?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1ty4y187dh?spm_id_from=333.999.0.0)
+
+```scala
+/**
+* dynamic programming: bottom up
+* time complexity: O(S * N), S is the amount, N is the coin denomination count
+* space complexity: O(S)
+*/
+
+object Solution {
+    def coinChange(coins: Array[Int], amount: Int): Int = {
+         
+        val dp = Array.fill[Int](amount + 1)(amount + 1) // record the minimum needed coins of each denominations
+
+        dp(0) = 0
+        for (i <- 1 to amount; denominations <- coins) {
+
+            if(denominations <= i) {
+                dp(i) = dp(i) min (dp(i - denominations) + 1)
+            }        
+        }
+    
+        if (dp.last > amount) -1 else dp.last
+    }
+}
+
+```
 
 ###  4.169. <a name='PowerofThree'></a>326. Power of Three
 
@@ -9974,6 +21500,65 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1VK411s7xi?spm_id_from=333.999.0.0)
 
+```scala
+
+/**
+* chosen solution
+* DP + bit operation 
+* using an array to record previous result, and current one just add 1 with previous calculated result
+* complexity:
+*   time complexity: O(N)
+*   space complexity: O(N)
+*/
+
+object Solution0 {
+    def countBits(num: Int): Array[Int] = {
+        var arr = Array.ofDim[Int](num + 1)
+        (1 to num).foreach{ n => 
+            arr(n) = arr(n & (n -1 )) + 1
+        }
+        arr     
+    }
+    
+}
+
+object Solution1 {
+    def countBits(num: Int): Array[Int] = {
+        (0 to num).map(_counter).toArray
+        
+    }
+    private def _counter(n: Int): Int = {
+        var counter = 0
+        var nn = n
+        
+        while(nn != 0) {
+            counter += 1
+            nn = nn & (nn - 1)
+        }
+        counter 
+    }
+}
+
+/**
+* DP + bit operation 
+* using an array to record previous result, and current one just add 1 with previous calculated result
+* complexity:
+*   time complexity: O(N)
+*   space complexity: O(N)
+*/
+
+object Solution2 {
+    def countBits(num: Int): Array[Int] = {
+        var arr = Array.ofDim[Int](num + 1)
+        (1 to num).foreach{ n => 
+            arr(n) = arr(n & (n -1 )) + 1
+        }
+        arr     
+    }
+    
+}
+```
+
 ###  4.176. <a name='PowerofFour'></a>342. Power of Four
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7D5?spm_id_from=333.999.0.0)
@@ -9992,6 +21577,24 @@ class Solution:
 
 [图灵](https://www.bilibili.com/video/BV1nQ4y1R7nH?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    def reverseString(s: Array[Char]): Unit = {
+        var begin = 0
+        var end = s.length - 1
+        while(begin < end){
+            var temp = s(begin)
+            s(begin) = s(end)
+            s(end) = temp
+            
+            begin += 1
+            end -= 1
+        }
+    }
+}
+
+```
+
 ###  4.179. <a name='ReverseVowelsofaString'></a>345. Reverse Vowels of a String
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7JH?spm_id_from=333.999.0.0)
@@ -10006,6 +21609,38 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1sk4y1B7vj?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    def topKFrequent(nums: Array[Int], k: Int): Array[Int] = {
+        var hm = scala.collection.mutable.Map.empty[Int, Int]
+        for(elem <- nums){
+            hm.get(elem) match{
+                case Some(count) => hm += (elem -> (count+1))
+                case None => hm += (elem -> 1)
+            }
+        }
+        
+        // hm.toList.sortBy(x => (x._2)*(-1)).take(k).map(_._1).toArray
+        // The above is a sorting approach. We can use Heap/PriorityQueue to achieve better time complexity
+        
+        import scala.math.Ordering.Implicits._
+        
+        def orderByFrequency(tup: (Int, Int)) = tup._2
+        
+        val pq = new scala.collection.mutable.PriorityQueue[(Int, Int)]()(Ordering.by(orderByFrequency))
+        
+        for(entry <- hm){
+            pq.enqueue(entry)
+        }
+        
+        println(pq)
+        (1 to k).map(_ => pq.dequeue).map(_._1).toArray
+        
+    }
+}
+
+```
+
 ###  4.182. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
 
 [小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
@@ -10015,6 +21650,53 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1gx411X7q8?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV165411879H?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def intersect(nums1: Array[Int], nums2: Array[Int]): Array[Int] = {
+        
+        val map1 = nums1.groupBy(identity).mapValues(_.length)
+        val map2 = nums2.groupBy(identity).mapValues(_.length)
+        
+        val keys = map1.keySet intersect map2.keySet
+        
+        keys.map(key => {
+            val count1 = map1.get(key).get
+            val count2 = map2.get(key).get
+            val count = if(count1 > count2) count2 else count1
+            Array.fill(count)(key)
+        }).toArray.flatten
+    }
+}
+
+
+//Alternate solution to keep count in HashMap from 1st array & decrease from second array... whatever is left is intersection
+object Solution {
+    def intersect(nums1: Array[Int], nums2: Array[Int]): Array[Int] = {
+        var map = scala.collection.mutable.Map.empty[Int, Int]
+        var output = List.empty[Int]
+        for(item <- nums1){
+            map.get(item) match{
+                case Some(count) => map += (item -> (count + 1))
+                case None => map += (item -> 1)
+            }
+        }
+        
+        for(item <- nums2){
+            map.get(item) match{
+                case Some(count) => {
+                    output = output :+ item
+                    if(count - 1 == 0) map.remove(item) else map += (item -> (count - 1))
+                }
+                case None => map.remove(item)
+            }
+        }
+        
+        output.toArray
+    }
+}
+
+```
 
 ###  4.184. <a name='DesignTwitter'></a>355. 设计推特 Design Twitter
 
@@ -10077,6 +21759,48 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1y4411A7d2?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1b541147WU?spm_id_from=333.999.0.0)
+
+```scala
+object Solution {
+    def firstUniqChar(s: String): Int = {
+        var map = scala.collection.mutable.Map.empty[Char, (Int, Int)]
+        (0 to s.length-1).map(i =>
+            map.get(s.charAt(i)) match{
+                case Some(indexAndCount) => map += (s.charAt(i) -> (i, indexAndCount._2 + 1))
+                case None => map += (s.charAt(i) -> (i, 1))
+            }
+        )
+        map.toList.filter(x => x._2._2 == 1).map(_._2._1).sorted.headOption.getOrElse(-1)
+    }
+}
+
+//Alternate/Better SCALA solution
+object Solution {
+    def firstUniqChar(s: String): Int = {
+        val hmap =  s.toCharArray.groupBy(identity).mapValues(_.length)
+        val uniqChar = s.toCharArray.zipWithIndex.find (p => hmap(p._1) == 1)
+        if(uniqChar.nonEmpty) uniqChar.get._2 else -1 
+    }
+}
+
+/**How the above solution works:
+scala> val a = "akashs"
+a: String = akashs
+
+scala> a.toCharArray.groupBy(identity)
+res0: scala.collection.immutable.Map[Char,Array[Char]] = Map(h -> Array(h), k -> Array(k), s -> Array(s, s), a -> Array(a, a))
+
+scala> a.toCharArray.groupBy(identity).mapValues(_.length)
+res1: scala.collection.immutable.Map[Char,Int] = Map(h -> 1, k -> 1, s -> 2, a -> 2)
+
+scala> a.toCharArray.zipWithIndex
+res2: Array[(Char, Int)] = Array((a,0), (k,1), (a,2), (s,3), (h,4), (s,5))
+
+scala> a.toCharArray.zipWithIndex.find(x => res1(x._1) == 1)
+res3: Option[(Char, Int)] = Some((k,1))
+*/
+
+```
 
 ###  4.197. <a name='FindtheDifference'></a>389. Find the Difference
 
@@ -10162,6 +21886,24 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1tD4y1m76j?spm_id_from=333.999.0.0)
 
+```scala
+object Solution {
+    def fizzBuzz(n: Int): List[String] = {
+        (1 to n).map(num => {
+            if(num%15 == 0)
+                "FizzBuzz"
+            else if(num%5 == 0)
+                "Buzz"
+            else if(num%3 == 0)
+                "Fizz"
+            else
+                num.toString
+        }).toList
+    }
+}
+
+```
+
 ###  4.212. <a name='-1'></a>413-等差数列划分
 
 [哈哈哈](https://www.bilibili.com/video/BV13a4y1i7tR?spm_id_from=333.999.0.0)
@@ -10239,6 +21981,135 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV1iW411d7Nb?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1254y1X7HV?spm_id_from=333.999.0.0)
+
+```scala
+/**
+* chosen solution
+* sliding window - two pointer template version
+* two index to indicate range: left and right
+* time complexity: O(N)
+* space timeComplexity: O(N) : one hashMap
+*/
+object Solution0 {
+  import scala.collection.mutable
+  def findAnagrams(s: String, p: String): List[Int] = {
+    val pMap = mutable.Map.empty ++ p.groupBy(identity).mapValues(_.length).toMap
+    val ret = scala.collection.mutable.ListBuffer[Int]()
+    var left = 0
+    var counter = pMap.size
+
+    for(right <- s.indices) {  // right index
+
+      pMap.get(s(right)) match {
+        case Some(e) if e >= 1 =>  // e >=1 means the char exits in p
+          pMap.update(s(right),  e - 1)
+          counter -= 1  // match a char
+        case Some(e) =>  // e <= 0 meas there would be duplicate char in s but p isn't
+          pMap.update(s(right),  e - 1)
+        case None =>
+      }
+      while(counter == 0) {
+        if((right - left + 1) == p.length) ret += left
+        pMap.get(leftChar) match {
+            case Some(v) =>
+                pMap.update(leftChar, v + 1)
+                if(v == 0) counter += 1
+            case None =>
+        }
+        left += 1
+      }
+    }
+    ret.toList
+  }
+}
+
+/**
+* my first commit
+* sliding window + hashMap within windows
+* time complexity: O(NM): N: s.length, M: p.length
+*/
+
+object Solution1 {
+  def findAnagrams(s: String, p: String): List[Int] = {
+    val pMap = p.groupBy(identity).mapValues(_.length).toMap
+
+     s.sliding(p.length).zipWithIndex.filter{ case (c, _) => pMap == c.groupBy(identity).mapValues(_.length).toMap}.map(_._2).toList
+  }
+}
+
+
+/**
+* sliding window - two pointer template version
+* two index to indicate range: left and right
+* time complexity: O(N)
+* space timeComplexity: O(N) : one hashMap
+*/
+
+object Solution2 {
+  import scala.collection.mutable
+  def findAnagrams(s: String, p: String): List[Int] = {
+    val pMap = mutable.Map.empty ++ p.groupBy(identity).mapValues(_.length).toMap
+    val ret = scala.collection.mutable.ListBuffer[Int]()
+    var left = 0
+    var counter = pMap.size
+
+    for(right <- s.indices) {  // right index
+
+      pMap.get(s(right)) match {
+        case Some(e) if e >= 1 =>  // e >=1 means the char exits in p
+          pMap.update(s(right),  e - 1)
+          counter -= 1  // match a char
+        case Some(e) =>  // e <= 0 meas there would be duplicate char in s but p isn't
+          pMap.update(s(right),  e - 1)
+        case None =>
+      }
+      while(counter == 0) {
+        if((right - left + 1) == p.length) ret += left
+        pMap.get(leftChar) match {
+            case Some(v) =>
+                pMap.update(leftChar, v + 1)
+                if(v == 0) counter += 1
+            case None =>
+        }
+        left += 1
+      }
+    }
+
+    ret.toList
+  }
+}
+
+/**
+* sliding window - two hashmap version
+* using a mutable map storing current window's string element and amount
+* time complexity: O(N)
+* space complexity: O(2N) -> two hashMap
+*/
+
+object Solution2-1 {
+  def findAnagrams(s: String, p: String): List[Int] = {
+    val pMap = p.groupBy(identity).mapValues(_.length).toMap
+    val sMap = scala.collection.mutable.Map[Char, Int]()
+    val result = scala.collection.mutable.ListBuffer[Int]()
+
+    for((char, right) <- s.zipWithIndex) {
+      sMap.put(char, sMap.getOrElse(char, 0) + 1)
+
+      if(right >= p.length) {
+        val leftChar = s(right - p.length)
+        sMap.get(leftChar) match {
+          case Some(e) if e == 1 => sMap.remove(leftChar)
+          case Some(e) => sMap.update(leftChar, e - 1)
+          case _ =>
+        }
+      }
+      if(pMap.equals(sMap)) result += (right - p.length + 1)
+    }
+    result.toList
+  }
+}
+
+```
 
 ###  4.228. <a name='ArrangingCoins'></a>441 Arranging Coins
 
@@ -10422,6 +22293,173 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV15y4y147Re?spm_id_from=333.999.0.0)
 
+```scala
+/**
+* chosen solution
+* iterative - bottom up with memorization
+* only record n -1 and n -2 status
+* time complexity O(N)
+* space complexity O(1)
+*/ 
+object Solution0 {
+    def fib(N: Int): Int = {
+        if (N <= 1) N
+        else {
+            var a = 0
+            var b = 1
+            (1 until N).foreach{ n =>
+                val c = a + b
+                a = b
+                b = c
+            }
+            b
+        }
+    }
+}
+
+/**
+* iterative - bottom up with memorization
+* time complexity O(N)
+* space complexity O(N)
+*/
+
+object Solution1 {
+    def fib(N: Int): Int = {
+        if(N <= 1) return N
+        
+        val cache = Array.ofDim[Int](N + 1)
+        cache(0) = 0
+        cache(1) = 1
+        (2 to N).foreach(n => cache(n) = cache(n -1) + cache(n -2))
+        cache(N)
+    }
+}
+
+/**
+* iterative - bottom up with memorization
+* only record n -1 and n -2 status
+* time complexity O(N)
+* space complexity O(1)
+*/ 
+object Solution1-2 {
+    def fib(N: Int): Int = {
+        if (N <= 1) N
+        else {
+            var a = 0
+            var b = 1
+            (1 until N).foreach{ n =>
+                val c = a + b
+                a = b
+                b = c
+            }
+            b
+        }
+    }
+}
+
+/**
+* recursive - top-down with memorization
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution2 {
+    def fib(N: Int): Int = {
+        if(N <= 1) return N
+        
+        val cache = Array.ofDim[Int](N + 1)
+        cache(0) = 0
+        cache(1) = 1
+
+        def _fib(n: Int):Int = {
+            if(n <= 1) return n
+            
+            if(cache(n) != 0) cache(n)
+            else {
+                cache(n) = _fib(n-1) + _fib(n-2)
+                cache(n)
+            }
+        }
+        _fib(N)
+        
+    }
+}
+
+
+
+/**
+* recursive version - bottom up
+* time complexity: O(2^N）
+* space complexity: O(N)
+*/
+
+object Solution3 {
+    def fib(N: Int): Int = {
+        if (N <= 1) N
+        else {
+           fib(N - 1) + fib(N - 2)
+        }
+    }
+}
+
+
+/**
+* matrix operation with pow operation
+* memo
+*   n > 1
+*   | fn   |    | 1  1  |^ (n -1)  | 1 |
+*   | fn-1 |  = | 1  0  |          | 1 |
+* time complexity: O(logN)
+* space complexity: O(logN) due to stack size
+*/
+object Solution4 {
+  def fib(N: Int): Int = {
+    if (N <= 1) return N
+
+    val matrix = Array.ofDim[Int](2, 2)
+    matrix(0)(0) = 1
+    matrix(0)(1) = 1
+    matrix(1)(0) = 1
+    matrix(1)(1) = 0
+
+    val identityMatrix = Array.tabulate(2, 2) {
+      case (i, j) if i == j => 1
+      case _ => 0
+    }
+    val retMatrix = matrixPow(identityMatrix, matrix, N - 1)
+    retMatrix(0)(0)
+  }
+
+  @annotation.tailrec
+  def matrixPow(current: Array[Array[Int]], base: Array[Array[Int]], pow: Int): Array[Array[Int]] = {
+    if (pow == 0) current
+    else {
+      if ((pow & 1) == 1) {
+        val newCurrent = multiply(current, base)
+        val newBase = multiply(base, base)
+
+        matrixPow(newCurrent, newBase, pow / 2)
+      } else {
+        val newBase = multiply(base, base)
+        matrixPow(current, newBase, pow / 2)
+      }
+    }
+
+  }
+
+  def multiply(a: Array[Array[Int]], b: Array[Array[Int]]): Array[Array[Int]] = {
+    val a00 = a(0)(0) * b(0)(0) + a(0)(1) * b(1)(0)
+    val a01 = a(0)(0) * b(0)(1) + a(0)(1) * b(1)(1)
+    val a10 = a(1)(0) * b(0)(0) + a(1)(1) * b(1)(0)
+    val a11 = a(1)(0) * b(0)(1) + a(1)(1) * b(1)(1)
+    a(0)(0) = a00
+    a(0)(1) = a01
+    a(1)(0) = a10
+    a(1)(1) = a11
+    a
+  }
+}
+```
+
 ###  4.267. <a name='LongestPalindromicSubsequence'></a>516. Longest Palindromic Subsequence
 
 [花花酱](https://www.bilibili.com/video/BV18W411d7k2?spm_id_from=333.999.0.0)
@@ -10498,6 +22536,128 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ta411F7rk?spm_id_from=333.999.0.0)
 
+```scala
+
+
+/**
+* union & find: implement both union by rank and path compression
+* time complexity : 
+*   in union & find each op:
+*           find: very very close to O(1) amortized
+*           union: very very close to O(1) amortized
+*   the entire ：
+*       O(n + M), n is node size, M is the times we call Union operation which cause O(1) 
+*       n (constructor) + M (call union times)
+*/
+
+object Solution1 {
+  def findCircleNum(M: Array[Array[Int]]): Int = {
+    val unionFind = new UnionFind(M.length)
+
+    for (i <- M.indices; j <- (i + 1) until M.length; if M(i)(j) == 1) {
+      unionFind.union(i, j)
+    }
+    unionFind.counter
+
+  }
+}
+
+class UnionFind(M: Int) {
+  val roots = Array.tabulate(M)(i => i)
+  val rank = Array.tabulate(M)(i => 1)
+  var counter = M
+
+  def findRoot(i: Int): Int = {
+
+    var root = i
+    while (root != roots(root)) {
+      roots(root) = roots(roots(root))  // path compression
+      root = roots(root)
+    }
+    root
+  }
+
+  def connected(a: Int, b: Int): Boolean = {
+    findRoot(a) == findRoot(b)
+  }
+
+  def union(a: Int, b: Int) {
+    val rootA = findRoot(a)
+    val rootB = findRoot(b)
+
+    if(rootA == rootB) return
+
+    // union by rank
+    if(rank(rootA) > rank(rootB)) {
+      roots(rootB) = rootA
+    }else if(rank(rootB) > rank(rootA)){
+      roots(rootA) = rootB
+    }else { // rank equal case
+      roots(rootB) = rootA
+      rank(rootA) += 1
+
+    }
+    counter -= 1
+  }
+}
+
+/**
+* union & find: without counter in union&find to record current cluster
+*       O(n + M + n), n is node size, M is the times we call Union operation which cause O(1) 
+*       n (construct union & find ) + M (call union times)  + n (n time call findRoot)
+*/
+object Solution1-2 {
+  def findCircleNum(M: Array[Array[Int]]): Int = {
+    val unionFind = new UnionFind(M.length)
+
+    for (i <- M.indices; j <- (i + 1) until M.length; if M(i)(j) == 1) {
+      unionFind.union(i, j)
+    }
+    M.indices.map(unionFind.findRoot).distinct.size
+
+  }
+}
+
+class UnionFind(M: Int) {
+  val roots = Array.tabulate(M)(i => i)
+  val rank = Array.tabulate(M)(i => 1)
+
+  def findRoot(i: Int): Int = {
+
+    var root = i
+    while (root != roots(root)) {
+      roots(root) = roots(roots(root))  // path compression
+      root = roots(root)
+    }
+    root
+  }
+
+  def connected(a: Int, b: Int): Boolean = {
+    findRoot(a) == findRoot(b)
+  }
+
+  def union(a: Int, b: Int) {
+    val rootA = findRoot(a)
+    val rootB = findRoot(b)
+
+    if(rootA == rootB) return
+
+    // union by rank
+    if(rank(rootA) > rank(rootB)) {
+      roots(rootB) = rootA
+    }else if(rank(rootB) > rank(rootA)){
+      roots(rootA) = rootB
+    }else { // rank equal case
+      roots(rootB) = rootA
+      rank(rootA) += 1
+
+    }
+  }
+}
+
+
+```
+
 ###  4.283. <a name='BrickWall'></a>554 Brick Wall
 
 [小明](https://www.bilibili.com/video/BV1mo4y1f7wc?spm_id_from=333.999.0.0)
@@ -10529,6 +22689,91 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV175411E761?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1154y1X7qB?spm_id_from=333.999.0.0)
+
+```scala
+
+
+/**
+* my first commitment: sliding window: hashcode with build-in sliding method
+*/
+object Solution1 {
+    def checkInclusion(s1: String, s2: String): Boolean = {
+      val s1Length = s1.length
+      val s1Hash = s1.groupBy(identity).mapValues(_.length).toMap.hashCode
+
+      s2.sliding(s1Length).exists(seq => seq.groupBy(identity).mapValues(_.length).toMap.hashCode == s1Hash)
+    }
+}
+
+
+/**
+* optimize from 1-1 : maintain sliding window and hashmap by my self
+* time complexity: O(s1.length + s2.length)
+* space complexity: O(s1.distinct.length)
+*/
+object Solution1-2 {
+    import collection.mutable
+    def checkInclusion(s1: String, s2: String): Boolean = {
+      val s1HashCode = s1.groupBy(identity).mapValues(_.length).toMap.hashCode
+      val s2Map = mutable.Map.empty[Char, Int]
+      
+      (0 until s2.length).exists {
+        case idx if idx < s1.length =>
+          val char = s2(idx)
+          mapIncrement(s2Map, char)
+          s2Map.hashCode == s1HashCode
+        case idx => 
+          val rightChar = s2(idx)
+          val leftChar = s2(idx - s1.length)
+          mapIncrement(s2Map, rightChar)
+          mapDecrement(s2Map, leftChar) 
+          s2Map.hashCode == s1HashCode
+      }
+    }
+    def mapIncrement(map: mutable.Map[Char, Int], char: Char): Unit = {
+      map.get(char) match {
+            case Some(v) => map.update(char, v + 1)
+            case None => map.update(char, 1)
+      }
+    }
+    def mapDecrement(map: mutable.Map[Char, Int], char: Char) = map.get(char) match {
+      case Some(v) if v == 1 => map.remove(char)
+      case Some(v) => map.update(char, v - 1)
+      case None =>
+    }
+}
+
+/**
+* sliding windows: using only 1 map to record differential
+* 1. if diff map is empty, s2 contains the permutation of s1
+* 2. initial map with foreach instead of groupBy witch is time consuming
+* time complexity (l1 + l2)
+*/
+object Solution1-3 {
+    import collection.mutable
+    def checkInclusion(s1: String, s2: String): Boolean = {
+      val diffMap = mutable.Map.empty[Char, Int]
+      s1.foreach(mapUpdate(diffMap, _, 1))
+      
+      (0 until s2.length).exists {case idx =>
+        if (idx >= s1.length) {
+          val leftChar = s2(idx - s1.length)
+          mapUpdate(diffMap, leftChar, 1)
+        }
+        val rightChar = s2(idx)
+        mapUpdate(diffMap, rightChar, -1)
+        diffMap.isEmpty
+      }
+    }
+    def mapUpdate(map: mutable.Map[Char, Int], char: Char, value: Int): Unit = {
+      map.get(char) match {
+            case Some(v) if v + value == 0 => map.remove(char)
+            case Some(v) => map.update(char, v + value)
+            case None => map.update(char, value)
+      }
+    }
+}
+```
 
 ###  4.288. <a name='-1'></a>572-另一个树的子树
 
@@ -10718,11 +22963,96 @@ class Solution:
 
 [图灵](https://www.bilibili.com/video/BV1g5411w7o8?spm_id_from=333.999.0.0)
 
+```scala
+/**
+* using min heap
+*/
+class KthLargest(_k: Int, _nums: Array[Int]) {
+    private val pq = scala.collection.mutable.PriorityQueue.empty[Int](Ordering[Int].reverse)
+    val k = _k
+    _nums.foreach(add)
+
+
+    def add(`val`: Int): Int = {
+        if (pq.size < k)
+            /* if only add one element at once, += is more effective than enqueue op */
+            pq += `val`
+            // pq.enqueue(`val`)
+        else if(pq.head < `val`){
+            pq.dequeue
+            pq += `val`
+            // pq.enqueue(`val`)
+        }
+        // println(pq.clone.dequeueAll)
+        pq.head
+               
+    }
+}
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(`val`)
+ */
+```
+
 ###  4.330. <a name='BinarySearch'></a>704.Binary Search二分查找
 
 [图灵](https://www.bilibili.com/video/BV1Dh411v7yT?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1qa4y157E4?spm_id_from=333.999.0.0)
+
+```scala
+
+/**
+* my first commitment:
+* time complexity: O(logn)
+*/
+
+object Solution1 {
+    def search(nums: Array[Int], target: Int): Int = {
+      var left = 0
+      var right = nums.length - 1
+      var ans = -1
+      while(ans == -1 && left <= right) {
+        println(left, right)
+        val mid: Int = left  + (right - left) / 2
+        if(nums(mid) == target){
+          ans = mid
+        } else if(target > nums(mid)) {
+          left = mid + 1
+        } else {
+          right = mid - 1
+        }
+ 
+      }
+      ans
+    }
+}
+
+/**
+* recursive version
+*/
+object Solution1-2 {
+    def search(nums: Array[Int], target: Int): Int = {
+        search(nums, target, 0, nums.length - 1)
+    }
+  
+    @annotation.tailrec
+    def search(nums: Array[Int], target: Int, left: Int, right: Int): Int = {
+      if(left > right) return -1
+      
+      val mid = left + (right - left) / 2
+      if (nums(mid) == target) 
+        mid
+      else if (target > nums(mid))
+        search(nums, target, mid + 1, right)
+      else 
+        search(nums, target, left, right - 1)
+      
+    }
+}
+```
 
 ###  4.331. <a name='DesignHashSet'></a>705 Design HashSet
 
@@ -10749,6 +23079,84 @@ class Solution:
 [哈哈哈](https://www.bilibili.com/video/BV1WK4y1E7mP?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1t54y187Qy?spm_id_from=333.999.0.0)
+
+```scala
+/**
+* my first commitment
+* dynamic programming
+*     dp(i)(j) means the best profit we can have at i-th day in different state un-holding stock or holding a share of stock.
+* 
+*  memo:
+*    this problem is similar to problem no 122
+*  time complexity: O(N)
+*  space complexity: O(N)
+*/
+object Solution1 {
+    def maxProfit(prices: Array[Int], fee: Int): Int = {
+        if(prices == null || prices.isEmpty) return 0
+        
+        /*
+        *  0 for un-holding any stack
+        *  1 for holding a share of stock
+        */
+        val dp = Array.tabulate(prices.length, 2) {
+            case (0, 0) => 0
+            case (0, 1) => -prices(0)
+            case _ => 0
+        }
+        
+        // 0: without holding, 1 holding
+        for(i <- 1 until prices.length) {
+            /** only pay the transition fee in selling a share of stock */
+            dp(i)(0) = dp(i - 1)(0) max (dp(i - 1)(1) + prices(i) - fee)
+            dp(i)(1) = dp(i - 1)(1) max (dp(i - 1)(0) - prices(i))
+        }
+        dp.last(0) // last time's state 0
+        
+    }
+}
+
+/**
+* dynamic programming: only create an array keeping holding and un-holding
+* time complexity: O(N)
+* space complexity:  O(1)
+*/
+object Solution1-1 {
+    def maxProfit(prices: Array[Int], fee: Int): Int = {
+        if(prices == null || prices.isEmpty) return 0
+        val dp = Array.ofDim[Int](2)
+        dp(0) = 0
+        dp(1) = -prices(0)
+        // 0 un-holding, 1 holding
+        for(i <- 1 until prices.length){
+        /*
+        * it may causes a problem here, because we overwrite the previous dp(0) by new state i value and dp(1) would utilizes dp(0) which was overwritten 
+        */
+            dp(0) = dp(0) max (dp(1) + prices(i) - fee)
+            dp(1) = dp(1) max (dp(0) - prices(i))
+        }
+        dp(0)
+    }
+}
+
+/**
+* dynamic programming 
+* function programming
+*/
+object Solution2 {
+    def maxProfit(prices: Array[Int], fee: Int): Int = {
+        val (unholding, holding) = prices.foldLeft((0, Int.MinValue)){
+            case ((unholding, holding), price) =>
+            (
+            // avoiding overflow
+                if((price - fee) > 0) unholding max (holding + price - fee) else unholding,
+                holding max (unholding - price)
+            )
+        }
+        unholding
+    }
+}
+```
 
 ###  4.337. <a name='RangeModule'></a>715. Range Module
 
@@ -11473,6 +23881,42 @@ class Solution:
 ###  4.501. <a name='LongestCommonSubsequence'></a>1143 Longest Common Subsequence
 
 [小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
+
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech.BaseExtension
+
+//问题转化为dp[0...i][0..j]是否存在公共字串
+//1.text1[i]==text2[j] && dp[i-1][j-1]存在公共字串
+//2.否则从已有的dp中选择最大值 max(dp[i-1][j], dp[i][j-1]);
+package lc1143{
+
+
+
+  object Solution {
+    def longestCommonSubsequence(text1: String, text2: String): Int = {
+      val m = text1.length
+      val n = text2.length
+      //val dp = Array.ofDim[Int](1001,1001)
+      val dp = Array.fill(1001,1001)(0)
+      for (i<- 1 to m) { // must have space?
+        for (j<- 1 to n) {
+          dp(i)(j) = if (text1(i-1)== text2(j-1)) dp(i-1)(j-1)+1 else Math.max(dp(i-1)(j),dp(i)(j-1))
+        }
+      }
+      dp(m)(n)
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      println(Solution.longestCommonSubsequence("abcde", "ace") == 3)
+    }
+    val name = "1143 Longest common sequence"
+  }
+}
+
+```
 
 ###  4.502. <a name='BinaryTreeColoringGame'></a>1145. Binary Tree Coloring Game
 
