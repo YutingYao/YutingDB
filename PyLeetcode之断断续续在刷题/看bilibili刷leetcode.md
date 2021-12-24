@@ -69,659 +69,659 @@
 	* 3.65. [71. Simplify Path](#SimplifyPath)
 	* 3.66. [72. Edit Distance 72-编辑距离](#EditDistance72-)
 	* 3.67. [73. Set Matrix Zeroes](#SetMatrixZeroes)
-* 4. [74 Search a 2D Matrix](#Searcha2DMatrix)
-	* 4.1. [75. Sort Colors](#SortColors)
-	* 4.2. [76-最小覆盖子串](#-1)
-	* 4.3. [77. 组合](#-1)
-	* 4.4. [78. Subsets 78-子集](#Subsets78-)
-	* 4.5. [79. Word Search](#WordSearch)
-	* 4.6. [80 Remove Duplicates from Sorted Array II](#RemoveDuplicatesfromSortedArrayII)
-	* 4.7. [82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List](#IIRemoveDuplicatesfromSortedList)
-	* 4.8. [83-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray-1)
-	* 4.9. [84. 柱状图中最大的矩形 Largest Rectangle in Histogram](#LargestRectangleinHistogram)
-	* 4.10. [86. 分隔链表(Partition List)](#PartitionList)
-	* 4.11. [87. Scramble String](#ScrambleString)
-	* 4.12. [88-Merge sorted array](#Mergesortedarray)
-	* 4.13. [ 89. 格雷编码](#89.)
-	* 4.14. [90-子集 II](#II)
-	* 4.15. [91. Decode Ways](#DecodeWays)
-	* 4.16. [92-Reverse Linked List II](#ReverseLinkedListII)
-	* 4.17. [ 93. 复原 IP 地址](#93.IP)
-	* 4.18. [94-Inorder wih stack](#Inorderwihstack)
-	* 4.19. [94-Binary Tree Inorder Traversal](#BinaryTreeInorderTraversal)
-	* 4.20. [95. 不同的二叉搜索树 II](#II-1)
-	* 4.21. [96. Unique Binary Search Trees](#UniqueBinarySearchTrees)
-	* 4.22. [98. Validate Binary Search Tree 98-验证二叉搜索树](#ValidateBinarySearchTree98-)
-	* 4.23. [100-Same Tree](#SameTree)
-	* 4.24. [101-Symmetric tree](#Symmetrictree)
-	* 4.25. [102-Binary Tree Level Order Traversal](#BinaryTreeLevelOrderTraversal)
-	* 4.26. [103. Binary Tree Zigzag Level Order Traversal](#BinaryTreeZigzagLevelOrderTraversal)
-	* 4.27. [104-Maximum Depth of Binary](#MaximumDepthofBinary)
-	* 4.28. [105-从前序与中序遍历序列构](#-1)
-	* 4.29. [106-从中序与后序遍历序列构造二叉树](#-1)
-	* 4.30. [107-Binary Tree Level Order Traversal II](#BinaryTreeLevelOrderTraversalII)
-	* 4.31. [108 Convert Sorted Array to Binary Search Tree](#ConvertSortedArraytoBinarySearchTree)
-	* 4.32. [109题. 有序链表转换二叉搜索树](#-1)
-	* 4.33. [110-Balanced Binary Tree](#BalancedBinaryTree)
-	* 4.34. [111-Minimum Depth of Binary Tree](#MinimumDepthofBinaryTree)
-	* 4.35. [112-Path Sum](#PathSum)
-	* 4.36. [113. 二叉树中和为某一值的路径](#-1)
-	* 4.37. [114题. 二叉树展开为链表](#-1)
-	* 4.38. [115. Distinct Subsequences](#DistinctSubsequences)
-	* 4.39. [116. Populating Next Right Pointers in Each Node](#PopulatingNextRightPointersinEachNode)
-	* 4.40. [117 Populating Next Right Pointers in Ea](#PopulatingNextRightPointersinEa)
-	* 4.41. [118-Pascal's Triangle](#PascalsTriangle)
-	* 4.42. [119-Pascal's Triangle II](#PascalsTriangleII)
-	* 4.43. [120 Triangle](#Triangle)
-	* 4.44. [121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机](#BestTimetoBuyandSellStock121-)
-	* 4.45. [122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II](#II122-BestTimetoBuyandSellStockII)
-	* 4.46. [123-买卖股票的最佳时机 III](#III)
-	* 4.47. [124. Binary Tree Maximum Path Sum](#BinaryTreeMaximumPathSum)
-	* 4.48. [125-Valid Palindrome](#ValidPalindrome)
-	* 4.49. [126. Word Ladder II](#WordLadderII)
-	* 4.50. [127. Word Ladder](#WordLadder)
-	* 4.51. [128. Longest Consecutive Sequence](#LongestConsecutiveSequence)
-	* 4.52. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
-	* 4.53. [130. Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
-	* 4.54. [131-分割回文串](#-1)
-	* 4.55. [132. Palindrome Partitioning II](#PalindromePartitioningII)
-	* 4.56. [133. Clone Graph](#CloneGraph)
-	* 4.57. [134. Gas Station](#GasStation)
-	* 4.58. [138 Copy List with Random Pointer](#CopyListwithRandomPointer)
-	* 4.59. [136-Single Number](#SingleNumber)
-	* 4.60. [137 Single Number II](#SingleNumberII)
-	* 4.61. [139 Word Break](#WordBreak)
-	* 4.62. [140 Word Break II](#WordBreakII)
-	* 4.63. [141-Linked List Cycle](#LinkedListCycle)
-	* 4.64. [142 Linked List Cycle II](#LinkedListCycleII)
-	* 4.65. [143 Reorder List](#ReorderList)
-	* 4.66. [144-Preorder with stack](#Preorderwithstack)
-	* 4.67. [144-Binary Tree Preorder Traversal](#BinaryTreePreorderTraversal)
-	* 4.68. [145-Postorder with stack](#Postorderwithstack)
-	* 4.69. [145-Binary Tree Postorder Traversal](#BinaryTreePostorderTraversal)
-	* 4.70. [146 LRU Cache](#LRUCache)
-	* 4.71. [147 Insertion Sort List](#InsertionSortList)
-	* 4.72. [148. Sort List](#SortList)
-	* 4.73. [149. Max Points on a Line](#MaxPointsonaLine)
-	* 4.74. [150. Evaluate Reverse Polish Notation](#EvaluateReversePolishNotation)
-	* 4.75. [151. Reverse Words in a String](#ReverseWordsinaString)
-	* 4.76. [152-乘积最大子数组](#-1)
-	* 4.77. [153-寻找旋转排序数组中的最小值](#-1)
-	* 4.78. [154 Find Minimum in Rotated Sorted Arr](#FindMinimuminRotatedSortedArr)
-	* 4.79. [155-Min Stack](#MinStack)
-	* 4.80. [160-Intersection of Two Linked Lists](#IntersectionofTwoLinkedLists)
-	* 4.81. [162. Find Peak Element](#FindPeakElement)
-	* 4.82. [165. Compare Version Numbers](#CompareVersionNumbers)
-	* 4.83. [166. Fraction to Recurring Decimal](#FractiontoRecurringDecimal)
-	* 4.84. [167-Two Sum II - Input array is sorted](#TwoSumII-Inputarrayissorted)
-	* 4.85. [168-Excel Sheet Column Title](#ExcelSheetColumnTitle)
-	* 4.86. [169. Majority Element](#MajorityElement)
-	* 4.87. [171. Excel Sheet Column Number](#ExcelSheetColumnNumber)
-	* 4.88. [172-Factorial Trailing Zeroes](#FactorialTrailingZeroes)
-	* 4.89. [173 Binary Search Tree Iterator](#BinarySearchTreeIterator)
-	* 4.90. [174 Dungeon Game](#DungeonGame)
-	* 4.91. [179 Largest Number](#LargestNumber)
-	* 4.92. [186. Reverse Words in a String II](#ReverseWordsinaStringII)
-	* 4.93. [187 Repeated DNA Sequences](#RepeatedDNASequences)
-	* 4.94. [188 Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
-	* 4.95. [189. Rotate Array](#RotateArray)
-	* 4.96. [190. Reverse Bits](#ReverseBits)
-	* 4.97. [191 Number of 1 Bits](#Numberof1Bits)
-	* 4.98. [198. House Robber 198-打家劫舍](#HouseRobber198-)
-	* 4.99. [199 Binary Tree Right Side View](#BinaryTreeRightSideView)
-	* 4.100. [200-岛屿数量](#-1)
-	* 4.101. [201 Bitwise AND of Numbers Range](#BitwiseANDofNumbersRange)
-	* 4.102. [202. 快乐数 Happy Number](#HappyNumber)
-	* 4.103. [203. Remove Linked List Elements](#RemoveLinkedListElements)
-	* 4.104. [204-Count Primes](#CountPrimes)
-	* 4.105. [205. isomorphic strings](#isomorphicstrings)
-	* 4.106. [206-Reverse Linked List](#ReverseLinkedList)
-	* 4.107. [207-课程表](#-1)
-	* 4.108. [208. Implement Trie (Prefix Tree)](#ImplementTriePrefixTree)
-	* 4.109. [209-长度最小的子数组](#-1)
-	* 4.110. [210. Course Schedule II 210-课程表II](#CourseScheduleII210-II)
-	* 4.111. [211 Add and Search Word](#AddandSearchWord)
-	* 4.112. [212. Word Search II](#WordSearchII)
-	* 4.113. [213. House Robber II 213-打家劫舍II](#HouseRobberII213-II)
-	* 4.114. [216. Combination Sum III 216-组合总和 III](#CombinationSumIII216-III)
-	* 4.115. [217. Contains Duplicate](#ContainsDuplicate)
-	* 4.116. [218. The Skyline Problem](#TheSkylineProblem)
-	* 4.117. [219. Contains Duplicate II](#ContainsDuplicateII)
-	* 4.118. [220 Contains Duplicate III](#ContainsDuplicateIII)
-	* 4.119. [221-最大正方形](#-1)
-	* 4.120. [222. Count Complete Tree Nodes](#CountCompleteTreeNodes)
-	* 4.121. [223. Rectangle Area](#RectangleArea)
-	* 4.122. [225-Implement Stack using Queues](#ImplementStackusingQueues)
-	* 4.123. [226-翻转二叉树](#-1)
-	* 4.124. [227 Basic Calculator II](#BasicCalculatorII)
-	* 4.125. [228 Summary Ranges](#SummaryRanges)
-	* 4.126. [229. Majority Element II](#MajorityElementII)
-	* 4.127. [230 Kth Smallest Element in a B](#KthSmallestElementinaB)
-	* 4.128. [231. Power of Two](#PowerofTwo)
-	* 4.129. [232-Implement Queue using Stacks](#ImplementQueueusingStacks)
-	* 4.130. [234. Palindrome Linked List](#PalindromeLinkedList)
-	* 4.131. [235. Lowest Common Ancestor of a Binary Search Tree](#LowestCommonAncestorofaBinarySearchTree)
-	* 4.132. [236-二叉树的最近公共祖先](#-1)
-	* 4.133. [237. Delete Node in a Linked List](#DeleteNodeinaLinkedList)
-	* 4.134. [238 Product of Array Except Self](#ProductofArrayExceptSelf)
-	* 4.135. [239. Sliding Window Maximum](#SlidingWindowMaximum)
-	* 4.136. [240. 二维数组的查找](#-1)
-	* 4.137. [242. Valid Anagram](#ValidAnagram)
-	* 4.138. [243. Shortest Word Distance](#ShortestWordDistance)
-	* 4.139. [246. Strobogrammatic Number](#StrobogrammaticNumber)
-	* 4.140. [257-二叉树的所有路径](#-1)
-	* 4.141. [258. Add Digits](#AddDigits)
-	* 4.142. [260-只出现一次的数字 III](#III-1)
-	* 4.143. [263 Ugly Number](#UglyNumber)
-	* 4.144. [264. Ugly Number II](#UglyNumberII)
-	* 4.145. [268 Missing Number](#MissingNumber)
-	* 4.146. [270. Closest Binary Search Tree Value](#ClosestBinarySearchTreeValue)
-	* 4.147. [274 H-Index](#H-Index)
-	* 4.148. [278. First Bad Version](#FirstBadVersion)
-	* 4.149. [279 Perfect Squares](#PerfectSquares)
-	* 4.150. [282. Expression Add Operators](#ExpressionAddOperators)
-	* 4.151. [283. Move Zeros](#MoveZeros)
-	* 4.152. [284 Peeking Iterator](#PeekingIterator)
-	* 4.153. [287 Find the Duplicate Number](#FindtheDuplicateNumber)
-	* 4.154. [289. Game of Life](#GameofLife)
-	* 4.155. [290. Word Pattern](#WordPattern)
-	* 4.156. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
-	* 4.157. [299. Bulls and Cows](#BullsandCows)
-	* 4.158. [300 Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
-	* 4.159. [301. Remove Invalid Parentheses](#RemoveInvalidParentheses)
-	* 4.160. [303-区域和检索 - 数组不可变](#-1)
-	* 4.161. [304. Range Sum Query 2D](#RangeSumQuery2D)
-	* 4.162. [309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期](#BestTimetoBuyandSellStockwithCooldown309-)
-	* 4.163. [310 Minimum Height Trees](#MinimumHeightTrees)
-	* 4.164. [312 Burst Balloons](#BurstBalloons)
-	* 4.165. [315. Count of Smaller Numbers After Self](#CountofSmallerNumbersAfterSelf)
-	* 4.166. [316 Remove Duplicate Letters](#RemoveDuplicateLetters)
-	* 4.167. [321. Create Maximum Number](#CreateMaximumNumber)
-	* 4.168. [322. Coin Change](#CoinChange)
-	* 4.169. [326. Power of Three](#PowerofThree)
-	* 4.170. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
-	* 4.171. [329. Longest Increasing Path in a Matrix](#LongestIncreasingPathinaMatrix)
-	* 4.172. [332 Reconstruct Itinerary](#ReconstructItinerary)
-	* 4.173. [334 Increasing Triplet Subseque](#IncreasingTripletSubseque)
-	* 4.174. [337 House Robber III](#HouseRobberIII)
-	* 4.175. [338 Counting Bits](#CountingBits)
-	* 4.176. [342. Power of Four](#PowerofFour)
-	* 4.177. [343-整数拆分](#-1)
-	* 4.178. [344. Reverse String](#ReverseString)
-	* 4.179. [345. Reverse Vowels of a String](#ReverseVowelsofaString)
-	* 4.180. [346 Moving Average from Data Stream](#MovingAveragefromDataStream)
-	* 4.181. [347. Top K Frequent Elements](#TopKFrequentElements)
-	* 4.182. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
-	* 4.183. [350. Intersection of Two Arrays II](#IntersectionofTwoArraysII)
-	* 4.184. [355. 设计推特 Design Twitter](#DesignTwitter)
-	* 4.185. [359 Logger Rate Limiter](#LoggerRateLimiter)
-	* 4.186. [367. Valid Perfect Square](#ValidPerfectSquare)
-	* 4.187. [368 Largest Divisible Subset](#LargestDivisibleSubset)
-	* 4.188. [373. Find K Pairs with Smallest Sums查找和最小的k对数字](#FindKPairswithSmallestSumsk)
-	* 4.189. [374. Guess Number Higher or Lower](#GuessNumberHigherorLower)
-	* 4.190. [376-摆动序列](#-1)
-	* 4.191. [377. Combination Sum IV](#CombinationSumIV)
-	* 4.192. [378-有序矩阵中第K小的元素](#K)
-	* 4.193. [380 Insert Delete GetRandom O(1)](#InsertDeleteGetRandomO1)
-	* 4.194. [382 Linked List Random Node](#LinkedListRandomNode)
-	* 4.195. [383 Ransom Note](#RansomNote)
-	* 4.196. [387. First Unique Character in a String](#FirstUniqueCharacterinaString)
-	* 4.197. [389. Find the Difference](#FindtheDifference)
-	* 4.198. [391. Perfect Rectangle](#PerfectRectangle)
-	* 4.199. [392. Is Subsequence](#IsSubsequence)
-	* 4.200. [393. UTF-8 Validation](#UTF-8Validation)
-	* 4.201. [394 Decode String](#DecodeString)
-	* 4.202. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
-	* 4.203. [399. Evaluate Division](#EvaluateDivision)
-	* 4.204. [402 Remove K Digits](#RemoveKDigits)
-	* 4.205. [404. Sum of Left Leaves](#SumofLeftLeaves)
-	* 4.206. [405-Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
-	* 4.207. [406. Queue Reconstruction by Height](#QueueReconstructionbyHeight)
-	* 4.208. [408. Valid Word Abbreviation](#ValidWordAbbreviation)
-	* 4.209. [409. Longest Palindrome](#LongestPalindrome)
-	* 4.210. [410. Split Array Largest Sum](#SplitArrayLargestSum)
-	* 4.211. [412. Fizz Buzz](#FizzBuzz)
-	* 4.212. [413-等差数列划分](#-1)
-	* 4.213. [414. Third Maximum Number](#ThirdMaximumNumber)
-	* 4.214. [415-Add Strings](#AddStrings)
-	* 4.215. [416. Partition Equal Subset Sum](#PartitionEqualSubsetSum)
-	* 4.216. [417. Pacific Atlantic Water Flow](#PacificAtlanticWaterFlow)
-	* 4.217. [419. Battleships in a Board](#BattleshipsinaBoard)
-	* 4.218. [421 Maximum XOR of Two Numbers in an Array](#MaximumXORofTwoNumbersinanArray)
-	* 4.219. [423 Reconstruct Original Digits from English](#ReconstructOriginalDigitsfromEnglish)
-	* 4.220. [424. 替换后的最长重复字符 Longest Repeating Character Replacem](#LongestRepeatingCharacterReplacem)
-	* 4.221. [429. N-ary Tree Level Order Traversal](#N-aryTreeLevelOrderTraversal)
-	* 4.222. [430 Flatten a Multilevel Doubly Linked List](#FlattenaMultilevelDoublyLinkedList)
-	* 4.223. [432. All O`one Data Structure](#AllOoneDataStructure)
-	* 4.224. [435-Non-overlapping Intervals](#Non-overlappingIntervals)
-	* 4.225. [436 Find Right Interval](#FindRightInterval)
-	* 4.226. [437 Path Sum III](#PathSumIII)
-	* 4.227. [438. Find All Anagrams in a String](#FindAllAnagramsinaString)
-	* 4.228. [441 Arranging Coins](#ArrangingCoins)
-	* 4.229. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
-	* 4.230. [443. String Compression](#StringCompression)
-	* 4.231. [445-Add Two Numbers II](#AddTwoNumbersII)
-	* 4.232. [447. Number of Boomerangs](#NumberofBoomerangs)
-	* 4.233. [448. Find All Numbers Disappeared in an Array](#FindAllNumbersDisappearedinanArray)
-	* 4.234. [449. Serialize and Deserialize BST](#SerializeandDeserializeBST)
-	* 4.235. [450. Delete Node in a BST](#DeleteNodeinaBST)
-	* 4.236. [451 Sort Characters By Frequency](#SortCharactersByFrequency)
-	* 4.237. [454 4Sum II](#SumII)
-	* 4.238. [452. Minimum Number of Arrows to Burst Balloons](#MinimumNumberofArrowstoBurstBalloons)
-	* 4.239. [455-Assign Cookies](#AssignCookies)
-	* 4.240. [456 132 Pattern](#Pattern)
-	* 4.241. [458 Poor Pigs](#PoorPigs)
-	* 4.242. [459 Repeated Substring Pattern](#RepeatedSubstringPattern)
-	* 4.243. [460. LFU Cache / O(1)](#LFUCacheO1)
-	* 4.244. [461 Hamming Distance](#HammingDistance)
-	* 4.245. [463 Island Perimeter](#IslandPerimeter)
-	* 4.246. [464. Can I Win](#CanIWin)
-	* 4.247. [466. 统计重复个数 Count The Repetitions](#CountTheRepetitions)
-	* 4.248. [468 Validate IP Address](#ValidateIPAddress)
-	* 4.249. [470. Implement Rand10() Using Rand7()](#ImplementRand10UsingRand7)
-	* 4.250. [475. Heaters](#Heaters)
-	* 4.251. [476. Number Complement](#NumberComplement)
-	* 4.252. [477. Total Hamming Distance](#TotalHammingDistance)
-	* 4.253. [478 Generate Random Point in a Circle](#GenerateRandomPointinaCircle)
-	* 4.254. [480. Sliding Window Median](#SlidingWindowMedian)
-	* 4.255. [484 Find Permutation](#FindPermutation)
-	* 4.256. [485. Max Consecutive Ones](#MaxConsecutiveOnes)
-	* 4.257. [486. Predict the Winner](#PredicttheWinner)
-	* 4.258. [490 The Maze](#TheMaze)
-	* 4.259. [494. Target Sum](#TargetSum)
-	* 4.260. [495 Teemo Attacking](#TeemoAttacking)
-	* 4.261. [496. 下一个更大元素 I (Next Greater Element I)](#INextGreaterElementI)
-	* 4.262. [497 Random Point in Non-overlapping](#RandomPointinNon-overlapping)
-	* 4.263. [500. Keyboard Row](#KeyboardRow)
-	* 4.264. [503-Next Greater Element II](#NextGreaterElementII)
-	* 4.265. [504-Base 7](#Base7)
-	* 4.266. [509. Fibonacci Number](#FibonacciNumber)
-	* 4.267. [516. Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
-	* 4.268. [518 Coin Change 2](#CoinChange2)
-	* 4.269. [520. Detect Capital](#DetectCapital)
-	* 4.270. [525. Contiguous Array](#ContiguousArray)
-	* 4.271. [526 Beautiful Arrangement](#BeautifulArrangement)
-	* 4.272. [528 Random Pick with Weight](#RandomPickwithWeight)
-	* 4.273. [530. Minimum Absolute Difference in BST](#MinimumAbsoluteDifferenceinBST)
-	* 4.274. [532 K-diff Pairs in an Array](#K-diffPairsinanArray)
-	* 4.275. [535. Encode and Decode TinyURL](#EncodeandDecodeTinyURL)
-	* 4.276. [537 Complex Number Multiplicatin](#ComplexNumberMultiplicatin)
-	* 4.277. [538 Convert BST to Greater Tree](#ConvertBSTtoGreaterTree)
-	* 4.278. [540. Single Element in a Sorted Array 540-有序数组中的单一元素](#SingleElementinaSortedArray540-)
-	* 4.279. [542. 01 矩阵 01 Matrix](#Matrix)
-	* 4.280. [543 Diameter of Binary Tree](#DiameterofBinaryTree)
-	* 4.281. [546 Remove Boxes](#RemoveBoxes)
-	* 4.282. [547-朋友圈](#-1)
-	* 4.283. [554 Brick Wall](#BrickWall)
-	* 4.284. [556 Next Greater Element III](#NextGreaterElementIII)
-	* 4.285. [560. Subarray Sum Equals K 和为K的子数组](#SubarraySumEqualsKK)
-	* 4.286. [563 Binary Tree Tilt](#BinaryTreeTilt)
-	* 4.287. [567. Permutation in String 567-字符串的排列](#PermutationinString567-)
-	* 4.288. [572-另一个树的子树](#-1)
-	* 4.289. [575 Distribute Candies](#DistributeCandies)
-	* 4.290. [576. Out of Boundary Paths](#OutofBoundaryPaths)
-	* 4.291. [581 Shortest Unsorted Continuous Suba](#ShortestUnsortedContinuousSuba)
-	* 4.292. [589 N-ary Tree Preorder Traversal](#N-aryTreePreorderTraversal)
-	* 4.293. [593 Valid Square](#ValidSquare)
-	* 4.294. [594 Longest Harmonious Subsequence](#LongestHarmoniousSubsequence)
-	* 4.295. [605 Can Place Flowers](#CanPlaceFlowers)
-	* 4.296. [621. Task Scheduler](#TaskScheduler)
-	* 4.297. [622 Design Circular Queue](#DesignCircularQueue)
-	* 4.298. [623 Add One Row to Tree](#AddOneRowtoTree)
-	* 4.299. [633-Sum of Square Numbers](#SumofSquareNumbers)
-	* 4.300. [636. Exclusive Time of Functions](#ExclusiveTimeofFunctions)
-	* 4.301. [637 Average of Levels in Binary Tree](#AverageofLevelsinBinaryTree)
-	* 4.302. [639. Decode Ways II](#DecodeWaysII)
-	* 4.303. [643. Maximum Average Subarray I](#MaximumAverageSubarrayI)
-	* 4.304. [645-错误的集合](#-1)
-	* 4.305. [646-最长数对链](#-1)
-	* 4.306. [647 Palindromic Substrings](#PalindromicSubstrings)
-	* 4.307. [650-只有两个键的键盘](#-1)
-	* 4.308. [652. Find Duplicate Subtrees](#FindDuplicateSubtrees)
-	* 4.309. [653. Two Sum IV](#TwoSumIV)
-	* 4.310. [662. Maximum Width of Binary Tree](#MaximumWidthofBinaryTree)
-	* 4.311. [667 Beautiful Arrangement II](#BeautifulArrangementII)
-	* 4.312. [668. Kth Smallest Number in Multiplication Table](#KthSmallestNumberinMultiplicationTable)
-	* 4.313. [669 Trim a Binary Search Tree](#TrimaBinarySearchTree)
-	* 4.314. [673 Number of Longest Increasing Subse](#NumberofLongestIncreasingSubse)
-	* 4.315. [678 Valid Parenthesis String](#ValidParenthesisString)
-	* 4.316. [680-Valid Palindrome II](#ValidPalindromeII)
-	* 4.317. [683. K Empty Slots](#KEmptySlots)
-	* 4.318. [684. Redundant Connection 684-冗余连接](#RedundantConnection684-)
-	* 4.319. [685. Redundant Connection II](#RedundantConnectionII)
-	* 4.320. [687. Longest Univalue Path](#LongestUnivaluePath)
-	* 4.321. [688. Knight Probability in Chessboard](#KnightProbabilityinChessboard)
-	* 4.322. [690. Employee Importance](#EmployeeImportance)
-	* 4.323. [692. Top K Frequent Words](#TopKFrequentWords)
-	* 4.324. [695-岛屿的最大面积](#-1)
-	* 4.325. [696 Count Binary Substrings](#CountBinarySubstrings)
-	* 4.326. [699. Falling Squares](#FallingSquares)
-	* 4.327. [700 Search in a Binary Search Tree](#SearchinaBinarySearchTree)
-	* 4.328. [701 Insert into a Binary Search Tree](#InsertintoaBinarySearchTree)
-	* 4.329. [703.Kth Largest Element in a Stream数据流中的第K大元素](#KthLargestElementinaStreamK)
-	* 4.330. [704.Binary Search二分查找](#BinarySearch)
-	* 4.331. [705 Design HashSet](#DesignHashSet)
-	* 4.332. [706. Design HashMap设计哈希映射](#DesignHashMap)
-	* 4.333. [707. Design Linked List](#DesignLinkedList)
-	* 4.334. [712. Minimum ASCII Delete Sum for Two Strings](#MinimumASCIIDeleteSumforTwoStrings)
-	* 4.335. [713 Subarray Product Less Than K](#SubarrayProductLessThanK)
-	* 4.336. [714-买卖股票的最佳时机含手续费](#-1)
-	* 4.337. [715. Range Module](#RangeModule)
-	* 4.338. [719. Find K-th Smallest Pair Distance](#FindK-thSmallestPairDistance)
-	* 4.339. [720. Longest Word in Dictionary](#LongestWordinDictionary)
-	* 4.340. [724. Find Pivot Index](#FindPivotIndex)
-	* 4.341. [725. Split Linked List in Parts](#SplitLinkedListinParts)
-	* 4.342. [726. Number of Atoms](#NumberofAtoms)
-	* 4.343. [730. Count Different Palindromic Subsequences](#CountDifferentPalindromicSubsequences)
-	* 4.344. [732. My Calendar III](#MyCalendarIII)
-	* 4.345. [733. 图像渲染 Flood Fill](#FloodFill)
-	* 4.346. [735 Asteroid Collision](#AsteroidCollision)
-	* 4.347. [737. Sentence Similarity II](#SentenceSimilarityII)
-	* 4.348. [739-Daily Temperatures](#DailyTemperatures)
-	* 4.349. [740. Delete and Earn](#DeleteandEarn)
-	* 4.350. [741. Cherry Pickup](#CherryPickup)
-	* 4.351. [743. Network Delay Time](#NetworkDelayTime)
-	* 4.352. [745. Prefix and Suffix Search](#PrefixandSuffixSearch)
-	* 4.353. [746. Min Cost Climbing Stairs](#MinCostClimbingStairs)
-	* 4.354. [748. Shortest Completing Word](#ShortestCompletingWord)
-	* 4.355. [752. Open the Lock](#OpentheLock)
-	* 4.356. [763 Partition Labels](#PartitionLabels)
-	* 4.357. [765. 情侣牵手 Couples Holding Hands](#CouplesHoldingHands)
-	* 4.358. [769. Max Chunks To Make Sorted](#MaxChunksToMakeSorted)
-	* 4.359. [771 Jewels and Stones](#JewelsandStones)
-	* 4.360. [773. Sliding Puzzle](#SlidingPuzzle)
-	* 4.361. [775. Global and Local Inversions](#GlobalandLocalInversions)
-	* 4.362. [778. Swim in Rising Water](#SwiminRisingWater)
-	* 4.363. [784. Letter Case Permutation](#LetterCasePermutation)
-	* 4.364. [785-判断二分图](#-1)
-	* 4.365. [786. K-th Smallest Prime Fraction](#K-thSmallestPrimeFraction)
-	* 4.366. [787. Cheapest Flights Within K Stops](#CheapestFlightsWithinKStops)
-	* 4.367. [790. Domino and Tromino Tiling](#DominoandTrominoTiling)
-	* 4.368. [792. Number of Matching Subsequences](#NumberofMatchingSubsequences)
-	* 4.369. [797 All Paths From Source to Target](#AllPathsFromSourcetoTarget)
-	* 4.370. [799 Champagne Tower](#ChampagneTower)
-	* 4.371. [801. Minimum Swaps To Make Sequences Increasing](#MinimumSwapsToMakeSequencesIncreasing)
-	* 4.372. [803. Bricks Falling When Hit](#BricksFallingWhenHit)
-	* 4.373. [804 Unique Morse Code Words](#UniqueMorseCodeWords)
-	* 4.374. [813. Largest Sum of Averages](#LargestSumofAverages)
-	* 4.375. [815. Bus Routes](#BusRoutes)
-	* 4.376. [817. Linked List Components](#LinkedListComponents)
-	* 4.377. [818. Race Car (上)](#RaceCar)
-	* 4.378. [821 Shortest Distance to a Character](#ShortestDistancetoaCharacter)
-	* 4.379. [823. Binary Trees With Factors](#BinaryTreesWithFactors)
-	* 4.380. [824 Goat Latin](#GoatLatin)
-	* 4.381. [827. Making A Large Island](#MakingALargeIsland)
-	* 4.382. [832 Flipping an Image](#FlippinganImage)
-	* 4.383. [835 Image Overlap](#ImageOverlap)
-	* 4.384. [837. 新 21 点 New 21 Game](#New21Game)
-	* 4.385. [841 Keys and Rooms](#KeysandRooms)
-	* 4.386. [842. Split Array into Fibonacci Sequence](#SplitArrayintoFibonacciSequence)
-	* 4.387. [844 Backspace String Compare](#BackspaceStringCompare)
-	* 4.388. [845 Longest Mountain in Array](#LongestMountaininArray)
-	* 4.389. [847 Shortest Path Visiting All Nodes](#ShortestPathVisitingAllNodes)
-	* 4.390. [849 Maximize Distance to Closest Person](#MaximizeDistancetoClosestPerson)
-	* 4.391. [856. Score of Parentheses](#ScoreofParentheses)
-	* 4.392. [858 Mirror Reflection](#MirrorReflection)
-	* 4.393. [859 Buddy Strings](#BuddyStrings)
-	* 4.394. [863. All Nodes Distance K in Binary Tree](#AllNodesDistanceKinBinaryTree)
-	* 4.395. [864. Shortest Path to Get All Keys](#ShortestPathtoGetAllKeys)
-	* 4.396. [869 Reordered Power of 2](#ReorderedPowerof2)
-	* 4.397. [865. Smallest Subtree with all the Deepest Nodes](#SmallestSubtreewithalltheDeepestNodes)
-	* 4.398. [871. Minimum Number of Refueling Stops](#MinimumNumberofRefuelingStops)
-	* 4.399. [873. Length of Longest Fibonacci Subsequence](#LengthofLongestFibonacciSubsequence)
-	* 4.400. [875.Koko Eating Bananas科科吃香蕉](#KokoEatingBananas)
-	* 4.401. [876.Middle of the Linked List 链表的中间结点](#MiddleoftheLinkedList)
-	* 4.402. [877 Stone Game](#StoneGame)
-	* 4.403. [879. Profitable Schemes](#ProfitableSchemes)
-	* 4.404. [880 Decoded String at Index](#DecodedStringatIndex)
-	* 4.405. [881 Boats to Save People](#BoatstoSavePeople)
-	* 4.406. [882. Reachable Nodes In Subdivided Graph](#ReachableNodesInSubdividedGraph)
-	* 4.407. [886. Possible Bipartition](#PossibleBipartition)
-	* 4.408. [887. Super Egg Drop](#SuperEggDrop)
-	* 4.409. [889. Construct Binary Tree from Preorder and Postorder](#ConstructBinaryTreefromPreorderandPostorder)
-	* 4.410. [891. Sum of Subsequence Widths](#SumofSubsequenceWidths)
-	* 4.411. [894. All Possible Full Binary Trees](#AllPossibleFullBinaryTrees)
-	* 4.412. [895. Maximum Frequency Stack](#MaximumFrequencyStack)
-	* 4.413. [898. Bitwise ORs of Subarrays](#BitwiseORsofSubarrays)
-	* 4.414. [901. Online Stock Span](#OnlineStockSpan)
-	* 4.415. [902 Numbers At Most N Given Digit Set](#NumbersAtMostNGivenDigitSet)
-	* 4.416. [904-水果成篮](#-1)
-	* 4.417. [905 Sort Array By Parity](#SortArrayByParity)
-	* 4.418. [906 Super Palindromes](#SuperPalindromes)
-	* 4.419. [909. Snakes and Ladders](#SnakesandLadders)
-	* 4.420. [910 Smallest Range II](#SmallestRangeII)
-	* 4.421. [916 Word Subsetse](#WordSubsetse)
-	* 4.422. [918 Maximum Sum Circular Sub](#MaximumSumCircularSub)
-	* 4.423. [923. 3Sum With Multiplicity](#SumWithMultiplicity)
-	* 4.424. [926. Flip String to Monotone Increasing](#FlipStringtoMonotoneIncreasing)
-	* 4.425. [930-和相同的二元子数组(滑动窗口+前缀和)](#-1)
-	* 4.426. [933 Number of Recent Calls](#NumberofRecentCalls)
-	* 4.427. [934. Shortest Bridge](#ShortestBridge)
-	* 4.428. [936 Stamping The Sequence](#StampingTheSequence)
-	* 4.429. [938 Range Sum of BST](#RangeSumofBST)
-	* 4.430. [941 Valid Mountain Array](#ValidMountainArray)
-	* 4.431. [943. Find the Shortest Superstring](#FindtheShortestSuperstring)
-	* 4.432. [946-Python-栈的压入、弹出序列](#Python-)
-	* 4.433. [946 Validate Stack Sequences](#ValidateStackSequences)
-	* 4.434. [947. 移除最多的同行或同列石头 Most Stones Removed with Same](#MostStonesRemovedwithSame)
-	* 4.435. [948 Bag of Tokens](#BagofTokens)
-	* 4.436. [949 Largest Time for Given Digits](#LargestTimeforGivenDigits)
-	* 4.437. [952 Largest Component Size by Commo](#LargestComponentSizebyCommo)
-	* 4.438. [953 Verifying an Alien Dictionary](#VerifyinganAlienDictionary)
-	* 4.439. [954 Array of Doubled Pairs](#ArrayofDoubledPairs)
-	* 4.440. [959. 由斜杠划分区域 Regions Cut By Slashes](#RegionsCutBySlashes)
-	* 4.441. [964. Least Operators to Express Number](#LeastOperatorstoExpressNumber)
-	* 4.442. [966 Vowel Spellchecker](#VowelSpellchecker)
-	* 4.443. [967. Numbers With Same Consecutive Differences](#NumbersWithSameConsecutiveDifferences)
-	* 4.444. [968 Binary Tree Cameras](#BinaryTreeCameras)
-	* 4.445. [969 Pancake Sorting](#PancakeSorting)
-	* 4.446. [971 Flip Binary Tree To Match Preorder](#FlipBinaryTreeToMatchPreorder)
-	* 4.447. [973 K Closest Points to Origin](#KClosestPointstoOrigin)
-	* 4.448. [974. 和可被 K 整除的子数组 Subarray Sums Divisible by K](#KSubarraySumsDivisiblebyK)
-	* 4.449. [975. Odd Even Jump](#OddEvenJump)
-	* 4.450. [976 Middle of the Linked List](#MiddleoftheLinkedList-1)
-	* 4.451. [977 Squares of a Sorted Array](#SquaresofaSortedArray)
-	* 4.452. [978. 最长湍流子数组 Longest Turbulent Subarray](#LongestTurbulentSubarray)
-	* 4.453. [980. Unique Paths III](#UniquePathsIII)
-	* 4.454. [983 Minimum Cost For Tickets](#MinimumCostForTickets)
-	* 4.455. [986 Interval List Intersections](#IntervalListIntersections)
-	* 4.456. [987 Vertical Order Traversal of a Binary](#VerticalOrderTraversalofaBinary)
-	* 4.457. [990. 等式方程的可满足性 Satisfiability of Equality Equations](#SatisfiabilityofEqualityEquations)
-	* 4.458. [992-K 个不同整数的子数组](#K-1)
-	* 4.459. [993. 二叉树的堂兄弟节点](#-1)
-	* 4.460. [994-腐烂的橘子](#-1)
-	* 4.461. [993, 994, 995, 996](#-1)
-	* 4.462. [997 Find the Town Judge](#FindtheTownJudge)
-	* 4.463. [1000. Minimum Cost to Merge Stones](#MinimumCosttoMergeStones)
-	* 4.464. [1001 Grid Illumination](#GridIllumination)
-	* 4.465. [1004-最大连续1的个数 III](#III-1)
-	* 4.466. [1007 Minimum Domino Rotations For Eq](#MinimumDominoRotationsForEq)
-	* 4.467. [1008 Construct Binary Search Tree from](#ConstructBinarySearchTreefrom)
-	* 4.468. [1009 Complement of Base 10 Integer](#ComplementofBase10Integer)
-	* 4.469. [1010 Pairs of Songs With Total Durations](#PairsofSongsWithTotalDurations)
-	* 4.470. [1013. 将数组分成和相等的三个部分 Partition Array Into Three Parts With Equ](#PartitionArrayIntoThreePartsWithEqu)
-	* 4.471. [1015 Smallest Integer Divisible by K](#SmallestIntegerDivisiblebyK)
-	* 4.472. [1019. Next Greater Node In Linked List](#NextGreaterNodeInLinkedList)
-	* 4.473. [1022 Sum of Root To Leaf Binary Numbers](#SumofRootToLeafBinaryNumbers)
-	* 4.474. [1025,1026,1027,1028](#-1)
-	* 4.475. [1024. Video Stitching](#VideoStitching)
-	* 4.476. [1026 Maximum Difference Between Nod](#MaximumDifferenceBetweenNod)
-	* 4.477. [1029 Two City Scheduling](#TwoCityScheduling)
-	* 4.478. [1032 Stream of Characters](#StreamofCharacters)
-	* 4.479. [1035 Uncrossed Lines](#UncrossedLines)
-	* 4.480. [1041 Robot Bounded In Circle](#RobotBoundedInCircle)
-	* 4.481. [1043. Partition Array for Maximum Sum](#PartitionArrayforMaximumSum)
-	* 4.482. [1044 Longest Duplicate Substring](#LongestDuplicateSubstring)
-	* 4.483. [1046 Last Stone Weight](#LastStoneWeight)
-	* 4.484. [1048 Longest String Chain](#LongestStringChain)
-	* 4.485. [1055.Shortest Way to Form String 形成字符串的最短路径](#ShortestWaytoFormString)
-	* 4.486. [1091-二进制矩阵中的最短路径](#-1)
-	* 4.487. [1094 Car Pooling](#CarPooling)
-	* 4.488. [1095. Find in Mountain Array](#FindinMountainArray)
-	* 4.489. [1105. Filling Bookcase Shelves](#FillingBookcaseShelves)
-	* 4.490. [1106. Parsing A Boolean Expression](#ParsingABooleanExpression)
-	* 4.491. [1110. Delete Nodes And Return Forest](#DeleteNodesAndReturnForest)
-	* 4.492. [1111. 有效括号的嵌套深度 Maximum Nesting Depth of Two Valid Parentheses](#MaximumNestingDepthofTwoValidParentheses)
-	* 4.493. [1114 - 1115 - 1116 - 多线程 threading](#threading)
-	* 4.494. [1123.Lowest Common Ancestor of Deepest Leaves最深叶节点的最近公共祖](#LowestCommonAncestorofDeepestLeaves)
-	* 4.495. [1124. Longest Well-Performing Interval](#LongestWell-PerformingInterval)
-	* 4.496. [1125. Smallest Sufficient Team](#SmallestSufficientTeam)
-	* 4.497. [1128. 等价多米诺骨牌对的数量 Number of Equivalent Domino Pairs](#NumberofEquivalentDominoPairs)
-	* 4.498. [1129. Shortest Path with Alternating Colors](#ShortestPathwithAlternatingColors)
-	* 4.499. [1137. N-th Tribonacci Number](#N-thTribonacciNumber)
-	* 4.500. [1140. Stone Game II](#StoneGameII)
-	* 4.501. [1143 Longest Common Subsequence](#LongestCommonSubsequence)
-	* 4.502. [1145. Binary Tree Coloring Game](#BinaryTreeColoringGame)
-	* 4.503. [1155. Number of Dice Rolls With Target Sum](#NumberofDiceRollsWithTargetSum)
-	* 4.504. [1160. 拼写单词 Find Words That Can Be Formed by Characters](#FindWordsThatCanBeFormedbyCharacters)
-	* 4.505. [1172. Dinner Plate Stacks](#DinnerPlateStacks)
-	* 4.506. [1178. Number of Valid Words for Each Puzzle](#NumberofValidWordsforEachPuzzle)
-	* 4.507. [1187. Make Array Strictly Increasing](#MakeArrayStrictlyIncreasing)
-	* 4.508. [1191. K-Concatenation Maximum Sum](#K-ConcatenationMaximumSum)
-	* 4.509. [1201. Ugly Number III](#UglyNumberIII)
-	* 4.510. [1202. Smallest String With Swaps](#SmallestStringWithSwaps)
-	* 4.511. [1203. 项目管理 Sort Items by Groups Respecting Dependencies](#SortItemsbyGroupsRespectingDependencies)
-	* 4.512. [1206. Design Skiplist](#DesignSkiplist)
-	* 4.513. [1209 Remove All Adjacent Duplicates in](#RemoveAllAdjacentDuplicatesin)
-	* 4.514. [1217 Minimum Cost to Move Chips](#MinimumCosttoMoveChips)
-	* 4.515. [1218. Longest Arithmetic Subsequence of Given Difference](#LongestArithmeticSubsequenceofGivenDifference)
-	* 4.516. [1220. Count Vowels Permutation](#CountVowelsPermutation)
-	* 4.517. [1223 Dice Roll Simulation](#DiceRollSimulation)
-	* 4.518. [1240 Tiling a Rectangle with the Fewest Squares](#TilingaRectanglewiththeFewestSquares)
-	* 4.519. [1248-统计「优美子数组」](#-1)
-	* 4.520. [1249 Minimum Remove to Make Valid Pare](#MinimumRemovetoMakeValidPare)
-	* 4.521. [1252 1253 1254 1255](#-1)
-	* 4.522. [1263. Minimum Moves to Move a Box to Their Target](#MinimumMovestoMoveaBoxtoTheirTarget)
-	* 4.523. [1277-统计全为1的正方形子矩阵](#-1)
-	* 4.524. [1278. Palindrome Partitioning III](#PalindromePartitioningIII)
-	* 4.525. [1283 Find the Smallest Divisor Given a](#FindtheSmallestDivisorGivena)
-	* 4.526. [1284. Minimum Number of Flips to Convert Binary Matrix](#MinimumNumberofFlipstoConvertBinaryMatrix)
-	* 4.527. [1290. 二进制链表转整数 (Convert Binary Number in a Linked List](#ConvertBinaryNumberinaLinkedList)
-	* 4.528. [1291 Sequential Digits](#SequentialDigits)
-	* 4.529. [1293. Shortest Path in a Grid with Obstacles Elimination](#ShortestPathinaGridwithObstaclesElimination)
-	* 4.530. [1296. Divide Array in Sets of K Consecutive Numbers](#DivideArrayinSetsofKConsecutiveNumbers)
-	* 4.531. [1301. Number of Paths with Max Score](#NumberofPathswithMaxScore)
-	* 4.532. [1302 Deepest Leaves Sum](#DeepestLeavesSum)
-	* 4.533. [1305 All Elements in Two Binary Search](#AllElementsinTwoBinarySearch)
-	* 4.534. [1306 Jump Game III](#JumpGameIII)
-	* 4.535. [1310. XOR Queries of a Subarray](#XORQueriesofaSubarray)
-	* 4.536. [1312. Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
-	* 4.537. [1320. Minimum Distance to Type a Word Using Two Finger](#MinimumDistancetoTypeaWordUsingTwoFinger)
-	* 4.538. [1329 Sort the Matrix Diagonally](#SorttheMatrixDiagonally)
-	* 4.539. [1332 Remove Palindromic Subsequences](#RemovePalindromicSubsequences)
-	* 4.540. [1334. Find the City With Smallest Number of Neighbors](#FindtheCityWithSmallestNumberofNeighbors)
-	* 4.541. [1335. Minimum Difficulty of a Job Schedule](#MinimumDifficultyofaJobSchedule)
-	* 4.542. [1337 The K Weakest Rows in a Matrix](#TheKWeakestRowsinaMatrix)
-	* 4.543. [1339 Maximum Product of Splitt](#MaximumProductofSplitt)
-	* 4.544. [1340. Jump Game V](#JumpGameV)
-	* 4.545. [1349. Maximum Students Taking Exam](#MaximumStudentsTakingExam)
-	* 4.546. [1353. Maximum Number of Events That Can Be Attended](#MaximumNumberofEventsThatCanBeAttended)
-	* 4.547. [1354. Construct Target Array With Multiple Sums](#ConstructTargetArrayWithMultipleSums)
-	* 4.548. [1368. Minimum Cost to Make at Least One Valid Path](#MinimumCosttoMakeatLeastOneValidPath)
-	* 4.549. [1371. Find the Longest Substring Containing Vowels in Eve](#FindtheLongestSubstringContainingVowelsinEve)
-	* 4.550. [1373. Maximum Sum BST in Binary Tree](#MaximumSumBSTinBinaryTree)
-	* 4.551. [1377. Frog Position After T Seconds](#FrogPositionAfterTSeconds)
-	* 4.552. [1379 Find Corresponding Node of Binary Tree in a Clone](#FindCorrespondingNodeofBinaryTreeinaClone)
-	* 4.553. [1382. Balance a Binary Search Tree](#BalanceaBinarySearchTree)
-	* 4.554. [1395. Count Number of Teams](#CountNumberofTeams)
-	* 4.555. [1396 Design Underground System](#DesignUndergroundSystem)
-	* 4.556. [1406. Stone Game III](#StoneGameIII)
-	* 4.557. [1409. Queries on a Permutation With Key](#QueriesonaPermutationWithKey)
-	* 4.558. [1416. Restore The Array](#RestoreTheArray)
-	* 4.559. [1424. Diagonal Traverse II](#DiagonalTraverseII)
-	* 4.560. [1425. Constrained Subset Sum](#ConstrainedSubsetSum)
-	* 4.561. [1426  Counting Elements](#CountingElements)
-	* 4.562. [1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie](#KidsWiththeGreatestNumberofCandie)
-	* 4.563. [1437 Check If All 1's Are at Least Length](#CheckIfAll1sAreatLeastLength)
-	* 4.564. [1438. Longest Continuous Subarray With Absolute](#LongestContinuousSubarrayWithAbsolute)
-	* 4.565. [1441 Build an Array With Stack Operations](#BuildanArrayWithStackOperations)
-	* 4.566. [1442. Count Triplets That Can Form Two Arrays of Equal](#CountTripletsThatCanFormTwoArraysofEqual)
-	* 4.567. [1443. Minimum Time to Collect All Apples in a Tree](#MinimumTimetoCollectAllApplesinaTree)
-	* 4.568. [1444. Number of Ways of Cutting a Pizza](#NumberofWaysofCuttingaPizza)
-	* 4.569. [1446 Consecutive Characters](#ConsecutiveCharacters)
-	* 4.570. [1448 Count Good Nodes in Binary Tree](#CountGoodNodesinBinaryTree)
-	* 4.571. [1449. Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
-	* 4.572. [1451 Rearrange Words in a Sentence](#RearrangeWordsinaSentence)
-	* 4.573. [1453 Maximum Number of Darts Inside of a Circular Dartb](#MaximumNumberofDartsInsideofaCircularDartb)
-	* 4.574. [1457 Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
-	* 4.575. [1461 Check If a String Contains All Binar](#CheckIfaStringContainsAllBinar)
-	* 4.576. [1463 Cherry Pickup II](#CherryPickupII)
-	* 4.577. [1473. Paint House III](#PaintHouseIII)
-	* 4.578. [1475. Final Prices With a Special Discount in a Sho](#FinalPricesWithaSpecialDiscountinaSho)
-	* 4.579. [1483. Kth Ancestor of a Tree Node](#KthAncestorofaTreeNode)
-	* 4.580. [1488. Avoid Flood in The City](#AvoidFloodinTheCity)
-* 5. [1489. Find Critical and Pseudo-Critical Edges in](#FindCriticalandPseudo-CriticalEdgesin)
-	* 5.1. [1492 The kth Factor of n](#ThekthFactorofn)
-	* 5.2. [1493. Longest Subarray of 1's After Deleting One](#LongestSubarrayof1sAfterDeletingOne)
-	* 5.3. [1499. Max Value of Equation](#MaxValueofEquation)
-	* 5.4. [1502 Can Make Arithmetic Progression From Sequence](#CanMakeArithmeticProgressionFromSequence)
-	* 5.5. [1503 Last Moment Before All Ants Fall Out of a Plank](#LastMomentBeforeAllAntsFallOutofaPlank)
-	* 5.6. [1505. Minimum Possible Integer After at Most K Adjacent](#MinimumPossibleIntegerAfteratMostKAdjacent)
-	* 5.7. [1508. Range Sum of Sorted Subarray Sums](#RangeSumofSortedSubarraySums)
-	* 5.8. [1510 Stone Game IV](#StoneGameIV)
-	* 5.9. [1514 Path with Maximum Probability](#PathwithMaximumProbability)
-	* 5.10. [1515 Best Position for a Service Centre](#BestPositionforaServiceCentre)
-	* 5.11. [1520. Maximum Number of Non-Overlapping Substrings](#MaximumNumberofNon-OverlappingSubstrings)
-	* 5.12. [1530. Number of Good Leaf Nodes Pairs](#NumberofGoodLeafNodesPairs)
-	* 5.13. [1531. String Compression II](#StringCompressionII)
-	* 5.14. [1534 Count Good Triplets](#CountGoodTriplets)
-	* 5.15. [1535 Find the Winner of an Array Game](#FindtheWinnerofanArrayGame)
-	* 5.16. [1537. Get the Maximum Score](#GettheMaximumScore)
-	* 5.17. [1539. Kth Missing Positive Number](#KthMissingPositiveNumber)
-	* 5.18. [1542. Find Longest Awesome Substring](#FindLongestAwesomeSubstring)
-	* 5.19. [1546. Maximum Number of Non-Overlapping Subarrays With Sum](#MaximumNumberofNon-OverlappingSubarraysWithSum)
-	* 5.20. [1550. Three Consecutive Odds](#ThreeConsecutiveOdds)
-	* 5.21. [1551 Minimum Operations to Make Array](#MinimumOperationstoMakeArray)
-	* 5.22. [1553. Minimum Number of Days to Eat N Oranges](#MinimumNumberofDaystoEatNOranges)
-	* 5.23. [1556. Thousand Separator](#ThousandSeparator)
-	* 5.24. [1558. Minimum Numbers of Function Calls to Make Target](#MinimumNumbersofFunctionCallstoMakeTarget)
-	* 5.25. [1563. Stone Game V](#StoneGameV)
-	* 5.26. [1569. Number of Ways to Reorder Array to Get Sa](#NumberofWaystoReorderArraytoGetSa)
-	* 5.27. [1573. Number of Ways to Split a String](#NumberofWaystoSplitaString)
-	* 5.28. [1585. Check If String Is Transformable With](#CheckIfStringIsTransformableWith)
-	* 5.29. [1593. Split a String Into the Max Number of Unique Substri](#SplitaStringIntotheMaxNumberofUniqueSubstri)
-	* 5.30. [1595. Minimum Cost to Connect Two Groups of Points](#MinimumCosttoConnectTwoGroupsofPoints)
-	* 5.31. [1621. Number of Sets of K Non-Overlapping Line](#NumberofSetsofKNon-OverlappingLine)
-	* 5.32. [1631. Path With Minimum Effort](#PathWithMinimumEffort)
-	* 5.33. [1632 Rank Transform of a Matrix](#RankTransformofaMatrix)
-	* 5.34. [1640 Check Array Formation Through](#CheckArrayFormationThrough)
-	* 5.35. [1641 Count Sorted Vowel Strings](#CountSortedVowelStrings)
-	* 5.36. [1642. Furthest Building You Can Reach](#FurthestBuildingYouCanReach)
-	* 5.37. [1646 Get Maximum in Generated Array](#GetMaximuminGeneratedArray)
-	* 5.38. [1648. Sell Diminishing-Valued Colored Balls](#SellDiminishing-ValuedColoredBalls)
-	* 5.39. [1649 Create Sorted Array through Instru](#CreateSortedArraythroughInstru)
-	* 5.40. [1655. Distribute Repeating Integers](#DistributeRepeatingIntegers)
-	* 5.41. [1657 Determine if Two Strings Are Close](#DetermineifTwoStringsAreClose)
-	* 5.42. [1658 Minimum Operations to Reduce X](#MinimumOperationstoReduceX)
-	* 5.43. [1659. Maximize Grid Happiness](#MaximizeGridHappiness)
-	* 5.44. [1662 Check If Two String Arrays are Equi](#CheckIfTwoStringArraysareEqui)
-	* 5.45. [1663 Smallest String With A Given Numer](#SmallestStringWithAGivenNumer)
-	* 5.46. [1673 Find the Most Competitive Subseq](#FindtheMostCompetitiveSubseq)
-	* 5.47. [1674. Minimum Moves to Make Array Complement](#MinimumMovestoMakeArrayComplement)
-	* 5.48. [1675. Minimize Deviation in Array](#MinimizeDeviationinArray)
-	* 5.49. [1679 Max Number of K-Sum Pairs】](#MaxNumberofK-SumPairs)
-	* 5.50. [1680 Concatenation of Consecutive Bina](#ConcatenationofConsecutiveBina)
-	* 5.51. [1681. Minimum Incompatibility](#MinimumIncompatibility)
-	* 5.52. [1690. Stone Game VII](#StoneGameVII)
-	* 5.53. [1696. Jump Game VI](#JumpGameVI)
-	* 5.54. [1704 Determine if String Halves Are Alike](#DetermineifStringHalvesAreAlike)
-	* 5.55. [1707. Maximum XOR With an Element From Array](#MaximumXORWithanElementFromArray)
-	* 5.56. [1713. Minimum Operations to Make a Subsequence](#MinimumOperationstoMakeaSubsequence)
-	* 5.57. [1721 Swapping Nodes in a Linked List](#SwappingNodesinaLinkedList)
-	* 5.58. [1727. Largest Submatrix With Rearrangements](#LargestSubmatrixWithRearrangements)
-	* 5.59. [1745. Palindrome Partitioning IV](#PalindromePartitioningIV)
-	* 5.60. [1760. Minimum Limit of Balls in a Bag](#MinimumLimitofBallsinaBag)
-	* 5.61. [1770. Maximum Score from Performing Multiplication](#MaximumScorefromPerformingMultiplication)
-	* 5.62. [1771. Maximize Palindrome Length From Subsequences](#MaximizePalindromeLengthFromSubsequences)
-	* 5.63. [1775. Equal Sum Arrays With Minimum Number of Operatio](#EqualSumArraysWithMinimumNumberofOperatio)
-	* 5.64. [1786. Number of Restricted Paths From First to Last Node](#NumberofRestrictedPathsFromFirsttoLastNode)
-	* 5.65. [1792. Maximum Average Pass Ratio](#MaximumAveragePassRatio)
-	* 5.66. [1799. Maximize Score After N Operations](#MaximizeScoreAfterNOperations)
-	* 5.67. [1815. Maximum Number of Groups Getting Fresh Donuts](#MaximumNumberofGroupsGettingFreshDonuts)
-	* 5.68. [1838. Frequency of the Most Frequent Element](#FrequencyoftheMostFrequentElement)
-	* 5.69. [1847. Closest Room](#ClosestRoom)
-	* 5.70. [1872. Stone Game VIII](#StoneGameVIII)
-	* 5.71. [s](#s)
+	* 3.68. [74 Search a 2D Matrix](#Searcha2DMatrix)
+	* 3.69. [75. Sort Colors](#SortColors)
+	* 3.70. [76-最小覆盖子串](#-1)
+	* 3.71. [77. 组合](#-1)
+	* 3.72. [78. Subsets 78-子集](#Subsets78-)
+	* 3.73. [79. Word Search](#WordSearch)
+	* 3.74. [80 Remove Duplicates from Sorted Array II](#RemoveDuplicatesfromSortedArrayII)
+	* 3.75. [82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List](#IIRemoveDuplicatesfromSortedList)
+	* 3.76. [83-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray-1)
+	* 3.77. [84. 柱状图中最大的矩形 Largest Rectangle in Histogram](#LargestRectangleinHistogram)
+	* 3.78. [86. 分隔链表(Partition List)](#PartitionList)
+	* 3.79. [87. Scramble String](#ScrambleString)
+	* 3.80. [88-Merge sorted array](#Mergesortedarray)
+	* 3.81. [ 89. 格雷编码](#89.)
+	* 3.82. [90-子集 II](#II)
+	* 3.83. [91. Decode Ways](#DecodeWays)
+	* 3.84. [92-Reverse Linked List II](#ReverseLinkedListII)
+	* 3.85. [ 93. 复原 IP 地址](#93.IP)
+	* 3.86. [94-Inorder wih stack](#Inorderwihstack)
+	* 3.87. [94-Binary Tree Inorder Traversal](#BinaryTreeInorderTraversal)
+	* 3.88. [95. 不同的二叉搜索树 II](#II-1)
+	* 3.89. [96. Unique Binary Search Trees](#UniqueBinarySearchTrees)
+	* 3.90. [98. Validate Binary Search Tree 98-验证二叉搜索树](#ValidateBinarySearchTree98-)
+	* 3.91. [100-Same Tree](#SameTree)
+	* 3.92. [101-Symmetric tree](#Symmetrictree)
+	* 3.93. [102-Binary Tree Level Order Traversal](#BinaryTreeLevelOrderTraversal)
+	* 3.94. [103. Binary Tree Zigzag Level Order Traversal](#BinaryTreeZigzagLevelOrderTraversal)
+	* 3.95. [104-Maximum Depth of Binary](#MaximumDepthofBinary)
+	* 3.96. [105-从前序与中序遍历序列构](#-1)
+	* 3.97. [106-从中序与后序遍历序列构造二叉树](#-1)
+	* 3.98. [107-Binary Tree Level Order Traversal II](#BinaryTreeLevelOrderTraversalII)
+	* 3.99. [108 Convert Sorted Array to Binary Search Tree](#ConvertSortedArraytoBinarySearchTree)
+	* 3.100. [109题. 有序链表转换二叉搜索树](#-1)
+	* 3.101. [110-Balanced Binary Tree](#BalancedBinaryTree)
+	* 3.102. [111-Minimum Depth of Binary Tree](#MinimumDepthofBinaryTree)
+	* 3.103. [112-Path Sum](#PathSum)
+	* 3.104. [113. 二叉树中和为某一值的路径](#-1)
+	* 3.105. [114题. 二叉树展开为链表](#-1)
+	* 3.106. [115. Distinct Subsequences](#DistinctSubsequences)
+	* 3.107. [116. Populating Next Right Pointers in Each Node](#PopulatingNextRightPointersinEachNode)
+	* 3.108. [117 Populating Next Right Pointers in Ea](#PopulatingNextRightPointersinEa)
+	* 3.109. [118-Pascal's Triangle](#PascalsTriangle)
+	* 3.110. [119-Pascal's Triangle II](#PascalsTriangleII)
+	* 3.111. [120 Triangle](#Triangle)
+	* 3.112. [121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机](#BestTimetoBuyandSellStock121-)
+	* 3.113. [122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II](#II122-BestTimetoBuyandSellStockII)
+	* 3.114. [123-买卖股票的最佳时机 III](#III)
+	* 3.115. [124. Binary Tree Maximum Path Sum](#BinaryTreeMaximumPathSum)
+	* 3.116. [125-Valid Palindrome](#ValidPalindrome)
+	* 3.117. [126. Word Ladder II](#WordLadderII)
+	* 3.118. [127. Word Ladder](#WordLadder)
+	* 3.119. [128. Longest Consecutive Sequence](#LongestConsecutiveSequence)
+	* 3.120. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
+	* 3.121. [130. Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
+	* 3.122. [131-分割回文串](#-1)
+	* 3.123. [132. Palindrome Partitioning II](#PalindromePartitioningII)
+	* 3.124. [133. Clone Graph](#CloneGraph)
+	* 3.125. [134. Gas Station](#GasStation)
+	* 3.126. [138 Copy List with Random Pointer](#CopyListwithRandomPointer)
+	* 3.127. [136-Single Number](#SingleNumber)
+	* 3.128. [137 Single Number II](#SingleNumberII)
+	* 3.129. [139 Word Break](#WordBreak)
+	* 3.130. [140 Word Break II](#WordBreakII)
+	* 3.131. [141-Linked List Cycle](#LinkedListCycle)
+	* 3.132. [142 Linked List Cycle II](#LinkedListCycleII)
+	* 3.133. [143 Reorder List](#ReorderList)
+	* 3.134. [144-Preorder with stack](#Preorderwithstack)
+	* 3.135. [144-Binary Tree Preorder Traversal](#BinaryTreePreorderTraversal)
+	* 3.136. [145-Postorder with stack](#Postorderwithstack)
+	* 3.137. [145-Binary Tree Postorder Traversal](#BinaryTreePostorderTraversal)
+	* 3.138. [146 LRU Cache](#LRUCache)
+	* 3.139. [147 Insertion Sort List](#InsertionSortList)
+	* 3.140. [148. Sort List](#SortList)
+	* 3.141. [149. Max Points on a Line](#MaxPointsonaLine)
+	* 3.142. [150. Evaluate Reverse Polish Notation](#EvaluateReversePolishNotation)
+	* 3.143. [151. Reverse Words in a String](#ReverseWordsinaString)
+	* 3.144. [152-乘积最大子数组](#-1)
+	* 3.145. [153-寻找旋转排序数组中的最小值](#-1)
+	* 3.146. [154 Find Minimum in Rotated Sorted Arr](#FindMinimuminRotatedSortedArr)
+	* 3.147. [155-Min Stack](#MinStack)
+	* 3.148. [160-Intersection of Two Linked Lists](#IntersectionofTwoLinkedLists)
+	* 3.149. [162. Find Peak Element](#FindPeakElement)
+	* 3.150. [165. Compare Version Numbers](#CompareVersionNumbers)
+	* 3.151. [166. Fraction to Recurring Decimal](#FractiontoRecurringDecimal)
+	* 3.152. [167-Two Sum II - Input array is sorted](#TwoSumII-Inputarrayissorted)
+	* 3.153. [168-Excel Sheet Column Title](#ExcelSheetColumnTitle)
+	* 3.154. [169. Majority Element](#MajorityElement)
+	* 3.155. [171. Excel Sheet Column Number](#ExcelSheetColumnNumber)
+	* 3.156. [172-Factorial Trailing Zeroes](#FactorialTrailingZeroes)
+	* 3.157. [173 Binary Search Tree Iterator](#BinarySearchTreeIterator)
+	* 3.158. [174 Dungeon Game](#DungeonGame)
+	* 3.159. [179 Largest Number](#LargestNumber)
+	* 3.160. [186. Reverse Words in a String II](#ReverseWordsinaStringII)
+	* 3.161. [187 Repeated DNA Sequences](#RepeatedDNASequences)
+	* 3.162. [188 Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
+	* 3.163. [189. Rotate Array](#RotateArray)
+	* 3.164. [190. Reverse Bits](#ReverseBits)
+	* 3.165. [191 Number of 1 Bits](#Numberof1Bits)
+	* 3.166. [198. House Robber 198-打家劫舍](#HouseRobber198-)
+	* 3.167. [199 Binary Tree Right Side View](#BinaryTreeRightSideView)
+	* 3.168. [200-岛屿数量](#-1)
+	* 3.169. [201 Bitwise AND of Numbers Range](#BitwiseANDofNumbersRange)
+	* 3.170. [202. 快乐数 Happy Number](#HappyNumber)
+	* 3.171. [203. Remove Linked List Elements](#RemoveLinkedListElements)
+	* 3.172. [204-Count Primes](#CountPrimes)
+	* 3.173. [205. isomorphic strings](#isomorphicstrings)
+	* 3.174. [206-Reverse Linked List](#ReverseLinkedList)
+	* 3.175. [207-课程表](#-1)
+	* 3.176. [208. Implement Trie (Prefix Tree)](#ImplementTriePrefixTree)
+	* 3.177. [209-长度最小的子数组](#-1)
+	* 3.178. [210. Course Schedule II 210-课程表II](#CourseScheduleII210-II)
+	* 3.179. [211 Add and Search Word](#AddandSearchWord)
+	* 3.180. [212. Word Search II](#WordSearchII)
+	* 3.181. [213. House Robber II 213-打家劫舍II](#HouseRobberII213-II)
+	* 3.182. [216. Combination Sum III 216-组合总和 III](#CombinationSumIII216-III)
+	* 3.183. [217. Contains Duplicate](#ContainsDuplicate)
+	* 3.184. [218. The Skyline Problem](#TheSkylineProblem)
+	* 3.185. [219. Contains Duplicate II](#ContainsDuplicateII)
+	* 3.186. [220 Contains Duplicate III](#ContainsDuplicateIII)
+	* 3.187. [221-最大正方形](#-1)
+	* 3.188. [222. Count Complete Tree Nodes](#CountCompleteTreeNodes)
+	* 3.189. [223. Rectangle Area](#RectangleArea)
+	* 3.190. [225-Implement Stack using Queues](#ImplementStackusingQueues)
+	* 3.191. [226-翻转二叉树](#-1)
+	* 3.192. [227 Basic Calculator II](#BasicCalculatorII)
+	* 3.193. [228 Summary Ranges](#SummaryRanges)
+	* 3.194. [229. Majority Element II](#MajorityElementII)
+	* 3.195. [230 Kth Smallest Element in a B](#KthSmallestElementinaB)
+	* 3.196. [231. Power of Two](#PowerofTwo)
+	* 3.197. [232-Implement Queue using Stacks](#ImplementQueueusingStacks)
+	* 3.198. [234. Palindrome Linked List](#PalindromeLinkedList)
+	* 3.199. [235. Lowest Common Ancestor of a Binary Search Tree](#LowestCommonAncestorofaBinarySearchTree)
+	* 3.200. [236-二叉树的最近公共祖先](#-1)
+	* 3.201. [237. Delete Node in a Linked List](#DeleteNodeinaLinkedList)
+	* 3.202. [238 Product of Array Except Self](#ProductofArrayExceptSelf)
+	* 3.203. [239. Sliding Window Maximum](#SlidingWindowMaximum)
+	* 3.204. [240. 二维数组的查找](#-1)
+	* 3.205. [242. Valid Anagram](#ValidAnagram)
+	* 3.206. [243. Shortest Word Distance](#ShortestWordDistance)
+	* 3.207. [246. Strobogrammatic Number](#StrobogrammaticNumber)
+	* 3.208. [257-二叉树的所有路径](#-1)
+	* 3.209. [258. Add Digits](#AddDigits)
+	* 3.210. [260-只出现一次的数字 III](#III-1)
+	* 3.211. [263 Ugly Number](#UglyNumber)
+	* 3.212. [264. Ugly Number II](#UglyNumberII)
+	* 3.213. [268 Missing Number](#MissingNumber)
+	* 3.214. [270. Closest Binary Search Tree Value](#ClosestBinarySearchTreeValue)
+	* 3.215. [274 H-Index](#H-Index)
+	* 3.216. [278. First Bad Version](#FirstBadVersion)
+	* 3.217. [279 Perfect Squares](#PerfectSquares)
+	* 3.218. [282. Expression Add Operators](#ExpressionAddOperators)
+	* 3.219. [283. Move Zeros](#MoveZeros)
+	* 3.220. [284 Peeking Iterator](#PeekingIterator)
+	* 3.221. [287 Find the Duplicate Number](#FindtheDuplicateNumber)
+	* 3.222. [289. Game of Life](#GameofLife)
+	* 3.223. [290. Word Pattern](#WordPattern)
+	* 3.224. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
+	* 3.225. [299. Bulls and Cows](#BullsandCows)
+	* 3.226. [300 Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
+	* 3.227. [301. Remove Invalid Parentheses](#RemoveInvalidParentheses)
+	* 3.228. [303-区域和检索 - 数组不可变](#-1)
+	* 3.229. [304. Range Sum Query 2D](#RangeSumQuery2D)
+	* 3.230. [309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期](#BestTimetoBuyandSellStockwithCooldown309-)
+	* 3.231. [310 Minimum Height Trees](#MinimumHeightTrees)
+	* 3.232. [312 Burst Balloons](#BurstBalloons)
+	* 3.233. [315. Count of Smaller Numbers After Self](#CountofSmallerNumbersAfterSelf)
+	* 3.234. [316 Remove Duplicate Letters](#RemoveDuplicateLetters)
+	* 3.235. [321. Create Maximum Number](#CreateMaximumNumber)
+	* 3.236. [322. Coin Change](#CoinChange)
+	* 3.237. [326. Power of Three](#PowerofThree)
+	* 3.238. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
+	* 3.239. [329. Longest Increasing Path in a Matrix](#LongestIncreasingPathinaMatrix)
+	* 3.240. [332 Reconstruct Itinerary](#ReconstructItinerary)
+	* 3.241. [334 Increasing Triplet Subseque](#IncreasingTripletSubseque)
+	* 3.242. [337 House Robber III](#HouseRobberIII)
+	* 3.243. [338 Counting Bits](#CountingBits)
+	* 3.244. [342. Power of Four](#PowerofFour)
+	* 3.245. [343-整数拆分](#-1)
+	* 3.246. [344. Reverse String](#ReverseString)
+	* 3.247. [345. Reverse Vowels of a String](#ReverseVowelsofaString)
+	* 3.248. [346 Moving Average from Data Stream](#MovingAveragefromDataStream)
+	* 3.249. [347. Top K Frequent Elements](#TopKFrequentElements)
+	* 3.250. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
+	* 3.251. [350. Intersection of Two Arrays II](#IntersectionofTwoArraysII)
+	* 3.252. [355. 设计推特 Design Twitter](#DesignTwitter)
+	* 3.253. [359 Logger Rate Limiter](#LoggerRateLimiter)
+	* 3.254. [367. Valid Perfect Square](#ValidPerfectSquare)
+	* 3.255. [368 Largest Divisible Subset](#LargestDivisibleSubset)
+	* 3.256. [373. Find K Pairs with Smallest Sums查找和最小的k对数字](#FindKPairswithSmallestSumsk)
+	* 3.257. [374. Guess Number Higher or Lower](#GuessNumberHigherorLower)
+	* 3.258. [376-摆动序列](#-1)
+	* 3.259. [377. Combination Sum IV](#CombinationSumIV)
+	* 3.260. [378-有序矩阵中第K小的元素](#K)
+	* 3.261. [380 Insert Delete GetRandom O(1)](#InsertDeleteGetRandomO1)
+	* 3.262. [382 Linked List Random Node](#LinkedListRandomNode)
+	* 3.263. [383 Ransom Note](#RansomNote)
+	* 3.264. [387. First Unique Character in a String](#FirstUniqueCharacterinaString)
+	* 3.265. [389. Find the Difference](#FindtheDifference)
+	* 3.266. [391. Perfect Rectangle](#PerfectRectangle)
+	* 3.267. [392. Is Subsequence](#IsSubsequence)
+	* 3.268. [393. UTF-8 Validation](#UTF-8Validation)
+	* 3.269. [394 Decode String](#DecodeString)
+	* 3.270. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
+	* 3.271. [399. Evaluate Division](#EvaluateDivision)
+	* 3.272. [402 Remove K Digits](#RemoveKDigits)
+	* 3.273. [404. Sum of Left Leaves](#SumofLeftLeaves)
+	* 3.274. [405-Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
+	* 3.275. [406. Queue Reconstruction by Height](#QueueReconstructionbyHeight)
+	* 3.276. [408. Valid Word Abbreviation](#ValidWordAbbreviation)
+	* 3.277. [409. Longest Palindrome](#LongestPalindrome)
+	* 3.278. [410. Split Array Largest Sum](#SplitArrayLargestSum)
+	* 3.279. [412. Fizz Buzz](#FizzBuzz)
+	* 3.280. [413-等差数列划分](#-1)
+	* 3.281. [414. Third Maximum Number](#ThirdMaximumNumber)
+	* 3.282. [415-Add Strings](#AddStrings)
+	* 3.283. [416. Partition Equal Subset Sum](#PartitionEqualSubsetSum)
+	* 3.284. [417. Pacific Atlantic Water Flow](#PacificAtlanticWaterFlow)
+	* 3.285. [419. Battleships in a Board](#BattleshipsinaBoard)
+	* 3.286. [421 Maximum XOR of Two Numbers in an Array](#MaximumXORofTwoNumbersinanArray)
+	* 3.287. [423 Reconstruct Original Digits from English](#ReconstructOriginalDigitsfromEnglish)
+	* 3.288. [424. 替换后的最长重复字符 Longest Repeating Character Replacem](#LongestRepeatingCharacterReplacem)
+	* 3.289. [429. N-ary Tree Level Order Traversal](#N-aryTreeLevelOrderTraversal)
+	* 3.290. [430 Flatten a Multilevel Doubly Linked List](#FlattenaMultilevelDoublyLinkedList)
+	* 3.291. [432. All O`one Data Structure](#AllOoneDataStructure)
+	* 3.292. [435-Non-overlapping Intervals](#Non-overlappingIntervals)
+	* 3.293. [436 Find Right Interval](#FindRightInterval)
+	* 3.294. [437 Path Sum III](#PathSumIII)
+	* 3.295. [438. Find All Anagrams in a String](#FindAllAnagramsinaString)
+	* 3.296. [441 Arranging Coins](#ArrangingCoins)
+	* 3.297. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
+	* 3.298. [443. String Compression](#StringCompression)
+	* 3.299. [445-Add Two Numbers II](#AddTwoNumbersII)
+	* 3.300. [447. Number of Boomerangs](#NumberofBoomerangs)
+	* 3.301. [448. Find All Numbers Disappeared in an Array](#FindAllNumbersDisappearedinanArray)
+	* 3.302. [449. Serialize and Deserialize BST](#SerializeandDeserializeBST)
+	* 3.303. [450. Delete Node in a BST](#DeleteNodeinaBST)
+	* 3.304. [451 Sort Characters By Frequency](#SortCharactersByFrequency)
+	* 3.305. [454 4Sum II](#SumII)
+	* 3.306. [452. Minimum Number of Arrows to Burst Balloons](#MinimumNumberofArrowstoBurstBalloons)
+	* 3.307. [455-Assign Cookies](#AssignCookies)
+	* 3.308. [456 132 Pattern](#Pattern)
+	* 3.309. [458 Poor Pigs](#PoorPigs)
+	* 3.310. [459 Repeated Substring Pattern](#RepeatedSubstringPattern)
+	* 3.311. [460. LFU Cache / O(1)](#LFUCacheO1)
+	* 3.312. [461 Hamming Distance](#HammingDistance)
+	* 3.313. [463 Island Perimeter](#IslandPerimeter)
+	* 3.314. [464. Can I Win](#CanIWin)
+	* 3.315. [466. 统计重复个数 Count The Repetitions](#CountTheRepetitions)
+	* 3.316. [468 Validate IP Address](#ValidateIPAddress)
+	* 3.317. [470. Implement Rand10() Using Rand7()](#ImplementRand10UsingRand7)
+	* 3.318. [475. Heaters](#Heaters)
+	* 3.319. [476. Number Complement](#NumberComplement)
+	* 3.320. [477. Total Hamming Distance](#TotalHammingDistance)
+	* 3.321. [478 Generate Random Point in a Circle](#GenerateRandomPointinaCircle)
+	* 3.322. [480. Sliding Window Median](#SlidingWindowMedian)
+	* 3.323. [484 Find Permutation](#FindPermutation)
+	* 3.324. [485. Max Consecutive Ones](#MaxConsecutiveOnes)
+	* 3.325. [486. Predict the Winner](#PredicttheWinner)
+	* 3.326. [490 The Maze](#TheMaze)
+	* 3.327. [494. Target Sum](#TargetSum)
+	* 3.328. [495 Teemo Attacking](#TeemoAttacking)
+	* 3.329. [496. 下一个更大元素 I (Next Greater Element I)](#INextGreaterElementI)
+	* 3.330. [497 Random Point in Non-overlapping](#RandomPointinNon-overlapping)
+	* 3.331. [500. Keyboard Row](#KeyboardRow)
+	* 3.332. [503-Next Greater Element II](#NextGreaterElementII)
+	* 3.333. [504-Base 7](#Base7)
+	* 3.334. [509. Fibonacci Number](#FibonacciNumber)
+	* 3.335. [516. Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
+	* 3.336. [518 Coin Change 2](#CoinChange2)
+	* 3.337. [520. Detect Capital](#DetectCapital)
+	* 3.338. [525. Contiguous Array](#ContiguousArray)
+	* 3.339. [526 Beautiful Arrangement](#BeautifulArrangement)
+	* 3.340. [528 Random Pick with Weight](#RandomPickwithWeight)
+	* 3.341. [530. Minimum Absolute Difference in BST](#MinimumAbsoluteDifferenceinBST)
+	* 3.342. [532 K-diff Pairs in an Array](#K-diffPairsinanArray)
+	* 3.343. [535. Encode and Decode TinyURL](#EncodeandDecodeTinyURL)
+	* 3.344. [537 Complex Number Multiplicatin](#ComplexNumberMultiplicatin)
+	* 3.345. [538 Convert BST to Greater Tree](#ConvertBSTtoGreaterTree)
+	* 3.346. [540. Single Element in a Sorted Array 540-有序数组中的单一元素](#SingleElementinaSortedArray540-)
+	* 3.347. [542. 01 矩阵 01 Matrix](#Matrix)
+	* 3.348. [543 Diameter of Binary Tree](#DiameterofBinaryTree)
+	* 3.349. [546 Remove Boxes](#RemoveBoxes)
+	* 3.350. [547-朋友圈](#-1)
+	* 3.351. [554 Brick Wall](#BrickWall)
+	* 3.352. [556 Next Greater Element III](#NextGreaterElementIII)
+	* 3.353. [560. Subarray Sum Equals K 和为K的子数组](#SubarraySumEqualsKK)
+	* 3.354. [563 Binary Tree Tilt](#BinaryTreeTilt)
+	* 3.355. [567. Permutation in String 567-字符串的排列](#PermutationinString567-)
+	* 3.356. [572-另一个树的子树](#-1)
+	* 3.357. [575 Distribute Candies](#DistributeCandies)
+	* 3.358. [576. Out of Boundary Paths](#OutofBoundaryPaths)
+	* 3.359. [581 Shortest Unsorted Continuous Suba](#ShortestUnsortedContinuousSuba)
+	* 3.360. [589 N-ary Tree Preorder Traversal](#N-aryTreePreorderTraversal)
+	* 3.361. [593 Valid Square](#ValidSquare)
+	* 3.362. [594 Longest Harmonious Subsequence](#LongestHarmoniousSubsequence)
+	* 3.363. [605 Can Place Flowers](#CanPlaceFlowers)
+	* 3.364. [621. Task Scheduler](#TaskScheduler)
+	* 3.365. [622 Design Circular Queue](#DesignCircularQueue)
+	* 3.366. [623 Add One Row to Tree](#AddOneRowtoTree)
+	* 3.367. [633-Sum of Square Numbers](#SumofSquareNumbers)
+	* 3.368. [636. Exclusive Time of Functions](#ExclusiveTimeofFunctions)
+	* 3.369. [637 Average of Levels in Binary Tree](#AverageofLevelsinBinaryTree)
+	* 3.370. [639. Decode Ways II](#DecodeWaysII)
+	* 3.371. [643. Maximum Average Subarray I](#MaximumAverageSubarrayI)
+	* 3.372. [645-错误的集合](#-1)
+	* 3.373. [646-最长数对链](#-1)
+	* 3.374. [647 Palindromic Substrings](#PalindromicSubstrings)
+	* 3.375. [650-只有两个键的键盘](#-1)
+	* 3.376. [652. Find Duplicate Subtrees](#FindDuplicateSubtrees)
+	* 3.377. [653. Two Sum IV](#TwoSumIV)
+	* 3.378. [662. Maximum Width of Binary Tree](#MaximumWidthofBinaryTree)
+	* 3.379. [667 Beautiful Arrangement II](#BeautifulArrangementII)
+	* 3.380. [668. Kth Smallest Number in Multiplication Table](#KthSmallestNumberinMultiplicationTable)
+	* 3.381. [669 Trim a Binary Search Tree](#TrimaBinarySearchTree)
+	* 3.382. [673 Number of Longest Increasing Subse](#NumberofLongestIncreasingSubse)
+	* 3.383. [678 Valid Parenthesis String](#ValidParenthesisString)
+	* 3.384. [680-Valid Palindrome II](#ValidPalindromeII)
+	* 3.385. [683. K Empty Slots](#KEmptySlots)
+	* 3.386. [684. Redundant Connection 684-冗余连接](#RedundantConnection684-)
+	* 3.387. [685. Redundant Connection II](#RedundantConnectionII)
+	* 3.388. [687. Longest Univalue Path](#LongestUnivaluePath)
+	* 3.389. [688. Knight Probability in Chessboard](#KnightProbabilityinChessboard)
+	* 3.390. [690. Employee Importance](#EmployeeImportance)
+	* 3.391. [692. Top K Frequent Words](#TopKFrequentWords)
+	* 3.392. [695-岛屿的最大面积](#-1)
+	* 3.393. [696 Count Binary Substrings](#CountBinarySubstrings)
+	* 3.394. [699. Falling Squares](#FallingSquares)
+	* 3.395. [700 Search in a Binary Search Tree](#SearchinaBinarySearchTree)
+	* 3.396. [701 Insert into a Binary Search Tree](#InsertintoaBinarySearchTree)
+	* 3.397. [703.Kth Largest Element in a Stream数据流中的第K大元素](#KthLargestElementinaStreamK)
+	* 3.398. [704.Binary Search二分查找](#BinarySearch)
+	* 3.399. [705 Design HashSet](#DesignHashSet)
+	* 3.400. [706. Design HashMap设计哈希映射](#DesignHashMap)
+	* 3.401. [707. Design Linked List](#DesignLinkedList)
+	* 3.402. [712. Minimum ASCII Delete Sum for Two Strings](#MinimumASCIIDeleteSumforTwoStrings)
+	* 3.403. [713 Subarray Product Less Than K](#SubarrayProductLessThanK)
+	* 3.404. [714-买卖股票的最佳时机含手续费](#-1)
+	* 3.405. [715. Range Module](#RangeModule)
+	* 3.406. [719. Find K-th Smallest Pair Distance](#FindK-thSmallestPairDistance)
+	* 3.407. [720. Longest Word in Dictionary](#LongestWordinDictionary)
+	* 3.408. [724. Find Pivot Index](#FindPivotIndex)
+	* 3.409. [725. Split Linked List in Parts](#SplitLinkedListinParts)
+	* 3.410. [726. Number of Atoms](#NumberofAtoms)
+	* 3.411. [730. Count Different Palindromic Subsequences](#CountDifferentPalindromicSubsequences)
+	* 3.412. [732. My Calendar III](#MyCalendarIII)
+	* 3.413. [733. 图像渲染 Flood Fill](#FloodFill)
+	* 3.414. [735 Asteroid Collision](#AsteroidCollision)
+	* 3.415. [737. Sentence Similarity II](#SentenceSimilarityII)
+	* 3.416. [739-Daily Temperatures](#DailyTemperatures)
+	* 3.417. [740. Delete and Earn](#DeleteandEarn)
+	* 3.418. [741. Cherry Pickup](#CherryPickup)
+	* 3.419. [743. Network Delay Time](#NetworkDelayTime)
+	* 3.420. [745. Prefix and Suffix Search](#PrefixandSuffixSearch)
+	* 3.421. [746. Min Cost Climbing Stairs](#MinCostClimbingStairs)
+	* 3.422. [748. Shortest Completing Word](#ShortestCompletingWord)
+	* 3.423. [752. Open the Lock](#OpentheLock)
+	* 3.424. [763 Partition Labels](#PartitionLabels)
+	* 3.425. [765. 情侣牵手 Couples Holding Hands](#CouplesHoldingHands)
+	* 3.426. [769. Max Chunks To Make Sorted](#MaxChunksToMakeSorted)
+	* 3.427. [771 Jewels and Stones](#JewelsandStones)
+	* 3.428. [773. Sliding Puzzle](#SlidingPuzzle)
+	* 3.429. [775. Global and Local Inversions](#GlobalandLocalInversions)
+	* 3.430. [778. Swim in Rising Water](#SwiminRisingWater)
+	* 3.431. [784. Letter Case Permutation](#LetterCasePermutation)
+	* 3.432. [785-判断二分图](#-1)
+	* 3.433. [786. K-th Smallest Prime Fraction](#K-thSmallestPrimeFraction)
+	* 3.434. [787. Cheapest Flights Within K Stops](#CheapestFlightsWithinKStops)
+	* 3.435. [790. Domino and Tromino Tiling](#DominoandTrominoTiling)
+	* 3.436. [792. Number of Matching Subsequences](#NumberofMatchingSubsequences)
+	* 3.437. [797 All Paths From Source to Target](#AllPathsFromSourcetoTarget)
+	* 3.438. [799 Champagne Tower](#ChampagneTower)
+	* 3.439. [801. Minimum Swaps To Make Sequences Increasing](#MinimumSwapsToMakeSequencesIncreasing)
+	* 3.440. [803. Bricks Falling When Hit](#BricksFallingWhenHit)
+	* 3.441. [804 Unique Morse Code Words](#UniqueMorseCodeWords)
+	* 3.442. [813. Largest Sum of Averages](#LargestSumofAverages)
+	* 3.443. [815. Bus Routes](#BusRoutes)
+	* 3.444. [817. Linked List Components](#LinkedListComponents)
+	* 3.445. [818. Race Car (上)](#RaceCar)
+	* 3.446. [821 Shortest Distance to a Character](#ShortestDistancetoaCharacter)
+	* 3.447. [823. Binary Trees With Factors](#BinaryTreesWithFactors)
+	* 3.448. [824 Goat Latin](#GoatLatin)
+	* 3.449. [827. Making A Large Island](#MakingALargeIsland)
+	* 3.450. [832 Flipping an Image](#FlippinganImage)
+	* 3.451. [835 Image Overlap](#ImageOverlap)
+	* 3.452. [837. 新 21 点 New 21 Game](#New21Game)
+	* 3.453. [841 Keys and Rooms](#KeysandRooms)
+	* 3.454. [842. Split Array into Fibonacci Sequence](#SplitArrayintoFibonacciSequence)
+	* 3.455. [844 Backspace String Compare](#BackspaceStringCompare)
+	* 3.456. [845 Longest Mountain in Array](#LongestMountaininArray)
+	* 3.457. [847 Shortest Path Visiting All Nodes](#ShortestPathVisitingAllNodes)
+	* 3.458. [849 Maximize Distance to Closest Person](#MaximizeDistancetoClosestPerson)
+	* 3.459. [856. Score of Parentheses](#ScoreofParentheses)
+	* 3.460. [858 Mirror Reflection](#MirrorReflection)
+	* 3.461. [859 Buddy Strings](#BuddyStrings)
+	* 3.462. [863. All Nodes Distance K in Binary Tree](#AllNodesDistanceKinBinaryTree)
+	* 3.463. [864. Shortest Path to Get All Keys](#ShortestPathtoGetAllKeys)
+	* 3.464. [869 Reordered Power of 2](#ReorderedPowerof2)
+	* 3.465. [865. Smallest Subtree with all the Deepest Nodes](#SmallestSubtreewithalltheDeepestNodes)
+	* 3.466. [871. Minimum Number of Refueling Stops](#MinimumNumberofRefuelingStops)
+	* 3.467. [873. Length of Longest Fibonacci Subsequence](#LengthofLongestFibonacciSubsequence)
+	* 3.468. [875.Koko Eating Bananas科科吃香蕉](#KokoEatingBananas)
+	* 3.469. [876.Middle of the Linked List 链表的中间结点](#MiddleoftheLinkedList)
+	* 3.470. [877 Stone Game](#StoneGame)
+	* 3.471. [879. Profitable Schemes](#ProfitableSchemes)
+	* 3.472. [880 Decoded String at Index](#DecodedStringatIndex)
+	* 3.473. [881 Boats to Save People](#BoatstoSavePeople)
+	* 3.474. [882. Reachable Nodes In Subdivided Graph](#ReachableNodesInSubdividedGraph)
+	* 3.475. [886. Possible Bipartition](#PossibleBipartition)
+	* 3.476. [887. Super Egg Drop](#SuperEggDrop)
+	* 3.477. [889. Construct Binary Tree from Preorder and Postorder](#ConstructBinaryTreefromPreorderandPostorder)
+	* 3.478. [891. Sum of Subsequence Widths](#SumofSubsequenceWidths)
+	* 3.479. [894. All Possible Full Binary Trees](#AllPossibleFullBinaryTrees)
+	* 3.480. [895. Maximum Frequency Stack](#MaximumFrequencyStack)
+	* 3.481. [898. Bitwise ORs of Subarrays](#BitwiseORsofSubarrays)
+	* 3.482. [901. Online Stock Span](#OnlineStockSpan)
+	* 3.483. [902 Numbers At Most N Given Digit Set](#NumbersAtMostNGivenDigitSet)
+	* 3.484. [904-水果成篮](#-1)
+	* 3.485. [905 Sort Array By Parity](#SortArrayByParity)
+	* 3.486. [906 Super Palindromes](#SuperPalindromes)
+	* 3.487. [909. Snakes and Ladders](#SnakesandLadders)
+	* 3.488. [910 Smallest Range II](#SmallestRangeII)
+	* 3.489. [916 Word Subsetse](#WordSubsetse)
+	* 3.490. [918 Maximum Sum Circular Sub](#MaximumSumCircularSub)
+	* 3.491. [923. 3Sum With Multiplicity](#SumWithMultiplicity)
+	* 3.492. [926. Flip String to Monotone Increasing](#FlipStringtoMonotoneIncreasing)
+	* 3.493. [930-和相同的二元子数组(滑动窗口+前缀和)](#-1)
+	* 3.494. [933 Number of Recent Calls](#NumberofRecentCalls)
+	* 3.495. [934. Shortest Bridge](#ShortestBridge)
+	* 3.496. [936 Stamping The Sequence](#StampingTheSequence)
+	* 3.497. [938 Range Sum of BST](#RangeSumofBST)
+	* 3.498. [941 Valid Mountain Array](#ValidMountainArray)
+	* 3.499. [943. Find the Shortest Superstring](#FindtheShortestSuperstring)
+	* 3.500. [946-Python-栈的压入、弹出序列](#Python-)
+	* 3.501. [946 Validate Stack Sequences](#ValidateStackSequences)
+	* 3.502. [947. 移除最多的同行或同列石头 Most Stones Removed with Same](#MostStonesRemovedwithSame)
+	* 3.503. [948 Bag of Tokens](#BagofTokens)
+	* 3.504. [949 Largest Time for Given Digits](#LargestTimeforGivenDigits)
+	* 3.505. [952 Largest Component Size by Commo](#LargestComponentSizebyCommo)
+	* 3.506. [953 Verifying an Alien Dictionary](#VerifyinganAlienDictionary)
+	* 3.507. [954 Array of Doubled Pairs](#ArrayofDoubledPairs)
+	* 3.508. [959. 由斜杠划分区域 Regions Cut By Slashes](#RegionsCutBySlashes)
+	* 3.509. [964. Least Operators to Express Number](#LeastOperatorstoExpressNumber)
+	* 3.510. [966 Vowel Spellchecker](#VowelSpellchecker)
+	* 3.511. [967. Numbers With Same Consecutive Differences](#NumbersWithSameConsecutiveDifferences)
+	* 3.512. [968 Binary Tree Cameras](#BinaryTreeCameras)
+	* 3.513. [969 Pancake Sorting](#PancakeSorting)
+	* 3.514. [971 Flip Binary Tree To Match Preorder](#FlipBinaryTreeToMatchPreorder)
+	* 3.515. [973 K Closest Points to Origin](#KClosestPointstoOrigin)
+	* 3.516. [974. 和可被 K 整除的子数组 Subarray Sums Divisible by K](#KSubarraySumsDivisiblebyK)
+	* 3.517. [975. Odd Even Jump](#OddEvenJump)
+	* 3.518. [976 Middle of the Linked List](#MiddleoftheLinkedList-1)
+	* 3.519. [977 Squares of a Sorted Array](#SquaresofaSortedArray)
+	* 3.520. [978. 最长湍流子数组 Longest Turbulent Subarray](#LongestTurbulentSubarray)
+	* 3.521. [980. Unique Paths III](#UniquePathsIII)
+	* 3.522. [983 Minimum Cost For Tickets](#MinimumCostForTickets)
+	* 3.523. [986 Interval List Intersections](#IntervalListIntersections)
+	* 3.524. [987 Vertical Order Traversal of a Binary](#VerticalOrderTraversalofaBinary)
+	* 3.525. [990. 等式方程的可满足性 Satisfiability of Equality Equations](#SatisfiabilityofEqualityEquations)
+	* 3.526. [992-K 个不同整数的子数组](#K-1)
+	* 3.527. [993. 二叉树的堂兄弟节点](#-1)
+	* 3.528. [994-腐烂的橘子](#-1)
+	* 3.529. [993, 994, 995, 996](#-1)
+	* 3.530. [997 Find the Town Judge](#FindtheTownJudge)
+	* 3.531. [1000. Minimum Cost to Merge Stones](#MinimumCosttoMergeStones)
+	* 3.532. [1001 Grid Illumination](#GridIllumination)
+	* 3.533. [1004-最大连续1的个数 III](#III-1)
+	* 3.534. [1007 Minimum Domino Rotations For Eq](#MinimumDominoRotationsForEq)
+	* 3.535. [1008 Construct Binary Search Tree from](#ConstructBinarySearchTreefrom)
+	* 3.536. [1009 Complement of Base 10 Integer](#ComplementofBase10Integer)
+	* 3.537. [1010 Pairs of Songs With Total Durations](#PairsofSongsWithTotalDurations)
+	* 3.538. [1013. 将数组分成和相等的三个部分 Partition Array Into Three Parts With Equ](#PartitionArrayIntoThreePartsWithEqu)
+	* 3.539. [1015 Smallest Integer Divisible by K](#SmallestIntegerDivisiblebyK)
+	* 3.540. [1019. Next Greater Node In Linked List](#NextGreaterNodeInLinkedList)
+	* 3.541. [1022 Sum of Root To Leaf Binary Numbers](#SumofRootToLeafBinaryNumbers)
+	* 3.542. [1025,1026,1027,1028](#-1)
+	* 3.543. [1024. Video Stitching](#VideoStitching)
+	* 3.544. [1026 Maximum Difference Between Nod](#MaximumDifferenceBetweenNod)
+	* 3.545. [1029 Two City Scheduling](#TwoCityScheduling)
+	* 3.546. [1032 Stream of Characters](#StreamofCharacters)
+	* 3.547. [1035 Uncrossed Lines](#UncrossedLines)
+	* 3.548. [1041 Robot Bounded In Circle](#RobotBoundedInCircle)
+	* 3.549. [1043. Partition Array for Maximum Sum](#PartitionArrayforMaximumSum)
+	* 3.550. [1044 Longest Duplicate Substring](#LongestDuplicateSubstring)
+	* 3.551. [1046 Last Stone Weight](#LastStoneWeight)
+	* 3.552. [1048 Longest String Chain](#LongestStringChain)
+	* 3.553. [1055.Shortest Way to Form String 形成字符串的最短路径](#ShortestWaytoFormString)
+	* 3.554. [1091-二进制矩阵中的最短路径](#-1)
+	* 3.555. [1094 Car Pooling](#CarPooling)
+	* 3.556. [1095. Find in Mountain Array](#FindinMountainArray)
+	* 3.557. [1105. Filling Bookcase Shelves](#FillingBookcaseShelves)
+	* 3.558. [1106. Parsing A Boolean Expression](#ParsingABooleanExpression)
+	* 3.559. [1110. Delete Nodes And Return Forest](#DeleteNodesAndReturnForest)
+	* 3.560. [1111. 有效括号的嵌套深度 Maximum Nesting Depth of Two Valid Parentheses](#MaximumNestingDepthofTwoValidParentheses)
+	* 3.561. [1114 - 1115 - 1116 - 多线程 threading](#threading)
+	* 3.562. [1123.Lowest Common Ancestor of Deepest Leaves最深叶节点的最近公共祖](#LowestCommonAncestorofDeepestLeaves)
+	* 3.563. [1124. Longest Well-Performing Interval](#LongestWell-PerformingInterval)
+	* 3.564. [1125. Smallest Sufficient Team](#SmallestSufficientTeam)
+	* 3.565. [1128. 等价多米诺骨牌对的数量 Number of Equivalent Domino Pairs](#NumberofEquivalentDominoPairs)
+	* 3.566. [1129. Shortest Path with Alternating Colors](#ShortestPathwithAlternatingColors)
+	* 3.567. [1137. N-th Tribonacci Number](#N-thTribonacciNumber)
+	* 3.568. [1140. Stone Game II](#StoneGameII)
+	* 3.569. [1143 Longest Common Subsequence](#LongestCommonSubsequence)
+	* 3.570. [1145. Binary Tree Coloring Game](#BinaryTreeColoringGame)
+	* 3.571. [1155. Number of Dice Rolls With Target Sum](#NumberofDiceRollsWithTargetSum)
+	* 3.572. [1160. 拼写单词 Find Words That Can Be Formed by Characters](#FindWordsThatCanBeFormedbyCharacters)
+	* 3.573. [1172. Dinner Plate Stacks](#DinnerPlateStacks)
+	* 3.574. [1178. Number of Valid Words for Each Puzzle](#NumberofValidWordsforEachPuzzle)
+	* 3.575. [1187. Make Array Strictly Increasing](#MakeArrayStrictlyIncreasing)
+	* 3.576. [1191. K-Concatenation Maximum Sum](#K-ConcatenationMaximumSum)
+	* 3.577. [1201. Ugly Number III](#UglyNumberIII)
+	* 3.578. [1202. Smallest String With Swaps](#SmallestStringWithSwaps)
+	* 3.579. [1203. 项目管理 Sort Items by Groups Respecting Dependencies](#SortItemsbyGroupsRespectingDependencies)
+	* 3.580. [1206. Design Skiplist](#DesignSkiplist)
+	* 3.581. [1209 Remove All Adjacent Duplicates in](#RemoveAllAdjacentDuplicatesin)
+	* 3.582. [1217 Minimum Cost to Move Chips](#MinimumCosttoMoveChips)
+	* 3.583. [1218. Longest Arithmetic Subsequence of Given Difference](#LongestArithmeticSubsequenceofGivenDifference)
+	* 3.584. [1220. Count Vowels Permutation](#CountVowelsPermutation)
+	* 3.585. [1223 Dice Roll Simulation](#DiceRollSimulation)
+	* 3.586. [1240 Tiling a Rectangle with the Fewest Squares](#TilingaRectanglewiththeFewestSquares)
+	* 3.587. [1248-统计「优美子数组」](#-1)
+	* 3.588. [1249 Minimum Remove to Make Valid Pare](#MinimumRemovetoMakeValidPare)
+	* 3.589. [1252 1253 1254 1255](#-1)
+	* 3.590. [1263. Minimum Moves to Move a Box to Their Target](#MinimumMovestoMoveaBoxtoTheirTarget)
+	* 3.591. [1277-统计全为1的正方形子矩阵](#-1)
+	* 3.592. [1278. Palindrome Partitioning III](#PalindromePartitioningIII)
+	* 3.593. [1283 Find the Smallest Divisor Given a](#FindtheSmallestDivisorGivena)
+	* 3.594. [1284. Minimum Number of Flips to Convert Binary Matrix](#MinimumNumberofFlipstoConvertBinaryMatrix)
+	* 3.595. [1290. 二进制链表转整数 (Convert Binary Number in a Linked List](#ConvertBinaryNumberinaLinkedList)
+	* 3.596. [1291 Sequential Digits](#SequentialDigits)
+	* 3.597. [1293. Shortest Path in a Grid with Obstacles Elimination](#ShortestPathinaGridwithObstaclesElimination)
+	* 3.598. [1296. Divide Array in Sets of K Consecutive Numbers](#DivideArrayinSetsofKConsecutiveNumbers)
+	* 3.599. [1301. Number of Paths with Max Score](#NumberofPathswithMaxScore)
+	* 3.600. [1302 Deepest Leaves Sum](#DeepestLeavesSum)
+	* 3.601. [1305 All Elements in Two Binary Search](#AllElementsinTwoBinarySearch)
+	* 3.602. [1306 Jump Game III](#JumpGameIII)
+	* 3.603. [1310. XOR Queries of a Subarray](#XORQueriesofaSubarray)
+	* 3.604. [1312. Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
+	* 3.605. [1320. Minimum Distance to Type a Word Using Two Finger](#MinimumDistancetoTypeaWordUsingTwoFinger)
+	* 3.606. [1329 Sort the Matrix Diagonally](#SorttheMatrixDiagonally)
+	* 3.607. [1332 Remove Palindromic Subsequences](#RemovePalindromicSubsequences)
+	* 3.608. [1334. Find the City With Smallest Number of Neighbors](#FindtheCityWithSmallestNumberofNeighbors)
+	* 3.609. [1335. Minimum Difficulty of a Job Schedule](#MinimumDifficultyofaJobSchedule)
+	* 3.610. [1337 The K Weakest Rows in a Matrix](#TheKWeakestRowsinaMatrix)
+	* 3.611. [1339 Maximum Product of Splitt](#MaximumProductofSplitt)
+	* 3.612. [1340. Jump Game V](#JumpGameV)
+	* 3.613. [1349. Maximum Students Taking Exam](#MaximumStudentsTakingExam)
+	* 3.614. [1353. Maximum Number of Events That Can Be Attended](#MaximumNumberofEventsThatCanBeAttended)
+	* 3.615. [1354. Construct Target Array With Multiple Sums](#ConstructTargetArrayWithMultipleSums)
+	* 3.616. [1368. Minimum Cost to Make at Least One Valid Path](#MinimumCosttoMakeatLeastOneValidPath)
+	* 3.617. [1371. Find the Longest Substring Containing Vowels in Eve](#FindtheLongestSubstringContainingVowelsinEve)
+	* 3.618. [1373. Maximum Sum BST in Binary Tree](#MaximumSumBSTinBinaryTree)
+	* 3.619. [1377. Frog Position After T Seconds](#FrogPositionAfterTSeconds)
+	* 3.620. [1379 Find Corresponding Node of Binary Tree in a Clone](#FindCorrespondingNodeofBinaryTreeinaClone)
+	* 3.621. [1382. Balance a Binary Search Tree](#BalanceaBinarySearchTree)
+	* 3.622. [1395. Count Number of Teams](#CountNumberofTeams)
+	* 3.623. [1396 Design Underground System](#DesignUndergroundSystem)
+	* 3.624. [1406. Stone Game III](#StoneGameIII)
+	* 3.625. [1409. Queries on a Permutation With Key](#QueriesonaPermutationWithKey)
+	* 3.626. [1416. Restore The Array](#RestoreTheArray)
+	* 3.627. [1424. Diagonal Traverse II](#DiagonalTraverseII)
+	* 3.628. [1425. Constrained Subset Sum](#ConstrainedSubsetSum)
+	* 3.629. [1426  Counting Elements](#CountingElements)
+	* 3.630. [1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie](#KidsWiththeGreatestNumberofCandie)
+	* 3.631. [1437 Check If All 1's Are at Least Length](#CheckIfAll1sAreatLeastLength)
+	* 3.632. [1438. Longest Continuous Subarray With Absolute](#LongestContinuousSubarrayWithAbsolute)
+	* 3.633. [1441 Build an Array With Stack Operations](#BuildanArrayWithStackOperations)
+	* 3.634. [1442. Count Triplets That Can Form Two Arrays of Equal](#CountTripletsThatCanFormTwoArraysofEqual)
+	* 3.635. [1443. Minimum Time to Collect All Apples in a Tree](#MinimumTimetoCollectAllApplesinaTree)
+	* 3.636. [1444. Number of Ways of Cutting a Pizza](#NumberofWaysofCuttingaPizza)
+	* 3.637. [1446 Consecutive Characters](#ConsecutiveCharacters)
+	* 3.638. [1448 Count Good Nodes in Binary Tree](#CountGoodNodesinBinaryTree)
+	* 3.639. [1449. Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
+	* 3.640. [1451 Rearrange Words in a Sentence](#RearrangeWordsinaSentence)
+	* 3.641. [1453 Maximum Number of Darts Inside of a Circular Dartb](#MaximumNumberofDartsInsideofaCircularDartb)
+	* 3.642. [1457 Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
+	* 3.643. [1461 Check If a String Contains All Binar](#CheckIfaStringContainsAllBinar)
+	* 3.644. [1463 Cherry Pickup II](#CherryPickupII)
+	* 3.645. [1473. Paint House III](#PaintHouseIII)
+	* 3.646. [1475. Final Prices With a Special Discount in a Sho](#FinalPricesWithaSpecialDiscountinaSho)
+	* 3.647. [1483. Kth Ancestor of a Tree Node](#KthAncestorofaTreeNode)
+	* 3.648. [1488. Avoid Flood in The City](#AvoidFloodinTheCity)
+	* 3.649. [1489. Find Critical and Pseudo-Critical Edges in](#FindCriticalandPseudo-CriticalEdgesin)
+	* 3.650. [1492 The kth Factor of n](#ThekthFactorofn)
+	* 3.651. [1493. Longest Subarray of 1's After Deleting One](#LongestSubarrayof1sAfterDeletingOne)
+	* 3.652. [1499. Max Value of Equation](#MaxValueofEquation)
+	* 3.653. [1502 Can Make Arithmetic Progression From Sequence](#CanMakeArithmeticProgressionFromSequence)
+	* 3.654. [1503 Last Moment Before All Ants Fall Out of a Plank](#LastMomentBeforeAllAntsFallOutofaPlank)
+	* 3.655. [1505. Minimum Possible Integer After at Most K Adjacent](#MinimumPossibleIntegerAfteratMostKAdjacent)
+	* 3.656. [1508. Range Sum of Sorted Subarray Sums](#RangeSumofSortedSubarraySums)
+	* 3.657. [1510 Stone Game IV](#StoneGameIV)
+	* 3.658. [1514 Path with Maximum Probability](#PathwithMaximumProbability)
+	* 3.659. [1515 Best Position for a Service Centre](#BestPositionforaServiceCentre)
+	* 3.660. [1520. Maximum Number of Non-Overlapping Substrings](#MaximumNumberofNon-OverlappingSubstrings)
+	* 3.661. [1530. Number of Good Leaf Nodes Pairs](#NumberofGoodLeafNodesPairs)
+	* 3.662. [1531. String Compression II](#StringCompressionII)
+	* 3.663. [1534 Count Good Triplets](#CountGoodTriplets)
+	* 3.664. [1535 Find the Winner of an Array Game](#FindtheWinnerofanArrayGame)
+	* 3.665. [1537. Get the Maximum Score](#GettheMaximumScore)
+	* 3.666. [1539. Kth Missing Positive Number](#KthMissingPositiveNumber)
+	* 3.667. [1542. Find Longest Awesome Substring](#FindLongestAwesomeSubstring)
+	* 3.668. [1546. Maximum Number of Non-Overlapping Subarrays With Sum](#MaximumNumberofNon-OverlappingSubarraysWithSum)
+	* 3.669. [1550. Three Consecutive Odds](#ThreeConsecutiveOdds)
+	* 3.670. [1551 Minimum Operations to Make Array](#MinimumOperationstoMakeArray)
+	* 3.671. [1553. Minimum Number of Days to Eat N Oranges](#MinimumNumberofDaystoEatNOranges)
+	* 3.672. [1556. Thousand Separator](#ThousandSeparator)
+	* 3.673. [1558. Minimum Numbers of Function Calls to Make Target](#MinimumNumbersofFunctionCallstoMakeTarget)
+	* 3.674. [1563. Stone Game V](#StoneGameV)
+	* 3.675. [1569. Number of Ways to Reorder Array to Get Sa](#NumberofWaystoReorderArraytoGetSa)
+	* 3.676. [1573. Number of Ways to Split a String](#NumberofWaystoSplitaString)
+	* 3.677. [1585. Check If String Is Transformable With](#CheckIfStringIsTransformableWith)
+	* 3.678. [1593. Split a String Into the Max Number of Unique Substri](#SplitaStringIntotheMaxNumberofUniqueSubstri)
+	* 3.679. [1595. Minimum Cost to Connect Two Groups of Points](#MinimumCosttoConnectTwoGroupsofPoints)
+	* 3.680. [1621. Number of Sets of K Non-Overlapping Line](#NumberofSetsofKNon-OverlappingLine)
+	* 3.681. [1631. Path With Minimum Effort](#PathWithMinimumEffort)
+	* 3.682. [1632 Rank Transform of a Matrix](#RankTransformofaMatrix)
+	* 3.683. [1640 Check Array Formation Through](#CheckArrayFormationThrough)
+	* 3.684. [1641 Count Sorted Vowel Strings](#CountSortedVowelStrings)
+	* 3.685. [1642. Furthest Building You Can Reach](#FurthestBuildingYouCanReach)
+	* 3.686. [1646 Get Maximum in Generated Array](#GetMaximuminGeneratedArray)
+	* 3.687. [1648. Sell Diminishing-Valued Colored Balls](#SellDiminishing-ValuedColoredBalls)
+	* 3.688. [1649 Create Sorted Array through Instru](#CreateSortedArraythroughInstru)
+	* 3.689. [1655. Distribute Repeating Integers](#DistributeRepeatingIntegers)
+	* 3.690. [1657 Determine if Two Strings Are Close](#DetermineifTwoStringsAreClose)
+	* 3.691. [1658 Minimum Operations to Reduce X](#MinimumOperationstoReduceX)
+	* 3.692. [1659. Maximize Grid Happiness](#MaximizeGridHappiness)
+	* 3.693. [1662 Check If Two String Arrays are Equi](#CheckIfTwoStringArraysareEqui)
+	* 3.694. [1663 Smallest String With A Given Numer](#SmallestStringWithAGivenNumer)
+	* 3.695. [1673 Find the Most Competitive Subseq](#FindtheMostCompetitiveSubseq)
+	* 3.696. [1674. Minimum Moves to Make Array Complement](#MinimumMovestoMakeArrayComplement)
+	* 3.697. [1675. Minimize Deviation in Array](#MinimizeDeviationinArray)
+	* 3.698. [1679 Max Number of K-Sum Pairs】](#MaxNumberofK-SumPairs)
+	* 3.699. [1680 Concatenation of Consecutive Bina](#ConcatenationofConsecutiveBina)
+	* 3.700. [1681. Minimum Incompatibility](#MinimumIncompatibility)
+	* 3.701. [1690. Stone Game VII](#StoneGameVII)
+	* 3.702. [1696. Jump Game VI](#JumpGameVI)
+	* 3.703. [1704 Determine if String Halves Are Alike](#DetermineifStringHalvesAreAlike)
+	* 3.704. [1707. Maximum XOR With an Element From Array](#MaximumXORWithanElementFromArray)
+	* 3.705. [1713. Minimum Operations to Make a Subsequence](#MinimumOperationstoMakeaSubsequence)
+	* 3.706. [1721 Swapping Nodes in a Linked List](#SwappingNodesinaLinkedList)
+	* 3.707. [1727. Largest Submatrix With Rearrangements](#LargestSubmatrixWithRearrangements)
+	* 3.708. [1745. Palindrome Partitioning IV](#PalindromePartitioningIV)
+	* 3.709. [1760. Minimum Limit of Balls in a Bag](#MinimumLimitofBallsinaBag)
+	* 3.710. [1770. Maximum Score from Performing Multiplication](#MaximumScorefromPerformingMultiplication)
+	* 3.711. [1771. Maximize Palindrome Length From Subsequences](#MaximizePalindromeLengthFromSubsequences)
+	* 3.712. [1775. Equal Sum Arrays With Minimum Number of Operatio](#EqualSumArraysWithMinimumNumberofOperatio)
+	* 3.713. [1786. Number of Restricted Paths From First to Last Node](#NumberofRestrictedPathsFromFirsttoLastNode)
+	* 3.714. [1792. Maximum Average Pass Ratio](#MaximumAveragePassRatio)
+	* 3.715. [1799. Maximize Score After N Operations](#MaximizeScoreAfterNOperations)
+	* 3.716. [1815. Maximum Number of Groups Getting Fresh Donuts](#MaximumNumberofGroupsGettingFreshDonuts)
+	* 3.717. [1838. Frequency of the Most Frequent Element](#FrequencyoftheMostFrequentElement)
+	* 3.718. [1847. Closest Room](#ClosestRoom)
+	* 3.719. [1872. Stone Game VIII](#StoneGameVIII)
+	* 3.720. [s](#s)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -8963,7 +8963,7 @@ object Solution2 {
 }
 ```
 
-###  4. <a name='Searcha2DMatrix'></a>74 Search a 2D Matrix
+###  3.68. <a name='Searcha2DMatrix'></a>74 Search a 2D Matrix
 
 [小明](https://www.bilibili.com/video/BV1aK4y1h7Bb?spm_id_from=333.999.0.0)
 
@@ -8987,7 +8987,7 @@ class Solution:
         return False
 ```
 
-###  4.1. <a name='SortColors'></a>75. Sort Colors
+###  3.69. <a name='SortColors'></a>75. Sort Colors
 
 [小梦想家](https://www.bilibili.com/video/BV1rE411n7mL?spm_id_from=333.999.0.0)
 
@@ -9015,7 +9015,7 @@ class Solution:
                 idx += 1
 ```
 
-###  4.2. <a name='-1'></a>76-最小覆盖子串
+###  3.70. <a name='-1'></a>76-最小覆盖子串
 
 [哈哈哈](https://www.bilibili.com/video/BV1PM4y1K7p6?spm_id_from=333.999.0.0)
 
@@ -9312,7 +9312,7 @@ object Solution1-4 {
 }
 ```
 
-###  4.3. <a name='-1'></a>77. 组合
+###  3.71. <a name='-1'></a>77. 组合
 
 ```py
 class Solution:
@@ -9331,7 +9331,7 @@ class Solution:
             return res
 ```
 
-###  4.4. <a name='Subsets78-'></a>78. Subsets 78-子集
+###  3.72. <a name='Subsets78-'></a>78. Subsets 78-子集
 
 [花花酱](https://www.bilibili.com/video/BV1jt411k7py?spm_id_from=333.999.0.0)
 
@@ -9410,7 +9410,7 @@ object Solution {
 
 ```
 
-###  4.5. <a name='WordSearch'></a>79. Word Search
+###  3.73. <a name='WordSearch'></a>79. Word Search
 
 [小梦想家](https://www.bilibili.com/video/BV1yE411g7Tb?spm_id_from=333.999.0.0)
 
@@ -9659,11 +9659,11 @@ object Solution2 {
 
 ```
 
-###  4.6. <a name='RemoveDuplicatesfromSortedArrayII'></a>80 Remove Duplicates from Sorted Array II
+###  3.74. <a name='RemoveDuplicatesfromSortedArrayII'></a>80 Remove Duplicates from Sorted Array II
 
 [小明](https://www.bilibili.com/video/BV1vy4y1S7sN?spm_id_from=333.999.0.0)
 
-###  4.7. <a name='IIRemoveDuplicatesfromSortedList'></a>82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List
+###  3.75. <a name='IIRemoveDuplicatesfromSortedList'></a>82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List
 
 [洛阳](https://www.bilibili.com/video/BV1Fi4y187pj?spm_id_from=333.999.0.0)
 
@@ -9700,7 +9700,7 @@ class Solution:
         return dummy.next
 ```
 
-###  4.8. <a name='Removeduplicatesfromsortedarray-1'></a>83-Remove duplicates from sorted array
+###  3.76. <a name='Removeduplicatesfromsortedarray-1'></a>83-Remove duplicates from sorted array
 
 [哈哈哈](https://www.bilibili.com/video/BV1yJ411R7FZ?spm_id_from=333.999.0.0)
 
@@ -9722,11 +9722,11 @@ class Solution:
         return head
 ```
 
-###  4.9. <a name='LargestRectangleinHistogram'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram
+###  3.77. <a name='LargestRectangleinHistogram'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram
 
 [官方](https://www.bilibili.com/video/BV16D4y1D7ed?spm_id_from=333.999.0.0)
 
-###  4.10. <a name='PartitionList'></a>86. 分隔链表(Partition List)
+###  3.78. <a name='PartitionList'></a>86. 分隔链表(Partition List)
 
 [洛阳](https://www.bilibili.com/video/BV1t64y1u7Ei?spm_id_from=333.999.0.0)
 
@@ -9747,11 +9747,11 @@ class Solution:
         return dummy1.next
 ```
 
-###  4.11. <a name='ScrambleString'></a>87. Scramble String
+###  3.79. <a name='ScrambleString'></a>87. Scramble String
 
 [花花酱](https://www.bilibili.com/video/BV1QE41137MG?spm_id_from=333.999.0.0)
 
-###  4.12. <a name='Mergesortedarray'></a>88-Merge sorted array
+###  3.80. <a name='Mergesortedarray'></a>88-Merge sorted array
 
 [哈哈哈](https://www.bilibili.com/video/BV14J411X7JE?spm_id_from=333.999.0.0)
 
@@ -9833,7 +9833,7 @@ object Solution {
 
 ```
 
-###  4.13. <a name='89.'></a> 89. 格雷编码
+###  3.81. <a name='89.'></a> 89. 格雷编码
 
 ```py
 class Solution:
@@ -9869,7 +9869,7 @@ class Solution:
         return res
 ```
 
-###  4.14. <a name='II'></a>90-子集 II
+###  3.82. <a name='II'></a>90-子集 II
 
 [哈哈哈](https://www.bilibili.com/video/BV11z4y1Q7Hd?spm_id_from=333.999.0.0)
 
@@ -9921,7 +9921,7 @@ class Solution:
         return res
 ```
 
-###  4.15. <a name='DecodeWays'></a>91. Decode Ways
+###  3.83. <a name='DecodeWays'></a>91. Decode Ways
 
 [花花酱](https://www.bilibili.com/video/BV1Lb411y7ec?spm_id_from=333.999.0.0)
 
@@ -10067,7 +10067,7 @@ object Solution1-3 {
 
 ```
 
-###  4.16. <a name='ReverseLinkedListII'></a>92-Reverse Linked List II
+###  3.84. <a name='ReverseLinkedListII'></a>92-Reverse Linked List II
 
 [哈哈哈](https://www.bilibili.com/video/BV1n7411G7N4?spm_id_from=333.999.0.0)
 
@@ -10092,7 +10092,7 @@ class Solution:
         return dummy.next
 ```
 
-###  4.17. <a name='93.IP'></a> 93. 复原 IP 地址
+###  3.85. <a name='93.IP'></a> 93. 复原 IP 地址
 
 ```py
 class Solution:
@@ -10127,7 +10127,7 @@ class Solution:
         return res
 ```
 
-###  4.18. <a name='Inorderwihstack'></a>94-Inorder wih stack
+###  3.86. <a name='Inorderwihstack'></a>94-Inorder wih stack
 
 [哈哈哈](https://www.bilibili.com/video/BV1uV411o78x?spm_id_from=333.999.0.0)
 
@@ -10135,7 +10135,7 @@ class Solution:
 
 
 
-###  4.19. <a name='BinaryTreeInorderTraversal'></a>94-Binary Tree Inorder Traversal
+###  3.87. <a name='BinaryTreeInorderTraversal'></a>94-Binary Tree Inorder Traversal
 
 [哈哈哈](https://www.bilibili.com/video/BV1n7411D7g5?spm_id_from=333.999.0.0)
 
@@ -10342,7 +10342,7 @@ object Solution {
 
 ```
 
-###  4.20. <a name='II-1'></a>95. 不同的二叉搜索树 II
+###  3.88. <a name='II-1'></a>95. 不同的二叉搜索树 II
 
 ```py
 class Solution:
@@ -10370,7 +10370,7 @@ class Solution:
         return backtrack(1,n)
 ```
 
-###  4.21. <a name='UniqueBinarySearchTrees'></a>96. Unique Binary Search Trees
+###  3.89. <a name='UniqueBinarySearchTrees'></a>96. Unique Binary Search Trees
 
 [小梦想家](https://www.bilibili.com/video/BV1xV411Y731?spm_id_from=333.999.0.0)
 
@@ -10406,7 +10406,7 @@ class Solution:
         return dp[-1]
 ```
 
-###  4.22. <a name='ValidateBinarySearchTree98-'></a>98. Validate Binary Search Tree 98-验证二叉搜索树
+###  3.90. <a name='ValidateBinarySearchTree98-'></a>98. Validate Binary Search Tree 98-验证二叉搜索树
 
 [花花酱](https://www.bilibili.com/video/BV12t411Y7TP?spm_id_from=333.999.0.0)
 
@@ -10625,7 +10625,7 @@ object Solution4 {
 }
 ```
 
-###  4.23. <a name='SameTree'></a>100-Same Tree 
+###  3.91. <a name='SameTree'></a>100-Same Tree 
 
 [哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
 
@@ -10818,7 +10818,7 @@ package lc0100 {
 
 ```
 
-###  4.24. <a name='Symmetrictree'></a>101-Symmetric tree
+###  3.92. <a name='Symmetrictree'></a>101-Symmetric tree
 
 [哈哈哈](https://www.bilibili.com/video/BV1VJ41197KD?spm_id_from=333.999.0.0)
 
@@ -10972,7 +10972,7 @@ object Solution {
 
 ```
 
-###  4.25. <a name='BinaryTreeLevelOrderTraversal'></a>102-Binary Tree Level Order Traversal
+###  3.93. <a name='BinaryTreeLevelOrderTraversal'></a>102-Binary Tree Level Order Traversal
 
 [哈哈哈](https://www.bilibili.com/video/BV1W54y197Lc?spm_id_from=333.999.0.0)
 
@@ -11201,7 +11201,7 @@ object Solution3 {
 }
 ```
 
-###  4.26. <a name='BinaryTreeZigzagLevelOrderTraversal'></a>103. Binary Tree Zigzag Level Order Traversal
+###  3.94. <a name='BinaryTreeZigzagLevelOrderTraversal'></a>103. Binary Tree Zigzag Level Order Traversal
 
 [小梦想家](https://www.bilibili.com/video/BV1NE411M7Fm?spm_id_from=333.999.0.0)
 
@@ -11309,7 +11309,7 @@ class Solution:
         return res
 ```
 
-###  4.27. <a name='MaximumDepthofBinary'></a>104-Maximum Depth of Binary
+###  3.95. <a name='MaximumDepthofBinary'></a>104-Maximum Depth of Binary
 
 [哈哈哈](https://www.bilibili.com/video/BV1AJ411Q7xG?spm_id_from=333.999.0.0)
 
@@ -11439,7 +11439,7 @@ object Solution {
 
 ```
 
-###  4.28. <a name='-1'></a>105-从前序与中序遍历序列构
+###  3.96. <a name='-1'></a>105-从前序与中序遍历序列构
 
 [哈哈哈](https://www.bilibili.com/video/BV1uv411B73D?spm_id_from=333.999.0.0)
 
@@ -11553,7 +11553,7 @@ object Solution1 {
 }
 ```
 
-###  4.29. <a name='-1'></a>106-从中序与后序遍历序列构造二叉树
+###  3.97. <a name='-1'></a>106-从中序与后序遍历序列构造二叉树
 
 [哈哈哈](https://www.bilibili.com/video/BV1r5411W7d2?spm_id_from=333.999.0.0)
 
@@ -11642,7 +11642,7 @@ class Solution(object):
             return root  
 ```
 
-###  4.30. <a name='BinaryTreeLevelOrderTraversalII'></a>107-Binary Tree Level Order Traversal II
+###  3.98. <a name='BinaryTreeLevelOrderTraversalII'></a>107-Binary Tree Level Order Traversal II
 
 [哈哈哈](https://www.bilibili.com/video/BV1eJ411z7d6?spm_id_from=333.999.0.0)
 
@@ -11679,7 +11679,7 @@ class Solution:
 ```py
 
 ```
-###  4.31. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
+###  3.99. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
 
 [花花酱](https://www.bilibili.com/video/BV1F7411H7tH?spm_id_from=333.999.0.0)
 
@@ -11814,7 +11814,7 @@ object Solution {
 
 ```
 
-###  4.32. <a name='-1'></a>109题. 有序链表转换二叉搜索树
+###  3.100. <a name='-1'></a>109题. 有序链表转换二叉搜索树
 
 https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
 
@@ -11915,7 +11915,7 @@ class Solution:
 
 ```
 
-###  4.33. <a name='BalancedBinaryTree'></a>110-Balanced Binary Tree
+###  3.101. <a name='BalancedBinaryTree'></a>110-Balanced Binary Tree
 
 [哈哈哈](https://www.bilibili.com/video/BV1NJ411v7b1?spm_id_from=333.999.0.0)
 
@@ -12000,7 +12000,7 @@ class Solution:
 
 ```
 
-###  4.34. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
+###  3.102. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
 
 [哈哈哈](https://www.bilibili.com/video/BV1E7411k7KY?spm_id_from=333.999.0.0)
 
@@ -12187,7 +12187,7 @@ object Solution3 {
 }
 ```
 
-###  4.35. <a name='PathSum'></a>112-Path Sum
+###  3.103. <a name='PathSum'></a>112-Path Sum
 
 [哈哈哈](https://www.bilibili.com/video/BV1T7411r7Yr?spm_id_from=333.999.0.0)
 
@@ -12274,7 +12274,7 @@ class Solution:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-###  4.36. <a name='-1'></a>113. 二叉树中和为某一值的路径
+###  3.104. <a name='-1'></a>113. 二叉树中和为某一值的路径
 
 [哈哈哈](https://www.bilibili.com/video/BV1P54y1i73U?spm_id_from=333.999.0.0)
 
@@ -12367,7 +12367,7 @@ class Solution(object):
             self.auxPathSum(root.right, sum, path + [root.val], res)
 ```
 
-###  4.37. <a name='-1'></a>114题. 二叉树展开为链表
+###  3.105. <a name='-1'></a>114题. 二叉树展开为链表
 
 https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=15731266160913668837&spm_id_from=333.337.0.0
 
@@ -12446,7 +12446,7 @@ class Solution(object):
         return root
 ```
 
-###  4.38. <a name='DistinctSubsequences'></a>115. Distinct Subsequences
+###  3.106. <a name='DistinctSubsequences'></a>115. Distinct Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
 
@@ -12527,7 +12527,7 @@ class SolutionDP2:
         return dp[-1]
 ```
 
-###  4.39. <a name='PopulatingNextRightPointersinEachNode'></a>116. Populating Next Right Pointers in Each Node
+###  3.107. <a name='PopulatingNextRightPointersinEachNode'></a>116. Populating Next Right Pointers in Each Node
 
 [花花酱](https://www.bilibili.com/video/BV1b4411R7G4?spm_id_from=333.999.0.0)
 
@@ -12611,12 +12611,12 @@ class Solution:
         return root
 ```
 
-###  4.40. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea
+###  3.108. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea
 
 [小明](https://www.bilibili.com/video/BV1np4y1r7fQ?spm_id_from=333.999.0.0)
 
 
-###  4.41. <a name='PascalsTriangle'></a>118-Pascal's Triangle
+###  3.109. <a name='PascalsTriangle'></a>118-Pascal's Triangle
 
 [哈哈哈](https://www.bilibili.com/video/BV1T741167KS?spm_id_from=333.999.0.0)
 
@@ -12732,7 +12732,7 @@ object Solution {
 
 ```
 
-###  4.42. <a name='PascalsTriangleII'></a>119-Pascal's Triangle II
+###  3.110. <a name='PascalsTriangleII'></a>119-Pascal's Triangle II
 
 [哈哈哈](https://www.bilibili.com/video/BV187411B7Hj?spm_id_from=333.999.0.0)
 
@@ -12842,7 +12842,7 @@ class Solution:
         return [*accumulate(range(rowIndex), lambda x,i: x*(rowIndex-i)//(i+1), initial=1)]
 ```
 
-###  4.43. <a name='Triangle'></a>120 Triangle
+###  3.111. <a name='Triangle'></a>120 Triangle
 
 [小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
 
@@ -12977,7 +12977,7 @@ object Solution1-3 {
 }
 ```
 
-###  4.44. <a name='BestTimetoBuyandSellStock121-'></a>121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
+###  3.112. <a name='BestTimetoBuyandSellStock121-'></a>121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
 
 [花花酱](https://www.bilibili.com/video/BV1oW411C7UB?spm_id_from=333.999.0.0)
 
@@ -13239,7 +13239,7 @@ object Solution {
 ```
 
 
-###  4.45. <a name='II122-BestTimetoBuyandSellStockII'></a>122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
+###  3.113. <a name='II122-BestTimetoBuyandSellStockII'></a>122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
 
 [哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
 
@@ -13515,7 +13515,7 @@ package lc0122_buynsellstock2 {
 
 ```
 
-###  4.46. <a name='III'></a>123-买卖股票的最佳时机 III
+###  3.114. <a name='III'></a>123-买卖股票的最佳时机 III
 
 [哈哈哈](https://www.bilibili.com/video/BV1Xp4y1k7aD?spm_id_from=333.999.0.0)
 
@@ -13938,7 +13938,7 @@ object Solution3-1 {
 }
 ```
 
-###  4.47. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
+###  3.115. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
 
 [花花酱](https://www.bilibili.com/video/BV1ct411r7qw?spm_id_from=333.999.0.0)
 
@@ -14110,7 +14110,7 @@ object Solution1 {
 }
 ```
 
-###  4.48. <a name='ValidPalindrome'></a>125-Valid Palindrome
+###  3.116. <a name='ValidPalindrome'></a>125-Valid Palindrome
 
 [哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
 
@@ -14253,7 +14253,7 @@ object Solution {
 
 ```
 
-###  4.49. <a name='WordLadderII'></a>126. Word Ladder II
+###  3.117. <a name='WordLadderII'></a>126. Word Ladder II
 
 [花花酱](https://www.bilibili.com/video/BV1yt411Y7gH?spm_id_from=333.999.0.0)
 
@@ -14377,7 +14377,7 @@ class Solution:
         return []
 ```
 
-###  4.50. <a name='WordLadder'></a>127. Word Ladder
+###  3.118. <a name='WordLadder'></a>127. Word Ladder
 
 [花花酱](https://www.bilibili.com/video/BV1yt411Y7Me?spm_id_from=333.999.0.0)
 
@@ -14556,11 +14556,11 @@ def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int
     return 0
 ```
 
-###  4.51. <a name='LongestConsecutiveSequence'></a>128. Longest Consecutive Sequence
+###  3.119. <a name='LongestConsecutiveSequence'></a>128. Longest Consecutive Sequence
 
 [花花酱](https://www.bilibili.com/video/BV14t411Y7cg?spm_id_from=333.999.0.0)
 
-###  4.52. <a name='SumRoottoLeafNumbers'></a>129 Sum Root to Leaf Numbers
+###  3.120. <a name='SumRoottoLeafNumbers'></a>129 Sum Root to Leaf Numbers
 
 [小明](https://www.bilibili.com/video/BV1VK411H7o5?spm_id_from=333.999.0.0)
 
@@ -14750,7 +14750,7 @@ class Solution:
         return sum
 ```
 
-###  4.53. <a name='SurroundedRegions130-'></a>130. Surrounded Regions 130-被围绕的区域
+###  3.121. <a name='SurroundedRegions130-'></a>130. Surrounded Regions 130-被围绕的区域
 
 [花花酱](https://www.bilibili.com/video/BV1dE411f7U4?spm_id_from=333.999.0.0)
 
@@ -14904,11 +14904,11 @@ class Solution:
                 self.dfs(x,y)   
 ```
 
-###  4.54. <a name='-1'></a>131-分割回文串
+###  3.122. <a name='-1'></a>131-分割回文串
 
 [哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
 
-###  4.55. <a name='PalindromePartitioningII'></a>132. Palindrome Partitioning II
+###  3.123. <a name='PalindromePartitioningII'></a>132. Palindrome Partitioning II
 
 [花花酱](https://www.bilibili.com/video/BV1NJ411v7k9?spm_id_from=333.999.0.0)
 
@@ -14995,7 +14995,7 @@ class Solution:
 
 ```
 
-###  4.56. <a name='CloneGraph'></a>133. Clone Graph
+###  3.124. <a name='CloneGraph'></a>133. Clone Graph
 
 [小梦想家](https://www.bilibili.com/video/BV1wA411T7SM?spm_id_from=333.999.0.0)
 
@@ -15125,7 +15125,7 @@ class Solution(object):
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4t97v5kpwvq0.png" width="50%">
 
-###  4.57. <a name='GasStation'></a>134. Gas Station
+###  3.125. <a name='GasStation'></a>134. Gas Station
 
 [小梦想家](https://www.bilibili.com/video/BV1BC4y1472f?spm_id_from=333.999.0.0)
 
@@ -15211,11 +15211,11 @@ class Solution:
         return start
 ```
 
-###  4.58. <a name='CopyListwithRandomPointer'></a>138 Copy List with Random Pointer
+###  3.126. <a name='CopyListwithRandomPointer'></a>138 Copy List with Random Pointer
 
 [小明](https://www.bilibili.com/video/BV1BN411R7a8?spm_id_from=333.999.0.0)
 
-###  4.59. <a name='SingleNumber'></a>136-Single Number
+###  3.127. <a name='SingleNumber'></a>136-Single Number
 
 [哈哈哈](https://www.bilibili.com/video/BV1g7411a7bf?spm_id_from=333.999.0.0)
 
@@ -15286,11 +15286,11 @@ package lc0136_singlenumber {
 
 ```
 
-###  4.60. <a name='SingleNumberII'></a>137 Single Number II
+###  3.128. <a name='SingleNumberII'></a>137 Single Number II
 
 [小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
 
-###  4.61. <a name='WordBreak'></a>139 Word Break
+###  3.129. <a name='WordBreak'></a>139 Word Break
 
 [小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
 
@@ -15408,7 +15408,7 @@ class Solution:
         return dfs(s)
 ```
 
-###  4.62. <a name='WordBreakII'></a>140 Word Break II
+###  3.130. <a name='WordBreakII'></a>140 Word Break II
 
 [小明](https://www.bilibili.com/video/BV1ht4y1X7DJ?spm_id_from=333.999.0.0)
 
@@ -15476,7 +15476,7 @@ class Solution(object):
         return sentences(0)
 ```
 
-###  4.63. <a name='LinkedListCycle'></a>141-Linked List Cycle
+###  3.131. <a name='LinkedListCycle'></a>141-Linked List Cycle
 
 [哈哈哈](https://www.bilibili.com/video/BV1g7411a7ta?spm_id_from=333.999.0.0)
 
@@ -15769,7 +15769,7 @@ object Solution {
 
 ```
 
-###  4.64. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
+###  3.132. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
 
 [小明](https://www.bilibili.com/video/BV1W5411L7AF?spm_id_from=333.999.0.0)
 
@@ -16008,15 +16008,15 @@ object Solution2-2 {
 
 ```
 
-###  4.65. <a name='ReorderList'></a>143 Reorder List
+###  3.133. <a name='ReorderList'></a>143 Reorder List
 
 [小明](https://www.bilibili.com/video/BV1Jf4y1Q7y7?spm_id_from=333.999.0.0)
 
-###  4.66. <a name='Preorderwithstack'></a>144-Preorder with stack
+###  3.134. <a name='Preorderwithstack'></a>144-Preorder with stack
 
 [哈哈哈](https://www.bilibili.com/video/BV1HT4y1G74i?spm_id_from=333.999.0.0)
 
-###  4.67. <a name='BinaryTreePreorderTraversal'></a>144-Binary Tree Preorder Traversal
+###  3.135. <a name='BinaryTreePreorderTraversal'></a>144-Binary Tree Preorder Traversal
 
 [哈哈哈](https://www.bilibili.com/video/BV1n7411D7NZ?spm_id_from=333.999.0.0)
 
@@ -16146,11 +16146,11 @@ class Solution(object):
         return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
 ```
 
-###  4.68. <a name='Postorderwithstack'></a>145-Postorder with stack
+###  3.136. <a name='Postorderwithstack'></a>145-Postorder with stack
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ti4y187jL?spm_id_from=333.999.0.0)
 
-###  4.69. <a name='BinaryTreePostorderTraversal'></a>145-Binary Tree Postorder Traversal
+###  3.137. <a name='BinaryTreePostorderTraversal'></a>145-Binary Tree Postorder Traversal
 
 [哈哈哈](https://www.bilibili.com/video/BV1n7411D7ub?spm_id_from=333.999.0.0)
 
@@ -16309,7 +16309,7 @@ class Solution:
         return res[::-1]
 ```
 
-###  4.70. <a name='LRUCache'></a>146 LRU Cache 
+###  3.138. <a name='LRUCache'></a>146 LRU Cache 
 
 [花花酱](https://www.bilibili.com/video/BV19b411c7ue?spm_id_from=333.999.0.0)
 
@@ -16865,7 +16865,7 @@ package lc0146 {
 
 ```
 
-###  4.71. <a name='InsertionSortList'></a>147 Insertion Sort List
+###  3.139. <a name='InsertionSortList'></a>147 Insertion Sort List
 
 [小明](https://www.bilibili.com/video/BV1F54y1k7oU?spm_id_from=333.999.0.0)
 
@@ -16999,7 +16999,7 @@ class Solution:
         return dummy.next
 ```
 
-###  4.72. <a name='SortList'></a>148. Sort List
+###  3.140. <a name='SortList'></a>148. Sort List
 
 [花花酱](https://www.bilibili.com/video/BV1jW411d7z7?spm_id_from=333.999.0.0)
 
@@ -17073,11 +17073,11 @@ class Solution:
         #     v = p2
 ```
 
-###  4.73. <a name='MaxPointsonaLine'></a>149. Max Points on a Line
+###  3.141. <a name='MaxPointsonaLine'></a>149. Max Points on a Line
 
 [花花酱](https://www.bilibili.com/video/BV1zb411u7WW?spm_id_from=333.999.0.0)
 
-###  4.74. <a name='EvaluateReversePolishNotation'></a>150. Evaluate Reverse Polish Notation
+###  3.142. <a name='EvaluateReversePolishNotation'></a>150. Evaluate Reverse Polish Notation
 
 [花花酱](https://www.bilibili.com/video/BV14f4y127K8?spm_id_from=333.999.0.0)
 
@@ -17136,7 +17136,7 @@ class Solution:
         return stack[0]
 ```
 
-###  4.75. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
+###  3.143. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411i7g4?spm_id_from=333.999.0.0)
 
@@ -17144,7 +17144,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ei4y1V7yA?spm_id_from=333.999.0.0)
 
-###  4.76. <a name='-1'></a>152-乘积最大子数组
+###  3.144. <a name='-1'></a>152-乘积最大子数组
 
 [哈哈哈](https://www.bilibili.com/video/BV12a4y1i76G?spm_id_from=333.999.0.0)
 
@@ -17299,7 +17299,7 @@ object Solution2-2 {
 }
 ```
 
-###  4.77. <a name='-1'></a>153-寻找旋转排序数组中的最小值
+###  3.145. <a name='-1'></a>153-寻找旋转排序数组中的最小值
 
 [哈哈哈](https://www.bilibili.com/video/BV1bT4y1w7yK?spm_id_from=333.999.0.0)
 
@@ -17335,11 +17335,11 @@ object Solution1 {
 }
 ```
 
-###  4.78. <a name='FindMinimuminRotatedSortedArr'></a>154 Find Minimum in Rotated Sorted Arr
+###  3.146. <a name='FindMinimuminRotatedSortedArr'></a>154 Find Minimum in Rotated Sorted Arr
 
 [小明](https://www.bilibili.com/video/BV1ik4y1B7de?spm_id_from=333.999.0.0)
 
-###  4.79. <a name='MinStack'></a>155-Min Stack
+###  3.147. <a name='MinStack'></a>155-Min Stack
 
 [哈哈哈](https://www.bilibili.com/video/BV1H74118748?spm_id_from=333.999.0.0)
 
@@ -17415,7 +17415,7 @@ class MinStack() {
 
 ```
 
-###  4.80. <a name='IntersectionofTwoLinkedLists'></a>160-Intersection of Two Linked Lists
+###  3.148. <a name='IntersectionofTwoLinkedLists'></a>160-Intersection of Two Linked Lists
 
 [哈哈哈](https://www.bilibili.com/video/BV1n741187X6?spm_id_from=333.999.0.0)
 
@@ -17529,21 +17529,21 @@ object Solution {
 
 ```
 
-###  4.81. <a name='FindPeakElement'></a>162. Find Peak Element
+###  3.149. <a name='FindPeakElement'></a>162. Find Peak Element
 
 [小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
 
-###  4.82. <a name='CompareVersionNumbers'></a>165. Compare Version Numbers
+###  3.150. <a name='CompareVersionNumbers'></a>165. Compare Version Numbers
 
 [小梦想家](https://www.bilibili.com/video/BV19K4y1C7L3?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Pk4y117dF?spm_id_from=333.999.0.0)
 
-###  4.83. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
+###  3.151. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
 
 [小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
 
-###  4.84. <a name='TwoSumII-Inputarrayissorted'></a>167-Two Sum II - Input array is sorted
+###  3.152. <a name='TwoSumII-Inputarrayissorted'></a>167-Two Sum II - Input array is sorted
 
 [哈哈哈](https://www.bilibili.com/video/BV167411h7ou?spm_id_from=333.999.0.0)
 
@@ -17551,13 +17551,13 @@ object Solution {
 
 [官方](https://www.bilibili.com/video/BV1VZ4y1M7eu?spm_id_from=333.999.0.0)
 
-###  4.85. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
+###  3.153. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
 
 [哈哈哈](https://www.bilibili.com/video/BV1Qj411f7FY?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H777?spm_id_from=333.999.0.0)
 
-###  4.86. <a name='MajorityElement'></a>169. Majority Element
+###  3.154. <a name='MajorityElement'></a>169. Majority Element
 
 [花花酱](https://www.bilibili.com/video/BV1hb411c7bF?spm_id_from=333.999.0.0)
 
@@ -17698,7 +17698,7 @@ object Solution {
 
 ```
 
-###  4.87. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
+###  3.155. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7nT?spm_id_from=333.999.0.0)
 
@@ -17729,7 +17729,7 @@ object Solution {
 
 ```
 
-###  4.88. <a name='FactorialTrailingZeroes'></a>172-Factorial Trailing Zeroes
+###  3.156. <a name='FactorialTrailingZeroes'></a>172-Factorial Trailing Zeroes
 
 [哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
 
@@ -17759,27 +17759,27 @@ object Solution {
 
 ```
 
-###  4.89. <a name='BinarySearchTreeIterator'></a>173 Binary Search Tree Iterator
+###  3.157. <a name='BinarySearchTreeIterator'></a>173 Binary Search Tree Iterator
 
 [小明](https://www.bilibili.com/video/BV1qK41137h1?spm_id_from=333.999.0.0)
 
-###  4.90. <a name='DungeonGame'></a>174 Dungeon Game
+###  3.158. <a name='DungeonGame'></a>174 Dungeon Game
 
 [小明](https://www.bilibili.com/video/BV1TK411W7T1?spm_id_from=333.999.0.0)
 
-###  4.91. <a name='LargestNumber'></a>179 Largest Number
+###  3.159. <a name='LargestNumber'></a>179 Largest Number
 
 [小明](https://www.bilibili.com/video/BV1mV411m7aN?spm_id_from=333.999.0.0)
 
-###  4.92. <a name='ReverseWordsinaStringII'></a>186. Reverse Words in a String II 
+###  3.160. <a name='ReverseWordsinaStringII'></a>186. Reverse Words in a String II 
 
 [哈哈哈](https://www.bilibili.com/video/BV1GV411Z7fo?spm_id_from=333.999.0.0)
 
-###  4.93. <a name='RepeatedDNASequences'></a>187 Repeated DNA Sequences
+###  3.161. <a name='RepeatedDNASequences'></a>187 Repeated DNA Sequences
 
 [小明](https://www.bilibili.com/video/BV1mp4y1r7v5?spm_id_from=333.999.0.0)
 
-###  4.94. <a name='BestTimetoBuyandSellStockIV'></a>188 Best Time to Buy and Sell Stock IV
+###  3.162. <a name='BestTimetoBuyandSellStockIV'></a>188 Best Time to Buy and Sell Stock IV
 
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
 
@@ -17946,13 +17946,13 @@ object Solution1-3 {
 }
 ```
 
-###  4.95. <a name='RotateArray'></a>189. Rotate Array 
+###  3.163. <a name='RotateArray'></a>189. Rotate Array 
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7Yy?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1N541177Bk?spm_id_from=333.999.0.0)
 
-###  4.96. <a name='ReverseBits'></a>190. Reverse Bits
+###  3.164. <a name='ReverseBits'></a>190. Reverse Bits
 
 [花花酱](https://www.bilibili.com/video/BV1NJ411k7VP?spm_id_from=333.999.0.0)
 
@@ -17981,7 +17981,7 @@ object Solution {
 
 ```
 
-###  4.97. <a name='Numberof1Bits'></a>191 Number of 1 Bits
+###  3.165. <a name='Numberof1Bits'></a>191 Number of 1 Bits
 
 [小明](https://www.bilibili.com/video/BV1i5411J7SA?spm_id_from=333.999.0.0)
 
@@ -18100,7 +18100,7 @@ def hammingWeight(n: Int): Int = {
 
 ```
 
-###  4.98. <a name='HouseRobber198-'></a>198. House Robber 198-打家劫舍
+###  3.166. <a name='HouseRobber198-'></a>198. House Robber 198-打家劫舍
 
 [12:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -18176,13 +18176,13 @@ object Solution {
 
 ```
 
-###  4.99. <a name='BinaryTreeRightSideView'></a>199 Binary Tree Right Side View
+###  3.167. <a name='BinaryTreeRightSideView'></a>199 Binary Tree Right Side View
 
 [小明](https://www.bilibili.com/video/BV1854y1W7CB?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1xK4y1b7Wh?spm_id_from=333.999.0.0)
 
-###  4.100. <a name='-1'></a>200-岛屿数量
+###  3.168. <a name='-1'></a>200-岛屿数量
 
 [哈哈哈](https://www.bilibili.com/video/BV15K411p72j?spm_id_from=333.999.0.0)
 
@@ -18417,7 +18417,7 @@ package lc0200_numberofisland {
 
 ```
 
-###  4.101. <a name='BitwiseANDofNumbersRange'></a>201 Bitwise AND of Numbers Range
+###  3.169. <a name='BitwiseANDofNumbersRange'></a>201 Bitwise AND of Numbers Range
 
 [小明](https://www.bilibili.com/video/BV1dT4y1g75m?spm_id_from=333.999.0.0)
 
@@ -18459,7 +18459,7 @@ class lc201_bitwiseand {
 
 ```
 
-###  4.102. <a name='HappyNumber'></a>202. 快乐数 Happy Number
+###  3.170. <a name='HappyNumber'></a>202. 快乐数 Happy Number
 
 [官方](https://www.bilibili.com/video/BV1Ca4y1v7Qr?spm_id_from=333.999.0.0)
 
@@ -18515,7 +18515,7 @@ package lc0202_happynumber {
 
 ```
 
-###  4.103. <a name='RemoveLinkedListElements'></a>203. Remove Linked List Elements
+###  3.171. <a name='RemoveLinkedListElements'></a>203. Remove Linked List Elements
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7bf?spm_id_from=333.999.0.0)
 
@@ -18564,7 +18564,7 @@ package lc203_remove_linkedlist_element {
 
 ```
 
-###  4.104. <a name='CountPrimes'></a>204-Count Primes
+###  3.172. <a name='CountPrimes'></a>204-Count Primes
 
 [哈哈哈](https://www.bilibili.com/video/BV167411w7Sf?spm_id_from=333.999.0.0)
 
@@ -18624,7 +18624,7 @@ object Solution {
 
 ```
 
-###  4.105. <a name='isomorphicstrings'></a>205. isomorphic strings
+###  3.173. <a name='isomorphicstrings'></a>205. isomorphic strings
 
 [小梦想家](https://www.bilibili.com/video/BV1ab411H7ZS?spm_id_from=333.999.0.0)
 
@@ -18673,7 +18673,7 @@ return true;
  */
 ```
 
-###  4.106. <a name='ReverseLinkedList'></a>206-Reverse Linked List
+###  3.174. <a name='ReverseLinkedList'></a>206-Reverse Linked List
 
 [哈哈哈](https://www.bilibili.com/video/BV1Q7411V7zr?spm_id_from=333.999.0.0)
 
@@ -18814,7 +18814,7 @@ This bug could be caught if you test your code with a linked list of size
 */
 ```
 
-###  4.107. <a name='-1'></a>207-课程表
+###  3.175. <a name='-1'></a>207-课程表
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411a74a?spm_id_from=333.999.0.0)
 
@@ -18878,7 +18878,7 @@ package lc207_course_schedule {
 
 ```
 
-###  4.108. <a name='ImplementTriePrefixTree'></a>208. Implement Trie (Prefix Tree)
+###  3.176. <a name='ImplementTriePrefixTree'></a>208. Implement Trie (Prefix Tree)
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411a74P?spm_id_from=333.999.0.0)
 
@@ -19150,11 +19150,11 @@ class Trie2() {
 }
 ```
 
-###  4.109. <a name='-1'></a>209-长度最小的子数组
+###  3.177. <a name='-1'></a>209-长度最小的子数组
 
 [哈哈哈](https://www.bilibili.com/video/BV1JZ4y1N7Rt?spm_id_from=333.999.0.0)
 
-###  4.110. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
+###  3.178. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
 
 [花花酱](https://www.bilibili.com/video/BV1gW411y7Kb?spm_id_from=333.999.0.0)
 
@@ -19206,11 +19206,11 @@ class lc210_courseschedule2 {
 
 ```
 
-###  4.111. <a name='AddandSearchWord'></a>211 Add and Search Word
+###  3.179. <a name='AddandSearchWord'></a>211 Add and Search Word
 
 [小明](https://www.bilibili.com/video/BV1x5411a77S?spm_id_from=333.999.0.0)
 
-###  4.112. <a name='WordSearchII'></a>212. Word Search II
+###  3.180. <a name='WordSearchII'></a>212. Word Search II
 
 [花花酱](https://www.bilibili.com/video/BV184411d7i9?spm_id_from=333.999.0.0)
 
@@ -19630,7 +19630,7 @@ object Solution2 {
 
 ```
 
-###  4.113. <a name='HouseRobberII213-II'></a>213. House Robber II 213-打家劫舍II
+###  3.181. <a name='HouseRobberII213-II'></a>213. House Robber II 213-打家劫舍II
 
 [18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -19638,7 +19638,7 @@ object Solution2 {
 
 [小明](https://www.bilibili.com/video/BV1GD4y1d7DS?spm_id_from=333.999.0.0)
 
-###  4.114. <a name='CombinationSumIII216-III'></a>216. Combination Sum III 216-组合总和 III
+###  3.182. <a name='CombinationSumIII216-III'></a>216. Combination Sum III 216-组合总和 III
 
 [花花酱](https://www.bilibili.com/video/BV14b411u7q8?spm_id_from=333.999.0.0)
 
@@ -19646,7 +19646,7 @@ object Solution2 {
 
 [小明](https://www.bilibili.com/video/BV1gz4y1Z7CV?spm_id_from=333.999.0.0)
 
-###  4.115. <a name='ContainsDuplicate'></a>217. Contains Duplicate
+###  3.183. <a name='ContainsDuplicate'></a>217. Contains Duplicate
 
 [小梦想家](https://www.bilibili.com/video/BV1ab411H7Zw?spm_id_from=333.999.0.0)
 
@@ -19680,19 +19680,19 @@ object Solution {
 
 ```
 
-###  4.116. <a name='TheSkylineProblem'></a>218. The Skyline Problem
+###  3.184. <a name='TheSkylineProblem'></a>218. The Skyline Problem
 
 [花花酱](https://www.bilibili.com/video/BV1hb411c7Q4?spm_id_from=333.999.0.0)
 
-###  4.117. <a name='ContainsDuplicateII'></a>219. Contains Duplicate II
+###  3.185. <a name='ContainsDuplicateII'></a>219. Contains Duplicate II
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7ga?spm_id_from=333.999.0.0)
 
-###  4.118. <a name='ContainsDuplicateIII'></a>220 Contains Duplicate III
+###  3.186. <a name='ContainsDuplicateIII'></a>220 Contains Duplicate III
 
 [小明](https://www.bilibili.com/video/BV19h41197iw?spm_id_from=333.999.0.0)
 
-###  4.119. <a name='-1'></a>221-最大正方形
+###  3.187. <a name='-1'></a>221-最大正方形
 
 [哈哈哈](https://www.bilibili.com/video/BV1XT4y137Gq?spm_id_from=333.999.0.0)
 
@@ -19700,17 +19700,17 @@ object Solution {
 
 [官方](https://www.bilibili.com/video/BV1mA411q7Sw?spm_id_from=333.999.0.0)
 
-###  4.120. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
+###  3.188. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
 
 [花花酱](https://www.bilibili.com/video/BV1n44y1E73D?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Qz411i7bh?spm_id_from=333.999.0.0)
 
-###  4.121. <a name='RectangleArea'></a>223. Rectangle Area
+###  3.189. <a name='RectangleArea'></a>223. Rectangle Area
 
 [小梦想家](https://www.bilibili.com/video/BV1Ck4y1z7Hp?spm_id_from=333.999.0.0)
 
-###  4.122. <a name='ImplementStackusingQueues'></a>225-Implement Stack using Queues
+###  3.190. <a name='ImplementStackusingQueues'></a>225-Implement Stack using Queues
 
 [哈哈哈](https://www.bilibili.com/video/BV1p741177pK?spm_id_from=333.999.0.0)
 
@@ -19952,7 +19952,7 @@ class MyStack4() {
 }
 ```
 
-###  4.123. <a name='-1'></a>226-翻转二叉树
+###  3.191. <a name='-1'></a>226-翻转二叉树
 
 [哈哈哈](https://www.bilibili.com/video/BV1Sh411R7B2?spm_id_from=333.999.0.0)
 
@@ -19960,21 +19960,21 @@ class MyStack4() {
 
 [小明](https://www.bilibili.com/video/BV1FK411p7Co?spm_id_from=333.999.0.0)
 
-###  4.124. <a name='BasicCalculatorII'></a>227 Basic Calculator II
+###  3.192. <a name='BasicCalculatorII'></a>227 Basic Calculator II
 
 [小明](https://www.bilibili.com/video/BV1Qy4y167Ax?spm_id_from=333.999.0.0)
 
-###  4.125. <a name='SummaryRanges'></a>228 Summary Ranges
+###  3.193. <a name='SummaryRanges'></a>228 Summary Ranges
 
 [小明](https://www.bilibili.com/video/BV1Et4y1i7YZ?spm_id_from=333.999.0.0)
 
-###  4.126. <a name='MajorityElementII'></a>229. Majority Element II 
+###  3.194. <a name='MajorityElementII'></a>229. Majority Element II 
 
 [哈哈哈](https://www.bilibili.com/video/BV12z411B7rS?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1nK411P7qR?spm_id_from=333.999.0.0)
 
-###  4.127. <a name='KthSmallestElementinaB'></a>230 Kth Smallest Element in a B
+###  3.195. <a name='KthSmallestElementinaB'></a>230 Kth Smallest Element in a B
 
 [小明](https://www.bilibili.com/video/BV1ha4y1i7dZ?spm_id_from=333.999.0.0)
 
@@ -20136,7 +20136,7 @@ object Solution {
 
 ```
 
-###  4.128. <a name='PowerofTwo'></a>231. Power of Two
+###  3.196. <a name='PowerofTwo'></a>231. Power of Two
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
 
@@ -20153,7 +20153,7 @@ object Solution {
 }
 ```
 
-###  4.129. <a name='ImplementQueueusingStacks'></a>232-Implement Queue using Stacks
+###  3.197. <a name='ImplementQueueusingStacks'></a>232-Implement Queue using Stacks
 
 [哈哈哈](https://www.bilibili.com/video/BV1p741177pp?spm_id_from=333.999.0.0)
 
@@ -20210,7 +20210,7 @@ class MyQueue() {
 
 ```
 
-###  4.130. <a name='PalindromeLinkedList'></a>234. Palindrome Linked List
+###  3.198. <a name='PalindromeLinkedList'></a>234. Palindrome Linked List
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7ML?spm_id_from=333.999.0.0)
 
@@ -20340,7 +20340,7 @@ object Solution {
 
 ```
 
-###  4.131. <a name='LowestCommonAncestorofaBinarySearchTree'></a>235. Lowest Common Ancestor of a Binary Search Tree
+###  3.199. <a name='LowestCommonAncestorofaBinarySearchTree'></a>235. Lowest Common Ancestor of a Binary Search Tree
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7VY?spm_id_from=333.999.0.0)
 
@@ -20399,7 +20399,7 @@ object Solution1-2 {
 }
 ```
 
-###  4.132. <a name='-1'></a>236-二叉树的最近公共祖先
+###  3.200. <a name='-1'></a>236-二叉树的最近公共祖先
 
 [哈哈哈](https://www.bilibili.com/video/BV1ov411172r?spm_id_from=333.999.0.0)
 
@@ -20446,7 +20446,7 @@ object Solution0 {
 }
 ```
 
-###  4.133. <a name='DeleteNodeinaLinkedList'></a>237. Delete Node in a Linked List
+###  3.201. <a name='DeleteNodeinaLinkedList'></a>237. Delete Node in a Linked List
 
 [小梦想家](https://www.bilibili.com/video/BV1rv411h7Lv?spm_id_from=333.999.0.0)
 
@@ -20492,7 +20492,7 @@ object Solution {
 
 ```
 
-###  4.134. <a name='ProductofArrayExceptSelf'></a>238 Product of Array Except Self
+###  3.202. <a name='ProductofArrayExceptSelf'></a>238 Product of Array Except Self
 
 [小明](https://www.bilibili.com/video/BV1oT4y1G78Y?spm_id_from=333.999.0.0)
 
@@ -20523,7 +20523,7 @@ object Solution {
 
 ```
 
-###  4.135. <a name='SlidingWindowMaximum'></a>239. Sliding Window Maximum
+###  3.203. <a name='SlidingWindowMaximum'></a>239. Sliding Window Maximum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C763?spm_id_from=333.999.0.0)
 
@@ -20714,11 +20714,11 @@ object Solution4 {
 }
 ```
 
-###  4.136. <a name='-1'></a>240. 二维数组的查找
+###  3.204. <a name='-1'></a>240. 二维数组的查找
 
 [哈哈哈](https://www.bilibili.com/video/BV1dz411i7jC?spm_id_from=333.999.0.0)
 
-###  4.137. <a name='ValidAnagram'></a>242. Valid Anagram 
+###  3.205. <a name='ValidAnagram'></a>242. Valid Anagram 
 
 [小梦想家](https://www.bilibili.com/video/BV1Db411s78v?spm_id_from=333.999.0.0)
 
@@ -20856,15 +20856,15 @@ object Solution {
 
 ```
 
-###  4.138. <a name='ShortestWordDistance'></a>243. Shortest Word Distance
+###  3.206. <a name='ShortestWordDistance'></a>243. Shortest Word Distance
 
 [小梦想家](https://www.bilibili.com/video/BV1Lb411x7Ae?spm_id_from=333.999.0.0)
 
-###  4.139. <a name='StrobogrammaticNumber'></a>246. Strobogrammatic Number
+###  3.207. <a name='StrobogrammaticNumber'></a>246. Strobogrammatic Number
 
 [小梦想家](https://www.bilibili.com/video/BV14b411g7zD?spm_id_from=333.999.0.0)
 
-###  4.140. <a name='-1'></a>257-二叉树的所有路径
+###  3.208. <a name='-1'></a>257-二叉树的所有路径
 
 [哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
 
@@ -20932,31 +20932,31 @@ package lc0257 {
 
 ```
 
-###  4.141. <a name='AddDigits'></a>258. Add Digits
+###  3.209. <a name='AddDigits'></a>258. Add Digits
 
 [小梦想家](https://www.bilibili.com/video/BV1ub41137cm?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1N54y1B7XU?spm_id_from=333.999.0.0)
 
-###  4.142. <a name='III-1'></a>260-只出现一次的数字 III
+###  3.210. <a name='III-1'></a>260-只出现一次的数字 III
 
 [哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1QK411J7dN?spm_id_from=333.999.0.0)
 
-###  4.143. <a name='UglyNumber'></a>263 Ugly Number
+###  3.211. <a name='UglyNumber'></a>263 Ugly Number
 
 [花花酱](https://www.bilibili.com/video/BV11W411C7zd?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1Mb41157Pa?spm_id_from=333.999.0.0)
 
-###  4.144. <a name='UglyNumberII'></a>264. Ugly Number II
+###  3.212. <a name='UglyNumberII'></a>264. Ugly Number II
 
 [花花酱](https://www.bilibili.com/video/BV1yW411C7Sm?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1vT4y1775u?spm_id_from=333.999.0.0)
 
-###  4.145. <a name='MissingNumber'></a>268 Missing Number
+###  3.213. <a name='MissingNumber'></a>268 Missing Number
 
 [小明](https://www.bilibili.com/video/BV1LU4y1p7n7?spm_id_from=333.999.0.0)
 
@@ -20988,18 +20988,18 @@ object Solution {
 
 ```
 
-###  4.146. <a name='ClosestBinarySearchTreeValue'></a>270. Closest Binary Search Tree Value
+###  3.214. <a name='ClosestBinarySearchTreeValue'></a>270. Closest Binary Search Tree Value
 
 [哈哈哈](https://www.bilibili.com/video/BV1zy4y1a7mR?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1fi4y1u7Sb?spm_id_from=333.999.0.0)
 
-###  4.147. <a name='H-Index'></a>274 H-Index
+###  3.215. <a name='H-Index'></a>274 H-Index
 
 [小明](https://www.bilibili.com/video/BV1ZV411z7Kx?spm_id_from=333.999.0.0)
 
 
-###  4.148. <a name='FirstBadVersion'></a>278. First Bad Version
+###  3.216. <a name='FirstBadVersion'></a>278. First Bad Version
 
 [小梦想家](https://www.bilibili.com/video/BV1rZ4y1P7YF?spm_id_from=333.999.0.0)
 
@@ -21041,15 +21041,15 @@ class Solution1 extends VersionControl {
 
 ```
 
-###  4.149. <a name='PerfectSquares'></a>279 Perfect Squares
+###  3.217. <a name='PerfectSquares'></a>279 Perfect Squares
 
 [小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
 
-###  4.150. <a name='ExpressionAddOperators'></a>282. Expression Add Operators
+###  3.218. <a name='ExpressionAddOperators'></a>282. Expression Add Operators
 
 [花花酱](https://www.bilibili.com/video/BV15W411C727?spm_id_from=333.999.0.0)
 
-###  4.151. <a name='MoveZeros'></a>283. Move Zeros
+###  3.219. <a name='MoveZeros'></a>283. Move Zeros
 
 [小梦想家](https://www.bilibili.com/video/BV1m441187Kt?spm_id_from=333.999.0.0)
 
@@ -21145,17 +21145,17 @@ public:
 
 ```
 
-###  4.152. <a name='PeekingIterator'></a>284 Peeking Iterator
+###  3.220. <a name='PeekingIterator'></a>284 Peeking Iterator
 
 [小明](https://www.bilibili.com/video/BV1LN411R7U7?spm_id_from=333.999.0.0)
 
-###  4.153. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
+###  3.221. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
 
 [小明](https://www.bilibili.com/video/BV1Ug4y1v7mF?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Pz4y1X7qR?spm_id_from=333.999.0.0)
 
-###  4.154. <a name='GameofLife'></a>289. Game of Life
+###  3.222. <a name='GameofLife'></a>289. Game of Life
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7ji?spm_id_from=333.999.0.0)
 
@@ -21163,23 +21163,23 @@ public:
 
 [官方](https://www.bilibili.com/video/BV1vz4y1R7DJ?spm_id_from=333.999.0.0)
 
-###  4.155. <a name='WordPattern'></a>290. Word Pattern
+###  3.223. <a name='WordPattern'></a>290. Word Pattern
 
 [小梦想家](https://www.bilibili.com/video/BV1d4411V7mi?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1HZ4y1N7wD?spm_id_from=333.999.0.0)
 
-###  4.156. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
+###  3.224. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV1Hb411c7cr?spm_id_from=333.999.0.0)
 
-###  4.157. <a name='BullsandCows'></a>299. Bulls and Cows
+###  3.225. <a name='BullsandCows'></a>299. Bulls and Cows
 
 [小梦想家](https://www.bilibili.com/video/BV1M64y1M7aP?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1bh411R7n4?spm_id_from=333.999.0.0)
 
-###  4.158. <a name='LongestIncreasingSubsequence'></a>300 Longest Increasing Subsequence 最长上升子序列
+###  3.226. <a name='LongestIncreasingSubsequence'></a>300 Longest Increasing Subsequence 最长上升子序列
 
 [花花酱](https://www.bilibili.com/video/BV1Wf4y1y7ou?spm_id_from=333.999.0.0)
 
@@ -21301,11 +21301,11 @@ object Solution3 {
 }
 ```
 
-###  4.159. <a name='RemoveInvalidParentheses'></a>301. Remove Invalid Parentheses
+###  3.227. <a name='RemoveInvalidParentheses'></a>301. Remove Invalid Parentheses
 
 [花花酱](https://www.bilibili.com/video/BV1VW411y7Xd?spm_id_from=333.999.0.0)
 
-###  4.160. <a name='-1'></a>303-区域和检索 - 数组不可变
+###  3.228. <a name='-1'></a>303-区域和检索 - 数组不可变
 
 [哈哈哈](https://www.bilibili.com/video/BV1RV411d76R?spm_id_from=333.999.0.0)
 
@@ -21313,13 +21313,13 @@ object Solution3 {
 
 [小明](https://www.bilibili.com/video/BV1Ho4y1U7wF?spm_id_from=333.999.0.0)
 
-###  4.161. <a name='RangeSumQuery2D'></a>304. Range Sum Query 2D
+###  3.229. <a name='RangeSumQuery2D'></a>304. Range Sum Query 2D
 
 [花花酱](https://www.bilibili.com/video/BV1Jb411k7LQ?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1R64y127jL?spm_id_from=333.999.0.0)
 
-###  4.162. <a name='BestTimetoBuyandSellStockwithCooldown309-'></a>309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期
+###  3.230. <a name='BestTimetoBuyandSellStockwithCooldown309-'></a>309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期
 
 [花花酱](https://www.bilibili.com/video/BV1qW411C7Xc?spm_id_from=333.999.0.0)
 
@@ -21408,29 +21408,29 @@ object Solution1-3 {
 }
 ```
 
-###  4.163. <a name='MinimumHeightTrees'></a>310 Minimum Height Trees
+###  3.231. <a name='MinimumHeightTrees'></a>310 Minimum Height Trees
 
 [小明](https://www.bilibili.com/video/BV1eA411j7XQ?spm_id_from=333.999.0.0)
 
-###  4.164. <a name='BurstBalloons'></a>312 Burst Balloons
+###  3.232. <a name='BurstBalloons'></a>312 Burst Balloons
 
 [小明](https://www.bilibili.com/video/BV1Q64y1f7Vy?spm_id_from=333.999.0.0)
 
-###  4.165. <a name='CountofSmallerNumbersAfterSelf'></a>315. Count of Smaller Numbers After Self
+###  3.233. <a name='CountofSmallerNumbersAfterSelf'></a>315. Count of Smaller Numbers After Self
 
 [花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
 
-###  4.166. <a name='RemoveDuplicateLetters'></a>316 Remove Duplicate Letters
+###  3.234. <a name='RemoveDuplicateLetters'></a>316 Remove Duplicate Letters
 
 [小明](https://www.bilibili.com/video/BV1x54y1R7y7?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Tz4y167pC?spm_id_from=333.999.0.0)
 
-###  4.167. <a name='CreateMaximumNumber'></a>321. Create Maximum Number
+###  3.235. <a name='CreateMaximumNumber'></a>321. Create Maximum Number
 
 [花花酱](https://www.bilibili.com/video/BV11W411U7NR?spm_id_from=333.999.0.0)
 
-###  4.168. <a name='CoinChange'></a>322. Coin Change
+###  3.236. <a name='CoinChange'></a>322. Coin Change
 
 [花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
 
@@ -21464,7 +21464,7 @@ object Solution {
 
 ```
 
-###  4.169. <a name='PowerofThree'></a>326. Power of Three
+###  3.237. <a name='PowerofThree'></a>326. Power of Three
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7QC?spm_id_from=333.999.0.0)
 
@@ -21472,31 +21472,31 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV1sZ4y1F7Lr?spm_id_from=333.999.0.0)
 
-###  4.170. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
+###  3.238. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
 
 [洛阳](https://www.bilibili.com/video/BV1v64y1u7AH?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1ag4y1B78z?spm_id_from=333.999.0.0)
 
-###  4.171. <a name='LongestIncreasingPathinaMatrix'></a>329. Longest Increasing Path in a Matrix
+###  3.239. <a name='LongestIncreasingPathinaMatrix'></a>329. Longest Increasing Path in a Matrix
 
 [花花酱](https://www.bilibili.com/video/BV1mW411d7q8?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1VK4y1K7SX?spm_id_from=333.999.0.0)
 
-###  4.172. <a name='ReconstructItinerary'></a>332 Reconstruct Itinerary
+###  3.240. <a name='ReconstructItinerary'></a>332 Reconstruct Itinerary
 
 [小明](https://www.bilibili.com/video/BV1qa4y1h7Ti?spm_id_from=333.999.0.0)
 
-###  4.173. <a name='IncreasingTripletSubseque'></a>334 Increasing Triplet Subseque
+###  3.241. <a name='IncreasingTripletSubseque'></a>334 Increasing Triplet Subseque
 
 [小明](https://www.bilibili.com/video/BV1Kr4y1F7m9?spm_id_from=333.999.0.0)
 
-###  4.174. <a name='HouseRobberIII'></a>337 House Robber III
+###  3.242. <a name='HouseRobberIII'></a>337 House Robber III
 
 [小明](https://www.bilibili.com/video/BV1WD4y1X7JQ?spm_id_from=333.999.0.0)
 
-###  4.175. <a name='CountingBits'></a>338 Counting Bits
+###  3.243. <a name='CountingBits'></a>338 Counting Bits
 
 [小明](https://www.bilibili.com/video/BV1VK411s7xi?spm_id_from=333.999.0.0)
 
@@ -21559,17 +21559,17 @@ object Solution2 {
 }
 ```
 
-###  4.176. <a name='PowerofFour'></a>342. Power of Four
+###  3.244. <a name='PowerofFour'></a>342. Power of Four
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7D5?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1p5411a7h1?spm_id_from=333.999.0.0)
 
-###  4.177. <a name='-1'></a>343-整数拆分
+###  3.245. <a name='-1'></a>343-整数拆分
 
 [哈哈哈](https://www.bilibili.com/video/BV1Dp4y1U79P?spm_id_from=333.999.0.0)
 
-###  4.178. <a name='ReverseString'></a>344. Reverse String
+###  3.246. <a name='ReverseString'></a>344. Reverse String
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7Ha?spm_id_from=333.999.0.0)
 
@@ -21595,15 +21595,15 @@ object Solution {
 
 ```
 
-###  4.179. <a name='ReverseVowelsofaString'></a>345. Reverse Vowels of a String
+###  3.247. <a name='ReverseVowelsofaString'></a>345. Reverse Vowels of a String
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7JH?spm_id_from=333.999.0.0)
 
-###  4.180. <a name='MovingAveragefromDataStream'></a>346 Moving Average from Data Stream
+###  3.248. <a name='MovingAveragefromDataStream'></a>346 Moving Average from Data Stream
 
 [小明](https://www.bilibili.com/video/BV1xV411m73u?spm_id_from=333.999.0.0)
 
-###  4.181. <a name='TopKFrequentElements'></a>347. Top K Frequent Elements 
+###  3.249. <a name='TopKFrequentElements'></a>347. Top K Frequent Elements 
 
 [花花酱](https://www.bilibili.com/video/BV1Mt411371T?spm_id_from=333.999.0.0)
 
@@ -21641,11 +21641,11 @@ object Solution {
 
 ```
 
-###  4.182. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
+###  3.250. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
 
 [小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
 
-###  4.183. <a name='IntersectionofTwoArraysII'></a>350. Intersection of Two Arrays II 
+###  3.251. <a name='IntersectionofTwoArraysII'></a>350. Intersection of Two Arrays II 
 
 [小梦想家](https://www.bilibili.com/video/BV1gx411X7q8?spm_id_from=333.999.0.0)
 
@@ -21698,63 +21698,63 @@ object Solution {
 
 ```
 
-###  4.184. <a name='DesignTwitter'></a>355. 设计推特 Design Twitter
+###  3.252. <a name='DesignTwitter'></a>355. 设计推特 Design Twitter
 
 [官方](https://www.bilibili.com/video/BV1aQ4y1N72N?spm_id_from=333.999.0.0)
 
-###  4.185. <a name='LoggerRateLimiter'></a>359 Logger Rate Limiter
+###  3.253. <a name='LoggerRateLimiter'></a>359 Logger Rate Limiter
 
 [小明](https://www.bilibili.com/video/BV1k64y1F7dE?spm_id_from=333.999.0.0)
 
-###  4.186. <a name='ValidPerfectSquare'></a>367. Valid Perfect Square
+###  3.254. <a name='ValidPerfectSquare'></a>367. Valid Perfect Square
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411X7Ke?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1DT4y1377H?spm_id_from=333.999.0.0)
 
-###  4.187. <a name='LargestDivisibleSubset'></a>368 Largest Divisible Subset
+###  3.255. <a name='LargestDivisibleSubset'></a>368 Largest Divisible Subset
 
 [小明](https://www.bilibili.com/video/BV15D4y1Q74b?spm_id_from=333.999.0.0)
 
-###  4.188. <a name='FindKPairswithSmallestSumsk'></a>373. Find K Pairs with Smallest Sums查找和最小的k对数字
+###  3.256. <a name='FindKPairswithSmallestSumsk'></a>373. Find K Pairs with Smallest Sums查找和最小的k对数字
 
 [图灵](https://www.bilibili.com/video/BV1Mv4y1Z79v?spm_id_from=333.999.0.0)
 
-###  4.189. <a name='GuessNumberHigherorLower'></a>374. Guess Number Higher or Lower
+###  3.257. <a name='GuessNumberHigherorLower'></a>374. Guess Number Higher or Lower
 
 [小梦想家](https://www.bilibili.com/video/BV1Hx41197ou?spm_id_from=333.999.0.0)
 
-###  4.190. <a name='-1'></a>376-摆动序列
+###  3.258. <a name='-1'></a>376-摆动序列
 
 [哈哈哈](https://www.bilibili.com/video/BV1sk4y167wV?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV16X4y1376k?spm_id_from=333.999.0.0)
 
-###  4.191. <a name='CombinationSumIV'></a>377. Combination Sum IV
+###  3.259. <a name='CombinationSumIV'></a>377. Combination Sum IV
 
 [花花酱](https://www.bilibili.com/video/BV1gW411y7uz?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1zA411L7nu?spm_id_from=333.999.0.0)
 
-###  4.192. <a name='K'></a>378-有序矩阵中第K小的元素
+###  3.260. <a name='K'></a>378-有序矩阵中第K小的元素
 
 [哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV1Zy4y127qr?spm_id_from=333.999.0.0)
 
-###  4.193. <a name='InsertDeleteGetRandomO1'></a>380 Insert Delete GetRandom O(1)
+###  3.261. <a name='InsertDeleteGetRandomO1'></a>380 Insert Delete GetRandom O(1)
 
 [小明](https://www.bilibili.com/video/BV1Fg4y1q7Ru?spm_id_from=333.999.0.0)
 
-###  4.194. <a name='LinkedListRandomNode'></a>382 Linked List Random Node
+###  3.262. <a name='LinkedListRandomNode'></a>382 Linked List Random Node
 
 [小明](https://www.bilibili.com/video/BV1xZ4y1G7ie?spm_id_from=333.999.0.0)
 
-###  4.195. <a name='RansomNote'></a>383 Ransom Note
+###  3.263. <a name='RansomNote'></a>383 Ransom Note
 
 [小明](https://www.bilibili.com/video/BV1GQ4y1N7Q5?spm_id_from=333.999.0.0)
 
-###  4.196. <a name='FirstUniqueCharacterinaString'></a>387. First Unique Character in a String
+###  3.264. <a name='FirstUniqueCharacterinaString'></a>387. First Unique Character in a String
 
 [小梦想家](https://www.bilibili.com/video/BV1y4411A7d2?spm_id_from=333.999.0.0)
 
@@ -21802,17 +21802,17 @@ res3: Option[(Char, Int)] = Some((k,1))
 
 ```
 
-###  4.197. <a name='FindtheDifference'></a>389. Find the Difference
+###  3.265. <a name='FindtheDifference'></a>389. Find the Difference
 
 [小梦想家](https://www.bilibili.com/video/BV1Et411K7jP?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1f5411L7r4?spm_id_from=333.999.0.0)
 
-###  4.198. <a name='PerfectRectangle'></a>391. Perfect Rectangle
+###  3.266. <a name='PerfectRectangle'></a>391. Perfect Rectangle
 
 [花花酱](https://www.bilibili.com/video/BV184411c7cs?spm_id_from=333.999.0.0)
 
-###  4.199. <a name='IsSubsequence'></a>392. Is Subsequence
+###  3.267. <a name='IsSubsequence'></a>392. Is Subsequence
 
 [小梦想家](https://www.bilibili.com/video/BV1fg4y1q7eT?spm_id_from=333.999.0.0)
 
@@ -21820,21 +21820,21 @@ res3: Option[(Char, Int)] = Some((k,1))
 
 [官方](https://www.bilibili.com/video/BV19f4y197yS?spm_id_from=333.999.0.0)
 
-###  4.200. <a name='UTF-8Validation'></a>393. UTF-8 Validation
+###  3.268. <a name='UTF-8Validation'></a>393. UTF-8 Validation
 
 [花花酱](https://www.bilibili.com/video/BV1SE411w7no?spm_id_from=333.999.0.0)
 
-###  4.201. <a name='DecodeString'></a>394 Decode String
+###  3.269. <a name='DecodeString'></a>394 Decode String
 
 [小明](https://www.bilibili.com/video/BV145411V75E?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1GZ4y1p7pE?spm_id_from=333.999.0.0)
 
-###  4.202. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
+###  3.270. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
 
 [小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
 
-###  4.203. <a name='EvaluateDivision'></a>399. Evaluate Division
+###  3.271. <a name='EvaluateDivision'></a>399. Evaluate Division
 
 [花花酱](https://www.bilibili.com/video/BV1iW41167Nb?spm_id_from=333.999.0.0)
 
@@ -21844,31 +21844,31 @@ res3: Option[(Char, Int)] = Some((k,1))
 
 [小明](https://www.bilibili.com/video/BV1rZ4y1N7CW?spm_id_from=333.999.0.0)
 
-###  4.204. <a name='RemoveKDigits'></a>402 Remove K Digits
+###  3.272. <a name='RemoveKDigits'></a>402 Remove K Digits
 
 [小明](https://www.bilibili.com/video/BV1PV411C79X?spm_id_from=333.999.0.0)
 
-###  4.205. <a name='SumofLeftLeaves'></a>404. Sum of Left Leaves
+###  3.273. <a name='SumofLeftLeaves'></a>404. Sum of Left Leaves
 
 [小梦想家](https://www.bilibili.com/video/BV1Et411K7wa?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV15a4y1779U?spm_id_from=333.999.0.0)
 
-###  4.206. <a name='ConvertaNumbertoHexadecimal'></a>405-Convert a Number to Hexadecimal
+###  3.274. <a name='ConvertaNumbertoHexadecimal'></a>405-Convert a Number to Hexadecimal
 
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
 
-###  4.207. <a name='QueueReconstructionbyHeight'></a>406. Queue Reconstruction by Height 
+###  3.275. <a name='QueueReconstructionbyHeight'></a>406. Queue Reconstruction by Height 
 
 [小明](https://www.bilibili.com/video/BV1xC4y1a72W?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV144411R7ch?spm_id_from=333.999.0.0)
 
-###  4.208. <a name='ValidWordAbbreviation'></a>408. Valid Word Abbreviation
+###  3.276. <a name='ValidWordAbbreviation'></a>408. Valid Word Abbreviation
 
 [小梦想家](https://www.bilibili.com/video/BV1A4411q74A?spm_id_from=333.999.0.0)
 
-###  4.209. <a name='LongestPalindrome'></a>409. Longest Palindrome
+###  3.277. <a name='LongestPalindrome'></a>409. Longest Palindrome
 
 [小梦想家](https://www.bilibili.com/video/BV1B441127W2?spm_id_from=333.999.0.0)
 
@@ -21876,11 +21876,11 @@ res3: Option[(Char, Int)] = Some((k,1))
 
 [官方](https://www.bilibili.com/video/BV1Lk4y1z7PG?spm_id_from=333.999.0.0)
 
-###  4.210. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
+###  3.278. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
 
-###  4.211. <a name='FizzBuzz'></a>412. Fizz Buzz
+###  3.279. <a name='FizzBuzz'></a>412. Fizz Buzz
 
 [小梦想家](https://www.bilibili.com/video/BV1xE411R7yK?spm_id_from=333.999.0.0)
 
@@ -21904,21 +21904,21 @@ object Solution {
 
 ```
 
-###  4.212. <a name='-1'></a>413-等差数列划分
+###  3.280. <a name='-1'></a>413-等差数列划分
 
 [哈哈哈](https://www.bilibili.com/video/BV13a4y1i7tR?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV13f4y167YZ?spm_id_from=333.999.0.0)
 
-###  4.213. <a name='ThirdMaximumNumber'></a>414. Third Maximum Number
+###  3.281. <a name='ThirdMaximumNumber'></a>414. Third Maximum Number
 
 [小梦想家](https://www.bilibili.com/video/BV1UE411X7k1?spm_id_from=333.999.0.0)
 
-###  4.214. <a name='AddStrings'></a>415-Add Strings
+###  3.282. <a name='AddStrings'></a>415-Add Strings
 
 [哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
 
-###  4.215. <a name='PartitionEqualSubsetSum'></a>416. Partition Equal Subset Sum
+###  3.283. <a name='PartitionEqualSubsetSum'></a>416. Partition Equal Subset Sum
 
 [花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
 
@@ -21926,57 +21926,57 @@ object Solution {
 
 [官方](https://www.bilibili.com/video/BV1oZ4y1G7QY?spm_id_from=333.999.0.0)
 
-###  4.216. <a name='PacificAtlanticWaterFlow'></a>417. Pacific Atlantic Water Flow
+###  3.284. <a name='PacificAtlanticWaterFlow'></a>417. Pacific Atlantic Water Flow
 
 [花花酱](https://www.bilibili.com/video/BV1Kb411K7ty?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1by4y1h7ab?spm_id_from=333.999.0.0)
 
-###  4.217. <a name='BattleshipsinaBoard'></a>419. Battleships in a Board 
+###  3.285. <a name='BattleshipsinaBoard'></a>419. Battleships in a Board 
 
 [小梦想家](https://www.bilibili.com/video/BV1TJ411j7QZ?spm_id_from=333.999.0.0)
 
-###  4.218. <a name='MaximumXORofTwoNumbersinanArray'></a>421 Maximum XOR of Two Numbers in an Array
+###  3.286. <a name='MaximumXORofTwoNumbersinanArray'></a>421 Maximum XOR of Two Numbers in an Array
 
 [小明](https://www.bilibili.com/video/BV1s64y1F7Wm?spm_id_from=333.999.0.0)
 
-###  4.219. <a name='ReconstructOriginalDigitsfromEnglish'></a>423 Reconstruct Original Digits from English
+###  3.287. <a name='ReconstructOriginalDigitsfromEnglish'></a>423 Reconstruct Original Digits from English
 
 [小明](https://www.bilibili.com/video/BV1554y1h73S?spm_id_from=333.999.0.0)
 
-###  4.220. <a name='LongestRepeatingCharacterReplacem'></a>424. 替换后的最长重复字符 Longest Repeating Character Replacem
+###  3.288. <a name='LongestRepeatingCharacterReplacem'></a>424. 替换后的最长重复字符 Longest Repeating Character Replacem
 
 [官方](https://www.bilibili.com/video/BV14r4y1K7rN?spm_id_from=333.999.0.0)
 
-###  4.221. <a name='N-aryTreeLevelOrderTraversal'></a>429. N-ary Tree Level Order Traversal
+###  3.289. <a name='N-aryTreeLevelOrderTraversal'></a>429. N-ary Tree Level Order Traversal
 
 [小梦想家](https://www.bilibili.com/video/BV1CE411Q7BQ?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Uv411K77M?spm_id_from=333.999.0.0)
 
-###  4.222. <a name='FlattenaMultilevelDoublyLinkedList'></a>430 Flatten a Multilevel Doubly Linked List
+###  3.290. <a name='FlattenaMultilevelDoublyLinkedList'></a>430 Flatten a Multilevel Doubly Linked List
 
 [小明](https://www.bilibili.com/video/BV1754y1q7Kb?spm_id_from=333.999.0.0)
 
-###  4.223. <a name='AllOoneDataStructure'></a>432. All O`one Data Structure
+###  3.291. <a name='AllOoneDataStructure'></a>432. All O`one Data Structure
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d7qR?spm_id_from=333.999.0.0)
 
-###  4.224. <a name='Non-overlappingIntervals'></a>435-Non-overlapping Intervals
+###  3.292. <a name='Non-overlappingIntervals'></a>435-Non-overlapping Intervals
 
 [哈哈哈](https://www.bilibili.com/video/BV1i7411p7pv?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Ak4y1U7f8?spm_id_from=333.999.0.0)
 
-###  4.225. <a name='FindRightInterval'></a>436 Find Right Interval
+###  3.293. <a name='FindRightInterval'></a>436 Find Right Interval
 
 [小明](https://www.bilibili.com/video/BV1YT4y1w7EP?spm_id_from=333.999.0.0)
 
-###  4.226. <a name='PathSumIII'></a>437 Path Sum III
+###  3.294. <a name='PathSumIII'></a>437 Path Sum III
 
 [小明](https://www.bilibili.com/video/BV1tZ4y1M7JR?spm_id_from=333.999.0.0)
 
-###  4.227. <a name='FindAllAnagramsinaString'></a>438. Find All Anagrams in a String
+###  3.295. <a name='FindAllAnagramsinaString'></a>438. Find All Anagrams in a String
 
 [花花酱](https://www.bilibili.com/video/BV1iW411d7Nb?spm_id_from=333.999.0.0)
 
@@ -22111,19 +22111,19 @@ object Solution2-1 {
 
 ```
 
-###  4.228. <a name='ArrangingCoins'></a>441 Arranging Coins
+###  3.296. <a name='ArrangingCoins'></a>441 Arranging Coins
 
 [小明](https://www.bilibili.com/video/BV1eV411k7rg?spm_id_from=333.999.0.0)
 
-###  4.229. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
+###  3.297. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
 
 [小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
 
-###  4.230. <a name='StringCompression'></a>443. String Compression
+###  3.298. <a name='StringCompression'></a>443. String Compression
 
 [小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
 
-###  4.231. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
+###  3.299. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
 
 [哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
 
@@ -22131,61 +22131,61 @@ object Solution2-1 {
 
 [小明](https://www.bilibili.com/video/BV17a4y1s7BG?spm_id_from=333.999.0.0)
 
-###  4.232. <a name='NumberofBoomerangs'></a>447. Number of Boomerangs
+###  3.300. <a name='NumberofBoomerangs'></a>447. Number of Boomerangs
 
 [小梦想家](https://www.bilibili.com/video/BV1hE411o7V2?spm_id_from=333.999.0.0)
 
-###  4.233. <a name='FindAllNumbersDisappearedinanArray'></a>448. Find All Numbers Disappeared in an Array
+###  3.301. <a name='FindAllNumbersDisappearedinanArray'></a>448. Find All Numbers Disappeared in an Array
 
 [小梦想家](https://www.bilibili.com/video/BV1SE411d7FM?spm_id_from=333.999.0.0)
 
-###  4.234. <a name='SerializeandDeserializeBST'></a>449. Serialize and Deserialize BST
+###  3.302. <a name='SerializeandDeserializeBST'></a>449. Serialize and Deserialize BST
 
 [花花酱](https://www.bilibili.com/video/BV1ab411c75V?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Ty4y1r7FT?spm_id_from=333.999.0.0)
 
-###  4.235. <a name='DeleteNodeinaBST'></a>450. Delete Node in a BST
+###  3.303. <a name='DeleteNodeinaBST'></a>450. Delete Node in a BST
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d7yU?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV1YK4y1h7Mw?spm_id_from=333.999.0.0)
 
-###  4.236. <a name='SortCharactersByFrequency'></a>451 Sort Characters By Frequency
+###  3.304. <a name='SortCharactersByFrequency'></a>451 Sort Characters By Frequency
 
 [小明](https://www.bilibili.com/video/BV18v411z7iy?spm_id_from=333.999.0.0)
 
-###  4.237. <a name='SumII'></a>454 4Sum II
+###  3.305. <a name='SumII'></a>454 4Sum II
 
 [小明](https://www.bilibili.com/video/BV1ny4y1D7UL?spm_id_from=333.999.0.0)
 
-###  4.238. <a name='MinimumNumberofArrowstoBurstBalloons'></a>452. Minimum Number of Arrows to Burst Balloons
+###  3.306. <a name='MinimumNumberofArrowstoBurstBalloons'></a>452. Minimum Number of Arrows to Burst Balloons
 
 [花花酱](https://www.bilibili.com/video/BV1bW411d77B?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1PZ4y1L7VM?spm_id_from=333.999.0.0)
 
-###  4.239. <a name='AssignCookies'></a>455-Assign Cookies
+###  3.307. <a name='AssignCookies'></a>455-Assign Cookies
 
 [哈哈哈](https://www.bilibili.com/video/BV157411s7b9?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1YE411r7UN?spm_id_from=333.999.0.0)
 
-###  4.240. <a name='Pattern'></a>456 132 Pattern
+###  3.308. <a name='Pattern'></a>456 132 Pattern
 
 [小明](https://www.bilibili.com/video/BV18f4y1i734?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1SZ4y1x74J?spm_id_from=333.999.0.0)
 
-###  4.241. <a name='PoorPigs'></a>458 Poor Pigs
+###  3.309. <a name='PoorPigs'></a>458 Poor Pigs
 
 [小明](https://www.bilibili.com/video/BV1g5411576M?spm_id_from=333.999.0.0)
 
-###  4.242. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
+###  3.310. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
 
 [小明](https://www.bilibili.com/video/BV1Yt4y1S7XZ?spm_id_from=333.999.0.0)
 
-###  4.243. <a name='LFUCacheO1'></a>460. LFU Cache / O(1)
+###  3.311. <a name='LFUCacheO1'></a>460. LFU Cache / O(1)
 
 [花花酱](https://www.bilibili.com/video/BV1gt411Y7PR?spm_id_from=333.999.0.0)
 
@@ -22193,101 +22193,101 @@ object Solution2-1 {
 
 [官方](https://www.bilibili.com/video/BV1kA41147t8?spm_id_from=333.999.0.0)
 
-###  4.244. <a name='HammingDistance'></a>461 Hamming Distance
+###  3.312. <a name='HammingDistance'></a>461 Hamming Distance
 
 [小明](https://www.bilibili.com/video/BV1M5411Y79g?spm_id_from=333.999.0.0)
 
-###  4.245. <a name='IslandPerimeter'></a>463 Island Perimeter
+###  3.313. <a name='IslandPerimeter'></a>463 Island Perimeter
 
 [小明](https://www.bilibili.com/video/BV16V41167bF?spm_id_from=333.999.0.0)
 
-###  4.246. <a name='CanIWin'></a>464. Can I Win
+###  3.314. <a name='CanIWin'></a>464. Can I Win
 
 [花花酱](https://www.bilibili.com/video/BV1KW411o7m2?spm_id_from=333.999.0.0)
 
-###  4.247. <a name='CountTheRepetitions'></a>466. 统计重复个数 Count The Repetitions
+###  3.315. <a name='CountTheRepetitions'></a>466. 统计重复个数 Count The Repetitions
 
 [官方](https://www.bilibili.com/video/BV1Qk4y1678m?spm_id_from=333.999.0.0)
 
-###  4.248. <a name='ValidateIPAddress'></a>468 Validate IP Address
+###  3.316. <a name='ValidateIPAddress'></a>468 Validate IP Address
 
 [小明](https://www.bilibili.com/video/BV1tg4y1q7Kq?spm_id_from=333.999.0.0)
 
-###  4.249. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
+###  3.317. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411Z7KX?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1AD4y1m7Qb?spm_id_from=333.999.0.0)
 
-###  4.250. <a name='Heaters'></a>475. Heaters
+###  3.318. <a name='Heaters'></a>475. Heaters
 
 [小梦想家](https://www.bilibili.com/video/BV1vJ41117VH?spm_id_from=333.999.0.0)
 
-###  4.251. <a name='NumberComplement'></a>476. Number Complement
+###  3.319. <a name='NumberComplement'></a>476. Number Complement
 
 [花花酱](https://www.bilibili.com/video/BV1PW411y7mv?spm_id_from=333.999.0.0)
 
-###  4.252. <a name='TotalHammingDistance'></a>477. Total Hamming Distance
+###  3.320. <a name='TotalHammingDistance'></a>477. Total Hamming Distance
 
 [花花酱](https://www.bilibili.com/video/BV1SW411r78m?spm_id_from=333.999.0.0)
 
-###  4.253. <a name='GenerateRandomPointinaCircle'></a>478 Generate Random Point in a Circle
+###  3.321. <a name='GenerateRandomPointinaCircle'></a>478 Generate Random Point in a Circle
 
 [小明](https://www.bilibili.com/video/BV1Nz4y127a1?spm_id_from=333.999.0.0)
 
-###  4.254. <a name='SlidingWindowMedian'></a>480. Sliding Window Median
+###  3.322. <a name='SlidingWindowMedian'></a>480. Sliding Window Median
 
 [花花酱](https://www.bilibili.com/video/BV15W411C7iy?spm_id_from=333.999.0.0)
 
-###  4.255. <a name='FindPermutation'></a>484 Find Permutation
+###  3.323. <a name='FindPermutation'></a>484 Find Permutation
 
 [小明](https://www.bilibili.com/video/BV1NT4y1L76i?spm_id_from=333.999.0.0)
 
-###  4.256. <a name='MaxConsecutiveOnes'></a>485. Max Consecutive Ones
+###  3.324. <a name='MaxConsecutiveOnes'></a>485. Max Consecutive Ones
 
 [小梦想家](https://www.bilibili.com/video/BV1zJ411R7SJ?spm_id_from=333.999.0.0)
 
-###  4.257. <a name='PredicttheWinner'></a>486. Predict the Winner
+###  3.325. <a name='PredicttheWinner'></a>486. Predict the Winner
 
 [花花酱](https://www.bilibili.com/video/BV1kW411d7R2?spm_id_from=333.999.0.0)
 
-###  4.258. <a name='TheMaze'></a>490 The Maze
+###  3.326. <a name='TheMaze'></a>490 The Maze
 
 [小明](https://www.bilibili.com/video/BV1az4y1f7Hn?spm_id_from=333.999.0.0)
 
-###  4.259. <a name='TargetSum'></a>494. Target Sum
+###  3.327. <a name='TargetSum'></a>494. Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
 
 [花花酱 下](https://www.bilibili.com/video/BV1WW411C7Mr?spm_id_from=333.999.0.0)
 
-###  4.260. <a name='TeemoAttacking'></a>495 Teemo Attacking
+###  3.328. <a name='TeemoAttacking'></a>495 Teemo Attacking
 
 [小明](https://www.bilibili.com/video/BV1LK4y1Y75e?spm_id_from=333.999.0.0)
 
-###  4.261. <a name='INextGreaterElementI'></a>496. 下一个更大元素 I (Next Greater Element I)
+###  3.329. <a name='INextGreaterElementI'></a>496. 下一个更大元素 I (Next Greater Element I)
 
 [洛阳](https://www.bilibili.com/video/BV1Ce411W7pW?spm_id_from=333.999.0.0)
 
-###  4.262. <a name='RandomPointinNon-overlapping'></a>497 Random Point in Non-overlapping
+###  3.330. <a name='RandomPointinNon-overlapping'></a>497 Random Point in Non-overlapping
 
 [小明](https://www.bilibili.com/video/BV12K4y1Y7r6?spm_id_from=333.999.0.0)
 
-###  4.263. <a name='KeyboardRow'></a>500. Keyboard Row
+###  3.331. <a name='KeyboardRow'></a>500. Keyboard Row
 
 [小梦想家](https://www.bilibili.com/video/BV1vJ411X7BR?spm_id_from=333.999.0.0)
 
-###  4.264. <a name='NextGreaterElementII'></a>503-Next Greater Element II
+###  3.332. <a name='NextGreaterElementII'></a>503-Next Greater Element II
 
 [哈哈哈](https://www.bilibili.com/video/BV197411L77N?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1k5411t7Pa?spm_id_from=333.999.0.0)
 
-###  4.265. <a name='Base7'></a>504-Base 7
+###  3.333. <a name='Base7'></a>504-Base 7
 
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7o5?spm_id_from=333.999.0.0)
 
-###  4.266. <a name='FibonacciNumber'></a>509. Fibonacci Number
+###  3.334. <a name='FibonacciNumber'></a>509. Fibonacci Number
 
 [1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -22460,57 +22460,57 @@ object Solution4 {
 }
 ```
 
-###  4.267. <a name='LongestPalindromicSubsequence'></a>516. Longest Palindromic Subsequence
+###  3.335. <a name='LongestPalindromicSubsequence'></a>516. Longest Palindromic Subsequence
 
 [花花酱](https://www.bilibili.com/video/BV18W411d7k2?spm_id_from=333.999.0.0)
 
-###  4.268. <a name='CoinChange2'></a>518 Coin Change 2
+###  3.336. <a name='CoinChange2'></a>518 Coin Change 2
 
 [小明](https://www.bilibili.com/video/BV1jC4y1a7YT?spm_id_from=333.999.0.0)
 
-###  4.269. <a name='DetectCapital'></a>520. Detect Capital
+###  3.337. <a name='DetectCapital'></a>520. Detect Capital
 
 [小梦想家](https://www.bilibili.com/video/BV1NJ41197da?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1xT4y1j7G4?spm_id_from=333.999.0.0)
 
-###  4.270. <a name='ContiguousArray'></a>525. Contiguous Array
+###  3.338. <a name='ContiguousArray'></a>525. Contiguous Array
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7SD?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV185411t7tu?spm_id_from=333.999.0.0)
 
-###  4.271. <a name='BeautifulArrangement'></a>526 Beautiful Arrangement
+###  3.339. <a name='BeautifulArrangement'></a>526 Beautiful Arrangement
 
 [小明](https://www.bilibili.com/video/BV1DK411M7QR?spm_id_from=333.999.0.0)
 
-###  4.272. <a name='RandomPickwithWeight'></a>528 Random Pick with Weight
+###  3.340. <a name='RandomPickwithWeight'></a>528 Random Pick with Weight
 
 [小明](https://www.bilibili.com/video/BV1UV411r7MK?spm_id_from=333.999.0.0)
 
-###  4.273. <a name='MinimumAbsoluteDifferenceinBST'></a>530. Minimum Absolute Difference in BST
+###  3.341. <a name='MinimumAbsoluteDifferenceinBST'></a>530. Minimum Absolute Difference in BST
 
 [花花酱](https://www.bilibili.com/video/BV1fW411k7eT?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1FJ41147BB?spm_id_from=333.999.0.0)
 
-###  4.274. <a name='K-diffPairsinanArray'></a>532 K-diff Pairs in an Array
+###  3.342. <a name='K-diffPairsinanArray'></a>532 K-diff Pairs in an Array
 
 [小明](https://www.bilibili.com/video/BV1MV41127o1?spm_id_from=333.999.0.0)
 
-###  4.275. <a name='EncodeandDecodeTinyURL'></a>535. Encode and Decode TinyURL
+###  3.343. <a name='EncodeandDecodeTinyURL'></a>535. Encode and Decode TinyURL
 
 [小梦想家](https://www.bilibili.com/video/BV1hb411e7zp?spm_id_from=333.999.0.0)
 
-###  4.276. <a name='ComplexNumberMultiplicatin'></a>537 Complex Number Multiplicatin
+###  3.344. <a name='ComplexNumberMultiplicatin'></a>537 Complex Number Multiplicatin
 
 [小明](https://www.bilibili.com/video/BV1sP4y1p7Px?spm_id_from=333.999.0.0)
 
-###  4.277. <a name='ConvertBSTtoGreaterTree'></a>538 Convert BST to Greater Tree
+###  3.345. <a name='ConvertBSTtoGreaterTree'></a>538 Convert BST to Greater Tree
 
 [小明](https://www.bilibili.com/video/BV1k541177bt?spm_id_from=333.999.0.0)
 
-###  4.278. <a name='SingleElementinaSortedArray540-'></a>540. Single Element in a Sorted Array 540-有序数组中的单一元素
+###  3.346. <a name='SingleElementinaSortedArray540-'></a>540. Single Element in a Sorted Array 540-有序数组中的单一元素
 
 [花花酱](https://www.bilibili.com/video/BV1gW411y7N3?spm_id_from=333.999.0.0)
 
@@ -22518,21 +22518,21 @@ object Solution4 {
 
 [小明](https://www.bilibili.com/video/BV1Tg4y1B7Va?spm_id_from=333.999.0.0)
 
-###  4.279. <a name='Matrix'></a>542. 01 矩阵 01 Matrix 
+###  3.347. <a name='Matrix'></a>542. 01 矩阵 01 Matrix 
 
 [官方](https://www.bilibili.com/video/BV1cZ4y1s727?spm_id_from=333.999.0.0)
 
-###  4.280. <a name='DiameterofBinaryTree'></a>543 Diameter of Binary Tree
+###  3.348. <a name='DiameterofBinaryTree'></a>543 Diameter of Binary Tree
 
 [小明](https://www.bilibili.com/video/BV12K4y1r78T?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1qA411t7LR?spm_id_from=333.999.0.0)
 
-###  4.281. <a name='RemoveBoxes'></a>546 Remove Boxes
+###  3.349. <a name='RemoveBoxes'></a>546 Remove Boxes
 
 [花花酱](https://www.bilibili.com/video/BV11W411Z7jG?spm_id_from=333.999.0.0)
 
-###  4.282. <a name='-1'></a>547-朋友圈
+###  3.350. <a name='-1'></a>547-朋友圈
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ta411F7rk?spm_id_from=333.999.0.0)
 
@@ -22658,15 +22658,15 @@ class UnionFind(M: Int) {
 
 ```
 
-###  4.283. <a name='BrickWall'></a>554 Brick Wall
+###  3.351. <a name='BrickWall'></a>554 Brick Wall
 
 [小明](https://www.bilibili.com/video/BV1mo4y1f7wc?spm_id_from=333.999.0.0)
 
-###  4.284. <a name='NextGreaterElementIII'></a>556 Next Greater Element III
+###  3.352. <a name='NextGreaterElementIII'></a>556 Next Greater Element III
 
 [小明](https://www.bilibili.com/video/BV19t4y167yb?spm_id_from=333.999.0.0)
 
-###  4.285. <a name='SubarraySumEqualsKK'></a>560. Subarray Sum Equals K 和为K的子数组
+###  3.353. <a name='SubarraySumEqualsKK'></a>560. Subarray Sum Equals K 和为K的子数组
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d71i?spm_id_from=333.999.0.0)
 
@@ -22676,11 +22676,11 @@ class UnionFind(M: Int) {
 
 [官方](https://www.bilibili.com/video/BV13t4y1y7ya?spm_id_from=333.999.0.0)
 
-###  4.286. <a name='BinaryTreeTilt'></a>563 Binary Tree Tilt
+###  3.354. <a name='BinaryTreeTilt'></a>563 Binary Tree Tilt
 
 [小明](https://www.bilibili.com/video/BV1KV41117ho?spm_id_from=333.999.0.0)
 
-###  4.287. <a name='PermutationinString567-'></a>567. Permutation in String 567-字符串的排列
+###  3.355. <a name='PermutationinString567-'></a>567. Permutation in String 567-字符串的排列
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7g6?spm_id_from=333.999.0.0)
 
@@ -22775,167 +22775,167 @@ object Solution1-3 {
 }
 ```
 
-###  4.288. <a name='-1'></a>572-另一个树的子树
+###  3.356. <a name='-1'></a>572-另一个树的子树
 
 [哈哈哈](https://www.bilibili.com/video/BV1cA411t7zD?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1wt4y197aB?spm_id_from=333.999.0.0)
 
-###  4.289. <a name='DistributeCandies'></a>575 Distribute Candies
+###  3.357. <a name='DistributeCandies'></a>575 Distribute Candies
 
 [小明](https://www.bilibili.com/video/BV11i4y1T7Pr?spm_id_from=333.999.0.0)
 
-###  4.290. <a name='OutofBoundaryPaths'></a>576. Out of Boundary Paths
+###  3.358. <a name='OutofBoundaryPaths'></a>576. Out of Boundary Paths
 
 [花花酱](https://www.bilibili.com/video/BV18W411d7Cf?spm_id_from=333.999.0.0)
 
-###  4.291. <a name='ShortestUnsortedContinuousSuba'></a>581 Shortest Unsorted Continuous Suba
+###  3.359. <a name='ShortestUnsortedContinuousSuba'></a>581 Shortest Unsorted Continuous Suba
 
 [小明](https://www.bilibili.com/video/BV1Y54y1h7Xa?spm_id_from=333.999.0.0)
 
-###  4.292. <a name='N-aryTreePreorderTraversal'></a>589 N-ary Tree Preorder Traversal
+###  3.360. <a name='N-aryTreePreorderTraversal'></a>589 N-ary Tree Preorder Traversal
 
 [小明](https://www.bilibili.com/video/BV1io4y1f7qT?spm_id_from=333.999.0.0)
 
-###  4.293. <a name='ValidSquare'></a>593 Valid Square
+###  3.361. <a name='ValidSquare'></a>593 Valid Square
 
 [小明](https://www.bilibili.com/video/BV1j5411V73U?spm_id_from=333.999.0.0)
 
-###  4.294. <a name='LongestHarmoniousSubsequence'></a>594 Longest Harmonious Subsequence
+###  3.362. <a name='LongestHarmoniousSubsequence'></a>594 Longest Harmonious Subsequence
 
 [小明](https://www.bilibili.com/video/BV1Pp4y1p7ss?spm_id_from=333.999.0.0)
 
-###  4.295. <a name='CanPlaceFlowers'></a>605 Can Place Flowers
+###  3.363. <a name='CanPlaceFlowers'></a>605 Can Place Flowers
 
 [小明](https://www.bilibili.com/video/BV1Uz4y1k7xU?spm_id_from=333.999.0.0)
 
-###  4.296. <a name='TaskScheduler'></a>621. Task Scheduler
+###  3.364. <a name='TaskScheduler'></a>621. Task Scheduler
 
 [花花酱](https://www.bilibili.com/video/BV1Wt411Y7Y9?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1LZ4y1M7Bg?spm_id_from=333.999.0.0)
 
-###  4.297. <a name='DesignCircularQueue'></a>622 Design Circular Queue
+###  3.365. <a name='DesignCircularQueue'></a>622 Design Circular Queue
 
 [小明](https://www.bilibili.com/video/BV1kV411n7Uk?spm_id_from=333.999.0.0)
 
-###  4.298. <a name='AddOneRowtoTree'></a>623 Add One Row to Tree
+###  3.366. <a name='AddOneRowtoTree'></a>623 Add One Row to Tree
 
 [小明](https://www.bilibili.com/video/BV1AK4y1U7ud?spm_id_from=333.999.0.0)
 
-###  4.299. <a name='SumofSquareNumbers'></a>633-Sum of Square Numbers
+###  3.367. <a name='SumofSquareNumbers'></a>633-Sum of Square Numbers
 
 [哈哈哈](https://www.bilibili.com/video/BV1a7411h7on?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Qh411i7Yh?spm_id_from=333.999.0.0)
 
-###  4.300. <a name='ExclusiveTimeofFunctions'></a>636. Exclusive Time of Functions
+###  3.368. <a name='ExclusiveTimeofFunctions'></a>636. Exclusive Time of Functions
 
 [花花酱](https://www.bilibili.com/video/BV1PW411o7Bh?spm_id_from=333.999.0.0)
 
-###  4.301. <a name='AverageofLevelsinBinaryTree'></a>637 Average of Levels in Binary Tree
+###  3.369. <a name='AverageofLevelsinBinaryTree'></a>637 Average of Levels in Binary Tree
 
 [小明](https://www.bilibili.com/video/BV1eb4y1976M?spm_id_from=333.999.0.0)
 
-###  4.302. <a name='DecodeWaysII'></a>639. Decode Ways II
+###  3.370. <a name='DecodeWaysII'></a>639. Decode Ways II
 
 [花花酱](https://www.bilibili.com/video/BV1YW411r75q?spm_id_from=333.999.0.0)
 
-###  4.303. <a name='MaximumAverageSubarrayI'></a>643. Maximum Average Subarray I
+###  3.371. <a name='MaximumAverageSubarrayI'></a>643. Maximum Average Subarray I
 
 [小梦想家](https://www.bilibili.com/video/BV1dV411k7i6?spm_id_from=333.999.0.0)
 
-###  4.304. <a name='-1'></a>645-错误的集合
+###  3.372. <a name='-1'></a>645-错误的集合
 
 [哈哈哈](https://www.bilibili.com/video/BV1az411e7zU?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Pf4y1479j?spm_id_from=333.999.0.0)
 
-###  4.305. <a name='-1'></a>646-最长数对链
+###  3.373. <a name='-1'></a>646-最长数对链
 
 [哈哈哈](https://www.bilibili.com/video/BV1rz411q7pZ?spm_id_from=333.999.0.0)
 
-###  4.306. <a name='PalindromicSubstrings'></a>647 Palindromic Substrings
+###  3.374. <a name='PalindromicSubstrings'></a>647 Palindromic Substrings
 
 [小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
 
-###  4.307. <a name='-1'></a>650-只有两个键的键盘
+###  3.375. <a name='-1'></a>650-只有两个键的键盘
 
 [哈哈哈](https://www.bilibili.com/video/BV1254y1z7ze?spm_id_from=333.999.0.0)
 
-###  4.308. <a name='FindDuplicateSubtrees'></a>652. Find Duplicate Subtrees
+###  3.376. <a name='FindDuplicateSubtrees'></a>652. Find Duplicate Subtrees
 
 [花花酱](https://www.bilibili.com/video/BV1cW411y7d1?spm_id_from=333.999.0.0)
 
-###  4.309. <a name='TwoSumIV'></a>653. Two Sum IV
+###  3.377. <a name='TwoSumIV'></a>653. Two Sum IV
 
 [小梦想家](https://www.bilibili.com/video/BV1Qz4y197h1?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1AQ4y117mc?spm_id_from=333.999.0.0)
 
-###  4.310. <a name='MaximumWidthofBinaryTree'></a>662. Maximum Width of Binary Tree
+###  3.378. <a name='MaximumWidthofBinaryTree'></a>662. Maximum Width of Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV1cv411q7pb?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV16a4y1h7fG?spm_id_from=333.999.0.0)
 
-###  4.311. <a name='BeautifulArrangementII'></a>667 Beautiful Arrangement II
+###  3.379. <a name='BeautifulArrangementII'></a>667 Beautiful Arrangement II
 
 [小明](https://www.bilibili.com/video/BV1j54y1b7Br?spm_id_from=333.999.0.0)
 
-###  4.312. <a name='KthSmallestNumberinMultiplicationTable'></a>668. Kth Smallest Number in Multiplication Table
+###  3.380. <a name='KthSmallestNumberinMultiplicationTable'></a>668. Kth Smallest Number in Multiplication Table
 
 [花花酱](https://www.bilibili.com/video/BV17W411C7ai?spm_id_from=333.999.0.0)
 
-###  4.313. <a name='TrimaBinarySearchTree'></a>669 Trim a Binary Search Tree
+###  3.381. <a name='TrimaBinarySearchTree'></a>669 Trim a Binary Search Tree
 
 [小明](https://www.bilibili.com/video/BV19y4y1J7fu?spm_id_from=333.999.0.0)
 
-###  4.314. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
+###  3.382. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
 
 [小明](https://www.bilibili.com/video/BV1gT4y1F7y3?spm_id_from=333.999.0.0)
 
-###  4.315. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
+###  3.383. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
 
 [小明](https://www.bilibili.com/video/BV1ap4y1X7nu?spm_id_from=333.999.0.0)
 
-###  4.316. <a name='ValidPalindromeII'></a>680-Valid Palindrome II
+###  3.384. <a name='ValidPalindromeII'></a>680-Valid Palindrome II
 
 [哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV17i4y147xn?spm_id_from=333.999.0.0)
 
-###  4.317. <a name='KEmptySlots'></a>683. K Empty Slots
+###  3.385. <a name='KEmptySlots'></a>683. K Empty Slots
 
 [花花酱](https://www.bilibili.com/video/BV1Jb411k7Yu?spm_id_from=333.999.0.0)
 
-###  4.318. <a name='RedundantConnection684-'></a>684. Redundant Connection 684-冗余连接
+###  3.386. <a name='RedundantConnection684-'></a>684. Redundant Connection 684-冗余连接
 
 [花花酱](https://www.bilibili.com/video/BV1mt411J79j?spm_id_from=333.999.0.0)
 
 [哈哈哈](https://www.bilibili.com/video/BV1oe411p7qF?spm_id_from=333.999.0.0)
 
-###  4.319. <a name='RedundantConnectionII'></a>685. Redundant Connection II
+###  3.387. <a name='RedundantConnectionII'></a>685. Redundant Connection II
 
 [花花酱](https://www.bilibili.com/video/BV1St411J7Ur?spm_id_from=333.999.0.0)
 
-###  4.320. <a name='LongestUnivaluePath'></a>687. Longest Univalue Path
+###  3.388. <a name='LongestUnivaluePath'></a>687. Longest Univalue Path
 
 [花花酱](https://www.bilibili.com/video/BV1wt411r7Pr?spm_id_from=333.999.0.0)
 
-###  4.321. <a name='KnightProbabilityinChessboard'></a>688. Knight Probability in Chessboard
+###  3.389. <a name='KnightProbabilityinChessboard'></a>688. Knight Probability in Chessboard
 
 [花花酱](https://www.bilibili.com/video/BV1Hb411c7mu?spm_id_from=333.999.0.0)
 
-###  4.322. <a name='EmployeeImportance'></a>690. Employee Importance
+###  3.390. <a name='EmployeeImportance'></a>690. Employee Importance
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411J7uC?spm_id_from=333.999.0.0)
 
-###  4.323. <a name='TopKFrequentWords'></a>692. Top K Frequent Words
+###  3.391. <a name='TopKFrequentWords'></a>692. Top K Frequent Words
 
 [花花酱](https://www.bilibili.com/video/BV1Mt41137eL?spm_id_from=333.999.0.0)
 
-###  4.324. <a name='-1'></a>695-岛屿的最大面积
+###  3.392. <a name='-1'></a>695-岛屿的最大面积
 
 [哈哈哈](https://www.bilibili.com/video/BV1s54y1B77k?spm_id_from=333.999.0.0)
 
@@ -22943,23 +22943,23 @@ object Solution1-3 {
 
 [官方](https://www.bilibili.com/video/BV1k64y1c798?spm_id_from=333.999.0.0)
 
-###  4.325. <a name='CountBinarySubstrings'></a>696 Count Binary Substrings
+###  3.393. <a name='CountBinarySubstrings'></a>696 Count Binary Substrings
 
 [小明](https://www.bilibili.com/video/BV14p4y1b7nV?spm_id_from=333.999.0.0)
 
-###  4.326. <a name='FallingSquares'></a>699. Falling Squares
+###  3.394. <a name='FallingSquares'></a>699. Falling Squares
 
 [花花酱](https://www.bilibili.com/video/BV1Lt41137EM?spm_id_from=333.999.0.0)
 
-###  4.327. <a name='SearchinaBinarySearchTree'></a>700 Search in a Binary Search Tree
+###  3.395. <a name='SearchinaBinarySearchTree'></a>700 Search in a Binary Search Tree
 
 [小明](https://www.bilibili.com/video/BV14z411e76U?spm_id_from=333.999.0.0)
 
-###  4.328. <a name='InsertintoaBinarySearchTree'></a>701 Insert into a Binary Search Tree
+###  3.396. <a name='InsertintoaBinarySearchTree'></a>701 Insert into a Binary Search Tree
 
 [小明](https://www.bilibili.com/video/BV1q54y1k76s?spm_id_from=333.999.0.0)
 
-###  4.329. <a name='KthLargestElementinaStreamK'></a>703.Kth Largest Element in a Stream数据流中的第K大元素
+###  3.397. <a name='KthLargestElementinaStreamK'></a>703.Kth Largest Element in a Stream数据流中的第K大元素
 
 [图灵](https://www.bilibili.com/video/BV1g5411w7o8?spm_id_from=333.999.0.0)
 
@@ -22996,7 +22996,7 @@ class KthLargest(_k: Int, _nums: Array[Int]) {
  */
 ```
 
-###  4.330. <a name='BinarySearch'></a>704.Binary Search二分查找
+###  3.398. <a name='BinarySearch'></a>704.Binary Search二分查找
 
 [图灵](https://www.bilibili.com/video/BV1Dh411v7yT?spm_id_from=333.999.0.0)
 
@@ -23054,27 +23054,27 @@ object Solution1-2 {
 }
 ```
 
-###  4.331. <a name='DesignHashSet'></a>705 Design HashSet
+###  3.399. <a name='DesignHashSet'></a>705 Design HashSet
 
 [小明](https://www.bilibili.com/video/BV1hV411z73p?spm_id_from=333.999.0.0)
 
-###  4.332. <a name='DesignHashMap'></a>706. Design HashMap设计哈希映射
+###  3.400. <a name='DesignHashMap'></a>706. Design HashMap设计哈希映射
 
 [图灵](https://www.bilibili.com/video/BV1Ho4y1Q7cr?spm_id_from=333.999.0.0)
 
-###  4.333. <a name='DesignLinkedList'></a>707. Design Linked List
+###  3.401. <a name='DesignLinkedList'></a>707. Design Linked List
 
 [花花酱](https://www.bilibili.com/video/BV1yW411Z7dV?spm_id_from=333.999.0.0)
 
-###  4.334. <a name='MinimumASCIIDeleteSumforTwoStrings'></a>712. Minimum ASCII Delete Sum for Two Strings
+###  3.402. <a name='MinimumASCIIDeleteSumforTwoStrings'></a>712. Minimum ASCII Delete Sum for Two Strings
 
 [花花酱](https://www.bilibili.com/video/BV17W411d7m2?spm_id_from=333.999.0.0)
 
-###  4.335. <a name='SubarrayProductLessThanK'></a>713 Subarray Product Less Than K
+###  3.403. <a name='SubarrayProductLessThanK'></a>713 Subarray Product Less Than K
 
 [小明](https://www.bilibili.com/video/BV1T5411j7tC?spm_id_from=333.999.0.0)
 
-###  4.336. <a name='-1'></a>714-买卖股票的最佳时机含手续费
+###  3.404. <a name='-1'></a>714-买卖股票的最佳时机含手续费
 
 [哈哈哈](https://www.bilibili.com/video/BV1WK4y1E7mP?spm_id_from=333.999.0.0)
 
@@ -23158,39 +23158,39 @@ object Solution2 {
 }
 ```
 
-###  4.337. <a name='RangeModule'></a>715. Range Module
+###  3.405. <a name='RangeModule'></a>715. Range Module
 
 [花花酱](https://www.bilibili.com/video/BV1jt411379W?spm_id_from=333.999.0.0)
 
-###  4.338. <a name='FindK-thSmallestPairDistance'></a>719. Find K-th Smallest Pair Distance
+###  3.406. <a name='FindK-thSmallestPairDistance'></a>719. Find K-th Smallest Pair Distance
 
 [花花酱](https://www.bilibili.com/video/BV1zb411u7iP?spm_id_from=333.999.0.0)
 
-###  4.339. <a name='LongestWordinDictionary'></a>720. Longest Word in Dictionary
+###  3.407. <a name='LongestWordinDictionary'></a>720. Longest Word in Dictionary
 
 [花花酱](https://www.bilibili.com/video/BV1vW411r75D?spm_id_from=333.999.0.0)
 
-###  4.340. <a name='FindPivotIndex'></a>724. Find Pivot Index
+###  3.408. <a name='FindPivotIndex'></a>724. Find Pivot Index
 
 [花花酱](https://www.bilibili.com/video/BV1KW411S7nG?spm_id_from=333.999.0.0)
 
-###  4.341. <a name='SplitLinkedListinParts'></a>725. Split Linked List in Parts
+###  3.409. <a name='SplitLinkedListinParts'></a>725. Split Linked List in Parts
 
 [花花酱](https://www.bilibili.com/video/BV1KW411S7ti?spm_id_from=333.999.0.0)
 
-###  4.342. <a name='NumberofAtoms'></a>726. Number of Atoms
+###  3.410. <a name='NumberofAtoms'></a>726. Number of Atoms
 
 [花花酱](https://www.bilibili.com/video/BV11W411U7KT?spm_id_from=333.999.0.0)
 
-###  4.343. <a name='CountDifferentPalindromicSubsequences'></a>730. Count Different Palindromic Subsequences
+###  3.411. <a name='CountDifferentPalindromicSubsequences'></a>730. Count Different Palindromic Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV12W41167vQ?spm_id_from=333.999.0.0)
 
-###  4.344. <a name='MyCalendarIII'></a>732. My Calendar III
+###  3.412. <a name='MyCalendarIII'></a>732. My Calendar III
 
 [花花酱](https://www.bilibili.com/video/BV1fW411k75b?spm_id_from=333.999.0.0)
 
-###  4.345. <a name='FloodFill'></a>733. 图像渲染 Flood Fill
+###  3.413. <a name='FloodFill'></a>733. 图像渲染 Flood Fill
 
 [花花酱](https://www.bilibili.com/video/BV1yW41167S4?spm_id_from=333.999.0.0)
 
@@ -23198,89 +23198,89 @@ object Solution2 {
 
 [小明](https://www.bilibili.com/video/BV1HZ4y1p7vH?spm_id_from=333.999.0.0)
 
-###  4.346. <a name='AsteroidCollision'></a>735 Asteroid Collision
+###  3.414. <a name='AsteroidCollision'></a>735 Asteroid Collision
 
 [小明](https://www.bilibili.com/video/BV1jT4y1F76n?spm_id_from=333.999.0.0)
 
-###  4.347. <a name='SentenceSimilarityII'></a>737. Sentence Similarity II
+###  3.415. <a name='SentenceSimilarityII'></a>737. Sentence Similarity II
 
 [花花酱](https://www.bilibili.com/video/BV1qW41167iB?spm_id_from=333.999.0.0)
 
-###  4.348. <a name='DailyTemperatures'></a>739-Daily Temperatures
+###  3.416. <a name='DailyTemperatures'></a>739-Daily Temperatures
 
 [哈哈哈](https://www.bilibili.com/video/BV1Q7411L7w8?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1ov411z7rM?spm_id_from=333.999.0.0)
 
-###  4.349. <a name='DeleteandEarn'></a>740. Delete and Earn
+###  3.417. <a name='DeleteandEarn'></a>740. Delete and Earn
 
 [24:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
 [花花酱](https://www.bilibili.com/video/BV1xW41167b5?spm_id_from=333.999.0.0)
 
-###  4.350. <a name='CherryPickup'></a>741. Cherry Pickup
+###  3.418. <a name='CherryPickup'></a>741. Cherry Pickup
 
 [花花酱](https://www.bilibili.com/video/BV1tW41167jy?spm_id_from=333.999.0.0)
 
-###  4.351. <a name='NetworkDelayTime'></a>743. Network Delay Time
+###  3.419. <a name='NetworkDelayTime'></a>743. Network Delay Time
 
 [花花酱](https://www.bilibili.com/video/BV1UW411r7S8?spm_id_from=333.999.0.0)
 
-###  4.352. <a name='PrefixandSuffixSearch'></a>745. Prefix and Suffix Search
+###  3.420. <a name='PrefixandSuffixSearch'></a>745. Prefix and Suffix Search
 
 [花花酱](https://www.bilibili.com/video/BV1TW411k7PY?spm_id_from=333.999.0.0)
 
-###  4.353. <a name='MinCostClimbingStairs'></a>746. Min Cost Climbing Stairs
+###  3.421. <a name='MinCostClimbingStairs'></a>746. Min Cost Climbing Stairs
 
 [7:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
 [花花酱](https://www.bilibili.com/video/BV1VW411y7Dq?spm_id_from=333.999.0.0)
 
-###  4.354. <a name='ShortestCompletingWord'></a>748. Shortest Completing Word
+###  3.422. <a name='ShortestCompletingWord'></a>748. Shortest Completing Word
 
 [花花酱](https://www.bilibili.com/video/BV15W411y7sJ?spm_id_from=333.999.0.0)
 
-###  4.355. <a name='OpentheLock'></a>752. Open the Lock
+###  3.423. <a name='OpentheLock'></a>752. Open the Lock
 
 [花花酱](https://www.bilibili.com/video/BV1NW411y74z?spm_id_from=333.999.0.0)
 
-###  4.356. <a name='PartitionLabels'></a>763 Partition Labels
+###  3.424. <a name='PartitionLabels'></a>763 Partition Labels
 
 [小明](https://www.bilibili.com/video/BV1Ca4y177LW?spm_id_from=333.999.0.0)
 
-###  4.357. <a name='CouplesHoldingHands'></a>765. 情侣牵手 Couples Holding Hands
+###  3.425. <a name='CouplesHoldingHands'></a>765. 情侣牵手 Couples Holding Hands
 
 [官方](https://www.bilibili.com/video/BV1pv411Y7wX?spm_id_from=333.999.0.0)
 
-###  4.358. <a name='MaxChunksToMakeSorted'></a>769. Max Chunks To Make Sorted
+###  3.426. <a name='MaxChunksToMakeSorted'></a>769. Max Chunks To Make Sorted
 
 [花花酱](https://www.bilibili.com/video/BV1LW411C7nD?spm_id_from=333.999.0.0)
 
-###  4.359. <a name='JewelsandStones'></a>771 Jewels and Stones
+###  3.427. <a name='JewelsandStones'></a>771 Jewels and Stones
 
 [小明](https://www.bilibili.com/video/BV1RC4y1W7yH?spm_id_from=333.999.0.0)
 
-###  4.360. <a name='SlidingPuzzle'></a>773. Sliding Puzzle
+###  3.428. <a name='SlidingPuzzle'></a>773. Sliding Puzzle
 
 [花花酱](https://www.bilibili.com/video/BV1PW411o7g4?spm_id_from=333.999.0.0)
 
-###  4.361. <a name='GlobalandLocalInversions'></a>775. Global and Local Inversions
+###  3.429. <a name='GlobalandLocalInversions'></a>775. Global and Local Inversions
 
 [花花酱](https://www.bilibili.com/video/BV1JW411d75t?spm_id_from=333.999.0.0)
 
-###  4.362. <a name='SwiminRisingWater'></a>778. Swim in Rising Water
+###  3.430. <a name='SwiminRisingWater'></a>778. Swim in Rising Water
 
 [花花酱](https://www.bilibili.com/video/BV1ab411k7TH?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1kv4y1f7to?spm_id_from=333.999.0.0)
 
-###  4.363. <a name='LetterCasePermutation'></a>784. Letter Case Permutation
+###  3.431. <a name='LetterCasePermutation'></a>784. Letter Case Permutation
 
 [花花酱](https://www.bilibili.com/video/BV1wW411o7WK?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Sv411a7Gx?spm_id_from=333.999.0.0)
 
-###  4.364. <a name='-1'></a>785-判断二分图
+###  3.432. <a name='-1'></a>785-判断二分图
 
 [哈哈哈](https://www.bilibili.com/video/BV1KQ4y1N72Z?spm_id_from=333.999.0.0)
 
@@ -23288,163 +23288,163 @@ object Solution2 {
 
 [官方](https://www.bilibili.com/video/BV1254y1i7Ut?spm_id_from=333.999.0.0)
 
-###  4.365. <a name='K-thSmallestPrimeFraction'></a>786. K-th Smallest Prime Fraction
+###  3.433. <a name='K-thSmallestPrimeFraction'></a>786. K-th Smallest Prime Fraction
 
 [花花酱](https://www.bilibili.com/video/BV1AW411o7oi?spm_id_from=333.999.0.0)
 
-###  4.366. <a name='CheapestFlightsWithinKStops'></a>787. Cheapest Flights Within K Stops
+###  3.434. <a name='CheapestFlightsWithinKStops'></a>787. Cheapest Flights Within K Stops
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7wc?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1DZ4y1H7oH?spm_id_from=333.999.0.0)
 
-###  4.367. <a name='DominoandTrominoTiling'></a>790. Domino and Tromino Tiling
+###  3.435. <a name='DominoandTrominoTiling'></a>790. Domino and Tromino Tiling
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7AW?spm_id_from=333.999.0.0)
 
-###  4.368. <a name='NumberofMatchingSubsequences'></a>792. Number of Matching Subsequences
+###  3.436. <a name='NumberofMatchingSubsequences'></a>792. Number of Matching Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7Af?spm_id_from=333.999.0.0)
 
-###  4.369. <a name='AllPathsFromSourcetoTarget'></a>797 All Paths From Source to Target
+###  3.437. <a name='AllPathsFromSourcetoTarget'></a>797 All Paths From Source to Target
 
 [小明](https://www.bilibili.com/video/BV1qa4y1E7sg?spm_id_from=333.999.0.0)
 
-###  4.370. <a name='ChampagneTower'></a>799 Champagne Tower
+###  3.438. <a name='ChampagneTower'></a>799 Champagne Tower
 
 [小明](https://www.bilibili.com/video/BV1Da411A7u5?spm_id_from=333.999.0.0)
 
-###  4.371. <a name='MinimumSwapsToMakeSequencesIncreasing'></a>801. Minimum Swaps To Make Sequences Increasing
+###  3.439. <a name='MinimumSwapsToMakeSequencesIncreasing'></a>801. Minimum Swaps To Make Sequences Increasing
 
 [花花酱](https://www.bilibili.com/video/BV1FW411o7tL?spm_id_from=333.999.0.0) 
 
-###  4.372. <a name='BricksFallingWhenHit'></a>803. Bricks Falling When Hit 
+###  3.440. <a name='BricksFallingWhenHit'></a>803. Bricks Falling When Hit 
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7kA?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Xv411W74B?spm_id_from=333.999.0.0)
 
-###  4.373. <a name='UniqueMorseCodeWords'></a>804 Unique Morse Code Words
+###  3.441. <a name='UniqueMorseCodeWords'></a>804 Unique Morse Code Words
 
 [小明](https://www.bilibili.com/video/BV1RD4y1Q7AM?spm_id_from=333.999.0.0)
 
-###  4.374. <a name='LargestSumofAverages'></a>813. Largest Sum of Averages
+###  3.442. <a name='LargestSumofAverages'></a>813. Largest Sum of Averages
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d7RB?spm_id_from=333.999.0.0)
 
-###  4.375. <a name='BusRoutes'></a>815. Bus Routes
+###  3.443. <a name='BusRoutes'></a>815. Bus Routes
 
 [花花酱](https://www.bilibili.com/video/BV1QW411d794?spm_id_from=333.999.0.0)
 
-###  4.376. <a name='LinkedListComponents'></a>817. Linked List Components
+###  3.444. <a name='LinkedListComponents'></a>817. Linked List Components
 
 [花花酱](https://www.bilibili.com/video/BV1cW411o7Eu?spm_id_from=333.999.0.0)
 
-###  4.377. <a name='RaceCar'></a>818. Race Car (上)
+###  3.445. <a name='RaceCar'></a>818. Race Car (上)
 
 [花花酱](https://www.bilibili.com/video/BV1cW411o7Tb?spm_id_from=333.999.0.0)
 
-###  4.378. <a name='ShortestDistancetoaCharacter'></a>821 Shortest Distance to a Character
+###  3.446. <a name='ShortestDistancetoaCharacter'></a>821 Shortest Distance to a Character
 
 [小明](https://www.bilibili.com/video/BV1gy4y1Y784?spm_id_from=333.999.0.0)
 
-###  4.379. <a name='BinaryTreesWithFactors'></a>823. Binary Trees With Factors
+###  3.447. <a name='BinaryTreesWithFactors'></a>823. Binary Trees With Factors
 
 [花花酱](https://www.bilibili.com/video/BV1CW411d7RX?spm_id_from=333.999.0.0)
 
-###  4.380. <a name='GoatLatin'></a>824 Goat Latin
+###  3.448. <a name='GoatLatin'></a>824 Goat Latin
 
 [小明](https://www.bilibili.com/video/BV1Th411o782?spm_id_from=333.999.0.0)
 
-###  4.381. <a name='MakingALargeIsland'></a>827. Making A Large Island
+###  3.449. <a name='MakingALargeIsland'></a>827. Making A Large Island
 
 [花花酱](https://www.bilibili.com/video/BV1mW411d7rc?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Cg4117727?spm_id_from=333.999.0.0)
 
-###  4.382. <a name='FlippinganImage'></a>832 Flipping an Image
+###  3.450. <a name='FlippinganImage'></a>832 Flipping an Image
 
 [小明](https://www.bilibili.com/video/BV1q54y1r7f3?spm_id_from=333.999.0.0)
 
-###  4.383. <a name='ImageOverlap'></a>835 Image Overlap
+###  3.451. <a name='ImageOverlap'></a>835 Image Overlap
 
 [小明](https://www.bilibili.com/video/BV1NK4y1a7Yf?spm_id_from=333.999.0.0)
 
-###  4.384. <a name='New21Game'></a>837. 新 21 点 New 21 Game
+###  3.452. <a name='New21Game'></a>837. 新 21 点 New 21 Game
 
 [官方](https://www.bilibili.com/video/BV1Sz4y197cA?spm_id_from=333.999.0.0)
 
-###  4.385. <a name='KeysandRooms'></a>841 Keys and Rooms
+###  3.453. <a name='KeysandRooms'></a>841 Keys and Rooms
 
 [小明](https://www.bilibili.com/video/BV1Wb4y1Q7hE?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV1HK411F7JQ?spm_id_from=333.999.0.0)
 
-###  4.386. <a name='SplitArrayintoFibonacciSequence'></a>842. Split Array into Fibonacci Sequence
+###  3.454. <a name='SplitArrayintoFibonacciSequence'></a>842. Split Array into Fibonacci Sequence
 
 [花花酱](https://www.bilibili.com/video/BV1ZJ411H7t4?spm_id_from=333.999.0.0)
 
-###  4.387. <a name='BackspaceStringCompare'></a>844 Backspace String Compare
+###  3.455. <a name='BackspaceStringCompare'></a>844 Backspace String Compare
 
 [小明](https://www.bilibili.com/video/BV1aC4y1s7LK?spm_id_from=333.999.0.0)
 
-###  4.388. <a name='LongestMountaininArray'></a>845 Longest Mountain in Array
+###  3.456. <a name='LongestMountaininArray'></a>845 Longest Mountain in Array
 
 [小明](https://www.bilibili.com/video/BV1zi4y1L7yV?spm_id_from=333.999.0.0)
 
-###  4.389. <a name='ShortestPathVisitingAllNodes'></a>847 Shortest Path Visiting All Nodes
+###  3.457. <a name='ShortestPathVisitingAllNodes'></a>847 Shortest Path Visiting All Nodes
 
 [花花酱](https://www.bilibili.com/video/BV1hW411d7MU?spm_id_from=333.999.0.0)
 
-###  4.390. <a name='MaximizeDistancetoClosestPerson'></a>849 Maximize Distance to Closest Person
+###  3.458. <a name='MaximizeDistancetoClosestPerson'></a>849 Maximize Distance to Closest Person
 
 [小明](https://www.bilibili.com/video/BV1ZZ4y1G7iT?spm_id_from=333.999.0.0)
 
-###  4.391. <a name='ScoreofParentheses'></a>856. Score of Parentheses
+###  3.459. <a name='ScoreofParentheses'></a>856. Score of Parentheses
 
 [花花酱](https://www.bilibili.com/video/BV1bW411d7gp?spm_id_from=333.999.0.0)
 
-###  4.392. <a name='MirrorReflection'></a>858 Mirror Reflection
+###  3.460. <a name='MirrorReflection'></a>858 Mirror Reflection
 
 [小明](https://www.bilibili.com/video/BV1av411r7MW?spm_id_from=333.999.0.0)
 
-###  4.393. <a name='BuddyStrings'></a>859 Buddy Strings
+###  3.461. <a name='BuddyStrings'></a>859 Buddy Strings
 
 [小明](https://www.bilibili.com/video/BV1nz4y1o7Wo?spm_id_from=333.999.0.0)
 
-###  4.394. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
+###  3.462. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
 
-###  4.395. <a name='ShortestPathtoGetAllKeys'></a>864. Shortest Path to Get All Keys
+###  3.463. <a name='ShortestPathtoGetAllKeys'></a>864. Shortest Path to Get All Keys
 
 [花花酱](https://www.bilibili.com/video/BV1LW411d7th?spm_id_from=333.999.0.0)
 
-###  4.396. <a name='ReorderedPowerof2'></a>869 Reordered Power of 2
+###  3.464. <a name='ReorderedPowerof2'></a>869 Reordered Power of 2
 
 [小明](https://www.bilibili.com/video/BV1M64y1D78v?spm_id_from=333.999.0.0)
 
-###  4.397. <a name='SmallestSubtreewithalltheDeepestNodes'></a>865. Smallest Subtree with all the Deepest Nodes
+###  3.465. <a name='SmallestSubtreewithalltheDeepestNodes'></a>865. Smallest Subtree with all the Deepest Nodes
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7ZR?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1CV41187ZA?spm_id_from=333.999.0.0)
 
-###  4.398. <a name='MinimumNumberofRefuelingStops'></a>871. Minimum Number of Refueling Stops
+###  3.466. <a name='MinimumNumberofRefuelingStops'></a>871. Minimum Number of Refueling Stops
 
 [花花酱](https://www.bilibili.com/video/BV1JW411d7VK?spm_id_from=333.999.0.0)
 
-###  4.399. <a name='LengthofLongestFibonacciSubsequence'></a>873. Length of Longest Fibonacci Subsequence
+###  3.467. <a name='LengthofLongestFibonacciSubsequence'></a>873. Length of Longest Fibonacci Subsequence
 
 [花花酱](https://www.bilibili.com/video/BV1jW411d79H?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1ab411i7wx?spm_id_from=333.999.0.0)
 
-###  4.400. <a name='KokoEatingBananas'></a>875.Koko Eating Bananas科科吃香蕉
+###  3.468. <a name='KokoEatingBananas'></a>875.Koko Eating Bananas科科吃香蕉
 
 [图灵](https://www.bilibili.com/video/BV1iV411s7eU?spm_id_from=333.999.0.0)
 
-###  4.401. <a name='MiddleoftheLinkedList'></a>876.Middle of the Linked List 链表的中间结点
+###  3.469. <a name='MiddleoftheLinkedList'></a>876.Middle of the Linked List 链表的中间结点
 
 [图灵](https://www.bilibili.com/video/BV1Kv411p7vf?spm_id_from=333.999.0.0)
 
@@ -23452,259 +23452,259 @@ object Solution2 {
 
 [官方](https://www.bilibili.com/video/BV1aK411T74X?spm_id_from=333.999.0.0)
 
-###  4.402. <a name='StoneGame'></a>877 Stone Game
+###  3.470. <a name='StoneGame'></a>877 Stone Game
 
 [花花酱](https://www.bilibili.com/video/BV1mW411Z7Hr?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1xq4y1Q7uL?spm_id_from=333.999.0.0)
 
-###  4.403. <a name='ProfitableSchemes'></a>879. Profitable Schemes
+###  3.471. <a name='ProfitableSchemes'></a>879. Profitable Schemes
 
 [花花酱](https://www.bilibili.com/video/BV1mW411Z7Jt?spm_id_from=333.999.0.0)
 
-###  4.404. <a name='DecodedStringatIndex'></a>880 Decoded String at Index
+###  3.472. <a name='DecodedStringatIndex'></a>880 Decoded String at Index
 
 [小明](https://www.bilibili.com/video/BV1Tt4y1k7GJ?spm_id_from=333.999.0.0)
 
-###  4.405. <a name='BoatstoSavePeople'></a>881 Boats to Save People
+###  3.473. <a name='BoatstoSavePeople'></a>881 Boats to Save People
 
 [小明](https://www.bilibili.com/video/BV1MT4y1K7yq?spm_id_from=333.999.0.0)
 
-###  4.406. <a name='ReachableNodesInSubdividedGraph'></a>882. Reachable Nodes In Subdivided Graph
+###  3.474. <a name='ReachableNodesInSubdividedGraph'></a>882. Reachable Nodes In Subdivided Graph
 
 [花花酱](https://www.bilibili.com/video/BV11W411Z71N?spm_id_from=333.999.0.0)
 
-###  4.407. <a name='PossibleBipartition'></a>886. Possible Bipartition
+###  3.475. <a name='PossibleBipartition'></a>886. Possible Bipartition
 
 [花花酱](https://www.bilibili.com/video/BV1DW411Z7G6?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1FT4y1g77u?spm_id_from=333.999.0.0)
 
-###  4.408. <a name='SuperEggDrop'></a>887. Super Egg Drop
+###  3.476. <a name='SuperEggDrop'></a>887. Super Egg Drop
 
 [花花酱](https://www.bilibili.com/video/BV1Tv411i7cP?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1ri4y1t78d?spm_id_from=333.999.0.0)
 
-###  4.409. <a name='ConstructBinaryTreefromPreorderandPostorder'></a>889. Construct Binary Tree from Preorder and Postorder
+###  3.477. <a name='ConstructBinaryTreefromPreorderandPostorder'></a>889. Construct Binary Tree from Preorder and Postorder
 
 [花花酱](https://www.bilibili.com/video/BV1DW411Z7Qi?spm_id_from=333.999.0.0)
 
-###  4.410. <a name='SumofSubsequenceWidths'></a>891. Sum of Subsequence Widths
+###  3.478. <a name='SumofSubsequenceWidths'></a>891. Sum of Subsequence Widths
 
 [花花酱](https://www.bilibili.com/video/BV1DW411Z7Yv?spm_id_from=333.999.0.0)
 
-###  4.411. <a name='AllPossibleFullBinaryTrees'></a>894. All Possible Full Binary Trees
+###  3.479. <a name='AllPossibleFullBinaryTrees'></a>894. All Possible Full Binary Trees
 
 [花花酱](https://www.bilibili.com/video/BV1rW411Z7Sb?spm_id_from=333.999.0.0)
 
-###  4.412. <a name='MaximumFrequencyStack'></a>895. Maximum Frequency Stack
+###  3.480. <a name='MaximumFrequencyStack'></a>895. Maximum Frequency Stack
 
 [花花酱](https://www.bilibili.com/video/BV1rW411Z7Hp?spm_id_from=333.999.0.0)
 
-###  4.413. <a name='BitwiseORsofSubarrays'></a>898. Bitwise ORs of Subarrays
+###  3.481. <a name='BitwiseORsofSubarrays'></a>898. Bitwise ORs of Subarrays
 
 [花花酱](https://www.bilibili.com/video/BV1kW411Z7HV?spm_id_from=333.999.0.0)
 
-###  4.414. <a name='OnlineStockSpan'></a>901. Online Stock Span
+###  3.482. <a name='OnlineStockSpan'></a>901. Online Stock Span
 
 [花花酱](https://www.bilibili.com/video/BV1kW411k77K?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Jg4y1B74H?spm_id_from=333.999.0.0)
 
-###  4.415. <a name='NumbersAtMostNGivenDigitSet'></a>902 Numbers At Most N Given Digit Set
+###  3.483. <a name='NumbersAtMostNGivenDigitSet'></a>902 Numbers At Most N Given Digit Set
 
 [小明](https://www.bilibili.com/video/BV19A411j7Wf?spm_id_from=333.999.0.0)
 
-###  4.416. <a name='-1'></a>904-水果成篮
+###  3.484. <a name='-1'></a>904-水果成篮
 
 [哈哈哈](https://www.bilibili.com/video/BV19i4y1M7Xn?spm_id_from=333.999.0.0)
 
-###  4.417. <a name='SortArrayByParity'></a>905 Sort Array By Parity
+###  3.485. <a name='SortArrayByParity'></a>905 Sort Array By Parity
 
 [小明](https://www.bilibili.com/video/BV1Xk4y117rK?spm_id_from=333.999.0.0)
 
-###  4.418. <a name='SuperPalindromes'></a>906 Super Palindromes
+###  3.486. <a name='SuperPalindromes'></a>906 Super Palindromes
 
 [小明](https://www.bilibili.com/video/BV1LA41157Wf?spm_id_from=333.999.0.0)
 
-###  4.419. <a name='SnakesandLadders'></a>909. Snakes and Ladders
+###  3.487. <a name='SnakesandLadders'></a>909. Snakes and Ladders
 
 [小梦想家](https://www.bilibili.com/video/BV1cy4y1W7u9?spm_id_from=333.999.0.0)
 
-###  4.420. <a name='SmallestRangeII'></a>910 Smallest Range II
+###  3.488. <a name='SmallestRangeII'></a>910 Smallest Range II
 
 [小明](https://www.bilibili.com/video/BV1p5411H7mS?spm_id_from=333.999.0.0)
 
-###  4.421. <a name='WordSubsetse'></a>916 Word Subsetse
+###  3.489. <a name='WordSubsetse'></a>916 Word Subsetse
 
 [小明](https://www.bilibili.com/video/BV1vh411S7r3?spm_id_from=333.999.0.0)
 
-###  4.422. <a name='MaximumSumCircularSub'></a>918 Maximum Sum Circular Sub
+###  3.490. <a name='MaximumSumCircularSub'></a>918 Maximum Sum Circular Sub
 
 [小明](https://www.bilibili.com/video/BV1c5411s7jZ?spm_id_from=333.999.0.0)
 
-###  4.423. <a name='SumWithMultiplicity'></a>923. 3Sum With Multiplicity 
+###  3.491. <a name='SumWithMultiplicity'></a>923. 3Sum With Multiplicity 
 
 [花花酱](https://www.bilibili.com/video/BV14t411o7QT?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Pv41187sq?spm_id_from=333.999.0.0)
 
-###  4.424. <a name='FlipStringtoMonotoneIncreasing'></a>926. Flip String to Monotone Increasing
+###  3.492. <a name='FlipStringtoMonotoneIncreasing'></a>926. Flip String to Monotone Increasing
 
 [花花酱](https://www.bilibili.com/video/BV1ft411R7qv?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Vh411i7Wg?spm_id_from=333.999.0.0)
 
-###  4.425. <a name='-1'></a>930-和相同的二元子数组(滑动窗口+前缀和)
+###  3.493. <a name='-1'></a>930-和相同的二元子数组(滑动窗口+前缀和)
 
 [哈哈哈](https://www.bilibili.com/video/BV1iy4y1T7M3?spm_id_from=333.999.0.0)
 
-###  4.426. <a name='NumberofRecentCalls'></a>933 Number of Recent Calls
+###  3.494. <a name='NumberofRecentCalls'></a>933 Number of Recent Calls
 
 [小明](https://www.bilibili.com/video/BV1gA41177jm?spm_id_from=333.999.0.0)
 
-###  4.427. <a name='ShortestBridge'></a>934. Shortest Bridge
+###  3.495. <a name='ShortestBridge'></a>934. Shortest Bridge
 
 [花花酱](https://www.bilibili.com/video/BV19t411y7rL?spm_id_from=333.999.0.0)
 
-###  4.428. <a name='StampingTheSequence'></a>936 Stamping The Sequence
+###  3.496. <a name='StampingTheSequence'></a>936 Stamping The Sequence
 
 [小明](https://www.bilibili.com/video/BV1d64y1D7fq?spm_id_from=333.999.0.0)
 
-###  4.429. <a name='RangeSumofBST'></a>938 Range Sum of BST
+###  3.497. <a name='RangeSumofBST'></a>938 Range Sum of BST
 
 [小明](https://www.bilibili.com/video/BV1WV411a7VR?spm_id_from=333.999.0.0)
 
-###  4.430. <a name='ValidMountainArray'></a>941 Valid Mountain Array
+###  3.498. <a name='ValidMountainArray'></a>941 Valid Mountain Array
 
 [小明](https://www.bilibili.com/video/BV1n5411G7qs?spm_id_from=333.999.0.0)
 
-###  4.431. <a name='FindtheShortestSuperstring'></a>943. Find the Shortest Superstring
+###  3.499. <a name='FindtheShortestSuperstring'></a>943. Find the Shortest Superstring
 
 [花花酱](https://www.bilibili.com/video/BV1yt411171k?spm_id_from=333.999.0.0)
 
-###  4.432. <a name='Python-'></a>946-Python-栈的压入、弹出序列
+###  3.500. <a name='Python-'></a>946-Python-栈的压入、弹出序列
 
 [哈哈哈](https://www.bilibili.com/video/BV1JD4y1o7ZD?spm_id_from=333.999.0.0)
 
-###  4.433. <a name='ValidateStackSequences'></a>946 Validate Stack Sequences
+###  3.501. <a name='ValidateStackSequences'></a>946 Validate Stack Sequences
 
 [小明](https://www.bilibili.com/video/BV1fz4y1y7rS?spm_id_from=333.999.0.0)
 
-###  4.434. <a name='MostStonesRemovedwithSame'></a>947. 移除最多的同行或同列石头 Most Stones Removed with Same
+###  3.502. <a name='MostStonesRemovedwithSame'></a>947. 移除最多的同行或同列石头 Most Stones Removed with Same
 
 [官方](https://www.bilibili.com/video/BV1Nr4y1K7Gj?spm_id_from=333.999.0.0)
 
-###  4.435. <a name='BagofTokens'></a>948 Bag of Tokens
+###  3.503. <a name='BagofTokens'></a>948 Bag of Tokens
 
 [小明](https://www.bilibili.com/video/BV1MK411P7K6?spm_id_from=333.999.0.0)
 
-###  4.436. <a name='LargestTimeforGivenDigits'></a>949 Largest Time for Given Digits
+###  3.504. <a name='LargestTimeforGivenDigits'></a>949 Largest Time for Given Digits
 
 [小明](https://www.bilibili.com/video/BV13v41117QS?spm_id_from=333.999.0.0)
 
-###  4.437. <a name='LargestComponentSizebyCommo'></a>952 Largest Component Size by Commo
+###  3.505. <a name='LargestComponentSizebyCommo'></a>952 Largest Component Size by Commo
 
 [小明](https://www.bilibili.com/video/BV1oK4y1h7Jt?spm_id_from=333.999.0.0)
 
-###  4.438. <a name='VerifyinganAlienDictionary'></a>953 Verifying an Alien Dictionary
+###  3.506. <a name='VerifyinganAlienDictionary'></a>953 Verifying an Alien Dictionary
 
 [小明](https://www.bilibili.com/video/BV1C64y1S7tT?spm_id_from=333.999.0.0)
 
-###  4.439. <a name='ArrayofDoubledPairs'></a>954 Array of Doubled Pairs
+###  3.507. <a name='ArrayofDoubledPairs'></a>954 Array of Doubled Pairs
 
 [小明](https://www.bilibili.com/video/BV1Hq4y1S7xR?spm_id_from=333.999.0.0)
 
-###  4.440. <a name='RegionsCutBySlashes'></a>959. 由斜杠划分区域 Regions Cut By Slashes
+###  3.508. <a name='RegionsCutBySlashes'></a>959. 由斜杠划分区域 Regions Cut By Slashes
 
 [官方](https://www.bilibili.com/video/BV1Ry4y117HD?spm_id_from=333.999.0.0)
 
-###  4.441. <a name='LeastOperatorstoExpressNumber'></a>964. Least Operators to Express Number
+###  3.509. <a name='LeastOperatorstoExpressNumber'></a>964. Least Operators to Express Number
 
 [花花酱](https://www.bilibili.com/video/BV1Pt411k7qn?spm_id_from=333.999.0.0)
 
-###  4.442. <a name='VowelSpellchecker'></a>966 Vowel Spellchecker
+###  3.510. <a name='VowelSpellchecker'></a>966 Vowel Spellchecker
 
 [小明](https://www.bilibili.com/video/BV1oK4y1T7kR?spm_id_from=333.999.0.0)
 
-###  4.443. <a name='NumbersWithSameConsecutiveDifferences'></a>967. Numbers With Same Consecutive Differences
+###  3.511. <a name='NumbersWithSameConsecutiveDifferences'></a>967. Numbers With Same Consecutive Differences
 
 [花花酱](https://www.bilibili.com/video/BV1gt411B7oG?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1f5411L7r4?spm_id_from=333.999.0.0)
 
-###  4.444. <a name='BinaryTreeCameras'></a>968 Binary Tree Cameras
+###  3.512. <a name='BinaryTreeCameras'></a>968 Binary Tree Cameras
 
 [小明](https://www.bilibili.com/video/BV1Q5411u72B?spm_id_from=333.999.0.0)
 
-###  4.445. <a name='PancakeSorting'></a>969 Pancake Sorting
+###  3.513. <a name='PancakeSorting'></a>969 Pancake Sorting
 
 [小明](https://www.bilibili.com/video/BV1hk4y127yJ?spm_id_from=333.999.0.0)
 
-###  4.446. <a name='FlipBinaryTreeToMatchPreorder'></a>971 Flip Binary Tree To Match Preorder
+###  3.514. <a name='FlipBinaryTreeToMatchPreorder'></a>971 Flip Binary Tree To Match Preorder
 
 [小明](https://www.bilibili.com/video/BV1NB4y1P7qL?spm_id_from=333.999.0.0)
 
-###  4.447. <a name='KClosestPointstoOrigin'></a>973 K Closest Points to Origin
+###  3.515. <a name='KClosestPointstoOrigin'></a>973 K Closest Points to Origin
 
 [小明](https://www.bilibili.com/video/BV1Vf4y1278J?spm_id_from=333.999.0.0)
 
-###  4.448. <a name='KSubarraySumsDivisiblebyK'></a>974. 和可被 K 整除的子数组 Subarray Sums Divisible by K 
+###  3.516. <a name='KSubarraySumsDivisiblebyK'></a>974. 和可被 K 整除的子数组 Subarray Sums Divisible by K 
 
 [官方](https://www.bilibili.com/video/BV19z4y1X79a?spm_id_from=333.999.0.0)
 
-###  4.449. <a name='OddEvenJump'></a>975. Odd Even Jump
+###  3.517. <a name='OddEvenJump'></a>975. Odd Even Jump
 
 [花花酱](https://www.bilibili.com/video/BV1pt411p7M4?spm_id_from=333.999.0.0)
 
-###  4.450. <a name='MiddleoftheLinkedList-1'></a>976 Middle of the Linked List
+###  3.518. <a name='MiddleoftheLinkedList-1'></a>976 Middle of the Linked List
 
 [小明](https://www.bilibili.com/video/BV1N5411t7Xm?spm_id_from=333.999.0.0)
 
-###  4.451. <a name='SquaresofaSortedArray'></a>977 Squares of a Sorted Array
+###  3.519. <a name='SquaresofaSortedArray'></a>977 Squares of a Sorted Array
 
 [小明](https://www.bilibili.com/video/BV1EX4y1u7Mb?spm_id_from=333.999.0.0)
 
-###  4.452. <a name='LongestTurbulentSubarray'></a>978. 最长湍流子数组 Longest Turbulent Subarray 
+###  3.520. <a name='LongestTurbulentSubarray'></a>978. 最长湍流子数组 Longest Turbulent Subarray 
 
 [官方](https://www.bilibili.com/video/BV1PV411i73Y?spm_id_from=333.999.0.0)
 
-###  4.453. <a name='UniquePathsIII'></a>980. Unique Paths III 
+###  3.521. <a name='UniquePathsIII'></a>980. Unique Paths III 
 
 [花花酱](https://www.bilibili.com/video/BV1yt41187Si?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1oK4y1a7Qp?spm_id_from=333.999.0.0)
 
-###  4.454. <a name='MinimumCostForTickets'></a>983 Minimum Cost For Tickets
+###  3.522. <a name='MinimumCostForTickets'></a>983 Minimum Cost For Tickets
 
 [小明](https://www.bilibili.com/video/BV1Wz4y1f7hG?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1WK4y1t7pP?spm_id_from=333.999.0.0)
 
-###  4.455. <a name='IntervalListIntersections'></a>986 Interval List Intersections
+###  3.523. <a name='IntervalListIntersections'></a>986 Interval List Intersections
 
 [小明](https://www.bilibili.com/video/BV1wg4y1z7Xz?spm_id_from=333.999.0.0)
 
-###  4.456. <a name='VerticalOrderTraversalofaBinary'></a>987 Vertical Order Traversal of a Binary
+###  3.524. <a name='VerticalOrderTraversalofaBinary'></a>987 Vertical Order Traversal of a Binary
 
 [小明](https://www.bilibili.com/video/BV1yZ4y1M7CL?spm_id_from=333.999.0.0)
 
-###  4.457. <a name='SatisfiabilityofEqualityEquations'></a>990. 等式方程的可满足性 Satisfiability of Equality Equations 
+###  3.525. <a name='SatisfiabilityofEqualityEquations'></a>990. 等式方程的可满足性 Satisfiability of Equality Equations 
 
 [官方](https://www.bilibili.com/video/BV1gz411i7kD?spm_id_from=333.999.0.0)
 
-###  4.458. <a name='K-1'></a>992-K 个不同整数的子数组
+###  3.526. <a name='K-1'></a>992-K 个不同整数的子数组
 
 [哈哈哈](https://www.bilibili.com/video/BV1t44y1q7th?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1xy4y1Y7GL?spm_id_from=333.999.0.0)
 
-###  4.459. <a name='-1'></a>993. 二叉树的堂兄弟节点
+###  3.527. <a name='-1'></a>993. 二叉树的堂兄弟节点
 
 [小明](https://www.bilibili.com/video/BV17t4y11725?spm_id_from=333.999.0.0)
 
-###  4.460. <a name='-1'></a>994-腐烂的橘子
+###  3.528. <a name='-1'></a>994-腐烂的橘子
 
 [哈哈哈](https://www.bilibili.com/video/BV1Yp4y1D7Kg?spm_id_from=333.999.0.0)
 
@@ -23712,173 +23712,173 @@ object Solution2 {
 
 [小明](https://www.bilibili.com/video/BV1Qk4y1m7fz?spm_id_from=333.999.0.0)
 
-###  4.461. <a name='-1'></a>993, 994, 995, 996
+###  3.529. <a name='-1'></a>993, 994, 995, 996
 
 [花花酱](https://www.bilibili.com/video/BV1bb41117PB?spm_id_from=333.999.0.0)
 
-###  4.462. <a name='FindtheTownJudge'></a>997 Find the Town Judge
+###  3.530. <a name='FindtheTownJudge'></a>997 Find the Town Judge
 
 [小明](https://www.bilibili.com/video/BV1Ka4y1i7Qt?spm_id_from=333.999.0.0)
 
-###  4.463. <a name='MinimumCosttoMergeStones'></a>1000. Minimum Cost to Merge Stones
+###  3.531. <a name='MinimumCosttoMergeStones'></a>1000. Minimum Cost to Merge Stones
 
 [花花酱](https://www.bilibili.com/video/BV1db411v7DG?spm_id_from=333.999.0.0)
 
-###  4.464. <a name='GridIllumination'></a>1001 Grid Illumination
+###  3.532. <a name='GridIllumination'></a>1001 Grid Illumination
 
 [小明](https://www.bilibili.com/video/BV1NT4y1V7Vk?spm_id_from=333.999.0.0)
 
-###  4.465. <a name='III-1'></a>1004-最大连续1的个数 III
+###  3.533. <a name='III-1'></a>1004-最大连续1的个数 III
 
 [哈哈哈](https://www.bilibili.com/video/BV1Zg411L7Qu?spm_id_from=333.999.0.0)
 
-###  4.466. <a name='MinimumDominoRotationsForEq'></a>1007 Minimum Domino Rotations For Eq
+###  3.534. <a name='MinimumDominoRotationsForEq'></a>1007 Minimum Domino Rotations For Eq
 
 [小明](https://www.bilibili.com/video/BV1br4y1w7TM?spm_id_from=333.999.0.0)
 
-###  4.467. <a name='ConstructBinarySearchTreefrom'></a>1008 Construct Binary Search Tree from
+###  3.535. <a name='ConstructBinarySearchTreefrom'></a>1008 Construct Binary Search Tree from
 
 [小明](https://www.bilibili.com/video/BV1yk4y1R7oF?spm_id_from=333.999.0.0)
 
-###  4.468. <a name='ComplementofBase10Integer'></a>1009 Complement of Base 10 Integer
+###  3.536. <a name='ComplementofBase10Integer'></a>1009 Complement of Base 10 Integer
 
 [小明](https://www.bilibili.com/video/BV1oK4y187ZM?spm_id_from=333.999.0.0)
 
-###  4.469. <a name='PairsofSongsWithTotalDurations'></a>1010 Pairs of Songs With Total Durations 
+###  3.537. <a name='PairsofSongsWithTotalDurations'></a>1010 Pairs of Songs With Total Durations 
 
 [小明](https://www.bilibili.com/video/BV1t64y1f7hc?spm_id_from=333.999.0.0)
 
-###  4.470. <a name='PartitionArrayIntoThreePartsWithEqu'></a>1013. 将数组分成和相等的三个部分 Partition Array Into Three Parts With Equ
+###  3.538. <a name='PartitionArrayIntoThreePartsWithEqu'></a>1013. 将数组分成和相等的三个部分 Partition Array Into Three Parts With Equ
 
 [官方](https://www.bilibili.com/video/BV1ZK4y1t7Sf?spm_id_from=333.999.0.0)
 
-###  4.471. <a name='SmallestIntegerDivisiblebyK'></a>1015 Smallest Integer Divisible by K
+###  3.539. <a name='SmallestIntegerDivisiblebyK'></a>1015 Smallest Integer Divisible by K
 
 [小明](https://www.bilibili.com/video/BV1PZ4y1G7iU?spm_id_from=333.999.0.0)
 
-###  4.472. <a name='NextGreaterNodeInLinkedList'></a>1019. Next Greater Node In Linked List
+###  3.540. <a name='NextGreaterNodeInLinkedList'></a>1019. Next Greater Node In Linked List
 
 [花花酱](https://www.bilibili.com/video/BV12b411s77J?spm_id_from=333.999.0.0)
 
-###  4.473. <a name='SumofRootToLeafBinaryNumbers'></a>1022 Sum of Root To Leaf Binary Numbers
+###  3.541. <a name='SumofRootToLeafBinaryNumbers'></a>1022 Sum of Root To Leaf Binary Numbers
 
 [小明](https://www.bilibili.com/video/BV11A411E7AN?spm_id_from=333.999.0.0)
 
-###  4.474. <a name='-1'></a>1025,1026,1027,1028
+###  3.542. <a name='-1'></a>1025,1026,1027,1028
 
 [花花酱](https://www.bilibili.com/video/BV1Nb411j7qr?spm_id_from=333.999.0.0)
 
-###  4.475. <a name='VideoStitching'></a>1024. Video Stitching
+###  3.543. <a name='VideoStitching'></a>1024. Video Stitching
 
 [花花酱](https://www.bilibili.com/video/BV1kb411u7Qk?spm_id_from=333.999.0.0)
 
-###  4.476. <a name='MaximumDifferenceBetweenNod'></a>1026 Maximum Difference Between Nod
+###  3.544. <a name='MaximumDifferenceBetweenNod'></a>1026 Maximum Difference Between Nod
 
 [小明](https://www.bilibili.com/video/BV1fi4y157ZS?spm_id_from=333.999.0.0)
 
-###  4.477. <a name='TwoCityScheduling'></a>1029 Two City Scheduling
+###  3.545. <a name='TwoCityScheduling'></a>1029 Two City Scheduling
 
 [小明](https://www.bilibili.com/video/BV1t54y1Q7G8?spm_id_from=333.999.0.0)
 
-###  4.478. <a name='StreamofCharacters'></a>1032 Stream of Characters
+###  3.546. <a name='StreamofCharacters'></a>1032 Stream of Characters
 
 [小明](https://www.bilibili.com/video/BV15T4y1L7RG?spm_id_from=333.999.0.0)
 
-###  4.479. <a name='UncrossedLines'></a>1035 Uncrossed Lines
+###  3.547. <a name='UncrossedLines'></a>1035 Uncrossed Lines
 
 [小明](https://www.bilibili.com/video/BV1si4y1s79e?spm_id_from=333.999.0.0)
 
-###  4.480. <a name='RobotBoundedInCircle'></a>1041 Robot Bounded In Circle
+###  3.548. <a name='RobotBoundedInCircle'></a>1041 Robot Bounded In Circle
 
 [小明](https://www.bilibili.com/video/BV1dk4y1y7RH?spm_id_from=333.999.0.0)
 
-###  4.481. <a name='PartitionArrayforMaximumSum'></a>1043. Partition Array for Maximum Sum
+###  3.549. <a name='PartitionArrayforMaximumSum'></a>1043. Partition Array for Maximum Sum
 
 [花花酱](https://www.bilibili.com/video/BV154411J7so?spm_id_from=333.999.0.0)
 
-###  4.482. <a name='LongestDuplicateSubstring'></a>1044 Longest Duplicate Substring
+###  3.550. <a name='LongestDuplicateSubstring'></a>1044 Longest Duplicate Substring
 
 [小明](https://www.bilibili.com/video/BV1Kv411B7a3?spm_id_from=333.999.0.0)
 
-###  4.483. <a name='LastStoneWeight'></a>1046 Last Stone Weight
+###  3.551. <a name='LastStoneWeight'></a>1046 Last Stone Weight
 
 [小明](https://www.bilibili.com/video/BV1w54y197Ln?spm_id_from=333.999.0.0)
 
-###  4.484. <a name='LongestStringChain'></a>1048 Longest String Chain
+###  3.552. <a name='LongestStringChain'></a>1048 Longest String Chain
 
 [小明](https://www.bilibili.com/video/BV17K4y1G7et?spm_id_from=333.999.0.0)
 
 
 
-###  4.485. <a name='ShortestWaytoFormString'></a>1055.Shortest Way to Form String 形成字符串的最短路径
+###  3.553. <a name='ShortestWaytoFormString'></a>1055.Shortest Way to Form String 形成字符串的最短路径
 
 [图灵](https://www.bilibili.com/video/BV1SZ4y1G7WX?spm_id_from=333.999.0.0)
 
-###  4.486. <a name='-1'></a>1091-二进制矩阵中的最短路径
+###  3.554. <a name='-1'></a>1091-二进制矩阵中的最短路径
 
 [哈哈哈](https://www.bilibili.com/video/BV17k4y1r7EP?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1ro4y197kU?spm_id_from=333.999.0.0)
 
-###  4.487. <a name='CarPooling'></a>1094 Car Pooling
+###  3.555. <a name='CarPooling'></a>1094 Car Pooling
 
 [小明](https://www.bilibili.com/video/BV1Xk4y1k7UX?spm_id_from=333.999.0.0)
 
-###  4.488. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
+###  3.556. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
 
 [花花酱](https://www.bilibili.com/video/BV1m5411V7x7?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1GK4115778?spm_id_from=333.999.0.0)
 
-###  4.489. <a name='FillingBookcaseShelves'></a>1105. Filling Bookcase Shelves
+###  3.557. <a name='FillingBookcaseShelves'></a>1105. Filling Bookcase Shelves
 
 [花花酱](https://www.bilibili.com/video/BV1Mx411X7Ks?spm_id_from=333.999.0.0)
 
-###  4.490. <a name='ParsingABooleanExpression'></a>1106. Parsing A Boolean Expression
+###  3.558. <a name='ParsingABooleanExpression'></a>1106. Parsing A Boolean Expression
 
 [花花酱](https://www.bilibili.com/video/BV1Cx411X7aF?spm_id_from=333.999.0.0)
 
-###  4.491. <a name='DeleteNodesAndReturnForest'></a>1110. Delete Nodes And Return Forest
+###  3.559. <a name='DeleteNodesAndReturnForest'></a>1110. Delete Nodes And Return Forest
 
 [花花酱](https://www.bilibili.com/video/BV1u4411977H?spm_id_from=333.999.0.0)
 
-###  4.492. <a name='MaximumNestingDepthofTwoValidParentheses'></a>1111. 有效括号的嵌套深度 Maximum Nesting Depth of Two Valid Parentheses
+###  3.560. <a name='MaximumNestingDepthofTwoValidParentheses'></a>1111. 有效括号的嵌套深度 Maximum Nesting Depth of Two Valid Parentheses
 
 [官方](https://www.bilibili.com/video/BV11a4y1v7Bb?spm_id_from=333.999.0.0)
 
-###  4.493. <a name='threading'></a>1114 - 1115 - 1116 - 多线程 threading
+###  3.561. <a name='threading'></a>1114 - 1115 - 1116 - 多线程 threading
 
 [花花酱](https://www.bilibili.com/video/BV12t411P79a?spm_id_from=333.999.0.0)
 
-###  4.494. <a name='LowestCommonAncestorofDeepestLeaves'></a>1123.Lowest Common Ancestor of Deepest Leaves最深叶节点的最近公共祖
+###  3.562. <a name='LowestCommonAncestorofDeepestLeaves'></a>1123.Lowest Common Ancestor of Deepest Leaves最深叶节点的最近公共祖
 
 [小明](https://www.bilibili.com/video/BV16f4y1q7eA?spm_id_from=333.999.0.0)
 
-###  4.495. <a name='LongestWell-PerformingInterval'></a>1124. Longest Well-Performing Interval
+###  3.563. <a name='LongestWell-PerformingInterval'></a>1124. Longest Well-Performing Interval
 
 [花花酱](https://www.bilibili.com/video/BV1Et41157Jw?spm_id_from=333.999.0.0)
 
-###  4.496. <a name='SmallestSufficientTeam'></a>1125. Smallest Sufficient Team
+###  3.564. <a name='SmallestSufficientTeam'></a>1125. Smallest Sufficient Team
 
 [花花酱](https://www.bilibili.com/video/BV14t411G7WL?spm_id_from=333.999.0.0)
 
-###  4.497. <a name='NumberofEquivalentDominoPairs'></a>1128. 等价多米诺骨牌对的数量 Number of Equivalent Domino Pairs
+###  3.565. <a name='NumberofEquivalentDominoPairs'></a>1128. 等价多米诺骨牌对的数量 Number of Equivalent Domino Pairs
 
 [官方](https://www.bilibili.com/video/BV1fV411q7ZY?spm_id_from=333.999.0.0)
 
-###  4.498. <a name='ShortestPathwithAlternatingColors'></a>1129. Shortest Path with Alternating Colors
+###  3.566. <a name='ShortestPathwithAlternatingColors'></a>1129. Shortest Path with Alternating Colors
 
 [花花酱](https://www.bilibili.com/video/BV1Et411J7Dh?spm_id_from=333.999.0.0)
 
-###  4.499. <a name='N-thTribonacciNumber'></a>1137. N-th Tribonacci Number
+###  3.567. <a name='N-thTribonacciNumber'></a>1137. N-th Tribonacci Number
 
 [3:55 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
-###  4.500. <a name='StoneGameII'></a>1140. Stone Game II
+###  3.568. <a name='StoneGameII'></a>1140. Stone Game II
 
 [花花酱](https://www.bilibili.com/video/BV1Gt411c7hM?spm_id_from=333.999.0.0)
 
-###  4.501. <a name='LongestCommonSubsequence'></a>1143 Longest Common Subsequence
+###  3.569. <a name='LongestCommonSubsequence'></a>1143 Longest Common Subsequence
 
 [小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
 
@@ -23918,143 +23918,143 @@ package lc1143{
 
 ```
 
-###  4.502. <a name='BinaryTreeColoringGame'></a>1145. Binary Tree Coloring Game
+###  3.570. <a name='BinaryTreeColoringGame'></a>1145. Binary Tree Coloring Game
 
 [花花酱](https://www.bilibili.com/video/BV1ft411K7Gf?spm_id_from=333.999.0.0)
 
-###  4.503. <a name='NumberofDiceRollsWithTargetSum'></a>1155. Number of Dice Rolls With Target Sum
+###  3.571. <a name='NumberofDiceRollsWithTargetSum'></a>1155. Number of Dice Rolls With Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1t4411Q7JN?spm_id_from=333.999.0.0)
 
-###  4.504. <a name='FindWordsThatCanBeFormedbyCharacters'></a>1160. 拼写单词 Find Words That Can Be Formed by Characters 
+###  3.572. <a name='FindWordsThatCanBeFormedbyCharacters'></a>1160. 拼写单词 Find Words That Can Be Formed by Characters 
 
 [官方](https://www.bilibili.com/video/BV1Lt4y1Q7Yx?spm_id_from=333.999.0.0)
 
-###  4.505. <a name='DinnerPlateStacks'></a>1172. Dinner Plate Stacks
+###  3.573. <a name='DinnerPlateStacks'></a>1172. Dinner Plate Stacks
 
 [花花酱](https://www.bilibili.com/video/BV1E4411z7xb?spm_id_from=333.999.0.0)
 
-###  4.506. <a name='NumberofValidWordsforEachPuzzle'></a>1178. Number of Valid Words for Each Puzzle
+###  3.574. <a name='NumberofValidWordsforEachPuzzle'></a>1178. Number of Valid Words for Each Puzzle
 
 [花花酱](https://www.bilibili.com/video/BV1x441117vz?spm_id_from=333.999.0.0)
 
-###  4.507. <a name='MakeArrayStrictlyIncreasing'></a>1187. Make Array Strictly Increasing
+###  3.575. <a name='MakeArrayStrictlyIncreasing'></a>1187. Make Array Strictly Increasing
 
 [花花酱](https://www.bilibili.com/video/BV1sJ411N7jD?spm_id_from=333.999.0.0)
 
-###  4.508. <a name='K-ConcatenationMaximumSum'></a>1191. K-Concatenation Maximum Sum
+###  3.576. <a name='K-ConcatenationMaximumSum'></a>1191. K-Concatenation Maximum Sum
 
 [花花酱](https://www.bilibili.com/video/BV1AJ411w756?spm_id_from=333.999.0.0)
 
-###  4.509. <a name='UglyNumberIII'></a>1201. Ugly Number III
+###  3.577. <a name='UglyNumberIII'></a>1201. Ugly Number III
 
 [花花酱](https://www.bilibili.com/video/BV1QJ411M7Jx?spm_id_from=333.999.0.0)
 
-###  4.510. <a name='SmallestStringWithSwaps'></a>1202. Smallest String With Swaps
+###  3.578. <a name='SmallestStringWithSwaps'></a>1202. Smallest String With Swaps
 
 [花花酱](https://www.bilibili.com/video/BV1PJ411T7Wq?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Yh41127VH?spm_id_from=333.999.0.0)
 
-###  4.511. <a name='SortItemsbyGroupsRespectingDependencies'></a>1203. 项目管理 Sort Items by Groups Respecting Dependencies
+###  3.579. <a name='SortItemsbyGroupsRespectingDependencies'></a>1203. 项目管理 Sort Items by Groups Respecting Dependencies
 
 [官方](https://www.bilibili.com/video/BV1iy4y1m7ye?spm_id_from=333.999.0.0)
 
-###  4.512. <a name='DesignSkiplist'></a>1206. Design Skiplist 
+###  3.580. <a name='DesignSkiplist'></a>1206. Design Skiplist 
 
 [花花酱](https://www.bilibili.com/video/BV1kT4y1F7Nr?spm_id_from=333.999.0.0)
 
-###  4.513. <a name='RemoveAllAdjacentDuplicatesin'></a>1209 Remove All Adjacent Duplicates in 
+###  3.581. <a name='RemoveAllAdjacentDuplicatesin'></a>1209 Remove All Adjacent Duplicates in 
 
 [小明](https://www.bilibili.com/video/BV1qA411L7z9?spm_id_from=333.999.0.0)
 
-###  4.514. <a name='MinimumCosttoMoveChips'></a>1217 Minimum Cost to Move Chips
+###  3.582. <a name='MinimumCosttoMoveChips'></a>1217 Minimum Cost to Move Chips
 
 [小明](https://www.bilibili.com/video/BV1zt4y1e7fK?spm_id_from=333.999.0.0)
 
-###  4.515. <a name='LongestArithmeticSubsequenceofGivenDifference'></a>1218. Longest Arithmetic Subsequence of Given Difference
+###  3.583. <a name='LongestArithmeticSubsequenceofGivenDifference'></a>1218. Longest Arithmetic Subsequence of Given Difference
 
 [花花酱](https://www.bilibili.com/video/BV1tE411f73y?spm_id_from=333.999.0.0)
 
-###  4.516. <a name='CountVowelsPermutation'></a>1220. Count Vowels Permutation
+###  3.584. <a name='CountVowelsPermutation'></a>1220. Count Vowels Permutation
 
 [花花酱](https://www.bilibili.com/video/BV1FJ411c7pT?spm_id_from=333.999.0.0)
 
-###  4.517. <a name='DiceRollSimulation'></a>1223 Dice Roll Simulation
+###  3.585. <a name='DiceRollSimulation'></a>1223 Dice Roll Simulation
 
 [花花酱](https://www.bilibili.com/video/BV17E411k7PR?spm_id_from=333.999.0.0)
 
-###  4.518. <a name='TilingaRectanglewiththeFewestSquares'></a>1240 Tiling a Rectangle with the Fewest Squares
+###  3.586. <a name='TilingaRectanglewiththeFewestSquares'></a>1240 Tiling a Rectangle with the Fewest Squares
 
 [花花酱](https://www.bilibili.com/video/BV1UE411t7Gb?spm_id_from=333.999.0.0)
 
-###  4.519. <a name='-1'></a>1248-统计「优美子数组」
+###  3.587. <a name='-1'></a>1248-统计「优美子数组」
 
 [哈哈哈](https://www.bilibili.com/video/BV1FU4y1H76T?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Wk4y1r7t7?spm_id_from=333.999.0.0)
 
-###  4.520. <a name='MinimumRemovetoMakeValidPare'></a>1249 Minimum Remove to Make Valid Pare
+###  3.588. <a name='MinimumRemovetoMakeValidPare'></a>1249 Minimum Remove to Make Valid Pare
 
 [小明](https://www.bilibili.com/video/BV1wK4y1X7G7?spm_id_from=333.999.0.0)
 
-###  4.521. <a name='-1'></a>1252 1253 1254 1255
+###  3.589. <a name='-1'></a>1252 1253 1254 1255
 
 [花花酱](https://www.bilibili.com/video/BV1kE411Y7rg?spm_id_from=333.999.0.0)
 
-###  4.522. <a name='MinimumMovestoMoveaBoxtoTheirTarget'></a>1263. Minimum Moves to Move a Box to Their Target
+###  3.590. <a name='MinimumMovestoMoveaBoxtoTheirTarget'></a>1263. Minimum Moves to Move a Box to Their Target
 
 [花花酱](https://www.bilibili.com/video/BV1AJ411Q7B6?spm_id_from=333.999.0.0)
 
-###  4.523. <a name='-1'></a>1277-统计全为1的正方形子矩阵
+###  3.591. <a name='-1'></a>1277-统计全为1的正方形子矩阵
 
 [哈哈哈](https://www.bilibili.com/video/BV1nk4y1k7vi?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Kp4y1X7n4?spm_id_from=333.999.0.0)
 
-###  4.524. <a name='PalindromePartitioningIII'></a>1278. Palindrome Partitioning III
+###  3.592. <a name='PalindromePartitioningIII'></a>1278. Palindrome Partitioning III
 
 [花花酱](https://www.bilibili.com/video/BV1HJ411q7nc?spm_id_from=333.999.0.0)
 
-###  4.525. <a name='FindtheSmallestDivisorGivena'></a>1283 Find the Smallest Divisor Given a
+###  3.593. <a name='FindtheSmallestDivisorGivena'></a>1283 Find the Smallest Divisor Given a
 
 [小明](https://www.bilibili.com/video/BV1Fv411r7Nw?spm_id_from=333.999.0.0)
 
-###  4.526. <a name='MinimumNumberofFlipstoConvertBinaryMatrix'></a>1284. Minimum Number of Flips to Convert Binary Matrix
+###  3.594. <a name='MinimumNumberofFlipstoConvertBinaryMatrix'></a>1284. Minimum Number of Flips to Convert Binary Matrix
 
 [花花酱](https://www.bilibili.com/video/BV1nJ411y7m1?spm_id_from=333.999.0.0)
 
-###  4.527. <a name='ConvertBinaryNumberinaLinkedList'></a>1290. 二进制链表转整数 (Convert Binary Number in a Linked List
+###  3.595. <a name='ConvertBinaryNumberinaLinkedList'></a>1290. 二进制链表转整数 (Convert Binary Number in a Linked List
 
 [洛阳](https://www.bilibili.com/video/BV1kc411h7Rs?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1nD4y1R7QH?spm_id_from=333.999.0.0)
 
-###  4.528. <a name='SequentialDigits'></a>1291 Sequential Digits
+###  3.596. <a name='SequentialDigits'></a>1291 Sequential Digits
 
 [小明](https://www.bilibili.com/video/BV11v411C7so?spm_id_from=333.999.0.0)
 
-###  4.529. <a name='ShortestPathinaGridwithObstaclesElimination'></a>1293. Shortest Path in a Grid with Obstacles Elimination
+###  3.597. <a name='ShortestPathinaGridwithObstaclesElimination'></a>1293. Shortest Path in a Grid with Obstacles Elimination
 
 [花花酱](https://www.bilibili.com/video/BV1VJ411k72A?spm_id_from=333.999.0.0)
 
-###  4.530. <a name='DivideArrayinSetsofKConsecutiveNumbers'></a>1296. Divide Array in Sets of K Consecutive Numbers
+###  3.598. <a name='DivideArrayinSetsofKConsecutiveNumbers'></a>1296. Divide Array in Sets of K Consecutive Numbers
 
 [花花酱](https://www.bilibili.com/video/BV1gJ411e7cS?spm_id_from=333.999.0.0)
 
-###  4.531. <a name='NumberofPathswithMaxScore'></a>1301. Number of Paths with Max Score
+###  3.599. <a name='NumberofPathswithMaxScore'></a>1301. Number of Paths with Max Score
 
 [花花酱](https://www.bilibili.com/video/BV1pJ411a7ry?spm_id_from=333.999.0.0)
 
-###  4.532. <a name='DeepestLeavesSum'></a>1302 Deepest Leaves Sum
+###  3.600. <a name='DeepestLeavesSum'></a>1302 Deepest Leaves Sum
 
 [小明](https://www.bilibili.com/video/BV1Bb4y1D7Cp?spm_id_from=333.999.0.0)
 
-###  4.533. <a name='AllElementsinTwoBinarySearch'></a>1305 All Elements in Two Binary Search
+###  3.601. <a name='AllElementsinTwoBinarySearch'></a>1305 All Elements in Two Binary Search
 
 [小明](https://www.bilibili.com/video/BV1kK411N7az?spm_id_from=333.999.0.0)
 
-###  4.534. <a name='JumpGameIII'></a>1306 Jump Game III
+###  3.602. <a name='JumpGameIII'></a>1306 Jump Game III
 
 [小明](https://www.bilibili.com/video/BV13y4y1q7Gi?spm_id_from=333.999.0.0)
 
@@ -24223,43 +24223,43 @@ class Solution:
         return False
 ```
 
-###  4.535. <a name='XORQueriesofaSubarray'></a>1310. XOR Queries of a Subarray
+###  3.603. <a name='XORQueriesofaSubarray'></a>1310. XOR Queries of a Subarray
 
 [花花酱](https://www.bilibili.com/video/BV1oJ411L78Y?spm_id_from=333.999.0.0)
 
-###  4.536. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. Minimum Insertion Steps to Make a String Palindrom
+###  3.604. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. Minimum Insertion Steps to Make a String Palindrom
 
 [花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
 
-###  4.537. <a name='MinimumDistancetoTypeaWordUsingTwoFinger'></a>1320. Minimum Distance to Type a Word Using Two Finger
+###  3.605. <a name='MinimumDistancetoTypeaWordUsingTwoFinger'></a>1320. Minimum Distance to Type a Word Using Two Finger
 
 [花花酱](https://www.bilibili.com/video/BV11J411n7fN?spm_id_from=333.999.0.0)
 
-###  4.538. <a name='SorttheMatrixDiagonally'></a>1329 Sort the Matrix Diagonally
+###  3.606. <a name='SorttheMatrixDiagonally'></a>1329 Sort the Matrix Diagonally
 
 [小明](https://www.bilibili.com/video/BV1hU4y147b1?spm_id_from=333.999.0.0)
 
-###  4.539. <a name='RemovePalindromicSubsequences'></a>1332 Remove Palindromic Subsequences
+###  3.607. <a name='RemovePalindromicSubsequences'></a>1332 Remove Palindromic Subsequences
 
 [小明](https://www.bilibili.com/video/BV1tK4y1D7aV?spm_id_from=333.999.0.0)
 
-###  4.540. <a name='FindtheCityWithSmallestNumberofNeighbors'></a>1334. Find the City With Smallest Number of Neighbors
+###  3.608. <a name='FindtheCityWithSmallestNumberofNeighbors'></a>1334. Find the City With Smallest Number of Neighbors
 
 [花花酱](https://www.bilibili.com/video/BV1b7411z7Tb?spm_id_from=333.999.0.0)
 
-###  4.541. <a name='MinimumDifficultyofaJobSchedule'></a>1335. Minimum Difficulty of a Job Schedule
+###  3.609. <a name='MinimumDifficultyofaJobSchedule'></a>1335. Minimum Difficulty of a Job Schedule
 
 [花花酱](https://www.bilibili.com/video/BV1K7411r7xj?spm_id_from=333.999.0.0)
 
-###  4.542. <a name='TheKWeakestRowsinaMatrix'></a>1337 The K Weakest Rows in a Matrix
+###  3.610. <a name='TheKWeakestRowsinaMatrix'></a>1337 The K Weakest Rows in a Matrix
 
 [小明](https://www.bilibili.com/video/BV1bX4y157ju?spm_id_from=333.999.0.0)
 
-###  4.543. <a name='MaximumProductofSplitt'></a>1339 Maximum Product of Splitt
+###  3.611. <a name='MaximumProductofSplitt'></a>1339 Maximum Product of Splitt
 
 [小明](https://www.bilibili.com/video/BV1Ch411i7yS?spm_id_from=333.999.0.0)
 
-###  4.544. <a name='JumpGameV'></a>1340. Jump Game V
+###  3.612. <a name='JumpGameV'></a>1340. Jump Game V
 
 [花花酱](https://www.bilibili.com/video/BV1h7411W7wS?spm_id_from=333.999.0.0)
 
@@ -24417,377 +24417,377 @@ class Solution:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-###  4.545. <a name='MaximumStudentsTakingExam'></a>1349. Maximum Students Taking Exam
+###  3.613. <a name='MaximumStudentsTakingExam'></a>1349. Maximum Students Taking Exam
 
 [花花酱](https://www.bilibili.com/video/BV1w7411V7eC?spm_id_from=333.999.0.0)
 
-###  4.546. <a name='MaximumNumberofEventsThatCanBeAttended'></a>1353. Maximum Number of Events That Can Be Attended 
+###  3.614. <a name='MaximumNumberofEventsThatCanBeAttended'></a>1353. Maximum Number of Events That Can Be Attended 
 
 [花花酱](https://www.bilibili.com/video/BV1C7411j7YJ?spm_id_from=333.999.0.0)
 
-###  4.547. <a name='ConstructTargetArrayWithMultipleSums'></a>1354. Construct Target Array With Multiple Sums
+###  3.615. <a name='ConstructTargetArrayWithMultipleSums'></a>1354. Construct Target Array With Multiple Sums
 
 [花花酱](https://www.bilibili.com/video/BV1g7411c793?spm_id_from=333.999.0.0)
 
-###  4.548. <a name='MinimumCosttoMakeatLeastOneValidPath'></a>1368. Minimum Cost to Make at Least One Valid Path
+###  3.616. <a name='MinimumCosttoMakeatLeastOneValidPath'></a>1368. Minimum Cost to Make at Least One Valid Path
 
 [花花酱](https://www.bilibili.com/video/BV1oE411E74t?spm_id_from=333.999.0.0)
 
-###  4.549. <a name='FindtheLongestSubstringContainingVowelsinEve'></a>1371. Find the Longest Substring Containing Vowels in Eve
+###  3.617. <a name='FindtheLongestSubstringContainingVowelsinEve'></a>1371. Find the Longest Substring Containing Vowels in Eve
 
 [花花酱](https://www.bilibili.com/video/BV1CE411K7hb?spm_id_from=333.999.0.0)
 
-###  4.550. <a name='MaximumSumBSTinBinaryTree'></a>1373. Maximum Sum BST in Binary Tree
+###  3.618. <a name='MaximumSumBSTinBinaryTree'></a>1373. Maximum Sum BST in Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV17E411u797?spm_id_from=333.999.0.0)
 
-###  4.551. <a name='FrogPositionAfterTSeconds'></a>1377. Frog Position After T Seconds
+###  3.619. <a name='FrogPositionAfterTSeconds'></a>1377. Frog Position After T Seconds
 
 [花花酱](https://www.bilibili.com/video/BV1mE411K7vc?spm_id_from=333.999.0.0)
 
-###  4.552. <a name='FindCorrespondingNodeofBinaryTreeinaClone'></a>1379 Find Corresponding Node of Binary Tree in a Clone
+###  3.620. <a name='FindCorrespondingNodeofBinaryTreeinaClone'></a>1379 Find Corresponding Node of Binary Tree in a Clone
 
 [小明](https://www.bilibili.com/video/BV1A54y147HN?spm_id_from=333.999.0.0)
 
-###  4.553. <a name='BalanceaBinarySearchTree'></a>1382. Balance a Binary Search Tree
+###  3.621. <a name='BalanceaBinarySearchTree'></a>1382. Balance a Binary Search Tree
 
 [花花酱](https://www.bilibili.com/video/BV1y7411f7v2?spm_id_from=333.999.0.0)
 
-###  4.554. <a name='CountNumberofTeams'></a>1395. Count Number of Teams
+###  3.622. <a name='CountNumberofTeams'></a>1395. Count Number of Teams
 
 [花花酱](https://www.bilibili.com/video/BV1cc411h73E?spm_id_from=333.999.0.0)
 
-###  4.555. <a name='DesignUndergroundSystem'></a>1396 Design Underground System
+###  3.623. <a name='DesignUndergroundSystem'></a>1396 Design Underground System
 
 [小明](https://www.bilibili.com/video/BV1uA411N7q6?spm_id_from=333.999.0.0)
 
-###  4.556. <a name='StoneGameIII'></a>1406. Stone Game III
+###  3.624. <a name='StoneGameIII'></a>1406. Stone Game III
 
 [花花酱](https://www.bilibili.com/video/BV1zT4y1G7Tb?spm_id_from=333.999.0.0)
 
-###  4.557. <a name='QueriesonaPermutationWithKey'></a>1409. Queries on a Permutation With Key
+###  3.625. <a name='QueriesonaPermutationWithKey'></a>1409. Queries on a Permutation With Key
 
 [花花酱](https://www.bilibili.com/video/BV1mz411b7Uw?spm_id_from=333.999.0.0)
 
-###  4.558. <a name='RestoreTheArray'></a>1416. Restore The Array
+###  3.626. <a name='RestoreTheArray'></a>1416. Restore The Array
 
 [花花酱](https://www.bilibili.com/video/BV1gK4y1k7Rv?spm_id_from=333.999.0.0)
 
-###  4.559. <a name='DiagonalTraverseII'></a>1424. Diagonal Traverse II
+###  3.627. <a name='DiagonalTraverseII'></a>1424. Diagonal Traverse II
 
 [花花酱](https://www.bilibili.com/video/BV1r5411x7Tm?spm_id_from=333.999.0.0)
 
-###  4.560. <a name='ConstrainedSubsetSum'></a>1425. Constrained Subset Sum
+###  3.628. <a name='ConstrainedSubsetSum'></a>1425. Constrained Subset Sum
 
 [花花酱](https://www.bilibili.com/video/BV13t4y1m7fD?spm_id_from=333.999.0.0)
 
-###  4.561. <a name='CountingElements'></a>1426  Counting Elements
+###  3.629. <a name='CountingElements'></a>1426  Counting Elements
 
 [小明](https://www.bilibili.com/video/BV1Eg4y187vx?spm_id_from=333.999.0.0)
 
-###  4.562. <a name='KidsWiththeGreatestNumberofCandie'></a>1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie
+###  3.630. <a name='KidsWiththeGreatestNumberofCandie'></a>1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie
 
 [官方](https://www.bilibili.com/video/BV1vD4y1D7yo?spm_id_from=333.999.0.0)
 
-###  4.563. <a name='CheckIfAll1sAreatLeastLength'></a>1437 Check If All 1's Are at Least Length
+###  3.631. <a name='CheckIfAll1sAreatLeastLength'></a>1437 Check If All 1's Are at Least Length
 
 [小明](https://www.bilibili.com/video/BV1Yo4y1R78P?spm_id_from=333.999.0.0)
 
-###  4.564. <a name='LongestContinuousSubarrayWithAbsolute'></a>1438. Longest Continuous Subarray With Absolute
+###  3.632. <a name='LongestContinuousSubarrayWithAbsolute'></a>1438. Longest Continuous Subarray With Absolute
 
 [花花酱](https://www.bilibili.com/video/BV1Cf4y1m7aN?spm_id_from=333.999.0.0)
 
-###  4.565. <a name='BuildanArrayWithStackOperations'></a>1441 Build an Array With Stack Operations
+###  3.633. <a name='BuildanArrayWithStackOperations'></a>1441 Build an Array With Stack Operations
 
 [小明](https://www.bilibili.com/video/BV1Gg4y167ZD?spm_id_from=333.999.0.0)
 
-###  4.566. <a name='CountTripletsThatCanFormTwoArraysofEqual'></a>1442. Count Triplets That Can Form Two Arrays of Equal
+###  3.634. <a name='CountTripletsThatCanFormTwoArraysofEqual'></a>1442. Count Triplets That Can Form Two Arrays of Equal
 
 [花花酱](https://www.bilibili.com/video/BV17g4y1B7yo?spm_id_from=333.999.0.0)
 
-###  4.567. <a name='MinimumTimetoCollectAllApplesinaTree'></a>1443. Minimum Time to Collect All Apples in a Tree
+###  3.635. <a name='MinimumTimetoCollectAllApplesinaTree'></a>1443. Minimum Time to Collect All Apples in a Tree
 
 [花花酱](https://www.bilibili.com/video/BV1e541147oZ?spm_id_from=333.999.0.0)
 
-###  4.568. <a name='NumberofWaysofCuttingaPizza'></a>1444. Number of Ways of Cutting a Pizza
+###  3.636. <a name='NumberofWaysofCuttingaPizza'></a>1444. Number of Ways of Cutting a Pizza
 
 [花花酱](https://www.bilibili.com/video/BV1CK411W7nR?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1gg4y1B7zS?spm_id_from=333.999.0.0)
 
-###  4.569. <a name='ConsecutiveCharacters'></a>1446 Consecutive Characters
+###  3.637. <a name='ConsecutiveCharacters'></a>1446 Consecutive Characters
 
 [小明](https://www.bilibili.com/video/BV1QA411j7Qt?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1pp4y1Q7Rh?spm_id_from=333.999.0.0)
 
-###  4.570. <a name='CountGoodNodesinBinaryTree'></a>1448 Count Good Nodes in Binary Tree
+###  3.638. <a name='CountGoodNodesinBinaryTree'></a>1448 Count Good Nodes in Binary Tree
 
 [小明](https://www.bilibili.com/video/BV1Zg4y1q7kc?spm_id_from=333.999.0.0)
 
-###  4.571. <a name='FormLargestIntegerWithDigitsThatAdd'></a>1449. Form Largest Integer With Digits That Add
+###  3.639. <a name='FormLargestIntegerWithDigitsThatAdd'></a>1449. Form Largest Integer With Digits That Add
 
 [花花酱](https://www.bilibili.com/video/BV19Q4y1A7Rf?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1j54y1D7vf?spm_id_from=333.999.0.0)
 
-###  4.572. <a name='RearrangeWordsinaSentence'></a>1451 Rearrange Words in a Sentence
+###  3.640. <a name='RearrangeWordsinaSentence'></a>1451 Rearrange Words in a Sentence
 
 [小明](https://www.bilibili.com/video/BV1UA411t7Eg?spm_id_from=333.999.0.0)
 
-###  4.573. <a name='MaximumNumberofDartsInsideofaCircularDartb'></a>1453 Maximum Number of Darts Inside of a Circular Dartb
+###  3.641. <a name='MaximumNumberofDartsInsideofaCircularDartb'></a>1453 Maximum Number of Darts Inside of a Circular Dartb
 
 [小明](https://www.bilibili.com/video/BV1Ut4y117jp?spm_id_from=333.999.0.0)
 
-###  4.574. <a name='Pseudo-PalindromicPathsinaBin'></a>1457 Pseudo-Palindromic Paths in a Bin
+###  3.642. <a name='Pseudo-PalindromicPathsinaBin'></a>1457 Pseudo-Palindromic Paths in a Bin
 
 [小明](https://www.bilibili.com/video/BV1t54y1t7KK?spm_id_from=333.999.0.0)
 
-###  4.575. <a name='CheckIfaStringContainsAllBinar'></a>1461 Check If a String Contains All Binar
+###  3.643. <a name='CheckIfaStringContainsAllBinar'></a>1461 Check If a String Contains All Binar
 
 [小明](https://www.bilibili.com/video/BV13Z4y1w7K9?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1oU4y1p7Tr?spm_id_from=333.999.0.0)
 
-###  4.576. <a name='CherryPickupII'></a>1463 Cherry Pickup II
+###  3.644. <a name='CherryPickupII'></a>1463 Cherry Pickup II
 
 [小明](https://www.bilibili.com/video/BV1AA411s7Tc?spm_id_from=333.999.0.0)
 
-###  4.577. <a name='PaintHouseIII'></a>1473. Paint House III
+###  3.645. <a name='PaintHouseIII'></a>1473. Paint House III
 
 [花花酱](https://www.bilibili.com/video/BV15K411p7nT?spm_id_from=333.999.0.0)
 
-###  4.578. <a name='FinalPricesWithaSpecialDiscountinaSho'></a>1475. Final Prices With a Special Discount in a Sho
+###  3.646. <a name='FinalPricesWithaSpecialDiscountinaSho'></a>1475. Final Prices With a Special Discount in a Sho
 
 [花花酱](https://www.bilibili.com/video/BV1na4y1Y7VU?spm_id_from=333.999.0.0)
 
-###  4.579. <a name='KthAncestorofaTreeNode'></a>1483. Kth Ancestor of a Tree Node
+###  3.647. <a name='KthAncestorofaTreeNode'></a>1483. Kth Ancestor of a Tree Node
 
 [花花酱](https://www.bilibili.com/video/BV1kt4y1X7fk?spm_id_from=333.999.0.0)
 
-###  4.580. <a name='AvoidFloodinTheCity'></a>1488. Avoid Flood in The City
+###  3.648. <a name='AvoidFloodinTheCity'></a>1488. Avoid Flood in The City
 
 [花花酱](https://www.bilibili.com/video/BV1af4y1y7uW?spm_id_from=333.999.0.0)
 
-##  5. <a name='FindCriticalandPseudo-CriticalEdgesin'></a>1489. Find Critical and Pseudo-Critical Edges in
+###  3.649. <a name='FindCriticalandPseudo-CriticalEdgesin'></a>1489. Find Critical and Pseudo-Critical Edges in
 
 [花花酱](https://www.bilibili.com/video/BV1cV41167oi?spm_id_from=333.999.0.0)
 
-###  5.1. <a name='ThekthFactorofn'></a>1492 The kth Factor of n
+###  3.650. <a name='ThekthFactorofn'></a>1492 The kth Factor of n
 
 [小明](https://www.bilibili.com/video/BV1ha4y1H7vz?spm_id_from=333.999.0.0)
 
-###  5.2. <a name='LongestSubarrayof1sAfterDeletingOne'></a>1493. Longest Subarray of 1's After Deleting One
+###  3.651. <a name='LongestSubarrayof1sAfterDeletingOne'></a>1493. Longest Subarray of 1's After Deleting One
 
 [花花酱](https://www.bilibili.com/video/BV1rC4y18751?spm_id_from=333.999.0.0)
 
-###  5.3. <a name='MaxValueofEquation'></a>1499. Max Value of Equation
+###  3.652. <a name='MaxValueofEquation'></a>1499. Max Value of Equation
 
 [花花酱](https://www.bilibili.com/video/BV1VK411H7zy?spm_id_from=333.999.0.0)
 
-###  5.4. <a name='CanMakeArithmeticProgressionFromSequence'></a>1502 Can Make Arithmetic Progression From Sequence
+###  3.653. <a name='CanMakeArithmeticProgressionFromSequence'></a>1502 Can Make Arithmetic Progression From Sequence
 
 [小明](https://www.bilibili.com/video/BV12T4y177vU?spm_id_from=333.999.0.0)
 
-###  5.5. <a name='LastMomentBeforeAllAntsFallOutofaPlank'></a>1503 Last Moment Before All Ants Fall Out of a Plank
+###  3.654. <a name='LastMomentBeforeAllAntsFallOutofaPlank'></a>1503 Last Moment Before All Ants Fall Out of a Plank
 
 [小明](https://www.bilibili.com/video/BV1Fg4y1i7na?spm_id_from=333.999.0.0)
 
-###  5.6. <a name='MinimumPossibleIntegerAfteratMostKAdjacent'></a>1505. Minimum Possible Integer After at Most K Adjacent
+###  3.655. <a name='MinimumPossibleIntegerAfteratMostKAdjacent'></a>1505. Minimum Possible Integer After at Most K Adjacent
 
 [花花酱](https://www.bilibili.com/video/BV1YD4y1S7BQ?spm_id_from=333.999.0.0)
 
-###  5.7. <a name='RangeSumofSortedSubarraySums'></a>1508. Range Sum of Sorted Subarray Sums
+###  3.656. <a name='RangeSumofSortedSubarraySums'></a>1508. Range Sum of Sorted Subarray Sums
 
 [花花酱](https://www.bilibili.com/video/BV1fg4y1v7qe?spm_id_from=333.999.0.0)
 
-###  5.8. <a name='StoneGameIV'></a>1510 Stone Game IV
+###  3.657. <a name='StoneGameIV'></a>1510 Stone Game IV
 
 [小明](https://www.bilibili.com/video/BV1pr4y1w7ao?spm_id_from=333.999.0.0)
 
-###  5.9. <a name='PathwithMaximumProbability'></a>1514 Path with Maximum Probability
+###  3.658. <a name='PathwithMaximumProbability'></a>1514 Path with Maximum Probability
 
 [小明](https://www.bilibili.com/video/BV1Ak4y1B7yR?spm_id_from=333.999.0.0)
 
-###  5.10. <a name='BestPositionforaServiceCentre'></a>1515 Best Position for a Service Centre
+###  3.659. <a name='BestPositionforaServiceCentre'></a>1515 Best Position for a Service Centre
 
 [小明](https://www.bilibili.com/video/BV1UA411e7PC?spm_id_from=333.999.0.0)
 
-###  5.11. <a name='MaximumNumberofNon-OverlappingSubstrings'></a>1520. Maximum Number of Non-Overlapping Substrings
+###  3.660. <a name='MaximumNumberofNon-OverlappingSubstrings'></a>1520. Maximum Number of Non-Overlapping Substrings
 
 [花花酱](https://www.bilibili.com/video/BV1yz4y1D7p3?spm_id_from=333.999.0.0)
 
-###  5.12. <a name='NumberofGoodLeafNodesPairs'></a>1530. Number of Good Leaf Nodes Pairs
+###  3.661. <a name='NumberofGoodLeafNodesPairs'></a>1530. Number of Good Leaf Nodes Pairs
 
 [花花酱](https://www.bilibili.com/video/BV1bv411q7SD?spm_id_from=333.999.0.0)
 
-###  5.13. <a name='StringCompressionII'></a>1531. String Compression II
+###  3.662. <a name='StringCompressionII'></a>1531. String Compression II
 
 [花花酱](https://www.bilibili.com/video/BV1aK4y1v7B9?spm_id_from=333.999.0.0)
 
-###  5.14. <a name='CountGoodTriplets'></a>1534 Count Good Triplets
+###  3.663. <a name='CountGoodTriplets'></a>1534 Count Good Triplets
 
 [小明](https://www.bilibili.com/video/BV11k4y1m7rV?spm_id_from=333.999.0.0)
 
-###  5.15. <a name='FindtheWinnerofanArrayGame'></a>1535 Find the Winner of an Array Game
+###  3.664. <a name='FindtheWinnerofanArrayGame'></a>1535 Find the Winner of an Array Game
 
 [小明](https://www.bilibili.com/video/BV1Xp4y1i7ey?spm_id_from=333.999.0.0)
 
-###  5.16. <a name='GettheMaximumScore'></a>1537. Get the Maximum Score
+###  3.665. <a name='GettheMaximumScore'></a>1537. Get the Maximum Score
 
 [小梦想家](https://www.bilibili.com/video/BV1KC4y1t7P8?spm_id_from=333.999.0.0)
 
-###  5.17. <a name='KthMissingPositiveNumber'></a>1539. Kth Missing Positive Number
+###  3.666. <a name='KthMissingPositiveNumber'></a>1539. Kth Missing Positive Number
 
 [小梦想家](https://www.bilibili.com/video/BV1SC4y147Eo?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1QK4y1p7E3?spm_id_from=333.999.0.0)
 
-###  5.18. <a name='FindLongestAwesomeSubstring'></a>1542. Find Longest Awesome Substring
+###  3.667. <a name='FindLongestAwesomeSubstring'></a>1542. Find Longest Awesome Substring
 
 [花花酱](https://www.bilibili.com/video/BV1ZD4y1U79Y?spm_id_from=333.999.0.0)
 
-###  5.19. <a name='MaximumNumberofNon-OverlappingSubarraysWithSum'></a>1546. Maximum Number of Non-Overlapping Subarrays With Sum
+###  3.668. <a name='MaximumNumberofNon-OverlappingSubarraysWithSum'></a>1546. Maximum Number of Non-Overlapping Subarrays With Sum
 
 [小梦想家](https://www.bilibili.com/video/BV1LA411n7L8?spm_id_from=333.999.0.0)
 
-###  5.20. <a name='ThreeConsecutiveOdds'></a>1550. Three Consecutive Odds
+###  3.669. <a name='ThreeConsecutiveOdds'></a>1550. Three Consecutive Odds
 
 [小梦想家](https://www.bilibili.com/video/BV1aV411m7fy?spm_id_from=333.999.0.0)
 
-###  5.21. <a name='MinimumOperationstoMakeArray'></a>1551 Minimum Operations to Make Array
+###  3.670. <a name='MinimumOperationstoMakeArray'></a>1551 Minimum Operations to Make Array
 
 [小明](https://www.bilibili.com/video/BV1u64y1S7fx?spm_id_from=333.999.0.0)
 
-###  5.22. <a name='MinimumNumberofDaystoEatNOranges'></a>1553. Minimum Number of Days to Eat N Oranges
+###  3.671. <a name='MinimumNumberofDaystoEatNOranges'></a>1553. Minimum Number of Days to Eat N Oranges
 
 [花花酱](https://www.bilibili.com/video/BV1Qf4y197Zk?spm_id_from=333.999.0.0)
 
-###  5.23. <a name='ThousandSeparator'></a>1556. Thousand Separator
+###  3.672. <a name='ThousandSeparator'></a>1556. Thousand Separator
 
 [小梦想家](https://www.bilibili.com/video/BV1Ka4y177HV?spm_id_from=333.999.0.0)
 
-###  5.24. <a name='MinimumNumbersofFunctionCallstoMakeTarget'></a>1558. Minimum Numbers of Function Calls to Make Target
+###  3.673. <a name='MinimumNumbersofFunctionCallstoMakeTarget'></a>1558. Minimum Numbers of Function Calls to Make Target
 
 [花花酱](https://www.bilibili.com/video/BV1xC4y1t7Q3?spm_id_from=333.999.0.0)
 
-###  5.25. <a name='StoneGameV'></a>1563. Stone Game V 
+###  3.674. <a name='StoneGameV'></a>1563. Stone Game V 
 
 [花花酱](https://www.bilibili.com/video/BV1B54y1U77f?spm_id_from=333.999.0.0)
 
-###  5.26. <a name='NumberofWaystoReorderArraytoGetSa'></a>1569. Number of Ways to Reorder Array to Get Sa
+###  3.675. <a name='NumberofWaystoReorderArraytoGetSa'></a>1569. Number of Ways to Reorder Array to Get Sa
 
 [花花酱](https://www.bilibili.com/video/BV1pZ4y1T7TY?spm_id_from=333.999.0.0)
 
-###  5.27. <a name='NumberofWaystoSplitaString'></a>1573. Number of Ways to Split a String
+###  3.676. <a name='NumberofWaystoSplitaString'></a>1573. Number of Ways to Split a String
 
 [花花酱](https://www.bilibili.com/video/BV1bi4y1u7c3?spm_id_from=333.999.0.0)
 
-###  5.28. <a name='CheckIfStringIsTransformableWith'></a>1585. Check If String Is Transformable With
+###  3.677. <a name='CheckIfStringIsTransformableWith'></a>1585. Check If String Is Transformable With
 
 [花花酱](https://www.bilibili.com/video/BV1a54y1m75Y?spm_id_from=333.999.0.0)
 
-###  5.29. <a name='SplitaStringIntotheMaxNumberofUniqueSubstri'></a>1593. Split a String Into the Max Number of Unique Substri
+###  3.678. <a name='SplitaStringIntotheMaxNumberofUniqueSubstri'></a>1593. Split a String Into the Max Number of Unique Substri
 
 [花花酱](https://www.bilibili.com/video/BV14y4y1k77x?spm_id_from=333.999.0.0) 
 
-###  5.30. <a name='MinimumCosttoConnectTwoGroupsofPoints'></a>1595. Minimum Cost to Connect Two Groups of Points
+###  3.679. <a name='MinimumCosttoConnectTwoGroupsofPoints'></a>1595. Minimum Cost to Connect Two Groups of Points
 
 [花花酱](https://www.bilibili.com/video/BV1Xf4y1D7SW?spm_id_from=333.999.0.0)
 
-###  5.31. <a name='NumberofSetsofKNon-OverlappingLine'></a>1621. Number of Sets of K Non-Overlapping Line
+###  3.680. <a name='NumberofSetsofKNon-OverlappingLine'></a>1621. Number of Sets of K Non-Overlapping Line
 
 [花花酱](https://www.bilibili.com/video/BV1JV411y7eK?spm_id_from=333.999.0.0)
 
-###  5.32. <a name='PathWithMinimumEffort'></a>1631. Path With Minimum Effort
+###  3.681. <a name='PathWithMinimumEffort'></a>1631. Path With Minimum Effort
 
 [花花酱](https://www.bilibili.com/video/BV1tr4y1w725?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1ft4y1z71X?spm_id_from=333.999.0.0)
 
-###  5.33. <a name='RankTransformofaMatrix'></a>1632 Rank Transform of a Matrix
+###  3.682. <a name='RankTransformofaMatrix'></a>1632 Rank Transform of a Matrix
 
 [小明](https://www.bilibili.com/video/BV1KX4y1F7UA?spm_id_from=333.999.0.0)
 
-###  5.34. <a name='CheckArrayFormationThrough'></a>1640 Check Array Formation Through
+###  3.683. <a name='CheckArrayFormationThrough'></a>1640 Check Array Formation Through
 
 [小明](https://www.bilibili.com/video/BV1uh411274P?spm_id_from=333.999.0.0)
 
-###  5.35. <a name='CountSortedVowelStrings'></a>1641 Count Sorted Vowel Strings
+###  3.684. <a name='CountSortedVowelStrings'></a>1641 Count Sorted Vowel Strings
 
 [小明](https://www.bilibili.com/video/BV1jf4y1k7bJ?spm_id_from=333.999.0.0)
 
-###  5.36. <a name='FurthestBuildingYouCanReach'></a>1642. Furthest Building You Can Reach
+###  3.685. <a name='FurthestBuildingYouCanReach'></a>1642. Furthest Building You Can Reach
 
 [花花酱](https://www.bilibili.com/video/BV1az4y1C7Pk?spm_id_from=333.999.0.0)
 
-###  5.37. <a name='GetMaximuminGeneratedArray'></a>1646 Get Maximum in Generated Array
+###  3.686. <a name='GetMaximuminGeneratedArray'></a>1646 Get Maximum in Generated Array
 
 [小明](https://www.bilibili.com/video/BV1W54y1s7mg?spm_id_from=333.999.0.0)
 
-###  5.38. <a name='SellDiminishing-ValuedColoredBalls'></a>1648. Sell Diminishing-Valued Colored Balls
+###  3.687. <a name='SellDiminishing-ValuedColoredBalls'></a>1648. Sell Diminishing-Valued Colored Balls
 
 [花花酱](https://www.bilibili.com/video/BV11z4y1C7PC?spm_id_from=333.999.0.0)
 
-###  5.39. <a name='CreateSortedArraythroughInstru'></a>1649 Create Sorted Array through Instru
+###  3.688. <a name='CreateSortedArraythroughInstru'></a>1649 Create Sorted Array through Instru
 
 [小明](https://www.bilibili.com/video/BV1ua4y1H7KK?spm_id_from=333.999.0.0)
 
-###  5.40. <a name='DistributeRepeatingIntegers'></a>1655. Distribute Repeating Integers
+###  3.689. <a name='DistributeRepeatingIntegers'></a>1655. Distribute Repeating Integers
 
 [花花酱](https://www.bilibili.com/video/BV1qt4y1a7Lm?spm_id_from=333.999.0.0)
 
-###  5.41. <a name='DetermineifTwoStringsAreClose'></a>1657 Determine if Two Strings Are Close
+###  3.690. <a name='DetermineifTwoStringsAreClose'></a>1657 Determine if Two Strings Are Close
 
 [小明](https://www.bilibili.com/video/BV18z4y1S779?spm_id_from=333.999.0.0)
 
-###  5.42. <a name='MinimumOperationstoReduceX'></a>1658 Minimum Operations to Reduce X
+###  3.691. <a name='MinimumOperationstoReduceX'></a>1658 Minimum Operations to Reduce X
 
 [小明](https://www.bilibili.com/video/BV18t4y1z7Hq?spm_id_from=333.999.0.0)
 
-###  5.43. <a name='MaximizeGridHappiness'></a>1659. Maximize Grid Happiness
+###  3.692. <a name='MaximizeGridHappiness'></a>1659. Maximize Grid Happiness
 
 [花花酱](https://www.bilibili.com/video/BV1kf4y1v7Js?spm_id_from=333.999.0.0)
 
-###  5.44. <a name='CheckIfTwoStringArraysareEqui'></a>1662 Check If Two String Arrays are Equi
+###  3.693. <a name='CheckIfTwoStringArraysareEqui'></a>1662 Check If Two String Arrays are Equi
 
 [小明](https://www.bilibili.com/video/BV1LV411t7v4?spm_id_from=333.999.0.0)
 
-###  5.45. <a name='SmallestStringWithAGivenNumer'></a>1663 Smallest String With A Given Numer
+###  3.694. <a name='SmallestStringWithAGivenNumer'></a>1663 Smallest String With A Given Numer
 
 [小明](https://www.bilibili.com/video/BV1gv411e7Ly?spm_id_from=333.999.0.0)
 
-###  5.46. <a name='FindtheMostCompetitiveSubseq'></a>1673 Find the Most Competitive Subseq
+###  3.695. <a name='FindtheMostCompetitiveSubseq'></a>1673 Find the Most Competitive Subseq
 
 [小明](https://www.bilibili.com/video/BV1yK4y1H7ni?spm_id_from=333.999.0.0)
 
-###  5.47. <a name='MinimumMovestoMakeArrayComplement'></a>1674. Minimum Moves to Make Array Complement
+###  3.696. <a name='MinimumMovestoMakeArrayComplement'></a>1674. Minimum Moves to Make Array Complement
 
 [花花酱](https://www.bilibili.com/video/BV1qz4y1k7Cm?spm_id_from=333.999.0.0)
 
-###  5.48. <a name='MinimizeDeviationinArray'></a>1675. Minimize Deviation in Array
+###  3.697. <a name='MinimizeDeviationinArray'></a>1675. Minimize Deviation in Array
 
 [花花酱](https://www.bilibili.com/video/BV15541157p6?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV16f4y167uf?spm_id_from=333.999.0.0)
 
-###  5.49. <a name='MaxNumberofK-SumPairs'></a>1679 Max Number of K-Sum Pairs】
+###  3.698. <a name='MaxNumberofK-SumPairs'></a>1679 Max Number of K-Sum Pairs】
 
 [小明](https://www.bilibili.com/video/BV16t4y1z7kY?spm_id_from=333.999.0.0)
 
-###  5.50. <a name='ConcatenationofConsecutiveBina'></a>1680 Concatenation of Consecutive Bina
+###  3.699. <a name='ConcatenationofConsecutiveBina'></a>1680 Concatenation of Consecutive Bina
 
 [小明](https://www.bilibili.com/video/BV1Py4y117o5?spm_id_from=333.999.0.0)
 
-###  5.51. <a name='MinimumIncompatibility'></a>1681. Minimum Incompatibility
+###  3.700. <a name='MinimumIncompatibility'></a>1681. Minimum Incompatibility
 
 [花花酱](https://www.bilibili.com/video/BV16p4y1z79z?spm_id_from=333.999.0.0)
 
-###  5.52. <a name='StoneGameVII'></a>1690. Stone Game VII
+###  3.701. <a name='StoneGameVII'></a>1690. Stone Game VII
 
 [花花酱](https://www.bilibili.com/video/BV1wf4y1e7xH?spm_id_from=333.999.0.0)
 
-###  5.53. <a name='JumpGameVI'></a>1696. Jump Game VI
+###  3.702. <a name='JumpGameVI'></a>1696. Jump Game VI
 
 [花花酱](https://www.bilibili.com/video/BV1554y1t7Tz?spm_id_from=333.999.0.0)
 
@@ -24847,72 +24847,72 @@ class Solution:
         return res
 ```
 
-###  5.54. <a name='DetermineifStringHalvesAreAlike'></a>1704 Determine if String Halves Are Alike
+###  3.703. <a name='DetermineifStringHalvesAreAlike'></a>1704 Determine if String Halves Are Alike
 
 [小明](https://www.bilibili.com/video/BV1WA41157sf?spm_id_from=333.999.0.0)
 
-###  5.55. <a name='MaximumXORWithanElementFromArray'></a>1707. Maximum XOR With an Element From Array
+###  3.704. <a name='MaximumXORWithanElementFromArray'></a>1707. Maximum XOR With an Element From Array
 
 [花花酱](https://www.bilibili.com/video/BV13v411t742?spm_id_from=333.999.0.0)
 
-###  5.56. <a name='MinimumOperationstoMakeaSubsequence'></a>1713. Minimum Operations to Make a Subsequence
+###  3.705. <a name='MinimumOperationstoMakeaSubsequence'></a>1713. Minimum Operations to Make a Subsequence
 
 [花花酱](https://www.bilibili.com/video/BV1Yy4y127DQ?spm_id_from=333.999.0.0)
 
-###  5.57. <a name='SwappingNodesinaLinkedList'></a>1721 Swapping Nodes in a Linked List
+###  3.706. <a name='SwappingNodesinaLinkedList'></a>1721 Swapping Nodes in a Linked List
 
 [小明](https://www.bilibili.com/video/BV1Ji4y1P7Xc?spm_id_from=333.999.0.0)
 
-###  5.58. <a name='LargestSubmatrixWithRearrangements'></a>1727. Largest Submatrix With Rearrangements
+###  3.707. <a name='LargestSubmatrixWithRearrangements'></a>1727. Largest Submatrix With Rearrangements
 
 [花花酱](https://www.bilibili.com/video/BV1XT4y1N7gy?spm_id_from=333.999.0.0)
 
-###  5.59. <a name='PalindromePartitioningIV'></a>1745. Palindrome Partitioning IV
+###  3.708. <a name='PalindromePartitioningIV'></a>1745. Palindrome Partitioning IV
 
 [花花酱](https://www.bilibili.com/video/BV1yo4y1R75T?spm_id_from=333.999.0.0)
 
-###  5.60. <a name='MinimumLimitofBallsinaBag'></a>1760. Minimum Limit of Balls in a Bag
+###  3.709. <a name='MinimumLimitofBallsinaBag'></a>1760. Minimum Limit of Balls in a Bag
 
 [花花酱](https://www.bilibili.com/video/BV1bK4y1H7Ly?spm_id_from=333.999.0.0)
 
-###  5.61. <a name='MaximumScorefromPerformingMultiplication'></a>1770. Maximum Score from Performing Multiplication
+###  3.710. <a name='MaximumScorefromPerformingMultiplication'></a>1770. Maximum Score from Performing Multiplication
 
 [花花酱](https://www.bilibili.com/video/BV1Li4y1T7j6?spm_id_from=333.999.0.0)
 
-###  5.62. <a name='MaximizePalindromeLengthFromSubsequences'></a>1771. Maximize Palindrome Length From Subsequences
+###  3.711. <a name='MaximizePalindromeLengthFromSubsequences'></a>1771. Maximize Palindrome Length From Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV1Cp4y1H7Xq?spm_id_from=333.999.0.0)
 
-###  5.63. <a name='EqualSumArraysWithMinimumNumberofOperatio'></a>1775. Equal Sum Arrays With Minimum Number of Operatio
+###  3.712. <a name='EqualSumArraysWithMinimumNumberofOperatio'></a>1775. Equal Sum Arrays With Minimum Number of Operatio
 
 [花花酱](https://www.bilibili.com/video/BV1Di4y1T7nF?spm_id_from=333.999.0.0)
 
-###  5.64. <a name='NumberofRestrictedPathsFromFirsttoLastNode'></a>1786. Number of Restricted Paths From First to Last Node
+###  3.713. <a name='NumberofRestrictedPathsFromFirsttoLastNode'></a>1786. Number of Restricted Paths From First to Last Node
 
 [花花酱](https://www.bilibili.com/video/BV1Df4y147TB?spm_id_from=333.999.0.0)
 
-###  5.65. <a name='MaximumAveragePassRatio'></a>1792. Maximum Average Pass Ratio
+###  3.714. <a name='MaximumAveragePassRatio'></a>1792. Maximum Average Pass Ratio
 
 [花花酱](https://www.bilibili.com/video/BV1qb4y197zc?spm_id_from=333.999.0.0)
 
-###  5.66. <a name='MaximizeScoreAfterNOperations'></a>1799. Maximize Score After N Operations
+###  3.715. <a name='MaximizeScoreAfterNOperations'></a>1799. Maximize Score After N Operations
 
 [花花酱](https://www.bilibili.com/video/BV1Sf4y1x7Cy?spm_id_from=333.999.0.0)
 
-###  5.67. <a name='MaximumNumberofGroupsGettingFreshDonuts'></a>1815. Maximum Number of Groups Getting Fresh Donuts
+###  3.716. <a name='MaximumNumberofGroupsGettingFreshDonuts'></a>1815. Maximum Number of Groups Getting Fresh Donuts
 
 [花花酱](https://www.bilibili.com/video/BV1CU4y187tk?spm_id_from=333.999.0.0)
 
-###  5.68. <a name='FrequencyoftheMostFrequentElement'></a>1838. Frequency of the Most Frequent Element
+###  3.717. <a name='FrequencyoftheMostFrequentElement'></a>1838. Frequency of the Most Frequent Element
 
 [花花酱](https://www.bilibili.com/video/BV1Ai4y1P7Yt?spm_id_from=333.999.0.0)
 
-###  5.69. <a name='ClosestRoom'></a>1847. Closest Room
+###  3.718. <a name='ClosestRoom'></a>1847. Closest Room
 
 [花花酱](https://www.bilibili.com/video/BV1cy4y1x7sz?spm_id_from=333.999.0.0)
 
-###  5.70. <a name='StoneGameVIII'></a>1872. Stone Game VIII
+###  3.719. <a name='StoneGameVIII'></a>1872. Stone Game VIII
 
 [花花酱](https://www.bilibili.com/video/BV1vb4y1z7wx?spm_id_from=333.999.0.0)
 
-###  5.71. <a name='s'></a>s
+###  3.720. <a name='s'></a>s
