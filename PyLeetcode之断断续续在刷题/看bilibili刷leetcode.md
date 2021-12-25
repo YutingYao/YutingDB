@@ -1620,6 +1620,29 @@ https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=1573126616091366883
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5csg54lu3lw0.png" width="50%">
 
+递归
+
+```py
+class Solution(object):
+    def flatten(self, root):
+        if not root:
+            return
+        #把子树备份一下
+        tmpleft = root.left
+        tmpright = root.right
+        root.left = None #记得把左子树置空
+        #先把左右子树捋直
+        self.flatten(tmpleft)
+        self.flatten(tmpright)
+        if tmpleft:
+            root.right = tmpleft #把捋直的左子树放到右边
+            while tmpleft.right: #找到现在右子树的最后一个node
+                tmpleft = tmpleft.right 
+            tmpleft.right = tmpright #左子树接上右子树
+```
+
+stack: 先看144题
+
 ```py
 class Solution:
     def flatten(self, root: TreeNode) -> None:
@@ -1627,19 +1650,19 @@ class Solution:
             return
         
         stack = [root]
-        prev = None
+        pre = None # 穿针引线
         
         while stack:
-            curr = stack.pop()
-            if prev:
-                prev.left = None
-                prev.right = curr
-            left, right = curr.left, curr.right
+            cur = stack.pop()
+            if pre:
+                pre.left = None # 穿针引线
+                pre.right = cur # 穿针引线
+            left, right = cur.left, cur.right
             if right:
                 stack.append(right)
             if left:
                 stack.append(left)
-            prev = curr
+            pre = cur # 穿针引线
 
         return root
 
@@ -1657,39 +1680,13 @@ class Solution:
             node = stack.pop()
             node = node.right
         
-        size = len(preorderList)
-        for i in range(1, size):
-            prev, curr = preorderList[i - 1], preorderList[i]
-            prev.left = None
-            prev.right = curr
+        n = len(preorderList)
+        for i in range(1, n):
+            prev, curr = preorderList[i - 1], preorderList[i] # 穿针引线
+            prev.left = None # 穿针引线
+            prev.right = curr # 穿针引线
 ```
 
-```py
-class Solution(object):
-    def flatten(self, root):
-        """
-        :type root: TreeNode
-        :rtype: void Do not return anything, modify root in-place instead.
-        """
-        if not root:
-            return
-        #把子树备份一下
-        left_node = root.left
-        right_node = root.right
-        root.left = None #记得把左子树置空
-        #先把左右子树捋直
-        self.flatten(left_node)
-        self.flatten(right_node)
-        if left_node:
-            root.right = left_node #把捋直的左子树放到右边
-            while left_node.right: #找到现在右子树的最后一个node
-                left_node = left_node.right 
-            left_node.right = right_node #左子树接上右子树
-
-
-
-        return root
-```
 
 ###  1.16. <a name='DistinctSubsequences'></a>115. Distinct Subsequences
 
@@ -1700,40 +1697,21 @@ class Solution(object):
 ```py
 class Solution:
     def numDistinct(self, s: str, t: str) -> int:
-        m, n = len(s), len(t)
-        if m < n:
-            return 0
-        
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        for i in range(m + 1):
-            dp[i][n] = 1
-        
-        for i in range(m - 1, -1, -1):
-            for j in range(n - 1, -1, -1):
-                if s[i] == t[j]:
-                    dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j]
-                else:
-                    dp[i][j] = dp[i + 1][j]
-        
-        return dp[0][0]
+        sN = len(s)
+        tN = len(t)
+        dp = [[0] * (tN+1) for _ in range(sN+1)]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/distinct-subsequences/solution/bu-tong-de-zi-xu-lie-by-leetcode-solutio-urw3/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
+        sN = len(s)
+        tN = len(t)
+        dp = [[0] * (tN+1) for _ in range(sN+1)]
 
-```py
-class Solution:
-    def numDistinct(self, s: str, t: str) -> int:
-        dp = [[0] * (len(t)+1) for _ in range(len(s)+1)]
-        for i in range(len(s)):
-            dp[i][0] = 1
-        for j in range(1, len(t)):
-            dp[0][j] = 0
-        for i in range(1, len(s)+1):
-            for j in range(1, len(t)+1):
-                if s[i-1] == t[j-1]:
+        for i in range(sN+1):
+            for j in range(tN+1):
+                if j == 0:  
+                    dp[i][j] = 1
+                elif i == 0:  
+                    dp[i][j] = 0
+                elif s[i-1] == t[j-1]:
                     dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
                 else:
                     dp[i][j] = dp[i-1][j]
@@ -1741,13 +1719,6 @@ class Solution:
 Python3:
 
 class SolutionDP2:
-    """
-    既然dp[i]只用到dp[i - 1]的状态，
-    我们可以通过缓存dp[i - 1]的状态来对dp进行压缩，
-    减少空间复杂度。
-    （原理等同同于滚动数组）
-    """
-    
     def numDistinct(self, s: str, t: str) -> int:
         n1, n2 = len(s), len(t)
         if n1 < n2:
@@ -1757,13 +1728,8 @@ class SolutionDP2:
         dp[0] = 1
 
         for i in range(1, n1 + 1):
-            # 必须深拷贝
-            # 不然prev[i]和dp[i]是同一个地址的引用
-            prev = dp.copy()
-            # 剪枝，保证s的长度大于等于t
-            # 因为对于任意i，i > n1, dp[i] = 0
-            # 没必要跟新状态。 
-            end = i if i < n2 else n2
+            prev = dp[:] # 深拷贝一下
+            end = i if i < n2 else n2 # 剪枝，保证s的长度大于等于t, 因为对于任意i，i > n1, dp[i] = 0, 没必要跟新状态。 
             for j in range(1, end + 1):
                 if s[i - 1] == t[j - 1]:
                     dp[j] = prev[j - 1] + prev[j]
@@ -1781,84 +1747,100 @@ class SolutionDP2:
 ```py
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
-        if root is None:
-            return None
+        if not root: return 
         
-        q=[root]
-        while q:
-            size=len(q)
-            last=None
-            for _ in range(size):
-                node=q.pop(0)
-                if last:
-                    last.next=node
-                last=node
+        que = [root]
+        while que:
+            n = len(que)
+            pre = Node(0) # 指针
+            for _ in range(n):
+                node = que.pop(0)
+                if pre:
+                    pre.next = node
+                pre = node
 
                 if node.left:
-                    q.append(node.left)
+                    que.append(node.left)
                 if node.right:
-                    q.append(node.right)
+                    que.append(node.right)
         
         return root
-```
-
-```py
-# BFS版本
 
 class Solution:
     # 层次遍历
     def connect(self, root: 'Node') -> 'Node':
         if not root: return 
-        q = deque([root])
-        while q:
-            sz = len(q)
-            for i in range(sz):
-                cur = q.popleft()
-                if i < sz - 1:
-                    cur.next = q[0]
+        que = deque([root])
+        while que:
+            n = len(que)
+            for i in range(n):        # 每一层n固定
+                cur = que.popleft()
+                if i < n - 1:         # 只要不是最后一个，就连上
+                    cur.next = que[0] # 只要不是最后一个，就连上
                 if cur.left:
-                    q.append(cur.left)
+                    que.append(cur.left)
                 if cur.right:
-                    q.append(cur.right)
+                    que.append(cur.right)
             
-        return root
-
-# DFS版本，只要关注两棵子树的next指针构建即可
-
-class Solution:
-    # DFS
-    def connect(self, root: 'Node') -> 'Node':
-        if not root: return
-        def dfs(root1, root2):
-            if not (root1 and root2): return 
-            root1.next = root2
-            dfs(root1.left, root1.right)
-            dfs(root1.right, root2.left)
-            dfs(root2.left, root2.right)
-        
-        dfs(root.left, root.right)
-        return root
-
-# Python递归，先序遍历，感觉很容易理解，速度还可以，只是空间复杂度用了递归所以差了点
-
-class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        def f(root):
-            if root:
-                p,q=root.left,root.right
-                while p:
-                    p.next=q
-                    p,q=p.right,q.left
-                f(root.left)
-                f(root.right)
-            return
-        f(root)
         return root
 ```
 
-###  1.18. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea
+```py
+class Solution:
+    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        if root:
+            l,r=root.left,root.right
+            while l:
+                l.next=r
+                l,r=l.right,r.left
+            self.connect(root.left)
+            self.connect(root.right)
+        return root
+```
+
+###  1.18. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea (可跳过)
 
 [小明](https://www.bilibili.com/video/BV1np4y1r7fQ?spm_id_from=333.999.0.0)
+
+看不懂，懵逼了
+
+```py
+# 看不懂，懵逼了
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        dummy = Node()
+        dummy.next = root
+        while dummy.next:
+            curp = dummy.next
+            dummy.next = None
+            pre = dummy
+            while curp:
+                for cur in [curp.left, curp.right]:
+                    if cur:
+                        pre.next = cur
+                        pre = cur
+                curp = curp.next
+        return root
+
+# python 非递归方法，常数空间，从顶到下，逐层连接
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        first = root # left_most表示当前层的最左边节点
+        while first: # 每次循环连接当前层的下一层
+            dummy = pre = Node(0) # head表示下一层的虚拟头部
+            cur = first
+            while cur : # 遍历当前层，将下一层连接
+                if cur.left :
+                    pre.next = cur.left
+                    pre = pre.next
+                if cur.right :
+                    pre.next = cur.right
+                    pre = pre.next
+                cur = cur.next
+            first = dummy.next
+        return root
+```
 
 
 ###  1.19. <a name='PascalsTriangle'></a>118-Pascal's Triangle
@@ -1871,78 +1853,38 @@ class Solution:
 
 ```py
 class Solution:
-    def generate(self, numRows: int) -> List[List[int]]:
-        ret = list()
+    def generate(self, numRows):
+        res = []
         for i in range(numRows):
-            row = list()
-            for j in range(0, i + 1):
-                if j == 0 or j == i:
-                    row.append(1)
-                else:
-                    row.append(ret[i - 1][j] + ret[i - 1][j - 1])
-            ret.append(row)
-        return ret
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/pascals-triangle/solution/yang-hui-san-jiao-by-leetcode-solution-lew9/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-库函数重拳出击！
-
+            curlevel = [1]*(i+1)
+            if i >= 2:
+                for n in range(1,i):
+                    curlevel[n] = pre[n-1]+pre[n]
+                    # 头尾为1，中间的第j个为上一层的第j-1个和j个的和
+            res += [curlevel]
+            pre = curlevel
+        return res
+        
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        return [[comb(i, j) for j in range(i + 1)] for i in range(numRows)]
+        res = []
+        for i in range(numRows):
+            level = []
+            for j in range(0, i + 1):
+                if j == 0 or j == i:
+                    level.append(1)
+                else:
+                    level.append(res[i - 1][j] + res[i - 1][j - 1])
+            res.append(level)
+        return res
 ```
 
 ```py
-class Solution:
-    def generate(self, numRows):
-        """
-        :type numRows: int
-        :rtype: List[List[int]]
-        """
-        result = []
-        for i in range(numRows):
-            now = [1]*(i+1)
-            if i >= 2:
-                for n in range(1,i):
-                    now[n] = pre[n-1]+pre[n]
-            result += [now]
-            pre = now
-        return result
-
-头尾为1，中间的第j个为上一层的第j-1个和j个的和，即：
-
-第i行lst[j] = ans[i-1][j-1] + ans[i-1][j]
-
+库函数重拳出击！
+它本质上评估为n! /(k! *(n-k)! )它也被称为二项式系数
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        ans = [[1]]
-        for i in range(1, numRows):
-            lst = [0 for _ in range(i+1)]
-            lst[0], lst[-1] = 1, 1
-            for j in range(1,i):  
-                lst[j] = ans[i-1][j-1] + ans[i-1][j]
-            ans.append(lst)
-        return ans
-
-计算好上一层的，用上一层的计算下一层
-
-class Solution:
-    def generate(self, numRows: int) -> List[List[int]]:
-        ans = []
-        # 遍历每一层
-        for i in range(1,numRows+1):
-            tmp_lis = []
-            # 遍历一层中的每一个元素
-            for j in range(i):
-                if j == 0 or j == i-1:
-                    tmp_lis.append(1)
-                else:
-                    tmp_lis.append(ans[i-2][j-1] + ans[i-2][j])
-            ans.append(tmp_lis)
-        return ans
+        return [[comb(i, j) for j in range(i + 1)] for i in range(numRows)]
 ```
 
 ```scala
@@ -1986,126 +1928,32 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV1Ni4y1g7Lv?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def getRow(self, rowIndex: int) -> List[int]:
-        r = [1]
-        for i in range(rowIndex):
-            r.append(0)
-            j = i + 1
-            while j > 0:
-                r[j] = r[j] + r[j - 1]
-                j -= 1
-        return r
-```
-
-```py
-# 方法 1：生成一半，另一半对称生成的一半
-class Solution1:
-    def generate(self, rowIndex):
-        cur = []
-        for i in range(rowIndex + 1):
-            # 每行首个元素为 1
-            temp = [1]
-            # 由上一行生成当前行前一半的元素
-            for j in range(i // 2):
-                temp += [pre[j] + pre[j + 1]]
-            # 对称生成另一半后合并，并组成新杨辉三角
-            cur = temp + temp[::-1][(i + 1) % 2:]
-            pre = cur
-        return cur
-
-
-# 方法 2：直接循环计算生成
-class Solution2:
-    def generate(self, rowIndex):
-        cur = [1]
-        for i in range(1, rowIndex + 1):
-            # 每行首个元素为 1
-            temp = [1]
-            # 由上一行循环生成当前行元素（除两端）
-            for j in range(1, i):
-                temp += [pre[j - 1] + pre[j]]
-            # 添加最后一个元素 1，并组成新杨辉三角
-            cur = temp + [1]
-            pre = cur
-        return cur
-
-
-# 方法 3：先直接生成所需空间（用 1 填充），再循环计算更新生成
 class Solution3:
     def generate(self, rowIndex):
         for i in range(rowIndex + 1):
             # 用 1 先填充每行所有元素
-            cur = [1] * (i + 1)
+            curlevel = [1] * (i + 1)
             # 由上一行循环生成当前行元素（除两端）
             for j in range(1, i):
-                cur[j] = pre[j - 1] + pre[j]
-            pre = cur
-        return cur
-
-
-# 方法 4：使用公式
-# 组合公式C(n,i) = n!/(i!*(n-i)!)
-# 则第(i+1)项是第i项的倍数=(n-i)/(i+1)
-class Solution4:
-    def generate(self, rowIndex):
-        temp = 1
-        res = []
-        for i in range(rowIndex + 1):
-            res.append(temp)
-            temp = temp * (rowIndex - i) // (i + 1)
-        return res
-
-
-# 方法 5：使用公式生成一半
-class Solution5:
-    def generate(self, rowIndex):
-        temp = 1
-        res = []
-        # 生成前半部分
-        for i in range((rowIndex) // 2 + 1):
-            res.append(temp)
-            temp = temp * (rowIndex - i) // (i + 1)
-        # 前半部分与其镜像对称的后半部分合并
-        return res + res[::-1][(rowIndex + 1) % 2:]
-
-
-# 方法 6：当前行等于上一行前后添零累加：[1,4,6,4,1] = [0,1,3,3,1] + [1,3,3,1,0]
-class Solution6:
-    def generate(self, rowIndex):
-        res = [1]
-        for i in range(rowIndex + 1):
-            # temp1, temp2 = [0] + res, res + [0]
-            # res = [temp1[j] + temp2[j] for j in range(i + 1)]
-            res = [([0] + res)[j] + (res + [0])[j] for j in range(i + 1)]
-        return res
-
-大伙儿新年好啊
+                curlevel[j] = pre[j - 1] + pre[j]
+            pre = curlevel
+        return curlevel
 
 class Solution:
     def getRow(self, rowIndex: int) -> List[int]:
-        return [*accumulate(range(rowIndex), lambda x,i: x*(rowIndex-i)//(i+1), initial=1)]
+        res = [1]
+        for i in range(rowIndex):
+            res.append(0)
+            j = i + 1
+            while j > 0:
+                res[j] = res[j] + res[j - 1]
+                j -= 1
+        return res
 ```
 
 ###  1.21. <a name='Triangle'></a>120 Triangle
 
 [小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def minimumTotal(self, triangle):
-        n = len(triangle)
-        f = [[0] * n for _ in range(n)]
-        f[0][0] = triangle[0][0]
-
-        for i in range(1, n):
-            f[i][0] = f[i - 1][0] + triangle[i][0]
-            for j in range(1, i):
-                f[i][j] = min(f[i - 1][j - 1], f[i - 1][j]) + triangle[i][j]
-            f[i][i] = f[i - 1][i - 1] + triangle[i][i]
-        
-        return min(f[n - 1])
-```
 
 ```py
 class Solution:
@@ -2124,15 +1972,7 @@ class Solution:
 ```
 
 ```scala
-/**
-* selection solution
-* dynamic programming - bottom up
-*     state definition: dp(j) represents minimum sum at point triangle(i)(j) during bottom up 
-* time complexity: O(N) N is the height of triangle
-* space complexity: O(N), only create dp array with dimension of last triangle
-*/
-
-object Solution0 {
+object Solution {
     def minimumTotal(triangle: List[List[Int]]): Int = {
         val depth = triangle.size
         val dp = triangle.last.toArray
@@ -2143,57 +1983,7 @@ object Solution0 {
     }
 }
 
-/**
-* my first commitment
-* memo
-*    dynamic programming from bottom to up
-* time complexity: O(N) N is the height of triangle
-* space complexity: O(N^2) : (1 + N) * N  / 2
-*/
-object Solution1 {
-  import scala.util.Try
-  def minimumTotal(triangle: List[List[Int]]): Int = {
-    val result = Array.ofDim[Array[Int]](triangle.size)
-    triangle.zipWithIndex.foreach { case (ll, idx) => result(idx) = Array.ofDim[Int](ll.size) }
-    for (i <- triangle.size - 1 to 0 by -1) {
-      val inner = triangle(i)
-      inner.zipWithIndex.foreach {
-        case (v, j) =>
-          val left = Try(result(i + 1)(j))
-          val right = Try(result(i + 1)(j + 1))
-          result(i)(j) = (left.getOrElse(0) min right.getOrElse(0)) + v
-      }
-    }
-
-    Try(result.head.head).getOrElse(0)
-  }
-}
-
-
-/**
-* dp dimension is like triangle
-* time complexity: O(N) N is the height of triangle
-* space complexity: O(N^2) : (1 + N) * N  / 2
-*/
-
-object Solution1-1 {
-  def minimumTotal(triangle: List[List[Int]]): Int = {
-    val result = triangle.map(_.toArray).toArray // O(N^2)
-    for (i <- result.length - 2 to 0 by -1) {
-      result(i).indices.foreach (j =>  result(i)(j) = ( result(i + 1)(j) min result(i + 1)(j + 1)) + result(i)(j))
-    }
-    result(0)(0)
-  }
-}
-
-
-/**
-* trick: dp is an array point to copy version of result's last array
-* time complexity: O(N) N is the height of triangle
-* space complexity: O(N^2) : (1 + N) * N  / 2
-*/
-
-object Solution1-2 {
+object Solution {
   def minimumTotal(triangle: List[List[Int]]): Int = {
     val result = triangle.map(_.toArray).toArray  // O(N^2)
     val dp = result.last
@@ -2203,22 +1993,6 @@ object Solution1-2 {
     }
     dp(0)
   }
-}
-
-/**
-* optimize from above: without covert entire list to array
-* time complexity: O(N) N is the height of triangle
-* space complexity: O(N), only create dp array with dimension of last triangle
-*/
-object Solution1-3 {
-    def minimumTotal(triangle: List[List[Int]]): Int = {
-        val depth = triangle.size
-        val dp = triangle.last.toArray
-        for(i <- (depth - 2) to 0 by -1; j <- triangle(i).indices) {
-            dp(j) = triangle(i)(j) + (dp(j) min dp(j + 1)) 
-        }
-        dp(0)
-    }
 }
 ```
 
@@ -5269,28 +5043,42 @@ object Solution2-2 {
 
 [洛阳](https://www.bilibili.com/video/BV1RD4y1D7C7?spm_id_from=333.999.0.0)
 
+
+```py
+Python递归
+
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
+```
+
 ```py
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
-        def preorder(root: TreeNode):
-            if not root:
+        def dfs(node):
+            if not node:
                 return
-            res.append(root.val)
-            preorder(root.left)
-            preorder(root.right)
+            res.append(node.val)
+            dfs(node.left)
+            dfs(node.right)
         
-        res = list()
-        preorder(root)
+        res = []
+        dfs(root)
         return res
+```
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/er-cha-shu-de-qian-xu-bian-li-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+stack
 
+```py
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
-        res = list()
+        res = []
         if not root:
             return res
         
@@ -5304,41 +5092,6 @@ class Solution:
             node = stack.pop()
             node = node.right
         return res
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/er-cha-shu-de-qian-xu-bian-li-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def preorderTraversal(self, root: TreeNode) -> List[int]:
-        res = list()
-        if not root:
-            return res
-        
-        p1 = root
-        while p1:
-            p2 = p1.left
-            if p2:
-                while p2.right and p2.right != p1:
-                    p2 = p2.right
-                if not p2.right:
-                    res.append(p1.val)
-                    p2.right = p1
-                    p1 = p1.left
-                    continue
-                else:
-                    p2.right = None
-            else:
-                res.append(p1.val)
-            p1 = p1.right
-        
-        return res
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/er-cha-shu-de-qian-xu-bian-li-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
@@ -5356,40 +5109,6 @@ class Solution:
         return ans
 ```
 
-```py
-Python迭代
-
-class Solution(object):
-    def preorderTraversal(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[int]
-        """
-        if not root:
-            return []
-        
-        stack = [root]
-        res = []
-        while stack:
-            cur = stack.pop()
-            res.append(cur.val)            
-            if cur.right:
-                stack.append(cur.right)
-            if cur.left:
-                stack.append(cur.left)
-        return res
-Python递归
-
-class Solution(object):
-    def preorderTraversal(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[int]
-        """
-        if not root:
-            return []
-        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
-```
 
 ###  1.46. <a name='Postorderwithstack'></a>145-Postorder with stack
 
