@@ -2264,62 +2264,39 @@ object Solution1 {
 
 [官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
 
+isalnum() 方法检测字符串是否由字母和数字组成。
+
+isalpha() 方法检测字符串是否只由字母组成。
+
+```py
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        left = 0
+        right = len(s) - 1
+        while left < right:
+            # 易错点：if not s[left].isalnum(): 是不对的，因为存在连续多个“非数字的情况”
+            while left < right and not s[left].isalnum(): 
+                left += 1
+            while left < right and not s[right].isalnum(): 
+                right -= 1
+            if s[left].lower() == s[right].lower():
+                left += 1
+                right -= 1
+            else:
+                return False
+        return True
+```
+
+python牛逼的一行代码：
+
 ```py
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         sgood = "".join(ch.lower() for ch in s if ch.isalnum())
         return sgood == sgood[::-1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-palindrome/solution/yan-zheng-hui-wen-chuan-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        sgood = "".join(ch.lower() for ch in s if ch.isalnum())
-        n = len(sgood)
-        left, right = 0, n - 1
-        
-        while left < right:
-            if sgood[left] != sgood[right]:
-                return False
-            left, right = left + 1, right - 1
-        return True
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-palindrome/solution/yan-zheng-hui-wen-chuan-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        n = len(s)
-        left, right = 0, n - 1
-        
-        while left < right:
-            while left < right and not s[left].isalnum():
-                left += 1
-            while left < right and not s[right].isalnum():
-                right -= 1
-            if left < right:
-                if s[left].lower() != s[right].lower():
-                    return False
-                left, right = left + 1, right - 1
-
-        return True
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-palindrome/solution/yan-zheng-hui-wen-chuan-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 class Solution:
     def isPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
         s = ''.join(filter(str.isalnum,s)).lower()
         return s==s[::-1]
 
@@ -2333,15 +2310,6 @@ class Solution:
         return s==s[::-1]
 ```
 
-```py
-class Solution(object):
-    def isPalindrome(self, s):
-        st = []
-        for i in s:
-            if i.isalpha():
-                st.append(i.lower())
-        return st == st[::-1]
-```
 
 ```scala
 
@@ -2367,157 +2335,131 @@ object Solution1 {
 }
 ```
 
-```scala
-object Solution {
-    def isPalindrome(s: String): Boolean = {
-        val str = s.filter(c => c.isLetter || c.isDigit).toUpperCase
-        if(str.isEmpty){
-            true
-        }else{
-            var flag = true
-            var head = 0
-            var tail = str.length - 1
-            
-            import scala.util.control.Breaks._
-            breakable{
-            while(head <=  tail){
-                if(str(head) != str(tail)){
-                    flag = false
-                    break
-                }
-                head +=1
-                tail -=1
-            }
-            }
-            flag
-        }
-        
-    }
-}
 
-```
-
-###  1.27. <a name='WordLadderII'></a>126. Word Ladder II
+###  1.27. <a name='WordLadderII'></a>126. (bfs好难暂时放弃) Word Ladder II
 
 [花花酱](https://www.bilibili.com/video/BV1yt411Y7gH?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV16K4y1j7hX?spm_id_from=333.999.0.0)
 
 ```py
-吐血了，从127而来，自己写了一版本， 击败5%用时3300ms。。。然后看了一下top。 仅68ms， 代码特别美 我的高仿127，单向bfs搞定，比较辣眼睛，可以跳过直接看大神代码。。。
-
-    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
-        if endWord not in wordList or not endWord or not beginWord or not wordList:
+# dfs
+class Solution:
+    def findLadders(self, beginWord: str, endWord: str, wordList):
+        if endWord not in wordList:
             return []
 
-        dictory = defaultdict(list)
-        L = len(beginWord)
+        allpath = []
+        visited = {beginWord}
 
-        # 准备过程  将字典中其中一位用*代替，建立map    
-        for word in wordList:
-            for i in range(L):
-                dictory[word[:i] + '*' + word[i+1:]].append(word)
-                
-        ans = []
+        def findWords(target,words):
+            res = []
+            for word in words:
+                n = len(target)
+                for i in range(n):
+                    if target[i] == word[i]: 
+                        n -= 1
+                if n == 1: 
+                    res.append(word)
+            return res
 
-        queue_begin = [(beginWord, 1, [[beginWord]])]
-        visited_begin = {beginWord:[[beginWord]]}
 
-        minLevel = len(wordList) + 1 # 最大长度为字典长度+1
+        def dfs(path,middlelist):
+            nonlocal allpath
+            if not middlelist:
+                return
+            if endWord in middlelist:
+                path.append(endWord)
+                allpath.append(path)
+                return 
+            for item in middlelist:
+              if item not in path:
+                dfs(path+[item],findWords(item,wordList))
+        dfs([beginWord],findWords(beginWord,wordList))
+        return allpath
+    
+if __name__ == "__main__":
+  s = Solution()
+  res = s.findLadders("hit","cog",["hot","dot","dog","lot","log","cog"])
+  print('res:',res)
 
-        while queue_begin:
-            current_word,level, paths = queue_begin.pop(0)
-
-            if level > minLevel: continue            
-
-            for i in range(L):
-                tmp = current_word[:i] + '*' + current_word[i+1:]
-                for word in dictory[tmp]:
-                    if word == endWord:
-                        # 拼接路径
-                        for p in paths:
-                            minLevel = level
-                            ans.append(p + [endWord])
-                            
-                    elif word not in visited_begin:
-                        new_paths = [p+[word] for p in paths]
-                        visited_begin[current_word] = new_paths
-                        queue_begin.append((word, level+1, new_paths))
-
-        return ans
-大神代码来了 击败100% 仅68ms
-
-def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
-        if endWord not in wordList: return []
-        # 定义了从头向后访问的集合，从尾向前访问的集合
-        # 将wordlist转成了set，方便做减法运算。定义了默认首次访问方向为向后
-        forward, backward, wordList, flag = {beginWord}, {endWord}, set(wordList), True  
-        # 所有字符，用于取代通配符，词长度， dic的key和value都是单词，value表示parent，或者说前置节点的意思。这里前置和后置的关系取决于距离beginword和endWord的距离
-        # dic 或者说 指向的是离beginWord距离更近一层的节点。一种BFS的思想。
-        letters, length, dic = 'abcdefghijklmnopqrstuvwxyz', len(beginWord), defaultdict(set)
-        while forward:
-            if len(forward) > len(backward): # 当向后方向的长度大于向前方向长度时，反转以下三个值。 处理了困扰我n久的双向遍历时最大深度问题。。。
-                forward, backward, flag = backward, forward, not flag
-
-            wordList -= forward  # 从wordList移除将要遍历的forward ， 这样顺便将wordList当做了visited用，很棒的想法
-            cur = set()
-            for word in forward:
-                # 这个循环我们将未插入dic的节点中，层数+1的节点全部插入dic。注意两个方向有区别。
-                for i in range(length):
-                    left, right = word[:i], word[i+1:]  #老生常谈的通配符
-                    for l in letters:  # l类似我们之前用的通配符*
-                        w = left + l + right  # 这个用letters处理，免去了构造一整个dict的过程，节约了很多代码和额外空间
-                        if w in wordList:
-                            cur.add(w)
-                            if flag:
-                                dic[w].add(word)    # 单词w可由word变化而来， 这里 w 比 word 离 beginWord远
-                            else:
-                                dic[word].add(w)    # 这个意思是逆序遍历时， 视为word可由w变化而来。这里 w 比word 离 endWord远，就是说离beginWord更近
-            
-            #很酷炫的写法，利用了集合的交集 &计算出的是一个set。
-            if cur & backward:  # 产生交集，最短路径找到  
-                # 用于生成全部路径，开始只放一个尾结点，通过dic不停找前置节点获取全路径
-                # 这是一个二维数组， 第一维表示全部的路径，第二维表示该路径下的全部节点。
-                res = [[endWord]] 
-                while res[0][0] != beginWord:  # 循环结束条件是刚添加进去的节点是beginWord
-                    # 这也是体现算法功底的代码。 遍历的是全部的路径， i代表的是其中一条路径，
-                    # i[0]代表的是每个路径的最前置节点，即第一个点。 注意我们每次都会清空之前的res，进行重新赋值。
-                    # 去除第一个点之后，通过dic[i[0]]获取前置节点x， 拼接路径：[x]+i
-                    # 这个代码干了这么多事，两层循环，但简洁优雅，又透露出算法功底，很佩服原作者！
-                    res = [[x]+i for i in res for x in dic[i[0]]]
-                return res  # 产生交集就return,避免了我写的那个有5层又有6层的情况。很妙
-            # 这个有一种指针向后移动的意味， 其实代表的是该层遍历结束，我们向后/向前移动一层。 类似常写的 cur = cur.next
-            forward = cur
-        return []
+# res: [['hit', 'hot', 'dot', 'dog', 'cog'], 
+# ['hit', 'hot', 'dot', 'lot', 'log', 'cog'], 
+# ['hit', 'hot', 'lot', 'dot', 'dog', 'cog'], 
+# ['hit', 'hot', 'lot', 'log', 'cog']]
 ```
 
 ```py
-把单词到通配串的路径生成，再把通配串到单词的路径生成，然后再单向宽搜，写双向就更复杂了，单向速度也马马虎虎吧，148ms。 py
-
+import collections
 class Solution:
-    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[str]:
-        d = collections.defaultdict(list)
+    def findLadders(self, beginWord: str, endWord: str, wordList):
+        if endWord not in wordList:
+            return []
+        lookup = collections.defaultdict(list)
+        L = len(beginWord)
+        for word in wordList:
+            for i in range(L):
+                lookup[word[:i] + '*' + word[i+1:]].append(word)
+        
+        res = []
+        que = [(beginWord, 1, [[beginWord]])] # 终点，长度，path
+        visited = {beginWord:[[beginWord]]}
+        mindepth = len(wordList) + 1  # 剪枝
+        print(visited)
+        while que:
+            cur, depth, paths = que.pop(0)
+            if depth > mindepth: continue  # 剪枝           
+            for i in range(L):
+                dummyword = cur[:i] + '*' + cur[i+1:]
+                for word in lookup[dummyword]:
+                    if word == endWord:
+                        for path in paths:
+                            mindepth = depth  # 剪枝
+                            res.append(path + [endWord])
+                    elif word not in visited:
+                        newPaths = [path+[word] for path in paths]
+                        visited[cur] = newPaths
+                        que.append((word, depth+1, newPaths))
+
+        return res
+    
+if __name__ == "__main__":
+  s = Solution()
+  res = s.findLadders("hit","cog",["hot","dot","dog","lot","log","cog"])
+  print('res:',res)
+```
+
+```py
+把单词到通配串的路径生成，再把通配串到单词的路径生成，
+然后再单向宽搜，写双向就更复杂了，单向速度也马马虎虎吧，148ms。 py
+
+import collections
+class Solution:
+    def findLadders(self, beginWord: str, endWord: str, wordList) :
+        lookup = collections.defaultdict(list)
         for word in wordList + [beginWord]:
             w = [*word]
             for i, c in enumerate(word):
                 w[i] = '.'
-                p = ''.join(w)
-                d[p].append(word)
-                d[word].append(p)
+                dummyword = ''.join(w)
+                lookup[dummyword].append(word)
+                lookup[word].append(dummyword)
                 w[i] = c
-        if endWord in d:
-            q, v = {beginWord: [[beginWord]]}, {beginWord}
-            while q:
-                if endWord in q:
-                    return [*q[endWord]]
-                t = collections.defaultdict(set)
-                for i in q:
-                    for j in d[i]:
-                        for w in d[j]:
-                            if w not in v:
-                                t[w].update((*p, w) for p in q[i])
-                q = t
-                v.update(q.keys())
+        if endWord in lookup:
+            que, visited = {beginWord: [[beginWord]]}, {beginWord}
+            while que:
+                # que是达到的点与路径的映射
+                if endWord in que:
+                    return [*que[endWord]]
+                tmp = collections.defaultdict(set)
+                
+                for i in que:
+                    for dummyword in lookup[i]:
+                        for w in lookup[dummyword]:
+                            if w not in visited:
+                                tmp[w].update((*path, w) for path in que[i]) #看不懂更新path路径😂
+                que = tmp
+                visited.update(que.keys())
         return []
 ```
 
@@ -2528,139 +2470,14 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1BK4y157k1?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        def addWord(word: str):
-            if word not in wordId:
-                nonlocal nodeNum
-                wordId[word] = nodeNum
-                nodeNum += 1
-        
-        def addEdge(word: str):
-            addWord(word)
-            id1 = wordId[word]
-            chars = list(word)
-            for i in range(len(chars)):
-                tmp = chars[i]
-                chars[i] = "*"
-                newWord = "".join(chars)
-                addWord(newWord)
-                id2 = wordId[newWord]
-                edge[id1].append(id2)
-                edge[id2].append(id1)
-                chars[i] = tmp
-
-        wordId = dict()
-        edge = collections.defaultdict(list)
-        nodeNum = 0
-
-        for word in wordList:
-            addEdge(word)
-        
-        addEdge(beginWord)
-        if endWord not in wordId:
-            return 0
-        
-        dis = [float("inf")] * nodeNum
-        beginId, endId = wordId[beginWord], wordId[endWord]
-        dis[beginId] = 0
-
-        que = collections.deque([beginId])
-        while que:
-            x = que.popleft()
-            if x == endId:
-                return dis[endId] // 2 + 1
-            for it in edge[x]:
-                if dis[it] == float("inf"):
-                    dis[it] = dis[x] + 1
-                    que.append(it)
-        
-        return 0
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/word-ladder/solution/dan-ci-jie-long-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        def addWord(word: str):
-            if word not in wordId:
-                nonlocal nodeNum
-                wordId[word] = nodeNum
-                nodeNum += 1
-        
-        def addEdge(word: str):
-            addWord(word)
-            id1 = wordId[word]
-            chars = list(word)
-            for i in range(len(chars)):
-                tmp = chars[i]
-                chars[i] = "*"
-                newWord = "".join(chars)
-                addWord(newWord)
-                id2 = wordId[newWord]
-                edge[id1].append(id2)
-                edge[id2].append(id1)
-                chars[i] = tmp
-
-        wordId = dict()
-        edge = collections.defaultdict(list)
-        nodeNum = 0
-
-        for word in wordList:
-            addEdge(word)
-        
-        addEdge(beginWord)
-        if endWord not in wordId:
-            return 0
-        
-        disBegin = [float("inf")] * nodeNum
-        beginId = wordId[beginWord]
-        disBegin[beginId] = 0
-        queBegin = collections.deque([beginId])
-
-        disEnd = [float("inf")] * nodeNum
-        endId = wordId[endWord]
-        disEnd[endId] = 0
-        queEnd = collections.deque([endId])
-
-        while queBegin or queEnd:
-            queBeginSize = len(queBegin)
-            for _ in range(queBeginSize):
-                nodeBegin = queBegin.popleft()
-                if disEnd[nodeBegin] != float("inf"):
-                    return (disBegin[nodeBegin] + disEnd[nodeBegin]) // 2 + 1
-                for it in edge[nodeBegin]:
-                    if disBegin[it] == float("inf"):
-                        disBegin[it] = disBegin[nodeBegin] + 1
-                        queBegin.append(it)
-
-            queEndSize = len(queEnd)
-            for _ in range(queEndSize):
-                nodeEnd = queEnd.popleft()
-                if disBegin[nodeEnd] != float("inf"):
-                    return (disBegin[nodeEnd] + disEnd[nodeEnd]) // 2 + 1
-                for it in edge[nodeEnd]:
-                    if disEnd[it] == float("inf"):
-                        disEnd[it] = disEnd[nodeEnd] + 1
-                        queEnd.append(it)
-        
-        return 0
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/word-ladder/solution/dan-ci-jie-long-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 (压根没想到用虚拟节点的方法，用了最蠢的遍历a-z的方法。没想到竟然能通过= =)
 
 附上我的低效python代码，仅供参考。
 
 from collections import deque
 class Solution:
-    def ladderLength(self, beginWord, endWord, wordList):
-        word_dict = set(wordList)
+    def ladderLength(self, beginWord: str, endWord: str, wordList):
+        lookup = set(wordList)
         visited = set(['beginWord'])
         queue = deque([(beginWord, 1)])
         while queue:
@@ -2669,35 +2486,41 @@ class Solution:
                 return depth
             for i in range(len(pop)):
                 for j in range(97, 123):
-                    new_word = pop[:i] + chr(j) + pop[i+1:]
-                    if new_word not in visited and new_word in word_dict:
-                        queue.append((new_word, depth + 1))
-                        visited.add(new_word)
+                    char26word = pop[:i] + chr(j) + pop[i+1:]
+                    if char26word not in visited and char26word in lookup:
+                        queue.append((char26word, depth + 1))
+                        visited.add(char26word)
         return 0
 ```
 
 ```py
-还有个更巧妙的想法，将 word 的某一位改为 '*' 作为 word 的 key。例如 hit 的 key 为 '*it'、'h*t'、'hi*'。
+还有个更巧妙的想法，将 word 的某一位改为 '*' 作为 word 的 key。
 
-在 wordList 中找到 key 相同的单词，即是能转换的单词。于是提前将 wordList 的单词按 key 存在哈希表中，就可以进一步减少搜索范围到 len(word)。
+例如 hit 的 key 为 '*it'、'h*t'、'hi*'。
 
-def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-    d = defaultdict(list)
-    gen_key = lambda w: [w[:i] + '*' + w[i+1:] for i in range(len(w))]
-    for word in wordList:
-        for key in gen_key(word):
-            d[key].append(word)
-    queue, vis = deque([(beginWord, 1)]), {beginWord}
-    while queue:
-        word, T = queue.popleft()
-        for key in gen_key(word):
-            for w in d[key]:
-                if w not in vis:
-                    if w == endWord:
-                        return T+1
-                    vis.add(w)
-                    queue.append([w, T+1])
-    return 0
+在 wordList 中找到 key 相同的单词，即是能转换的单词。
+
+于是提前将 wordList 的单词按 key 存在哈希表中，就可以进一步减少搜索范围到 len(word)。
+
+from collections import deque
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        lookup = defaultdict(list)
+        genKey = lambda w: [w[:i] + '*' + w[i+1:] for i in range(len(w))]
+        for word in wordList:
+            for dummyword in genKey(word):
+                lookup[dummyword].append(word)
+        queue, visited = deque([(beginWord, 1)]), {beginWord}
+        while queue:
+            word, depth = queue.popleft()
+            for dummyword in genKey(word):
+                for nextword in lookup[dummyword]:
+                    if nextword not in visited:
+                        if nextword == endWord:
+                            return depth+1
+                        visited.add(nextword)
+                        queue.append([nextword, depth+1])
+        return 0
 ```
 
 ###  1.29. <a name='LongestConsecutiveSequence'></a>128. Longest Consecutive Sequence
@@ -2711,46 +2534,24 @@ def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int
 ```py
 class Solution:
     def sumNumbers(self, root: TreeNode) -> int:
-        def dfs(root, prevTotal) -> int:
-            if not root:
-                return 0
-            total = prevTotal * 10 + root.val
-            if not root.left and not root.right:
-                return total
-            else:
-                return dfs(root.left, total) + dfs(root.right, total)
-        return dfs(root, 0)
-
-def sumNumbers(self, root: TreeNode) -> int:
-        nums = []
-        def dfs(root, s):
-            nonlocal nums
-            if not root:
-                return 0
-            s = 10 * s + root.val
-            if not root.left and not root.right:
-                nums.append(s)
-            dfs(root.left, s)
-            dfs(root.right, s)
-        dfs(root, 0)
-        return sum(nums)
-
-
-class Solution:
-    def sumNumbers(self, root: TreeNode) -> int:
-        def dfs(root, nowVal):
-            nonlocal ans
-            if root.left == None and root.right == None:
-                ans += nowVal
+        sums = 0
+        def dfs(node,cur):
+            nonlocal sums
+            if not node:
                 return
-            if root.left:
-                dfs(root.left, nowVal*10 + root.left.val)
-            if root.right:
-                dfs(root.right, nowVal*10 + root.right.val)
-        ans = 0
-        if root:
-            dfs(root, root.val)
-        return ans
+            else:
+                cur = cur*10 + node.val
+                if not node.left and not node.right: # 易错点：不要忽视了这种情况
+                    sums += cur
+                    return
+                else:
+                    dfs(node.right,cur)
+                    dfs(node.left,cur)
+        dfs(root,0)
+        return sums # 在根节点处cur为0，而不是sums
+
+
+其他写法：
 
 class Solution:
     def sumNumbers(self, root: TreeNode) -> int:
@@ -2768,130 +2569,28 @@ class Solution:
         dfs(root, 0)
         return ans
 
-class Solution:
-    total = 0
-    
-    def dfs(self, p: TreeNode, cur: int) -> None:
-        if p.left == None and p.right == None:
-                self.total += cur * 10 + p.val
-                return
-        next_val = cur * 10 + p.val
-        if p.left: self.dfs(p.left, next_val)
-        if p.right: self.dfs(p.right, next_val)
-    
-    def sumNumbers(self, root: TreeNode) -> int:
-        if not root: return 0
-        self.dfs(root, 0)
-        return self.total
-
-class Solution(object):
-    def sumNumbers(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        return self.dfs(root, 0)
-
-    def dfs(self, root, sum):
-        if root is None:
-            return 0
-        sum  = sum * 10 + root.val
-        if root.left is None and root.right is None:
-            return sum
-        return self.dfs(root.left, sum) + self.dfs(root.right, sum)
-
-# 其实递归不难想到，不过我自己做错在细节方面
-
-# 如果只有单支，每朝下走一层，代表的数字都增加10， 10* 原本的 + 新节点的数字，最终也是用这个来解
-
-# ```
-class Solution(object):
-    def sumNumbers(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        return self.dfs(root,0)
-    
-    
-    def dfs(self,root,curSum):
-        if root == None:
-            return 0
-        else:
-            curSum = curSum * 10 + root.val
-            if root.left == None and root.right == None:
-                return curSum
-            else:
-                return self.dfs(root.left, curSum) + self.dfs(root.right, curSum)
 ```
 
 ```py
 class Solution:
     def sumNumbers(self, root: TreeNode) -> int:
-        import collections
-        ans = 0
-        nq = collections.deque([root])
-        vq = collections.deque([root.val])
-        while nq:
-            root = nq.popleft()
-            val = vq.popleft()
-
-            if root.left:
-                nq.append(root.left)
-                vq.append(val*10+root.left.val)
-            if root.right:
-                nq.append(root.right)
-                vq.append(val*10+root.right.val)
-            if not root.left and not root.right:
-                ans += val
-        return ans
-
-class Solution:
-    def sumNumbers(self, root: TreeNode) -> int:
         if not root:
             return 0
 
-        total = 0
-        nodeQueue = collections.deque([root])
-        numQueue = collections.deque([root.val])
+        sums = 0
+        que = collections.deque([(root,root.val)])
         
-        while nodeQueue:
-            node = nodeQueue.popleft()
-            num = numQueue.popleft()
+        while que:
+            node, num = que.popleft()
             left, right = node.left, node.right
             if not left and not right:
-                total += num
+                sums += num
             else:
                 if left:
-                    nodeQueue.append(left)
-                    numQueue.append(num * 10 + left.val)
+                    que.append((left, num * 10 + left.val))
                 if right:
-                    nodeQueue.append(right)
-                    numQueue.append(num * 10 + right.val)
-
-        return total
-
-# 利用辅助栈的非递归方法
-
-class Solution:
-    def sumNumbers(self, root: TreeNode) -> int:
-        stack = []
-        p = root
-        sum = 0
-        while(p or stack):
-            if(p):
-                stack.append(p)
-                if(p.left):
-                    p.left.val += p.val*10
-                p = p.left
-            else:
-                p = stack.pop()
-                if(not p.left and not p.right):
-                    sum += p.val
-                if(p.right):
-                    p.right.val += p.val*10
-                p = p.right
-        return sum
+                    que.append((right, num * 10 + right.val))
+        return sums
 ```
 
 ###  1.31. <a name='SurroundedRegions130-'></a>130. Surrounded Regions 130-被围绕的区域
@@ -2901,6 +2600,45 @@ class Solution:
 [哈哈哈](https://www.bilibili.com/video/BV18y4y1j7JH?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1pV411k7TH?spm_id_from=333.999.0.0)
+
+
+```py
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        m = len(board)
+        n = len(board[0])
+        que = collections.deque()
+
+        for i in range(m):
+            for j in range(n):
+                if i==0 or i==m-1 or j==0 or j==n-1: # 易错点：m 和 n 不要写反了
+                    if board[i][j] == 'O':
+                        que.append((i,j))
+
+        while que:
+            x,y = que.popleft()
+            board[x][y] = 'A'
+            for dx,dy in [(1,0),(-1,0),(0,1),(0,-1)]:
+                # 易错点：x+dx 和 x 不要写反了
+                if 0 <= x+dx < m-1 and 0 <= y+dy < n-1 and board[x+dx][y+dy] == 'O': # 易错点：'O'不要写成0
+                    board[x+dx][y+dy] = 'A'
+                    que.append((x+dx,y+dy))
+
+        for i in range(m):
+            for j in range(n):
+                # 易错点：== 和 = 不要写反了
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                elif board[i][j] == 'A':
+                    board[i][j] = 'O'
+
+        return board
+```
+
+另一种写法
 
 ```py
 class Solution:
@@ -2934,129 +2672,288 @@ class Solution:
                     board[i][j] = "O"
                 elif board[i][j] == "O":
                     board[i][j] = "X"
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/surrounded-regions/solution/bei-wei-rao-de-qu-yu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def solve(self, board: List[List[str]]) -> None:
-        if not board:
-            return
-        
-        n, m = len(board), len(board[0])
-        que = collections.deque()
-        for i in range(n):
-            if board[i][0] == "O":
-                que.append((i, 0))
-                board[i][0] = "A"
-            if board[i][m - 1] == "O":
-                que.append((i, m - 1))
-                board[i][m - 1] = "A"
-        for i in range(m - 1):
-            if board[0][i] == "O":
-                que.append((0, i))
-                board[0][i] = "A"
-            if board[n - 1][i] == "O":
-                que.append((n - 1, i))
-                board[n - 1][i] = "A"
-        
-        while que:
-            x, y = que.popleft()
-            for mx, my in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
-                if 0 <= mx < n and 0 <= my < m and board[mx][my] == "O":
-                    que.append((mx, my))
-                    board[mx][my] = "A"
-        
-        for i in range(n):
-            for j in range(m):
-                if board[i][j] == "A":
-                    board[i][j] = "O"
-                elif board[i][j] == "O":
-                    board[i][j] = "X"
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/surrounded-regions/solution/bei-wei-rao-de-qu-yu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-```py
-方法一：BFS
 
-class Solution:
-    def solve(self, board: List[List[str]]) -> None:
-        self.m, self.n = len(board), len(board[0])
-        self.board = board
-        self.connectedToBorder = set()
-        for i in range(self.m):   #把第一行和最后一行的所有O相连的都加入集合
-            if (i, 0) not in self.connectedToBorder and self.board[i][0] == 'O':
-                self.bfs(i, 0)
-            if (i, self.n-1) not in self.connectedToBorder and self.board[i][self.n-1] == 'O':
-                self.bfs(i, self.n-1)
-        for j in range(self.n):   #把第一列和最后一列的所有O相连的都加入集合
-            if (0, j) not in self.connectedToBorder and self.board[0][j] == 'O':
-                self.bfs(0, j)
-            if (self.m-1, j) not in self.connectedToBorder and self.board[self.m-1][j] == 'O':
-                self.bfs(self.m-1, j)
-
-        #把不在集合中的O全变为X
-        for i in range(self.m):
-            for j in range(self.n):
-                if (i,j) not in self.connectedToBorder and self.board[i][j] == 'O':
-                    self.board[i][j] = 'X'
-
-    def bfs(self, k, l):
-        Q = collections.deque([(k,l)])
-        while Q:
-            i, j = Q.popleft()
-            self.connectedToBorder.add((i,j))
-            for x, y in [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]:
-                if (x,y) not in self.connectedToBorder:
-                    if self.m > x >=0 and self.n > y >= 0 and self.board[x][y] == 'O':
-                        self.connectedToBorder.add((x,y))
-                        Q.append((x,y))
-方法二：DFS
-
-class Solution:
-    def solve(self, board: List[List[str]]) -> None:
-        self.m, self.n = len(board), len(board[0])
-        self.board = board
-        self.connectedToBorder = set()
-        for i in range(self.m):   #把第一行和最后一行的所有O相连的都加入集合
-            if (i, 0) not in self.connectedToBorder and self.board[i][0] == 'O':
-                self.dfs(i, 0)
-            if (i, self.n-1) not in self.connectedToBorder and self.board[i][self.n-1] == 'O':
-                self.dfs(i, self.n-1)
-        for j in range(self.n):   #把第一列和最后一列的所有O相连的都加入集合
-            if (0, j) not in self.connectedToBorder and self.board[0][j] == 'O':
-                self.dfs(0, j)
-            if (self.m-1, j) not in self.connectedToBorder and self.board[self.m-1][j] == 'O':
-                self.dfs(self.m-1, j)
-
-        #把不在集合中的O全变为X
-        for i in range(self.m):
-            for j in range(self.n):
-                if (i,j) not in self.connectedToBorder and self.board[i][j] == 'O':
-                    self.board[i][j] = 'X'
-
-    def dfs(self, i, j):
-        self.connectedToBorder.add((i,j))
-        for x, y in [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]:
-            if (x,y) not in self.connectedToBorder and self.m > x >=0 and self.n > y >= 0 and self.board[x][y] == 'O':
-                self.dfs(x,y)   
-```
 
 ###  1.32. <a name='-1'></a>131-分割回文串
 
 [哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+        f = [[True] * n for _ in range(n)]
+
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 1, n):
+                f[i][j] = (s[i] == s[j]) and f[i + 1][j - 1]
+
+        ret = list()
+        ans = list()
+
+        def dfs(i: int):
+            if i == n:
+                ret.append(ans[:])
+                return
+            
+            for j in range(i, n):
+                if f[i][j]:
+                    ans.append(s[i:j+1])
+                    dfs(j + 1)
+                    ans.pop()
+
+        dfs(0)
+        return ret
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/palindrome-partitioning/solution/fen-ge-hui-wen-chuan-by-leetcode-solutio-6jkv/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+
+        ret = list()
+        ans = list()
+
+        @cache
+        def isPalindrome(i: int, j: int) -> int:
+            if i >= j:
+                return 1
+            return isPalindrome(i + 1, j - 1) if s[i] == s[j] else -1
+
+        def dfs(i: int):
+            if i == n:
+                ret.append(ans[:])
+                return
+            
+            for j in range(i, n):
+                if isPalindrome(i, j) == 1:
+                    ans.append(s[i:j+1])
+                    dfs(j + 1)
+                    ans.pop()
+
+        dfs(0)
+        isPalindrome.cache_clear()
+        return ret
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/palindrome-partitioning/solution/fen-ge-hui-wen-chuan-by-leetcode-solutio-6jkv/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        def backtrack(start):
+            if start == len(s):
+                ans.append(tmp[:])
+                return
+            
+            for end in range(start+1, len(s)+1):
+                seg = s[start:end]
+                if seg == seg[::-1]:
+                    tmp.append(seg)
+                    backtrack(end)
+                    tmp.pop()
+            
+        tmp = []
+        ans = []
+        backtrack(0)
+        return ans
+
+# 递归解法,我们找出所有开头的回文串种类,然后递归解决就可以了,举个例子,假设ans(s)返回字符串s的解,那么对于字符串s="aab" 所有的答# # 案应该是"a" + ans("ab"), "aa" + ans("b"), 而"aab" + ans("")不是答案,因为"aab"不是回文字符串,需要注意我们需要对空字符串 的情况返回# # [[]],代表它的解是空集
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+        ans = []
+        if n == 0:
+            ans.append([])
+
+        for i in range(1, n+1):
+            if s[:i] != s[:i][::-1]:
+                continue
+            j = [s[:i]]
+            s2 = self.partition(s[i:])
+            for k in s2:
+                ans.append(j+k)
+        return ans
+```
+
+```py
+
+
+python3 用回溯递归的方法去试探每一种可能性 对于一个字符串s，
+
+有len(s)种方法把它分成左右两个部分（分割方法看代码），
+
+假如左侧的不是回文，则舍弃这次尝试；
+
+假如左侧的是回文串，则把右侧的进行递归的分割，并返回右侧的分割的所有情况
+
+class Solution(object):
+    def partition(self, s):
+        """
+        :type s: str
+        :rtype: List[List[str]]
+        """
+        if len(s) == 0:
+            return [[]]
+        if len(s) == 1:
+            return [[s]]
+        tmp = []
+        for i in range(1,len(s)+1):
+            left = s[:i]
+            right = s[i:]
+            if left ==left[::-1]: #如果左侧不是回文的，则舍弃这种尝试
+                right = self.partition(right)
+                for i in range(len(right)):
+                    tmp.append([left]+right[i])
+        return tmp
+
+Python：
+
+# 版本一
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        res = []  
+        path = []  #放已经回文的子串
+        def backtrack(s,startIndex):
+            if startIndex >= len(s):  #如果起始位置已经大于s的大小，说明已经找到了一组分割方案了
+                return res.append(path[:])
+            for i in range(startIndex,len(s)):
+                p = s[startIndex:i+1]  #获取[startIndex,i+1]在s中的子串
+                if p == p[::-1]: path.append(p)  #是回文子串
+                else: continue  #不是回文，跳过
+                backtrack(s,i+1)  #寻找i+1为起始位置的子串
+                path.pop()  #回溯过程，弹出本次已经填在path的子串
+        backtrack(s,0)
+        return res
+                
+# 版本二
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        res = []
+        path = []  #放已经回文的子串
+        # 双指针法判断是否是回文串
+        def isPalindrome(s):
+            n = len(s)
+            i, j = 0, n - 1
+            while i < j: 
+                if s[i] != s[j]:return False
+                i += 1
+                j -= 1
+            return True
+            
+        def backtrack(s, startIndex):
+            if startIndex >= len(s): # 如果起始位置已经大于s的大小，说明已经找到了一组分割方案了
+                res.append(path[:])
+                return  
+            for i in range(startIndex, len(s)):
+                p = s[startIndex:i+1] # 获取[startIndex,i+1]在s中的子串
+                if isPalindrome(p): # 是回文子串
+                    path.append(p)
+                else: continue #不是回文，跳过
+                backtrack(s, i + 1)
+                path.pop() #回溯过程，弹出本次已经填在path的子串
+        backtrack(s, 0)
+        return res
+
+
+方法一：回溯，用额外的函数判断是否是回文，可AC但时间稍微长一些
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        self.ans = []
+        self.backTracking(s, [])
+        return self.ans
+
+    def backTracking(self, s, lst):
+        if s == '':
+            self.ans.append(lst)
+        else:
+            for i in range(0, len(s)):
+                if self.isHui(s[0:i+1]):
+                    self.backTracking(s[i+1:], lst + [s[0:i+1]])
+
+    def isHui(self, s):
+        return s == s[::-1]
+方法二：根据题解优化
+
+用动态规划进行预处理
+
+此外回溯的代码也进行了一些修改，每次都不再传入一个列表了，而是就只用一个list
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        l = len(s)
+        dp = [[True for _ in range(len(s))] for _ in range(len(s))]
+        for i in range(l-1, -1, -1):  
+            for j in range(i + 1, l):
+                dp[i][j] = (s[i] == s[j]) and dp[i+1][j-1]
+        print(dp)
+        
+        ans = []
+        ret = []
+
+        def backTracking(n):
+            if n == l:
+                ret.append(ans[:])
+                return
+            else:
+                for i in range(n, l):
+                    if dp[n][i]:
+                        ans.append(s[n:i+1])
+                        backTracking(i+1)
+                        ans.pop()
+
+        backTracking(0)
+        return ret
+
+
+不需要预处理，没有递归，然后代码简洁的动态规划
+
+我真牛逼
+
+总结一下思路：
+
+用res保存当前位置i的分割结果
+
+下一个位置的分割结果 = 前一个位置所有分割结果
+
+加上当前位置的字母s[i]得到的结果 
+
++ 判断前一个位置每个分割结果中最后一个回文串和当前字母s[i]是否组成回文串得到的结果 
+
++ 判断前一个位置每个分割结果中最后两个回文串和当前字母s[i]是否组成回文串得到的结果
+
+class Solution:
+    def partition(self, s: str):
+        n = len(s)
+        res = [[s[0]]]
+        for i in range(1, n):
+            for j in range(len(res)):
+                if len(res[j][-1]) == 1 and res[j][-1] == s[i]:
+                    res.append(res[j][:-1] + [s[i] + s[i]])
+                if len(res[j]) > 1 and len(res[j][-2]) == 1 and res[j][-2] == s[i]:
+                    res.append(res[j][:-2] + [s[i] + res[j][-1] + s[i]])
+                res[j].append(s[i])
+        return res
+```
+
+
+
 
 ###  1.33. <a name='PalindromePartitioningII'></a>132. Palindrome Partitioning II
 
 [花花酱](https://www.bilibili.com/video/BV1NJ411v7k9?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1944y1C71s?spm_id_from=333.999.0.0)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5d4nophqby00.webp" width="70%">
 
 ```py
 class Solution:
@@ -3078,11 +2975,6 @@ class Solution:
                         f[i] = min(f[i], f[j] + 1)
         
         return f[n - 1]
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/palindrome-partitioning-ii/solution/fen-ge-hui-wen-chuan-ii-by-leetcode-solu-norx/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
