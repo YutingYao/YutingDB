@@ -2681,43 +2681,32 @@ class Solution:
 [哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
 
 ```py
+# 递归解法
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        n = len(s)
-        f = [[True] * n for _ in range(n)]
-
-        for i in range(n - 1, -1, -1):
-            for j in range(i + 1, n):
-                f[i][j] = (s[i] == s[j]) and f[i + 1][j - 1]
-
-        ret = list()
-        ans = list()
-
-        def dfs(i: int):
-            if i == n:
-                ret.append(ans[:])
+        def backtrack(startIndex):
+            if startIndex == len(s):
+                res.append(path[:])
                 return
             
-            for j in range(i, n):
-                if f[i][j]:
-                    ans.append(s[i:j+1])
-                    dfs(j + 1)
-                    ans.pop()
-
-        dfs(0)
-        return ret
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/palindrome-partitioning/solution/fen-ge-hui-wen-chuan-by-leetcode-solutio-6jkv/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+            for end in range(startIndex, len(s)):
+                seg = s[startIndex:end+1]
+                if seg == seg[::-1]:
+                    path.append(seg)
+                    backtrack(end+1)
+                    path.pop()
+            
+        path = []
+        res = []
+        backtrack(0)
+        return res
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
         n = len(s)
 
-        ret = list()
-        ans = list()
+        res = []
+        path = []
 
         @cache
         def isPalindrome(i: int, j: int) -> int:
@@ -2725,25 +2714,50 @@ class Solution:
                 return 1
             return isPalindrome(i + 1, j - 1) if s[i] == s[j] else -1
 
-        def dfs(i: int):
-            if i == n:
-                ret.append(ans[:])
+        def backtrack(startIndex: int):
+            if startIndex == n:
+                res.append(path[:])
                 return
             
-            for j in range(i, n):
-                if isPalindrome(i, j) == 1:
-                    ans.append(s[i:j+1])
-                    dfs(j + 1)
-                    ans.pop()
+            for end in range(startIndex, n):
+                if isPalindrome(startIndex, end) == 1:
+                    path.append(s[startIndex:end+1])
+                    backtrack(end + 1)
+                    path.pop()
 
-        dfs(0)
+        backtrack(0)
         isPalindrome.cache_clear()
-        return ret
+        return res
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/palindrome-partitioning/solution/fen-ge-hui-wen-chuan-by-leetcode-solutio-6jkv/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        # ------------------------ 背一背 ------------------------
+        n = len(s)
+        isPalinDP = [[True] * n for _ in range(n)]
+        
+        for start in range(n - 1, -1, -1): # start 指向 倒数第二位, start 向前扫描
+            for end in range(start + 1, n): # end 指向 倒数第一位, end 向后扫描
+                isPalinDP[start][end] = (s[start] == s[end]) and isPalinDP[start + 1][end - 1] 
+        # ------------------------ 背一背 ------------------------
+
+        res = []
+        path = []
+
+        def backtrack(startIndex: int):
+            if startIndex == n:
+                res.append(path[:])
+                return
+            
+            for end in range(startIndex, n):
+                if isPalinDP[startIndex][end]:
+                    path.append(s[startIndex:end+1])
+                    backtrack(end + 1)
+                    path.pop()
+
+        backtrack(0)
+        return res
+
+
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
@@ -2764,27 +2778,10 @@ class Solution:
         backtrack(0)
         return ans
 
-# 递归解法,我们找出所有开头的回文串种类,然后递归解决就可以了,举个例子,假设ans(s)返回字符串s的解,那么对于字符串s="aab" 所有的答# # 案应该是"a" + ans("ab"), "aa" + ans("b"), 而"aab" + ans("")不是答案,因为"aab"不是回文字符串,需要注意我们需要对空字符串 的情况返回# # [[]],代表它的解是空集
 
-class Solution:
-    def partition(self, s: str) -> List[List[str]]:
-        n = len(s)
-        ans = []
-        if n == 0:
-            ans.append([])
-
-        for i in range(1, n+1):
-            if s[:i] != s[:i][::-1]:
-                continue
-            j = [s[:i]]
-            s2 = self.partition(s[i:])
-            for k in s2:
-                ans.append(j+k)
-        return ans
 ```
 
 ```py
-
 
 python3 用回溯递归的方法去试探每一种可能性 对于一个字符串s，
 
@@ -2794,158 +2791,72 @@ python3 用回溯递归的方法去试探每一种可能性 对于一个字符�
 
 假如左侧的是回文串，则把右侧的进行递归的分割，并返回右侧的分割的所有情况
 
+class Solution:
+    @cache
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+        res = []
+        if n == 0:
+            res.append([])
+
+        for i in range(1, n+1):
+            if s[:i] != s[:i][::-1]:
+                continue
+            left = [s[:i]]
+            rights = self.partition(s[i:])
+            for right in rights:
+                res.append(left+right)
+        return res
+
+
 class Solution(object):
     def partition(self, s):
-        """
-        :type s: str
-        :rtype: List[List[str]]
-        """
-        if len(s) == 0:
-            return [[]]
-        if len(s) == 1:
-            return [[s]]
-        tmp = []
-        for i in range(1,len(s)+1):
-            left = s[:i]
-            right = s[i:]
-            if left ==left[::-1]: #如果左侧不是回文的，则舍弃这种尝试
-                right = self.partition(right)
-                for i in range(len(right)):
-                    tmp.append([left]+right[i])
-        return tmp
 
-Python：
-
-# 版本一
-class Solution:
-    def partition(self, s: str) -> List[List[str]]:
-        res = []  
-        path = []  #放已经回文的子串
-        def backtrack(s,startIndex):
-            if startIndex >= len(s):  #如果起始位置已经大于s的大小，说明已经找到了一组分割方案了
-                return res.append(path[:])
-            for i in range(startIndex,len(s)):
-                p = s[startIndex:i+1]  #获取[startIndex,i+1]在s中的子串
-                if p == p[::-1]: path.append(p)  #是回文子串
-                else: continue  #不是回文，跳过
-                backtrack(s,i+1)  #寻找i+1为起始位置的子串
-                path.pop()  #回溯过程，弹出本次已经填在path的子串
-        backtrack(s,0)
-        return res
-                
-# 版本二
-class Solution:
-    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
         res = []
-        path = []  #放已经回文的子串
-        # 双指针法判断是否是回文串
-        def isPalindrome(s):
-            n = len(s)
-            i, j = 0, n - 1
-            while i < j: 
-                if s[i] != s[j]:return False
-                i += 1
-                j -= 1
-            return True
-            
-        def backtrack(s, startIndex):
-            if startIndex >= len(s): # 如果起始位置已经大于s的大小，说明已经找到了一组分割方案了
-                res.append(path[:])
-                return  
-            for i in range(startIndex, len(s)):
-                p = s[startIndex:i+1] # 获取[startIndex,i+1]在s中的子串
-                if isPalindrome(p): # 是回文子串
-                    path.append(p)
-                else: continue #不是回文，跳过
-                backtrack(s, i + 1)
-                path.pop() #回溯过程，弹出本次已经填在path的子串
-        backtrack(s, 0)
-        return res
 
-
-方法一：回溯，用额外的函数判断是否是回文，可AC但时间稍微长一些
-
-class Solution:
-    def partition(self, s: str) -> List[List[str]]:
-        self.ans = []
-        self.backTracking(s, [])
-        return self.ans
-
-    def backTracking(self, s, lst):
-        if s == '':
-            self.ans.append(lst)
-        else:
-            for i in range(0, len(s)):
-                if self.isHui(s[0:i+1]):
-                    self.backTracking(s[i+1:], lst + [s[0:i+1]])
-
-    def isHui(self, s):
-        return s == s[::-1]
-方法二：根据题解优化
-
-用动态规划进行预处理
-
-此外回溯的代码也进行了一些修改，每次都不再传入一个列表了，而是就只用一个list
-
-class Solution:
-    def partition(self, s: str) -> List[List[str]]:
-        l = len(s)
-        dp = [[True for _ in range(len(s))] for _ in range(len(s))]
-        for i in range(l-1, -1, -1):  
-            for j in range(i + 1, l):
-                dp[i][j] = (s[i] == s[j]) and dp[i+1][j-1]
-        print(dp)
         
-        ans = []
-        ret = []
+        if n == 0:
+            return [[]]
+        if n == 1:
+            return [[s]]
 
-        def backTracking(n):
-            if n == l:
-                ret.append(ans[:])
-                return
-            else:
-                for i in range(n, l):
-                    if dp[n][i]:
-                        ans.append(s[n:i+1])
-                        backTracking(i+1)
-                        ans.pop()
 
-        backTracking(0)
-        return ret
+        for i in range(1, n+1):
+            if s[:i] != s[:i][::-1]:
+                continue
+            left = [s[:i]]
+            rights = self.partition(s[i:])
+            for right in rights:
+                res.append(left+right)
+        return res
 
 
 不需要预处理，没有递归，然后代码简洁的动态规划
 
 我真牛逼
 
-总结一下思路：
-
-用res保存当前位置i的分割结果
-
-下一个位置的分割结果 = 前一个位置所有分割结果
-
-加上当前位置的字母s[i]得到的结果 
-
-+ 判断前一个位置每个分割结果中最后一个回文串和当前字母s[i]是否组成回文串得到的结果 
-
-+ 判断前一个位置每个分割结果中最后两个回文串和当前字母s[i]是否组成回文串得到的结果
-
 class Solution:
     def partition(self, s: str):
+        
         n = len(s)
         res = [[s[0]]]
-        for i in range(1, n):
-            for j in range(len(res)):
-                if len(res[j][-1]) == 1 and res[j][-1] == s[i]:
-                    res.append(res[j][:-1] + [s[i] + s[i]])
-                if len(res[j]) > 1 and len(res[j][-2]) == 1 and res[j][-2] == s[i]:
-                    res.append(res[j][:-2] + [s[i] + res[j][-1] + s[i]])
-                res[j].append(s[i])
+        
+# 下一个位置的分割结果 = 前一个位置所有分割结果 + 当前位置的字母s[i]得到的结果 
+        for char in s[1:]:
+            for path in res[:]: # 一定要写成res[:],而不是res
+                
+# + 判断前一个位置每个分割结果中最后一个回文串和当前字母s[i]是否组成回文串得到的结果 --> 也就是偶数个回文
+                if len(path[-1]) == 1 and path[-1] == char:
+                    res.append(path[:-1] + [char + char])
+                    
+# + 判断前一个位置每个分割结果中最后两个回文串和当前字母s[i]是否组成回文串得到的结果 --> 也就是奇数个回文
+                if len(path) > 1 and len(path[-2]) == 1 and path[-2] == char:
+                    res.append(path[:-2] + [char + path[-1] + char])
+                    
+                path.append(char)
         return res
 ```
-
-
-
 
 ###  1.33. <a name='PalindromePartitioningII'></a>132. Palindrome Partitioning II
 
@@ -2959,75 +2870,49 @@ class Solution:
 class Solution:
     def minCut(self, s: str) -> int:
         n = len(s)
-        g = [[True] * n for _ in range(n)]
+        isPalinDP = [[True] * n for _ in range(n)]
+        
+        for start in range(n - 1, -1, -1): # start 指向 倒数第二位, start 向前扫描
+            for end in range(start + 1, n): # end 指向 倒数第一位, end 向后扫描
+                isPalinDP[start][end] = (s[start] == s[end]) and isPalinDP[start + 1][end - 1] 
 
-        for i in range(n - 1, -1, -1):
-            for j in range(i + 1, n):
-                g[i][j] = (s[i] == s[j]) and g[i + 1][j - 1]
-
-        f = [float("inf")] * n
-        for i in range(n):
-            if g[0][i]:
-                f[i] = 0
+        cutDP = [float("inf")] * n
+        for endcut in range(n):
+            # 如果前一小段是回文
+            if isPalinDP[0][endcut]:
+                cutDP[endcut] = 0
+            # 如果前一小段不是回文，则从start开始继续拆分
             else:
-                for j in range(i):
-                    if g[j + 1][i]:
-                        f[i] = min(f[i], f[j] + 1)
+                for startcut in range(endcut):
+                    if isPalinDP[startcut + 1][endcut]:
+                        cutDP[endcut] = min(cutDP[endcut], cutDP[startcut] + 1) # 动态转移，将 cutDP[start] + 1处的转移过来
         
-        return f[n - 1]
+        return cutDP[n - 1]
 ```
 
 ```py
+看不懂
 class Solution:
     def minCut(self, s: str) -> int:
+        def dfs(startI):
+            if startI >= len(s):
+                return -1
+            elif startI == len(s)-1: 
+                dp[startI] = 0
+                return 0
+            
+            if dp[startI] < 1e9: 
+                return dp[startI]
 
-        isPalindromic=[[False]*len(s) for _ in range(len(s))]
-
-        for i in range(len(s)-1,-1,-1):
-            for j in range(i,len(s)):
-                if s[i]!=s[j]:
-                    isPalindromic[i][j] = False
-                elif  j-i<=1 or isPalindromic[i+1][j-1]:
-                    isPalindromic[i][j] = True
-
-        # print(isPalindromic)
-        dp=[sys.maxsize]*len(s)
-        dp[0]=0
-
-        for i in range(1,len(s)):
-            if isPalindromic[0][i]:
-                dp[i]=0
-                continue
-            for j in range(0,i):
-                if isPalindromic[j+1][i]==True:
-                    dp[i]=min(dp[i], dp[j]+1)
-        return dp[-1]
-```
-
-```py
-记忆化dfs，5%睡了睡了
-
-class Solution:
-    def minCut(self, s: str) -> int:
-        self.memo = [9999]*len(s)
-        self.s = s
-        return self.dfs(0)
-    
-    def dfs(self,pos):
-        if pos >= len(self.memo):
-            return -1
-        elif pos == len(self.memo)-1: 
-            self.memo[pos] = 0
-            return 0
+            for i in range(startI,len(s)):
+                # 如果某个子序列回文
+                if s[startI:i+1]==s[startI:i+1][::-1] :
+                    dp[startI] = min(dfs(i+1),dp[startI])
+            dp[startI] += 1
+            return dp[startI]
         
-        if self.memo[pos] < 9999: 
-            return self.memo[pos]
-
-        for i in range(pos,len(self.s)):
-            if self.s[pos:i+1]==self.s[pos:i+1][::-1] :
-                self.memo[pos] = min(self.dfs(i+1),self.memo[pos])
-        self.memo[pos] += 1
-        return self.memo[pos]
+        dp = [1e9]*len(s)
+        return dfs(0)
 
 ```
 
@@ -3049,86 +2934,6 @@ https://www.bilibili.com/video/BV1Cy4y127Di?from=search&seid=1523679132498069423
 
 
 ```py
-class Solution:
-    def createNode(self, oldNode):
-        newNode = Node(oldNode.val)
-        self.newNodeDict[newNode.val] = newNode
-        for i in oldNode.neighbors:
-            if i.val not in self.newNodeDict:
-                self.createNode(i)
-            newNode.neighbors.append(self.newNodeDict[i.val])
-        return newNode
-        
-    def cloneGraph(self, node):
-        if not node:
-            return None
-        self.newNodeDict = {}
-        return self.createNode(node)
-```
-
-```py
-class Solution:
-    def cloneGraph(self, node: 'Node') -> 'Node':
-        def dfs(u):
-            vis[u] = Node(u.val)
-            vis[u].neighbors = [dfs(v) if v not in vis else vis[v] for v in u.neighbors]
-            return vis[u]
-
-        vis = {}
-        return dfs(node) if node else None
-
-# bfs模板加一个dict记录即可！
-
-class Solution:
-    def cloneGraph(self, node: 'Node') -> 'Node':
-        if node is None: return None
-        from collections import deque
-        d = deque([node])
-        visited = set([node.val])
-        has = {node.val: Node(node.val)}
-        while d:
-            onode = d.pop()
-            cnode = has[onode.val]
-            for nd in onode.neighbors:
-                if nd.val not in visited:
-                    d.append(nd)
-                    visited.add(nd.val)
-                if nd.val not in has:
-                    has[nd.val] = Node(nd.val)
-                cnode.neighbors.append(has[nd.val])
-        return has[node.val]
-
-class Solution(object):
-    def cloneGraph(self, node):
-        """
-        :type node: Node
-        :rtype: Node
-        """
-        if node == None: return None
-
-        root = Node(node.val)
-        # must 1 to 1
-        createdNodes = {}
-        createdNodes[root.val] = root 
-
-        stack = []
-        stack.append(node)
-
-        while stack:
-        	cur = stack.pop()
-        	if cur.val in createdNodes:
-        		existNode = createdNodes[cur.val]
-        		for neighbor in cur.neighbors:
-        			if neighbor.val in createdNodes:
-        				existNeighbor = createdNodes[neighbor.val]
-        				existNode.neighbors.append(existNeighbor)
-        			else:
-        				newNode = Node(neighbor.val)
-        				existNode.neighbors.append(newNode)
-        				createdNodes[neighbor.val] = newNode
-        				stack.append(neighbor)
-        return root
-
 class Solution(object):
 
     def __init__(self):
@@ -3141,25 +2946,61 @@ class Solution(object):
         """
         if not node:
             return node
-
+        # 递归结束条件：
         # 如果该节点已经被访问过了，则直接从哈希表中取出对应的克隆节点返回
         if node in self.visited:
             return self.visited[node]
-
         # 克隆节点，注意到为了深拷贝我们不会克隆它的邻居的列表
-        clone_node = Node(node.val, [])
-
+        cloneNode = Node(node.val, [])
         # 哈希表存储
-        self.visited[node] = clone_node
-
+        self.visited[node] = cloneNode
         # 遍历该节点的邻居并更新克隆节点的邻居列表
         if node.neighbors:
-            clone_node.neighbors = [self.cloneGraph(n) for n in node.neighbors]
-
-        return clone_node
+            cloneNode.neighbors = [self.cloneGraph(n) for n in node.neighbors] # 递归在这里，neighbors里面是😁
+        return cloneNode
 ```
 
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4t97v5kpwvq0.png" width="50%">
+```py
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        def dfs(nod): # dfs的本质在于赋值
+            VisitDic[nod] = Node(nod.val)
+            # 对node的neighbors,如果在目录里面，返回这些邻居的值nod.val,否则dfs
+            VisitDic[nod].neighbors = [dfs(n) if n not in VisitDic else VisitDic[n] for n in nod.neighbors] # 递归在这里，neighbors里面是😁
+            return VisitDic[nod]
+ Node(node.val) Node(node.val)
+        VisitDic = {}
+        return dfs(node) if node else None
+
+# bfs模板加一个dict记录即可！
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return None
+        nodecp = Node(node.val)
+        # visited + stack 两步骤
+        visited = {node:nodecp}
+        stack = [node]
+        while stack:
+            node = stack.pop()
+            for neigh in node.neighbors:
+                if neigh not in visited:
+                    # visited + stack 两步骤
+                    visited[neigh] = Node(neigh.val)
+                    stack.append(
+                visited[node].neighbors.append(visited[neigh]) # 😁 注意，append是字典内的neigh，也就是 Node(node.val)
+        return nodecp
+```
+
 
 ###  1.35. <a name='GasStation'></a>134. Gas Station
 

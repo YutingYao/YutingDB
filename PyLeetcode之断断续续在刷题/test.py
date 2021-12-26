@@ -1,37 +1,21 @@
-import collections
 class Solution:
-    def findLadders(self, beginWord: str, endWord: str, wordList):
-        if endWord not in wordList:
-            return []
-        lookup = collections.defaultdict(list)
-        L = len(beginWord)
-        for word in wordList:
-            for i in range(L):
-                lookup[word[:i] + '*' + word[i+1:]].append(word)
+    def minCut(self, s: str) -> int:
+        n = len(s)
+        isPalinDP = [[True] * n for _ in range(n)]
         
-        res = []
-        que = [(beginWord, 1, [[beginWord]])] # 终点，长度，path
-        visited = {beginWord:[[beginWord]]}
-        mindepth = len(wordList) + 1  # 剪枝
-        print(visited)
-        while que:
-            cur, depth, paths = que.pop(0)
-            if depth > mindepth: continue  # 剪枝           
-            for i in range(L):
-                dummyword = cur[:i] + '*' + cur[i+1:]
-                for word in lookup[dummyword]:
-                    if word == endWord:
-                        for path in paths:
-                            mindepth = depth  # 剪枝
-                            res.append(path + [endWord])
-                    elif word not in visited:
-                        new_paths = [p+[word] for p in paths]
-                        visited[cur] = new_paths
-                        que.append((word, depth+1, new_paths))
+        for start in range(n - 1, -1, -1): # start 指向 倒数第二位, start 向前扫描
+            for end in range(start + 1, n): # end 指向 倒数第一位, end 向后扫描
+                isPalinDP[start][end] = (s[start] == s[end]) and isPalinDP[start + 1][end - 1] 
 
-        return res
-    
-if __name__ == "__main__":
-  s = Solution()
-  res = s.findLadders("hit","cog",["hot","dot","dog","lot","log","cog"])
-  print('res:',res)
+        cutDP = [float("inf")] * n
+        for end in range(n):
+            # 如果前一小段是回文
+            if isPalinDP[0][end]:
+                cutDP[end] = 0
+            # 如果前一小段不是回文，则从start开始继续拆分
+            else:
+                for start in range(end):
+                    if isPalinDP[start + 1][end]:
+                        cutDP[end] = min(cutDP[end], cutDP[start] + 1)
+        
+        return cutDP[n - 1]
