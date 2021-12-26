@@ -1957,18 +1957,15 @@ class Solution:
 
 ```py
 class Solution:
-    def minimumTotal(self, triangle):
-        n = len(triangle)
-        f = [0] * n
-        f[0] = triangle[0][0]
-
-        for i in range(1, n):
-            f[i] = f[i - 1] + triangle[i][i]
-            for j in range(i - 1, 0, -1):
-                f[j] = min(f[j - 1], f[j]) + triangle[i][j]
-            f[0] += triangle[i][0]
-        
-        return min(f)
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        i = len(triangle) - 2
+        while i >= 0:
+            subi = i
+            while subi >= 0:
+                triangle[i][subi] += min(triangle[i+1][subi],triangle[i+1][subi+1])
+                subi -= 1
+            i -= 1
+        return triangle[0][0]
 ```
 
 ```scala
@@ -1981,18 +1978,6 @@ object Solution {
         }
         dp(0)
     }
-}
-
-object Solution {
-  def minimumTotal(triangle: List[List[Int]]): Int = {
-    val result = triangle.map(_.toArray).toArray  // O(N^2)
-    val dp = result.last
-    for (i <- result.length - 2 to 0 by -1) {
-      val ll = result(i)
-      ll.indices.foreach (j =>  dp(j) = (dp(j) min dp(j + 1)) + ll(j))
-    }
-    dp(0)
-  }
 }
 ```
 
@@ -2011,194 +1996,18 @@ object Solution {
 [官方](https://www.bilibili.com/video/BV1hA411t76C?spm_id_from=333.999.0.0)
 
 ```py
-# 此方法会超时
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        ans = 0
-        for i in range(len(prices)):
-            for j in range(i + 1, len(prices)):
-                ans = max(ans, prices[j] - prices[i])
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/121-mai-mai-gu-piao-de-zui-jia-shi-ji-by-leetcode-/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        inf = int(1e9)
-        minprice = inf
         maxprofit = 0
+        minprice = 1e9
         for price in prices:
-            maxprofit = max(price - minprice, maxprofit)
-            minprice = min(price, minprice)
+            maxprofit = max(maxprofit,price - minprice)
+            minprice = min(minprice,price)
         return maxprofit
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/121-mai-mai-gu-piao-de-zui-jia-shi-ji-by-leetcode-/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
-动态规划
-
-关键在于利润只和价格有关，和天数无关
-
-从后往前遍历（代码里面先把prices reverse了一下所以是从前往后）
-
-遇到更大的值，则更新此值为最高卖出价
-
-遇到更小的值，就用最高卖出价减去其值，则为该位置能获得的最大利润
-
-执行用时：168 ms, 在所有 Python3 提交中击败了84.89%的用户
-内存消耗：22.8 MB, 在所有 Python3 提交中击败了88.83%的用户
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        prices.reverse()
-        m = prices[0]
-        prices[0] = 0
-        for i in range(1,len(prices)):
-            if prices[i] >= m:  #更新最高卖出价
-                m = prices[i]
-                prices[i] = 0
-            else:
-                prices[i] = m - prices[i]  #当前能获利最多
-        return max(prices)
-
-# 动态规划
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-        have = [0] * length  # 表示第i天持有股票所得最多现金
-        no = [0] * length    # 表示第i天不持有股票所得最多现金
-        have[0] = -prices[0] # 此时的持有股票就一定是买入股票了
-        no[0] = 0            # 不持有股票那么现金就是0
-        for i in range(1, length):
-            have[i] = max(have[i-1], -prices[i])
-            no[i] = max(no[i-1], prices[i] + have[i-1])
-        return no[-1]  # 不持有股票状态所得金钱一定比持有股票状态得到的多
-        
-# 空间优化
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-        have = -prices[0] # 此时的持有股票就一定是买入股票了
-        no = 0            # 不持有股票那么现金就是0
-        for i in range(1, length):
-            have = max(have, -prices[i])
-            no = max(no, prices[i] + have)
-        return no  # 不持有股票状态所得金钱一定比持有股票状态得到的多
-
-# 贪心法
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        low = float("inf")
-        result = 0
-        for i in range(len(prices)):
-            low = min(low, prices[i]) # 取最左最小价格
-            result = max(result, prices[i] - low) # 直接取最大区间利润
-        return result
-
-class Solution:
-    def maxProfit(self, prices) -> int:
-
-
-        if len(prices) <= 1:
-            return 0
-
-        min_input = prices[0]
-        max_profit = 0
-        for p in prices[1:]:
-            min_input = min(p, min_input)
-            max_profit = max(max_profit, p - min_input)
-
-        return max_profit
-
-class Solution:
-    def maxProfit(self, prices):
-        """
-        :type prices: List[int]
-        :rtype: int
-        """
-        min_p, max_p = 999999, 0
-        for i in range(len(prices)):
-            min_p = min(min_p, prices[i])
-            max_p = max(max_p, prices[i] - min_p)
-        return max_p
 ```
 
 ```scala
-/**
-* dynamic programming
-* time complexity : O(N)
-* space complexity: O(3N)
-*/
-object Solution1 {
-    def maxProfit(prices: Array[Int]): Int = {
-        if (prices == null || prices.isEmpty) return 0
-        /* 
-        * state: 0: without holding, 
-        *        1: holding 1 stock, 
-        *        2: already sold stock
-        */
-        val profits = Array.ofDim[Int](prices.length, 3)
-        
-        profits(0)(0) = 0
-        profits(0)(1) = -prices(0)
-        profits(0)(2) = Int.MinValue
-        
-        for (i <- 1 until prices.length) {
-            
-            profits(i)(0) = profits(i - 1)(0)  // state: 0 -> 0
-            profits(i)(1) = profits(i - 1)(1) max (profits(i - 1)(0) - prices(i)) // state: 0 -> 1, 1 -> 1
-            profits(i)(2) = profits(i - 1)(2) max (profits(i - 1)(1) + prices(i)) // state: 2 -> 2, 1 -> 2
-        }
-        profits.last.max
-    }
-}
-/**
-* dynamic programming
-* time complexity: O(N)
-* space complexity: O(1): only create a size 3 of one dimension array
-*/
-object Solution1-2 {
-    def maxProfit(prices: Array[Int]): Int = {
-        if(prices == null || prices.isEmpty) return 0
-       /* 
-       * state: 0: without holding, 
-       *        1: holding 1 stock, 
-       *        2: already sold stock
-       */
-        val dp = Array.ofDim[Int](3)
-        dp(0) = 0
-        dp(1) = -prices(0)
-        dp(2) = Int.MinValue // initial as 0 is acceptable
-        
-        for(i <- 1 until prices.size){
-            dp(0) = dp(0)
-            dp(1) = (dp(0) - prices(i)) max dp(1)
-            dp(2) = (dp(1) + prices(i)) max dp(2)
-        }
-        dp.max
-    }
-}
-
-
-/**
-* Kadane's Algorithm: though of dynamic programming
-* record min price so far and maxProfit during iteration
-* time complexity O(N)
-* space complexity O(1)
-*/
-
-object Solution2 {
+object Solution {
     def maxProfit(prices: Array[Int]): Int = {
         prices.foldLeft((Int.MaxValue, 0)){
             case ((minPriceSoFar, maxProfit), price) => (minPriceSoFar min price, maxProfit max (price - minPriceSoFar))
@@ -2206,57 +2015,6 @@ object Solution2 {
     }
 }
 ```
-
-```scala
-package com.zhourui.leetcode
-
-import com.zhourui.codech._
-import scala.math.{min,max}
-
-//[7,1,5,3,6,4] -> 6-1=5
-package lc121_besttime_sell_stock {
-  object Solution {
-    def maxProfit(prices: Array[Int]): Int = {
-      if (prices.isEmpty) return 0
-      var maxProfit = Int.MinValue
-      prices.reduceLeft((a,b)=>{
-        maxProfit = max(maxProfit, b - a)
-        min(a,b)
-      })
-      max(0,maxProfit)
-    }
-  }
-}
-
-```
-
-```scala
-object Solution {
-    def maxProfit(prices: Array[Int]): Int = {
-        var buy = 0
-        var sell = 1
-        
-        var maxProfit = 0
-        
-        while(buy < sell && sell < prices.size){
-            if(prices(buy) > prices(sell)){
-                buy = sell
-                sell += 1
-            }else{
-                val profit = prices(sell) - prices(buy)
-                if(profit > maxProfit) {
-                    maxProfit = profit
-                }
-                sell += 1
-            }
-        }
-        
-        maxProfit
-    }
-}
-
-```
-
 
 ###  1.23. <a name='II122-BestTimetoBuyandSellStockII'></a>122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
 
@@ -2271,47 +2029,44 @@ object Solution {
 [官方](https://www.bilibili.com/video/BV17i4y1L7LG?spm_id_from=333.999.0.0)
 
 ```py
-# 动态规划
+我的写法：
+
+贪心算法，一次遍历，只要今天价格小于明天价格就在今天买入然后明天卖出，时间复杂度O(n)
+
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-        have = [0] * length  # 表示第i天持有股票所得最多现金
-        no = [0] * length    # 表示第i天不持有股票所得最多现金
-        have[0] = -prices[0] # 此时的持有股票就一定是买入股票了
-        no[0] = 0            # 不持有股票那么现金就是0
-        for i in range(1, length):
-            have[i] = max(have[i-1], no[i-1] - prices[i]) # 唯一不同之处
-            no[i] = max(no[i-1], prices[i] + have[i-1])
-        return no[-1]  # 不持有股票状态所得金钱一定比持有股票状态得到的多
+        maxprofit = 0
+        preprice = 1e9
+        for price in prices:
+            if price > preprice:
+                maxprofit += price - preprice
+                # preprice = 1e9 是错误的，比如[1,2,3,4,5] 会返回2，应该返回4
+                preprice = price
+            else:
+                preprice = price
+        return maxprofit
 
-# 贪心法
+# 简化为
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxprofit = 0
+        preprice = 1e9
+        for price in prices:
+            if price > preprice:
+                maxprofit += price - preprice
+            preprice = price
+        return maxprofit
+```
+
+```py
+
+其他写法：
+
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         return sum([prices[i+1]-prices[i] for i in range(len(prices)-1) if prices[i+1]-prices[i] > 0])
 
-第一种方法：深度优先搜索，时间复杂度O(2^n)，这个通过不了LeetCode，不过能work，测试了多组测试样例是正确的
 
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        self.prices = prices
-        self.profit = []
-        self.helper(0, 0, 0)
-        return max(self.profit)
-        
-    # have 0:未持有  1:持有
-    def helper(self, i, have, profit):
-        if i == len(self.prices):
-            self.profit.append(profit)
-            return
-        if have: # 如果持有中
-            self.helper(i+1, 0, profit + self.prices[i]) # 卖出
-            self.helper(i+1, 1, profit) # 不动
-        else: # 如果未持有
-            self.helper(i+1, 0, profit) # 不动
-            self.helper(i+1, 1, profit - self.prices[i]) # 买入
-第二种方法：贪心算法，一次遍历，只要今天价格小于明天价格就在今天买入然后明天卖出，时间复杂度O(n)
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -2320,65 +2075,6 @@ class Solution:
             if prices[i] > prices[i-1]:
                 ans += prices[i] - prices[i-1]
         return ans
-第三种方法：DP动态规划，第i天只有两种状态，不持有或持有股票，当天不持有股票的状态可能来自昨天卖出或者昨天也不持有，同理，当天持有股票的状态可能来自昨天买入或者昨天也持有中，取最后一天的不持有股票状态就是问题的解
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
-        n = len(prices)
-        dp = [[0]*2 for _ in range(n)]
-        # dp[i][0]表示第i天不持有股票, dp[i][1]表示第i天持有股票
-        dp[0][0], dp[0][1] = 0, - prices[0]
-        for i in range(1, n):
-            dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
-            dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
-        return dp[n-1][0]
-```
-
-```py
-class Solution(object):
-    def maxProfit(self, prices):
-        profit = 0
-        for day in range(len(prices)-1):
-            differ = prices[day+1] - prices[day]
-            if differ > 0:
-                profit += differ
-        return profit
-
-分享一个比较巧妙的思路： 可以将股票的价格画成折线统计图看一看，上升阶段的差值（波峰和波谷的差值）之和就是所能得到的最大价值（如果加入其他下降阶段只会减少收益）， 因此统计上升阶段的值即可
-
-class Solution:
-    def maxProfit(self, prices):
-        if len(prices) == 0:    # 如果股票长度为零， 收益为0
-            return 0
-
-        maxPro = 0
-
-        for i in range(1, len(prices)):
-            if prices[i] > prices[i-1]:
-                maxPro += prices[i] - prices[i-1]
-
-        return maxPro
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        result = 0
-        for i in range(1, len(prices)):
-            result += max(prices[i] - prices[i - 1], 0)
-        return result
-python动态规划
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        length = len(prices)
-        dp = [[0] * 2 for _ in range(length)]
-        dp[0][0] = -prices[0]
-        dp[0][1] = 0
-        for i in range(1, length):
-            dp[i][0] = max(dp[i-1][0], dp[i-1][1] - prices[i]) #注意这里是和121. 买卖股票的最佳时机唯一不同的地方
-            dp[i][1] = max(dp[i-1][1], dp[i-1][0] + prices[i])
-        return dp[-1][1]
 ```
 
 ```scala
@@ -2409,98 +2105,6 @@ object Solution1-2 {
   }
 }
 
-/**
-* dynamic programming 
-* time complexity: O(N)
-* space complexity: O(2N) create a two-dimension array
-*/
-
-object Solution2 {
-    def maxProfit(prices: Array[Int]): Int = {
-        if(prices == null || prices.isEmpty) return 0   
-        /* 
-        * state definition: 
-        *    0  without holding,
-        *    1  holding a share
-        */
-        val profits = Array.ofDim[Int](prices.length, 2)
-        
-        profits(0)(0) = 0
-        profits(0)(1) = -prices(0)
-        for(i <- 1 until prices.length) {
-            profits(i)(0) = profits(i - 1)(0) max (profits(i - 1)(1) + prices(i)) //  sell 
-            profits(i)(1) = profits(i - 1)(1) max (profits(i - 1)(0) - prices(i)) // buy and hold
-        }
-        profits.last.max
-    }
-}
-/**
-* dynamic programming : simplify above solution
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-
-object Solution2-1 {
-    def maxProfit(prices: Array[Int]): Int = {
-        if(prices == null || prices.isEmpty) return 0
-        val dp = Array.ofDim[Int](2)
-        /* 
-        * state definition: 
-        *    0  without holding,
-        *    1  holding a share
-        */
-        dp(0) = 0
-        dp(1) = -prices(0)
-        for(i <- 1 until prices.size) {
-        /*
-        * it may causes a problem here, because we overwrite the previous dp(0) by new state i value and dp(1) would utilizes dp(0) which was overwritten 
-        * in this problem, a stock can be bought or sold for multiple times in one day, so overwriting is not matter
-        */
-            dp(0) = dp(0) max (dp(1) + prices(i))
-            dp(1) = dp(1) max (dp(0) - prices(i))
-        }
-        
-        dp.max
-        
-    }
-}
-```
-
-
-```scala
-object Solution {
-    def maxProfit(prices: Array[Int]): Int = {
-        var buy = 0
-        var sell = 1
-        var profitNow = 0
-        var maxProfit = 0
-        var maxSell = 0
-        
-        var buyPrice = 0
-        var sellPrice = 0
-        
-        while(buy < prices.size && sell < prices.size){
-            
-            buyPrice = prices(buy)
-            sellPrice = prices(sell)
-            
-            if(buyPrice < sellPrice && sellPrice >= maxSell){
-                maxSell = sellPrice
-                profitNow = sellPrice - buyPrice
-                sell += 1
-            }else{
-                maxProfit += profitNow
-                maxSell = 0
-                profitNow = 0
-                buy = sell
-                sell += 1
-            }
-        }
-        
-        if(maxProfit == 0) profitNow else maxProfit + profitNow
-    }
-}
-
 //Alternate solution
 object Solution {
     def maxProfit(prices: Array[Int]): Int = {
@@ -2509,17 +2113,7 @@ object Solution {
             ._1
     }
 }
-
-```
-
-```scala
-package com.zhourui.leetcode
-
-// 归纳为
-// 如果今天价格比昨天高，那么昨天买入，今天卖出(假如昨天已经卖出，那么取消，改为今天卖出)
-// 如果今天比昨天价格低，那么就今天买入(取消昨天的买入)
-
-package lc0122_buynsellstock2 {
+ 
   object Solution {
     def maxProfit(prices: Array[Int]): Int = {
       if (prices.isEmpty) return 0
@@ -2530,7 +2124,6 @@ package lc0122_buynsellstock2 {
       )
     }
   }
-}
 
 ```
 
@@ -2541,25 +2134,20 @@ package lc0122_buynsellstock2 {
 [小明](https://www.bilibili.com/video/BV1rk4y117z8?spm_id_from=333.999.0.0)
 
 ```py
+# 我的写法：
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         n = len(prices)
-        buy1 = buy2 = -prices[0]
-        sell1 = sell2 = 0
-        for i in range(1, n):
-            buy1 = max(buy1, -prices[i])
-            sell1 = max(sell1, buy1 + prices[i])
-            buy2 = max(buy2, sell1 - prices[i])
-            sell2 = max(sell2, buy2 + prices[i])
-        return sell2
+        profit1 = profit2 = 0
+        buy1 = buy2 = prices[0]
+        for i in range(1,n):
+            # 实际上，是从卖出那天开始算，也就是第二天
+            buy1 = min(buy1,prices[i])
+            profit1 = max(profit1,prices[i]-buy1)
+            buy2 = min(buy2,prices[i]-profit1)  # buy2[i]-profit1[i-1] 相当于一个虚拟的买入价格
+            profit2 = max(profit2,prices[i]-buy2)
+        return profit2
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-iii-by-wrnt/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
 ## 未进行空间优化
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -2571,361 +2159,14 @@ class Solution:
         buy1[0] = buy2[0] = -prices[0]
         sell1[0] = sell2[0] = 0
         for i in range(1, n):
-            buy1[i]  = max(buy1[i-1], -prices[i])
+            buy1[i]  = max(buy1[i-1], -prices[i]) 
             sell1[i] = max(sell1[i-1], buy1[i-1] + prices[i])
             buy2[i]  = max(buy2[i-1], sell1[i-1] - prices[i])
             sell2[i] = max(sell2[i-1], buy2[i-1] + prices[i])
         return sell2[-1]
-
-## 空间优化
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        buy1 = buy2 = -prices[0]
-        sell1 = sell2 = 0
-        for i in range(1, n):
-            buy1 = max(buy1, -prices[i])
-            sell1 = max(sell1, buy1 + prices[i])
-            buy2 = max(buy2, sell1 - prices[i])
-            sell2 = max(sell2, buy2 + prices[i])
-        return sell2
-
-这题我会，甚至都不用翻之前的代码，至于空间优化什么的，只会让我的代码不够优雅（手动狗头）
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        # dp[i][j][k] 表示
-        # 第i天 持有和不持有 交易k次
-        dp = [[[0]*3 for _ in range(2)] for _ in range(n)]
-        
-        # 初始化 第0天的时候 持有和不持有其实与交易次数无关 和之前的初始化是一样的
-        for i in range(3):
-            dp[0][0][i],dp[0][1][i] = 0,-prices[0]
-
-        # 按照天数和交易次数来遍历
-        for i in range(1,n):
-            for k in range(3):
-                # 和以往的题目一样 卖出的时候算作一次交易 这里用到了k-1 所以k为0要分开讨论
-                # 想一想k为0时候的意思 第i天不持有而且没有卖出过 只能是i-1天的时候也不持有
-                dp[i][0][k] = max(dp[i-1][0][k],dp[i-1][1][k-1]+prices[i]) if k!=0 else dp[i-1][0][k]
-                dp[i][1][k] = max(dp[i-1][1][k],dp[i-1][0][k]  -prices[i])
-        # 和以往的题目一样 最大值出现在最后一天不持有的情况下
-        return max(dp[n-1][0])
-
-# k表示的是交易的次数，这涉及到“进行一次交易”的定义，
-# 可以在买的时候定义为进行了一次交易，也可以在卖的时候定义为进行了一次交易，
-# 这里我们的定义是在卖出的时候视为进行了一次交易，这不但方便代码书写，
-# 也符合常规的思维模式，所以在买入的时候交易次数k不变
-
-更容易理解的写法：
-
-def maxProfit(self, prices: list) -> int:
-    
-   # special case handle
-
-    if len(prices) == 1:
-        return 0
-
-    sell1 = sell2 = 0
-    buy1 = buy2 = prices[0]
-    for p in prices:
-        buy1 = min(buy1, p)
-        sell1 = max(sell1, p - buy1)
-        buy2 = min(buy2, p - sell1)
-        sell2 = max(sell2, p - buy2)
-    return sell2
-小脑袋只能看着答案分析出来怎么运作的，想不出大佬们怎么从无到有创造出这个算法的。
-
-假想价格波动：
-
-单调递减波形： a-递减->b
-在单调递减的阶段：buy2和buy1将保持相等，不断更新最低买进价格。
-（在复杂波形处始的递减波形直到第一个转折点都没有意义）
-
-单调递增波形：a-递增->b
-buy1 保持为当前p价位之前找到的最低价位。
-sell1随着单调递增不断更新最大获益值。
-同时buy2 = min(buy2', p-sell1),假设buy2' < p-sell1：
-则这种情况下，buy2 保持不变，同样为之前找到的最低价位即与buy1相等；
-若buy2' > p- sell1. 
-则buy2 = p-sell1 = p - (p-buy1) = buy1，同样也与buy1相等。
-即在单调递增的情况下，
-buy2，sell2收敛为整场只做一次买卖的buy1,sell1的同等情况。
-
-先单调递增后单调递减的波形：
-单调递增部分同<2>分析，buy2=buy1,sell2=sell1; 
-在转折点开始递减以后，由于p值不断减小，
-sell1 保持为转折点处的最大收益值不变。
-buy2 = min(buy2', p - sell1) 可能有两种取值，若buy2取值buy2'，
-很明显此时buy2、sell2将收敛为与buy1、sell1相等的情况；
-若buy2开始取值p-sell1,由于p的值不断减小(单调递减波段），
-那么从此以后buy2将一直取值p-sell1, 
-在这种情况下，sell2 = max(sell2‘, p - buy2)，
-如sell2 取值sell2'不变则与sell1值相同，
-若sell2取值p-buy2=p-(p-sell1)=sell1, 
-则也必然与sell1相同。
-也就是在先单调递增后单调递减的波段，
-最大收益就是在转折点一次买卖的buy1,sell1情况。
-
-先单调递增后单调递减，
-然后又单调递增的波形：
-a-递增->b-递减->c-递增->d
-在a->c段通<3>分析。c->d段。
-buy2的值将保持c - (b-a)不变 
-sell2 = max(sell2‘, p - buy2) = max( b -a, p - (c- (b-a))) = max (b-a, (p-c + (b-a)))
-
-dp1[i] = max(dp[i-1], prices[i] - minval) 从前往后遍历，表示第1天到第i天之间的最大利润（通过是否在第i天卖出确认）；
-dp2[i] = max(dp[i+1], maxval - prices[i]) 从后往前遍历，表示第i天到最后一天之间的最大利润（通过是否在第i天买进确认）；
-res = max(dp1 + dp2)，(dp1 + dp2)[i] 正好表示从第1天到最后一天经过两次交易的最大利润，我们的目标是找到令总利润最大的i。
-python：
-class Solution:
-    def maxProfit(self, prices):
-        n = len(prices)
-        if n < 2:
-            return 0
-        dp1 = [0 for _ in range(n)]
-        dp2 = [0 for _ in range(n)]
-        minval = prices[0]
-        maxval = prices[-1]
-        #前向   
-        for i in range(1,n):
-            dp1[i] = max(dp1[i-1], prices[i] - minval)
-            minval = min(minval, prices[i])
-        #后向    
-        for i in range(n-2,-1,-1):
-            dp2[i] = max(dp2[i+1], maxval - prices[i])
-            maxval = max(maxval, prices[i])
-        
-        dp = [dp1[i] + dp2[i] for i in range(n)]
-        return max(dp)
-
-第一种方法：标准的三维DP动态规划，三个维度，第一维表示天，第二维表示交易了几次，第三维表示是否持有股票。与下面188题买卖股票4一样的代码，把交易k次定义为2次。当然也可以把内层的for循环拆出来，分别列出交易0次、1次、2次的状态转移方程即可
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
-        n = len(prices)
-        dp = [[[0]*2 for _ in range(3)] for _ in range(n)]
-        # dp[i][j][0]表示第i天交易了j次时不持有股票, dp[i][j][1]表示第i天交易了j次时持有股票
-        # 定义卖出股票时交易次数加1
-        for i in range(3):
-            dp[0][i][0], dp[0][i][1] = 0, -prices[0]
-        
-        for i in range(1, n):
-            for j in range(3):
-                if not j:
-                    dp[i][j][0] = dp[i-1][j][0]
-                else:
-                    dp[i][j][0] = max(dp[i-1][j][0], dp[i-1][j-1][1] + prices[i])
-                dp[i][j][1] = max(dp[i-1][j][1], dp[i-1][j][0] - prices[i])
-        
-        return max(dp[n-1][0][0], dp[n-1][1][0], dp[n-1][2][0])
-
-第二种方法：用变量而不是多维数组保存迭代的值，优点是省内存空间，缺点是不是标准DP，没法泛化
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
-        
-        buy1, sell1, buy2, sell2 = -prices[0], 0, -prices[0], 0
-        for i in range(1,len(prices)):
-            buy1 = max(buy1,-prices[i])	#用负值统一变量
-            sell1 = max(sell1,buy1 + prices[i])	#sell1为 0~i(含)天股市中买卖一次的最优利润
-            buy2 = max(buy2,sell1 - prices[i])	#仅当＞0才会更新，保证 第二次买入不会与第一次卖出为同一天。而sell1为历史记录保证第二次买入比第一次卖出晚。
-            sell2 = max(sell2,buy2 + prices[i])	#若第二轮买卖为同一天，则不会更新。此操作自然保证sell2为买卖至多两次的最优利润。
-        return sell2
 ```
 
 ```scala
-/**
-* Dynamic programming: three dimension dp array
-*    memo:
-*       dp definition: dp[i][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
-*/ 
-object Solution1 {
-  def maxProfit(prices: Array[Int]): Int = {
-    /* 
-    * profits(i)(j)(k)
-    *   dimension i: state sequence
-    *   
-    *   profits()(0)(0) keep observing
-    *   profits()(0)(1) buy first share
-    *   profits()(1)(0) after selling first share
-    *   profits()(1)(1) buy second share
-    *   profits()(2)(0) after selling second share
-    *   profits()(2)(1) non-meaningful
-    */
-    val profits = Array.ofDim[Int](prices.length, 3, 2)
-    
-    profits(0)(0)(0) = 0
-    profits(0)(0)(1) = -prices(0)
-    profits(0)(1)(0) = 0
-    profits(0)(1)(1) = Int.MinValue  // buy state
-    profits(0)(2)(0) = 0
-    profits(0)(2)(1) = Int.MinValue // buy state
-    
-    /* state transition */
-    for(i <- 1 until prices.length) {
-      profits(i)(0)(0) = profits(i - 1)(0)(0)  // actually non-meaningful
-      profits(i)(0)(1) = profits(i - 1)(0)(1) max (profits(i - 1)(0)(0) - prices(i)) // buy
-      profits(i)(1)(0) = profits(i - 1)(1)(0) max (profits(i - 1)(0)(1) + prices(i)) // sell
-      profits(i)(1)(1) = profits(i - 1)(1)(1) max (profits(i - 1)(1)(0) - prices(i)) // buy
-      profits(i)(2)(0) = profits(i - 1)(2)(0) max (profits(i - 1)(1)(1) + prices(i)) // sell        
-    }
-    profits.last.map(_(0)).max
-  }
-}
-/**
-* Dynamic programming: three dimension dp array
-*   shift state definition
-*/ 
-object Solution1-2 {
-    def maxProfit(prices: Array[Int]): Int = {
-            /* 
-            * profits(i)(j)(k)
-            *   dimension i: state sequence
-            *   
-            *   profits()(0)(0) dummy state
-            *   profits()(0)(0) dummy state
-            *   profits()(1)(0) buying first share
-            *   profits()(1)(1) after sold first share
-            *   profits()(2)(0) buying second share
-            *   profits()(2)(1) after sold second share
-            */
-        val dp = Array.tabulate(prices.length, 3, 2){
-            case (0, 1, 0) => -prices(0)  // buy state
-            case (0, 1, 1) => 0  // sell state
-            case (0, 2, 0) => Int.MinValue // buy state
-            case (0, 2, 1) => 0 // sell state
-            case _ => 0
-        }
-        for(i <- 1 until prices.length; j <- 1 to 2) {
-            dp(i)(j)(0) = dp(i - 1)(j)(0) max (dp(i - 1)(j - 1)(1)  - prices(i)) // buy
-            dp(i)(j)(1) = dp(i - 1)(j)(1) max (dp(i - 1)(j)(0) + prices(i))  // sell
-        }
-        dp.last.map(_(1)).max
-    }
-}
-/**
-* dynamic programming: tree dimension array
-*   drop dummy state
-*/
-
-object Solution1-3 {
-    def maxProfit(prices: Array[Int]): Int = {
-        val transactionLimit = 2
-            /* 
-            * profits(i)(j)(k)
-            *   dimension i: state sequence
-            *   profits()(0)(0) buying first share
-            *   profits()(0)(1) after sold first share
-            *   profits()(1)(0) buying second share
-            *   profits()(1)(1) after sold second share
-            */
-        val dp = Array.tabulate(prices.length, transactionLimit, 2){
-            case (0, 0, 0) => -prices(0)  // buy
-            case (0, _, 1) => 0  // sell
-            case (0, _, 0) => Int.MinValue // buy
-            case _ => 0
-        }
-        
-        for(i <- 1 until prices.length; j <- 0 until transactionLimit) {
-            /*
-            * 0 buy, 1 sell
-            */
-            dp(i)(j)(0) = dp(i - 1)(j)(0) max {
-                if(j == 0) -prices(i)
-                else dp(i - 1)(j - 1)(1) - prices(i)
-            }    
-            dp(i)(j)(1) = dp(i - 1)(j)(1) max (dp(i - 1)(j)(0) + prices(i))
-        }
-        dp.last.map(_(1)).max
-    }
-}
-
-/**
-* Dynamic programming with only keeping two time state: current and previous
-* this version is more elegant than above one
-* time complexity: O(N)
-* space complexity: O(2 * 2 * 2) = O(8) = O(1)
-*/
-object Solution2 {
-    def maxProfit(prices: Array[Int]): Int = {
-        val transactions = 2
-        val profits = Array.ofDim[Int](2, transactions, 2)
-        
-        for (i <- profits.indices; j <- 0 until transactions) {
-            profits(i)(j)(0) = Int.MinValue // buy
-            profits(i)(j)(1) = 0 // sell
-        }
-     
-        /** iterate from index 0 */
-        for (i <- prices.indices; j <- 0 until transactions) {
-            val currentStatus = i % 2
-            val previousStatus = (i + 1) % 2
-            profits(currentStatus)(j)(1) =  profits(previousStatus)(j)(1) max  (profits(previousStatus)(j)(0) + prices(i)) // sell
-
-            if(j == 0)  
-                profits(currentStatus)(j)(0) =  profits(previousStatus)(j)(0) max - prices(i) // buy
-            else 
-                profits(currentStatus)(j)(0) =  profits(previousStatus)(j)(0) max (profits(previousStatus)(j - 1)(1) - prices(i)) // buy from previous (j - 1) sell status
-
-        }
-
-        profits((prices.length - 1) % 2).map(_.max).max
-        
-    }
-     private def debugProfits(profits: Array[Array[Array[Int]]]): Unit = {
-        profits.zipWithIndex.foreach{
-          case (p, i) =>
-            println(s"status: $i")
-            p.zipWithIndex.foreach{
-            case (pp, j) =>
-                println(s"transaction $j: hold: ${pp(0)}, sell: ${pp(1)}")
-          }
-            println(" ")
-        }
-  }
-}
-
-/**
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-object Solution2-1 {
-    def maxProfit(prices: Array[Int]): Int = {
-        val transactionLimit = 2
-        val dp = Array.tabulate(2, transactionLimit, 2) {
-            case (_, _, 0) => Int.MinValue
-            case (_, _, 1) => 0
-            case _ => 0
-        }
-        
-        for(i <- prices.indices; j <- 0 until transactionLimit) {
-            val currentIdx = i & 1  // bit op: AND op
-            val previousIdx = currentIdx ^1 // bit op: XOR op
-
-            // 0 buy; 1 sell
-            dp(currentIdx)(j)(0) = dp(previousIdx)(j)(0) max {
-                if(j == 0) -prices(i)
-                else dp(previousIdx)(j - 1)(1) - prices(i)
-            }
-            dp(currentIdx)(j)(1) = dp(previousIdx)(j)(1) max (dp(previousIdx)(j)(0) + prices(i))
-        }
-        
-        dp((prices.length - 1) & 1).map(_(1)).max
-        
-    }
-}
-
-/**
-* Kadane's Algorithm:  dynamic programming only keep one previous status
-* time complexity: O(N)
-* space complexity: O(1)
-*/ 
 object Solution3{
     def maxProfit(prices: Array[Int]): Int = {
         val r = prices.foldLeft((Int.MinValue, 0, Int.MinValue, 0)){
@@ -2966,152 +2207,39 @@ object Solution3-1 {
 [官方](https://www.bilibili.com/video/BV1qT4y1J71C?spm_id_from=333.999.0.0)
 
 ```py
-# python3
+我的思考：
+        # 有两种情况：
+        # node.val 往上回收, 构成递归
+        return max(left,right) + node.val
+        # node.val 不往上回收, 左中右
+        res = max(left+right + node.val, res)
 
 class Solution:
-    def maxPathSum(self, root: TreeNode) -> int:
-        self.max_val = -float('inf')
-        self.process(root)
-        return self.max_val
-
-
-    def process(self, root):
-        if not root:
-            return 0
-        left = max(0, self.process(root.left))
-        right = max(0, self.process(root.right))
-        self.max_val = max(self.max_val, root.val + left + right, root.val + max(left, right))# 把 {左中右} + {经过中间} 保存下来
-        return root.val + max(left, right) #  {左中右}的值不会返回 + {经过中间} 会返回
-
-# 不用看官方题解，那么复杂。 
-# 所有树的题目，都想成一颗只有根、左节点、右节点 的小树。
-# 然后一颗颗小树构成整棵大树，所以只需要考虑这颗小树即可。
-# 接下来分情况， 按照题意：一颗三个节点的小树的结果只可能有如下6种情况：
-
-# 根 + 左 + 右
-# 根 + 左
-# 根 + 右
-# 根
-# 左
-# 右
-# 好了，分析上述6种情况， 只有 2,3,4 可以向上累加，
-# 而1,5,6不可以累加（这个很好想，情况1向上累加的话，必然出现分叉，
-# 情况5和6直接就跟上面的树枝断开的，没法累加），
-# 所以我们找一个全局变量存储 1,5,6这三种不可累加的最大值， 
-# 另一方面咱们用遍历树的方法求2,3,4这三种可以累加的情况。 
-# 最后把两类情况得到的最大值再取一个最大值即可。
-
-class Solution(object):
-    def maxPathSum(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        self.max_sum = -sys.maxsize - 1
-
-        def scan(root):
-            if root is None:
-                return -sys.maxsize - 1
-            left = scan(root.left)
-            right = scan(root.right)
-            self.max_sum = max(self.max_sum, root.val + left + right, left, right) # 情况1,5,6，不累加直接放变量里暂存
-            return max(root.val, root.val + left, root.val + right)  # 情况2,3,4 ，累加需要递归
-
-        new_max = scan(root)
-        return max(self.max_sum, new_max)  # 两类情况再求最大
-
-import sys
-
-class Solution:
-    
-    result = -sys.maxsize-1
-    
-    def maxPathSum(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        self.maxValue(root)
-        return self.result
-    
-    """
-    最大路径和：根据当前节点的角色，路径和可分为两种情况：
-    一：以当前节点为根节点
-    1.只有当前节点
-    2.当前节点+左子树
-    3.当前节点+右子书
-    4.当前节点+左右子树    
-    这四种情况的最大值即为以当前节点为根的最大路径和
-    此最大值要和已经保存的最大值比较，得到整个树的最大路径值
-    
-    二：当前节点作为父节点的一个子节点
-    和父节点连接的话则需取【单端的最大值】
-    1.只有当前节点
-    2.当前节点+左子树
-    3.当前节点+右子书
-    这三种情况的最大值    
-    """
-    def maxValue(self,root):
-        if root == None:            
-            return 0
-        
-        leftValue = self.maxValue(root.left)
-        rightValue = self.maxValue(root.right)
-        
-        value1 = root.val
-        value2 = root.val + leftValue
-        value3 = root.val + rightValue
-        value4 = root.val + rightValue + leftValue
-        
-        #以此节点为根节点的最大值
-        maxValue = max([value1,value2,value3,value4])
-        
-        #当前遍历树的最大值
-        self.result = max(maxValue, self.result)
-        
-        #要和父节点关联，则需要取去除情况4的最大值
-        return max([value1,value2,value3])
-
-class Solution:
-    def __init__(self):
-        self.maxSum = float("-inf")
-
-    def maxPathSum(self, root: TreeNode) -> int:
-        def maxGain(node):
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        res = -1e9
+        # left = right = 0
+        def dfs(node) -> int:
+            nonlocal res # 也可以写成 self.res
             if not node:
                 return 0
-
-            # 递归计算左右子节点的最大贡献值
-            # 只有在最大贡献值大于 0 时，才会选取对应子节点
-            leftGain = max(maxGain(node.left), 0)
-            rightGain = max(maxGain(node.right), 0)
-            
-            # 节点的最大路径和取决于该节点的值与该节点的左右子节点的最大贡献值
-            priceNewpath = node.val + leftGain + rightGain
-            
-            # 更新答案
-            self.maxSum = max(self.maxSum, priceNewpath)
-        
-            # 返回节点的最大贡献值
-            return node.val + max(leftGain, rightGain)
-   
-        maxGain(root)
-        return self.maxSum
+            # if node.left:
+            left = max(dfs(node.left), 0)     # 正负性：left 为负，就不回收
+            # if node.right:
+            right = max(dfs(node.right), 0)   # 正负性：right 为负，就不回收
+            # 有两种情况：node.val 不往上回收, 左中右
+            res = max(left + right + node.val, res)
+            # 有两种情况：node.val 往上回收, 构成递归
+            return max(left,right) + node.val # 正负性：node.val必须回收
+        dfs(root)
+        return res
 ```
 
 ```scala
-/**
-* my first commitment: variation of Kadane's algorithm.
-*/
-
 object Solution1 {
     def maxPathSum(root: TreeNode): Int = {
         dfs(root)._1
     }
-     /**
-      * maxEndingHere records the path maximum summation which ending at current node
-      * maxSoFar records the maximum sum globally
-      */
+
     def dfs(node: TreeNode): (Int, Int) = {
       if (node == null) return (Int.MinValue, 0)
       
@@ -3119,10 +2247,7 @@ object Solution1 {
       val (rightSoFar, rightEndingHere) = dfs(node.right)
 
       val maxSoFar = leftSoFar max rightSoFar max (node.value + leftEndingHere + rightEndingHere)
-      /**
-      * we should choose one path witch makes summation maximum ending at current node
-      * maxEndingHere is not charge for node.value + leftEndingHere + rightEndingHere
-      */
+
       val maxEndingHere = 0 max (node.value + (leftEndingHere max rightEndingHere))
       (maxSoFar, maxEndingHere)
     }
