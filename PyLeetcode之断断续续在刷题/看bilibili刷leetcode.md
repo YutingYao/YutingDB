@@ -4755,66 +4755,20 @@ object Solution {
 
 ```py
 # 努力接受了一下。就是想象一下峰顶在中间，那么左右两侧都是有序的，可根据mid和mid+1的值判断当前是在哪一侧，然后最后定位到峰值
-
-class Solution:
+class Solution(object):
     def findPeakElement(self, nums):
         l = 0 
         r = len(nums) - 1 
 
         while l <= r:
-            mid = (l + r) >> 1 
-            
-            if mid == len(nums) - 1:
-                r = mid - 1 
-            else:
-                if nums[mid] > nums[mid+1]:
-                    r = mid - 1 
-                else:
-                    l = mid + 1 
-        return l
+        	mid = (l + r) >> 1
 
-# 要求时间复杂度 O(log N)，考虑二分查找。
+        	if l == r : return l # 关键在于这里
 
-# nums[mid] > max(nums[mid-1], nums[mid+1])	mid 即为所求
-# nums[mid] < nums[mid+1]			        [mid+1, n-1] 范围内必然有一个峰值
-# nums[mid] < nums[mid-1]				[0, mid-1] 范围内必然有一个峰值
-class Solution(object):
-    def findPeakElement(self, nums):
-        n = len(nums)
-        i, j = 0, n - 1
-        while i <= j:
-            mid = i + (j - i) // 2
-            if (mid == 0 or nums[mid] > nums[mid-1]) and (mid == n-1 or nums[mid] > nums[mid+1]):
-                return mid
-            if nums[mid] < nums[mid+1]:
-                i = mid + 1
-            else:
-                j = mid - 1
-
-class Solution(object):
-    def findPeakElement(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        l, r = 0, len(nums) - 1
-        while l <= r:
-        	if l == r : return l
-        	mid = l + ((r - l) >> 2)
-        	if nums[mid] < nums[mid+1]:
+        	if nums[mid] < nums[mid+1]: # 关键在于这里，背一背吧
         		l = mid + 1
         	else:
         		r = mid
-
-            
-# 方法一：寻找最大值
-class Solution:
-    def findPeakElement(self, nums):
-        idx = 0
-        for i in range(1, len(nums)):
-            if nums[i] > nums[idx]:
-                idx = i
-        return idx
 ```
 
 ###  1.60. <a name='CompareVersionNumbers'></a>165. Compare Version Numbers
@@ -4824,45 +4778,20 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Pk4y117dF?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def compareVersion(self, version1: str, version2: str) -> int:
-        for v1, v2 in zip_longest(version1.split('.'), version2.split('.'), fillvalue=0):
-            x, y = int(v1), int(v2)
-            if x != y:
-                return 1 if x > y else -1
-        return 0
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/compare-version-numbers/solution/bi-jiao-ban-ben-hao-by-leetcode-solution-k6wi/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+简洁版
 
 class Solution:
     def compareVersion(self, version1: str, version2: str) -> int:
-        n, m = len(version1), len(version2)
-        i, j = 0, 0
-        while i < n or j < m:
-            x = 0
-            while i < n and version1[i] != '.':
-                x = x * 10 + ord(version1[i]) - ord('0')
-                i += 1
-            i += 1  # 跳过点号
-            y = 0
-            while j < m and version2[j] != '.':
-                y = y * 10 + ord(version2[j]) - ord('0')
-                j += 1
-            j += 1  # 跳过点号
-            if x != y:
-                return 1 if x > y else -1
-        return 0
+        for x, y in zip_longest(version1.split('.'), version2.split('.'), fillvalue='0'):
+            a, b = int(x), int(y)
+            if a != b: return 1 if a > b else -1
+        return 0 
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/compare-version-numbers/solution/bi-jiao-ban-ben-hao-by-leetcode-solution-k6wi/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
+python 精简版
+
 class Solution:
     def compareVersion(self, version1: str, version2: str) -> int:
         v1 = version1.split(".")
@@ -4877,32 +4806,6 @@ class Solution:
             elif x<y:
                 return -1
         return 0
-python 精简版
-
-class Solution:
-    def compareVersion(self, version1: str, version2: str) -> int:
-        a = list(map(int,version1.split('.')))
-        b = list(map(int,version2.split('.')))
-        if len(a) > len(b):
-            b += [0] * (len(a) - len(b))
-        else:
-            a += [0] * (len(b) - len(a))
-        a = int(''.join(map(str,a)))
-        b = int(''.join(map(str,b)))
-        if a > b:
-            return 1
-        elif a < b:
-            return -1
-        else:
-            return 0
-简洁版
-
-class Solution:
-    def compareVersion(self, version1: str, version2: str) -> int:
-        for x, y in zip_longest(version1.split('.'), version2.split('.'), fillvalue='0'):
-            a, b = int(x), int(y)
-            if a != b: return 1 if a > b else -1
-        return 0 
 ```
 
 ###  1.61. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
@@ -5121,63 +5024,7 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1VZ4y1M7eu?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        n = len(numbers)
-        for i in range(n):
-            low, high = i + 1, n - 1
-            while low <= high:
-                mid = (low + high) // 2
-                if numbers[mid] == target - numbers[i]:
-                    return [i + 1, mid + 1]
-                elif numbers[mid] > target - numbers[i]:
-                    high = mid - 1
-                else:
-                    low = mid + 1
-        
-        return [-1, -1]
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/solution/liang-shu-zhi-he-ii-shu-ru-you-xu-shu-zu-by-leet-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        low, high = 0, len(numbers) - 1
-        while low < high:
-            total = numbers[low] + numbers[high]
-            if total == target:
-                return [low + 1, high + 1]
-            elif total < target:
-                low += 1
-            else:
-                high -= 1
-
-        return [-1, -1]
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/solution/liang-shu-zhi-he-ii-shu-ru-you-xu-shu-zu-by-leet-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
 python 3 有点二分法的味道
-
-class Solution:
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        left = 0
-        right = len(numbers)-1      
-        while left < right:
-            if numbers[left] + numbers[right] == target:                
-                return [left+1, right+1]
-            elif numbers[left] + numbers[right] < target:
-                left = left + 1
-            else:
-                right = right - 1
-
-python3 双指针，二分，hash表记录差值 class Solution: def twoSum(self, numbers: List[int], target: int) -> List[int]: n = len(numbers)
 
     # 双指针
 class Solution:
@@ -5190,27 +5037,16 @@ class Solution:
                 l +=1
             else:
                 r -=1
-    # 二分
-class Solution:
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        for i in range(n-1):
-            l, r =i+1, n-1
-            while l <= r:
-                mid = (l+r) // 2
-                if numbers[mid] == target - numbers[i]:
-                    return [i+1, mid+1]
-                elif numbers[mid] > target - numbers[i]:
-                    r = mid - 1
-                else:
-                    l = mid + 1
+        return [-1, -1]
+
     # hasn表，利用hash表记录所有的差值
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        hash_ = dict()
+        visited = dict()
         for index, num in enumerate(numbers):
-            if num in hash_:
-                return [hash_[num]+1, index+1]
-            hash_[target - num] = index
+            if num in visited:
+                return [visited[num]+1, index+1]
+            visited[target - num] = index
 ```
 
 ###  1.63. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
@@ -5220,35 +5056,18 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H777?spm_id_from=333.999.0.0)
 
 ```py
+## A的ascii码为65
+# 又想了好久才知道在哪里减一。。
 class Solution:
-    def convertToTitle(self, columnNumber: int) -> str:
-        ans = list()
-        while columnNumber > 0:
-            a0 = (columnNumber - 1) % 26 + 1
-            ans.append(chr(a0 - 1 + ord("A")))
-            columnNumber = (columnNumber - a0) // 26
-        return "".join(ans[::-1])
+    def convertToTitle(self, n: int) -> str:
+        res = ''
+        while(n):
+            n -= 1
+            res = chr(n%26+65) + res
+            n = n//26
+        return res
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/excel-sheet-column-title/solution/excelbiao-lie-ming-cheng-by-leetcode-sol-hgj4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-class Solution:
-    def convertToTitle(self, columnNumber: int) -> str:
-        ans = list()
-        while columnNumber > 0:
-            columnNumber -= 1
-            ans.append(chr(columnNumber % 26 + ord("A")))
-            columnNumber //= 26
-        return "".join(ans[::-1])
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/excel-sheet-column-title/solution/excelbiao-lie-ming-cheng-by-leetcode-sol-hgj4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-麻了，简单题都不能重拳出击了
 
 class Solution:
     def convertToTitle(self, columnNumber: int) -> str:
@@ -5259,21 +5078,6 @@ class Solution:
             res += chr(columnNumber % 26 + ord('A'))
             columnNumber //= 26
         return res[::-1]
-```
-
-```py
-## A的ascii码为65
-
-class Solution:
-    def convertToTitle(self, n: int) -> str:
-        s = ''
-        while(n):
-            n -= 1
-            s = chr(n%26+65) + s
-            n = n//26
-        return s
-
-用换进制的方法做了好久，突然发现这个题是没有A0的，又想了好久才知道在哪里减一。。
 
 class Solution(object):
     def convertToTitle(self, columnNumber):
@@ -5282,24 +5086,6 @@ class Solution(object):
             columnNumber -= 1
             res = chr(columnNumber % 26 + 65) + res
             columnNumber = columnNumber // 26 
-        return res
-
-class Solution(object):
-    def convertToTitle(self, columnNumber):
-        """
-        :type columnNumber: int
-        :rtype: str
-        """
-        words = 'ZABCDEFGHIJKLMNOPQRSTUVWXY'
-        dic = {}
-        for i in range(26):
-            dic[i] = words[i]
-        res = ''
-        while columnNumber :
-            columnNumber,mod = divmod(columnNumber,26)
-            res = dic[mod] + res
-            if not mod:
-                columnNumber -= 1
         return res
 ```
 
@@ -5314,143 +5100,35 @@ class Solution(object):
 ```py
 class Solution:
     def majorityElement(self, nums: List[int]) -> int:
-        counts = collections.Counter(nums)
-        return max(counts.keys(), key=counts.get)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        return sorted(nums)[len(nums) // 2]
 
 class Solution:
     def majorityElement(self, nums: List[int]) -> int:
         nums.sort()
         return nums[len(nums) // 2]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def majorityElement(self, nums: List[int]) -> int:
-        majority_count = len(nums) // 2
-        while True:
-            candidate = random.choice(nums)
-            if sum(1 for elem in nums if elem == candidate) > majority_count:
-                return candidate
+        counts = collections.Counter(nums)
+        return max(counts.keys(), key=counts.get)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+# 投票策略，半数以上获胜
 
 class Solution:
     def majorityElement(self, nums: List[int]) -> int:
         count = 0
         candidate = None
 
-        for num in nums:
+        for vot in nums:
             if count == 0:
-                candidate = num
-            count += (1 if num == candidate else -1)
+                candidate = vot
+            count += (1 if vot == candidate else -1)
 
         return candidate
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
-python3 因为一定有众数，且众数个数大于n/2，所以直接排序输出n/2位置的数即可。[力扣]
-
-class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        nums.sort()
-        return nums[int(len(nums)/2)]
-         整除//不好用吗，为什么用int
-
-
-藏在管子里的蛇，身体长于管子的一半的话，砍中间就肯定能砍到
-
-class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        return sorted(nums)[len(nums) // 2]
 ```
 
 ```scala
-
-/**
-* chosen solution
-*
-* Boyer-Moore Voting Algorithm
-* time complexity N(N)
-* space complexity O(1)
-*/
-object Solution {
-    def majorityElement(nums: Array[Int]): Int = {
-      var counter = 1
-      var candidate = nums(0)
-      for (idx <- 1 until nums.length) {
-        val value = nums(idx)
-        if(candidate == value)
-          counter += 1
-        else {
-          if(counter == 1)
-            candidate = value
-          else
-            counter -= 1
-        }
-      }
-      candidate
-    }
-}
-
-
-/**
-* Boyer-Moore Voting Algorithm
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-object Solution1 {
-  def majorityElement(nums: Array[Int]): Int = {
-    var num = nums(0)
-    var counter = 0
-    nums.foreach { n =>
-      if (num == n) {
-        counter += 1
-      } else {
-        counter -= 1
-        if (counter == 0) {
-          num = n
-          counter += 1
-        }
-      }
-    }
-    num
-  }
-}
-
-/**
-* immutable during iteration
-*/
-object Solution1-2 {
-    def majorityElement(nums: Array[Int]): Int = {
-       val (ans, accumulate) = (1 until nums.length).foldLeft((nums.head, 1)) {
-            case ((cur, acc), idx) =>
-                val incoming = nums(idx)
-                if(incoming == cur) (cur, acc + 1)
-                else {
-                    if(acc == 1) (incoming, 1)
-                    else (cur, acc - 1)
-                }
-        }
-        ans
-    }
-}
-
 /**
 * HashMap
 * time complexity: O(N)
@@ -5474,40 +5152,73 @@ object Solution3 {
         nums.sorted(Ordering.Int)(nums.length / 2)
     }
 }
-
-
 ```
 
+
 ```scala
-object Solution {
+
+/**
+* chosen solution
+* 投票测量
+* Boyer-Moore Voting Algorithm
+* time complexity N(N)
+* space complexity O(1)
+*/
+object Solution
     def majorityElement(nums: Array[Int]): Int = {
-        var map = scala.collection.mutable.Map.empty[Int, Int]
-        for(elem <- nums){
-            map.get(elem) match{
-                case Some(count) => map += (elem -> (count+1))
-                case None => map += (elem -> 1)
-            }
+      var counter = 0
+      var candidate = nums(0)
+      for (idx <- 1 until nums.length) {
+        val vot = nums(idx)
+        if(candidate == vot)
+          counter += 1
+        else {
+          if(counter == 0)
+            candidate = vot
+          else
+            counter -= 1
         }
-        
-        map.toList.filter(_._2 > (nums.size / 2)).head._1
+      }
+      candidate
     }
 }
+
+
+object Solution1 {
+  def majorityElement(nums: Array[Int]): Int = {
+    var candidate = nums(0)
+    var counter = 0
+    candidate.foreach { vot =>
+      if (candidate == vot) {
+        counter += 1
+      } else {
+        counter -= 1
+        if (counter == 0) {
+          candidate = vot
+          counter += 1
+        }
+      }
+    }
+    candidate
+  }
+}
+
 
 //Alternate solution O(n) but NO EXTRA SPACE
 object Solution {
     def majorityElement(nums: Array[Int]): Int = {     
-        var current = nums.head
+        var candidate = nums.head
         var count = 0
-        nums.foreach(num => {
+        nums.foreach(vot => {
             if(count == 0) { 
-                current = num
+                candidate = vot
                 count = 0
             }
-            if(num == current) count+=1;
+            if(vot == candidate) count+=1;
             else count-=1;
         })
         
-        current
+        candidate
     }
 }
 
@@ -5520,84 +5231,19 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV1h541187Sv?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def titleToNumber(self, columnTitle: str) -> int:
-        number, multiple = 0, 1
-        for i in range(len(columnTitle) - 1, -1, -1):
-            k = ord(columnTitle[i]) - ord("A") + 1
-            number += k * multiple
-            multiple *= 26
-        return number
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/excel-sheet-column-number/solution/excelbiao-lie-xu-hao-by-leetcode-solutio-r29l/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def titleToNumber(self, columnTitle: str) -> int:
-        num = 0
-        for t in columnTitle:
-            num *= 26 
-            num += ord(t) - ord('A') + 1
-        return num
-
-python 从左到右遍历
-
+# python 从左到右遍历
+        #26进制转10进制
 class Solution:
 def titleToNumber(self, columnTitle: str) -> int:
         res = 0
-        for c in columnTitle:
+        for char in columnTitle:
             res *= 26
-            res += ord(c) - ord('A') + 1 
+            res += ord(char) - ord('A') + 1 
         return res
 ```
 
-```py
-class Solution(object):
-    def titleToNumber(self, s):
-        #26进制转10进制
-        ans = 0
-        for x in s:
-            ans *= 26
-            ans += ord(x)-ord('A')+1
-        return ans
-        请问一下-ord('A')+1 该怎么理解呢,说明A表示1，而不是0。ord('A') = 65 这里直接减去64就好了
-
-我太菜了
-
-class Solution:
-    def titleToNumber(self, columnTitle: str) -> int:
-        map = {'A':1, 'B':2, 'C':3, 'D':4,'E':5, 'F':6, 'G':7, 'H':8,
-        'I':9, 'J':10, 'K':11, 'L':12,'M':13, 'N':14, 'O':15, 'P':16,
-        'Q':17, 'R':18, 'S':19, 'T':20,'U':21, 'V':22, 'W':23, 'X':24,'Y':25, 'Z':26}
-        i = len(columnTitle) - 1
-        p = 0
-        res = 0
-        while i > -1:
-            res += (map[columnTitle[i]]) * pow(26, p)
-            p += 1
-            i -= 1
-        return res
-```
 
 ```scala
-object Solution {
-    def titleToNumber(s: String): Int = {
-        var size = s.size
-        var i = 0
-        var sheetNumber = 0
-        while(i < size){
-            var sum = (s.charAt(i) - 'A' + 1) * Math.pow(26, (size - i-1)).toInt
-            
-            sheetNumber += sum
-            i += 1
-        }
-        sheetNumber
-    }
-}
-
-
 //Alternate solution
 object Solution {
     def titleToNumber(s: String): Int = 
@@ -5613,91 +5259,37 @@ object Solution {
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7tS?spm_id_from=333.999.0.0)
 
 ```py
-def trailingZeroes(self, n: int) -> int:
-        
-    # Calculate n!
-    n_factorial = 1
-    for i in range(2, n + 1):
-        n_factorial *= i
-    
-    # Count how many 0's are on the end.
-    zero_count = 0
-    while n_factorial % 10 == 0:
-        zero_count += 1
-        n_factorial //= 10
-        
-    return zero_count
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        # Calculate n!
+        factorial = 1
+        for i in range(2, n + 1):
+            factorial *= i
+        # Count how many 0's are on the end.
+        res = 0
+        while factorial % 10 == 0:
+            res += 1
+            factorial //= 10
+            
+        return res
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-def trailingZeroes(self, n: int) -> int:
-        
-    zero_count = 0
-    for i in range(5, n + 1, 5):
-        current = i
-        while current % 5 == 0:
-            zero_count += 1
-            current //= 5
 
-    return zero_count
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        ans = 0
+        while n > 0:
+            n //= 5
+            ans += n
+        return ans
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-def trailingZeroes(self, n: int) -> int:
-        
-    zero_count = 0
-    for i in range(5, n + 1, 5):
-        power_of_5 = 5
-        while i % power_of_5 == 0:
-            zero_count += 1
-            power_of_5 *= 5
-
-    return zero_count
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-def trailingZeroes(self, n: int) -> int:
-    zero_count = 0
-    current_multiple = 5
-    while n >= current_multiple:
-        zero_count += n // current_multiple
-        current_multiple *= 5
-    return zero_count
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-def trailingZeroes(self, n: int) -> int:
-    zero_count = 0
-    while n > 0:
-        n //= 5
-        zero_count += n
-    return zero_count
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
 class Solution:
     def trailingZeroes(self, n: int) -> int:
         ans = 0
         while n >= 5:
-            ans = ans + n//5
-            n=n//5
+            ans += n//5
+            n = n//5
         return ans
 ```
 
@@ -5731,9 +5323,7 @@ object Solution {
 
 ```py
 # 在数据上设计迭代器的话，是「一定」不能修改原始的数据的。
-
 # ------
-
 # 借楼贴个 Morris 遍历。O(1) 空间复杂度，均摊 O(1) 时间复杂度。
 
 class BSTIterator:
@@ -5950,19 +5540,11 @@ class BSTIterator(object):
 
 ```py
 from functools import cmp_to_key
-
-# 比较函数
-def compare(a, b):
-    print("compare:")
-    return int(b + a) - int(a + b)
-    
-
 class Solution(object):
     def largestNumber(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: str
-        """
+        # 比较函数
+        def compare(a, b):
+            return int(b + a) - int(a + b)
         nums = sorted([str(x) for x in nums], key=cmp_to_key(compare))
         return str(int(''.join(nums)))
 ```
@@ -5979,21 +5561,12 @@ class Solution:
 ```
 
 ```py
-# 一个[0,0]让我不讲武德——str->int->str
-
+# 大小的比较不是常规的字符串比较
+# 正常来说'30' > '3' 但是'303' < '330'
+# 需要自己定义排序规则
+import functools
 class Solution:
     def largestNumber(self, nums):
-        # res = []
-        # for i in nums:
-        #     res.append(str(i))
-
-        # res.sort(reverse=True)
-        # print(res)
-        # return ''.join(res)
-
-        # 大小的比较不是常规的字符串比较
-        # 正常来说'30' > '3' 但是'303' < '330'
-        # 需要自己定义排序规则
 
         res = []
         for i in nums:
@@ -6001,22 +5574,18 @@ class Solution:
 
         def cmp(a,b):
             return 1 if (a+b) < (b+a) else -1
-        
-        import functools
         res.sort(key=functools.cmp_to_key(cmp))
-        
-        # print(res)
         return str(int(''.join(res)))
 ```
 
 ```py
 class Solution:
     def largestNumber(self, nums):
-        nums=sorted([str(x) for x in nums],reverse=True)
+        nums = sorted([str(x) for x in nums],reverse=True)
         for i in range(len(nums)-1):
             for j in range(i,len(nums)):
-                if str(nums[i])+str(nums[j])<str(nums[j])+str(nums[i]):
-                    nums[i],nums[j]=nums[j],nums[i]
+                if str(nums[i]) + str(nums[j]) < str(nums[j]) + str(nums[i]):
+                    nums[i],nums[j] = nums[j],nums[i]
         return str(int(''.join(nums)))
 ```
 
@@ -6033,6 +5602,36 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
 
 ```py
+Python： 版本一
+
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        if len(prices) == 0:
+            return 0
+        dp = [[0] * (2*k+1) for _ in range(len(prices))]
+        for j in range(1, 2*k, 2):
+            dp[0][j] = -prices[0]
+        for i in range(1, len(prices)):
+            for j in range(0, 2*k-1, 2):
+                dp[i][j+1] = max(dp[i-1][j+1], dp[i-1][j] - prices[i])
+                dp[i][j+2] = max(dp[i-1][j+2], dp[i-1][j+1] + prices[i])
+        return dp[-1][2*k]
+版本二
+
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        if len(prices) == 0: return 0
+        dp = [0] * (2*k + 1)
+        for i in range(1,2*k,2):
+            dp[i] = -prices[0]
+        for i in range(1,len(prices)):
+            for j in range(1,2*k + 1):
+                if j % 2:
+                    dp[j] = max(dp[j],dp[j-1]-prices[i])
+                else:
+                    dp[j] = max(dp[j],dp[j-1]+prices[i])
+        return dp[2*k]
+
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
         if not prices:
@@ -6055,10 +5654,6 @@ class Solution:
 
         return max(sell[n - 1])
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-iv-by-8xtkp/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
         if not prices:
@@ -6081,10 +5676,7 @@ class Solution:
 
         return max(sell)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-iv-by-8xtkp/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 ```
 
 ```py
@@ -6142,6 +5734,9 @@ class Solution:
 
         return max(no)
 
+```
+
+```py
 
 标准的三维DP动态规划，三个维度，第一维表示天，第二维表示交易了几次，第三维表示是否持有股票。
 
@@ -6193,35 +5788,7 @@ class Solution:
         return res
 
 
-Python： 版本一
 
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if len(prices) == 0:
-            return 0
-        dp = [[0] * (2*k+1) for _ in range(len(prices))]
-        for j in range(1, 2*k, 2):
-            dp[0][j] = -prices[0]
-        for i in range(1, len(prices)):
-            for j in range(0, 2*k-1, 2):
-                dp[i][j+1] = max(dp[i-1][j+1], dp[i-1][j] - prices[i])
-                dp[i][j+2] = max(dp[i-1][j+2], dp[i-1][j+1] + prices[i])
-        return dp[-1][2*k]
-版本二
-
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if len(prices) == 0: return 0
-        dp = [0] * (2*k + 1)
-        for i in range(1,2*k,2):
-            dp[i] = -prices[0]
-        for i in range(1,len(prices)):
-            for j in range(1,2*k + 1):
-                if j % 2:
-                    dp[j] = max(dp[j],dp[j-1]-prices[i])
-                else:
-                    dp[j] = max(dp[j],dp[j-1]+prices[i])
-        return dp[2*k]
 ```
 
 
@@ -6411,6 +5978,7 @@ class Solution:
         k = k % n
         for _ in range(k):
             nums.insert(0,nums.pop())
+
 class Solution:
     def rotate(self, A: List[int], k: int) -> None:
         def reverse(i, j):
@@ -6427,14 +5995,9 @@ class Solution:
 
 
 ```py
-一行98.44%时间,数组切片必须等于切片，左边方括号和冒号都是要的
-不写切片相当于nums修改的地址重新指向右边的临时地址，写切片相当于按着切片下标修改值，前者在线上判定里无法AC，线上判定只判定原地地址的情况，不写切片的nums只在函数内有效。
-切片不能满足O(1)的空间要求
-
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
         nums[: ] = nums[-k % len(nums): ] + nums[: -k % len(nums)]
-改成空间o(1)的方法了，速度还快了，99.53%。
 
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
@@ -6448,14 +6011,12 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1qv411i7Wg?spm_id_from=333.999.0.0)
 
 ```py
-从n的右侧开始，逐个检查是否是1（利用一个s）
+# 从n的右侧开始，逐个检查是否是1（利用一个s）
 
-ans逐渐<<1，如果当前n&s==s，则说明此位为1，ans+=1
+# ans逐渐<<1，如果当前n&s==s，则说明此位为1，ans+=1
 
-最后ans就是n的二进制位的颠倒了
+# 最后ans就是n的二进制位的颠倒了
 
-执行用时：28 ms, 在所有 Python3 提交中击败了92.53%的用户
-内存消耗：14.9 MB, 在所有 Python3 提交中击败了21.75%的用户
 
 class Solution:
     def reverseBits(self, n: int) -> int:
@@ -6470,7 +6031,7 @@ class Solution:
             ans += 1
         return ans
 
-    每次只对最低位进行操作，理论上效率高于对 31 的循环
+# 每次只对最低位进行操作，理论上效率高于对 31 的循环
 
 class Solution:
     def reverseBits(self, n: int) -> int:
@@ -6522,48 +6083,6 @@ class Solution:
         ret = sum(1 for i in range(32) if n & (1 << i)) 
         return ret
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-1-bits/solution/wei-1de-ge-shu-by-leetcode-solution-jnwf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-class Solution:
-    def hammingWeight(self, n: int) -> int:
-        ret = 0
-        while n:
-            n &= n - 1
-            ret += 1
-        return ret
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-1-bits/solution/wei-1de-ge-shu-by-leetcode-solution-jnwf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-最近每日一题是来给我培养信心的？
-
-class Solution:
-    def hammingWeight(self, n: int) -> int:
-        ones = 0
-        while n > 0:
-            ones += 1
-            n &= n - 1
-        return ones
-```
-
-```py
-从1开始，每次<<一位，与n做与运算，如果不为0，则该位为1
-
-执行用时：36 ms, 在所有 Python3 提交中击败了40.82%的用户
-内存消耗：14.7 MB, 在所有 Python3 提交中击败了91.95%的用户
-class Solution:
-    def hammingWeight(self, n: int) -> int:
-        a, ans = 0, 0
-        while a <= 32:
-            if (1<<a)&n != 0:
-                ans += 1
-            a += 1
-        return ans
-         
 class Solution:
     def hammingWeight(self, n: int) -> int:
         return ('{:0b}'.format(n).count('1'))
@@ -6571,17 +6090,39 @@ class Solution:
 class Solution:
     def hammingWeight(self, n: int) -> int:
         return bin(n).count('1')
- python 输入的是10进制的 直接转str不行 可以试试 bin(n) 将10进制 转成 二进制然后 count
+#  python 输入的是10进制的 直接转str不行 可以试试 bin(n) 将10进制 转成 二进制然后 count
+```
 
+```py
+# 从1开始，每次<<一位，与n做与运算，如果不为0，则该位为1
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+
+        res = 0
+        while n:
+            n &= n - 1
+            res += 1
+        return res
+
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        a, res = 0, 0
+        while a <= 32:
+            if (1<<a)&n != 0:
+                res += 1
+            a += 1
+        return res
 ```
 
 ```scala
-/**
-* chosen solution
-* bit operation - recursive version
-* time complexity: O(1)
-*/
-object Solution0{
+
+// 使用位操作:x = x & (x -1)将最后一个非零pos设置为零  
+
+//Alternate(需要理解这里发生了什么)和num, num-1  
+// num & num-1返回最后一个SET位  
+//交替位移位和计数1  
+
+object Solution{
     // you need treat n as an unsigned value
     def hammingWeight(n: Int): Int = {
         _hammingWeight(n, 0)
@@ -6594,10 +6135,7 @@ object Solution0{
     }
 }
 
-/**
-* my first commitment
-* time complexity: fixed size: 32 bits, so O(1)
-*/
+
 object Solution0 {
     // you need treat n as an unsigned value
     def hammingWeight(n: Int): Int = {
@@ -6616,54 +6154,6 @@ object Solution0 {
 }
 
 
-/**
-* bit operation - iterative version
-* memo
-*    1. using bit operation :  x = x & (x -1)  to set the last non zero pos to zero
-*
-*/
-object Solution1 {
-    // you need treat n as an unsigned value
-    def hammingWeight(n: Int): Int = {
-
-        var nn = n
-        var counter = 0
-        while(nn != 0) {
-            counter += 1
-            nn = nn & (nn -1)
-        }
-        
-        counter
-    }
-}
-
-/**
-* bit operation - recursive version
-*/
-object Solution1-2 {
-    // you need treat n as an unsigned value
-    def hammingWeight(n: Int): Int = {
-        _hammingWeight(n, 0)
-    }
-    
-    @annotation.tailrec
-    def _hammingWeight(n: Int, counter: Int): Int = {
-        if(n  == 0) counter
-        else _hammingWeight(n & (n - 1), counter + 1 )
-    }
-}
-
-```
-
-```scala
-object Solution {
-    // you need treat n as an unsigned value
-    def hammingWeight(n: Int): Int = {
-        n.toBinaryString.toCharArray.filter(_ == '1').length
-    }
-}
-
-//Alternate bit-wise shift and count 1
 def hammingWeight(n: Int): Int = {
         var count = 0
         var num   = n
@@ -6675,19 +6165,25 @@ def hammingWeight(n: Int): Int = {
     count
 }
 
-//Alternate (need to understand whats happening here) AND of num, num-1
-// num & num-1 returns the last SET bit
 def hammingWeight(n: Int): Int = {
-        println(n)
-        var sum = 0
+        var counter = 0
         var num = n         
         while (num != 0) {
-            sum += 1
+            counter += 1
             num &= (num-1)                
         }
-        sum
+        counter
     }
 
+```
+
+```scala
+object Solution {
+    // you need treat n as an unsigned value
+    def hammingWeight(n: Int): Int = {
+        n.toBinaryString.toCharArray.filter(_ == '1').length
+    }
+}
 ```
 
 ###  1.76. <a name='HouseRobber198-'></a>198. House Robber 198-打家劫舍
@@ -6705,6 +6201,32 @@ def hammingWeight(n: Int): Int = {
 [官方](https://www.bilibili.com/video/BV18g4y1i7f9?spm_id_from=333.999.0.0)
 
 ```py
+动态规划，典型例题：
+
+class Solution(object):
+    def rob(self, nums):
+        last = 0 
+        now = 0
+        for i in nums: 
+            #这是一个动态规划问题
+            #其实就是一个奇数和偶数位元素求和，哪个更大么？
+            last, now = now, max(last + i, now)
+        return now
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        y = yesterday = 0
+        t = today = 0
+        for j in nums:
+            y, t = t, max(y + j, t)
+        return t
+```
+
+```py
+状态转移方程，dp[i]=max(dp[i-1],dp[i-2]+nums[i]
+
+而后发现dp[i] ,只与dp[i-2],dp[i-1]有关了
+
 class Solution:
     def rob(self, nums: List[int]) -> int:
         if not nums:
@@ -6722,10 +6244,7 @@ class Solution:
         
         return dp[size - 1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/house-robber/solution/da-jia-jie-she-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
@@ -6742,29 +6261,6 @@ class Solution:
         
         return second
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/house-robber/solution/da-jia-jie-she-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-使劲盯着题解看，滚动数组，受到启发，写了这个，优化了5次。
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        y = yesterday = 0
-        t = today = 0
-        for j in nums:
-            y, t = t, max(y + j, t)
-        return t
-其实就是，在dp 数组前面，加上了两天，这两天，运气不好，啥都没有搞到。为了把所有边界的情况，也压到这些代码中， 而不必单独写语句，压缩函数的行数。
-
-dp[i] 这个定义，一定要搞清楚，代表，截至第i天，能够偷盗的最大收获，这一天可能没偷，但昨天干了一个大活。 [33,9999,1] ,最后一天，啥也不干。但最后一天的dp[i]=9999 ,虽然前一天也是9999
-状态转移方程，dp[i]=max(dp[i-1],dp[i-2]+nums[i]
-而后发现dp[i] ,只与dp[i-2],dp[i-1]有关了
-空间压缩，也就是原来要用一个列表存储dp ，现在只用两个变量，不过这两个变量要时刻刷新。
-我一开始，也不会空间压缩，慢慢来。
-
-动态规划。当前位置的最大金额，等于前一个位置的金额，或者前前位置金额加上当前位置金额。dp[i]=max(dp[i-1], dp[i-2]+nums[i])
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
@@ -6777,7 +6273,6 @@ class Solution:
             dp[i] = max(dp[i-1], (dp[i-2]+nums[i]))
         return dp[len(nums)-1]
 
-Python：
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
@@ -6807,35 +6302,6 @@ class Solution:
                 sums[0] = sums[1] = 0
         ret += max(sums[0], sums[1])
         return ret
-
-动态规划，典型例题：
-
-class Solution(object):
-    def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        last = 0 
-        now = 0
-        for i in nums: 
-            #这是一个动态规划问题
-            last, now = now, max(last + i, now)
-        return now
-但是我确实实现的不是很复杂，就是一个交替赋值比对的过程。 可以探讨。
-
-class Solution(object):
-    def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        last = 0 
-        now = 0
-        for i in nums: 
-            #其实就是一个奇数和偶数位元素求和，哪个更大么？
-            last, now = now, max(last + i, now)
-        return now
 ```
 
 
@@ -6908,26 +6374,13 @@ object Solution {
 [官方](https://www.bilibili.com/video/BV1xK4y1b7Wh?spm_id_from=333.999.0.0)
 
 ```py
-# py，36ms，99.37%前根序遍历，按层存进字典，
-# 能保证每层最后一个遍历的到的元素一定是最右边的元素，
-# 输出时字典默认遍历序等于定义序
 
 class Solution:
     def rightSideView(self, root: TreeNode):
-        d = {}
-        def f(r, i):
-            if r:
-                d[i] = r.val
-                f(r.left, i + 1)
-                f(r.right, i + 1)
-        f(root, 0)
-        return [*d.values()]
-class Solution:
-    def rightSideView(self, root: TreeNode):
-        d, f = {}, lambda r, i: r and (d.__setitem__(i, r.val) or f(r.left, i + 1) or f(r.right, i + 1))
-        return f(root, 0) or [*d.values()]
-
-#  bfs 层序遍历，每次保留最后一个值
+        dic, dfs = {}, lambda node, startI: node and (dic.__setitem__(startI, node.val) or dfs(node.left, startI + 1) or dfs(node.right, startI + 1))
+        return dfs(root, 0) or [*dic.values()]
+# __setitem__:每当属性被赋值的时候都会调用该方法，因此不能再该方法内赋值 self.name = value 会死循环
+#  bfs 层序遍历，每次保留最后一个值stack
 
 class Solution:
     def rightSideView(self, root: TreeNode):
@@ -6946,19 +6399,14 @@ class Solution:
 
 class Solution:
     def rightSideView(self, root: TreeNode):
-        ans, d = [], root and [root]
-        while d:
-            ans.append(d[-1].val)
-            d = [r for t in d for r in (t.left, t.right) if r]
-        return ans
+        res, level = [], root and [root]
+        while level:
+            res.append(level[-1].val)
+            level = [right for tree in level for right in (tree.left, tree.right) if right]
+        return res
+
 # 老层序遍历了
 
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
 class Solution:
     def rightSideView(self, root: TreeNode):
         if not root:
@@ -6966,28 +6414,28 @@ class Solution:
         res = []
         node = [root]
         while node:
-            node2 = []
+            tmpNode = []
             for n in node:
                 if n.left:
-                    node2.append(n.left)
+                    tmpNode.append(n.left)
                 if n.right:
-                    node2.append(n.right)
+                    tmpNode.append(n.right)
             res.append(node[-1].val)
-            node = node2
+            node = tmpNode
         return res
 
-# 后序遍历：
+# 递归
 
 class Solution:
     def rightSideView(self, root: TreeNode):
-        d = []
-        def f(r, i):
-            if r:
-                i == len(d) and d.append(r.val)
-                f(r.right, i + 1)
-                f(r.left, i + 1)
-        f(root, 0)
-        return d
+        res = []
+        def dfs(node, startIndex):
+            if node:
+                startIndex == len(res) and res.append(node.val)
+                dfs(node.right, startIndex + 1)
+                dfs(node.left, startIndex + 1)
+        dfs(root, 0)
+        return res
 ```
 
 ###  1.78. <a name='-1'></a>200-岛屿数量
@@ -7006,7 +6454,6 @@ class Solution:
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3v3ayrrcjf60.png" width="50%">
 
 ```py
-
 # dfs
 from pprint import pprint
 class Solution:
@@ -7032,13 +6479,8 @@ class Solution:
 
 # 看了别人的代码，写的真美 ╮(╯_╰)╭ 啊
 
-# ```python
 class Solution(object):
     def numIslands(self, grid):
-        """
-        :type grid: List[List[str]]
-        :rtype: int
-        """
         def dfs(gird, used, row, col, x, y):
             if gird[x][y] == '0' or used[x][y]:
                 return 
@@ -7093,13 +6535,8 @@ class Solution:
 
 ```py
 # 厉害的解法：Sink and count the islands.
-# ```python
 class Solution(object):
     def numIslands(self, grid):
-        """
-        :type grid: List[List[str]]
-        :rtype: int
-        """
         def sink(i, j):
             if 0 <= i < len(grid) and 0 <= j < len(grid[0]) and grid[i][j] == '1':
                 grid[i][j] = '0'
@@ -7193,55 +6630,8 @@ object Solution1 {
 *     both union and find operation's amortized time complexity in UnionFind class are very very close to 1 but not 1
 */
 
-/**
-* weighted quick-union with path compression
-* all operation's amortized time complexity are very very close to 1
-*/
-class UnionFind(grid: Array[Array[Char]]) {
-  private val n = grid.length
-  private val m = grid(0).length
-  private val roots = Array.tabulate(n * m){i => i}
-  private val rank = Array.fill[Int](n * m)(1)
-  var counter = (for(i <- 0 until n; j <- 0 until m ; if grid(i)(j) == '1' ) yield(i, j)).size
 
-  def findRoot(coord: (Int, Int)): Int = {
-    var idx = coord._2 + coord._1 * m
-    var root = idx
-
-    while(root != roots(root)) {
-      root = roots(root)
-    }
-    /** path compression */
-    while(idx != roots(idx)) {
-      val tmp = roots(idx)
-      roots(idx) = root
-      idx = tmp
-    }
-    root
-  }
-
-  def isConnected(coordA: (Int, Int), coordB: (Int, Int)): Boolean = {
-    findRoot(coordA) == findRoot(coordB)
-  }
-  def union(coordA: (Int, Int), coordB: (Int, Int)): Unit = {
-    val findA  = findRoot(coordA)
-    val findB = findRoot(coordB)
-    if(findA == findB) return
-
-    if(rank(findA) > rank(findB)) {
-      roots(findB) = findA
-    }else if(rank(findA) < rank(findB)) {
-      roots(findA) = findB
-    }else {
-      roots(findA) = findB
-      rank(findB) += 1
-    }
-    counter -= 1
-  }
-
-}
-
-object Solution2 {
+object Solution {
   private val endLabel = '0'
   def numIslands(grid: Array[Array[Char]]): Int = {
     val unionFind = new UnionFind(grid)
@@ -7270,64 +6660,6 @@ object Solution2 {
       (row, col + 1),
       (row, col - 1)
     ).filter{ case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
-  }
-}
-
-```
-
-```scala
-package com.zhourui.leetcode
-
-
-// 思路 
-package lc0200_numberofisland {
-  object Solution {
-    def numIslands(grid: Array[Array[Char]]): Int = {
-      if(grid.isEmpty || grid(0).isEmpty){
-        return 0
-      }
-      val m = grid.size
-      val n = grid(0).size;
-
-      //val dp:Array[Array[Int]];//vector<vector<int>> dp(m,std::vector<int>(n));
-      //val dp = Array.ofDim[Int](m,n)
-      val dp = Array.fill(m,n)(0)
-
-      var count=0;
-      for (i<-0 until m) {
-        for (j<-0 until n) {
-          if (dp(i)(j)==0) {
-            if (bfs(grid,dp,(i,j)))
-              count +=1;
-          }
-        }
-      }
-      count;
-    }
-
-    def bfs(grid:Array[Array[Char]], dp:Array[Array[Int]],pos:(Int,Int)):Boolean = {
-      val m = grid.length
-      val n = grid(0).length
-      if (pos._1>=m || pos._2>=n || pos._1<0 || pos._2<0) {
-        return false
-      }
-      if (dp(pos._1)(pos._2) == 1) {
-        false
-      } else if (dp(pos._1)(pos._2) == 0 && grid(pos._1)(pos._2) == '1') {
-        dp(pos._1)(pos._2) = 1
-        // right
-        bfs(grid, dp, (pos._1, pos._2 + 1))
-        // down
-        bfs(grid, dp, (pos._1 + 1, pos._2))
-        // up
-        bfs(grid, dp, (pos._1 - 1, pos._2))
-        // left
-        bfs(grid, dp, (pos._1, pos._2 - 1))
-        true;
-      } else {
-        false
-      }
-    }
   }
 }
 
