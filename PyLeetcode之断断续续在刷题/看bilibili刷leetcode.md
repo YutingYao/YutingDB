@@ -3229,44 +3229,28 @@ class Solution(object):
 [洛阳](https://www.bilibili.com/video/BV1PA411b7gq?spm_id_from=333.999.0.0)
 
 ```py
+方法一：集合 如果发现节点已在集合内则说明存在环
+
 class Solution:
     def hasCycle(self, head: ListNode) -> bool:
-        seen = set()
+        visited = set()
         while head:
-            if head in seen:
+            visited.add(head)
+            head = head.next
+            if head in visited:
                 return True
-            seen.add(head)
+        return False
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        visited = set()
+        while head:
+            if head in visited:
+                return True
+            visited.add(head)
             head = head.next
         return False
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        if not head or not head.next:
-            return False
-        
-        slow = head
-        fast = head.next
-
-        while slow != fast:
-            if not fast or not fast.next:
-                return False
-            slow = slow.next
-            fast = fast.next.next
-        
-        return True
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
 感觉初始时把快慢指针都指向 head 反而更简洁：
 
 class Solution:
@@ -3281,207 +3265,46 @@ class Solution:
         
 ```
 
+
 ```scala
-/**
- * Definition for singly-linked list.
- * class ListNode(var _x: Int = 0) {
- *   var next: ListNode = null
- *   var x: Int = _x
- * }
- */
-
-/**
-* chosen solution
-* memo
-*      1. create two pointers one work faster with two step the other work slower with a step
-*         if there is a cycle in linked list, the faster pointer will equal to  slower pointer sooner or later
-*
-* time complexity: 
-*       no cycle: O(N)
-*       has cycleL O(N + K) K is the cycle length
-* space complexity: O(1) )
-*/
-
-object Solution0 {
-    def hasCycle(head: ListNode): Boolean = {
-        if(head != null && head.next != null) 
-            _hasCycle(head.next.next, head.next)
-        else false
-    }
-    
-    @annotation.tailrec
-    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
-        if(fast == null || fast.next == null || slow == null) return false
-        else if(fast == slow) return true
-        else _hasCycle(fast.next.next, slow.next)
-    }
-}
-
-
-/**
-* seen set  iterative version
-* memo
-*     using a set to record the node which was seen
-* time complexity: O(N)
-* space complexity: O(N)
-*/
 object Solution1 {
     def hasCycle(head: ListNode): Boolean = {
         
-        var p = head
-        val seenSet = new scala.collection.mutable.HashSet[ListNode]()
+        var cur = head
+        val visited = new scala.collection.mutable.HashSet[ListNode]()
         
-        var result: Boolean = false
-        while (p != null && result != true) {
+        var res: Boolean = false
+        while (cur != null && res != true) {
 
-            if(seenSet.contains(p))  
-                result = true
+            if(visited.contains(cur))  
+                res = true
             else {
-                seenSet += p
-                p = p.next
-            
+                visited += cur
+                cur = cur.next
             }
         }
-        result
+        res
     }
-}
-/**
-* seen set - recursive version
-* memo
-*     using a set to record the node which was seen
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-object Solution2 {
-    def hasCycle(head: ListNode): Boolean = {
-        val seenSet = new scala.collection.mutable.HashSet[ListNode]()
-        _hasCycle(head, seenSet)
-     
-    }
-    
-    def _hasCycle(n: ListNode, seenSet: scala.collection.mutable.HashSet[ListNode]): Boolean = {
-        (n, seenSet.contains(n)) match {
-            case (null, _) => false
-            case (_, true) => true
-            case (_, false) => 
-                 seenSet += n
-                _hasCycle(n.next, seenSet)
-        }
-    }
-    
 }
 
-/**
-* two pointer - iterative version
-* memo
-*      1. create two pointers one work faster with two step the other work slower with a step
-*         if there is a cycle in linked list, the faster pointer will equal to  slower pointer sooner or later
-*
-* time complexity: 
-*       no cycle: O(N)
-*       has cycleL O(N + K) K is the cycle length
-* space complexity: O(1) 
-*/
+
 object Solution3 {
     def hasCycle(head: ListNode): Boolean = {
-        var pointerA = head
-        var pointerB = head
+        var fast = head
+        var slow = head
         
         
         var result = false
-        while (pointerA != null && pointerA.next != null && result != true) {
-            pointerA = pointerA.next.next
-            pointerB = pointerB.next
+        while (fast != null && fast.next != null && result != true) {
+            fast = fast.next.next
+            slow = slow.next
         
-            if(pointerA == pointerB) result = true
+            if(fast == slow) result = true
         }
         result
     }
 }
 
-/**
-* two pointer - recursive version
-* time complexity: 
-*       no cycle: O(N)
-*       has cycleL O(N + K) K is the cycle length
-* space complexity: O(1)     
-*/
-object Solution4 {
-    def hasCycle(head: ListNode): Boolean = {
-        if( head != null && head.next != null) 
-            _hasCycle(head.next, head)
-        else 
-            false
-    }
-    
-    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
-        (fast, slow, fast == slow) match {
-            case (null, _, _) => false
-            case (_, null, _) => false
-            case (_, _, true) => true
-            case (_, _, false) => 
-                if (fast.next == null) false
-                else _hasCycle(fast.next.next, slow.next)   
-        }  
-    } 
-}
-/**
-* two pointer - tail recursive
-*/
-object Solution4-1 {
-    def hasCycle(head: ListNode): Boolean = {
-        if(head != null && head.next != null) 
-            _hasCycle(head.next.next, head.next)
-        else false
-    }
-    
-    @annotation.tailrec
-    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
-        if(fast == null || fast.next == null || slow == null) return false
-        else if(fast == slow) return true
-        else _hasCycle(fast.next.next, slow.next)
-    }
-}
-
-```
-
-```scala
-/**
- * Definition for singly-linked list.
- * class ListNode(var _x: Int = 0) {
- *   var next: ListNode = null
- *   var x: Int = _x
- * }
- */
-
-object Solution {
-    def hasCycle(head: ListNode): Boolean = {
-        var ha = head
-        if(ha == null){
-            false
-        }else if(ha.next == null){
-            false
-        }else{
-            var hs = scala.collection.mutable.HashSet.empty[ListNode]
-            var flag = true
-            var output = false
-            while(flag){
-                if(hs.contains(ha)){
-                    flag = false
-                    output = true
-                }else if(ha.next == null){
-                    flag = false
-                }else{
-                    hs.add(ha)
-                    ha = ha.next
-                }
-            }
-            output
-        }
-    }
-}
-
-//Alternate solution: Slow & Fast pointer
 object Solution {
     def hasCycle(head: ListNode): Boolean = {
         
@@ -3509,6 +3332,24 @@ object Solution {
     }
 }
 
+/**
+* two pointer - tail recursive
+*/
+object Solution {
+    def hasCycle(head: ListNode): Boolean = {
+        if(head != null && head.next != null) 
+            _hasCycle(head.next.next, head.next)
+        else false
+    }
+    
+    @annotation.tailrec
+    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
+        if(fast == null || fast.next == null || slow == null) return false
+        else if(fast == slow) return true
+        else _hasCycle(fast.next.next, slow.next)
+    }
+}
+//Alternate solution: Slow & Fast pointer
 ```
 
 ###  1.42. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
@@ -3518,232 +3359,120 @@ object Solution {
 [洛阳](https://www.bilibili.com/video/BV15e41147EY?spm_id_from=333.999.0.0)
 
 ```py
-只有我的代码这么奇葩吗=-=
-
-class Solution(object):
-    def hasCycle(self, head):
-        """
-        :type head: ListNode
-        :rtype: bool
-        """
-        while head:
-            if head.val == 'bjfuvth':
-                return True
-            else:
-                head.val = 'bjfuvth'
-            head = head.next
-        return False
-
-方法一：集合 如果发现节点已在集合内则说明存在环
+我这个都在一个循环中，简洁点
 
 class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        s = set()
-        while h2 != None and head.next != None:
-            s.add(head)
-            head = head.next
-            if head in s:
-                return True
-        return False
+    def detectCycle(self, head: ListNode) -> ListNode:
+        fast, slow, res = head, head, head
+        flag = False
 
-方法二：双指针。 快慢指针，如果两个指针相遇则说明存在环
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if flag: res = res.next
+
+            if slow == fast: flag = True
+            if flag and slow == res: return res
+        return None
 
 class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        h1, h2 = head, head
-        while h2 != None and h2.next != None:
-            h2 = h2.next.next
-            h1 = h1.next
-            if h1 == h2:
-                return True
-        return False
-```
-
-```py
-class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        if not head: return False
+    def detectCycle(self, head: ListNode) -> ListNode:
         slow, fast = head, head
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
-            if fast == slow:
-                return True
-        return False
+            # 如果相遇
+            if slow == fast:
+                p = head
+                q = slow
+                while p!=q:
+                    p = p.next
+                    q = q.next
+                #你也可以return q
+                return p
+
+        return None
+```
+
+```py
+在for循环与while循环中的else语句块
+
+旨在循环正常遍历了所有内容或由于循环条件不成立而结束循环时执行，
+
+如果for循环与while循环因为break退出，则不执行else语句块中的内容。
+
+continue对else没影响。 
+
+这样在while循环之后使用else代码块，就可以达到代码中使用flag的效果
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if not head:
+            return None
+        fast, slow = head,  head
+        while slow.next and fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                break
+        else:
+            return None
+        
+        slow = head
+        while slow != fast:
+             slow = slow.next
+             fast = fast.next
+        return slow
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        # 首先初始化快指针和慢指针，确保快指针走的路的长度是慢指针长度的2倍
+        if head and head.next:
+            fast = head.next.next
+            slow = head.next
+        else:
+            return None  # 说明无环
+
+        # 进行循环，首先让快指针和慢指针第一次相遇
+        while fast:
+            if fast != slow:
+
+                # 快指针走两步
+                if fast.next:
+                    fast = fast.next.next
+                else:
+                    return None  # 说明无环
+
+                # 慢指针走一步
+                slow = slow.next
+            else:
+                detection = head
+                while detection != slow:  # 此时由于slow和fast是一样的，用哪个都行
+                    slow = slow.next
+                    detection = detection.next
+
+                return detection
+
 ```
 
 ```scala
-/**
-* chosen solution 
-* two pointer: tail recursive
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-object Solution0 {
+object Solution {
     def detectCycle(head: ListNode): ListNode = {
-        if(head == null || head.next == null || head.next.next == null) return null
-        val meetNode =  _findMeetNode(head.next, head.next.next)
-        
-        meetNode match {
-            case null => null
-            case _ => _findStartNode(head, meetNode)
-        }
-    }
-    
-    @annotation.tailrec
-    def _findStartNode(nodeA: ListNode, nodeB: ListNode): ListNode = {
-       if(nodeA == nodeB) nodeA
-        else _findStartNode(nodeA.next, nodeB.next)
-        
-    }
-    
-    @annotation.tailrec
-    def _findMeetNode(slow: ListNode, fast: ListNode): ListNode = {
-        if(fast == null || fast.next == null) return null
-        if(slow == fast) return slow
-        _findMeetNode(slow.next, fast.next.next)
-        
-    }
-}
-
-/**
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-object Solution1 {
-    def detectCycle(head: ListNode): ListNode = {
-        val seenSet = new scala.collection.mutable.HashSet[ListNode]()
-        var p = head
+        val visited = new scala.collection.mutable.HashSet[ListNode]()
+        var cur = head
         
         var result: ListNode = null
 
-        while (p != null && result == null) {
+        while (cur != null && result == null) {
             // println(result)
-            if(seenSet.contains(p))  
-                result = p
+            if(visited.contains(cur))  
+                result = cur
             else {
-                seenSet += p
-                p = p.next
+                visited += cur
+                cur = cur.next
             }
         }
         result
-        
-    }
-}
-
-
-/**
-* two pointer
-* without using extra space
-*/
-object Solution2 {
-    def detectCycle(head: ListNode): ListNode = {
-        val meetPoint = if (head != null && head.next != null)
-            _detectCycle(head.next.next, head.next)
-        else None
-            
-        meetPoint match {
-            case None => null
-            case Some(slow1) => getStartOfLoop(head, meetPoint)   
-        }
-        
-    }
-    
-    def getStartOfLoop(slow1: ListNode, slow2: ListNode): ListNode = {
-        
-        if (slow1 != slow2) 
-            getStartOfLoop(slow1.next, slow2.next)
-        else
-            slow2
-
-    }
-    
-    def _detectCycle(fast: ListNode, slow: ListNode): Option[ListNode] = {
-        
-        (fast, slow, fast == slow) match {
-            case (null, _, _) => None
-            case (_, null, _) => None
-            case (_, _, true) => Some(slow)
-            case (_, _, false) => 
-                if(fast.next != null) _detectCycle(fast.next.next, slow.next)
-                else None
-        }
-        
-    }
-}
-
-/**
-* two pointer
-* iterative version without extra space
-*/
-
-object Solution2-1 {
-    def detectCycle(head: ListNode): ListNode = {
-        val meetNode = _detectCycle(head)
-        
-        if(meetNode == null) {
-            null
-        }else {
-         findStartPoint(head, meetNode)   
-        }
-        
-    }
-    def findStartPoint(head: ListNode, meet: ListNode): ListNode =  {
-        var node1 = head
-        var node2 = meet
-        
-        while(node1 != node2) {
-            node1 = node1.next
-            node2 = node2.next
-        }
-        node1
-    }
-    
-    def _detectCycle(head: ListNode): ListNode = {
-        var fast = head
-        var slow = head
-        
-        var result:ListNode = null
-        while(result == null && fast != null && slow != null && fast.next != null) {
-            fast = fast.next.next
-            slow = slow.next
-            if(fast == slow){
-                result = slow
-            }
-        }
-        
-        result
-    }
-}
-
-/**
-* two pointer: tail recursive
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-object Solution2-2 {
-    def detectCycle(head: ListNode): ListNode = {
-        if(head == null || head.next == null || head.next.next == null) return null
-        val meetNode =  _findMeetNode(head.next, head.next.next)
-        
-        meetNode match {
-            case null => null
-            case _ => _findStartNode(head, meetNode)
-        }
-    }
-    
-    @annotation.tailrec
-    def _findStartNode(nodeA: ListNode, nodeB: ListNode): ListNode = {
-       if(nodeA == nodeB) nodeA
-        else _findStartNode(nodeA.next, nodeB.next)
-        
-    }
-    
-    @annotation.tailrec
-    def _findMeetNode(slow: ListNode, fast: ListNode): ListNode = {
-        if(fast == null || fast.next == null) return null
-        if(slow == fast) return slow
-        _findMeetNode(slow.next, fast.next.next)
         
     }
 }
@@ -3772,10 +3501,6 @@ Python递归
 
 class Solution(object):
     def preorderTraversal(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[int]
-        """
         if not root:
             return []
         return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
@@ -3804,7 +3529,6 @@ class Solution:
         res = []
         if not root:
             return res
-        
         stack = []
         node = root
         while stack or node:
@@ -3855,14 +3579,21 @@ class Solution:
             postorder(root.right)
             res.append(root.val)
         
-        res = list()
+        res = []
         postorder(root)
         return res
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/er-cha-shu-de-hou-xu-bian-li-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        from collections import deque
+        res, que = [], deque()
+        que.append(root) if root else None
+        while que:
+            tmp = que.pop()
+            res.append(tmp.val)
+            que.append(tmp.left) if tmp.left else None
+            que.append(tmp.right) if tmp.right else None
+        return res[::-1]
 
 class Solution:
     def postorderTraversal(self, root: TreeNode) -> List[int]:
@@ -3888,112 +3619,6 @@ class Solution:
         
         return res
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/er-cha-shu-de-hou-xu-bian-li-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        def addPath(node: TreeNode):
-            count = 0
-            while node:
-                count += 1
-                res.append(node.val)
-                node = node.right
-            i, j = len(res) - count, len(res) - 1
-            while i < j:
-                res[i], res[j] = res[j], res[i]
-                i += 1
-                j -= 1
-        
-        if not root:
-            return list()
-        
-        res = list()
-        p1 = root
-
-        while p1:
-            p2 = p1.left
-            if p2:
-                while p2.right and p2.right != p1:
-                    p2 = p2.right
-                if not p2.right:
-                    p2.right = p1
-                    p1 = p1.left
-                    continue
-                else:
-                    p2.right = None
-                    addPath(p1.left)
-            p1 = p1.right
-        
-        addPath(root)
-        return res
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-postorder-traversal/solution/er-cha-shu-de-hou-xu-bian-li-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
-# 前序遍历-递归-LC144_二叉树的前序遍历
-class Solution:
-    def preorderTraversal(self, root: TreeNode) -> List[int]:
-        # 保存结果
-        result = []
-        
-        def traversal(root: TreeNode):
-            if root == None:
-                return
-            result.append(root.val) # 前序
-            traversal(root.left)    # 左
-            traversal(root.right)   # 右
-
-        traversal(root)
-        return result
-
-# 中序遍历-递归-LC94_二叉树的中序遍历
-class Solution:
-    def inorderTraversal(self, root: TreeNode) -> List[int]:
-        result = []
-
-        def traversal(root: TreeNode):
-            if root == None:
-                return
-            traversal(root.left)    # 左
-            result.append(root.val) # 中序
-            traversal(root.right)   # 右
-
-        traversal(root)
-        return result
-
-# 后序遍历-递归-LC145_二叉树的后序遍历
-class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        result = []
-
-        def traversal(root: TreeNode):
-            if root == None:
-                return
-            traversal(root.left)    # 左
-            traversal(root.right)   # 右
-            result.append(root.val) # 后序
-
-        traversal(root)
-        return result
-
-class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        from collections import deque
-        res, q = [], deque()
-        q.append(root) if root else None
-        while q:
-            t = q.pop()
-            res.append(t.val)
-            q.append(t.left) if t.left else None
-            q.append(t.right) if t.right else None
-        return res[::-1]
 ```
 
 ###  1.48. <a name='LRUCache'></a>146 LRU Cache 
@@ -4007,6 +3632,10 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1ZQ4y1A74H?spm_id_from=333.999.0.0)
 
 ```py
+
+from clecode import decorator_default
+import collections
+
 class LRUCache(collections.OrderedDict):
 
     def __init__(self, capacity: int):
@@ -4027,83 +3656,50 @@ class LRUCache(collections.OrderedDict):
         if len(self) > self.capacity:
             self.popitem(last=False)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/lru-cache/solution/lruhuan-cun-ji-zhi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-class DLinkedNode:
-    def __init__(self, key=0, value=0):
-        self.key = key
-        self.value = value
-        self.prev = None
-        self.next = None
+if __name__ == "__main__":  
+    import doctest  
+    
+    doctest.testmod()
+```
 
 
+```py
+import collections
 class LRUCache:
-
-    def __init__(self, capacity: int):
-        self.cache = dict()
-        # 使用伪头部和伪尾部节点    
-        self.head = DLinkedNode()
-        self.tail = DLinkedNode()
-        self.head.next = self.tail
-        self.tail.prev = self.head
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
         self.capacity = capacity
-        self.size = 0
+        self.cache = collections.OrderedDict()
 
-    def get(self, key: int) -> int:
-        if key not in self.cache:
-            return -1
-        # 如果 key 存在，先通过哈希表定位，再移到头部
-        node = self.cache[key]
-        self.moveToHead(node)
-        return node.value
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        if key in self.cache:
+            value = self.cache.pop(key)
+            self.cache[key] = value
+            return value
+            
+        return -1
 
-    def put(self, key: int, value: int) -> None:
-        if key not in self.cache:
-            # 如果 key 不存在，创建一个新的节点
-            node = DLinkedNode(key, value)
-            # 添加进哈希表
-            self.cache[key] = node
-            # 添加至双向链表的头部
-            self.addToHead(node)
-            self.size += 1
-            if self.size > self.capacity:
-                # 如果超出容量，删除双向链表的尾部节点
-                removed = self.removeTail()
-                # 删除哈希表中对应的项
-                self.cache.pop(removed.key)
-                self.size -= 1
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: void
+        """
+        if key in self.cache:
+            self.cache.pop(key)
         else:
-            # 如果 key 存在，先通过哈希表定位，再修改 value，并移到头部
-            node = self.cache[key]
-            node.value = value
-            self.moveToHead(node)
-    
-    def addToHead(self, node):
-        node.prev = self.head
-        node.next = self.head.next
-        self.head.next.prev = node
-        self.head.next = node
-    
-    def removeNode(self, node):
-        node.prev.next = node.next
-        node.next.prev = node.prev
+            if len(self.cache) == self.capacity:
+                self.cache.popitem(last=False)
+                
+        self.cache[key] = value
 
-    def moveToHead(self, node):
-        self.removeNode(node)
-        self.addToHead(node)
-
-    def removeTail(self):
-        node = self.tail.prev
-        self.removeNode(node)
-        return node
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/lru-cache/solution/lruhuan-cun-ji-zhi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```scala
@@ -4143,166 +3739,6 @@ class LRUCache0(_capacity: Int) {
   }
 }
 
-/**
-* my first commitment
-* implement with linked list
-* time complexity:
-*    get, put, delete: O(N)
-*/
-case class Node(key: Int, var value: Int, var next: Node = null)
-
-class LRUCache1(_capacity: Int) {
-  private val head = Node(Int.MinValue, -1, null)
-  private val capacity = _capacity
-
-
-  def get(key: Int): Int = {
-    var preNode = head
-    var current = head.next
-
-
-    // find the key in linkedList
-    while(current != null && current.key != key) {
-      preNode = current
-      current = current.next
-    }
-
-
-    if(current != null) {
-      deleteNode(preNode)
-      prepend(current)
-      current.value
-    } else {
-      -1
-    }
-
-  }
-
-def put(key: Int, value: Int) {
-    var prepreNode = head
-    var preNode = head
-    var current = preNode.next
-    var count = 0
-
-    while(current != null && current.key != key) {
-      prepreNode = preNode
-      preNode = current
-      current = current.next
-      count += 1
-    }
-    if(current != null) {
-      current.value = value
-      deleteNode(preNode)
-      prepend(current)
-
-    }else {
-
-      if(count >= this.capacity) {
-        // delete node
-        prepreNode.next = null
-//        deleteTail()
-      }
-      prepend(Node(key, value, null))
-    }
-
-  }
-
-  private def deleteNode(preNode: Node) {
-    val deleteOne = preNode.next
-    if(deleteOne != null) {
-      preNode.next = deleteOne.next
-    }
-  }
-  
-  private def deleteTail(): Unit ={
-    var preNode = head
-    var current = preNode.next
-    while(current != null && current.next != null) {
-      preNode = current
-      current = current.next
-    }
-    deleteNode(preNode)
-  }
-
-  private def prepend(newNode: Node) {
-    newNode.next = head.next
-    head.next = newNode
-  }
-
-  private def traversal(): Unit = {
-    var node = head.next
-
-    while(node != null) {
-      print(s"(key: ${node.key} value: ${node.value})")
-      node = node.next
-    }
-    println(" ")
-  }
-  
-}
-
-/**
-* double linked list + hashset
-* time complexity:
-*    get, put, delete: O(1)
-*/
-
-case class Node(key: Option[Int], var value: Int, var pre:Node = null, var next: Node = null)
-class LRUCache2(_capacity: Int) {
-
-  private val capacity = _capacity
-  private var currentSize = 0
-  private val head = Node(None, -1)
-  private var tail = Node(None, -1)
-  head.next = tail
-  tail.pre = head
-
-  private val cache = collection.mutable.HashMap[Int, Node]()
-
-  def get(key: Int): Int = {
-    cache.get(key).map{ node =>
-      removeNode(node)
-      prependNode(node)
-      node.value
-    }.getOrElse(-1)
-  }
-
-  def put(key: Int, value: Int) {
-    val node = cache.get(key) match {
-      case Some(n) =>
-        n.value = value
-        removeNode(n)
-        prependNode(n)
-        n
-      case None =>
-        if(currentSize >= capacity) {
-          cache.remove(tail.pre.key.get)
-          removeTail()
-          currentSize -= 1
-        }
-        currentSize += 1
-        prependNode(Node(Some(key), value))
-        head.next
-    }
-    cache += (key -> node)
-  }
-  private def removeTail(): Unit ={
-    val lastNode = tail.pre
-    removeNode(lastNode)
-  }
-
-  private def prependNode(node: Node): Unit = {
-    node.next = head.next
-    node.pre = head
-
-    head.next.pre = node
-    head.next = node
-  }
-  private def removeNode(node: Node): Unit = {
-    node.pre.next = node.next
-    node.next.pre = node.pre
-  }
-}
 
 
 /**
@@ -4349,11 +3785,8 @@ class LRUCache3(_capacity: Int) {
 ```
 
 ```scala
-package com.zhourui.leetcode
-import com.zhourui.codech._
 import scala.collection.mutable._
 
-package lc0146 {
   class LRUCache(_capacity: Int) {
 
     val hm = HashMap[Int, Int]()
@@ -4390,74 +3823,6 @@ package lc0146 {
     }
   }
 
-
-  class LRUCache2(_capacity: Int) {
-    case class KV(k:Int,var v:Int)
-    case class Node(v:KV,var prev:Node,var next:Node)
-
-
-    var head:Node = null
-    var tail:Node = null
-    val hm = HashMap[Int, Node]()
-    val c = _capacity
-
-    def addToHead(cur:Node): Unit = {
-      if (head!=null) {
-        head.prev = cur
-      } else {
-        tail = cur
-      }
-      cur.prev = null
-      cur.next = head
-      head = cur
-    }
-
-    // cur not null
-    def remove(cur:Node): Unit = {
-      if (cur.prev!=null) { // it is Not head
-        cur.prev.next = cur.next
-      } else {
-        head = cur.next
-      }
-
-      if (cur.next!=null) { // not tail
-        cur.next.prev = cur.prev
-      } else {
-        tail = cur.prev
-      }
-    }
-
-    def get(key: Int): Int = {
-      if (hm.contains(key)) {
-        val node = hm(key)
-        remove(node)
-        addToHead(node)
-        node.v.v
-      } else { // not found
-        -1
-      }
-    }
-
-    def put(key: Int, value: Int) {
-      if (hm.contains(key)) {
-        val node = hm(key)
-        remove(node)
-        addToHead(node)
-        node.v.v = value
-      } else {
-        if (hm.size == c) {
-          val old = tail
-          if (old!=null) {
-            remove(old)
-            hm.remove(old.v.k)
-          }
-        }
-        val node = Node(KV(key,value),null,null)
-        hm(key) = node
-        addToHead(node)
-      }
-    }
-  }
 
 // test case
 //  ["LRUCache","put","put","put","put","put","get","put","get","get","put","get","put","put","put","get","put","get","get","get","get","put","put","get","get","get","put","put","get","put","get","put","get","get","get","put","put","put","get","put","get","get","put","put","get","put","put","put","put","get","put","put","get","put","put","get","put","put","put","put","put","get","put","put","get","put","get","get","get","put","get","get","put","put","put","put","get","put","put","put","put","get","get","get","put","put","put","get","put","put","put","get","put","put","put","get","get","get","put","put","put","put","get","put","put","put","put","put","put","put"]
@@ -4500,7 +3865,9 @@ package lc0146 {
       }
     }
   }
+```
 
+```scala
   class Test extends BaseExtension {
     def init {
       val lru = new LRUCache(2)
@@ -4545,11 +3912,6 @@ package lc0146 {
     }
     val name = "146 LRU chache xxxx"
   }
-
-
-
-}
-
 ```
 
 ###  1.49. <a name='InsertionSortList'></a>147 Insertion Sort List
@@ -4564,125 +3926,64 @@ class Solution:
         if not head:
             return head
         
-        dummyHead = ListNode(0)
-        dummyHead.next = head
-        lastSorted = head
-        curr = head.next
-
-        while curr:
-            if lastSorted.val <= curr.val:
-                lastSorted = lastSorted.next
-            else:
-                prev = dummyHead
-                while prev.next.val <= curr.val:
-                    prev = prev.next
-                lastSorted.next = curr.next
-                curr.next = prev.next
-                prev.next = curr
-            curr = lastSorted.next
-        
-        return dummyHead.next
-
-class Solution(object):
-    def insertionSortList(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        if head == None or head.next == None:
-            return head
-
-        dummy = ListNode(-1)
+        dummy = ListNode(0)
         dummy.next = head
-
-        prev = head 
+        tmp = head
         cur = head.next
 
         while cur:
-            p = dummy
-            while p.next.val <= cur.val and p != prev:
-                p = p.next
-            if p != prev:
-                prev.next = cur.next
-                cur.next = p.next
-                p.next = cur
-            prev = cur
+            if tmp.val <= cur.val:
+                tmp = tmp.next
+            else:
+                pre = dummy
+                while pre.next.val <= cur.val:
+                    pre = pre.next
+                tmp.next = cur.next
+                cur.next = pre.next
+                pre.next = cur
+            cur = tmp.next
+        
+        return dummy.next
+
+class Solution(object):
+    def insertionSortList(self, head):
+        if head == None or head.next == None:
+            return head
+
+        dummy = ListNode(0)
+        dummy.next = head
+
+        tmp = head 
+        cur = head.next
+
+        while cur:
+            pre = dummy
+            while pre.next.val <= cur.val and pre != tmp:
+                pre = pre.next
+            if pre != tmp:
+                tmp.next = cur.next
+                cur.next = pre.next
+                pre.next = cur
+            tmp = cur
             cur = cur.next
 
         return dummy.next
 
-class Solution:
-    def insertionSortList(self, head: ListNode) -> ListNode:
-        if not head:
-            return head
-        dummyHead = ListNode()
-        dummyHead.next = head
-        ppre = head
-        p = head.next
-        while p:
-            #如果前一个节点的值小于当前节点的值，就不需要插入，直接指向下一个节点就可以了
-            if ppre.val <= p.val:
-                ppre = p 
-                p = p.next
-            else:
-                #首先把当前节点摘出来
-                #用tmp来保存要插入的节点
-                tmp = p
-                #将它的前一个节点指向后一个节点,p后移
-                ppre.next = p.next
-                p = p.next
-                #然后接着将tmp插入到之前已经排序好的链表中
-                #定义一个q指针和qpre指针
-                q = head
-                qpre = dummyHead
-                #当当前指针的值小于要插入节点的值，就将当前指针后移 
-                while tmp.val > q.val:
-                    qpre = q
-                    q = q.next
-                #结束循环的时候q指向的是满足q.val >= tmp.val，qpre.val < tmp.val 也就是tmp应该插入到qpre的后面
-                tmp.next = q
-                qpre.next = tmp
-                #至此插入完成
-                #！！！注意插入完成后head节点可能发生了变化，需要更新一下
-                head = dummyHead.next
-        return dummyHead.next
-
-class Solution:
-    def insertionSortList(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        dummy = ListNode(0)
-        dummy.next = head
-        while head and head.next:
-            if head.val <= head.next.val:
-                head = head.next
-                continue
-            pre = dummy
-            while pre.next.val < head.next.val:
-                pre = pre.next
-            cur = head.next
-            head.next = cur.next
-            cur.next = pre.next
-            pre.next = cur
-            
-        return dummy.next
-        #  试一下这组数据 [0, 5000]+list(range(1, 5000)) 会超时。只是题目的测试用例没有，所以过了
 
 # 菜鸡版 python
-
 class Solution:
     def insertionSortList(self, head: ListNode) -> ListNode:
         dummy = ListNode(-1, head)
         cur = head.next
         dummy.next.next = None
         while cur:
-            node = dummy
-            while node.next and cur.val > node.next.val:
-                node = node.next
-            third = cur.next
-            cur.next = node.next
-            node.next = cur
-            cur = third
+            pre = dummy
+            while pre.next and cur.val > pre.next.val:
+                pre = pre.next
+            tmp = cur.next
+            cur.next = pre.next
+            pre.next = cur
+            cur = tmp
         return dummy.next
 ```
 
@@ -4695,22 +3996,22 @@ class Solution:
 ```py
 class Solution:
     def sortList(self, head: ListNode) -> ListNode:
-        h_head = ListNode(-1, head)
-        mem = []
+        dummy = ListNode(-1, head)
+        sortlist = []
         while(head is not None):
-            next_h = head.next
+            aft = head.next
             head.next = None
-            mem.append(head)
-            head = next_h
-        mem = sorted(mem, key=lambda x: x.val)
-        n = len(mem)
+            sortlist.append(head)
+            head = aft
+        sortlist = sorted(sortlist, key=lambda x: x.val)
+        n = len(sortlist)
         if n == 0:
             return None
-        h_head.next = mem[0]
+        dummy.next = sortlist[0]
         for i in range(n-1):
-            mem[i].next = mem[i+1]
+            sortlist[i].next = sortlist[i+1]
         
-        return h_head.next
+        return dummy.next
 ```
 
 ```py
@@ -4835,11 +4136,35 @@ class Solution:
 class Solution:
     def reverseWords(self, s: str) -> str:
         return " ".join(reversed(s.split()))
+```
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/reverse-words-in-a-string/solution/fan-zhuan-zi-fu-chuan-li-de-dan-ci-by-leetcode-sol/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```py
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        left, right = 0, len(s) - 1
+        # 去掉字符串开头的空白字符
+        while left <= right and s[left] == ' ':
+            left += 1
+        
+        # 去掉字符串末尾的空白字符
+        while left <= right and s[right] == ' ':
+            right -= 1
+            
+        que, word = collections.deque(), []
+        # 将单词 push 到队列的头部
+        while left <= right:
+            if s[left] == ' ' and word:
+                que.appendleft(''.join(word))
+                word = []
+            elif s[left] != ' ':
+                word.append(s[left])
+            left += 1
+        que.appendleft(''.join(word))
+        
+        return ' '.join(que)
+```
+
+```py
 一种没有用split 和reverse的方法[^1]
 
 分三步:
@@ -4902,95 +4227,9 @@ class Solution:
         word_reverse(s)
         #print(s)
         return clean_space(s)
-
-class Solution:
-    def trim_spaces(self, s: str) -> list:
-        left, right = 0, len(s) - 1
-        # 去掉字符串开头的空白字符
-        while left <= right and s[left] == ' ':
-            left += 1
-        
-        # 去掉字符串末尾的空白字符
-        while left <= right and s[right] == ' ':
-            right -= 1
-        
-        # 将字符串间多余的空白字符去除
-        output = []
-        while left <= right:
-            if s[left] != ' ':
-                output.append(s[left])
-            elif output[-1] != ' ':
-                output.append(s[left])
-            left += 1
-        
-        return output
-            
-    def reverse(self, l: list, left: int, right: int) -> None:
-        while left < right:
-            l[left], l[right] = l[right], l[left]
-            left, right = left + 1, right - 1
-            
-    def reverse_each_word(self, l: list) -> None:
-        n = len(l)
-        start = end = 0
-        
-        while start < n:
-            # 循环至单词的末尾
-            while end < n and l[end] != ' ':
-                end += 1
-            # 翻转单词
-            self.reverse(l, start, end - 1)
-            # 更新start，去找下一个单词
-            start = end + 1
-            end += 1
-                
-    def reverseWords(self, s: str) -> str:
-        l = self.trim_spaces(s)
-        
-        # 翻转字符串
-        self.reverse(l, 0, len(l) - 1)
-        
-        # 翻转每个单词
-        self.reverse_each_word(l)
-        
-        return ''.join(l)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/reverse-words-in-a-string/solution/fan-zhuan-zi-fu-chuan-li-de-dan-ci-by-leetcode-sol/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-```py
-class Solution:
-    def reverseWords(self, s: str) -> str:
-        left, right = 0, len(s) - 1
-        # 去掉字符串开头的空白字符
-        while left <= right and s[left] == ' ':
-            left += 1
-        
-        # 去掉字符串末尾的空白字符
-        while left <= right and s[right] == ' ':
-            right -= 1
-            
-        d, word = collections.deque(), []
-        # 将单词 push 到队列的头部
-        while left <= right:
-            if s[left] == ' ' and word:
-                d.appendleft(''.join(word))
-                word = []
-            elif s[left] != ' ':
-                word.append(s[left])
-            left += 1
-        d.appendleft(''.join(word))
-        
-        return ' '.join(d)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/reverse-words-in-a-string/solution/fan-zhuan-zi-fu-chuan-li-de-dan-ci-by-leetcode-sol/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
 
 ###  1.54. <a name='-1'></a>152-乘积最大子数组
 
@@ -4999,37 +4238,34 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1iK411K7yG?spm_id_from=333.999.0.0)
 
 ```py
-# ```python
+# 动态规划：遍历时，每次分别存储 前i个中连续数组 [最大的乘积和] 和 [最小乘积和]
+
+# 之所有存 [最小乘积和]，是因为 [最小乘积和] 如果是负数有可能遇到负数，
+
+# 相乘后结果更大 Python
+
 class Solution(object):
     def maxProduct(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
         n = len(nums)
         maxdp = [ nums[0] for i in range(n)]
         mindp = [ nums[0] for i in range(n)]
-
 
         for i in range(1,n):
         	maxdp[i] = max(mindp[i-1]*nums[i], maxdp[i-1]*nums[i],nums[i])
         	mindp[i] = min(maxdp[i-1]*nums[i], mindp[i-1]*nums[i],nums[i])
 
         return max(maxdp)
+
 class Solution:
     def maxProduct(self,nums):
         dp_max, dp_min = nums[0],nums[0] 
         maxp = nums[0]
         for i in range(1,len(nums)):
-            # 　注意 这里必须是同时更新
-            dp_max, dp_min = max(nums[i], dp_max*nums[i], dp_min*nums[i]), min(nums[i], dp_max*nums[i], dp_min*nums[i])
+            dp_max = max(nums[i], dp_max*nums[i], dp_min*nums[i]) 
+            dp_min = min(nums[i], dp_max*nums[i], dp_min*nums[i])
             maxp = max(maxp, dp_max)
         return maxp
-# 动态规划：遍历时，每次分别存储前i个中连续数组最大的乘积和和最小乘积和 
 
-# 之所有存最小乘积和，是因为最小乘积和如果是负数有可能遇到负数，
-
-# 相乘后结果更大 Python
 
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
@@ -5058,13 +4294,7 @@ class Solution:
             ans = max(maxF, ans)
         
         return ans
-# dp记录两个状态最小值dp_min、最大值dp_max，状态转移方程：
 
-# dp_min[i] = min(dp_min[i-1]*nums[i], dp_max[i-1]*nums[i], nums[i])
-
-# dp_max[i] = max(dp_min[i-1]*nums[i], dp_max[i-1]*nums[i], nums[i])
-
-# 返回dp_max的最大值即为结果。
 
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
@@ -5079,13 +4309,7 @@ class Solution:
             dp_max[i] = max(dp_min[i-1]*nums[i], dp_max[i-1]*nums[i], nums[i])
             res = max(res, dp_max[i])
         return res
-# 思路二, 动态规划[^1]
 
-# 我们只要记录前i的最小值, 和最大值, 
-
-# 那么 dp[i] = max(nums[i] * pre_max, nums[i] * pre_min, nums[i]), 
-
-# 这里0 不需要单独考虑, 因为当相乘不管最大值和最小值,都会置0
 
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
@@ -5104,17 +4328,21 @@ class Solution:
 
 ```scala
 
-/**
-* chosen solution
-* dynamic programming
-* using dp array to record previous max min value ending at index i-th
-*   dp(i)(j) means the maximum and minimum contiguous product ending at i-th position
-*   each state i update 
-*        1. max(current v,  previous state max value * current value,  previous state min value * current value)
-*        2. min(current v,  previous state max value * current value,  previous state min value * current value)
-*
-*  time complexity: O(N)
-*/ 
+object Solution2-1 {
+    def maxProduct(nums: Array[Int]): Int = {
+        
+        val (_, _, ans) = (1 until nums.length).foldLeft((nums.head, nums.head, nums.head)){
+            case ((min, max, ans), idx) => 
+                val a = nums(idx) * min 
+                val b = nums(idx) * max
+                val newMin = a min b min nums(idx)
+                val newMax = a max b max nums(idx)
+                (newMin, newMax, ans max newMax)
+        }
+        ans
+    }
+}
+
 
 object Solution0 {
   def maxProduct(nums: Array[Int]): Int = {
@@ -5135,29 +4363,13 @@ object Solution0 {
   }
 }
 
-/**
-* my first commitment
-* recursive version : correct but may cause memory exceed limit
-* time complexity: O(N^2)
-*/
-object Solution1 {
-  def maxProduct(nums: Array[Int]): Int = {
-    (1 to nums.length).map(n =>  _maxProduct(nums(n - 1), nums.takeRight(nums.length - n))).max
-  }
-
-  def _maxProduct(curr: Int, nums: Array[Int]): Int = {
-      if(nums.isEmpty) return curr          
-      curr max  _maxProduct( curr * nums(0), nums.takeRight(nums.length - 1))
-  }
-}
-
 
 /**
 * optimize above one
 * don't copy subArray during transmit parameters
 * time complexity： O(N^2)
 */
-object Solution1-2 {
+object Solution {
   def maxProduct(nums: Array[Int]): Int = {
     (1 to nums.length).map(n =>  _maxProduct(nums(n - 1), n, nums)).max
   }
@@ -5168,68 +4380,10 @@ object Solution1-2 {
 
 }
 
-/**
-* dynamic programming
-* using dp array to record previous max min value ending at index i-th
-*   dp(i)(j) means the maximum and minimum contiguous product ending at i-th position
-*   each state i update 
-*        1. max(current v,  previous state max value * current value,  previous state min value * current value)
-*        2. min(current v,  previous state max value * current value,  previous state min value * current value)
-*
-*  time complexity: O(N)
-*  space  complexity: O(2N), actually it can be optimized to O(2) which records previous min and max value
-*/
-object Solution2 {
-    def maxProduct(nums: Array[Int]): Int = {
-        // 0:  minimum , 1:  maximum
-        val dp = Array.ofDim[Int](nums.length, 2)
-        dp(0)(0) = nums(0)
-        dp(0)(1) = nums(0)
-        
-        for(i <- 1 until nums.length) {
-            val a = dp(i - 1)(0) * nums(i) 
-            val b = dp(i - 1)(1) * nums(i)
-            dp(i)(0) = a min b min nums(i)
-            dp(i)(1) = a max b max nums(i)
-        }
-        
-        
-        dp.map(_(1)).max
-    }
-}
 
 
-/**
-* dynamic programming
-* memo
-*   1. only keep previous state 
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-object Solution2-1 {
-    def maxProduct(nums: Array[Int]): Int = {
-        
-        val (_, _, ans) = (1 until nums.length).foldLeft((nums.head, nums.head, nums.head)){
-            case ((min, max, ans), idx) => 
-                val a = nums(idx) * min 
-                val b = nums(idx) * max
-                val newMin = a min b min nums(idx)
-                val newMax = a max b max nums(idx)
-                (newMin, newMax, ans max newMax)
-        }
-        ans
-    }
-}
 
-
-/**
-* a recursive dp method： not my own 
-* memo
-*   1. only keep the closest state
-* time complexity: O(N)
-* space complexity: O(N) although it don;t create a length of nums array, it convert nums array to list
-*/
-object Solution2-2 {
+object Solution {
     def maxProduct(nums: Array[Int]): Int = {
         if (nums == null || nums.size == 0) {
             return 0;
@@ -5287,23 +4441,6 @@ class Solution:
             else:  
                 r = mid
         return nums[l]
-
-class Solution:
-    def findMin(self, nums):
-
-        l, r = 0, len(nums)-1
-
-        while l <= r:
-            mid = l + (r - l) // 2
-            if l == mid:
-                if l+1 <= r:
-                    return min(nums[l], nums[l+1])
-                else:
-                    return nums[l]
-            if nums[mid] < nums[r]:
-                r = mid
-            else:
-                l = mid
 ```
 
 ```scala
@@ -5368,11 +4505,6 @@ class MinStack:
     def getMin(self) -> int:
         return self.min_stack[-1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/min-stack/solution/zui-xiao-zhan-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
 
 class MinStack:
@@ -5436,10 +4568,6 @@ class MinStack:
         return self.min_stack[-1]        
 ```
 
-```py
-
-```
-
 
 ```scala
 class MinStack() {
@@ -5473,10 +4601,10 @@ class MinStack() {
 
 }
 
-//Alternate solution: much faster
-//Here we are prepending elements to the list instead of appending
-//Note that since List is actually a LinkedList its much easier to deal with "head" of the list
-//There is also another list to maintain min elements of the list
+//替代解决方案：更快
+//这里我们将元素添加到列表中而不是附加
+//请注意，由于List实际上是一个LinkedList，因此处理列表的“头部”要容易得多
+//还有另一个列表来维护列表的最小元素
 class MinStack() {
 
     /** initialize your data structure here. */
@@ -5484,9 +4612,9 @@ class MinStack() {
     var mins = List.empty[Int]
 
     def push(x: Int) {
-        //this line fails if we make second condition as x < mins.head
-        //with NoSuchElementException: head of empty list
-        //why???
+        //如果我们将第二个条件设为 x < mins.head，则此行失败
+        //with NoSuchElementException: 空列表的头部
+        //为什么？？？
         if(mins.isEmpty || mins.head >= x) mins = x +: mins
         stack = x +: stack
     }
@@ -5517,6 +4645,38 @@ class MinStack() {
 [小明](https://www.bilibili.com/video/BV18K4y1J7wx?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1np4y1y789?spm_id_from=333.999.0.0)
+
+```py
+## 1. 哈希表
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        listA = set()
+        while headA:
+            listA.add(headA)
+            headA = headA.next
+        while headB:
+            if headB in listA:
+                return headB
+            headB = headB.next
+        return None
+
+# > 时间复杂度 $O(M+N)$, 空间复杂度 $O(M)$
+
+## 2. 双指针
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if not headA or not headB:
+            return None
+        pa,pb = headA, headB
+        while pa != pb:
+            pa = pa.next if pa else headB
+            pb = pb.next if pb else headA
+        return pa
+
+# > 时间复杂度 $O(M+N)$, 空间复杂度 $O(1)$
+```
 
 ```py
 
@@ -5552,106 +4712,9 @@ class Solution:
         return None
 ```
 
-```py
-## 1. 哈希表
 
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        listA = set()
-        while headA:
-            listA.add(headA)
-            headA = headA.next
-        while headB:
-            if headB in listA:
-                return headB
-            headB = headB.next
-        return None
-> 时间复杂度 $O(M+N)$, 空间复杂度 $O(M)$
-
-## 2. 双指针
-
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        if not headA or not headB:
-            return None
-        pa,pb = headA, headB
-        while pa != pb:
-            pa = pa.next if pa else headB
-            pb = pb.next if pb else headA
-        return pa
-> 时间复杂度 $O(M+N)$, 空间复杂度 $O(1)$
-```
 
 ```scala
-/**
- * Definition for singly-linked list.
- * class ListNode(var _x: Int = 0) {
- *   var next: ListNode = null
- *   var x: Int = _x
- * }
- */
-
-object Solution {
-    
-    def getIntersectionNode(headA: ListNode, headB: ListNode): ListNode = {
-        if(headA == null){
-            null
-        }else if(headB == null){
-            null
-        }else{
-            var ha = headA
-        var hb = headB
-        
-        var hAsize = 0
-        var hBsize = 0
-        while(ha.next != null){
-            hAsize += 1
-            ha = ha.next
-        }
-        while(hb.next != null){
-            hBsize += 1
-            hb = hb.next
-        }
-        
-        var first: ListNode = null
-        var second: ListNode = null
-        var diff = 0
-        
-        if(hAsize>hBsize){
-            first = headA
-            second = headB
-            diff=hAsize-hBsize
-        }else{
-            first = headB
-            second = headA
-            diff=hBsize-hAsize
-        }
-        
-        while(diff > 0){
-            first = first.next
-            diff -= 1
-        }
-        
-        var result: ListNode = null
-        import scala.util.control.Breaks._
-        breakable{
-        while(first!= null && second!= null){
-            if(first == second){
-                result = first
-                break
-            }
-            first = first.next
-            second = second.next
-        }
-        }
-        
-        result
-        }
-    }
-}
-
-//Alternate solution
-
 /**
  * Definition for singly-linked list.
  * class ListNode(var _x: Int = 0) {

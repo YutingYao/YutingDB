@@ -1,21 +1,23 @@
 class Solution:
-    def minCut(self, s: str) -> int:
-        n = len(s)
-        isPalinDP = [[True] * n for _ in range(n)]
+    def reverseWords(self, s: str) -> str:
+        left, right = 0, len(s) - 1
+        # 去掉字符串开头的空白字符
+        while left <= right and s[left] == ' ':
+            left += 1
         
-        for start in range(n - 1, -1, -1): # start 指向 倒数第二位, start 向前扫描
-            for end in range(start + 1, n): # end 指向 倒数第一位, end 向后扫描
-                isPalinDP[start][end] = (s[start] == s[end]) and isPalinDP[start + 1][end - 1] 
-
-        cutDP = [float("inf")] * n
-        for end in range(n):
-            # 如果前一小段是回文
-            if isPalinDP[0][end]:
-                cutDP[end] = 0
-            # 如果前一小段不是回文，则从start开始继续拆分
-            else:
-                for start in range(end):
-                    if isPalinDP[start + 1][end]:
-                        cutDP[end] = min(cutDP[end], cutDP[start] + 1)
+        # 去掉字符串末尾的空白字符
+        while left <= right and s[right] == ' ':
+            right -= 1
+            
+        que, word = collections.deque(), []
+        # 将单词 push 到队列的头部
+        while left <= right:
+            if s[left] == ' ' and word:
+                que.appendleft(''.join(word))
+                word = []
+            elif s[left] != ' ':
+                word.append(s[left])
+            left += 1
+        que.appendleft(''.join(word))
         
-        return cutDP[n - 1]
+        return ' '.join(que)
