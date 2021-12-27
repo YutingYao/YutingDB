@@ -2930,8 +2930,6 @@ https://www.bilibili.com/video/BV1Cy4y127Di?from=search&seid=1523679132498069423
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6d4fzq5ov200.png)
 
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2ie91wvv2iu0.png" width="70%">
-
 
 ```py
 class Solution(object):
@@ -2976,7 +2974,6 @@ class Solution:
             # 对node的neighbors,如果在目录里面，返回这些邻居的值nod.val,否则dfs
             VisitDic[nod].neighbors = [dfs(n) if n not in VisitDic else VisitDic[n] for n in nod.neighbors] # 递归在这里，neighbors里面是😁
             return VisitDic[nod]
- Node(node.val) Node(node.val)
         VisitDic = {}
         return dfs(node) if node else None
 
@@ -2984,21 +2981,83 @@ class Solution:
 
 class Solution:
     def cloneGraph(self, node: 'Node') -> 'Node':
+        visited = {}
+        def dfs(nod,visited):
+            if not nod:
+                return None # dfs 返回的是neighbors
+            elif nod in visited:
+                # 易错点：return nod
+                return visited[nod]
+            else:
+                visited[nod] = Node(nod.val)
+                for neigh in nod.neighbors:
+                    visited[nod].neighbors.append(dfs(neigh,visited))
+            return visited[nod]
+        return dfs(node,visited) # 易错点：一定要返回
+```
+
+```py
+类似的三种写法：
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
         if not node:
             return None
-        nodecp = Node(node.val)
         # visited + stack 两步骤
+        nodecp = Node(node.val)
         visited = {node:nodecp}
         stack = [node]
         while stack:
-            node = stack.pop()
-            for neigh in node.neighbors:
+            tmp = stack.pop() #
+            for neigh in tmp.neighbors:
                 if neigh not in visited:
                     # visited + stack 两步骤
                     visited[neigh] = Node(neigh.val)
-                    stack.append(
-                visited[node].neighbors.append(visited[neigh]) # 😁 注意，append是字典内的neigh，也就是 Node(node.val)
+                    stack.append(neigh)
+                visited[tmp].neighbors.append(visited[neigh]) # 😁 注意，append是字典内的neigh，也就是 Node(node.val)
         return nodecp
+
+类似的三种写法：
+
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return None
+        # visited + stack 两步骤
+        visited = {}
+        visited[node] = Node(node.val)
+        stack = [node]
+        while stack:
+            tmp = stack.pop() 
+            for neigh in tmp.neighbors:
+                if neigh not in visited:
+                    # visited + stack 两步骤
+                    visited[neigh] = Node(neigh.val)
+                    stack.append(neigh)
+                visited[tmp].neighbors.append(visited[neigh]) 
+        return visited[node]
+
+类似的三种写法：
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return None
+        # visited + stack 两步骤
+        visited = {}
+        stack = [node]
+        while stack:
+            tmp = stack.pop() 
+            if tmp not in visited: # 这行必须要有
+                visited[tmp] = Node(tmp.val)
+            for neigh in tmp.neighbors:
+                if neigh not in visited:
+                    # visited + stack 两步骤
+                    visited[neigh] = Node(neigh.val)
+                    stack.append(neigh)
+                visited[tmp].neighbors.append(visited[neigh]) 
+        return visited[node]
 ```
 
 
@@ -3009,70 +3068,6 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1754y1176F?spm_id_from=333.999.0.0)
 
 ```py
-啪就打开题解 很快啊
-
-class Solution:
-    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
-        i = 0
-        while i<len(cost):
-            soG = 0
-            soC = 0
-            tmp = 0
-            while tmp<len(cost):
-                j = (i+tmp)%len(cost)
-                soC+=cost[j]
-                soG+=gas[j]
-                if soC>soG:
-                    break
-                tmp+=1
-            if tmp == len(cost):
-                return i
-            else:
-                i = i+tmp+1
-        return -1
-
-class Solution:
-    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
-        n = len(gas)
-        start = 0
-        surplus = 0
-        i = 0
-        while True:
-            t = (start+i) % n
-            surplus += gas[t] - cost[t]
-            i += 1
-            if surplus < 0:
-                if start == n-1:
-                    return -1
-                surplus = 0
-                start += 1
-                i = 0
-            elif i == n:
-                return start
-算法思路一样，复杂度分析一下应该也是O(n)，但是运行到倒数第二个测试就会超时，很头疼
-```
-
-```py
-class Solution(object):
-    def canCompleteCircuit(self, gas, cost):
-        # a 就是那个数组
-        a = []
-        for i in range(len(gas)):
-            a.append(gas[i] - cost[i])
-
-        if sum(a) < 0:
-            return -1
-
-        start = 0
-        all_money = 0
-        for i in range(len(a)):
-            all_money += a[i]
-            if all_money < 0:
-                all_money = 0
-                start = i+1
-
-        return start
-
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         start = 0
@@ -3104,63 +3099,25 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
 
-```scala
-object Solution {
-    def singleNumber(nums: Array[Int]): Int = {
-        nums.distinct.filter(x => nums.filter(_ == x).length != 2)(0)
-    }
-}
+```py
+class Solution:
+    def singleNumber(self, nums):
+        a = 0
+        for num in nums:
+            a = a ^ num
+        return a
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        return reduce(lambda x, y: x ^ y, nums)
 ```
 
 ```scala
 object Solution {
     def singleNumber(nums: Array[Int]): Int = {
-        var hashSet = scala.collection.mutable.HashSet.empty[Int]
-        for(num <- nums){
-            if(hashSet.contains(num)){
-                hashSet.remove(num)
-            }else{
-                hashSet.add(num)
-            }
-        }
-        
-        hashSet.head
+        nums.reduce(_^_)
     }
 }
-
-//Alternate solution (not much time improvement)
-/**
-scala> 3 ^ 3
-res0: Int = 0
-
-scala> 3 ^ 4
-res1: Int = 7
-
-scala> 3 ^ 4 ^ 3
-res2: Int = 4
-*/
-object Solution {
-    def singleNumber(nums: Array[Int]): Int = {
-        nums.reduce(_ ^ _)
-    }
-}
-
-```
-
-```scala
-package com.zhourui.leetcode
-
-package lc0136_singlenumber {
-  object Solution {
-    def singleNumber(nums: Array[Int]): Int = {
-      val ret = nums.foldLeft(0) ( _ ^ _)
-      return ret
-
-    }
-  }
-
-}
-
 ```
 
 ###  1.38. <a name='SingleNumberII'></a>137 Single Number II
@@ -3172,43 +3129,6 @@ package lc0136_singlenumber {
 [小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
 
 ```py
-class Solution(object):
-    def wordBreak(self, s, wordDict):
-        """
-        :type s: str
-        :type wordDict: List[str]
-        :rtype: bool
-        """
-        ok = [True]
-        for i in range(1, len(s)+1):
-            ok += [any(ok[j] and s[j:i] in wordDict for j in range(i))]
-        return ok[-1]
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        wordDictSet = set(wordDict)
-        dp = [False] * (len(s) + 1)
-        for i in range(1, len(s) + 1):
-            # 找切分点
-            for j in range(i):
-                if dp[j] and s[j: i] in wordDictSet:
-                    dp[i] = True # 说明s[: i] 在wordDict中
-                    break # 剩下的切分点j不用再寻找了
-        return dp[-1]
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        '''排列'''
-        dp = [False]*(len(s) + 1)
-        dp[0] = True
-        # 遍历背包
-        for j in range(1, len(s) + 1):
-            # 遍历单词
-            for word in wordDict:
-                if j >= len(word):
-                    dp[j] = dp[j] or (dp[j - len(word)] and word == s[j - len(word):j])
-        return dp[len(s)]
-
 # python 动态规划
 
 # 从 i = 0 开始分析：i = 0， 遍历 j in range(1, n+1)， 
@@ -3219,70 +3139,26 @@ class Solution:
 
 # 然后基于第一个单词一个单词一个单词地接上去。
 
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+
+        dp = [True]
+        for end in range(1, len(s)+1):
+            dp += [any(dp[start] and s[start:end] in wordDict for start in range(end))]
+        return dp[-1]
+
 class Solution:
     def wordBreak(self, s, wordDict):
         n = len(s) 
+        dp = [True] + [False]*n
 
-        flag = [True] + [False]*n
+        for end in range(1, n + 1):
+            for start in range(end):
+                if dp[start] and s[start: end] in wordDict:
+                    dp[end] = True # 说明s[: i] 在wordDict中
+                    break # 优化部分：剩下的切分点j不用再寻找了，也可以不写，像下方一样
+        return dp[-1]
 
-        for i in range(n):
-            for j in range(i+1, n+1):
-                if flag[i] == True and (s[i:j] in wordDict):
-                    flag[j] = True
-        
-        return flag[-1]
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        """
-        :type s: str
-        :type wordDict: List[str]
-        :rtype: bool
-        """
-        if not s:
-            return True
-        
-        breakp = [0]
-        
-        for i in range(len(s) + 1):
-            for j in breakp:
-                if s[j:i] in wordDict:
-                    breakp.append(i)
-                    break
-        return breakp[-1] == len(s)
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        """
-        :type s: str
-        :type wordDict: List[str]
-        :rtype: bool
-        """
-        if not s:
-            return True
-        
-        breakp = [0]
-        
-        for i in range(len(s) + 1):
-            for j in breakp:
-                if s[j:i] in wordDict:
-                    breakp.append(i)
-                    break
-        return breakp[-1] == len(s)
-
-# 超时了 但是还是想分享一下 一个回溯的方法
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        def dfs(s):
-            if s.isspace():
-                return True
-            for item in wordDict:
-                if item in s:
-                    if dfs(s.replace(item,' ',1)):
-                        return True
-            return False
-        return dfs(s)
 ```
 
 ###  1.40. <a name='WordBreakII'></a>140 Word Break II
@@ -3291,30 +3167,24 @@ class Solution:
 
 ```py
 # 直接回溯过了，这是样例出问题了还是标错难度了。。。
-
 class Solution(object):
     def wordBreak(self, s, wordDict):
-        """
-        :type s: str
-        :type wordDict: List[str]
-        :rtype: List[str]
-        """
-        cash = dict()
-        for word in wordDict:
-            cash[word] = 1
-        ans = []
-        def backtract(s, tmp, ans):
+        res = []
+        
+        # 也是左右🐧切
+        def backtrack(s, path):
+            # nonlocal res
             if len(s) == 0:
-                ans.append(tmp[1:])
+                res.append(path[1:])
                 return
 
             n = len(s)
             for i in range(n):
                 if s[:i+1] in cash:
-                    backtract(s[i+1:], tmp+" "+s[:i+1], ans)
-        backtract(s, "", ans)
-        #ans.sort()
-        return ans
+                    backtrack(s[i+1:], path+" "+s[:i+1])
+                    
+        backtrack(s, "")
+        return res
 
 class Solution:
     def wordBreak(self, s, wordDict):
@@ -3322,14 +3192,14 @@ class Solution:
         def backtrack(index: int):
             if index == len(s):
                 return [[]]
-            ans = list()
+            res = []
             for i in range(index + 1, len(s) + 1):
-                word = s[index:i]
-                if word in wordSet:
-                    nextWordBreaks = backtrack(i)
-                    for nextWordBreak in nextWordBreaks:
-                        ans.append(nextWordBreak.copy() + [word])
-            return ans
+                left = s[index:i]
+                if left in wordSet:
+                    rightBreaks = backtrack(i)
+                    for right in rightBreaks:
+                        res.append(right[:] + [left])
+            return res
         
         wordSet = set(wordDict)
         breakList = backtrack(0)
@@ -3337,11 +3207,6 @@ class Solution:
 
 class Solution(object):
     def wordBreak(self, s, wordDict):
-        """
-        :type s: str
-        :type wordDict: List[str]
-        :rtype: List[str]
-        """
         memo = {len(s): ['']}
         def sentences(i):
             if i not in memo:
