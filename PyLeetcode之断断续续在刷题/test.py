@@ -1,23 +1,17 @@
-class Solution:
-    def reverseWords(self, s: str) -> str:
-        left, right = 0, len(s) - 1
-        # 去掉字符串开头的空白字符
-        while left <= right and s[left] == ' ':
-            left += 1
-        
-        # 去掉字符串末尾的空白字符
-        while left <= right and s[right] == ' ':
-            right -= 1
-            
-        que, word = collections.deque(), []
-        # 将单词 push 到队列的头部
-        while left <= right:
-            if s[left] == ' ' and word:
-                que.appendleft(''.join(word))
-                word = []
-            elif s[left] != ' ':
-                word.append(s[left])
-            left += 1
-        que.appendleft(''.join(word))
-        
-        return ' '.join(que)
+class Solution(object):
+    def rob(self, nums):
+
+        def RobRange(start,end):
+            #前1个，前2个
+            dp1=0
+            dp2=0
+            for i in range(start, end + 1):
+                maxdp = max(dp1, dp2 + nums[i])
+                dp2 = dp1
+                dp1 = maxdp
+            return maxdp
+
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+        return max(RobRange(0,n-2),RobRange(1,n-1))
