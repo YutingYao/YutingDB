@@ -1,4 +1,5 @@
 metals/
+.metals/
 *.log
 .vscode/settings.json
 .metals/metals.h2.db
@@ -6,6 +7,9 @@ metals/
 *.meta
 *.class
 *.xml
+*.db
+*.db
+*.db
 *.db
 *.db
 *.db
