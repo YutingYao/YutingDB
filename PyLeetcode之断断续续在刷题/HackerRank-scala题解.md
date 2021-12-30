@@ -1,5 +1,4 @@
 
-
 ## 简单题
 
 ### Hello World N Times
@@ -160,7 +159,6 @@ def f(arr:List[Int]):List[Int] = arr match{
 }
 ```
 
-
 ### Sum of Odd Elements 奇数求和
 
 ```s
@@ -189,7 +187,6 @@ def f(arr: List[Int]): Int = arr.filter(x => (x % 2).abs == 1).sum
 过滤掉偶数：
 def f(arr: List[Int]): Int = arr.filterNot(_ % 2 == 0).sum
 ```
-
 
 ```scala
 def f(arr: List[Int]): Int = arr match {
@@ -298,7 +295,6 @@ def f(a: List[Int]) = a.map(_.abs)
 def f(a: List[Int]) = a.map(x => x.abs)
 ```
 
-
 ### Reverse a List
 
 ```s
@@ -356,8 +352,6 @@ def f(arr:List[Int]):List[Int] = arr match{
 }
 ```
 
-
-
 ### Evaluating e^x
 
 ```s
@@ -376,13 +370,10 @@ Sample Output
 0.6065
 ```
 
-
-
 ```scala
 def scan[B >: A](z: B)(op: (B, B) => B): Seq[B]
 计算集合元素的前缀扫描。
 ```
-
 
 ```scala
 def f(x: Double):Double = 1 + List(2,3,4,5,6,7,8,9.0).scan(x)((ini,cur) => x*ini/cur).sum
@@ -417,11 +408,13 @@ def main(args: Array[String]) {
 
 ## 复杂题
 
-### Area Under Curves and Volume of Revolving a Curve 
+### Area Under Curves and Volume of Revolving a Curve
 
-https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem
+<https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem>
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1x8qb87o7wjk.webp)
+
+[scala里的List/Stream/View机制浅析](https://blog.csdn.net/tlxamulet/article/details/78305652)
 
 ```scala
 object Solution {
@@ -432,24 +425,22 @@ object Solution {
           coeff * math.pow(x, p)
         }.reduce(_ + _)
          ------------------------------------------------------------------------------
-       (coefficients.view zip powers map (e => e._1 * math.pow(x, e._2))).sum
+        (coefficients.view zip powers map (e => e._1 * math.pow(x, e._2))).sum
          ------------------------------------------------------------------------------
         (coefficients zip powers).map(t => t._1 * pow(x, t._2)).sum
          ------------------------------------------------------------------------------
-        ((coefficients, powers).zipped map {(a,p) => a * Math.pow(x, p)}).sum
+        ((coefficients, powers).zipped map {(coeff,p) => coeff * Math.pow(x, p)}).sum
          ------------------------------------------------------------------------------
-        (coefficients zip powers) map {case (c, p) => c * math.pow(x, p)} sum
-         coefficients.zip(powers).map { case (c, p) => c * math.pow(x, p) }.sum
+        (coefficients zip powers) map {case (coeff, p) => coeff * math.pow(x, p)} sum
+         coefficients.zip(powers).map {case (coeff, p) => coeff * math.pow(x, p)}.sum
          ------------------------------------------------------------------------------
-        (0 until coefficients.size).foldLeft(0.0) { (s: Double, i: Int) => s + coefficients(i) * Math.pow(x, powers(i)) }
          ------------------------------------------------------------------------------
-        coefficients.zip(powers).foldLeft(0.0) { case (sum, (a, b)) => sum + a * math.pow(x, b) }
+        coefficients.zip(powers).foldLeft(0.0) { case (sum, (coeff, p)) => sum + coeff * math.pow(x, p) }
          ------------------------------------------------------------------------------
         (for (i <- 0 until coefficients.size) yield coefficients(i) * Math.pow(x, powers(i))).sum
          ------------------------------------------------------------------------------
-        (coefficients.view zip powers map (e => e._1 * math.pow(x, e._2))).sum
+        (0 until coefficients.size).foldLeft(0.0) { (sum: Double, i: Int) => sum + coefficients(i) * Math.pow(x, powers(i)) }
          ------------------------------------------------------------------------------
-        (coefficients.view zip powers map (e => e._1 * math.pow(x, e._2))).sum
          ------------------------------------------------------------------------------
         val y = (coefficients, powers).zipped map { _ * scala.math.pow(x, _) } sum
         y * 0.001
@@ -467,11 +458,6 @@ object Solution {
         math.Pi * math.pow(f(coefficients, powers, x), 2)
        math.Pi * math.pow(f(coefficients, powers, x), 2)
          ------------------------------------------------------------------------------
-        val y = ((coefficients, powers).zipped map { _ * scala.math.pow(x, _) } sum)
-        y*y * scala.math.Pi * 0.001
-         ------------------------------------------------------------------------------
-        val y : Double = (((coefficients, powers).zipped map {(a,p) => a * Math.pow(x, p)}).sum)
-        Math.PI * y * y
          ------------------------------------------------------------------------------
         def square(y: Double) = y * y
         square(f(coefficients, powers, x)) * Math.PI
@@ -484,13 +470,11 @@ object Solution {
         coefficients: List[Int],
         powers: List[Int]): Double = 
          ------------------------------------------------------------------------------
+         最简洁的写法：
         lowerLimit.toDouble.to(upperLimit.toDouble).by(0.001).map(func(coefficients,powers,_)).sum * 0.001
          ------------------------------------------------------------------------------
-        math.floor(((lowerLimit * 1000) to (upperLimit * 1000) 
-              map (e => func(coefficients, powers, e * 0.001) * 0.001)).sum * 10) / 10
-         ------------------------------------------------------------------------------
-        math.floor(((lowerLimit * 1000) to (upperLimit * 1000) 
-                map (e => func(coefficients, powers, e * 0.001) * 0.001)).sum * 10) / 10
+        val low = lowerLimit * 1.0
+        (low to (upperLimit, 0.001)) map { x => func(coefficients, powers, x) } sum
          ------------------------------------------------------------------------------
         if(upperLimit - lowerLimit < 0.001) acc
         else summation(func, upperLimit, lowerLimit + 0.001, coefs, powers, acc + func(coefs, powers, lowerLimit) * 0.001)
@@ -498,21 +482,23 @@ object Solution {
         def calc(sum: Double, x: Double): Double = if (x > upperLimit) sum else calc(sum + func(coefficients, powers, x) * 0.001, x + 0.001)
         round(calc(0, lowerLimit))
          ------------------------------------------------------------------------------
-        (lowerLimit.toDouble to upperLimit by 0.001).foldLeft(0.0) { case (sum, x) =>
-          sum + func(coefficients, powers, x)
-        } / 1000.0
+        // math.floor(((lowerLimit * 1000) to (upperLimit * 1000) 
+        //       map (e => func(coefficients, powers, e * 0.001) * 0.001)).sum * 10) / 10
          ------------------------------------------------------------------------------
-        (0 to ((upperLimit-lowerLimit)/0.001).toInt).map(x => func(coefficients, powers, lowerLimit+0.001*x)*0.001).sum
          ------------------------------------------------------------------------------
-        val low = lowerLimit * 1.0
-        (low to (upperLimit, 0.001)) map { x => func(coefficients, powers, x) } sum
+        // (lowerLimit.toDouble to upperLimit by 0.001).foldLeft(0.0) { case (sum, x) =>
+        //   sum + func(coefficients, powers, x)
+        // } / 1000.0
          ------------------------------------------------------------------------------
-        math.floor ({ for (x <- lowerLimit.toDouble to upperLimit by 0.001)
-        yield func(coefficients, powers, x) * 0.001 }.sum * 10) / 10
+        // (0 to ((upperLimit-lowerLimit)/0.001).toInt).map(x => func(coefficients, powers, lowerLimit+0.001*x)*0.001).sum
          ------------------------------------------------------------------------------
-        (1 to 1000).map{ x => 
-          func(coeff, p, low + x * (up - low) / 1000.0)
-        }.reduce(_ + _) * (up - low) / 1000.0
+         ------------------------------------------------------------------------------
+        // math.floor ({ for (x <- lowerLimit.toDouble to upperLimit by 0.001)
+        // yield func(coefficients, powers, x) * 0.001 }.sum * 10) / 10
+         ------------------------------------------------------------------------------
+        // (1 to 1000).map{ x => 
+        //   func(coeff, p, low + x * (up - low) / 1000.0)
+        // }.reduce(_ + _) * (up - low) / 1000.0
          ------------------------------------------------------------------------------
 
     def displayAnswers(coefficients:List[Int],powers:List[Int],limits:List[Int])
@@ -528,7 +514,215 @@ object Solution {
 }
 ```
 
-### 
+### Compute the Perimeter of a Polygon
+
+<https://www.hackerrank.com/challenges/lambda-march-compute-the-perimeter-of-a-polygon/problem>
+
+```s
+Sample Input
+
+4
+0 0
+0 1  
+1 1  
+1 0
+Sample Output
+
+4
+```
+
+```scala
+这个代码写得漂亮啊
+object Solution extends App {
+  case class Point(x: Int, y: Int) {
+    // 计算直角三角形的斜边长。hypot(double x, double y);
+    def dist(p: Point) = math.hypot(x-p.x, y-p.y)
+  }
+  // 输入字符
+  val in = new java.util.Scanner(System.in)
+  val pts = List.fill(in.nextInt)(Point(in.nextInt, in.nextInt))
+  // 递归求面积
+  def perimeter(pts: List[Point], prev: Point): Double = pts match {
+    case p :: tail => prev.dist(p) + perimeter(tail, p)
+    case Nil => 0
+  }
+  println(perimeter(pts, pts(pts.size-1)))
+}
+
+------------------------------------------------------------------------
+
+object Solution {
+ def solve(n: Int, xs: Array[Int], ys: Array[Int]): Double = {
+  var result = 0.0
+
+  for (i <- 0 until n) {
+   val j = (i + 1) % n
+   result += Math.hypot(xs(j) - xs(i), ys(j) - ys(i))
+  }
+
+  return result
+ }
+
+ def main(args: Array[String]): Unit = {
+  // 输入字符
+  val sc = new java.util.Scanner(System.in)
+  val n = sc.nextInt
+
+  val xs = new Array[Int](n)
+  val ys = new Array[Int](n)
+
+  for (i <- 0 until n) {
+   // 输入字符，循环读取
+   xs(i) = sc.nextInt
+   ys(i) = sc.nextInt
+  }
+
+  println(solve(n, xs, ys))
+ }
+}
+```
+
+```scala
+
+
+--------------------------------------------------------------
+object Solution {
+
+    def dist(x1: Int, y1: Int, x2: Int, y2: Int): Double = {
+        scala.math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    }
+    
+    def main(args: Array[String]) {
+        // 读取字符的个数
+        val N = scala.io.StdIn.readInt();
+        var sum = 0.0;
+        // 读取点的坐标，多加一个字符，因为有x(i-1), y(i-1)
+        var x: Array[Int] = Array.fill[Int](N+1)(0)
+        var y: Array[Int] = Array.fill[Int](N+1)(0)
+        for (i <- 1 to N) {
+            val s = scala.io.StdIn.readLine().split(" ").map(_.toInt);
+            x.update(i, s(0));
+            y.update(i, s(1));
+            if (i > 1) sum += dist(x(i), y(i), x(i-1), y(i-1));
+        }
+        // 计算面积
+        sum += dist(x(1), y(1), x(N), y(N))
+        println(sum)
+    }
+}
+```
+
+Scala列表有三个基本操作：
+
+- head 返回列表第一个元素
+- tail 返回一个列表，包含除了第一元素之外的其他元素
+- isEmpty 在列表为空时返回true
+
+[Scala中sliding与grouped的区别](https://www.jianshu.com/p/9db2b4fbb03c)
+
+[Scala中拆分操作partition、grouped、groupBy和sliding函数](https://blog.csdn.net/weixin_42078760/article/details/106982271)
+
+```scala
+import scala.math._
+
+object Solution {
+
+    def distance(x1: Int, y1: Int, x2: Int, y2: Int) = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2))
+    
+    def main(args: Array[String]) {
+        // tail 返回一个列表，包含除了第一元素之外的其他元素
+        val pairs = io.Source.stdin.getLines.toList.tail
+        val completePairs = (pairs :+ pairs.head).map(x => x.split(" ").map(_.toInt))
+        val ans = completePairs.sliding(2).map{points =>
+            // 感觉这里漏了几个点
+            distance(points(0)(0), points(0)(1), points(1)(0), points(1)(1))
+        }.sum
+        println(ans)
+    }
+}
+
+-------------------------------------------------------------------------------------------------
+
+object Solution {
+
+  def main(args: Array[String]) {
+    var polygons = Seq((0, 0)).drop(1)
+    for (i <- 1 to readLine.toInt) {
+      val poly = readLine.split(" ").map(_.toInt)
+      polygons = polygons :+ (poly(0), poly(1))
+    }
+    // 前后两个数的相加的和，再把头尾相加
+    println(polygons.sliding(2).map(p => distanceBetween(p(0), p(1))).sum + distanceBetween(polygons.head, polygons.last))
+  }
+
+  def distanceBetween(first:(Int,Int), second:(Int,Int)): Double = {
+    val dx = second._1 - first._1
+    val dy = second._2 - first._2
+    math.sqrt(dx*dx + dy*dy)
+  }
+}
+```
+
+```scala
+object Solution {
+
+  def dist(a: (Int, Int), b: (Int, Int)): Double = {
+    math.sqrt(math.abs(a._1 - b._1) * math.abs(a._1 - b._1) + math.abs(a._2 - b._2) * math.abs(a._2 - b._2))
+  }
+
+  def computePerimeter(vertices: List[(Int, Int)], start: (Int, Int), perimeter: Double): Double = {
+    vertices match {
+      case Nil => perimeter
+      // 计算最后一个元素，与第一个元素
+      case x :: Nil => perimeter + dist(x, start)
+      // 计算第一个元素和第二个元素，再删除第一个元素
+      case x :: y :: xs => computePerimeter(y :: xs, start, perimeter + dist(x, y))
+    }
+  }
+
+  def toTuple(arr: Array[String]): (Int, Int) = {
+    (arr(0).toInt, arr(1).toInt)
+  }
+
+  def main(args: Array[String]) {
+    var vertices: List[(Int, Int)] = Nil
+    for (i <- 1 to io.StdIn.readLine().trim.toInt) vertices = toTuple(io.StdIn.readLine().split(" ")) :: vertices
+    vertices = vertices.reverse
+    printf("%.1f", computePerimeter(vertices, vertices.head, 0))
+  }
+}
+```
+
+```scala
+import scala.io.StdIn._
+import scala.math._
+object Solution {
+
+    def main(args: Array[String]) {
+
+        val n = readInt()
+        // 读取元素
+        val(startX,startY) =readTuple()
+        def compute(num:Int,prevX:Int,prevY:Int):Double={
+            // 返回第一个元素和最后一个元素的结果
+            if(num==0) return calc(prevX,prevY,startX,startY)
+            // 读取元素
+            val(curX,curY) = readTuple()
+            // prevX,prevY来自于递归，curX,curY来自于读取
+            return calc(prevX,prevY,curX,curY) + compute(num-1,curX,curY)
+        }       
+        def calc(x1:Int,y1:Int,x2:Int,y2:Int):Double = sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
+        println(compute(n-1,startX,startY))
+    }
+    
+       def readTuple():(Int,Int) = readLine().split(" ").toList match{
+            case List(s1:String,s2:String) =>(s1.toInt,s2.toInt)
+        }
+     
+}
+```
+
+###
 
 ```s
 
@@ -538,7 +732,23 @@ object Solution {
 
 ```
 
-### 
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+###
 
 ```s
 
@@ -548,7 +758,7 @@ object Solution {
 
 ```
 
-### 
+###
 
 ```s
 
@@ -558,7 +768,7 @@ object Solution {
 
 ```
 
-### 
+###
 
 ```s
 
@@ -568,19 +778,7 @@ object Solution {
 
 ```
 
-
-
-### 
-
-```s
-
-```
-
-```scala
-
-```
-
-### 
+###
 
 ```s
 
