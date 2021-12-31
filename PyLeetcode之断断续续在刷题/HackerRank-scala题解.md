@@ -722,6 +722,357 @@ object Solution {
 }
 ```
 
+### Compute the Area of a Polygon
+
+```s
+Sample Input
+
+4
+0 0
+0 1  
+1 1  
+1 0
+Sample Output
+
+1
+```
+
+```scala
+object Solution {
+
+    def dist(x1: Int, y1: Int, x2: Int, y2: Int): Double = {
+        scala.math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    }
+    
+    def prod(x1: Int, y1: Int, x2: Int, y2: Int): Double = {
+        x1 * y2 - x2 * y1;
+    }
+    
+    def area(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int): Double = {
+        prod(x2-x1, y2-y1, x3-x1, y3-y1) / 2.0;
+    }
+    
+    def main(args: Array[String]) {
+        val N = scala.io.StdIn.readInt();
+        var sum = 0.0;
+        var x: Array[Int] = Array.fill[Int](N+1)(0)
+        var y: Array[Int] = Array.fill[Int](N+1)(0)
+        for (i <- 1 to N) {
+            val s = scala.io.StdIn.readLine().split(" ").map(_.toInt);
+            x.update(i, s(0));
+            y.update(i, s(1)); 
+            // update是赋值
+        }
+        for (i <- 3 to N) {
+            sum += area(x(1), y(1), x(i-1), y(i-1), x(i), y(i));
+        }
+        println(scala.math.abs(sum))
+    }
+}
+```
+
+java.util.Scanner😁
+
+```scala
+object Solution extends App {
+  case class Point(x: Long, y: Long) {
+    def dist(p: Point) = math.hypot(x-p.x, y-p.y)
+  }
+  val in = new java.util.Scanner(System.in)
+  val pts = List.fill(in.nextInt)(Point(in.nextInt, in.nextInt))
+  def det(p1: Point, p2: Point) = p1.x*p2.y-p1.y*p2.x
+  def area(pts: List[Point], prev: Point): Long = pts match {
+    case p :: tail => det(p, prev) + area(tail, p) // 递归调用
+    case Nil => 0
+  }
+  println(-0.5*area(pts, pts(pts.size-1)))
+}
+
+object Solution {
+  def cross(x1: Double, y1: Double, x2: Double, y2: Double): Double = x1 * y2 - y1 * x2
+
+  def solve(n: Int, xs: Array[Int], ys: Array[Int]): Double = {
+    var result = 0.0
+
+    for (i <- 0 until n) {
+      val j = (i + 1) % n // 这样，i = n 时，j = 1
+      result += cross(xs(i), ys(i), xs(j), ys(j))
+    }
+
+    return Math.abs(result) / 2.0
+  }
+
+  def main(args: Array[String]): Unit = {
+    val sc = new java.util.Scanner(System.in)
+    val n = sc.nextInt
+
+    val xs = new Array[Int](n)
+    val ys = new Array[Int](n)
+
+    for (i <- 0 until n) {
+      xs(i) = sc.nextInt
+      ys(i) = sc.nextInt
+    }
+
+    println(solve(n, xs, ys))
+  }
+}
+```
+
+滑动窗口
+
+```scala
+import scala.math._
+object Solution {
+
+    def distance(x1: Int, y1: Int, x2: Int, y2: Int) = x1 * y2 - y1 * x2
+    def main(args: Array[String]) {
+        
+        val pairs = io.Source.stdin.getLines.toList.tail
+        val completePairs = (pairs :+ pairs.head).map(x => x.split(" ").map(_.toInt))
+        // 把 pairs.head 加到 pairs 的尾部
+        val ans = completePairs.sliding(2).map{points =>
+            distance(points(0)(0), points(0)(1), points(1)(0), points(1)(1))
+        }.sum/2.0
+        println(abs(ans))
+    }
+}
+```
+
+```scala
+object Solution {
+  private def readLine: String = {
+    scala.io.StdIn.readLine()
+  }
+  def main(args: Array[String]) {
+    val N = readLine.toInt
+    val coords = Array.ofDim[(Int,Int)](N)
+    for (i <- 0 until N) {
+      val arr = readLine.trim.split(' ').map(s => s.toInt)
+      coords(i) = (arr(0), arr(1))
+    }
+
+    val shiftedCoords = coords ++ Seq(coords(0))
+    // ++ 用于连接两个集合
+
+    def area(i:Int) : Double = {
+      0.5*(shiftedCoords(i)._1 * shiftedCoords(i+1)._2 - shiftedCoords(i+1)._1 * shiftedCoords(i)._2)
+    }
+
+    val areaTotal = (0 until N).map(i => area(i)).sum
+    println(areaTotal)
+  }
+
+
+}
+```
+
+case class Point 😁
+
+```scala
+object Solution {
+  import scala.io.StdIn._
+
+  case class Point(x: Double, y: Double) {
+    def det(q: Point) = x * q.y - y * q.x
+  }
+  def main(args: Array[String]) {
+    val Array(n) = readArray()
+    val ps = Seq.fill(n){readPoint()}
+    println(f"${run(ps)}%.3f") // %.3f 取小数点后三位
+  }
+  def run(ps: Seq[Point]) = {
+    val qs = ps.tail :+ ps.head
+    val ds = (ps zip qs) map { case (p, q) => p det q}
+    math.abs(ds.sum / 2.0)
+  }
+  def readArray() = readLine().split("\\s+").map(_.toInt)
+  def readPoint() = readArray() match {
+    case Array(x, y) => Point(x, y)
+  }
+}
+```
+
+滑动窗口
+
+[Scala集合Seq](https://blog.csdn.net/wenthkim/article/details/86550209): ([官方资料](https://www.scala-lang.org/api/2.12.5/scala/collection/Seq.html))([用法实例](https://www.codercto.com/a/90989.html))
+
+- Seq是`列表`，适合存`有序``重复`数据，进行快速`插入/删除`元素等场景
+
+- [数组Array与序列Seq是兼容的](http://bcxw.net/book/38.html)
+
+Seq 同样分为可变和不可变两大类，此外还派生出 IndexedSeq 和 LinearSeq 两个重要的子特质：
+
+- IndexedSeq ：代表`索引序列`，对于基于`索引`的操作来说效率较高，一般底层依赖于数组实现。
+- LinearSeq ：代表`线性序列`，对于 `head、tail，以及 isEmpty` 一类的方法效率较高，一般底层依赖于链表实现。
+
+```scala
+object Solution {
+
+  def main(args: Array[String]) {
+    var polygons: Seq[(Int, Int)] = Seq()
+    for (i <- 1 to readInt) {
+      val poly = readLine.split(" ").map(_.toInt)
+      polygons = polygons :+ (poly(0), poly(1)) // 点一个个连上去
+    }
+    polygons = polygons :+ polygons.head // 再把头部接上
+    println(math.abs(polygons.sliding(2).map(p => calc(p(0), p(1))).sum) / 2.0)
+
+  }
+
+  def calc(a: (Int, Int), b: (Int, Int)): Int = {
+    a._1 * b._2 - a._2 * b._1
+  }
+
+}
+```
+
+match case 递归调用
+
+```scala
+object Solution {
+
+  def area(vertices: List[(Int, Int)], start: (Int, Int), a: Double): Double = {
+    vertices match {
+      case Nil => a
+      case x :: Nil => math.abs((a + x._1 * start._2 - x._2 * start._1) / 2)
+      case x :: y :: xs => area(y :: xs, start, a + x._1 * y._2 - x._2 * y._1)
+    }
+  }
+
+  def toTuple(arr: Array[String]): (Int, Int) = {
+    (arr(0).toInt, arr(1).toInt)
+  }
+
+  def main(args: Array[String]) {
+    var vertices: List[(Int, Int)] = Nil
+    for (i <- 1 to io.StdIn.readLine().trim.toInt) vertices = toTuple(io.StdIn.readLine().split(" ")) :: vertices
+    vertices = vertices.reverse
+    printf("%.1f", area(vertices, vertices.head, 0))
+  }
+}
+```
+
+明明可以用for循环解决的问题,scala偏偏要用函数
+
+```scala
+import scala.annotation.tailrec
+import scala.io.StdIn
+
+object Solution {
+  def main(args: Array[String]) {
+    val n = StdIn.readLine().trim().toInt
+    val points = (1 to n)
+      .map(i => StdIn.readLine().trim().split(" ").map(_.toInt))
+
+    @tailrec
+    def loop (area:Double, counter:Int):Double = {
+      if (counter >= n) return area
+      val currentPoint = points(counter)
+      val nextPoint = if (counter == n - 1) points(0) else points(counter + 1)
+      val areaDelta = nextPoint(0)*currentPoint(1) - nextPoint(1)*currentPoint(0)
+      loop (area + areaDelta, counter + 1)
+    }
+    println(math.abs(loop(0, 0))/2)
+  }
+}
+```
+
+Source.fromInputStream.getLines().next() 😁
+
+```scala
+import java.text.DecimalFormat
+import scala.io.Source;
+
+object Solution {
+  def area(p: (Int, Int), points: List[(Int, Int)], accum: Double): Double = {
+    if (points.isEmpty) accum
+    else {
+      val next = points.head
+      val part1 = p._1 * next._2
+      val part2 = p._2 * next._1
+      val dist = 0.5 * (part1 - part2)
+      area(next, points.tail, accum + dist)
+    }
+  }
+  
+  def main(args: Array[String]) {
+    val input = Source.fromInputStream(System.in);
+    val lines = input.getLines()
+    val N = lines.next().trim().toInt
+    val points = List.range(0, N).map { _ => {
+      val L = lines.next().split(' ').map { _.trim().toInt }
+      (L(0), L(1))
+    }
+    }
+    val formatter = new DecimalFormat("#.#")
+    val p = Math.abs(area(points.head, points.tail :+ points.head, 0.0))
+    println(formatter.format(p))
+  }
+}
+```
+
+Scanner(System.in).nextDouble
+
+```scala
+import java.io.FileInputStream
+import java.util.Scanner
+
+object Solution {
+    def area(list: List[(Double, Double)]): Double = {
+      def crossProduct(x: (Double, Double), y: (Double, Double)): Double = {
+        return ((x._1 * y._2) - (y._1 * x._2))/2.0
+      }
+      // 递归调用
+      def calculateArea(list: List[(Double, Double)], sum: Double): Double = list match {
+        case Nil => sum
+        case x :: y :: xs => calculateArea(y :: xs, sum + crossProduct(x, y))
+        case x :: Nil => sum
+      }
+      calculateArea(list, 0)
+    }
+    
+    def main(args: Array[String]) {
+      val in = new Scanner(System.in)
+      val n = in.nextInt
+      val list = (for(j <- 0 until n) yield (in.nextDouble, in.nextDouble)).toList
+      val center1 = list.reduce((x,y) => ((x._1 + y._1), (x._2 + y._2)))
+      val center = (center1._1/n, center1._2/n)
+      println(area((list :+ list.head).map(x => (x._1 - center._1, x._2 - center._2))))
+      // list :+ list.head首尾相连,center是什么鬼
+    }
+}
+```
+
+
+```scala
+object Solution {
+    def det(p1: (Int, Int), p2: (Int, Int)): Double = {
+        val (x1, y1) = p1
+        val (x2, y2) = p2
+        x1 * y2 - x2 * y1
+    }
+    def perimeter(points: List[(Int, Int)]): Double = {
+        val wrapped_points = points.last +: points
+        val adj_points = wrapped_points zip wrapped_points.tail
+        // points 加到队首以后,进行拉链操作
+        adj_points.map{case (p1, p2) => det(p1, p2)}.sum / 2
+    }
+    
+    def main(args: Array[String]) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution
+*/
+        val num_points = readInt
+        var points = List.empty[(Int, Int)]
+        for (_ <- 1 to num_points) {
+            val point = readLine.split(' ').map(_.toInt)
+            points = (point(0), point(1)) +: points
+        }
+        println(perimeter(points.reverse))
+    }
+}
+```
+
 ###
 
 ```s
@@ -748,9 +1099,15 @@ object Solution {
 
 ```
 
-###
+```scala
 
-```s
+```
+
+```scala
+
+```
+
+```scala
 
 ```
 
@@ -768,6 +1125,44 @@ object Solution {
 
 ```
 
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+
+
 ###
 
 ```s
@@ -778,9 +1173,81 @@ object Solution {
 
 ```
 
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
 ###
 
 ```s
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
 
 ```
 

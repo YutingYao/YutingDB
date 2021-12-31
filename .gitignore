@@ -8,9 +8,4 @@ metals/
 *.class
 *.xml
 *.db
-*.db
-*.db
-*.db
-*.db
-*.db
-*.db
+.metals
