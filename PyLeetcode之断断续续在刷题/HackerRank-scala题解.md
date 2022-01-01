@@ -1073,6 +1073,364 @@ object Solution {
 }
 ```
 
+### Fibonacci Numbers
+
+https://www.hackerrank.com/challenges/functional-programming-warmups-in-recursion---fibonacci-numbers/problem
+
+```s
+Sample Input and Output Values for the Fibonacci Series
+
+fibonacci(3) = (0+1) = 1  
+fibonacci(4) = (1+1) = 2  
+fibonacci(5) = (1+2) = 3  
+```
+
+```scala
+object Solution {
+    
+     def fibonacci(x:Int):Int = {
+          if (x <= 2) x - 1
+          else fibonacci(x - 1) + fibonacci(x - 2)
+
+     }
+
+    def main(args: Array[String]) {
+         println(fibonacci(readInt()))
+
+    }
+}
+```
+
+```scala
+object Solution {
+    
+     def fibonacci(x:Int):Int = x match {
+          case 0 | 1 => 0
+          case 2 => 1
+          case _ => fibonacci(x-1) + fibonacci(x-2)
+     }
+
+    def main(args: Array[String]) {
+         println(fibonacci(readInt()))
+    }
+}
+```
+
+```scala
+object Solution {
+    
+     def fibonacci(x:Int):Int = {
+        if(x == 1) 0
+        else if(x == 2) 1
+        else fibonacci(x-1) + fibonacci(x-2)
+     }
+
+    def main(args: Array[String]) {
+         println(fibonacci(readInt()))
+    }
+}
+```
+
+### Pascal's Triangle
+
+https://www.hackerrank.com/challenges/pascals-triangle/problem
+
+```s
+Sample Input
+
+4  
+
+Sample Output
+
+1  
+1 1  
+1 2 1  
+1 3 3 1   
+```
+
+用col, row两个参数：
+
+```scala
+object Solution {
+    def pascal(c: Int, r: Int): Int = {
+        if (c == 0 || c == r) 1
+        else pascal(c - 1, r - 1) + pascal(c, r - 1)
+      }
+
+    def main(args: Array[String]) {
+          for (row <- 0 to readInt()-1) {
+              for (col <- 0 to row)
+                print(pascal(col, row) + " ")
+              println()
+          }
+    }
+}
+```
+
+```scala
+object Solution
+{
+  def main(args: Array[String])
+  {
+    def pascal(c: Int, r: Int): Int =
+    {
+      if(c == 0 || c == r) 1 else pascal(c, r - 1) + pascal(c - 1, r - 1)
+    }
+
+    for (row <- 0 to readLine.toInt - 1)
+    {
+      for (col <- 0 to row)
+        print(pascal(col, row) + " ")
+      println()
+    }
+  }
+}
+```
+
+用滑动窗口：
+
+```scala
+object Solution {
+  // 将dp写成递归的形式
+  def printRows(curRow: Array[Int], n: Int) {
+    if (n > 0) {
+      println(curRow.mkString(" "))
+      printRows((0 +: curRow :+ 0).sliding(2).map { case Array(a, b) => a + b }.toArray, n - 1)
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    printRows(Array(1), readInt())
+  }
+}
+```
+
+### String Mingling
+
+https://www.hackerrank.com/challenges/string-mingling/problem
+
+一行代码
+
+```s
+Sample Input #00
+
+abcde
+pqrst
+
+Sample Output #00
+
+apbqcrdset
+
+Sample Input #01
+
+hacker
+ranker
+
+Sample Output #01
+
+hraacnkkeerr
+```
+
+```scala
+精简版：
+
+object Solution {
+  def main(args: Array[String]): Unit = {
+    println(readLine.zip(readLine).map(e => e._1 + "" + e._2).mkString(""))
+  }
+}
+
+详细版：
+
+object Solution{
+    def main(args: Array[String]): Unit = {
+        println(readLine.toCharArray.toList.zip(readLine.toCharArray.toList).map(e => e._1 + "" + e._2).mkString(""));
+    }
+}
+
+object Solution {
+    def main(args: Array[String]) {
+        println((readLine() zip readLine()).toList map {case (e1, e2) => e1.toString + e2.toString} mkString)
+    }
+}
+```
+
+```scala
+object Solution {
+    
+  def mingle(ps: String, qs: String): String = {
+    (ps, qs).zipped.flatMap{case x => Array(x._1, x._2)}.mkString("")
+  }
+
+  def main(args: Array[String]) {
+    val ps = io.StdIn.readLine
+    val qs = io.StdIn.readLine
+    print(mingle(ps, qs))
+  }
+}
+
+object Solution extends App {
+  val a = readLine.toList
+  val b = readLine.toList
+  println(a.zip(b).flatMap(pair => List(pair._1, pair._2)).mkString)
+}
+```
+
+charAt 的用法：
+
+```scala
+object Solution {
+    def mingle(p:String, q:String) = {
+        for (i <- 0 until p.length()) {
+            print(p.charAt(i));
+            print(q.charAt(i));
+        }
+    }
+    def main(args: Array[String]) {
+        mingle(readLine(), readLine())
+    }
+}
+
+object Solution {
+  def main(args: Array[String]) {
+    var p = scala.io.StdIn.readLine
+    var q = scala.io.StdIn.readLine
+    var out = new StringBuilder("")
+    for (i <- 0 to p.length-1) {
+      out += p.charAt(i)
+      out += q.charAt(i)
+    }
+    println(out)
+  }
+}
+
+object Solution {
+  def main(args: Array[String]) {
+    var P:String = readLine()
+    var Q:String = readLine()
+    var i:Int = 0
+    for(i <- 0 until P.length()){
+      print(P.charAt(i)+""+Q.charAt(i))
+    }
+  }
+}
+```
+
+flatten 的用法：
+
+```scala
+import scala.io.Source
+
+object Solution {
+  
+  def solve(s: String, t: String) =
+    (s zip t) map {i => List(i._1,i._2)} flatten
+
+  def main(args: Array[String]): Unit = {
+    val lines = Source.stdin.getLines
+    val s = lines.next
+    val t = lines.next
+    println(solve(s,t) mkString "")
+  }
+}
+```
+
+直接交替打印：
+
+```scala
+object Solution {
+  val in = {
+    io.Source.stdin.getLines()
+  }
+  def main(args: Array[String]): Unit = {
+    val a, b = in.next
+    val n = a.length()
+    for (i <- 0 until n) {
+      print(a(i))
+      print(b(i)) 
+    }
+  }
+}
+
+
+import scala.io._
+
+object Solution 
+{
+    def main(args:Array[String]):Unit=
+    {
+        var A=Console.readLine()
+        var B=Console.readLine()
+        
+        for(i<-0 until A.length())
+        {
+            print(A(i))
+            print(B(i))
+        }
+    }
+}
+```
+
+transpose 的用法：
+
+```scala
+import java.io.PrintWriter
+import java.util.Scanner
+import scala.annotation.tailrec
+
+object Solution extends App {
+  val sc = new Scanner(System.in)
+  val out = new PrintWriter(System.out)
+  
+  def solve(): String = {
+    val P, Q = sc.nextLine
+    List(P, Q).transpose.map(_.mkString).mkString
+  }
+  
+  out.println(solve)
+  out.flush
+}
+```
+
+递归：
+
+```scala
+object Solution {
+  
+  def main(args: Array[String]) {
+    val s1 = readLine.toList
+    val s2 = readLine.toList
+    val result = mingle(s1, s2, Nil).reverse.mkString
+    println(result)
+  }
+  
+  def mingle(first: List[Char], second: List[Char], res: List[Char]): List[Char] = first match {
+    case Nil => res
+    case head :: t => mingle(second, t, head :: res)
+    // 交替将头部元素附着到结果上
+  }
+  
+}
+```
+
+IndexedSeq的用法
+
+```scala
+import scala.collection.immutable.IndexedSeq
+
+object Solution {
+  def main(args: Array[String]): Unit = {
+    val p: String = readLine()
+    val q: String = readLine()
+    val zip: IndexedSeq[(Char, Char)] = p.zip(q)
+    zip.foreach(x => {
+      print(x._1); print(x._2);
+    })
+    println()
+  }
+}
+```
+
 ###
 
 ```s
@@ -1115,12 +1473,6 @@ object Solution {
 
 ```
 
-###
-
-```s
-
-```
-
 ```scala
 
 ```
@@ -1142,76 +1494,6 @@ object Solution {
 ```
 
 ```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-
-
-###
-
-```s
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-###
-
-```s
 
 ```
 

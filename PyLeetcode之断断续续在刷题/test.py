@@ -1,17 +1,16 @@
-class Solution(object):
-    def rob(self, nums):
+class Solution:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        dayset = set(days)
+        N = len(days)
+        durations = [1, 7, 30]
 
-        def RobRange(start,end):
-            #前1个，前2个
-            dp1=0
-            dp2=0
-            for i in range(start, end + 1):
-                maxdp = max(dp1, dp2 + nums[i])
-                dp2 = dp1
-                dp1 = maxdp
-            return maxdp
+        @lru_cache(None)
+        def dp(date):
+            if date > N:
+                return 0
+            elif date in dayset:
+                return min(dp(date + gap) + fee for fee, gap in zip(costs, durations))
+            else:
+                return dp(date + 1)
 
-        n = len(nums)
-        if n == 1:
-            return nums[0]
-        return max(RobRange(0,n-2),RobRange(1,n-1))
+        return dp(1)
