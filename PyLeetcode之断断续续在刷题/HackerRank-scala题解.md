@@ -1431,6 +1431,867 @@ object Solution {
 }
 ```
 
+### String-o-Permute
+
+https://www.hackerrank.com/challenges/string-o-permute/problem
+
+```s
+Sample Input
+
+2
+abcdpqrs
+az
+
+Sample Output
+
+badcqpsr
+za
+```
+
+利用二进制运算符：将奇数和偶数位置调换
+
+```scala
+object Solution {
+    def main(args: Array[String]) {
+      val lines = scala.io.Source.stdin.getLines
+        val T = lines.next.toInt
+        for (_ <- 1 to T)
+        {
+          val s = lines.next
+            val ans = for (i <- 0 until s.length) yield s(i^1)  
+            println(ans.mkString)
+        }
+    }
+}
+```
+
+利用 charAt
+
+```scala
+object Solution {
+  def main(args: Array[String]): Unit = {
+    var t = Console.readInt
+    for( tc <- 0 until t) {  
+      var a = Console.readLine
+      val n = a.length()
+      var i:Int = 0
+      for( i <- 0 until n/2) {
+        print(a.charAt(2*i+1))
+        print(a.charAt(2*i))
+      }
+      println()
+    }
+  }
+}
+
+/**
+ * Created by hama_du on 2014/03/21.
+ */
+object Solution extends App {
+  val T = readLine().toInt
+  (0 until T).foreach(_ => {
+    println(solve(readLine()))
+  })
+
+  def solve(line: String): String = {
+    String.valueOf((0 until line.length).map(i => {
+      if (i % 2 == 0) {
+        line.charAt(i+1)
+      } else {
+        line.charAt(i-1)
+      }
+    }).toArray)
+  }
+}
+
+import scala.annotation.tailrec;
+
+object Solution {
+
+    def main(args: Array[String]) {
+        val t = readLine.toInt;
+        for(i <- 1 to t) f(readLine);
+    }
+  
+    def f(t:String):Unit = {
+        var i = 0;
+        val tLen = t.length;
+        while(i < tLen-1){
+            print(t.charAt(i+1) +""+ t.charAt(i));
+            i+=2;
+        }
+        println();
+    }
+  
+}
+
+object Solution {
+
+    def main(args: Array[String]) {
+        var num = readInt;
+        for (i <- 1 to num){
+          var word:String = readLine;
+          for(i <- 0 to (word.length/2)-1)
+            print(word.charAt(2*i+1).asInstanceOf[Char] + "" + word.charAt(2*i).asInstanceOf[Char])
+          println("")
+        }
+    }
+}
+```
+
+利用 grouped
+
+```scala
+object Solution {
+  
+    def main(args: Array[String]) {
+      def solve: Unit = {
+        val in = readLine()
+        println(in.grouped(2).toList.map(x => x.reverse).mkString)
+      }
+      val numInputs = Integer.parseInt(readLine())
+      (0 until numInputs).foreach(_ => solve)
+      
+    }
+}
+
+object Solution {
+
+  def solve(s: String): String = {
+    s.grouped(2).map(_.reverse).mkString
+  }
+
+  def main(args: Array[String]) {
+    val t = readLine().toInt
+    for (_ <- 1 to t) {
+      val s = readLine()
+      val result = solve(s)
+      println(result)
+    }
+  }
+}
+
+object Solution {
+
+    def main(args: Array[String]) {
+      val input = io.Source.stdin.getLines
+      val t: Int = input.next.toInt
+      val lines: Iterator[String] = input.take(t)
+      
+      for (line <- lines) {
+        line.grouped(2).foreach {
+          pair => {
+            print(pair(1))
+            print(pair(0))
+          }
+        }
+        println
+      }
+    }
+}
+
+利用了隐式函数
+
+object Solution {
+
+  implicit def intWithTimes(n: Int) = new {        
+    def times(f: => Unit) = 1 to n foreach {_ => f}
+  }
+
+  def main(args: Array[String]): Unit = {
+    val lines = io.Source.stdin.getLines()
+    val ntimes = lines.next().toInt;
+    ntimes times {
+      lines.next.toList.grouped(2).foreach{ case List(a,b) => print(b); print(a)}
+      println
+    }
+  }
+
+}
+```
+
+利用 match case 递归
+
+```scala
+object Solution {
+
+  def main(args: Array[String]) {
+      val lines = io.Source.stdin.getLines.drop(1).toList.foreach { line =>
+        println(swap(line))
+      }
+    
+  }
+  
+  def swap(str: String): String = {
+    def helper(res: List[Char], input: List[Char]): List[Char] = input match {
+      case even :: odd :: xs => helper(even :: odd :: res, xs) // 不太明白😁
+      case _ => res.reverse
+    }
+    helper(List(), str.toList).mkString
+  }
+  
+}
+```
+
+### String Compression
+
+https://www.hackerrank.com/challenges/string-compression/problem
+
+```s
+Sample Input #00
+
+abcaaabbb
+
+Sample Output #00
+
+abca3b3
+
+Sample Input #01
+
+abcd
+
+Sample Output #01
+
+abcd
+
+Sample Input #02
+
+aaabaaaaccaaaaba
+
+Sample Output #02
+
+a3ba4c2a4ba
+```
+
+利用charAt
+
+```scala
+import java.io.BufferedReader
+import java.io.InputStreamReader
+//remove if not needed
+import scala.collection.JavaConversions._
+
+object Solution {
+
+  def main(args: Array[String]) {
+    val br = new BufferedReader(new InputStreamReader(System.in))
+    val line1 = br.readLine()
+    var temp = 1
+    var lastch = line1.charAt(0)
+    for (i <- 1 until line1.length) {
+      if (line1.charAt(i) == lastch) {
+        temp += 1
+      } else {
+        System.out.print(lastch)
+        if (temp > 1) {
+          System.out.print(temp)
+        }
+        lastch = line1.charAt(i)
+        temp = 1
+      }
+    }
+    System.out.print(lastch)
+    if (temp > 1) System.out.print(temp)
+    println()
+  }
+}
+
+
+object Solution {
+    def main(args: Array[String]) {
+        var m = readLine();
+        var cur = m.charAt(0);
+        var c = 1;
+        for (i <- 1 until m.length()) {
+            if (m.charAt(i) == cur) {
+                c = c + 1;
+            } else {
+                print(cur);
+                if (c > 1)
+                    print(c);
+                cur = m.charAt(i);
+                c = 1;
+            }
+        }
+        print(cur);
+        if (c > 1)
+            print(c);
+    }
+}
+
+
+object Solution {
+  def main(args: Array[String]) {
+    var S:String = readLine()
+    var check:Int = 0
+    for(i <- 0 until S.length()){
+      if(i==0 || S.charAt(i)!=S.charAt(i-1)){
+        if(check>1) print(check)
+        print(S.charAt(i))
+        check=1
+      }
+      else check=check+1
+    }
+    if(check>1) print(check)
+  }
+}
+```
+
+利用StringBuffer
+
+```scala
+object Solution extends App {
+  val s = readLine
+  val buffer = new StringBuffer
+  var i = 0
+  while(i < s.length) {
+    var j = i
+    var cnt = 0
+    while(j < s.length && s(i) == s(j)) {
+      cnt += 1
+      j += 1
+    }
+    if (cnt == 1) buffer.append(s(i))
+    else buffer.append(s(i) + "" + cnt)
+    i += cnt
+  }
+  println(buffer.toString)
+}
+```
+
+利用takeWhile和dropWhile
+
+```scala
+object Solution {
+    
+    def apeCompress(str: String):Unit = {
+        if (str.length != 0) {
+            val char = str(0)
+            val count = str.takeWhile(_ == char).length
+            if (count != 1)
+                print(char + "" + count)
+            else
+                print(char)
+
+            apeCompress(str.dropWhile(_ == char))
+        }
+    }
+
+    def main(args: Array[String]) {
+        apeCompress(readLine())
+    }
+}
+```
+
+利用match case
+
+```scala
+object Solution {
+    def main(args: Array[String]) {
+        val s = io.Source.stdin.getLines().take(1).toList.head + "0"
+            val res = s.foldLeft(('a',0)) { (acc, ch) =>
+  (acc, ch) match {
+    case ((_, 0), ch) => (ch, 1)
+    case ((prev, n), cur) if prev == cur => (cur, n+1)
+    case ((prev, 1), cur) => print(prev); (cur, 1)
+    case ((prev, n), cur) => print(prev + n.toString); (cur, 1)
+  }}
+    }
+}
+
+```
+
+### Convex Hull
+
+```s
+Sample Input
+
+6    
+1 1    
+2 5    
+3 3    
+5 3    
+3 2    
+2 2
+
+Sample Output
+
+12.2   
+```
+
+- 计算欧氏距离
+- 需要删除：交叉乘积 <= 0
+
+```scala
+import scala.collection.mutable.ArrayBuffer
+
+object Solution {
+
+    type Coordinate = (Int, Int)
+
+    def euclid(x: Coordinate, y: Coordinate): Double = 
+        Math.sqrt(Math.pow(x._1 - y._1, 2) + Math.pow(x._2 - y._2, 2))
+
+    def array2Tuple(a: Array[Int]): Coordinate = (a(0), a(1))
+
+    def crossProduct(a: Coordinate, b: Coordinate, c: Coordinate): Int =
+        (b._1 - a._1) * (c._2 - b._2) - (c._1 - b._1) * (b._2 - a._2)
+
+    def inBetween(a: Coordinate, b: Coordinate, c: Coordinate): Boolean =
+        crossProduct(a, b, c) == 0 && (b._1 - a._1) * (b._1 - c._1) <= 0 && (b._2 - a._2) * (b._2 - c._2) <= 0
+
+    def shouldRemove(a: Coordinate, b: Coordinate, c: Coordinate): Boolean =
+        crossProduct(a, b, c) < 0 || inBetween(b, a, c)
+
+    def convexHull(a: Array[Coordinate]): Double = {
+        // 找到最小的点
+        val p0 = a.minBy(_.swap) // 你可以使用 Tuple.swap 方法来交换元组的元素
+        // 按照与x轴的角度排序
+        val b = a.filter(_ != p0).sortBy(x => (p0._1 - x._1) / euclid(p0, x)) :+ p0
+        // 把内部的点都删掉
+        val h = b.tail.foldLeft(ArrayBuffer(p0, b.head)) {
+            (z, x) => {
+                while (z.length >= 2 && shouldRemove(z(z.length - 2), z.last, x))
+                    z.remove(z.length - 1)
+                if (z.length < 2 || !inBetween(z(z.length - 2), x, z.last))
+                    z += x
+                z
+            }
+        }
+        // 计算外部的点的周长
+        h.sliding(2).toArray.map(t => euclid(t(0), t(1))).sum
+    }
+
+    def main(args: Array[String]) {
+        println(convexHull((1 to readInt()).map(_ => array2Tuple(readLine.trim.split(' ').map(_.toInt))).toArray))
+    }
+}
+```
+
+```scala
+object Solution {
+
+    def input = io.Source.stdin.getLines().toList
+    def intLists: List[List[Int]] = input.map(_.split(" ").toList.filter(_.size>0).map(_.toInt))
+    def pairs: List[(Int, Int)] = intLists.tail.filter(_.size>0).map(x => (x.head, x.tail.head))
+
+    type Point = (Int,Int)
+    type Points = List[Point]
+
+    // 距离    
+    def Distance(A:Point, B:Point): Double = {
+        val dx = (A._1 - B._1)
+        val dy = (A._2 - B._2)
+        math.sqrt(dx*dx + dy*dy)        
+    }
+
+    // 交叉乘积
+    def ChordDistance(A:Point, B:Point)(C:Point): (Int,Point) = {
+        val ABx = B._1-A._1;
+        val ABy = B._2-A._2;
+        val num = ABx*(A._2-C._2)-ABy*(A._1-C._1);
+        ((if (num < 0) -num else num),C)
+    }
+
+    // 判断是否在外边缘
+    def isAbove(A:Point, B:Point)(P:Point): Boolean =
+      (B._1-A._1)*(P._2-A._2) - (B._2-A._2)*(P._1-A._1) > 0
+         
+    // 判断是否在外边缘
+    def insideTriangle( A:Point,B:Point,C:Point )(p:Point): Boolean =
+        isAbove( A,B)(p) && isAbove(B,C)(p) && isAbove(C,A)(p)
+        
+    def quickHull(p:Points):Points = {
+        def quickHullRecurs(p:Points, A:Point, B:Point):Points = {
+            if ( p.isEmpty ) List(B)
+            else
+            {
+                val C = p.map(ChordDistance(A,B) ).maxBy(_._1)._2
+                val newP = p filterNot(_==C)
+                val (s0,s1) = newP partition isAbove(A,C)
+                val s2 = s1 filter isAbove(C,B)
+                A :: quickHullRecurs(s0,A,C) ::: quickHullRecurs(s2,C,B) 
+            }
+        }
+
+        if (p.length == 3) p.last :: p
+        else {
+            val A = p.minBy(_._1)
+            val B = p.maxBy(_._1)
+            val initHull = List(A,B)
+            val initSet = p.filterNot(_==initHull.head).filterNot(_==initHull.tail.head)
+            val (s0,s1) = initSet partition isAbove(A,B)
+            quickHullRecurs(s0, A, B) :::
+            quickHullRecurs(s1, B, A).tail
+        }
+    }
+    def main(args: Array[String]) {
+        val points:Points = pairs
+        val hull = quickHull(points)
+        val perim= (hull zip (hull.tail)).map(x=>Distance(x._1,x._2)).sum
+        println(perim)
+    }
+}
+```
+
+```scala
+object Solution {
+    
+    case class Point(x: Int, y: Int)
+   
+    def cross(o: Point, a: Point, b: Point) = {
+        (a.x-o.x)*(b.y-o.y)-(a.y-o.y)*(b.x-o.x)
+    } 
+    
+    def dist(p1: Point, p2: Point) = {
+        scala.math.sqrt(scala.math.pow(p1.x-p2.x,2) + scala.math.pow(p1.y-p2.y,2));
+    }
+    
+    def halfConvexHull(points : scala.collection.mutable.ListBuffer[Point]) = {
+        var hull = new scala.collection.mutable.ArrayStack[Point]();
+        for (point <- points){
+            while (hull.length>=2 && (cross(hull(1),hull(0),point)<=0)){
+                hull.pop();
+            }
+            hull.push(point);
+        }
+        hull;
+    }
+    
+    def convexHull(argPoints : scala.collection.mutable.ListBuffer[Point]) = {
+        var points = argPoints.sortBy(p => (p.x,p.y));
+        var lowerHull = halfConvexHull(points);
+        var upperHull = halfConvexHull(points.reverse);
+        lowerHull.pop();
+        upperHull.pop();
+        upperHull ++ lowerHull;
+    }
+    
+    def main(args: Array[String]) {
+        var n = readInt();
+        var points = new scala.collection.mutable.ListBuffer[Point]()
+            
+        for (i <- 1 to n){
+            var Array(x,y) = readLine().split(" ").map(_.toInt)
+            points += (Point(x,y));
+        }
+        var hull = convexHull(points);
+        hull.push(hull.last);
+        
+        var perimeter:Double = 0.0;
+        for (i<-0 to hull.length-2){
+            perimeter+=dist(hull(i),hull(i+1));
+        }
+        print(perimeter);
+    }
+}
+```
+
+```scala
+object Solution {
+    type Y = Int
+    type X = Int
+    type Point = (X, Y)
+        
+    def length(p1: Point, p2: Point): Double = 
+        math.sqrt(math.pow(p2._1 - p1._1, 2) + math.pow(p2._2 - p1._2, 2))    
+        
+    def perimeter(xs: List[Point]): Double =
+        if (xs.nonEmpty)
+          ((xs.head, xs.last) :: xs.zip(xs.tail)).foldLeft(0d) {
+            case (acc, (p1, p2)) => acc + length(p1, p2)
+          }
+        else 0
+
+    def ccw(o: Point, a: Point, b: Point) = (a._1 - o._1) * (b._2 - o._2) - (a._2 - o._2) * (b._1 - o._1)        
+            
+    def convexMonotone(xs: List[Point]): List[Point] = {
+        val sorted = xs.sorted
+
+        @scala.annotation.tailrec
+        def loop(path: List[Point], p: Point): List[Point] = path match {
+          case p1 :: p2 :: tail if ccw(p2, p1, p) <= 0 => loop(p2 :: tail, p)
+          case _ => p :: path
+        }
+
+        val lower = sorted.foldLeft(Nil: List[Point])((path, p) => loop(path, p))
+        val upper = sorted.reverse.foldLeft(Nil: List[Point])((path, p) => loop(path, p))
+
+        upper.tail ::: lower.tail
+    }            
+            
+    def main(args: Array[String]) {
+        val N = io.StdIn.readInt()
+        val points = (0 until N).map(_ => io.StdIn.readLine().split("\\s+") match {
+            case Array(x, y) => (x.toInt, y.toInt)
+          }).toList
+        println(perimeter(convexMonotone(points)))
+    }
+}
+```
+
+
+```scala
+object Solution extends App {
+  case class Point(x: Int, y: Int)
+
+  // 计算距离
+  def sqDist(p1: Point, p2: Point) = {
+    def sq(i: Int) = i*i
+    sq(p1.x - p2.x) + sq(p1.y - p2.y)
+  }
+
+  // 计算是否为凸
+  def hull(points: Seq[Point]) = {
+    def cross(p0: Point, p1: Point, p2: Point) = (p1.x - p0.x)*(p2.y - p0.y) - (p1.y - p0.y)*(p2.x - p0.x)
+
+    val p0 = points.minBy{case Point(x, y) => (x, y)}
+    val sortedPoints = points.filter(_ != p0).sortWith{ (p1, p2) =>
+      val c = cross(p0, p1, p2)
+      c > 0 || (c == 0 && sqDist(p0, p1) < sqDist(p0, p2))
+    }
+
+    // 保留凸的点
+    def loop(acc: List[Point], points: List[Point]): List[Point] = (acc, points) match {
+      // 递归结束
+      case (_, Nil) => acc
+      // 继续递归：只有1个点，就继续
+      case (_ :: Nil, pn :: ps) => loop(pn :: acc, ps)
+      // 继续递归：只有2个点，并且，凸，就继续，
+      case (pnm :: pnmm :: _, pn :: ps) if cross(pnmm, pnm, pn) > 0 => loop(pn :: acc, ps)
+      // 否则，删去第一个元素
+      case (_ :: acct, _) => loop(acct, points)
+    }
+    loop(List(p0), (sortedPoints :+ p0).toList)
+  }
+
+  def perimeter(hull: Seq[Point]) = {
+    def dist(p1: Point, p2: Point) = math.sqrt(sqDist(p1, p2))
+    // 滑动窗口
+    hull.sliding(2).map{case List(p1, p2) => dist(p1, p2)}.sum
+  }  
+
+  val in = io.Source.stdin.getLines
+  val N = in.next().toInt
+  val points = for (_ <- 1 to N) yield {
+    val x = in.next().split(" ").map(_.toInt)
+    Point(x(0), x(1))
+  }
+
+  println(perimeter(hull(points)))
+}
+
+import scala.collection.mutable.ListBuffer
+
+object Solution {
+  
+  case class Point(x: Double, y: Double)
+  // 计算是否为凸
+  def convexHull(ps: Array[Point]): Array[Point] = {
+    val points = ps.sortWith((p, q) => p.x < q.x || (p.x == q.x && p.y < q.y))
+    val upper = halfHull(points)
+    val lower = halfHull(points.reverse)
+    upper.tail ++ lower.tail
+  }
+  
+  def halfHull(ps: Array[Point]): Array[Point] = {
+    val hull = new ListBuffer[Point]()
+    for (p <- ps) {
+      while (hull.size >= 2 && ccw(p, hull(0), hull(1))) {
+        hull.remove(0)
+      }
+    hull.prepend(p)
+    }
+    hull.toArray
+  }
+  
+  def ccw(p1: Point, p2: Point, p3: Point) = {
+    val exteriorProduct = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x)
+    val collinear: Boolean = math.abs(exteriorProduct) <= 1e-9
+    val ccw: Boolean = exteriorProduct < 0.0
+    collinear || ccw
+  }
+  // 计算周长
+  def length(p: Point, q: Point): Double = math.sqrt((p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y))
+    
+  def perimeter(ps: Array[Point]): Double = {
+    (1 until ps.length).foldLeft(length(ps(0), ps.last))((acc, i) => acc + length(ps(i), ps(i - 1)))
+  }
+  
+  def solve(ps: Array[Point]): Double = perimeter(convexHull(ps))
+    
+  def main(args: Array[String]) {
+    val n = io.StdIn.readInt
+    val points = Array.range(0, n) map {line =>
+      val coordinates = io.StdIn.readLine.split(" ").map(_.toDouble)
+      Point(coordinates(0), coordinates(1))
+    }
+    println(solve(points))
+  }
+}
+```
+
+case class + 伴生对象
+
+```scala
+case class Point(x: Int, y: Int) {
+  def angleWith(p: Point): Double = Math.atan2(p.y - y, p.x - x)
+  def distance(p: Point): Double = Math.sqrt(Math.pow(p.x - x, 2) + Math.pow(p.y - y, 2))
+}
+
+object Point {
+  def apply(a: Array[Int]): Point = Point(a(0), a(1))
+}
+
+object Solution {
+  def ccw(p1: Point, p2: Point, p3: Point): Boolean = {
+    (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) >= 0
+  }
+
+  // 可以看到两个函数名一样的，
+  // 他的参数是不一样的，
+  // 这两个函数的功能一样，
+  // 但是接受的参数不一样，所以这才需要去定义两个函数。
+  def convexHull(sortedPoints: List[Point]): List[Point] = {
+    convexHull(sortedPoints.take(3).reverse, sortedPoints.drop(3) :+ sortedPoints.head)
+  }
+
+  def convexHull(hullPoints: List[Point], restPoints: List[Point]): List[Point] = {
+    if (restPoints == Nil) hullPoints
+    else if (ccw(hullPoints(1), hullPoints(0), restPoints(0))) {
+      convexHull(restPoints.head :: hullPoints, restPoints.tail)
+    } else {
+      convexHull(hullPoints.tail, restPoints)
+    }
+  }
+
+  def lowestPoint(pts: Array[Point]): Point = pts.minBy(p => p.y * 10001 + p.x)
+
+  def sortedPoints(pts: Array[Point]): List[Point] = {
+    ((lowest: Point) =>
+      pts.sortWith { (p1, p2) => 
+        lowest.angleWith(p1).compare(lowest.angleWith(p2)) match {
+          case 0 => lowest.distance(p1).compare(lowest.distance(p2)) < 0
+          case n => n < 0
+        }
+      }.toList)(lowestPoint(pts))
+  }
+
+  def readPoints: Array[Point] = Array.fill(readLine().trim.toInt)(Point(readLine().split(" ").map(_.toInt)))
+
+  def main(args: Array[String]): Unit = {
+    printf("%.1f\n", convexHull(sortedPoints(readPoints)).sliding(2).map { case List(p1, p2) => p1.distance(p2) }.sum)
+  }
+}
+```
+
+```scala
+object Solution {
+
+  def grahamScan(points: Vector[(Int, Int)]): Double = {
+
+    def theta(p0: (Int, Int), p1: (Int, Int)): Double = {
+      val dx = p1._1 - p0._1
+      val dy = p1._2 - p0._2
+      val ax = math.abs(dx)
+      val ay = math.abs(dy)
+      val t = if (ax + ay == 0) 0.0 else dy.toFloat / (ax + ay)
+      90.0 * (if (dx < 0) 2.0 - t else if (dy < 0) 4.0 + t else t)
+    }
+
+    def distance(p1: (Int, Int), p2: (Int, Int)) =
+      math.sqrt(math.pow(p2._1 - p1._1, 2) + math.pow(p2._2 - p1._2, 2))
+
+    def perimeter(ps: List[(Int, Int)]) = {
+      def perimeterAcc(ps: List[(Int, Int)], acc: Double): Double =
+        ps match {
+          case p1 :: (p2 :: pt) => perimeterAcc(p2 :: pt, acc + distance(p1, p2))
+          case _ => acc
+        }
+        // 每次递归，删除队首元素
+      perimeterAcc(ps, 0.0)
+    }
+
+    def scan(points: List[(Int, Int)], acc: List[(Int, Int)]): List[(Int, Int)] = {
+      def ccw(p0: (Int, Int), p1: (Int, Int), p2: (Int, Int)): Integer =
+        (p1._1 - p0._1) * (p2._2 - p0._2) - (p1._2 - p0._2) * (p2._1 - p0._1)
+      (points, acc) match {
+        case (Nil, _) => acc
+        case (p :: ps, p2 :: p1 :: pps) => if (ccw(p1, p2, p) >= 0) scan(ps, p :: acc) // 如果p不在内部，则p :: acc
+        else scan(points, p1 :: pps) // 否则，删除p2
+        case (p :: ps, xs) => scan(ps, p :: xs) // 把p挪过来
+      }
+    }
+
+    val start = points.min(Ordering[(Int, Int)].on { x: (Int, Int) => (x._2, x._1) })
+    val thetas = points.map(p => (p, theta(start, p), distance(p, start)))
+    perimeter(start::scan(thetas.sortBy(t => (t._2, t._3)).map { case (p, t, d) => p }.toList, Nil))
+  }
+
+  def main(args: Array[String]): Unit = {
+    val n = readLine.toInt
+    val input = (for (i <- 1 to n)
+      yield (readLine split ("""\s""")).map(_.toInt)).map { case Array(a, b) => (a, b) }.toVector
+    println("%.1f".format(grahamScan(input)))
+  }
+}
+`
+```scala
+object Solution {
+
+    type Point = (Int, Int)
+    type Line = (Point, Point)
+
+    def dist(point: Point, line: Line): Double = {
+        val vy = line._2._1 - line._1._1
+        val vx = line._1._2 - line._2._2
+        vx * (point._1 - line._1._1) + vy * (point._2 - line._1._2)
+    }
+
+    def mostDistant(line: Line, points: List[Point]): (List[Point], List[Point]) =
+        points.filter(dist(_, line) > 0) match {
+            case newPoints: List[Point] if newPoints.nonEmpty => (List(newPoints.maxBy(dist(_, line))), newPoints)
+            case _ => (List(), List())
+        }
+
+    def buildConvexHull(line: Line, points: List[Point]): List[Line] = mostDistant(line, points) match {
+        case (maxPoint, newPoints) if maxPoint.nonEmpty =>
+            buildConvexHull((line._1, maxPoint.head), newPoints) ::: buildConvexHull((maxPoint.head,line._2), newPoints)
+        case _ => List(line)
+    }
+
+    def convexHull(points: List[Point]): List[Line] = (points.minBy(_._1), points.maxBy(_._1)) match {
+        case (minPoint, maxPoint) => buildConvexHull((minPoint, maxPoint), points) ::: buildConvexHull((maxPoint, minPoint), points)
+        case _ => List()
+    }
+    
+    def main(args: Array[String]) {
+        val n = readInt
+        val points = (for (_ <- 1 to n) yield readLine).map(_.split(" ")).map {
+            case Array(a, b) => (a.toInt, b.toInt)
+        }.toList
+        
+        import math._
+        val perimeter = (0d /: convexHull(points)) {
+            case (s, ((xa, ya), (xb, yb))) => s + sqrt(pow(xb - xa, 2) + pow(yb - ya, 2))
+        }
+        println(perimeter)
+    }
+}
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
+```scala
+
+```
+
 ###
 
 ```s
@@ -1465,7 +2326,9 @@ object Solution {
 
 ```
 
-```scala
+###
+
+```s
 
 ```
 
@@ -1497,15 +2360,9 @@ object Solution {
 
 ```
 
-```scala
+###
 
-```
-
-```scala
-
-```
-
-```scala
+```s
 
 ```
 
