@@ -5768,59 +5768,65 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1ri4y1t78d?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def superEggDrop(self, k: int, n: int) -> int:
-        memo = {}
-        def dp(k, n):
-            if (k, n) not in memo:
-                if n == 0:
-                    ans = 0
-                elif k == 1:
-                    ans = n
-                else:
-                    lo, hi = 1, n
-                    # keep a gap of 2 x values to manually check later
-                    while lo + 1 < hi:
-                        x = (lo + hi) // 2
-                        t1 = dp(k - 1, x - 1)
-                        t2 = dp(k, n - x)
+dp[k][m] 的含义是k个鸡蛋 移动m次最多能够确定多少楼层
+这个角度思考
+dp[k][m] 最多能够确定的楼层数为L
 
-                        if t1 < t2:
-                            lo = x
-                        elif t1 > t2:
-                            hi = x
-                        else:
-                            lo = hi = x
+那么我选定第一个扔的楼层之后，我要么碎，要么不碎
 
-                    ans = 1 + min(max(dp(k - 1, x - 1), dp(k, n - x))
-                                  for x in (lo, hi))
+这就是把L分成3段:
+左边是碎的那段 长度是 dp[k][m - 1]
+右边是没碎的那段 长度是 dp[k-1][m - 1] 因为已经碎了一个了
+中间是我选定扔的楼层 是1
 
-                memo[k, n] = ans
-            return memo[k, n]
+所以递推公式是:
+dp[k][m] = dp[k - 1][m - 1] + dp[k][m - 1] + 1
 
-        return dp(k, n)
+根据递推公式 如果采用k倒着从大到小计算 就可以只存一行的dp[k] 直接原地更新dp[k] 不影响后续计算 
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/super-egg-drop/solution/ji-dan-diao-luo-by-leetcode-solution-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+只需要O(K)空间复杂度 O(KlogN) 鸡蛋完全够用的时候 就是走LogN步 最差情况是1个鸡蛋走N步 O(KN)
 
 class Solution:
-    def superEggDrop(self, k: int, n: int) -> int:
-        # Right now, dp[i] represents dp(1, i)
-        dp = list(range(n + 1))
-        dp2 = [0] * (n + 1)
-        for k in range(2, k + 1):
-            # Now, we will develop dp2[i] = dp(j, i)
+    def superEggDrop(self, eggs: int, level: int) -> int:
+            dp = [0] * (eggs + 1)
+            m = 0
+            while dp[eggs] < level:
+                m += 1
+                for gg in range(eggs, 0, -1):
+                    # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层，鸡蛋没碎，可以遍历的楼层数目
+                    dp[gg] = dp[gg - 1] + dp[gg] + 1
+            return m
+
+if __name__ == "__main__":      
+	s = Solution()
+	print(s.superEggDrop(3,14))
+    # print('移动次数:',m,'鸡蛋:', k)
+    # 移动次数: 1 鸡蛋: 3
+    # 移动次数: 1 鸡蛋: 2
+    # 移动次数: 1 鸡蛋: 1
+    # 移动次数: 2 鸡蛋: 3
+    # 移动次数: 2 鸡蛋: 2
+    # 移动次数: 2 鸡蛋: 1
+    # 移动次数: 3 鸡蛋: 3
+    # 移动次数: 3 鸡蛋: 2
+    # 移动次数: 3 鸡蛋: 1
+    # 移动次数: 4 鸡蛋: 3
+    # 移动次数: 4 鸡蛋: 2
+    # 移动次数: 4 鸡蛋: 1
+```
+
+```py
+class Solution:
+    def superEggDrop(self, eggs: int, levels: int) -> int:
+        dp = list(range(levels + 1))
+        dp2 = [0] * (levels + 1)
+        for eggs in range(2, eggs + 1):
             x = 1
-            for m in range(1, n + 1):
-                # Let's find dp2[m] = dp(j, m)
-                # Increase our optimal x while we can make our answer better.
-                # Notice max(dp[x-1], dp2[m-x]) > max(dp[x], dp2[m-x-1])
-                # is simply max(T1(x-1), T2(x-1)) > max(T1(x), T2(x)).
+            for m in range(1, levels + 1):
+                # max(dp[x-1], dp2[m-x]) > max(dp[x], dp2[m-x-1])
+                # max(T1(x-1), T2(x-1)) > max(T1(x), T2(x)).
                 while x < m and max(dp[x - 1], dp2[m - x]) >= max(dp[x], dp2[m - x - 1]):
                     x += 1
-
                 # The final answer happens at this x.
                 dp2[m] = 1 + max(dp[x - 1], dp2[m - x])
 
@@ -5828,57 +5834,22 @@ class Solution:
 
         return dp[-1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/super-egg-drop/solution/ji-dan-diao-luo-by-leetcode-solution-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
-    def superEggDrop(self, k: int, n: int) -> int:
-        if n == 1:
+    def superEggDrop(self, eggs: int, level: int) -> int:
+        if level == 1:
             return 1
-        f = [[0] * (k + 1) for _ in range(n + 1)]
-        for i in range(1, k + 1):
+        f = [[0] * (eggs + 1) for _ in range(level + 1)]
+        for i in range(1, eggs + 1):
             f[1][i] = 1
-        ans = -1
-        for i in range(2, n + 1):
-            for j in range(1, k + 1):
+        res = -1
+        for i in range(2, level + 1):
+            for j in range(1, eggs + 1):
                 f[i][j] = 1 + f[i - 1][j - 1] + f[i - 1][j]
-            if f[i][k] >= n:
-                ans = i
+            if f[i][eggs] >= level:
+                res = i
                 break
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/super-egg-drop/solution/ji-dan-diao-luo-by-leetcode-solution-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-```
-
-```py
-dp[k][m] 的含义是k个鸡蛋 移动m次最多能够确定多少楼层
-这个角度思考
-dp[k][m] 最多能够确定的楼层数为L
-那么我选定第一个扔的楼层之后，我要么碎，要么不碎
-这就是把L分成3段
-左边是碎的那段 长度是dp[k][m - 1]
-右边是没碎的那段 长度是dp[k-1][m - 1] 因为已经碎了一个了
-中间是我选定扔的楼层 是1
-所以递推公式是
-dp[k][m] = dp[k - 1][m - 1] + dp[k][m - 1] + 1
-根据递推公式 如果采用k倒着从大到小计算 就可以只存一行的dp[k] 直接原地更新dp[k] 不影响后续计算 只需要O(K)空间复杂度 O(KlogN) 鸡蛋完全够用的时候 就是走LogN步 最差情况是1个鸡蛋走N步 O(KN)
-
-def superEggDrop(self, K: int, N: int) -> int:
-        dp = [0] * (K + 1)
-        m = 0
-        while dp[K] < N:
-            m += 1
-            for k in range(K, 0, -1):
-                # print(m, k)
-                dp[k] = dp[k - 1] + dp[k] + 1
-        return m
+        return res
 ```
 
 ###  1.150. <a name='ConstructBinaryTreefromPreorderandPostorder'></a>889. Construct Binary Tree from Preorder and Postorder
