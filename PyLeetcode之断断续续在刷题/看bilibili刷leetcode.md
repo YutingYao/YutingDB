@@ -15,12 +15,12 @@
 	* 1.13. [112-Path Sum](#PathSum)
 	* 1.14. [113. 二叉树中和为某一值的路径](#-1)
 	* 1.15. [114题. 二叉树展开为链表](#-1)
-	* 1.16. [115. Distinct Subsequences](#DistinctSubsequences)
+	* 1.16. [115. 【动态🚀规划】Distinct Subsequences](#DistinctSubsequences)
 	* 1.17. [116. Populating Next Right Pointers in Each Node](#PopulatingNextRightPointersinEachNode)
 	* 1.18. [117 Populating Next Right Pointers in Ea (可跳过)](#PopulatingNextRightPointersinEa)
 	* 1.19. [118-Pascal's Triangle](#PascalsTriangle)
 	* 1.20. [119-Pascal's Triangle II](#PascalsTriangleII)
-	* 1.21. [120 Triangle](#Triangle)
+	* 1.21. [120 【动态🚀规划】Triangle](#Triangle)
 	* 1.22. [121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机](#BestTimetoBuyandSellStock121-)
 	* 1.23. [122-买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II](#II122-BestTimetoBuyandSellStockII)
 	* 1.24. [123-买卖股票的最佳时机 III](#III)
@@ -31,14 +31,14 @@
 	* 1.29. [128. Longest Consecutive Sequence](#LongestConsecutiveSequence)
 	* 1.30. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
 	* 1.31. [130. Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
-	* 1.32. [131-分割回文串](#-1)
-	* 1.33. [132. Palindrome Partitioning II](#PalindromePartitioningII)
+	* 1.32. [131-【动态🚀规划】分割回文串](#-1)
+	* 1.33. [132. 【动态🚀规划】Palindrome Partitioning II](#PalindromePartitioningII)
 	* 1.34. [133. Clone Graph](#CloneGraph)
 	* 1.35. [134. Gas Station](#GasStation)
 	* 1.36. [138 Copy List with Random Pointer](#CopyListwithRandomPointer)
 	* 1.37. [136-Single Number](#SingleNumber)
 	* 1.38. [137 Single Number II](#SingleNumberII)
-	* 1.39. [139 Word Break](#WordBreak)
+	* 1.39. [139 【动态🚀规划】Word Break](#WordBreak)
 	* 1.40. [140 Word Break II](#WordBreakII)
 	* 1.41. [141-Linked List Cycle](#LinkedListCycle)
 	* 1.42. [142 Linked List Cycle II](#LinkedListCycleII)
@@ -53,7 +53,7 @@
 	* 1.51. [149. Max Points on a Line](#MaxPointsonaLine)
 	* 1.52. [150. Evaluate Reverse Polish Notation](#EvaluateReversePolishNotation)
 	* 1.53. [151. Reverse Words in a String](#ReverseWordsinaString)
-	* 1.54. [152-乘积最大子数组](#-1)
+	* 1.54. [152 【动态🚀规划】乘积最大子数组](#-1)
 	* 1.55. [153-寻找旋转排序数组中的最小值](#-1)
 	* 1.56. [154 Find Minimum in Rotated Sorted Arr](#FindMinimuminRotatedSortedArr)
 	* 1.57. [155-Min Stack](#MinStack)
@@ -71,11 +71,11 @@
 	* 1.69. [179 Largest Number](#LargestNumber)
 	* 1.70. [186. Reverse Words in a String II](#ReverseWordsinaStringII)
 	* 1.71. [187 Repeated DNA Sequences](#RepeatedDNASequences)
-	* 1.72. [188 Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
+	* 1.72. [188 【动态🚀规划】Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
 	* 1.73. [189. Rotate Array](#RotateArray)
 	* 1.74. [190. Reverse Bits](#ReverseBits)
 	* 1.75. [191 Number of 1 Bits](#Numberof1Bits)
-	* 1.76. [198. House Robber 198-打家劫舍](#HouseRobber198-)
+	* 1.76. [198. 【动态🚀规划】House Robber 198-打家劫舍](#HouseRobber198-)
 	* 1.77. [199 Binary Tree Right Side View](#BinaryTreeRightSideView)
 	* 1.78. [200-岛屿数量](#-1)
 	* 1.79. [201 Bitwise AND of Numbers Range](#BitwiseANDofNumbersRange)
@@ -90,13 +90,13 @@
 	* 1.88. [210. Course Schedule II 210-课程表II](#CourseScheduleII210-II)
 	* 1.89. [211 Add and Search Word](#AddandSearchWord)
 	* 1.90. [212. Word Search II](#WordSearchII)
-	* 1.91. [213. House Robber II 213-打家劫舍II](#HouseRobberII213-II)
+	* 1.91. [213.【动态🚀规划】 House Robber II 213-打家劫舍II](#HouseRobberII213-II)
 	* 1.92. [216. Combination Sum III 216-组合总和 III](#CombinationSumIII216-III)
 	* 1.93. [217. Contains Duplicate](#ContainsDuplicate)
 	* 1.94. [218. The Skyline Problem](#TheSkylineProblem)
 	* 1.95. [219. Contains Duplicate II](#ContainsDuplicateII)
 	* 1.96. [220 Contains Duplicate III](#ContainsDuplicateIII)
-	* 1.97. [221-最大正方形](#-1)
+	* 1.97. [221-【动态🚀规划】最大正方形](#-1)
 	* 1.98. [222. Count Complete Tree Nodes](#CountCompleteTreeNodes)
 	* 1.99. [223. Rectangle Area](#RectangleArea)
 	* 1.100. [224](#-1)
@@ -122,12 +122,12 @@
 	* 1.120. [258. Add Digits](#AddDigits)
 	* 1.121. [260-只出现一次的数字 III](#III-1)
 	* 1.122. [263 Ugly Number](#UglyNumber)
-	* 1.123. [264. Ugly Number II](#UglyNumberII)
+	* 1.123. [264. 【动态🚀规划】Ugly Number II](#UglyNumberII)
 	* 1.124. [268 Missing Number](#MissingNumber)
 	* 1.125. [270. Closest Binary Search Tree Value](#ClosestBinarySearchTreeValue)
 	* 1.126. [274 H-Index](#H-Index)
 	* 1.127. [278. First Bad Version](#FirstBadVersion)
-	* 1.128. [279 Perfect Squares](#PerfectSquares)
+	* 1.128. [279 【动态🚀规划】Perfect Squares](#PerfectSquares)
 	* 1.129. [282. Expression Add Operators](#ExpressionAddOperators)
 	* 1.130. [283. Move Zeros](#MoveZeros)
 	* 1.131. [284 Peeking Iterator](#PeekingIterator)
@@ -136,22 +136,22 @@
 	* 1.134. [290. Word Pattern](#WordPattern)
 	* 1.135. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
 	* 1.136. [299. Bulls and Cows](#BullsandCows)
-	* 1.137. [300 Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
+	* 1.137. [300 【动态🚀规划】Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
 	* 1.138. [301. Remove Invalid Parentheses](#RemoveInvalidParentheses)
 	* 1.139. [303-区域和检索 - 数组不可变](#-1)
 	* 1.140. [304. Range Sum Query 2D](#RangeSumQuery2D)
-	* 1.141. [309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期](#BestTimetoBuyandSellStockwithCooldown309-)
+	* 1.141. [309. 【动态🚀规划】Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期](#BestTimetoBuyandSellStockwithCooldown309-)
 	* 1.142. [310 Minimum Height Trees](#MinimumHeightTrees)
 	* 1.143. [312 Burst Balloons](#BurstBalloons)
 	* 1.144. [315. Count of Smaller Numbers After Self](#CountofSmallerNumbersAfterSelf)
 	* 1.145. [316 Remove Duplicate Letters](#RemoveDuplicateLetters)
 	* 1.146. [319](#-1)
 	* 1.147. [321. Create Maximum Number](#CreateMaximumNumber)
-	* 1.148. [322. Coin Change](#CoinChange)
+	* 1.148. [322. 【动态🚀规划】Coin Change](#CoinChange)
 	* 1.149. [324](#-1)
 	* 1.150. [326. Power of Three](#PowerofThree)
 	* 1.151. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
-	* 1.152. [329. Longest Increasing Path in a Matrix](#LongestIncreasingPathinaMatrix)
+	* 1.152. [329. 【动态🚀规划】Longest Increasing Path in a Matrix](#LongestIncreasingPathinaMatrix)
 	* 1.153. [332 Reconstruct Itinerary](#ReconstructItinerary)
 	* 1.154. [334 Increasing Triplet Subseque](#IncreasingTripletSubseque)
 	* 1.155. [337 House Robber III](#HouseRobberIII)
@@ -163,7 +163,7 @@
 	* 1.161. [346 Moving Average from Data Stream](#MovingAveragefromDataStream)
 	* 1.162. [347. Top K Frequent Elements](#TopKFrequentElements)
 	* 1.163. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
-	* 1.164. [350. Intersection of Two Arrays II](#IntersectionofTwoArraysII)
+	* 1.164. [350. 【动态🚀规划】Intersection of Two Arrays II](#IntersectionofTwoArraysII)
 	* 1.165. [355. 设计推特 Design Twitter](#DesignTwitter)
 	* 1.166. [359 Logger Rate Limiter](#LoggerRateLimiter)
 	* 1.167. [367. Valid Perfect Square](#ValidPerfectSquare)
@@ -171,7 +171,7 @@
 	* 1.169. [373. Find K Pairs with Smallest Sums查找和最小的k对数字](#FindKPairswithSmallestSumsk)
 	* 1.170. [374. Guess Number Higher or Lower](#GuessNumberHigherorLower)
 	* 1.171. [376-摆动序列](#-1)
-	* 1.172. [377. Combination Sum IV](#CombinationSumIV)
+	* 1.172. [377. 【动态🚀规划】Combination Sum IV](#CombinationSumIV)
 	* 1.173. [378-有序矩阵中第K小的元素](#K)
 	* 1.174. [380 Insert Delete GetRandom O(1)](#InsertDeleteGetRandomO1)
 	* 1.175. [382 Linked List Random Node](#LinkedListRandomNode)
@@ -180,7 +180,7 @@
 	* 1.178. [387. First Unique Character in a String](#FirstUniqueCharacterinaString)
 	* 1.179. [389. Find the Difference](#FindtheDifference)
 	* 1.180. [391. Perfect Rectangle](#PerfectRectangle)
-	* 1.181. [392. Is Subsequence](#IsSubsequence)
+	* 1.181. [392. 【动态🚀规划】Is Subsequence](#IsSubsequence)
 	* 1.182. [393. UTF-8 Validation](#UTF-8Validation)
 	* 1.183. [394 Decode String](#DecodeString)
 	* 1.184. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
@@ -193,10 +193,10 @@
 	* 1.191. [409. Longest Palindrome](#LongestPalindrome)
 	* 1.192. [410. Split Array Largest Sum](#SplitArrayLargestSum)
 	* 1.193. [412. Fizz Buzz](#FizzBuzz)
-	* 1.194. [413-等差数列划分](#-1)
+	* 1.194. [413-【动态🚀规划】等差数列划分](#-1)
 	* 1.195. [414. Third Maximum Number](#ThirdMaximumNumber)
 	* 1.196. [415-Add Strings](#AddStrings)
-	* 1.197. [416. Partition Equal Subset Sum](#PartitionEqualSubsetSum)
+	* 1.197. [416. 【动态🚀规划】Partition Equal Subset Sum](#PartitionEqualSubsetSum)
 	* 1.198. [417. Pacific Atlantic Water Flow](#PacificAtlanticWaterFlow)
 	* 1.199. [419. Battleships in a Board](#BattleshipsinaBoard)
 	* 1.200. [421 Maximum XOR of Two Numbers in an Array](#MaximumXORofTwoNumbersinanArray)
@@ -240,7 +240,7 @@
 	* 1.238. [485. Max Consecutive Ones](#MaxConsecutiveOnes)
 	* 1.239. [486. Predict the Winner](#PredicttheWinner)
 	* 1.240. [490 The Maze](#TheMaze)
-	* 1.241. [494. Target Sum](#TargetSum)
+	* 1.241. [494. 【动态🚀规划】Target Sum](#TargetSum)
 	* 1.242. [495 Teemo Attacking](#TeemoAttacking)
 	* 1.243. [496. 下一个更大元素 I (Next Greater Element I)](#INextGreaterElementI)
 	* 1.244. [497 Random Point in Non-overlapping](#RandomPointinNon-overlapping)
@@ -1302,7 +1302,7 @@ class Solution:
 ```
 
 
-###  1.16. <a name='DistinctSubsequences'></a>115. Distinct Subsequences
+###  1.16. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
 
@@ -1565,7 +1565,7 @@ class Solution:
         return res
 ```
 
-###  1.21. <a name='Triangle'></a>120 Triangle
+###  1.21. <a name='Triangle'></a>120 【动态🚀规划】Triangle
 
 [小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
 
@@ -2290,7 +2290,7 @@ class Solution:
 
 
 
-###  1.32. <a name='-1'></a>131-分割回文串
+###  1.32. <a name='-1'></a>131-【动态🚀规划】分割回文串
 
 [哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
 
@@ -2446,7 +2446,7 @@ class Solution(object):
         return res
 
 
-不需要预处理，没有递归，然后代码简洁的动态规划
+不需要预处理，没有递归，然后代码简洁的动态🚀规划
 
 我真牛逼
 
@@ -2472,7 +2472,7 @@ class Solution:
         return res
 ```
 
-###  1.33. <a name='PalindromePartitioningII'></a>132. Palindrome Partitioning II
+###  1.33. <a name='PalindromePartitioningII'></a>132. 【动态🚀规划】Palindrome Partitioning II
 
 [花花酱](https://www.bilibili.com/video/BV1NJ411v7k9?spm_id_from=333.999.0.0)
 
@@ -2738,12 +2738,12 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
 
-###  1.39. <a name='WordBreak'></a>139 Word Break
+###  1.39. <a name='WordBreak'></a>139 【动态🚀规划】Word Break
 
 [小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
 
 ```py
-# python 动态规划
+# python 动态🚀规划
 
 # 从 i = 0 开始分析：i = 0， 遍历 j in range(1, n+1)， 
 
@@ -3858,14 +3858,14 @@ class Solution:
 
 
 
-###  1.54. <a name='-1'></a>152-乘积最大子数组
+###  1.54. <a name='-1'></a>152 【动态🚀规划】乘积最大子数组
 
 [哈哈哈](https://www.bilibili.com/video/BV12a4y1i76G?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1iK411K7yG?spm_id_from=333.999.0.0)
 
 ```py
-# 动态规划：遍历时，每次分别存储 前i个中连续数组 [最大的乘积和] 和 [最小乘积和]
+# 动态🚀规划：遍历时，每次分别存储 前i个中连续数组 [最大的乘积和] 和 [最小乘积和]
 
 # 之所有存 [最小乘积和]，是因为 [最小乘积和] 如果是负数有可能遇到负数，
 
@@ -5224,7 +5224,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1mp4y1r7v5?spm_id_from=333.999.0.0)
 
-###  1.72. <a name='BestTimetoBuyandSellStockIV'></a>188 Best Time to Buy and Sell Stock IV
+###  1.72. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
 
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
 
@@ -5365,7 +5365,7 @@ class Solution:
 
 ```py
 
-标准的三维DP动态规划，三个维度，第一维表示天，第二维表示交易了几次，第三维表示是否持有股票。
+标准的三维DP动态🚀规划，三个维度，第一维表示天，第二维表示交易了几次，第三维表示是否持有股票。
 
 首先初始化三维数组，填充第1天操作j次的没买或买了的情况的初始值，没买就是0，第一天就买入即-prices[0]。这里定义卖出操作时交易次数加1
 
@@ -5813,7 +5813,7 @@ object Solution {
 }
 ```
 
-###  1.76. <a name='HouseRobber198-'></a>198. House Robber 198-打家劫舍
+###  1.76. <a name='HouseRobber198-'></a>198. 【动态🚀规划】House Robber 198-打家劫舍
 
 [12:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -5828,14 +5828,14 @@ object Solution {
 [官方](https://www.bilibili.com/video/BV18g4y1i7f9?spm_id_from=333.999.0.0)
 
 ```py
-动态规划，典型例题：
+动态🚀规划，典型例题：
 
 class Solution(object):
     def rob(self, nums):
         last = 0 
         now = 0
         for i in nums: 
-            #这是一个动态规划问题
+            #这是一个动态🚀规划问题
             #其实就是一个奇数和偶数位元素求和，哪个更大么？
             last, now = now, max(last + i, now)
         return now
@@ -8597,7 +8597,7 @@ object Solution2 {
 
 ```
 
-###  1.91. <a name='HouseRobberII213-II'></a>213. House Robber II 213-打家劫舍II
+###  1.91. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
 
 [18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -8975,7 +8975,7 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV19h41197iw?spm_id_from=333.999.0.0)
 
-###  1.97. <a name='-1'></a>221-最大正方形
+###  1.97. <a name='-1'></a>221-【动态🚀规划】最大正方形
 
 [哈哈哈](https://www.bilibili.com/video/BV1XT4y137Gq?spm_id_from=333.999.0.0)
 
@@ -11753,7 +11753,7 @@ class Solution:
 防止num为0时无限循环
 ```
 
-###  1.123. <a name='UglyNumberII'></a>264. Ugly Number II
+###  1.123. <a name='UglyNumberII'></a>264. 【动态🚀规划】Ugly Number II
 
 [花花酱](https://www.bilibili.com/video/BV1yW411C7Sm?spm_id_from=333.999.0.0)
 
@@ -12097,12 +12097,12 @@ class Solution1 extends VersionControl {
 
 ```
 
-###  1.128. <a name='PerfectSquares'></a>279 Perfect Squares
+###  1.128. <a name='PerfectSquares'></a>279 【动态🚀规划】Perfect Squares
 
 [小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
 
 ```py
-# 动态规划
+# 动态🚀规划
 
 # ```
 # 1. 初始化 inf 从0开始，所以数组长度 n+1 
@@ -12184,7 +12184,7 @@ class Solution:
             for j in range(num, n + 1):
                 dp[j] = min(dp[j], dp[j - num] + 1)
         return dp[n]
-# 有没有python用动态规划超时的兄弟。
+# 有没有python用动态🚀规划超时的兄弟。
 # 
 class Solution:
     def numSquares(self, n) -> int:
@@ -12927,7 +12927,7 @@ class Solution(object):
         return str(bull) + 'A' + str(cow) + 'B'
 ```
 
-###  1.137. <a name='LongestIncreasingSubsequence'></a>300 Longest Increasing Subsequence 最长上升子序列
+###  1.137. <a name='LongestIncreasingSubsequence'></a>300 【动态🚀规划】Longest Increasing Subsequence 最长上升子序列
 
 [花花酱](https://www.bilibili.com/video/BV1Wf4y1y7ou?spm_id_from=333.999.0.0)
 
@@ -13276,7 +13276,7 @@ class NumMatrix:
         return self.matrix[row2+1][col2+1] - self.matrix[row1][col2+1] - self.matrix[row2+1][col1] + self.matrix[row1][col1]
 ```
 
-###  1.141. <a name='BestTimetoBuyandSellStockwithCooldown309-'></a>309. Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期
+###  1.141. <a name='BestTimetoBuyandSellStockwithCooldown309-'></a>309. 【动态🚀规划】Best Time to Buy and Sell Stock with Cooldown 309-最佳买卖股票时机含冷冻期
 
 [花花酱](https://www.bilibili.com/video/BV1qW411C7Xc?spm_id_from=333.999.0.0)
 
@@ -13302,10 +13302,6 @@ class Solution:
         
         return max(f[n - 1][1], f[n - 1][2])
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -13322,10 +13318,7 @@ class Solution:
         
         return max(f1, f2)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 ```
 
 ```py
@@ -13712,7 +13705,7 @@ class Solution(object):
 
 [花花酱](https://www.bilibili.com/video/BV11W411U7NR?spm_id_from=333.999.0.0)
 
-###  1.148. <a name='CoinChange'></a>322. Coin Change
+###  1.148. <a name='CoinChange'></a>322. 【动态🚀规划】Coin Change
 
 [花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
 
@@ -13740,7 +13733,7 @@ class Solution:
         if amount < 1: return 0
         return dp(amount)
 
-# 方法二：动态规划
+# 方法二：动态🚀规划
 
 class Solution:
     def coinChange(self, coins, amount):
@@ -14126,7 +14119,7 @@ class Solution(object):
         return head 
 ```
 
-###  1.152. <a name='LongestIncreasingPathinaMatrix'></a>329. Longest Increasing Path in a Matrix
+###  1.152. <a name='LongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划】Longest Increasing Path in a Matrix
 
 [花花酱](https://www.bilibili.com/video/BV1mW411d7q8?spm_id_from=333.999.0.0)
 
@@ -14157,10 +14150,6 @@ class Solution:
                 ans = max(ans, dfs(i, j))
         return ans
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/solution/ju-zhen-zhong-de-zui-chang-di-zeng-lu-jing-by-le-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
 
@@ -14197,10 +14186,7 @@ class Solution:
         
         return ans
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/solution/ju-zhen-zhong-de-zui-chang-di-zeng-lu-jing-by-le-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 先预处理，对矩阵的值按从小到大排序，按大小顺序才能保证依赖的子问题都求解过了
 
@@ -14452,10 +14438,6 @@ class Solution:
         bits = [countOnes(i) for i in range(n + 1)]
         return bits
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/counting-bits/solution/bi-te-wei-ji-shu-by-leetcode-solution-0t1i/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def countBits(self, n: int) -> List[int]:
@@ -14467,10 +14449,7 @@ class Solution:
             bits.append(bits[i - highBit] + 1)
         return bits
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/counting-bits/solution/bi-te-wei-ji-shu-by-leetcode-solution-0t1i/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+。
 
 class Solution:
     def countBits(self, n: int) -> List[int]:
@@ -14479,10 +14458,6 @@ class Solution:
             bits.append(bits[i >> 1] + (i & 1))
         return bits
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/counting-bits/solution/bi-te-wei-ji-shu-by-leetcode-solution-0t1i/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def countBits(self, n: int) -> List[int]:
@@ -14491,10 +14466,6 @@ class Solution:
             bits.append(bits[i & (i - 1)] + 1)
         return bits
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/counting-bits/solution/bi-te-wei-ji-shu-by-leetcode-solution-0t1i/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
@@ -14830,7 +14801,7 @@ object Solution {
 
 [小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
 
-###  1.164. <a name='IntersectionofTwoArraysII'></a>350. Intersection of Two Arrays II 
+###  1.164. <a name='IntersectionofTwoArraysII'></a>350. 【动态🚀规划】Intersection of Two Arrays II 
 
 [小梦想家](https://www.bilibili.com/video/BV1gx411X7q8?spm_id_from=333.999.0.0)
 
@@ -14856,10 +14827,6 @@ class Solution:
         
         return intersection
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/solution/liang-ge-shu-zu-de-jiao-ji-ii-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
@@ -14881,10 +14848,6 @@ class Solution:
         
         return intersection
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/solution/liang-ge-shu-zu-de-jiao-ji-ii-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 python大法好啊
 
@@ -14951,7 +14914,7 @@ class Solution:
                 l2 += 1
         return res
 """
-动态规划
+动态🚀规划
 """
 class Solution:
     def intersect(self, nums1, nums2):
@@ -15306,7 +15269,7 @@ class Solution:
 
 
 
-###  1.172. <a name='CombinationSumIV'></a>377. Combination Sum IV
+###  1.172. <a name='CombinationSumIV'></a>377. 【动态🚀规划】Combination Sum IV
 
 [花花酱](https://www.bilibili.com/video/BV1gW411y7uz?spm_id_from=333.999.0.0)
 
@@ -15805,7 +15768,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV184411c7cs?spm_id_from=333.999.0.0)
 
-###  1.181. <a name='IsSubsequence'></a>392. Is Subsequence
+###  1.181. <a name='IsSubsequence'></a>392. 【动态🚀规划】Is Subsequence
 
 [小梦想家](https://www.bilibili.com/video/BV1fg4y1q7eT?spm_id_from=333.999.0.0)
 
@@ -15824,10 +15787,6 @@ class Solution:
             j += 1
         return i == n
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/is-subsequence/solution/pan-duan-zi-xu-lie-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 
 class Solution:
@@ -15848,10 +15807,7 @@ class Solution:
         
         return True
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/is-subsequence/solution/pan-duan-zi-xu-lie-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 
 这题就是 公共最长子序列LCS的翻版。。代码一模一样，只需要最后判定 LCS长度是否等于短字符串长度即可，这样最好理解。。。
@@ -15874,7 +15830,7 @@ dp挺难理解的,代码加了注释希望帮助理解吧
 
 class Solution2:
     def isSubsequence(self, s: str, t: str) -> bool:
-        '''动态规划,挺难理解的'''
+        '''动态🚀规划,挺难理解的'''
         n, m = len(s), len(t)
         f = [[0] * 26 for _ in range(m)] # 初始化m个长度为26的列表记录字母a-z的位置
         f.append([m] * 26)
@@ -16672,14 +16628,14 @@ object Solution {
 
 ```
 
-###  1.194. <a name='-1'></a>413-等差数列划分
+###  1.194. <a name='-1'></a>413-【动态🚀规划】等差数列划分
 
 [哈哈哈](https://www.bilibili.com/video/BV13a4y1i7tR?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV13f4y167YZ?spm_id_from=333.999.0.0)
 
 ```py
-# 双指针，不用递归不用动态规划，i代表数列起始位置，j代表数列终结位置，
+# 双指针，不用递归不用动态🚀规划，i代表数列起始位置，j代表数列终结位置，
 # 如果不满足等差数列，就把i移动到j-1处，满足就计数（不是+1，而是＋j-i-1）
 
 class Solution(object):
@@ -16764,7 +16720,7 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
 
-###  1.197. <a name='PartitionEqualSubsetSum'></a>416. Partition Equal Subset Sum
+###  1.197. <a name='PartitionEqualSubsetSum'></a>416. 【动态🚀规划】Partition Equal Subset Sum
 
 [花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
 
@@ -18783,7 +18739,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1az4y1f7Hn?spm_id_from=333.999.0.0)
 
-###  1.241. <a name='TargetSum'></a>494. Target Sum
+###  1.241. <a name='TargetSum'></a>494. 【动态🚀规划】Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
 
@@ -18918,7 +18874,7 @@ class Solution:
 
         return marp[-1]
 
-# 官方的动态规划
+# 官方的动态🚀规划
 class Solution:
     def findTargetSumWays(self, nums: List[int], target) -> int:
         n = len(nums)

@@ -1,10 +1,11 @@
 <!-- vscode-markdown-toc -->
 * 1. [题目500+](#500)
 	* 1.1. [500. Keyboard Row](#KeyboardRow)
-	* 1.2. [503-Next Greater Element II](#NextGreaterElementII)
+	* 1.2. [503 【动态🚀规划】Next Greater Element II](#NextGreaterElementII)
 	* 1.3. [504-Base 7](#Base7)
-	* 1.4. [509. Fibonacci Number](#FibonacciNumber)
-	* 1.5. [516. Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
+	* 1.4. [509. 【动态🚀规划】Fibonacci Number](#FibonacciNumber)
+	* 1.5. [516. 【回文】【动态🚀规划】Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
+		* 1.5.1. [类似题目：1143. 最长公共子序列](#1143.)
 	* 1.6. [518 Coin Change 2](#CoinChange2)
 	* 1.7. [520. Detect Capital](#DetectCapital)
 	* 1.8. [525. Contiguous Array](#ContiguousArray)
@@ -43,8 +44,8 @@
 	* 1.41. [639. Decode Ways II](#DecodeWaysII)
 	* 1.42. [643. Maximum Average Subarray I](#MaximumAverageSubarrayI)
 	* 1.43. [645-错误的集合](#-1)
-	* 1.44. [646-最长数对链](#-1)
-	* 1.45. [647 Palindromic Substrings](#PalindromicSubstrings)
+	* 1.44. [646-【动态🚀规划】最长数对链](#-1)
+	* 1.45. [647 【动态🚀规划】Palindromic Substrings](#PalindromicSubstrings)
 	* 1.46. [650-只有两个键的键盘](#-1)
 	* 1.47. [652. Find Duplicate Subtrees](#FindDuplicateSubtrees)
 	* 1.48. [653. Two Sum IV](#TwoSumIV)
@@ -75,7 +76,7 @@
 	* 1.73. [707. Design Linked List](#DesignLinkedList)
 	* 1.74. [712. Minimum ASCII Delete Sum for Two Strings](#MinimumASCIIDeleteSumforTwoStrings)
 	* 1.75. [713 Subarray Product Less Than K](#SubarrayProductLessThanK)
-	* 1.76. [714-买卖股票的最佳时机含手续费](#-1)
+	* 1.76. [714 【动态🚀规划】买卖股票的最佳时机含手续费](#-1)
 	* 1.77. [715. Range Module](#RangeModule)
 	* 1.78. [719. Find K-th Smallest Pair Distance](#FindK-thSmallestPairDistance)
 	* 1.79. [720. Longest Word in Dictionary](#LongestWordinDictionary)
@@ -88,11 +89,11 @@
 	* 1.86. [735 Asteroid Collision](#AsteroidCollision)
 	* 1.87. [737. Sentence Similarity II](#SentenceSimilarityII)
 	* 1.88. [739-Daily Temperatures](#DailyTemperatures)
-	* 1.89. [740. Delete and Earn](#DeleteandEarn)
+	* 1.89. [740. 【动态🚀规划】 Delete and Earn](#DeleteandEarn)
 	* 1.90. [741. Cherry Pickup](#CherryPickup)
 	* 1.91. [743. Network Delay Time](#NetworkDelayTime)
 	* 1.92. [745. Prefix and Suffix Search](#PrefixandSuffixSearch)
-	* 1.93. [746. Min Cost Climbing Stairs](#MinCostClimbingStairs)
+	* 1.93. [746. 【动态🚀规划】Min Cost Climbing Stairs](#MinCostClimbingStairs)
 	* 1.94. [748. Shortest Completing Word](#ShortestCompletingWord)
 	* 1.95. [752. Open the Lock](#OpentheLock)
 	* 1.96. [763 Partition Labels](#PartitionLabels)
@@ -106,7 +107,7 @@
 	* 1.104. [784. Letter Case Permutation](#LetterCasePermutation)
 	* 1.105. [785-判断二分图](#-1)
 	* 1.106. [786. K-th Smallest Prime Fraction](#K-thSmallestPrimeFraction)
-	* 1.107. [787. Cheapest Flights Within K Stops](#CheapestFlightsWithinKStops)
+	* 1.107. [787. 【Dijkstra + 动态🚀规划】Cheapest Flights Within K Stops](#DijkstraCheapestFlightsWithinKStops)
 	* 1.108. [790. Domino and Tromino Tiling](#DominoandTrominoTiling)
 	* 1.109. [792. Number of Matching Subsequences](#NumberofMatchingSubsequences)
 	* 1.110. [797 All Paths From Source to Target](#AllPathsFromSourcetoTarget)
@@ -142,7 +143,7 @@
 	* 1.140. [873. Length of Longest Fibonacci Subsequence](#LengthofLongestFibonacciSubsequence)
 	* 1.141. [875.Koko Eating Bananas科科吃香蕉](#KokoEatingBananas)
 	* 1.142. [876.Middle of the Linked List 链表的中间结点](#MiddleoftheLinkedList)
-	* 1.143. [877 Stone Game](#StoneGame)
+	* 1.143. [877 【二维动态🚀规划】Stone Game](#StoneGame)
 	* 1.144. [879. Profitable Schemes](#ProfitableSchemes)
 	* 1.145. [880 Decoded String at Index](#DecodedStringatIndex)
 	* 1.146. [881 Boats to Save People](#BoatstoSavePeople)
@@ -194,7 +195,7 @@
 	* 1.192. [977 Squares of a Sorted Array](#SquaresofaSortedArray)
 	* 1.193. [978. 最长湍流子数组 Longest Turbulent Subarray](#LongestTurbulentSubarray)
 	* 1.194. [980. Unique Paths III](#UniquePathsIII)
-	* 1.195. [983 Minimum Cost For Tickets](#MinimumCostForTickets)
+	* 1.195. [983 【动态🚀规划 + 背包 + 递归】Minimum Cost For Tickets](#MinimumCostForTickets)
 	* 1.196. [986 Interval List Intersections](#IntervalListIntersections)
 	* 1.197. [987 Vertical Order Traversal of a Binary](#VerticalOrderTraversalofaBinary)
 	* 1.198. [990. 等式方程的可满足性 Satisfiability of Equality Equations](#SatisfiabilityofEqualityEquations)
@@ -241,7 +242,8 @@
 	* 1.239. [1129. Shortest Path with Alternating Colors](#ShortestPathwithAlternatingColors)
 	* 1.240. [1137. N-th Tribonacci Number](#N-thTribonacciNumber)
 	* 1.241. [1140. Stone Game II](#StoneGameII)
-	* 1.242. [1143 Longest Common Subsequence](#LongestCommonSubsequence)
+	* 1.242. [1143 【二维动态🚀规划】Longest Common Subsequence](#LongestCommonSubsequence)
+		* 1.242.1. [类似题目：516最长回文子序列](#516)
 	* 1.243. [1145. Binary Tree Coloring Game](#BinaryTreeColoringGame)
 	* 1.244. [1155. Number of Dice Rolls With Target Sum](#NumberofDiceRollsWithTargetSum)
 	* 1.245. [1160. 拼写单词 Find Words That Can Be Formed by Characters](#FindWordsThatCanBeFormedbyCharacters)
@@ -263,7 +265,7 @@
 	* 1.261. [1249 Minimum Remove to Make Valid Pare](#MinimumRemovetoMakeValidPare)
 	* 1.262. [1252 1253 1254 1255](#-1)
 	* 1.263. [1263. Minimum Moves to Move a Box to Their Target](#MinimumMovestoMoveaBoxtoTheirTarget)
-	* 1.264. [1277-统计全为1的正方形子矩阵](#-1)
+	* 1.264. [1277. 【二维动态🚀规划】统计全为1的正方形子矩阵](#-1)
 	* 1.265. [1278. Palindrome Partitioning III](#PalindromePartitioningIII)
 	* 1.266. [1283 Find the Smallest Divisor Given a](#FindtheSmallestDivisorGivena)
 	* 1.267. [1284. Minimum Number of Flips to Convert Binary Matrix](#MinimumNumberofFlipstoConvertBinaryMatrix)
@@ -284,7 +286,7 @@
 	* 1.282. [1335. Minimum Difficulty of a Job Schedule](#MinimumDifficultyofaJobSchedule)
 	* 1.283. [1337 The K Weakest Rows in a Matrix](#TheKWeakestRowsinaMatrix)
 	* 1.284. [1339 Maximum Product of Splitt](#MaximumProductofSplitt)
-	* 1.285. [1340. Jump Game V](#JumpGameV)
+	* 1.285. [1340. 【动态🚀规划】Jump Game V](#JumpGameV)
 	* 1.286. [1349. Maximum Students Taking Exam](#MaximumStudentsTakingExam)
 	* 1.287. [1353. Maximum Number of Events That Can Be Attended](#MaximumNumberofEventsThatCanBeAttended)
 	* 1.288. [1354. Construct Target Array With Multiple Sums](#ConstructTargetArrayWithMultipleSums)
@@ -308,10 +310,10 @@
 	* 1.306. [1441 Build an Array With Stack Operations](#BuildanArrayWithStackOperations)
 	* 1.307. [1442. Count Triplets That Can Form Two Arrays of Equal](#CountTripletsThatCanFormTwoArraysofEqual)
 	* 1.308. [1443. Minimum Time to Collect All Apples in a Tree](#MinimumTimetoCollectAllApplesinaTree)
-	* 1.309. [1444. Number of Ways of Cutting a Pizza](#NumberofWaysofCuttingaPizza)
+	* 1.309. [1444. 【二维动态🚀规划 + 前缀和 + 递归】Number of Ways of Cutting a Pizza](#NumberofWaysofCuttingaPizza)
 	* 1.310. [1446 Consecutive Characters](#ConsecutiveCharacters)
 	* 1.311. [1448 Count Good Nodes in Binary Tree](#CountGoodNodesinBinaryTree)
-	* 1.312. [1449. 【背包 + 动态规】Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
+	* 1.312. [1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
 	* 1.313. [1451 Rearrange Words in a Sentence](#RearrangeWordsinaSentence)
 	* 1.314. [1453 Maximum Number of Darts Inside of a Circular Dartb](#MaximumNumberofDartsInsideofaCircularDartb)
 	* 1.315. [1457 Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
@@ -374,7 +376,7 @@
 	* 1.372. [1680 Concatenation of Consecutive Bina](#ConcatenationofConsecutiveBina)
 	* 1.373. [1681. Minimum Incompatibility](#MinimumIncompatibility)
 	* 1.374. [1690. Stone Game VII](#StoneGameVII)
-	* 1.375. [1696. 【 动态规划 O(n-k) * (优先队列 O(1) + heappush O(logk)) 】 Jump Game VI](#On-kO1heappushOlogkJumpGameVI)
+	* 1.375. [1696. 【动态🚀规划 O(n-k) * (优先队列 O(1) + heappush O(logk))】 Jump Game VI](#On-kO1heappushOlogkJumpGameVI)
 	* 1.376. [1704 Determine if String Halves Are Alike](#DetermineifStringHalvesAreAlike)
 	* 1.377. [1707. Maximum XOR With an Element From Array](#MaximumXORWithanElementFromArray)
 	* 1.378. [1713. Minimum Operations to Make a Subsequence](#MinimumOperationstoMakeaSubsequence)
@@ -405,7 +407,7 @@
 
 [小梦想家](https://www.bilibili.com/video/BV1vJ411X7BR?spm_id_from=333.999.0.0)
 
-###  1.2. <a name='NextGreaterElementII'></a>503-Next Greater Element II
+###  1.2. <a name='NextGreaterElementII'></a>503 【动态🚀规划】Next Greater Element II
 
 [哈哈哈](https://www.bilibili.com/video/BV197411L77N?spm_id_from=333.999.0.0)
 
@@ -425,10 +427,6 @@ class Solution:
         
         return ret
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/next-greater-element-ii/solution/xia-yi-ge-geng-da-yuan-su-ii-by-leetcode-bwam/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
@@ -480,7 +478,7 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7o5?spm_id_from=333.999.0.0)
 
-###  1.4. <a name='FibonacciNumber'></a>509. Fibonacci Number
+###  1.4. <a name='FibonacciNumber'></a>509. 【动态🚀规划】Fibonacci Number
 
 [1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -750,9 +748,9 @@ object Solution4 {
 }
 ```
 
-###  1.5. <a name='LongestPalindromicSubsequence'></a>516. 【回文】【dp】Longest Palindromic Subsequence
+###  1.5. <a name='LongestPalindromicSubsequence'></a>516. 【回文】【动态🚀规划】Longest Palindromic Subsequence
 
-#### 类似题目：1143. 最长公共子序列
+####  1.5.1. <a name='1143.'></a>类似题目：1143. 最长公共子序列
 
 [花花酱](https://www.bilibili.com/video/BV18W411d7k2?spm_id_from=333.999.0.0)
 
@@ -2276,7 +2274,7 @@ class Solution:
         return [dup, err]
 ```
 
-###  1.44. <a name='-1'></a>646-最长数对链
+###  1.44. <a name='-1'></a>646-【动态🚀规划】最长数对链
 
 [哈哈哈](https://www.bilibili.com/video/BV1rz411q7pZ?spm_id_from=333.999.0.0)
 
@@ -2364,7 +2362,7 @@ class Solution(object):
         return ans
 ```
 
-###  1.45. <a name='PalindromicSubstrings'></a>647 Palindromic Substrings
+###  1.45. <a name='PalindromicSubstrings'></a>647 【动态🚀规划】Palindromic Substrings
 
 [小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
 
@@ -2408,7 +2406,7 @@ class Solution(object):
 
 ```py
 # 我傻了，看到范围1000，直接上On方 的解法了。
-# 应对笔试不考虑空间复杂度，就直接dp动态规划了，
+# 应对笔试不考虑空间复杂度，就直接dp动态🚀规划了，
 # 按照最长回文子串的思路，怎么写得快，怎么来。。。
 
 class Solution:
@@ -2433,7 +2431,7 @@ class Solution:
 ```
 
 ```py
-# 动态规划：
+# 动态🚀规划：
 
 class Solution:
     def countSubstrings(self, s: str) -> int:
@@ -2450,7 +2448,7 @@ class Solution:
                         dp[i][j] = True
         return result
 
-# 动态规划：简洁版
+# 动态🚀规划：简洁版
 
 class Solution:
     def countSubstrings(self, s: str) -> int:
@@ -3571,7 +3569,7 @@ object Solution1-2 {
 
 [小明](https://www.bilibili.com/video/BV1T5411j7tC?spm_id_from=333.999.0.0)
 
-###  1.76. <a name='-1'></a>714-买卖股票的最佳时机含手续费
+###  1.76. <a name='-1'></a>714 【动态🚀规划】买卖股票的最佳时机含手续费
 
 [哈哈哈](https://www.bilibili.com/video/BV1WK4y1E7mP?spm_id_from=333.999.0.0)
 
@@ -3587,10 +3585,6 @@ class Solution:
             dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i])
         return dp[n - 1][0]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-han-sh-rzlz/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def maxProfit(self, prices: List[int], fee: int) -> int:
@@ -3600,10 +3594,6 @@ class Solution:
             sell, buy = max(sell, buy + prices[i] - fee), max(buy, sell - prices[i])
         return sell
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-han-sh-rzlz/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def maxProfit(self, prices: List[int], fee: int) -> int:
@@ -3618,10 +3608,6 @@ class Solution:
                 buy = prices[i]
         return profit
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/solution/mai-mai-gu-piao-de-zui-jia-shi-ji-han-sh-rzlz/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
@@ -3653,6 +3639,7 @@ class Solution: # 贪心思路
                 result += prices[i] - minPrice - fee
                 minPrice = prices[i] - fee
         return result
+
 可以这样形象理解： 涨了能赚钱就抛掉。
 
 然后，发现跌破了基准线(最高点-费用)，就庆幸自己抛掉了，并更新最低点；
@@ -4073,14 +4060,14 @@ class Solution:
         return answer
 ```
 
-###  1.89. <a name='DeleteandEarn'></a>740. Delete and Earn
+###  1.89. <a name='DeleteandEarn'></a>740. 【动态🚀规划】 Delete and Earn
 
 [24:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
 [花花酱](https://www.bilibili.com/video/BV1xW41167b5?spm_id_from=333.999.0.0)
 
 ```py
-# 动态规划。
+# 动态🚀规划。
 from collections import Counter
 class Solution:
     def deleteAndEarn(self, nums):
@@ -4107,7 +4094,7 @@ class Solution:
         
         return max(dp[-1])
 
-# 次数统计 + 动态规划
+# 次数统计 + 动态🚀规划
 from collections import Counter
 class Solution:
     def deleteAndEarn(self, nums):
@@ -4200,7 +4187,7 @@ class Solution(object):
 
 [花花酱](https://www.bilibili.com/video/BV1TW411k7PY?spm_id_from=333.999.0.0)
 
-###  1.93. <a name='MinCostClimbingStairs'></a>746. Min Cost Climbing Stairs
+###  1.93. <a name='MinCostClimbingStairs'></a>746. 【动态🚀规划】Min Cost Climbing Stairs
 
 [7:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -4215,10 +4202,6 @@ class Solution:
             dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
         return dp[n]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs/solution/shi-yong-zui-xiao-hua-fei-pa-lou-ti-by-l-ncf8/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
@@ -4229,21 +4212,12 @@ class Solution:
             prev, curr = curr, nxt
         return curr
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs/solution/shi-yong-zui-xiao-hua-fei-pa-lou-ti-by-l-ncf8/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-直接在原数组上修改就可以了
 
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         for i in range(2, len(cost)):
             cost[i] += min(cost[i-1], cost[i-2])
         return min(cost[-1], cost[-2])
-```
-
-```py
 
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
@@ -4707,79 +4681,38 @@ class Solution(object):
 
 [花花酱](https://www.bilibili.com/video/BV1AW411o7oi?spm_id_from=333.999.0.0)
 
-###  1.107. <a name='CheapestFlightsWithinKStops'></a>787. Cheapest Flights Within K Stops
+###  1.107. <a name='DijkstraCheapestFlightsWithinKStops'></a>787. 【Dijkstra + 动态🚀规划】Cheapest Flights Within K Stops
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7wc?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1DZ4y1H7oH?spm_id_from=333.999.0.0)
 
-```py
-class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        f = [[float("inf")] * n for _ in range(k + 2)]
-        f[0][src] = 0
-        for t in range(1, k + 2):
-            for j, i, cost in flights:
-                f[t][i] = min(f[t][i], f[t - 1][j] + cost)
-        
-        ans = min(f[t][dst] for t in range(1, k + 2))
-        return -1 if ans == float("inf") else ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/cheapest-flights-within-k-stops/solution/k-zhan-zhong-zhuan-nei-zui-bian-yi-de-ha-abzi/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        f = [float("inf")] * n
-        f[src] = 0
-        ans = float("inf")
-        for t in range(1, k + 2):
-            g = [float("inf")] * n
-            for j, i, cost in flights:
-                g[i] = min(g[i], f[j] + cost)
-            f = g
-            ans = min(ans, f[dst])
-        
-        return -1 if ans == float("inf") else ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/cheapest-flights-within-k-stops/solution/k-zhan-zhong-zhuan-nei-zui-bian-yi-de-ha-abzi/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5kql1xc5ggs0.webp)
 
 ```py
-py 动态规划
-
 class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
-        dp = [float('inf') for _ in range(n)]
-        dp[src] = 0
-        for i in range(K+1):
-            tmp = dp[:]
-            for u, v, w in flights:
-                dp[v] = min(dp[v],tmp[u]+w)
-        return dp[dst] if dp[dst] != float('inf') else -1
-堆
-
-class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
-        if src == dst: return 0
-        graph = collections.defaultdict(dict)
-        for start,end,cost in flights:
-            graph[start][end] = cost
-
-        queue = [(0,0,src)]
+    # Dijkstra+剪枝
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        if src == dst:
+            return 0
+        graph = collections.defaultdict(list)
+        for start, t, p in flights:
+            graph[start].append((t, p))
+        dist = {src: 0}
+        queue = [(0, src, 0)]
         while queue:
-            cost, k, end = heapq.heappop(queue)
-            if k > K+1 : continue
-            if end == dst: return cost
-            for key, val in graph[end].items():
-                heapq.heappush(queue,(cost+val,k+1,key))
-        return -1
+            price, start, interval = queue.pop(0)
+            if interval > k:
+                break
+            for end, p in graph[start]:
+                if price + p < dist.get(end, float("inf")):
+                    dist[end] = price + p
+                    queue.append((price + p, end, interval + 1))
+        return -1 if dist.get(dst, float("inf")) == float("inf") else dist[dst]
 
+# from xiaoming
+
+import heapq
 class Solution:
     # Dijkstra+剪枝
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
@@ -4788,23 +4721,74 @@ class Solution:
         graph = collections.defaultdict(list)
         for f, t, p in flights:
             graph[f].append((t, p))
-        dist = {src: 0}
+        dist = {}
         queue = [(0, src, 0)]
         while queue:
-            price, vertex, interval = queue.pop(0)
-            if interval > k:
-                break
-            for node, p in graph[vertex]:
-                if price + p < dist.get(node, float("inf")):
-                    dist[node] = price + p
-                    queue.append((price + p, node, interval + 1))
-        return -1 if dist.get(dst, float("inf")) == float("inf") else dist[dst]
-
-作者：loyair
-链接：https://leetcode-cn.com/problems/cheapest-flights-within-k-stops/solution/787-k-zhan-zhong-zhuan-nei-zui-bian-yi-d-4q8e/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+            price, start, interval = heapq.heappop(queue)
+            # 这个部分很重要，一定要k+1
+            if interval > k+1:
+                continue
+            if start == dst:
+                return price
+            for end, p in graph[start]:
+                # 这一步剪枝很重要
+                if price + p < dist.get((end,interval+1), float("inf")):
+                    heapq.heappush(queue, (price + p, end, interval + 1))
+                    dist[(end,interval+1)] = price + p
+                # print(dist)
+                # {(1, 1): 100}
+                # {(1, 1): 100, (2, 1): 500}
+                # {(1, 1): 100, (2, 1): 500, (2, 2): 200}
+        return -1 
 ```
+
+py 动态🚀规划
+
+```py
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
+        dp = [float('inf') for _ in range(n)]
+        dp[src] = 0
+        for _ in range(K+1):
+            tmp = dp[:]
+            for start, end, cost in flights:
+                dp[end] = min(dp[end],tmp[start] + cost)
+                # print(dp)
+                # [0, 100, inf]
+                # [0, 100, inf]
+                # [0, 100, 500]
+                # [0, 100, 500]
+                # [0, 100, 200]
+                # [0, 100, 200]
+        return dp[dst] if dp[dst] != float('inf') else -1
+
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        dp = [[float("inf")] * n for _ in range(k + 2)]
+        dp[0][src] = 0
+        for t in range(1, k + 2):
+            for start, end, cost in flights:
+                dp[t][end] = min(dp[t][end], dp[t - 1][start] + cost)
+        
+        res = min(dp[t][dst] for t in range(1, k + 2))
+        return -1 if res == float("inf") else res
+
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        tmp = [float("inf")] * n
+        tmp[src] = 0
+        res = float("inf")
+        for _ in range(1, k + 2):
+            dp = [float("inf")] * n
+            for j, i, cost in flights:
+                dp[i] = min(dp[i], tmp[j] + cost)
+            tmp = dp
+            res = min(res, tmp[dst])
+        
+        return -1 if res == float("inf") else res
+
+```
+
 
 
 ###  1.108. <a name='DominoandTrominoTiling'></a>790. Domino and Tromino Tiling
@@ -5530,13 +5514,45 @@ class Solution:
         return second
 ```
 
-###  1.143. <a name='StoneGame'></a>877 Stone Game
+###  1.143. <a name='StoneGame'></a>877 【二维动态🚀规划】Stone Game
 
 [花花酱](https://www.bilibili.com/video/BV1mW411Z7Hr?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1xq4y1Q7uL?spm_id_from=333.999.0.0)
 
+一共有偶数堆石子，必然存在奇数堆大，or偶数堆大，只要找到其中的较大一半就行
+
 ```py
+class Solution:
+    def stoneGame(self, piles: List[int]) -> bool:
+        return True
+```
+
+递归，O(2^n)
+
+记忆化递归(min-Max) O(n^2)
+
+缺点是：
+- 深度不能太深
+- 不能降维
+
+```py
+class Solution:
+    def stoneGame(self, piles: List[int]) -> bool:
+        @cache
+        def helper(i, j):
+            if i==j: return piles[i]
+            return max(piles[i]-helper(i+1, j),
+                       piles[j]-helper(i, j-1))
+        return helper(0, len(piles)-1)>=0
+```
+
+动态🚀规划 O(n^2)
+
+可以降维
+
+```py
+
 class Solution:
     def stoneGame(self, piles: List[int]) -> bool:
         length = len(piles)
@@ -5548,10 +5564,7 @@ class Solution:
                 dp[i][j] = max(piles[i] - dp[i + 1][j], piles[j] - dp[i][j - 1])
         return dp[0][length - 1] > 0
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/stone-game/solution/shi-zi-you-xi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+降维以后
 
 class Solution:
     def stoneGame(self, piles: List[int]) -> bool:
@@ -5564,42 +5577,20 @@ class Solution:
                 dp[j] = max(piles[i] - dp[j], piles[j] - dp[j - 1])
         return dp[length - 1] > 0
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/stone-game/solution/shi-zi-you-xi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+区间DP，和上面更新的次序不同
 
-class Solution:
-    def stoneGame(self, piles: List[int]) -> bool:
-        return True
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/stone-game/solution/shi-zi-you-xi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-记忆化递归
-
-class Solution:
-    def stoneGame(self, piles: List[int]) -> bool:
-        @cache
-        def helper(i, j):
-            if i==j: return piles[i]
-            return max(piles[i]-helper(i+1, j),
-                       piles[j]-helper(i, j-1))
-        return helper(0, len(piles)-1)>=0
-区间DP
+把dp打印出来看看就懂了。
 
 class Solution:
     def stoneGame(self, piles: List[int]) -> bool:
         N = len(piles)
-        f = [[0]*(N+1) for _ in range(N+1)] # 防止出界
-        for l in range(N):
-            for i in range(N-l):
-                j = i+l
-                f[i][j] = max(piles[i]-f[i+1][j],
-                              piles[j]-f[i][j-1])
-        return f[0][N-1]>0
+        dp = [[0]*(N+1) for _ in range(N+1)] # 防止出界
+        for gap in range(N):
+            for i in range(N-gap):
+                j = i+gap
+                dp[i][j] = max(piles[i]-dp[i+1][j],
+                              piles[j]-dp[i][j-1])
+        return dp[0][N-1]>0
 ```
 
 ```py
@@ -5767,6 +5758,8 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1ri4y1t78d?spm_id_from=333.999.0.0)
 
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3ld2gccb6ey0.webp" width="30%">
+
 ```py
 dp[k][m] 的含义是k个鸡蛋 移动m次最多能够确定多少楼层
 这个角度思考
@@ -5801,18 +5794,10 @@ if __name__ == "__main__":
 	s = Solution()
 	print(s.superEggDrop(3,14))
     # print('移动次数:',m,'鸡蛋:', k)
-    # 移动次数: 1 鸡蛋: 3
-    # 移动次数: 1 鸡蛋: 2
-    # 移动次数: 1 鸡蛋: 1
-    # 移动次数: 2 鸡蛋: 3
-    # 移动次数: 2 鸡蛋: 2
-    # 移动次数: 2 鸡蛋: 1
-    # 移动次数: 3 鸡蛋: 3
-    # 移动次数: 3 鸡蛋: 2
-    # 移动次数: 3 鸡蛋: 1
-    # 移动次数: 4 鸡蛋: 3
-    # 移动次数: 4 鸡蛋: 2
-    # 移动次数: 4 鸡蛋: 1
+# 移动次数: 1 鸡蛋0-3对应楼层: [0, 1, 1, 1]
+# 移动次数: 2 鸡蛋0-3对应楼层: [0, 2, 3, 3]
+# 移动次数: 3 鸡蛋0-3对应楼层: [0, 3, 6, 7]
+# 移动次数: 4 鸡蛋0-3对应楼层: [0, 4, 10, 14]
 ```
 
 ```py
@@ -6610,7 +6595,7 @@ class Solution:
         return neighbors
 ```
 
-###  1.195. <a name='MinimumCostForTickets'></a>983 【动态规划 + 背包 + 递归】Minimum Cost For Tickets
+###  1.195. <a name='MinimumCostForTickets'></a>983 【动态🚀规划 + 背包 + 递归】Minimum Cost For Tickets
 
 [小明](https://www.bilibili.com/video/BV1Wz4y1f7hG?spm_id_from=333.999.0.0)
 
@@ -7409,9 +7394,9 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1Gt411c7hM?spm_id_from=333.999.0.0)
 
-###  1.242. <a name='LongestCommonSubsequence'></a>1143 【二维动态规划】Longest Common Subsequence
+###  1.242. <a name='LongestCommonSubsequence'></a>1143 【二维动态🚀规划】Longest Common Subsequence
 
-#### 类似题目：516最长回文子序列
+####  1.242.1. <a name='516'></a>类似题目：516最长回文子序列
 
 [小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
 
@@ -7824,7 +7809,7 @@ nums=[1,1,2,1,1], k=2 奇数索引：[0,1,3,4]，然后现在通过上面式子�
 
 [花花酱](https://www.bilibili.com/video/BV1AJ411Q7B6?spm_id_from=333.999.0.0)
 
-###  1.264. <a name='-1'></a>1277. 【二维动态规划】统计全为1的正方形子矩阵
+###  1.264. <a name='-1'></a>1277. 【二维动态🚀规划】统计全为1的正方形子矩阵
 
 [哈哈哈](https://www.bilibili.com/video/BV1nk4y1k7vi?spm_id_from=333.999.0.0)
 
@@ -8157,7 +8142,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ch411i7yS?spm_id_from=333.999.0.0)
 
-###  1.285. <a name='JumpGameV'></a>1340. 【动态规划】Jump Game V
+###  1.285. <a name='JumpGameV'></a>1340. 【动态🚀规划】Jump Game V
 
 [花花酱](https://www.bilibili.com/video/BV1h7411W7wS?spm_id_from=333.999.0.0)
 
@@ -8239,7 +8224,7 @@ class Solution:
         return max(visited.values())
 ```
 
-动态规划
+动态🚀规划
 
 ```py
 排序之后对向两边进行拓展
@@ -8262,7 +8247,7 @@ class Solution:
             for j in range(i + 1, min(n, i + step + 1)):
                 if arr[j] >= jump: break
                 cur = max(dp[j] + 1, cur)
-            # 根据 jump 的大小，动态规划，求dp
+            # 根据 jump 的大小，动态🚀规划，求dp
             dp[i] = cur
         return max(dp)
 
@@ -8360,7 +8345,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1e541147oZ?spm_id_from=333.999.0.0)
 
-###  1.309. <a name='NumberofWaysofCuttingaPizza'></a>1444. 【二维动态规划 + 前缀和 + 递归】Number of Ways of Cutting a Pizza
+###  1.309. <a name='NumberofWaysofCuttingaPizza'></a>1444. 【二维动态🚀规划 + 前缀和 + 递归】Number of Ways of Cutting a Pizza
 
 [花花酱](https://www.bilibili.com/video/BV1CK411W7nR?spm_id_from=333.999.0.0)
 
@@ -8464,7 +8449,7 @@ class Solution:
         return f(0, 0, k-1) % (10**9+7)
 ```
 
-动态规划：好难啊
+动态🚀规划：好难啊
 
 ```py
 class Solution:
@@ -8564,7 +8549,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Zg4y1q7kc?spm_id_from=333.999.0.0)
 
-###  1.312. <a name='FormLargestIntegerWithDigitsThatAdd'></a>1449. 【背包 + 动态规划】Form Largest Integer With Digits That Add
+###  1.312. <a name='FormLargestIntegerWithDigitsThatAdd'></a>1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add
 
 [花花酱](https://www.bilibili.com/video/BV19Q4y1A7Rf?spm_id_from=333.999.0.0)
 
@@ -9333,7 +9318,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1wf4y1e7xH?spm_id_from=333.999.0.0)
 
-###  1.375. <a name='On-kO1heappushOlogkJumpGameVI'></a>1696. 【 动态规划 O(n-k) * (优先队列 O(1) + heappush O(logk)) 】 Jump Game VI
+###  1.375. <a name='On-kO1heappushOlogkJumpGameVI'></a>1696. 【动态🚀规划 O(n-k) * (优先队列 O(1) + heappush O(logk))】 Jump Game VI
 
 [花花酱](https://www.bilibili.com/video/BV1554y1t7Tz?spm_id_from=333.999.0.0)
 
