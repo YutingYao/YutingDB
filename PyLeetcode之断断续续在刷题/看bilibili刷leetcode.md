@@ -18739,11 +18739,151 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1az4y1f7Hn?spm_id_from=333.999.0.0)
 
-###  1.241. <a name='TargetSum'></a>494. 【动态🚀规划】Target Sum
+###  1.241. <a name='TargetSum'></a>494. 【动态🚀规划 + 背包】Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
 
 [花花酱 下](https://www.bilibili.com/video/BV1WW411C7Mr?spm_id_from=333.999.0.0)
+
+0-1背包（二维动态规划）
+
+```py
+
+# 官方的动态🚀规划
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        n = len(nums)
+        total = sum(nums)
+        neg = total - target
+        if neg < 0 or neg % 2 == 1:
+            return 0
+        neg = neg // 2
+        dp = [[0] * (neg + 1) for _ in range(n + 1)]
+        dp[0][0] = 1
+        for i in range(1, n + 1):
+            num = nums[i - 1]
+            for j in range(neg + 1):
+                dp[i][j] += dp[i - 1][j]
+                if j >= num:
+                    dp[i][j] += dp[i - 1][j - num]
+        return dp[-1][-1]
+
+# 二维数组的外层循环，一般不都是从0到nums.length-1吗，为什么这里是从1到nums.length+1，百思不得其解
+class Solution(object):
+    def findTargetSumWays(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target
+        :rtype
+        """
+        su = sum(nums)
+
+        if (su + target) % 2 == 1 or su < target: return 0
+
+        new_target = (su - target) // 2
+
+        dp = [[0 for _ in  range(new_target + 1)] for _ in range(len(nums) + 1)] 
+        dp[0][0] = 1
+
+        for i in range(1, len(nums) + 1):
+            u = nums[i-1]
+            for j in range(0, new_target + 1):
+                if j >= u:
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-u]
+                else:
+                    dp[i][j] = dp[i-1][j]
+
+        return dp[len(nums)][new_target]
+```
+
+0-1背包（一维动态规划）
+
+```py
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        s = sum(nums)
+        if (target+s)&1: return 0
+        
+        bagSize = (target+s) >> 1
+        dp = [1] + [0]*bagSize
+        for num in nums:
+            for i in range(bagSize, num-1, -1):
+                dp[i] += dp[i-num]
+        return dp[-1]
+
+class Solution:
+    def findTargetSumWays(self, nums, target) -> int:
+        tmp = sum(nums)-target
+        if tmp<0 or tmp&1:return 0
+        neg = tmp>>1
+        dp = [1] + [0]*neg
+        for num in nums:
+            for j in range(neg,num-1,-1):
+                dp[j] += dp[j-num]
+        return dp[-1]
+# 感觉用sum-target返回0会剪枝更多 速度稍微快那么一点点
+
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        sumValue = sum(nums)
+        if target > sumValue or (sumValue + target) % 2 == 1: 
+            return 0
+
+        bagSize = (sumValue + target) // 2
+        dp = [0] * (bagSize + 1)
+        if dp:
+            dp[0] = 1
+
+        for num in nums:
+            for j in range(bagSize, num - 1, -1):
+                dp[j] += dp[j - num]
+        return dp[bagSize] if dp else 0
+
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 1, 0, 0, 0]
+--------------------
+数字： 1 dp: [1, 1, 0, 0, 0]
+数字： 1 dp: [1, 1, 0, 0, 0]
+数字： 1 dp: [1, 1, 1, 0, 0]
+数字： 1 dp: [1, 2, 1, 0, 0]
+--------------------
+数字： 1 dp: [1, 2, 1, 0, 0]
+数字： 1 dp: [1, 2, 1, 1, 0]
+数字： 1 dp: [1, 2, 3, 1, 0]
+数字： 1 dp: [1, 3, 3, 1, 0]
+--------------------
+数字： 1 dp: [1, 3, 3, 1, 1]
+数字： 1 dp: [1, 3, 3, 4, 1]
+数字： 1 dp: [1, 3, 6, 4, 1]
+数字： 1 dp: [1, 4, 6, 4, 1]
+--------------------
+数字： 1 dp: [1, 4, 6, 4, 5]
+数字： 1 dp: [1, 4, 6, 10, 5]
+数字： 1 dp: [1, 4, 10, 10, 5]
+数字： 1 dp: [1, 5, 10, 10, 5]
+--------------------
+
+
+
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        if not nums or sum(nums) < target or (sum(nums) + target)%2 == 1:
+            return 0
+
+        s = (sum(nums) + target)//2 #只一个子集，使得子集和为s
+
+        # 对于每一个数都有加入和不加入两种情况，因此可以使用背包问题的方法求解
+        dp = [0 for _ in range(s+1)]
+        if dp:
+            dp[0] = 1 # 当i - num =0也就是这个数加入/不加入正好可以满足要求时，解法为1（这个地方确实想了很久，看了题解）
+        for num in nums:
+            for i in range(s,num-1,-1):#参考背包问题的自顶向下
+                dp[i] = dp[i] + dp[i - num]
+
+        return dp[-1] if dp else 0
+```
 
 ```py
 # 思路
@@ -18788,11 +18928,6 @@ class Solution:
 
 class Solution(object):
     def findTargetSumWays(self, nums, S):
-        """
-        :type nums: List[int]
-        :type S
-        :rtype
-        """
         def findSum(sum, startIdx):
             if startIdx == len(nums):
                 return 1 if sum == 0 else 0
@@ -18800,14 +18935,8 @@ class Solution(object):
         return findSum(S, 0)
 # 但是这样会超时，所以用cache 记一下
 
-# ```python
 class Solution(object):
     def findTargetSumWays(self, nums, S):
-        """
-        :type nums: List[int]
-        :type S
-        :rtype
-        """
         def findSum(s, start_idx):
             if start_idx == len(nums):
                 return 1 if s == 0 else 0
@@ -18819,116 +18948,7 @@ class Solution(object):
         return findSum(S, 0)
 ```
 
-```py
-#  0-1背包
 
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        s = sum(nums)
-        if (target+s)&1: return 0
-        
-        V = (target+s) >> 1
-        f = [1] + [0]*V
-        for n in nums:
-            for i in range(V, n-1, -1):
-                f[i] += f[i-n]
-        return f[-1]
-
-class Solution:
-    def findTargetSumWays(self, nums, target) -> int:
-        tmp=sum(nums)-target
-        if tmp<0 or tmp&1:return 0
-        neg=tmp>>1
-        dp=[1]+[0]*neg
-        for num in nums:
-            for j in range(neg,num-1,-1):
-                dp[j]+=dp[j-num]
-        return dp[-1]
-# 感觉用sum-target返回0会剪枝更多 速度稍微快那么一点点
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        sumValue = sum(nums)
-        if target > sumValue or (sumValue + target) % 2 == 1: return 0
-        bagSize = (sumValue + target) // 2
-        dp = [0] * (bagSize + 1)
-        dp[0] = 1
-        for i in range(len(nums)):
-            for j in range(bagSize, nums[i] - 1, -1):
-                dp[j] += dp[j - nums[i]]
-        return dp[bagSize]
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        if not nums or sum(nums) < target or (sum(nums) + target)%2 == 1:
-            return 0
-
-        s = (sum(nums)+target)//2 #只一个子集，使得子集和为s
-
-        # 对于每一个数都有加入和不加入两种情况，因此可以使用背包问题的方法求解
-        marp = [0 for _ in range(s+1)]
-        marp[0] = 1 #当i - num =0也就是这个数加入/不加入正好可以满足要求时，解法为1（这个地方确实想了很久，看了题解）
-        for num in nums:
-            for i in range(s,num-1,-1):#参考背包问题的自顶向下
-                marp[i] = marp[i]+marp[i - num]
-
-        return marp[-1]
-
-# 官方的动态🚀规划
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        n = len(nums)
-        total = sum(nums)
-        neg = total - target
-        if neg < 0 or neg % 2 == 1:
-            return 0
-        neg = neg // 2
-        dp = [[0] * (neg + 1) for _ in range(n + 1)]
-        dp[0][0] = 1
-        for i in range(1, n + 1):
-            num = nums[i - 1]
-            for j in range(neg + 1):
-                dp[i][j] += dp[i - 1][j]
-                if j >= num:
-                    dp[i][j] += dp[i - 1][j - num]
-        return dp[-1][-1]
-
-# 二维数组的外层循环，一般不都是从0到nums.length-1吗，为什么这里是从1到nums.length+1，百思不得其解
-class Solution(object):
-    def findTargetSumWays(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target
-        :rtype
-        """
-        su = sum(nums)
-
-        """
-        su_data - du_data = target
-        su_data + du_data = su 
-        2 * su_data = target + su 
-        su_data = (target + su) / 2
-
-        dp[i][j] 前i个数中（包含i），加和等于j
-        """
-
-        if (su + target) % 2 == 1 or su < target: return 0
-
-        new_target = (su - target) // 2
-
-        dp = [[0 for _ in  range(new_target + 1)] for _ in range(len(nums) + 1)] 
-        dp[0][0] = 1
-
-        for i in range(1, len(nums) + 1):
-            u = nums[i-1]
-            for j in range(0, new_target + 1):
-                if j >= u:
-                    dp[i][j] = dp[i-1][j] + dp[i-1][j-u]
-                else:
-                    dp[i][j] = dp[i-1][j]
-
-        return dp[len(nums)][new_target]
-```
 
 ###  1.242. <a name='TeemoAttacking'></a>495 Teemo Attacking
 

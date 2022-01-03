@@ -2280,109 +2280,425 @@ object Solution {
 }
 ```
 
-```scala
+### Prefix Compression
 
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-###
+https://www.hackerrank.com/challenges/prefix-compression/problem?isFullScreen=true
 
 ```s
+Sample Input 0
 
+abcdefpr
+abcpqr
+
+Sample Output 0
+
+3 abc
+5 defpr
+3 pqr
+
+Sample Input 1
+
+kitkat
+kit
+
+Sample Output 1
+
+3 kit
+3 kat
+0
+
+Sample Input 2
+
+puppy
+puppy
+
+Sample Output 2
+
+5 puppy
+0
+0
 ```
+
+利用 takeWhile 和 drop
 
 ```scala
+object Solution {
 
+  def CompressPrefix(x: String, y: String): (String, String, String) = {
+    val common = x.zip(y).takeWhile(x => x._1 == x._2).unzip._1.mkString
+    val compressedX = x.drop(common.length)
+    val compressedY = y.drop(common.length)
+    (common, compressedX, compressedY)
+  }
+
+  def main(args: Array[String]) {
+    val x = io.StdIn.readLine()
+    val y = io.StdIn.readLine()
+    val (common, compressedX, compressedY) = CompressPrefix(x, y)
+    println(s"${common.length} $common")
+    println(s"${compressedX.length} $compressedX")
+    println(s"${compressedY.length} $compressedY")
+  }
+}
+
+object Solution {
+
+    def main(args: Array[String]) {
+        val x = readLine()
+        val y = readLine()
+            
+        val prefix = x.zip(y).takeWhile { p => p._1 == p._2 }.unzip._1.mkString
+        val plen = prefix.length
+
+        println(plen + " " + prefix)
+        println((x.length - plen) + " " + x.drop(plen))
+        println((y.length - plen) + " " + y.drop(plen))
+    }
+}
+
+
+
+object Solution {
+
+    def solve(x: String, y: String) = {
+        val p = ((x zip y) takeWhile {
+            p => p._1 == p._2
+        } map {
+            p => p._1
+        }) mkString ""
+        val _x = x drop p.length;
+        val _y = y drop p.length;
+        println(p.length + " " + p);
+        println(_x.length + " " + _x);
+        println(_y.length + " " + _y);
+    }
+    
+    def main(args: Array[String]) {
+        val input = io.Source.stdin.getLines.toList;
+        solve(input.head, input.tail.head);
+    }
+}
+
+object Solution {
+    def main(args: Array[String]) {
+        val x = readLine()
+        val y = readLine()
+        val prLen = (x zip y takeWhile { case(c,d) => c == d }).length
+        println(prLen + " " + (x take prLen))
+        val rx = x.length - prLen
+        println(rx + " " + (x drop prLen))
+        val ry = y.length - prLen
+        println(ry + " " + (y drop prLen))
+    }
+}
 ```
+
+利用 slice
 
 ```scala
+object Solution {
 
+    def main(args: Array[String]) {
+        val x = readLine();
+        val y = readLine();
+        
+        val pre = x.zip(y).takeWhile(Function.tupled(_==_)).map(_._1).mkString
+        print(s"${pre.length} $pre\n")
+        print(s"${x.length-pre.length} ${x.slice(pre.length,x.length)}\n")
+        print(s"${y.length-pre.length} ${y.slice(pre.length,y.length)}\n")
+
+    }
+    
+}
+
+object Solution {
+    
+    def prefix(s1: String, s2: String) = {  s1.zip(s2).takeWhile(Function.tupled(_ == _)).map(_._1).mkString }  
+    def postSlice(s1: String, i: Int) = { if(s1.length > i)  s1.slice(i, s1.length) else ""}
+    
+    def main(args: Array[String]) {
+        val s1 = scala.io.StdIn.readLine()
+        val s2 = scala.io.StdIn.readLine()
+        
+        val p = prefix(s1, s2)
+        val pp1 = postSlice(s1, p.length)
+        val pp2 = postSlice(s2, p.length)
+            
+        println(p.length + " " + p)
+        println(pp1.length + " " + pp1)
+        println(pp2.length + " " + pp2)
+    }
+}
 ```
 
-```scala
+### String Reductions
 
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-###
+https://www.hackerrank.com/challenges/string-reductions/problem
 
 ```s
+Sample Input #00
 
+accabb
+
+Sample Output #00
+
+acb
+
+Sample Input #01
+
+abc
+
+Sample Output #01
+
+abc
+
+Sample Input #02
+
+pprrqq
+
+Sample Output #02
+
+prq
+```
+
+利用 distinct
+
+```scala
+object Solution {
+
+  def main(args: Array[String]) {
+    println(io.StdIn.readLine.distinct)
+  }
+}
 ```
 
 ```scala
+object Solution {
 
+    def main(args: Array[String]) {
+        var a = readLine().trim
+            print(a.distinct)
+    }
+}
 ```
 
 ```scala
-
+import java.io.PrintWriter
+import java.util.Scanner
+import scala.annotation.tailrec
+  
+object Solution extends App {
+  val sc = new Scanner(System.in)
+  val out = new PrintWriter(System.out)
+    
+  def solve(): String = sc.nextLine.distinct
+    
+  out.println(solve)
+  out.flush
+}
 ```
+
+利用 match case + substring + 递归
 
 ```scala
+object Solution {
 
+    def main(args: Array[String]) {
+        for (ln <- io.Source.stdin.getLines) println(stringFilter(ln))    
+    }
+
+    // 对 x != s(0) 的部分 进行递归
+    // substring(1): 去除第一个元素
+    def stringFilter(s: String): String = s match {
+        case s if s.length != 0 => s(0) + stringFilter(s.substring(1).filter(x => x != s(0)))
+        case _ => ""    
+    }
+}
+
+object Solution {
+
+    def main(args: Array[String]) {
+       val in = readLine.toList
+       val out = iter(in).reverse.mkString
+       println(out)
+    }
+    // used是一个字典，
+    def iter(in: List[Char], used: Set[Char] = Set(), accu: List[Char] = List()): List[Char] = in match {
+        case Nil                          => accu
+        case h :: t if(used.contains(h))  => iter(t, used, accu) // 如果访问过，则把head删除
+        case h :: t if(!used.contains(h)) => iter(t, used + h, h :: accu) // 如果没有访问过，则 used + head，并且 h :: accu
+    }
+}
+
+显然，上面的used是多余的，如下所示
+
+object Solution {
+
+    def main(args: Array[String]) {
+        val l = scala.io.StdIn.readLine().toList
+
+        def decompo(x:List[Char],y:List[Char]): List[Char] = (x,y) match{
+            case (Nil,y) => y
+            case  (x::xs,y) => if(y.contains(x)){decompo(xs,y)}else{decompo(xs,y:+x)}
+        }
+
+        val a = decompo(l,List())
+        println(a.mkString)
+    }
+}
 ```
 
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-###
+### String Compression
 
 ```s
+Sample Input #00
 
+abcaaabbb
+
+Sample Output #00
+
+abca3b3
+
+Sample Input #01
+
+abcd
+
+Sample Output #01
+
+abcd
+
+Sample Input #02
+
+aaabaaaaccaaaaba
+
+Sample Output #02
+
+a3ba4c2a4ba
+```
+
+利用 takeWhile 和 dropWhile 递归
+
+```scala
+object Solution {
+    
+    def apeCompress(str: String):Unit = {
+        if (str.length != 0) {
+            val char = str(0)
+            val count = str.takeWhile(_ == char).length
+            if (count != 1)
+                print(char + "" + count)
+            else
+                print(char)
+
+            apeCompress(str.dropWhile(_ == char))
+        }
+    }
+
+    def main(args: Array[String]) {
+        apeCompress(readLine())
+    }
+}
+```
+
+遍历整个字符串
+
+```scala
+object Solution {
+    def main(args: Array[String]) {
+        var m = readLine();
+        var cur = m.charAt(0);
+        var c = 1;
+        for (i <- 1 until m.length()) {
+            if (m.charAt(i) == cur) {
+                c = c + 1;
+            } else {
+                print(cur);
+                if (c > 1)
+                    print(c);
+                cur = m.charAt(i);
+                c = 1;
+            }
+        }
+        print(cur);
+        if (c > 1)
+            print(c);
+    }
+}
+
+
+object Solution {
+  def main(args: Array[String]) {
+    var S: String = readLine()
+    var check: Int = 0
+    for (i <- 0 until S.length()) {
+      // 在字母不同的位置分割
+      if (i==0 || S.charAt(i)!=S.charAt(i-1)) {
+        if (check>1) print (check)
+        print(S.charAt(i))
+        check=1
+      }
+      else check = check + 1
+    }
+    if (check>1) print (check)
+  }
+}
+```
+
+利用 takeWhile dropWhile 和 match case
+
+```scala
+object Solution {
+
+  def compress(s: String): String = {
+    def iter(s: List[Char], accu: List[String]): List[String] = s match {
+      case Nil => accu
+      case h :: t => {
+        val substring = s.takeWhile(_ == h)
+        val res = if (substring.size > 1) h.toString + substring.size else h.toString
+        iter(s.dropWhile(_ == h), res :: accu)
+      }
+    }
+    iter(s.toList, Nil).reverse.mkString
+  }
+  def main(args: Array[String]) {
+    val s = readLine
+    println(compress(s))
+  }
+}
+
+object Solution {
+    def main(args: Array[String]) {
+        def compMsg(m: List[Char]) = {
+            def pack(l: List[Char]): List[List[Char]] = l match {
+                case Nil => Nil
+                case x => x.takeWhile(_ == x.head) :: pack(x.dropWhile(_ == x.head))
+            }
+            val conv = pack(m)
+            conv.foreach {c => if(c.length>1) print(c.head+c.length.toString) else print(c.head)}
+            }
+        compMsg(readLine().toList)
+    }
+}
 ```
 
 ```scala
-
+object Solution {
+    def main(args: Array[String]) {
+        val s = io.Source.stdin.getLines().take(1).toList.head + "0"
+            val res = s.foldLeft(('a',0)) { (acc, ch) =>
+                (acc, ch) match {
+                  case ((_, 0), ch) => (ch, 1)
+                  case ((prev, n), cur) if prev == cur => (prev, n+1)
+                  case ((prev, 1), cur) => print(prev); (cur, 1)
+                  case ((prev, n), cur) => print(prev + n.toString); (cur, 1)
+                }}
+    }
+}
 ```
 
-```scala
+### 
 
-```
-
-```scala
-
-```
-
-```scala
-
-```
-
-```scala
+```s
 
 ```
 
