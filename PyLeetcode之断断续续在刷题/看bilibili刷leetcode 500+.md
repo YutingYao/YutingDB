@@ -1,9 +1,9 @@
 <!-- vscode-markdown-toc -->
 * 1. [题目500+](#500)
 	* 1.1. [500. Keyboard Row](#KeyboardRow)
-	* 1.2. [503 【动态🚀规划】Next Greater Element II](#NextGreaterElementII)
+	* 1.2. [503 【栈】Next Greater Element II](#NextGreaterElementII)
 	* 1.3. [504-Base 7](#Base7)
-	* 1.4. [509. 【动态🚀规划】Fibonacci Number](#FibonacciNumber)
+	* 1.4. [509. 【动态🚀规划 + 递归】Fibonacci Number](#FibonacciNumber)
 	* 1.5. [516. 【回文】【动态🚀规划】Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
 		* 1.5.1. [类似题目：1143. 最长公共子序列](#1143.)
 	* 1.6. [518 Coin Change 2](#CoinChange2)
@@ -44,8 +44,8 @@
 	* 1.41. [639. Decode Ways II](#DecodeWaysII)
 	* 1.42. [643. Maximum Average Subarray I](#MaximumAverageSubarrayI)
 	* 1.43. [645-错误的集合](#-1)
-	* 1.44. [646-【动态🚀规划】最长数对链](#-1)
-	* 1.45. [647 【动态🚀规划】Palindromic Substrings](#PalindromicSubstrings)
+	* 1.44. [646-【动态🚀规划 + 贪心】最长数对链](#-1)
+	* 1.45. [647 【动态🚀规划 + 中心拓展】Palindromic Substrings](#PalindromicSubstrings)
 	* 1.46. [650-只有两个键的键盘](#-1)
 	* 1.47. [652. Find Duplicate Subtrees](#FindDuplicateSubtrees)
 	* 1.48. [653. Two Sum IV](#TwoSumIV)
@@ -407,78 +407,83 @@
 
 [小梦想家](https://www.bilibili.com/video/BV1vJ411X7BR?spm_id_from=333.999.0.0)
 
-###  1.2. <a name='NextGreaterElementII'></a>503 【动态🚀规划】Next Greater Element II
+###  1.2. <a name='NextGreaterElementII'></a>503 【栈】Next Greater Element II
 
 [哈哈哈](https://www.bilibili.com/video/BV197411L77N?spm_id_from=333.999.0.0)
 
 [洛阳](https://www.bilibili.com/video/BV1k5411t7Pa?spm_id_from=333.999.0.0)
 
+
 ```py
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        n = len(nums)
-        ret = [-1] * n
-        stk = list()
-
-        for i in range(n * 2 - 1):
-            while stk and nums[stk[-1]] < nums[i % n]:
-                ret[stk.pop()] = nums[i % n]
-            stk.append(i % n)
-        
-        return ret
-
-```
-
-```py
-赞一个，一开始真没想到用两个数组，一直在想用双指针+单调栈能不能搞出来
-
-用单调栈求解，此处栈内记录的是 nums 元素的下标
-
-直接将 nums 复制两倍
-判断栈顶元素和当前元素的大小
-若栈顶元素 > 当前元素：当前元素入栈
-若栈顶元素 < 当前元素：弹出栈顶元素，并记录栈顶元素的下一个更大元素为当前元素
-class Solution(object):
-    def nextGreaterElements(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[int]
-        """
-        nums_length = len(nums)
-        res_list = [-1 for _ in range(nums_length)]
-        stack = list()
-        
-        double_nums = nums + nums
-        for index, num in enumerate(double_nums):
-            while stack and nums[stack[-1]] < num:
-                res_list[stack[-1]] = num
-                stack.pop()
-            if index < nums_length:
-                stack.append(index)
-        return res_list
-
-```
-
-```py
-Python:
-
-class Solution:
-    def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        dp = [-1] * len(nums)
+        res = nums[:]
         stack = []
-        for i in range(len(nums)*2):
-            while(len(stack) != 0 and nums[i%len(nums)] > nums[stack[-1]]):
-                    dp[stack[-1]] = nums[i%len(nums)]
-                    stack.pop()
-            stack.append(i%len(nums))
-        return dp
+        for idx, cur in sorted(enumerate(nums),key = lambda x: x[1]):
+            while stack and nums[stack[-1]] < cur:
+                res[stack[-1]] = cur
+                stack.pop()
+            stack.append(idx)
+        
+        while stack:
+            res[stack[-1]] = -1
+            stack.pop()
+        
+        return res
+        
+# 哭，我又理解错题目了
+# 输入：
+# [5,4,3,2,1]
+# 输出：
+# [-1,5,4,3,2]
+# 预期结果：
+# [-1,5,5,5,5]
 ```
+
+```py
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        res = nums[:]
+        stack = []
+        # 双倍nums大法好
+        for idx, cur in enumerate(nums + nums):
+            while stack and nums[stack[-1]] < cur:
+                res[stack[-1]] = cur
+                stack.pop()
+            if idx < len(nums): # 易错点：append(idx)是有条件的
+                stack.append(idx)
+        
+        while stack:
+            res[stack[-1]] = -1
+            stack.pop()
+        
+        return res
+
+更简单的写法:
+
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        res = [-1] * len(nums)
+        stack = []
+        # 双倍nums大法好
+        for idx, cur in enumerate(nums + nums):
+            while stack and nums[stack[-1]] < cur:
+                res[stack[-1]] = cur
+                stack.pop()
+            if idx < len(nums): # 易错点：append(idx)是有条件的
+                stack.append(idx)
+        return res
+
+
+```
+
+
 
 ###  1.3. <a name='Base7'></a>504-Base 7
 
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7o5?spm_id_from=333.999.0.0)
 
-###  1.4. <a name='FibonacciNumber'></a>509. 【动态🚀规划】Fibonacci Number
+###  1.4. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
 
 [1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -487,98 +492,45 @@ class Solution:
 ```py
 class Solution:
     def fib(self, n: int) -> int:
-        if n < 2:
-            return n
-        
-        p, q, r = 0, 0, 1
-        for i in range(2, n + 1):
-            p, q = q, r
-            r = p + q
-        
-        return r
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/fibonacci-number/solution/fei-bo-na-qi-shu-by-leetcode-solution-o4ze/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def fib(self, n: int) -> int:
-        if n < 2:
-            return n
-        
-        q = [[1, 1], [1, 0]]
-        res = self.matrix_pow(q, n - 1)
-        return res[0][0]
-    
-    def matrix_pow(self, a: List[List[int]], n: int) -> List[List[int]]:
-        ret = [[1, 0], [0, 1]]
-        while n > 0:
-            if n & 1:
-                ret = self.matrix_multiply(ret, a)
-            n >>= 1
-            a = self.matrix_multiply(a, a)
-        return ret
-
-    def matrix_multiply(self, a: List[List[int]], b: List[List[int]]) -> List[List[int]]:
-        c = [[0, 0], [0, 0]]
-        for i in range(2):
-            for j in range(2):
-                c[i][j] = a[i][0] * b[0][j] + a[i][1] * b[1][j]
-        return c
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/fibonacci-number/solution/fei-bo-na-qi-shu-by-leetcode-solution-o4ze/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def fib(self, n: int) -> int:
-        sqrt5 = 5**0.5
-        fibN = ((1 + sqrt5) / 2) ** n - ((1 - sqrt5) / 2) ** n
-        return round(fibN / sqrt5)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/fibonacci-number/solution/fei-bo-na-qi-shu-by-leetcode-solution-o4ze/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-Python：
-
-class Solution:
-    def fib(self, n: int) -> int:
-        if n < 2:
-            return n
-        a, b, c = 0, 1, 0
-        for i in range(1, n):
-            c = a + b
-            a, b = b, c
-        return c
-
-class Solution:
-    def fib(self, n: int) -> int:
         a, b = 0, 1
         for i in range(n): 
             a, b = b, a + b # py的单行更新值
     	return a
+
+
 # 递归实现
 class Solution:
+    @lru_cache
     def fib(self, n: int) -> int:
         if n < 2:
             return n
         return self.fib(n - 1) + self.fib(n - 2)
-```
 
-```py
-通项公式了解一下
-
+    
 class Solution:
-    def fib(self, N):
-        """
-        :type N: int
-        :rtype: int
-        """
-        return int((5**0.5)*0.2*( ((1+5**0.5)/2)**N-((1-5**0.5)/2)**N))
+    @cache
+    def fib(self, n: int) -> int:
+        if n < 2:
+            return n
+        return self.fib(n - 1) + self.fib(n - 2)
+
+# 记忆化递归
+class Solution:
+    def fib(self, n: int) -> int:
+        dic = {}
+        dic[0] = 0
+        dic[1] = 1
+
+        def helper(n):
+            # 这个写法是错误的：if n == 0 or 1:
+            if n <= 1:
+                return n
+            elif n in dic:
+                return dic[n]
+            else:
+                dic[n] = helper(n - 1) + helper(n - 2)
+                return dic[n]
+        return helper(n)
 ```
 
 ```scala
@@ -675,7 +627,7 @@ object Solution2 {
 
 
 /**
-* recursive version - bottom up
+* recursive version - top-down
 * time complexity: O(2^N）
 * space complexity: O(N)
 */
@@ -690,62 +642,6 @@ object Solution3 {
 }
 
 
-/**
-* matrix operation with pow operation
-* memo
-*   n > 1
-*   | fn   |    | 1  1  |^ (n -1)  | 1 |
-*   | fn-1 |  = | 1  0  |          | 1 |
-* time complexity: O(logN)
-* space complexity: O(logN) due to stack size
-*/
-object Solution4 {
-  def fib(N: Int): Int = {
-    if (N <= 1) return N
-
-    val matrix = Array.ofDim[Int](2, 2)
-    matrix(0)(0) = 1
-    matrix(0)(1) = 1
-    matrix(1)(0) = 1
-    matrix(1)(1) = 0
-
-    val identityMatrix = Array.tabulate(2, 2) {
-      case (i, j) if i == j => 1
-      case _ => 0
-    }
-    val retMatrix = matrixPow(identityMatrix, matrix, N - 1)
-    retMatrix(0)(0)
-  }
-
-  @annotation.tailrec
-  def matrixPow(current: Array[Array[Int]], base: Array[Array[Int]], pow: Int): Array[Array[Int]] = {
-    if (pow == 0) current
-    else {
-      if ((pow & 1) == 1) {
-        val newCurrent = multiply(current, base)
-        val newBase = multiply(base, base)
-
-        matrixPow(newCurrent, newBase, pow / 2)
-      } else {
-        val newBase = multiply(base, base)
-        matrixPow(current, newBase, pow / 2)
-      }
-    }
-
-  }
-
-  def multiply(a: Array[Array[Int]], b: Array[Array[Int]]): Array[Array[Int]] = {
-    val a00 = a(0)(0) * b(0)(0) + a(0)(1) * b(1)(0)
-    val a01 = a(0)(0) * b(0)(1) + a(0)(1) * b(1)(1)
-    val a10 = a(1)(0) * b(0)(0) + a(1)(1) * b(1)(0)
-    val a11 = a(1)(0) * b(0)(1) + a(1)(1) * b(1)(1)
-    a(0)(0) = a00
-    a(0)(1) = a01
-    a(1)(0) = a10
-    a(1)(1) = a11
-    a
-  }
-}
 ```
 
 ###  1.5. <a name='LongestPalindromicSubsequence'></a>516. 【回文】【动态🚀规划】Longest Palindromic Subsequence
@@ -771,6 +667,7 @@ class Solution:
                     dp[stt][end] = dp[stt+1][end-1] + 2
                 else:
                     dp[stt][end] = max(dp[stt+1][end], dp[stt][end-1])
+                    # 因为可以删除字符,所以可以像这样直接传递
         
         #print(dp)
         return dp[0][-1]
@@ -2274,298 +2171,94 @@ class Solution:
         return [dup, err]
 ```
 
-###  1.44. <a name='-1'></a>646-【动态🚀规划】最长数对链
+###  1.44. <a name='-1'></a>646-【动态🚀规划 + 贪心】最长数对链
 
 [哈哈哈](https://www.bilibili.com/video/BV1rz411q7pZ?spm_id_from=333.999.0.0)
 
+python3 贪心（按照右端点排序）（速度better）
+
 ```py
-# python3 贪心
-
 class Solution:
-    def findLongestChain(self, pairs):
-        length = len(pairs)
-        if length<=1:
-            return length
-        pairs = sorted(pairs, key=lambda x:x[1])
-        pre = -1
-        res = 0
-        for i in range(length):
-            if pre == -1:
-                pre = i
-                res += 1
-            elif pairs[i][0] > pairs[pre][1]:
-                pre = i
-                res += 1
-        return res
-
-# python3, 贪心思想，具体参看附加上的归类的两道题的思路：
-
-class Solution:
-    def findLongestChain(self, pairs):
-        pairs.sort(key=lambda x: (x[1], x[0]))
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
+        pairs.sort(key=lambda x: x[1])
         count = 0
         end = -float('inf')
         for i, p in enumerate(pairs):
+            # print(p[0],end)
+            # 易错点：题目容易理解错误
+            # 当且仅当 b < c 时，数对(c, d) 才可以跟在 (a, b) 后面。
             if p[0] > end:
                 count += 1
                 end = p[1]
+                # print('new end:',end)
         return count 
+```
 
-class Solution(object):
-    def findLongestChain(self, pairs):
-        """
-        :type pairs: List[List[int]]
-        :rtype: int
-        """
-        if not pairs or len(pairs) == 0:
-            return 0
+动态规划（按照左端点排序）
+
+```py
+class Solution:
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
         pairs = sorted(pairs, key=lambda x:x[0])
         dp = [1] * len(pairs)
-        for i in range(1, len(pairs)):
-            for j in range(i):
-                dp[i] = max(dp[i], dp[j] + 1 if pairs[i][0] > pairs[j][1] else dp[j])
+        for cur in range(1, len(pairs)):
+            for pre in range(cur):
+                dp[cur] = max(dp[cur], dp[pre] + 1 if pairs[cur][0] > pairs[pre][1] else dp[pre])
         return dp[-1]
-
-class Solution(object):
-    def findLongestChain(self, pairs):
-        """
-        :type pairs: List[List[int]]
-        :rtype: int
-        """
-        if not pairs or len(pairs) == 0:
-            return 0
-        cur, res = float('-inf'), 0
-        for p in sorted(pairs, key=lambda x: x[1]):
-            if cur < p[0]: cur, res = p[1], res + 1
-        return res
-# 条件反射python3
 
 class Solution:
     def findLongestChain(self, pairs):
         pairs.sort(key=lambda x:x[0])
         dp = []
-        for i in range(len(pairs)):
+        for cur in range(len(pairs)):
             dp.append(1)
-            for j in range(i):
-                if pairs[i][0] > pairs[j][1]:
-                    dp[i] = max(dp[i], dp[j] + 1)
+            for pre in range(cur):
+                if pairs[cur][0] > pairs[pre][1]:
+                    dp[cur] = max(dp[cur], dp[pre] + 1)
         return dp[-1]
-
-import operator
-class Solution(object):
-    def findLongestChain(self, pairs):
-        cur, ans = float('-inf'), 0
-        for x, y in sorted(pairs, key = operator.itemgetter(1)):
-            if cur < x:
-                cur = y
-                ans += 1
-        return ans
 ```
 
-###  1.45. <a name='PalindromicSubstrings'></a>647 【动态🚀规划】Palindromic Substrings
+
+
+###  1.45. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 中心拓展】Palindromic Substrings
 
 [小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
 
 ```py
-# python无敌啊！！！有没有天理啊，手动滑稽😏😏😏😏！一行解法：
-# ```python
-import os
-class Solution(object):
-    def countSubstrings(self, s):
-        """
-        :type s: str
-        :rtype
-        """
-        return sum(len(os.path.commonprefix((s[:i][::-1], s[i:]))) 
-                   + len(os.path.commonprefix((s[:i][::-1], s[i + 1:]))) + 1 
-                        for i in range(len(s)))
-# ```
-# 解释下为啥要加两次，因为回文串有以下两种形式：
-# - ‘abcba’
-# - 'abba'
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        n = len(s)
+        dp = [[0] * n for _ in range(n)]
+        res = 0
+        # 这个部分其实可以不写：
+        # for i in range(n):
+        #     dp[i][i]=1
+        for i in range(n):
+            for j in range(i, -1, -1):
+                if s[i] == s[j] and (i - j <= 1 or dp[i - 1][j + 1]):
+                    dp[i][j] = 1
+                    res += 1
+        return res
 
-# 那为啥要加那个1呢，上面解释过了，单个字符也算是一个回文子串呀，嘻嘻😁
+
 
 class Solution(object):
     def countSubstrings(self, s):
-        """
-        :type s: str
-        :rtype
-        """
         '''
         双指针太暴力了吧
         '''
         cnt = 0
         for i in range(0,len(s)):
             for j in range(i+1,len(s)+1):
-                # print(s[i:j])
                 if s[i:j] == s[i:j][::-1]:
                     cnt += 1
         return cnt
 ```
 
 ```py
-# 我傻了，看到范围1000，直接上On方 的解法了。
-# 应对笔试不考虑空间复杂度，就直接dp动态🚀规划了，
-# 按照最长回文子串的思路，怎么写得快，怎么来。。。
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        n = len(s)
-        dp = [[True] * n for _ in range(n)]
-        ans = 0
-        for d in range(n):
-            for x in range(n):
-                y = x + d
-                if y >= n:
-                    break
-                if d == 0:
-                    dp[x][y] = True
-                elif d == 1:
-                    dp[x][y] = (s[x] == s[y])
-                else:
-                    dp[x][y] = dp[x+1][y-1] and (s[x] == s[y])
-                if dp[x][y]:
-                    ans += 1
-        return ans
-```
-
-```py
-# 动态🚀规划：
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        dp = [[False] * len(s) for _ in range(len(s))]
-        result = 0
-        for i in range(len(s)-1, -1, -1): #注意遍历顺序
-            for j in range(i, len(s)):
-                if s[i] == s[j]:
-                    if j - i <= 1: #情况一 和 情况二
-                        result += 1
-                        dp[i][j] = True
-                    elif dp[i+1][j-1]: #情况三
-                        result += 1
-                        dp[i][j] = True
-        return result
-
-# 动态🚀规划：简洁版
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        dp = [[False] * len(s) for _ in range(len(s))]
-        result = 0
-        for i in range(len(s)-1, -1, -1): #注意遍历顺序
-            for j in range(i, len(s)):
-                if s[i] == s[j] and (j - i <= 1 or dp[i+1][j-1]): 
-                    result += 1
-                    dp[i][j] = True
-        return result
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        n = len(s)
-        dp = [[0] * n for _ in range(n)]
-        res = 0
-        for i in range(n):
-            for j in range(i, -1, -1):
-                if s[i] == s[j] and (i - j + 1 <= 2 or dp[i - 1][j + 1]):
-                    #print(i,j)
-                    dp[i][j] = 1
-                if dp[i][j]:res += 1
-        return res
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        n=len(s)
-        dp = [[0]*n for i in range(n)]
-        for i in range(n):
-            dp[i][i]=1
-        ans = n
-        for i in range(n):
-            for j in range(i-1,-1,-1):
-                if s[j]==s[i] and dp[j+1][i-1]==i-j-1:
-                    dp[j][i] = dp[j+1][i-1]+2
-                    ans+=1
-        return ans
-```
-
-
-```py
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        n = len(s)
-        self.res = 0
-
-        def helper(i, j):
-            while i >= 0 and j < n and s[i] == s[j]:
-                self.res += 1
-                i -= 1
-                j += 1
-
-        for i in range(n):
-            helper(i, i)
-            helper(i, i + 1)
-        return self.res
-# 暴力，中心扩展
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        length = len(s)
-        if length == 0:return 0
-        count = 0
-        def centerExpand(left,right):
-            cnt = 0
-            while left >= 0 and right < length:
-                if s[left] == s[right]:
-                    cnt += 1
-                    left -= 1
-                    right += 1
-                else:
-                    return cnt
-            return cnt
-        for i in range(length):
-            count += centerExpand(i,i)
-            count += centerExpand(i,i+1)
-        return count
-# 双指针法：
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        result = 0
-        for i in range(len(s)):
-            result += self.extend(s, i, i, len(s)) #以i为中心
-            result += self.extend(s, i, i+1, len(s)) #以i和i+1为中心
-        return result
-    
-    def extend(self, s, i, j, n):
-        res = 0
-        while i >= 0 and j < n and s[i] == s[j]:
-            i -= 1
-            j += 1
-            res += 1
-        return res
-# python 每个位置向两端搜索
-
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        def extend(i, j, s):
-            count = 0
-            while i >= 0 and j < len(s) and s[i] == s[j]:
-                count += 1
-                i -= 1
-                j += 1
-            return count
-
-        count = 0
-        m = len(s)
-        for i in range(m):
-            count += extend(i, i, s)
-            count += extend(i, i+1, s)
-        return count
 # Python3中心扩展法非常简洁代码
-
 # 直接利用中心扩展法, 依次计数找到的所有的回文子串即可；
 # 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
-
 # 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
 ### 代码
 from math import floor,ceil
@@ -3579,202 +3272,15 @@ object Solution1-2 {
 class Solution:
     def maxProfit(self, prices: List[int], fee: int) -> int:
         n = len(prices)
-        dp = [[0, -prices[0]]] + [[0, 0] for _ in range(n - 1)]
-        for i in range(1, n):
-            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i] - fee)
-            dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i])
-        return dp[n - 1][0]
-
-
-class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        n = len(prices)
-        sell, buy = 0, -prices[0]
-        for i in range(1, n):
-            sell, buy = max(sell, buy + prices[i] - fee), max(buy, sell - prices[i])
-        return sell
-
-
-class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        n = len(prices)
-        buy = prices[0] + fee
+        buy = prices[0]
         profit = 0
-        for i in range(1, n):
-            if prices[i] + fee < buy:
-                buy = prices[i] + fee
-            elif prices[i] > buy:
-                profit += prices[i] - buy
-                buy = prices[i]
-        return profit
-
-```
-
-```py
-Python：
-
-class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        n = len(prices)
-        dp = [[0] * 2 for _ in range(n)]
-        dp[0][0] = -prices[0] #持股票
-        for i in range(1, n):
-            dp[i][0] = max(dp[i-1][0], dp[i-1][1] - prices[i])
-            dp[i][1] = max(dp[i-1][1], dp[i-1][0] + prices[i] - fee)
-        return max(dp[-1][0], dp[-1][1])
-
-
-Python：
-
-class Solution: # 贪心思路
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        result = 0
-        minPrice = prices[0]
-        for i in range(1, len(prices)):
-            if prices[i] < minPrice:
-                minPrice = prices[i]
-            elif prices[i] >= minPrice and prices[i] <= minPrice + fee: 
-                continue
-            else: 
-                result += prices[i] - minPrice - fee
-                minPrice = prices[i] - fee
-        return result
-
-可以这样形象理解： 涨了能赚钱就抛掉。
-
-然后，发现跌破了基准线(最高点-费用)，就庆幸自己抛掉了，并更新最低点；
-
-如果没有跌破，但却找到新的高点，就找证券公司说我要反悔，之前抛掉的不算，并更新基准线。 
-
-之前的贪心算法则是：遇到高点不急着抛掉，建立基准线；一旦跌破基准线则穿越回到之前的高点抛掉。
-
-遇到新的高点，则更新基准线。 两者本质上完全一样的，就是反悔的时间点不一样。
-
-Python3. Greedy is good.
-
-假设此次交易利润：B - A - fee， 下次交易利润：D - C - fee， 
-
-两次交易利润之和为 B - A + D - C - fee * 2， 
-
-而只进行一次交易的利润为：D - A - fee， 只有当两次交易利润之和大于只进行一次交易的利润，
-
-才会进行两次交易，因此：B - A + D - C - fee * 2 > D - A - fee，化简得 B - fee > C，
-
-即下次交易的买入额要小于这次交易的卖出额-fee，才会获得更高总利润。 
-
-这里设定minimum为此次交易卖出额-fee， 如果下一次股票价格比minimum小，
-
-说明值得买入（重新赋值minimum）；
-
- 如果大于minimum + fee，则按照minimum来计算交易利润，
- 
- 计算结果等价于上一次交易不卖出，这次卖出（即公式里的D - A - fee）； 
-
- 而其他情况不值得交易（得不偿失或者根本没利润）。
-
-class Solution:
-    def maxProfit(self, prices, fee):
-        """
-        :type prices: List[int]
-        :type fee: int
-        :rtype: int
-        """
-        n = len(prices)
-        if n < 2:
-             return 0
-        ans = 0
-        minimum = prices[0]
-        for i in range(1, n):
-            if prices[i] < minimum:
-                minimum = prices[i]
-            elif prices[i] > minimum + fee:
-                ans += prices[i]-fee-minimum
-                minimum = prices[i]-fee
-        return ans
-## 未进行空间优化
-class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-        have = [0] * length  # 表示第i天持有股票所得最多现金
-        no = [0] * length    # 表示第i天不持有股票所得最多现金
-        have[0] = -prices[0] # 此时的持有股票就一定是买入股票了
-        no[0] = 0            # 不持有股票那么现金就是0
-        for i in range(1, length):
-            have[i] = max(have[i-1], no[i-1] - prices[i]) 
-            no[i] = max(no[i-1], prices[i] + have[i-1] - fee)# 唯一不同之处
-        return no[-1]  # 不持有股票状态所得金钱一定比持有股票状态得到的多
-
-## 空间优化
-class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-        have = -prices[0] # 此时的持有股票就一定是买入股票了
-        no = 0            # 不持有股票那么现金就是0
-        for i in range(1, length):
-            have = max(have, no - prices[i]) 
-            no = max(no, prices[i] + have - fee) # 唯一不同之处
-        return no  # 不持有股票状态所得金钱一定比持有股票状态得到的多
-
-fee一笔交易只收一次，买的时候收和卖的时候收没差的
-dp1[i]表示第i天手上有股票，dp2[i]表示第i天手上没有股票，递归方程：
-
-dp1[i] = max(dp1[i-1], dp2[i-1] - prices[i]) （第二项表示在第i天买入股票）
-dp2[i] = max(dp2[i-1], dp1[i-1] + prices[i] - fee) （第二项表示在第i天将股票卖出，需扣除手续费）
-python:
-class Solution:
-    def maxProfit(self, prices, fee):
-        n = len(prices)
-        if n < 2:
-            return 0
-        dp1 = [0 for _ in range(n)]#第i天手上有股票时的最大收益
-        dp2 = [0 for _ in range(n)]#第i天手上无股票时的最大收益
-        dp1[0] = -prices[0]
         for i in range(1,n):
-            dp1[i] = max(dp1[i-1], dp2[i-1] - prices[i])
-            dp2[i] = max(dp2[i-1], dp1[i-1] + prices[i] - fee)
-        return dp2[n-1]
+            buy = min(buy, prices[i]-profit)
+            profit = max(profit, prices[i] - buy - fee)
+        return profit
 ```
 
 ```scala
-/**
-* my first commitment
-* dynamic programming
-*     dp(i)(j) means the best profit we can have at i-th day in different state un-holding stock or holding a share of stock.
-* 
-*  memo:
-*    this problem is similar to problem no 122
-*  time complexity: O(N)
-*  space complexity: O(N)
-*/
-object Solution1 {
-    def maxProfit(prices: Array[Int], fee: Int): Int = {
-        if(prices == null || prices.isEmpty) return 0
-        
-        /*
-        *  0 for un-holding any stack
-        *  1 for holding a share of stock
-        */
-        val dp = Array.tabulate(prices.length, 2) {
-            case (0, 0) => 0
-            case (0, 1) => -prices(0)
-            case _ => 0
-        }
-        
-        // 0: without holding, 1 holding
-        for(i <- 1 until prices.length) {
-            /** only pay the transition fee in selling a share of stock */
-            dp(i)(0) = dp(i - 1)(0) max (dp(i - 1)(1) + prices(i) - fee)
-            dp(i)(1) = dp(i - 1)(1) max (dp(i - 1)(0) - prices(i))
-        }
-        dp.last(0) // last time's state 0
-        
-    }
-}
-
 /**
 * dynamic programming: only create an array keeping holding and un-holding
 * time complexity: O(N)
@@ -3795,24 +3301,6 @@ object Solution1-1 {
             dp(1) = dp(1) max (dp(0) - prices(i))
         }
         dp(0)
-    }
-}
-
-/**
-* dynamic programming 
-* function programming
-*/
-object Solution2 {
-    def maxProfit(prices: Array[Int], fee: Int): Int = {
-        val (unholding, holding) = prices.foldLeft((0, Int.MinValue)){
-            case ((unholding, holding), price) =>
-            (
-            // avoiding overflow
-                if((price - fee) > 0) unholding max (holding + price - fee) else unholding,
-                holding max (unholding - price)
-            )
-        }
-        unholding
     }
 }
 ```
@@ -4067,111 +3555,48 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV1xW41167b5?spm_id_from=333.999.0.0)
 
 ```py
-# 动态🚀规划。
-from collections import Counter
-class Solution:
-    def deleteAndEarn(self, nums):
-        # 统计每个数字出现的次数、去重、排序
-        dic = Counter(nums)
-        nums = list(set(nums))
-        nums.sort()
-        
-        # dp[i][0]: nums[0：i+1]中，不删除nums[i]所能获得的最大点数
-        # dp[i][1]: 删除nums[i]所能获得的最大点数和
-        dp = [[0 for i in range(2)] for _ in range(len(nums))]
-        dp[0][0] = 0
-        dp[0][1] = nums[0] * dic[nums[0]]
-
-        for i in range(1, len(dp)):
-            if nums[i] - nums[i-1] == 1:
-                # 与上一元素相差1，则删除nums[i]的情况dp[i][1]，依赖于不删除nums[i-1]的情况，即dp[i-1][0]。
-                dp[i][1] = dp[i-1][0] + nums[i] * dic[nums[i]]
-            else:
-                # 上一元素是否删除，与当前状态无关，选取前一状态获得的最大点数。
-                dp[i][1] = max(dp[i-1][0],dp[i-1][1]) + nums[i] * dic[nums[i]]
-            # 不删除当前元素，直接取前一状态的最大值。
-            dp[i][0] = max(dp[i-1][0],dp[i-1][1])
-        
-        return max(dp[-1])
-
-# 次数统计 + 动态🚀规划
-from collections import Counter
-class Solution:
-    def deleteAndEarn(self, nums):
-        count = Counter(nums)
-        tmp = sorted(count)
-        n = len(tmp)
-        dp = [0]*(1+n) # dp[i] 表示的是在[tmp[0],...tmp[i-1]]能获得的最大点数
-        dp[1] = tmp[0] * count[tmp[0]]
-
-        for i in range(2, 1+n):
-            dp[i] = max(dp[i-1], dp[i-2] + tmp[i-1] * count[tmp[i-1]])
-            if tmp[i-1] - tmp[i-2] > 1:
-                dp[i] = max(dp[i], dp[i-1] + tmp[i-1] * count[tmp[i-1]])
-        
-        return dp[-1]
-
-# 先排序，后 DP
-
-class Solution:
-    def deleteAndEarn(self, nums):
-        nums.sort()
-        # dp[0] 表示当前数不选，dp[1] 表示当前数选。从第一个数向后辗转递推
-        dp = [0, nums[0]]
-        for i in range(1, len(nums)):
-            if nums[i] == nums[i - 1]:
-                # 如果当前数和前一个数相等，则在前一个被选择的条件下，再选当前数。
-                dp[1] += nums[i]
-            elif nums[i] == nums[i - 1] + 1:
-                # 如果当前数和前一个数相差 1，则一种情况是前一个数没选的条件下，选择当前数；
-                # 或者在前一个数被选择的条件下，舍弃掉当前数
-                temp = dp[0]
-                dp[0] = max(dp)  # 舍弃掉当前数
-                dp[1] = temp + nums[i]  # 选择当前数
-            else:
-                # 如果当前数和前一个数相差大于 1，则一种情况是前一个数已选的条件下，舍弃当前数
-                # 第二种情况是，前一个数已选的条件下，选择当前数；
-                # 第三种情况是，前一个数未选的条件下，选择当前数；（该情况必然非最大，不用考虑）
-                # 第四种情况是，前一个数未选的条件下，舍弃当前数；（同上，非最大，不用考虑）
-                dp[0] = max(dp)
-                dp[1] = dp[0] + nums[i]
-        return max(dp)
-
-# 让我们一起来帮助撬家人，然后用获得的点数去超商买些好吃的
-
-class Solution:
-    def deleteAndEarn(self, nums):
-        max_num = max(nums)
-        table = [0]*(max_num+1)
-        for i in nums:
-            table[i] += 1
-
-        # dp[i][0]和dp[i][1]分别表示第i个数不选和选的最大所得
-        # dp = [[0]*2 for _ in range(max_num+1)]
-
-        # for i in range(1,max_num+1):
-        #     dp[i][0] = max(dp[i-1][0],dp[i-1][1])
-        #     # 选择第i个数 第i-1个数一定不选而且可以选走所有的i  
-        #     dp[i][1] = dp[i-1][0] + i*table[i]
-
-        # 优化一下空间
-        dp_0,dp_1 = 0,0
-        for i in range(1,max_num+1):
-            dp_0,dp_1 = max(dp_0,dp_1),dp_0+i*table[i]
-            
-        return max(dp_0,dp_1)
-
+别人的写法：
 class Solution(object):
     def deleteAndEarn(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
         dp = [0] * 10001
         for num in nums:
             dp[num] += num
         for i in range(2, 10001):
             dp[i] = max(dp[i]+dp[i-2], dp[i-1])
+        return dp[-1]
+
+我的修改：
+class Solution:
+    def deleteAndEarn(self, nums: List[int]) -> int:
+        n = max(nums)
+        dp = [0] * (n + 1)
+
+        for num in nums:
+            dp[num] += num 
+        
+        start = max(2, min(nums))
+        for i in range(start, n + 1):
+            # 易错点：不是这个dp[i] += max(dp[i-2], dp[i-1])
+            dp[i] = max(dp[i-2] + dp[i], dp[i-1])
+        return dp[-1]
+
+使用计数器：
+from collections import Counter
+class Solution:
+    def deleteAndEarn(self, nums):
+        count = Counter(nums)
+        # print(count): Counter({3: 1, 4: 1, 2: 1})
+        key = sorted(count)
+        # print(key): [2, 3, 4]
+        n = len(key)
+        dp = [0]*(1+n) # dp[i] 表示的是在[tmp[0],...tmp[i-1]]能获得的最大点数
+        dp[1] = key[0] * count[key[0]]
+
+        for i in range(2, 1+n):
+            if key[i-1] - key[i-2] == 1:
+                dp[i] = max(dp[i-1], dp[i-2] + key[i-1] * count[key[i-1]])
+            if key[i-1] - key[i-2] > 1:
+                dp[i] = dp[i-1] + key[i-1] * count[key[i-1]]
         return dp[-1]
 ```
 
@@ -4194,24 +3619,30 @@ class Solution(object):
 [花花酱](https://www.bilibili.com/video/BV1VW411y7Dq?spm_id_from=333.999.0.0)
 
 ```py
+# [10,15,20,10]
+# dp(0) dp(1) dp(2)              dp(3)                              dp(4)
+# 0       0     10
+#                    20 + 10       | 15 + 0           10 + ?          | 20 + ？
+#                    cost(2)+dp(2) | cost(1)+dp(1)    cost(3) + dp(3) | cost(2) + dp(2)
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         n = len(cost)
-        dp = [0] * (n + 1)
-        for i in range(2, n + 1):
-            dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
-        return dp[n]
+        dp = [0] * (n+1)
+        for i in range(2,n+1):
+            dp[i] = min(dp[i-1] + cost[i-1], dp[i-2] + cost[i-2])
+        return dp[-1]
 
-
+空间优化：
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         n = len(cost)
-        prev = curr = 0
-        for i in range(2, n + 1):
-            nxt = min(curr + cost[i - 1], prev + cost[i - 2])
-            prev, curr = curr, nxt
-        return curr
+        dp1 = dp0 = 0
+        for i in range(2,n+1):
+            dp = min(dp1 + cost[i-1], dp0 + cost[i-2])
+            dp1, dp0 = dp, dp1
+        return dp
 
+或者返回到达 cost[-1], cost[-2] 的较小值
 
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
@@ -5593,23 +5024,7 @@ class Solution:
         return dp[0][N-1]>0
 ```
 
-```py
-反正暴力解过了就行了。
 
-class Solution:
-    def stoneGame(self, piles: List[int]) -> bool:
-        @cache
-        def max_points(piles, start, end):
-            if end - start == 1:
-                return max(piles)
-            op1 = piles[start] + max_points(piles, start + 2, end)
-            op2 = piles[start] + max_points(piles, start + 1, end - 1)
-            op3 = piles[end] + max_points(piles, start + 1, end - 1)
-            op4 = piles[end] + max_points(piles, start, end - 2)
-            return max(op1, op2, op3, op4)
-        
-        return max_points(tuple(piles), 0, len(piles) - 1) > (sum(piles) / 2)
-```
 
 ###  1.144. <a name='ProfitableSchemes'></a>879. Profitable Schemes
 
