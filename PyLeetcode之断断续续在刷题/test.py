@@ -1,13 +1,18 @@
 class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        tmp = [float("inf")] * n
-        tmp[src] = 0
-        res = float("inf")
-        for _ in range(1, k + 2):
-            dp = [float("inf")] * n
-            for j, i, cost in flights:
-                dp[i] = min(dp[i], tmp[j] + cost)
-            tmp = dp
-            res = min(res, tmp[dst])
-        
-        return -1 if res == float("inf") else res
+    def lengthOfLIS(self, nums):
+        res = []
+        for num in nums:
+            if not res or num > res[-1]:
+                res.append(num)
+            else:
+                l, r = 0, len(res) - 1
+                idx = r
+                while l <= r:
+                    mid = (l + r) // 2
+                    if res[mid] >= num:
+                        idx = mid
+                        r = mid - 1
+                    else:
+                        l = mid + 1
+                res[idx] = num
+        return len(res)

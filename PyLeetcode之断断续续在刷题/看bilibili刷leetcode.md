@@ -31,14 +31,14 @@
 	* 1.29. [128. Longest Consecutive Sequence](#LongestConsecutiveSequence)
 	* 1.30. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
 	* 1.31. [130. Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
-	* 1.32. [131-【动态🚀规划】分割回文串](#-1)
+	* 1.32. [131- 分割回文串](#-1)
 	* 1.33. [132. 【动态🚀规划】Palindrome Partitioning II](#PalindromePartitioningII)
 	* 1.34. [133. Clone Graph](#CloneGraph)
 	* 1.35. [134. Gas Station](#GasStation)
 	* 1.36. [138 Copy List with Random Pointer](#CopyListwithRandomPointer)
 	* 1.37. [136-Single Number](#SingleNumber)
 	* 1.38. [137 Single Number II](#SingleNumberII)
-	* 1.39. [139 【动态🚀规划】Word Break](#WordBreak)
+	* 1.39. [139 【动态🚀规划 + 背包】Word Break](#WordBreak)
 	* 1.40. [140 Word Break II](#WordBreakII)
 	* 1.41. [141-Linked List Cycle](#LinkedListCycle)
 	* 1.42. [142 Linked List Cycle II](#LinkedListCycleII)
@@ -122,12 +122,12 @@
 	* 1.120. [258. Add Digits](#AddDigits)
 	* 1.121. [260-只出现一次的数字 III](#III-1)
 	* 1.122. [263 Ugly Number](#UglyNumber)
-	* 1.123. [264. 【动态🚀规划】Ugly Number II](#UglyNumberII)
+	* 1.123. [264. 【动态🚀规划 + 3指针】Ugly Number II](#UglyNumberII)
 	* 1.124. [268 Missing Number](#MissingNumber)
 	* 1.125. [270. Closest Binary Search Tree Value](#ClosestBinarySearchTreeValue)
 	* 1.126. [274 H-Index](#H-Index)
 	* 1.127. [278. First Bad Version](#FirstBadVersion)
-	* 1.128. [279 【动态🚀规划】Perfect Squares](#PerfectSquares)
+	* 1.128. [279 【动态🚀规划 + 背包】Perfect Squares](#PerfectSquares)
 	* 1.129. [282. Expression Add Operators](#ExpressionAddOperators)
 	* 1.130. [283. Move Zeros](#MoveZeros)
 	* 1.131. [284 Peeking Iterator](#PeekingIterator)
@@ -136,7 +136,7 @@
 	* 1.134. [290. Word Pattern](#WordPattern)
 	* 1.135. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
 	* 1.136. [299. Bulls and Cows](#BullsandCows)
-	* 1.137. [300 【动态🚀规划】Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
+	* 1.137. [300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
 	* 1.138. [301. Remove Invalid Parentheses](#RemoveInvalidParentheses)
 	* 1.139. [303-区域和检索 - 数组不可变](#-1)
 	* 1.140. [304. Range Sum Query 2D](#RangeSumQuery2D)
@@ -147,11 +147,11 @@
 	* 1.145. [316 Remove Duplicate Letters](#RemoveDuplicateLetters)
 	* 1.146. [319](#-1)
 	* 1.147. [321. Create Maximum Number](#CreateMaximumNumber)
-	* 1.148. [322. 【动态🚀规划】Coin Change](#CoinChange)
+	* 1.148. [322. 【动态🚀规划 + 背包 + dfs】Coin Change](#dfsCoinChange)
 	* 1.149. [324](#-1)
 	* 1.150. [326. Power of Three](#PowerofThree)
 	* 1.151. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
-	* 1.152. [329. 【动态🚀规划】Longest Increasing Path in a Matrix](#LongestIncreasingPathinaMatrix)
+	* 1.152. [329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix](#dfsLongestIncreasingPathinaMatrix)
 	* 1.153. [332 Reconstruct Itinerary](#ReconstructItinerary)
 	* 1.154. [334 Increasing Triplet Subseque](#IncreasingTripletSubseque)
 	* 1.155. [337 House Robber III](#HouseRobberIII)
@@ -163,7 +163,7 @@
 	* 1.161. [346 Moving Average from Data Stream](#MovingAveragefromDataStream)
 	* 1.162. [347. Top K Frequent Elements](#TopKFrequentElements)
 	* 1.163. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
-	* 1.164. [350. 【动态🚀规划】Intersection of Two Arrays II](#IntersectionofTwoArraysII)
+	* 1.164. [350. 【动态🚀规划 + 双指针 + 哈希表】Intersection of Two Arrays II](#IntersectionofTwoArraysII)
 	* 1.165. [355. 设计推特 Design Twitter](#DesignTwitter)
 	* 1.166. [359 Logger Rate Limiter](#LoggerRateLimiter)
 	* 1.167. [367. Valid Perfect Square](#ValidPerfectSquare)
@@ -172,6 +172,7 @@
 	* 1.170. [374. Guess Number Higher or Lower](#GuessNumberHigherorLower)
 	* 1.171. [376-摆动序列](#-1)
 	* 1.172. [377. 【动态🚀规划】Combination Sum IV](#CombinationSumIV)
+		* 1.172.1. [类似题目：416题，494题，不可以重复，377重复](#416494377)
 	* 1.173. [378-有序矩阵中第K小的元素](#K)
 	* 1.174. [380 Insert Delete GetRandom O(1)](#InsertDeleteGetRandomO1)
 	* 1.175. [382 Linked List Random Node](#LinkedListRandomNode)
@@ -196,7 +197,8 @@
 	* 1.194. [413-【动态🚀规划】等差数列划分](#-1)
 	* 1.195. [414. Third Maximum Number](#ThirdMaximumNumber)
 	* 1.196. [415-Add Strings](#AddStrings)
-	* 1.197. [416. 【动态🚀规划】Partition Equal Subset Sum](#PartitionEqualSubsetSum)
+	* 1.197. [416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum](#dfsstartIforPartitionEqualSubsetSum)
+		* 1.197.1. [相似题目：494题](#494)
 	* 1.198. [417. Pacific Atlantic Water Flow](#PacificAtlanticWaterFlow)
 	* 1.199. [419. Battleships in a Board](#BattleshipsinaBoard)
 	* 1.200. [421 Maximum XOR of Two Numbers in an Array](#MaximumXORofTwoNumbersinanArray)
@@ -240,7 +242,7 @@
 	* 1.238. [485. Max Consecutive Ones](#MaxConsecutiveOnes)
 	* 1.239. [486. Predict the Winner](#PredicttheWinner)
 	* 1.240. [490 The Maze](#TheMaze)
-	* 1.241. [494. 【动态🚀规划】Target Sum](#TargetSum)
+	* 1.241. [494. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Target Sum](#dfsstartIforTargetSum)
 	* 1.242. [495 Teemo Attacking](#TeemoAttacking)
 	* 1.243. [496. 下一个更大元素 I (Next Greater Element I)](#INextGreaterElementI)
 	* 1.244. [497 Random Point in Non-overlapping](#RandomPointinNon-overlapping)
@@ -2290,7 +2292,7 @@ class Solution:
 
 
 
-###  1.32. <a name='-1'></a>131-【动态🚀规划】分割回文串
+###  1.32. <a name='-1'></a>131- 分割回文串
 
 [哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
 
@@ -2481,6 +2483,13 @@ class Solution:
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5d4nophqby00.webp" width="70%">
 
 ```py
+输入
+"aab"
+
+[0, inf, inf]
+[0, 0, inf]
+[0, 0, 1]
+
 class Solution:
     def minCut(self, s: str) -> int:
         n = len(s)
@@ -2502,32 +2511,6 @@ class Solution:
                         cutDP[endcut] = min(cutDP[endcut], cutDP[startcut] + 1) # 动态转移，将 cutDP[start] + 1处的转移过来
         
         return cutDP[n - 1]
-```
-
-```py
-看不懂
-class Solution:
-    def minCut(self, s: str) -> int:
-        def dfs(startI):
-            if startI >= len(s):
-                return -1
-            elif startI == len(s)-1: 
-                dp[startI] = 0
-                return 0
-            
-            if dp[startI] < 1e9: 
-                return dp[startI]
-
-            for i in range(startI,len(s)):
-                # 如果某个子序列回文
-                if s[startI:i+1]==s[startI:i+1][::-1] :
-                    dp[startI] = min(dfs(i+1),dp[startI])
-            dp[startI] += 1
-            return dp[startI]
-        
-        dp = [1e9]*len(s)
-        return dfs(0)
-
 ```
 
 ###  1.34. <a name='CloneGraph'></a>133. Clone Graph
@@ -2738,7 +2721,7 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
 
-###  1.39. <a name='WordBreak'></a>139 【动态🚀规划】Word Break
+###  1.39. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
 
 [小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
 
@@ -2752,14 +2735,6 @@ object Solution {
 # 此时相当于把打头的单词可能的情况全部找出来了。
 
 # 然后基于第一个单词一个单词一个单词地接上去。
-
-class Solution(object):
-    def wordBreak(self, s, wordDict):
-
-        dp = [True]
-        for end in range(1, len(s)+1):
-            dp += [any(dp[start] and s[start:end] in wordDict for start in range(end))]
-        return dp[-1]
 
 class Solution:
     def wordBreak(self, s, wordDict):
@@ -3864,93 +3839,25 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1iK411K7yG?spm_id_from=333.999.0.0)
 
+maxdp * num, mindp * num, num
+
 ```py
 # 动态🚀规划：遍历时，每次分别存储 前i个中连续数组 [最大的乘积和] 和 [最小乘积和]
-
-# 之所有存 [最小乘积和]，是因为 [最小乘积和] 如果是负数有可能遇到负数，
-
-# 相乘后结果更大 Python
-
-class Solution(object):
-    def maxProduct(self, nums):
-        n = len(nums)
-        maxdp = [ nums[0] for i in range(n)]
-        mindp = [ nums[0] for i in range(n)]
-
-        for i in range(1,n):
-        	maxdp[i] = max(mindp[i-1]*nums[i], maxdp[i-1]*nums[i],nums[i])
-        	mindp[i] = min(maxdp[i-1]*nums[i], mindp[i-1]*nums[i],nums[i])
-
-        return max(maxdp)
-
-class Solution:
-    def maxProduct(self,nums):
-        dp_max, dp_min = nums[0],nums[0] 
-        maxp = nums[0]
-        for i in range(1,len(nums)):
-            dp_max = max(nums[i], dp_max*nums[i], dp_min*nums[i]) 
-            dp_min = min(nums[i], dp_max*nums[i], dp_min*nums[i])
-            maxp = max(maxp, dp_max)
-        return maxp
-
-
-class Solution:
-    def maxProduct(self, nums: List[int]) -> int:
-        max_num = []
-        min_num = []
-
-        max_num.append(nums[0])
-        min_num.append(nums[0])
-
-        res = nums[0]
-
-        for i in range(1,len(nums)):
-            max_num.append(max(nums[i], nums[i]*max_num[i-1], nums[i]*min_num[i-1]))
-            min_num.append(min(nums[i], nums[i]*max_num[i-1], nums[i]*min_num[i-1]))
-            res = max(res, max_num[i])
-        return res
-# 优化空间
-class Solution:
-    def maxProduct(self, nums: List[int]) -> int:
-        maxF, minF, ans = nums[0], nums[0], nums[0]
-        length = len(nums)
-        for i in range(1, length):
-            mx, mn = maxF, minF # 只用两个变量来维护i−1时刻的状态,优化空间
-            maxF = max(mx * nums[i], nums[i], mn * nums[i])
-            minF = min(mn * nums[i], nums[i], mx * nums[i])
-            ans = max(maxF, ans)
-        
-        return ans
-
-
-class Solution:
-    def maxProduct(self, nums: List[int]) -> int:
-        n = len(nums)
-        dp_min = [1] * n
-        dp_max = [1] * n
-        dp_min[0] = nums[0]
-        dp_max[0] = nums[0]
-        res = dp_max[0]
-        for i in range(1, n):
-            dp_min[i] = min(dp_min[i-1]*nums[i], dp_max[i-1]*nums[i], nums[i])
-            dp_max[i] = max(dp_min[i-1]*nums[i], dp_max[i-1]*nums[i], nums[i])
-            res = max(res, dp_max[i])
-        return res
-
 
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
         if not nums: return 
         res = nums[0]
-        pre_max = nums[0]
-        pre_min = nums[0]
+        maxdp = nums[0]
+        mindp = nums[0]
         for num in nums[1:]:
-            cur_max = max(pre_max * num, pre_min * num, num)
-            cur_min = min(pre_max * num, pre_min * num, num)
-            res = max(res, cur_max)
-            pre_max = cur_max
-            pre_min = cur_min
+            maxdp, mindp = max(maxdp * num, mindp * num, num), min(maxdp * num, mindp * num, num)
+            res = max(res, maxdp)
         return res
+
+# 之所有存 [最小乘积和]，是因为 [最小乘积和] 如果是负数有可能遇到负数，
+
+# 相乘后结果更大 Python
 ```
 
 ```scala
@@ -5229,191 +5136,70 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
 
 ```py
-Python： 版本一
-
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if len(prices) == 0:
-            return 0
-        dp = [[0] * (2*k+1) for _ in range(len(prices))]
-        for j in range(1, 2*k, 2):
-            dp[0][j] = -prices[0]
-        for i in range(1, len(prices)):
-            for j in range(0, 2*k-1, 2):
-                dp[i][j+1] = max(dp[i-1][j+1], dp[i-1][j] - prices[i])
-                dp[i][j+2] = max(dp[i-1][j+2], dp[i-1][j+1] + prices[i])
-        return dp[-1][2*k]
-版本二
-
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if len(prices) == 0: return 0
-        dp = [0] * (2*k + 1)
-        for i in range(1,2*k,2):
-            dp[i] = -prices[0]
-        for i in range(1,len(prices)):
-            for j in range(1,2*k + 1):
-                if j % 2:
-                    dp[j] = max(dp[j],dp[j-1]-prices[i])
-                else:
-                    dp[j] = max(dp[j],dp[j-1]+prices[i])
-        return dp[2*k]
-
+# 背一背
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
         if not prices:
             return 0
 
-        n = len(prices)
-        k = min(k, n // 2)
-        buy = [[0] * (k + 1) for _ in range(n)]
-        sell = [[0] * (k + 1) for _ in range(n)]
-
-        buy[0][0], sell[0][0] = -prices[0], 0
-        for i in range(1, k + 1):
-            buy[0][i] = sell[0][i] = float("-inf")
-
-        for i in range(1, n):
-            buy[i][0] = max(buy[i - 1][0], sell[i - 1][0] - prices[i])
-            for j in range(1, k + 1):
-                buy[i][j] = max(buy[i - 1][j], sell[i - 1][j] - prices[i])
-                sell[i][j] = max(sell[i - 1][j], buy[i - 1][j - 1] + prices[i]);  
-
-        return max(sell[n - 1])
-
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if not prices:
-            return 0
-
-        n = len(prices)
-        k = min(k, n // 2)
-        buy = [0] * (k + 1)
-        sell = [0] * (k + 1)
-
-        buy[0], sell[0] = -prices[0], 0
-        for i in range(1, k + 1):
-            buy[i] = sell[i] = float("-inf")
-
-        for i in range(1, n):
-            buy[0] = max(buy[0], sell[0] - prices[i])
-            for j in range(1, k + 1):
-                buy[j] = max(buy[j], sell[j] - prices[i])
-                sell[j] = max(sell[j], buy[j - 1] + prices[i]); 
-
-        return max(sell)
+        buy = [prices[0]] * (k+1)
+        sell = [0] * (k+1)
+        for price in prices:
+            for time in range(1,k+1): 
+                # 对于每一个新来的价格，依 time 比较 and 更新
+                buy[time-1] = min(buy[time-1],  price - sell[time-1])
+                sell[time]  = max(sell[time], price - buy[time-1])
+                # print('价格:',price,'次数:',time,'buy:',buy)
+                # print('价格:',price,'次数:',time,'sell:',sell)
+                
+        return sell[k]
 
 
-```
+if __name__ == "__main__":   
+	s = Solution()
+	print(s.maxProfit(k = 2, prices = [3,2,6,5,0,3,-1,3]))
 
-```py
-## 未进行空间优化
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if not prices:
-            return 0
-
-
-        n = len(prices)
-        k = min(k, n // 2)  # k最大为总天数的一半
-        have = [[0] * (k + 1) for _ in range(n)]
-        no = [[0] * (k + 1) for _ in range(n)]
-
-
-        have[0][0], no[0][0] = -prices[0], 0
-        for i in range(1, k + 1): # 不合法状态
-            have[0][i] = no[0][i] = float("-inf")
-
-
-        for i in range(1, n): # j=0时, no[i][0]不合法
-            have[i][0] = max(have[i - 1][0], no[i - 1][0] - prices[i])
-            for j in range(1, k + 1):
-                have[i][j] = max(have[i - 1][j], no[i - 1][j] - prices[i])
-                no[i][j] = max(no[i - 1][j], have[i - 1][j - 1] + prices[i]);  
-
-
-        return max(no[n - 1])
-
-## 进行空间优化
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if not prices:
-            return 0
-
-
-        n = len(prices)
-        k = min(k, n // 2)  # k最大为总天数的一半
-        have = [0] * (k + 1)
-        no = [0] * (k + 1)
-
-
-        have[0], no[0] = -prices[0], 0
-        for i in range(1, k + 1): # 不合法状态
-            have[i] = no[i] = float("-inf")
-
-
-        for i in range(1, n): # j=0时, no[0]不合法
-            have[0] = max(have[0], no[0] - prices[i])
-            for j in range(k, 0, -1): # 优化空间, k倒序
-                have[j] = max(have[j], no[j] - prices[i])
-                no[j] = max(no[j], have[j - 1] + prices[i]); 
-
-
-        return max(no)
-
-```
-
-```py
-
-标准的三维DP动态🚀规划，三个维度，第一维表示天，第二维表示交易了几次，第三维表示是否持有股票。
-
-首先初始化三维数组，填充第1天操作j次的没买或买了的情况的初始值，没买就是0，第一天就买入即-prices[0]。这里定义卖出操作时交易次数加1
-
-然后是状态转移方程，下面描述的i, j都大于0
-
-「第i天交易次数0不持有股票」的情况只能来自「第i-1天交易次数0不持有股票」；
-
-「第i天交易j次不持有股票」的状态可以来自「第i-1天交易j次不持有股票」或者「第i-1天交易j-1次持有股票」(即今天卖出股票，然后交易次数+1)；
-
-「第i天交易j次持有股票」的状态可以来自「第i-1天交易j次持有股票」或者「第i-1天交易j次不持有股票」(即今天买入股票，因为是买入操作所以交易次数不变)
-
-最后对于这题LeetCode的测试样例里有超大k值的情况，退化成122题不限次数的操作，可以用贪心解决或者直接替换k值为数组长度的一半
-
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if not prices or not k:
-            return 0
-        n = len(prices)
-        
-        # 当k大于数组长度的一半时，等同于不限次数交易即122题，用贪心算法解决，否则LeetCode会超时，也可以直接把超大的k替换为数组的一半，就不用写额外的贪心算法函数
-        if k > n//2:
-            return self.greedy(prices)
-        
-        dp, res = [[[0]*2 for _ in range(k+1)] for _ in range(n)], []
-        # dp[i][k][0]表示第i天已交易k次时不持有股票 dp[i][k][1]表示第i天已交易k次时持有股票
-        # 设定在卖出时加1次交易次数
-        for i in range(k+1):
-            dp[0][i][0], dp[0][i][1] = 0, - prices[0]
-        for i in range(1, n):
-            for j in range(k+1):
-                if not j:
-                    dp[i][j][0] = dp[i-1][j][0]
-                else:
-                    dp[i][j][0] = max(dp[i-1][j][0], dp[i-1][j-1][1] + prices[i])
-                dp[i][j][1] = max(dp[i-1][j][1], dp[i-1][j][0] - prices[i])
-        # 「所有交易次数最后一天不持有股票」的集合的最大值即为问题的解
-        for m in range(k+1):
-            res.append(dp[n-1][m][0])
-        return max(res)
-    
-    # 处理k过大导致超时的问题，用贪心解决
-    def greedy(self, prices):
-        res = 0
-        for i in range(1, len(prices)):
-            if prices[i] > prices[i-1]:
-                res += prices[i] - prices[i-1]
-        return res
-
+价格: 3 次数: 1 buy: [3, 3, '*']
+价格: 3 次数: 1 sell: [0, 0, 0]
+价格: 3 次数: 2 buy: [3, 3, '*']
+价格: 3 次数: 2 sell: [0, 0, 0]
+--------------------
+价格: 2 次数: 1 buy: [2, 3, '*']
+价格: 2 次数: 1 sell: [0, 0, 0]
+价格: 2 次数: 2 buy: [2, 2, '*']
+价格: 2 次数: 2 sell: [0, 0, 0]
+--------------------
+价格: 6 次数: 1 buy: [2, 2, '*']
+价格: 6 次数: 1 sell: [0, 4, 0]
+价格: 6 次数: 2 buy: [2, 2, '*']
+价格: 6 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 5 次数: 1 buy: [2, 2, '*']
+价格: 5 次数: 1 sell: [0, 4, 4]
+价格: 5 次数: 2 buy: [2, 1, '*']
+价格: 5 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 0 次数: 1 buy: [0, 1, '*']
+价格: 0 次数: 1 sell: [0, 4, 4]
+价格: 0 次数: 2 buy: [0, -4, '*']
+价格: 0 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 3 次数: 1 buy: [0, -4, '*']
+价格: 3 次数: 1 sell: [0, 4, 4]
+价格: 3 次数: 2 buy: [0, -4, '*']
+价格: 3 次数: 2 sell: [0, 4, 7]
+--------------------
+价格: -1 次数: 1 buy: [-1, -4, '*']
+价格: -1 次数: 1 sell: [0, 4, 7]
+价格: -1 次数: 2 buy: [-1, -5, '*']
+价格: -1 次数: 2 sell: [0, 4, 7]
+--------------------
+价格: 3 次数: 1 buy: [-1, -5, '*']
+价格: 3 次数: 1 sell: [0, 4, 7]
+价格: 3 次数: 2 buy: [-1, -5, '*']
+价格: 3 次数: 2 sell: [0, 4, 8]
+--------------------
+8
 
 
 ```
@@ -5829,106 +5615,13 @@ object Solution {
 
 ```py
 动态🚀规划，典型例题：
-
-class Solution(object):
-    def rob(self, nums):
-        last = 0 
-        now = 0
-        for i in nums: 
-            #这是一个动态🚀规划问题
-            #其实就是一个奇数和偶数位元素求和，哪个更大么？
-            last, now = now, max(last + i, now)
-        return now
-
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        y = yesterday = 0
-        t = today = 0
-        for j in nums:
-            y, t = t, max(y + j, t)
-        return t
-```
-
-```py
-状态转移方程，dp[i]=max(dp[i-1],dp[i-2]+nums[i]
-
-而后发现dp[i] ,只与dp[i-2],dp[i-1]有关了
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        if not nums:
-            return 0
-
-        size = len(nums)
-        if size == 1:
-            return nums[0]
-        
-        dp = [0] * size
-        dp[0] = nums[0]
-        dp[1] = max(nums[0], nums[1])
-        for i in range(2, size):
-            dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
-        
-        return dp[size - 1]
-
-
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        if not nums:
-            return 0
-
-        size = len(nums)
-        if size == 1:
-            return nums[0]
-        
-        first, second = nums[0], max(nums[0], nums[1])
-        for i in range(2, size):
-            first, second = second, max(first + nums[i], second)
-        
-        return second
-
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        if len(nums) == 1:
-            return nums[0]
-        dp = [0] * len(nums)
-        dp[0] = nums[0]
-        dp[1] = max(nums[0], nums[1])
-        for i in range(2, len(nums)):
-            dp[i] = max(dp[i-1], (dp[i-2]+nums[i]))
-        return dp[len(nums)-1]
-
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        if len(nums) == 0:
-            return 0
-        if len(nums) == 1:
-            return nums[0]
-        dp = [0] * len(nums)
-        dp[0] = nums[0]
-        dp[1] = max(nums[0], nums[1])
-        for i in range(2, len(nums)):
-            dp[i] = max(dp[i-2]+nums[i], dp[i-1])
-        return dp[-1]
-```
-
-```py
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        n = len(nums)
-        sums = [0, 0]
-        ret = 0
-        for i in range(n):
-            t = i % 2;
-            sums[t] += nums[i]
-            if sums[t] <= sums[1 - t]:
-                ret += sums[1 - t]
-                sums[0] = sums[1] = 0
-        ret += max(sums[0], sums[1])
-        return ret
+        dp0 = 0
+        dp1 = 0
+        for num in nums:
+            dp0, dp1 = dp1, max(dp0 + num, dp1)
+        return dp1
 ```
 
 
@@ -8606,96 +8299,58 @@ object Solution2 {
 [小明](https://www.bilibili.com/video/BV1GD4y1d7DS?spm_id_from=333.999.0.0)
 
 ```py
+# dp[i] = max(dp[i-2] + nums[i], dp[i-1])
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        # 易错点：注意特殊情况
+        if n <= 2:
+            return max(nums)
+
+        dp1 = [0] * (n - 1)
+        dp1[0] = nums[0]
+        dp1[1] = max(nums[1],nums[0])
+        for i in range(2, n - 1):
+            dp1[i] = max(dp1[i-2] + nums[i], dp1[i-1])
+
+        dp2 = [0] * (n - 1)
+        dp2[0] = nums[1]
+        dp2[1] = max(nums[1],nums[2])
+        # 易错点：注意，根据递推式，这里不是，dp2[1] = nums[2]
+        for i in range(2, n - 1):
+            dp2[i] = max(dp2[i-2] + nums[i + 1], dp2[i-1])
+
+        return max(dp1[-1],dp2[-1])
+
 # 核心原则就是：第一个和最后一个不能同时抢。 
 # 所以：要么不抢第一个，要么不抢最后一个。 
 # 注意，不抢第一个的时候，最后一个可抢可不抢；
 # 另一种情况同理 取两种情况中的最大值
 
-class Solution(object):
-    def rob(self, nums):
-        n = len(nums)
-        if n == 0:
-          return 0
-        if n <= 2:
-          return max(nums)
-        # 不抢第一个
-        dp1 = [0] * n
-        dp1[0] = 0
-        dp1[1] = nums[1]
-        for i in range(2, n):
-          dp1[i] = max(dp1[i-1],nums[i] + dp1[i-2])
+降维以后：
 
-        # 不抢最后一个
-        dp2 = [0] * n
-        dp2[0] = nums[0]
-        dp2[1] = max(nums[0],nums[1])
-        for i in range(2, n-1):
-          dp2[i] = max(dp2[i-1],nums[i] + dp2[i-2])
-        return max(dp1[n-1],dp2[n-2])
-
-
-
-class Solution(object):
-    def rob(self, nums):
-
-        n = len(nums)
-        if n == 0 : return 0
-        if n == 1 : return nums[0]
-        if n == 2 : return max(nums[0],nums[1])
-        
-        dp = [[0 for i in range(n)] for j in range(n)]
-
-        for i in range(n):
-            for j in range(i,n):
-                if j == i:
-                    dp[i][j] = nums[j]
-                elif j == i + 1:
-                    dp[i][j] = max(nums[i],nums[i+1])
-                else:
-                    dp[i][j] = max(dp[i][j-2] + nums[j], dp[i][j-1])
-
-        # rob without n-1, or rob with  n-1
-        val = max(dp[0][n-2], dp[1][n-3] + nums[n-1])
-
-        return val
-```
-
-```py
-class Solution(object):
-    def rob(self, nums):
-
-        def RobRange(start,end):
-            #前1个，前2个
-            dp1=0
-            dp2=0
-            for i in range(start, end + 1):
-                maxdp = max(dp1, dp2 + nums[i])
-                dp2 = dp1
-                dp1 = maxdp
-            return maxdp
-
-        n = len(nums)
-        if n == 1:
-            return nums[0]
-        return max(RobRange(0,n-2),RobRange(1,n-1))
-
-
+# dp[i] = max(dp[i-2] + nums[i], dp[i-1])
 class Solution:
-    def rob(self, nums):
-        def RobRange(start: int, end: int) -> int:
-            dp1 = nums[start]
-            dp2 = max(nums[start], nums[start + 1])
-            for i in range(start + 2, end + 1):
-                dp1, dp2 = dp2, max(dp1 + nums[i], dp2)
-            return dp2
-        
+    def rob(self, nums: List[int]) -> int:
         n = len(nums)
-        if n == 1:
-            return nums[0]
-        elif n == 2:
-            return max(nums[0], nums[1])
-        else:
-            return max(RobRange(0, n - 2), RobRange(1, n - 1))
+        # 易错点：注意特殊情况
+        if n <= 2:
+            return max(nums)
+
+        def robrange(start,end):
+            dp0 = 0
+            dp1 = nums[start]
+            for i in range(start + 1,end):
+                dp1, dp0 = max(dp0 + nums[i], dp1), dp1
+            return dp1
+        # 也可以这么写：
+        # def robrange(start,end):
+        #     dp0 = 0
+        #     dp1 = 0
+        #     for num in nums[start:end]:
+        #         dp1, dp0 = max(dp0 + num, dp1), dp1
+        #     return dp1
+        return max(robrange(0,n-1),robrange(1,n))
 ```
 
 ###  1.92. <a name='CombinationSumIII216-III'></a>216. Combination Sum III 216-组合总和 III
@@ -8984,59 +8639,34 @@ object Solution {
 [官方](https://www.bilibili.com/video/BV1mA411q7Sw?spm_id_from=333.999.0.0)
 
 ```py
-# 暴力卷积法
-
-import numpy as np
-from scipy.signal import convolve2d
-class Solution:
-    def maximalSquare(self, matrix):
-        if not matrix: return 0
-        matrix=np.array(matrix,int)
-        for i in range(1,min(matrix.shape)+1):
-            if convolve2d(matrix,np.ones((i,i),int),'valid').max()<i**2:
-                return (i-1)**2
-        return i**2
-```
-
-```py
-
-
-# 回想了一下上次的思考，对于这个矩阵中需要构成square(len>1)，
-
 # 右下角的坐标为(x, y) ，那么(x - 1, y - 1)一定需要是一个square，
-
 # 并且该点的左边全为1，上边也为1，按照这个进行理解变长的增加。
-
+构建dp：
 class Solution:
     def maximalSquare(self, matrix):
         m, n = len(matrix), len(matrix[0])
-        # initialze a (m, n) array
         dp = [[0] * n for _ in range(m)]
-        res = 0
+        maxEdge = 0
         for i in range(m):
             for j in range(n):
                 if matrix[i][j] == '1':
-                    dp[i][j] = min(min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1
-                    res = max(dp[i][j], res)
-        return res * res
+                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
+                    maxEdge = max(dp[i][j], res)
+        return maxEdge * maxEdge
 
-# 用原数组存算出来的值，空间复杂度是不是就降到O(1)了
-
+原地修改：
 class Solution:
     def maximalSquare(self, matrix):
         maxEdge = 0
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
-                if i and j:
-                    if matrix[i][j]=="1":
-                        matrix[i][j]=min(int(matrix[i-1][j-1]),int(matrix[i][j-1]),int(matrix[i-1][j]))+1
+                if i and j: # 这个写法妙啊，刚好就跳过了 i-1
+                    if matrix[i][j] == "1":
+                        matrix[i][j] = min(int(matrix[i-1][j-1]), int(matrix[i][j-1]), int(matrix[i-1][j])) + 1
                     else:
-                        matrix[i][j]=0
+                        matrix[i][j] = 0
                 maxEdge = max(maxEdge,int(matrix[i][j]))
         return maxEdge**2       
-# 浑元形意太极门的人过来，集合了
-
-
 ```
 
 ###  1.98. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
@@ -11753,7 +11383,7 @@ class Solution:
 防止num为0时无限循环
 ```
 
-###  1.123. <a name='UglyNumberII'></a>264. 【动态🚀规划】Ugly Number II
+###  1.123. <a name='UglyNumberII'></a>264. 【动态🚀规划 + 3指针】Ugly Number II
 
 [花花酱](https://www.bilibili.com/video/BV1yW411C7Sm?spm_id_from=333.999.0.0)
 
@@ -11761,99 +11391,35 @@ class Solution:
 
 ```py
 # python 实习面试这道题挂了，但我就不懂了，第一次见这题目谁能想到3指针的方法？
-
+# [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
 class Solution(object):
     def nthUglyNumber(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
         res = [1]
         idx2 = 0
         idx3 = 0
         idx5 = 0
         for i in range(n-1):
-            res.append(min(res[idx2]*2,res[idx3]*3,res[idx5]*5))
-            if res[-1] == res[idx2]*2:
+            nxt = min(res[idx2]*2, res[idx3]*3, res[idx5]*5)
+            res.append(nxt)
+            print(res[idx2]*2, res[idx3]*3, res[idx5]*5, res)
+            if nxt == res[idx2]*2:
                 idx2 += 1
-            if res[-1] == res[idx3]*3:
+            if nxt == res[idx3]*3:
                 idx3 += 1
-            if res[-1] == res[idx5]*5:
+            if nxt == res[idx5]*5:
                 idx5 += 1
         return res[-1]
 
-# 就这？好清晰，牛的牛的
+# 2 3 5 [1, 2]
+# 4 3 5 [1, 2, 3]
+# 4 6 5 [1, 2, 3, 4]
+# 6 6 5 [1, 2, 3, 4, 5]
+# 6 6 10 [1, 2, 3, 4, 5, 6]
+# 8 9 10 [1, 2, 3, 4, 5, 6, 8]
+# 10 9 10 [1, 2, 3, 4, 5, 6, 8, 9]
+# 10 12 10 [1, 2, 3, 4, 5, 6, 8, 9, 10]
+# 12 12 15 [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
 
-class Solution(object):
-    def nthUglyNumber(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        a,b,c = 0,0,0
-        dp = [0]*n
-        dp[0] = 1
-        for i in range(1,n):
-            dp[i] = min(dp[a]*2,dp[b]*3,dp[c]*5)
-            if dp[i] == dp[a]*2:
-                a += 1
-            if dp[i] == dp[b]*3:
-                b += 1
-            if dp[i] == dp[c]*5:
-                c += 1
-        return dp[n-1]
-
-class Solution:
-    def nthUglyNumber(self, n: int) -> int:
-        dp = [0] * (n + 1)
-        dp[1] = 1
-        p2 = p3 = p5 = 1
-
-        for i in range(2, n + 1):
-            num2, num3, num5 = dp[p2] * 2, dp[p3] * 3, dp[p5] * 5
-            dp[i] = min(num2, num3, num5)
-            if dp[i] == num2:
-                p2 += 1
-            if dp[i] == num3:
-                p3 += 1
-            if dp[i] == num5:
-                p5 += 1
-        
-        return dp[n]
-# 还可以优化：
-# 根据页面hint 来做的
-class Solution(object):
-    def nthUglyNumber(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        if n == 1:
-            return 1
-        else:
-            import collections
-            q2 = collections.deque()
-            q3 = collections.deque()
-            q5 = collections.deque()
-            q2.append(2)
-            q3.append(3)
-            q5.append(5)
-            while n > 1:
-                    x = min(q2[0],q3[0],q5[0])
-                    if x == q2[0]:
-                            x = q2.popleft()
-                            q2.append(2*x)
-                            q3.append(3*x)
-                            q5.append(5*x)
-                    elif x == q3[0]:
-                            x = q3.popleft()
-                            q3.append(3*x)
-                            q5.append(5*x)
-                    else:
-                            x = q5.popleft()
-                            q5.append(5*x)
-                    n -= 1
-            return x
 ```
 
 ###  1.124. <a name='MissingNumber'></a>268 Missing Number
@@ -12097,168 +11663,26 @@ class Solution1 extends VersionControl {
 
 ```
 
-###  1.128. <a name='PerfectSquares'></a>279 【动态🚀规划】Perfect Squares
+###  1.128. <a name='PerfectSquares'></a>279 【动态🚀规划 + 背包】Perfect Squares
 
 [小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
 
 ```py
 # 动态🚀规划
-
-# ```
-# 1. 初始化 inf 从0开始，所以数组长度 n+1 
-# 2. 考虑到是平方，意味着他的间隔可能是跳跃性的，所以 
-#         n  =   (n-j*j)  + j*j
-#         dp[i] = dp[i-1] + 1
-# 3. 那么 min 就是未来找到最小值而存在的，因为需要遍历很多个平方， dp[i] 用户存储最小值
-# 4. 返回 dp[-1] 的结果，也就是最终 n 的值
-# ```
-
-# ```python
-class Solution(object):
-    def numSquares(self, n) -> int:
-        square_nums = [i**2 for i in range(1, int(n**0.5)+1)]
-        dp = [float('inf')] * (n+1)
-        dp[0] = 0
-        for i in range(1, n+1):
-            for square in square_nums:
-                if i < square:
-                    break
-                # print("%s --- %s结果需要一次 --- %s结果需要%s次" % (i, square, i-square, dp[i-square]))
-                dp[i] = min(dp[i], dp[i-square] + 1)
-        return dp[-1]
-
-# 我会背包了 我真牛逼！ 打开评论 我是s逼
-# 超时，最后测试用例7217
-class Solution:
-    def numSquares(self, n) -> int:
-        goods = []
-        for i in range(1,101):
-            goods.append(i * i)
-        dp = [float('inf')] * (n + 1)
-        dp[0] = 0
-        for g in goods:
-            for j in range(1,n+1):
-                if j - g >= 0:
-                    dp[j] = min(dp[j-g] + 1,dp[j])
-        return dp[n]
-# Python：
-
-class Solution:
-    def numSquares(self, n) -> int:
         '''版本一，先遍历背包, 再遍历物品'''
-        # 初始化
-        nums = [i**2 for i in range(1, n + 1) if i**2 <= n]
-        dp = [10**4]*(n + 1)
-        dp[0] = 0
-        # 遍历背包
-        for j in range(1, n + 1):
-            # 遍历物品
-            for num in nums:
-                if j >= num:
-                    dp[j] = min(dp[j], dp[j - num] + 1)
-        return dp[n]
- class Solution:
-    '''版本一，先遍历背包, 再遍历物品'''
-    def numSquares(self, n) -> int:
-        dp = [n] * (n + 1)
-        dp[0] = 0
-        # 遍历背包
-        for j in range(1, n+1):
-            for i in range(1, n):
-                num = i ** 2
-                if num > j: break
-                # 遍历物品
-                if j - num >= 0:
-                    dp[j] = min(dp[j], dp[j - num] + 1)
-        return dp[n]   
- class Solution:
-    def numSquares1(self, n) -> int:
         '''版本二， 先遍历物品, 再遍历背包'''
-        # 初始化
-        nums = [i**2 for i in range(1, n + 1) if i**2 <= n]
-        dp = [10**4]*(n + 1)
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [10e5] * (n + 1)
         dp[0] = 0
-        # 遍历物品
-        for num in nums:
-            # 遍历背包
+        # 也可以 sqrt = floor(n**0.5) 
+        sqrt = ceil(n**0.5) 
+        for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
+            num = i**2
             for j in range(num, n + 1):
-                dp[j] = min(dp[j], dp[j - num] + 1)
-        return dp[n]
-# 有没有python用动态🚀规划超时的兄弟。
-# 
-class Solution:
-    def numSquares(self, n) -> int:
-        f = [float('inf')] * (n+1)
-        f[0] = 0
-        for  i in range(1,n+1):
-            i_sqrt = i**0.5
-            j = 1
-            while j <= i_sqrt:
-                f[i] = min(f[i],f[i-j**2]+1)
-                j += 1
-        return f[n]
-class Solution:
-    def numSquares(self, n) -> int:
-        """
-        完全背包问题： f[i][j]: 前i个物品，占据j空间最少可以放几个。
-        f[i][j] = min(f[i - 1][j], f[i][j - v[i] + w[i], ..., f[i][j - k * v[i]] + k * w[i])
-        = min(f[i-1][j], f[i][j - v[i] + w[i]])
-        空间优化之后得到：
-        f[i] = min(f[i], f[i- v[i] + w[i]])
-        """
-        f = [n] * (n + 1)
-        f[0] = 0
-        for i in range(1, n + 1):
-            j = 1
-            while j * j <= i:
-                f[i] = min(f[i], f[i - j * j] + 1)
-                j += 1
-        return f[n]
-```
-
-
-```py
-# 执行时间7256ms，在超时的边缘反复横跳
-from math import ceil
-class Solution:
-    def numSquares(self, n) -> int:
-
-        def f(n):
-            if n <= 3:
-                return n
-            # if n is square itself
-            if sqrt(n) % 1 == 0:
-                return 1
-            return min(
-                (f(n - i**2) + 1 for i in reversed(range(1, ceil(sqrt(n)))))
-            )
-
-        return f(n)
-```
-
-```py
-# 四平方定理： 任何一个正整数都可以表示成不超过四个整数的平方之和。 
-
-# 推论：满足四数平方和定理的数n（四个整数的情况），必定满足 n=4^a(8b+7)
-
-class Solution:
-    def numSquares(self, n):
-            """
-            :type n
-            :rtype
-            """
-            while n % 4 == 0: 
-                n /= 4 
-            if n % 8 == 7: 
-                return 4 
-            a = 0 
-            while a**2 <= n: 
-                b = int((n - a**2)**0.5) 
-                if a**2 + b**2 == n: 
-                    return (not not a) + (not not b) 
-                a += 1 
-            return 3
-# 一个解题合集，欢迎小伙伴一起
+                if j >= num:
+                    dp[j] = min(dp[j], dp[j-num] + 1) 
+        return dp[-1]
 ```
 
 ###  1.129. <a name='ExpressionAddOperators'></a>282. Expression Add Operators
@@ -12927,40 +12351,18 @@ class Solution(object):
         return str(bull) + 'A' + str(cow) + 'B'
 ```
 
-###  1.137. <a name='LongestIncreasingSubsequence'></a>300 【动态🚀规划】Longest Increasing Subsequence 最长上升子序列
+###  1.137. <a name='LongestIncreasingSubsequence'></a>300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列
 
 [花花酱](https://www.bilibili.com/video/BV1Wf4y1y7ou?spm_id_from=333.999.0.0)
 
-[哈哈哈](https://www.bilibili.com/video/BV1rT4y1u7jV?spm_id_from=333.999.0.0)
+[哈哈哈](https://www.bilibili.com/video/BV1rT4y1ujV?spm_id_from=333.999.0.0)
+
+动态规划： 时间复杂度为 O(n2)
 
 ```py
-# 贪心 + 二分查找
-
-class Solution:
-    def lengthOfLIS(self, nums):
-        d = []
-        for n in nums:
-            if not d or n > d[-1]:
-                d.append(n)
-            else:
-                l, r = 0, len(d) - 1
-                loc = r
-                while l <= r:
-                    mid = (l + r) // 2
-                    if d[mid] >= n:
-                        loc = mid
-                        r = mid - 1
-                    else:
-                        l = mid + 1
-                d[loc] = n
-        return len(d)
 
 class Solution(object):
     def lengthOfLIS(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
         if not nums:
             return 0
         dp = [1 for i in range(len(nums))]
@@ -12970,36 +12372,27 @@ class Solution(object):
                     dp[i] = max(dp[j]+1, dp[i])
         return max(dp)
 
-class Solution:
-    def lengthOfLIS(self, nums):
-        if len(nums) <= 1:
-            return len(nums)
-        dp = [1] * len(nums)
-        result = 0
-        for i in range(1, len(nums)):
-            for j in range(0, i):
-                if nums[i] > nums[j]:
-                    dp[i] = max(dp[i], dp[j] + 1)
-            result = max(result, dp[i]) #取长的子序列
-        return result
+```
 
+贪心 + 二分查找
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6wjfuj0uqvo0.webp)
+
+```py
 class Solution:
-    def lengthOfLIS(self, nums):
-        if not nums:
-            return 0
-        dp = []
-        for i in range(len(nums)):
-            dp.append(1)
-            for j in range(i):
-                if nums[i] > nums[j]:
-                    dp[i] = max(dp[i], dp[j] + 1)
-        return max(dp)
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        res = []
+        for num in nums:
+            # bisect_left会把新的元素放在相等元素前面, 即原来值5的索引位置2
+            i = bisect_left(res, num)
+            if i == len(res):
+                res.append(num)
+            else:
+                res[i] = num
+        return len(res)
 ```
 
 ```scala
-
-
-
 /**
 * chosen answer
 * dynamic programming 
@@ -13287,163 +12680,40 @@ class NumMatrix:
 ```py
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
-        
-        n = len(prices)
-        # f[i][0]: 手上持有股票的最大收益
-        # f[i][1]: 手上不持有股票，并且处于冷冻期中的累计最大收益
-        # f[i][2]: 手上不持有股票，并且不在冷冻期中的累计最大收益
-        f = [[-prices[0], 0, 0]] + [[0] * 3 for _ in range(n - 1)]
-        for i in range(1, n):
-            f[i][0] = max(f[i - 1][0], f[i - 1][2] - prices[i])
-            f[i][1] = f[i - 1][0] + prices[i]
-            f[i][2] = max(f[i - 1][1], f[i - 1][2])
-        
-        return max(f[n - 1][1], f[n - 1][2])
-
+        buy = prices[0]
+        lazy = 0
+        profit = 0
+        for price in prices:
+            # 顺序不能错
+            buy = min(buy, price - lazy)
+            # buy <- lazy
+            lazy = max(profit, lazy)
+            # lazy <- profit
+            profit = max(profit, price - buy)
+        return max(lazy,profit)
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
-        
-        n = len(prices)
-        f0, f1, f2 = -prices[0], 0, 0
-        for i in range(1, n):
-            newf0 = max(f0, f2 - prices[i])
-            newf1 = f0 + prices[i]
-            newf2 = max(f1, f2)
-            f0, f1, f2 = newf0, newf1, newf2
-        
-        return max(f1, f2)
+        buy = prices[0]
+        lazy = 0
+        profit = 0
+        for price in prices:
+            # 顺序不能错
+            buy = min(buy, price - lazy)
+            # buy <- lazy
+            lazy = max(profit, lazy)
+            # lazy <- profit
+            profit = price - buy
+        return max(lazy,profit)
 
 
-```
-
-```py
-## 两个状态
-## 未进行空间优化
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        if n <= 1 :
-            return 0
-        
-        have = [0] * n
-        no = [0] * n
-        have[0] = - prices[0]
-        no[0] = 0     
-        have[1] = max(have[0], -prices[1])
-        no[1] = max(no[0], have[0] + prices[1])
-        for i in range(2, n) :
-            no[i] = max(no[i - 1], have[i - 1] + prices[i])
-            have[i] = max(have[i - 1], no[i - 2] - prices[i])
-        
-        return no[n - 1]
-
-## 空间优化
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        if n <= 1 :
-            return 0
-        
-        have = - prices[0] # 对have[0]初始化
-        no = 0     
-        temp = no # 当i=2时, 记录下第一个no[i-2]
-        have = max(have, -prices[1]) # 对have[1]初始化
-        no = max(no, have + prices[1])
-        for i in range(2, n) :
-            no_i2 = temp # 记录下no[i-2]
-            temp = no    # 记录下no[i-1]
-            no = max(no, have + prices[i])
-            have = max(have, no_i2 - prices[i])
-        return no
-
-## 三个状态
-## 未进行空间优化
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-        have = [0] * length  # 表示第i天持有股票所得最多现金
-        no = [0] * length    # 表示第i天不持有股票且不在冷冻期所得最多现金
-        cold = [0] * length  # 表示第i天不持有股票且在冷冻期所得最多现金
-        have[0] = -prices[0] # 此时的持有股票就一定是买入股票了
-        no[0] = 0            # 不持有股票那么现金就是0
-        cold[0] = 0
-        for i in range(1, length):
-            have[i] = max(have[i-1], no[i-1] - prices[i]); 
-            no[i] = max(no[i-1], cold[i-1]);
-            cold[i] = have[i-1] + prices[i];
-        return max(cold[-1], no[-1])
-
-## 空间优化
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        length = len(prices)
-        if len == 0:
-            return 0
-
-        have = -prices[0] # 此时的持有股票就一定是买入股票了
-        no = 0            # 不持有股票那么现金就是0
-        cold = 0
-        for i in range(1, length):
-            have = max(have, no - prices[i]); 
-            no = max(no, cold);
-            cold = have + prices[i];
-        return max(cold, no)
-
-sell[i]表示截至第i天，最后一个操作是卖时的最大收益；
-buy[i]表示截至第i天，最后一个操作是买时的最大收益；
-cool[i]表示截至第i天，最后一个操作是冷冻期时的最大收益；
 递推公式：
 sell[i] = max(buy[i-1]+prices[i], sell[i-1]) (第一项表示第i天卖出，第二项表示第i天冷冻)
 buy[i] = max(cool[i-1]-prices[i], buy[i-1]) （第一项表示第i天买进，第二项表示第i天冷冻）
 cool[i] = max(sell[i-1], buy[i-1], cool[i-1])
-python:
 
-class Solution:
-    def maxProfit(self, prices):
-        n = len(prices)
-        if n == 0:
-            return 0     
-        sell = [0 for _ in range(n)]
-        buy = [0 for _ in range(n)]
-        cool = [0 for _ in range(n)]
-        buy[0] = -prices[0]
-        for i in range(1,n):
-            sell[i] = max(buy[i-1] + prices[i], sell[i-1])
-            buy[i] = max(cool[i-1] - prices[i], buy[i-1])
-            cool[i] = max(sell[i-1], buy[i-1],cool[i-1])
-        return sell[-1]
-
-Python：
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        if n == 0:
-            return 0
-        dp = [[0] * 4 for _ in range(n)]
-        dp[0][0] = -prices[0] #持股票
-        for i in range(1, n):
-            dp[i][0] = max(dp[i-1][0], max(dp[i-1][3], dp[i-1][1]) - prices[i])
-            dp[i][1] = max(dp[i-1][1], dp[i-1][3])
-            dp[i][2] = dp[i-1][0] + prices[i]
-            dp[i][3] = dp[i-1][2]
-        return max(dp[n-1][3], dp[n-1][1], dp[n-1][2])
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        # dp0: 手上有股票   dp1: 手上没股票且当天卖出   dp2: 手上没股票且之前卖出
-        dp0, dp1, dp2 = -prices[0], 0, 0
-        for p in prices[1:]:
-            dp0, dp1, dp2 = max(dp0, dp2-p), dp0+p, max(dp1, dp2)
-        return max(dp1, dp2)
 ```
+
 
 ```scala
 
@@ -13705,7 +12975,7 @@ class Solution(object):
 
 [花花酱](https://www.bilibili.com/video/BV11W411U7NR?spm_id_from=333.999.0.0)
 
-###  1.148. <a name='CoinChange'></a>322. 【动态🚀规划】Coin Change
+###  1.148. <a name='dfsCoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change
 
 [花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
 
@@ -13714,6 +12984,35 @@ class Solution(object):
 [小明](https://www.bilibili.com/video/BV1ty4y187dh?spm_id_from=333.999.0.0)
 
 ```py
+动态🚀规划
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # 这道题的难点在于：dp数组的初始化
+        dp = [10e9] * (amount + 1)
+        dp[0] = 0
+
+        for coin in coins:
+            for i in range(coin, amount + 1):
+                if i >= coin:
+                    dp[i] = min(dp[i], dp[i-coin] + 1)
+         # 这道题的难点在于：最后结果的输出
+        return dp[-1] if dp[-1] != 10e9 else -1
+
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [10e9] * (amount + 1)
+        dp[0] = 0
+
+        # 这道题 i 和 coin 倒是无所谓
+        for i in range(1, amount + 1):
+            for coin in coins:
+                if i >= coin:
+                    dp[i] = min(dp[i], dp[i-coin] + 1)
+        return dp[-1] if dp[-1] != 10e9 else -1
+
+
 # 方法一：记忆化搜索
 
 class Solution:
@@ -13733,47 +13032,8 @@ class Solution:
         if amount < 1: return 0
         return dp(amount)
 
-# 方法二：动态🚀规划
 
-class Solution:
-    def coinChange(self, coins, amount):
-        dp = [float('inf')] * (amount + 1)
-        dp[0] = 0
-        
-        for coin in coins:
-            for x in range(coin, amount + 1):
-                dp[x] = min(dp[x], dp[x - coin] + 1)
-        return dp[amount] if dp[amount] != float('inf') else -1 
 
-# python 完全背包问题
-
-class Solution:
-    def coinChange(self, coins, amount):
-        if coins == []: return -1
-        dp = [amount+1] * (amount + 1)
-        dp[0] = 0
-        for i in range(1, amount+1):
-            for coin in coins:
-                if i >= coin:
-                    dp[i] = min(dp[i], dp[i-coin]+1)
-
-        if dp[-1] == amount+1: 
-            return -1
-        else:
-            return dp[amount] 
-
-class Solution:
-    def coinChange(self, coins, amount):
-        '''版本一'''
-        # 初始化
-        dp = [amount + 1]*(amount + 1)
-        dp[0] = 0
-        # 遍历物品
-        for coin in coins:
-            # 遍历背包
-            for j in range(coin, amount + 1):
-                dp[j] = min(dp[j], dp[j - coin] + 1)
-        return dp[amount] if dp[amount] < amount + 1 else -1
 
 # BFS
 
@@ -14119,11 +13379,42 @@ class Solution(object):
         return head 
 ```
 
-###  1.152. <a name='LongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划】Longest Increasing Path in a Matrix
+###  1.152. <a name='dfsLongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
 
 [花花酱](https://www.bilibili.com/video/BV1mW411d7q8?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1VK4y1K7SX?spm_id_from=333.999.0.0)
+
+动态🚀规划
+
+```py
+先预处理，对矩阵的值按从小到大排序，按大小顺序才能保证依赖的子问题都求解过了
+
+dp[i][j]表示以matrix[i][j]结尾的最长递增长度
+
+初始dp[i][j]都等于1
+若matrix[i][j]四个方向有任意小于它，则可以更新dp[i][j] = max(dp[i][j], 1 + dp[r][c])
+
+class Solution(object):
+    def longestIncreasingPath(self, matrix):
+        if not matrix or not matrix[0]:
+            return 0
+        m, n = len(matrix), len(matrix[0])
+        lst = []
+        for i in range(m):
+            for j in range(n):
+                lst.append((matrix[i][j], i, j))
+        lst.sort()
+        dp = [[0 for _ in range(n)] for _ in range(m)]
+        for num, i, j in lst:
+            dp[i][j] = 1
+            for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                r, c = i + di, j + dj
+                if 0 <= r < m and 0 <= c < n:
+                    if matrix[i][j] > matrix[r][c]:
+                        dp[i][j] = max(dp[i][j], 1 + dp[r][c])
+        return max([dp[i][j] for i in range(m) for j in range(n)])
+```
 
 ```py
 class Solution:
@@ -14188,45 +13479,9 @@ class Solution:
 
 
 
-先预处理，对矩阵的值按从小到大排序，按大小顺序才能保证依赖的子问题都求解过了
 
-dp[i][j]表示以matrix[i][j]结尾的最长递增长度
 
-初始dp[i][j]都等于1
-若matrix[i][j]四个方向有任意小于它，则可以更新dp[i][j] = max(dp[i][j], 1 + dp[r][c])
-class Solution(object):
-    def longestIncreasingPath(self, matrix):
-        if not matrix or not matrix[0]:
-            return 0
-        m, n = len(matrix), len(matrix[0])
-        lst = []
-        for i in range(m):
-            for j in range(n):
-                lst.append((matrix[i][j], i, j))
-        lst.sort()
-        dp = [[0 for _ in range(n)] for _ in range(m)]
-        for num, i, j in lst:
-            dp[i][j] = 1
-            for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                r, c = i + di, j + dj
-                if 0 <= r < m and 0 <= c < n:
-                    if matrix[i][j] > matrix[r][c]:
-                        dp[i][j] = max(dp[i][j], 1 + dp[r][c])
-        return max([dp[i][j] for i in range(m) for j in range(n)])
 
-我用的是优先队列就省去sort啦~
-
-之所以要先排序，我觉得很可能是因为倒数第二行dp[i][j]=max(dp[i][j],1+dp[r][c])。 
-
-这里出现了dp[r][c]，所以我们在计算dp[i][j]之前，必须先把dp[r][c]计算出来。 
-
-matrix(r,c)位置的值比matrix（i，j）位置的值小（从if语句看出来的）。
-
-所以我们只要保证，先把matrix中值小的位置的dp先算出来，
-
-再把值大的位置的dp算出来，倒数第二行的代码就有意义了。所以我们要先排序。
-
- 想到了和你一样的dp数组，没想到这种dp数组的填充方式，非常巧妙呀！
 ```
 
 ```py
@@ -14801,100 +14056,43 @@ object Solution {
 
 [小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
 
-###  1.164. <a name='IntersectionofTwoArraysII'></a>350. 【动态🚀规划】Intersection of Two Arrays II 
+###  1.164. <a name='IntersectionofTwoArraysII'></a>350. 【动态🚀规划 + 双指针 + 哈希表】Intersection of Two Arrays II 
 
 [小梦想家](https://www.bilibili.com/video/BV1gx411X7q8?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV165411879H?spm_id_from=333.999.0.0)
 
 ```py
+"""
+动态🚀规划：容易出错，最好别用
+"""
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        if len(nums1) > len(nums2):
-            return self.intersect(nums2, nums1)
-        
-        m = collections.Counter()
-        for num in nums1:
-            m[num] += 1
-        
-        intersection = list()
-        for num in nums2:
-            if (count := m.get(num, 0)) > 0:
-                intersection.append(num)
-                m[num] -= 1
-                if m[num] == 0:
-                    m.pop(num)
-        
-        return intersection
-
-
-class Solution:
-    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        # 输入：
+        # [2,1]
+        # [1,2]
+        # 输出：
+        # [1]
+        # 预期结果：
+        # [1,2]
+        # 所以必须要排序
         nums1.sort()
         nums2.sort()
+        dp = [[[]] * (len(nums2) + 1) for _ in range(len(nums1) + 1)]
+        # 错误写法：dp = [[] * (len(nums1) + 1) for _ in range(len(nums2) + 1)]
 
-        length1, length2 = len(nums1), len(nums2)
-        intersection = list()
-        index1 = index2 = 0
-        while index1 < length1 and index2 < length2:
-            if nums1[index1] < nums2[index2]:
-                index1 += 1
-            elif nums1[index1] > nums2[index2]:
-                index2 += 1
-            else:
-                intersection.append(nums1[index1])
-                index1 += 1
-                index2 += 1
-        
-        return intersection
+        for i in range(1, len(nums1)+1):
+            for j in range(1, len(nums2)+1):
+                if nums1[i-1] == nums2[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + [nums1[i-1]] # 易错点：不能用append
+                else:
+                    # 精简的写法：dp[i][j] = max(dp[i][j-1], dp[i-1][j], key = len).copy()
+                    if len(dp[i][j-1]) > len(dp[i-1][j]):
+                        dp[i][j] = dp[i][j-1]  
+                    else:
+                        dp[i][j] = dp[i-1][j]
+        return dp[-1][-1]
 
-
-python大法好啊
-
-class Solution:
-    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        num1 = collections.Counter(nums1)
-        num2 = collections.Counter(nums2)
-        num = num1 & num2
-        return num.elements()
-        最后是不是应该 return(list(num.elements())
-         .elements()返回的是迭代器，应该加。
-         我觉得也是， num.elements() 好像是个地址值
-         大佬👍。学习了Counter的&用法。不过elements函数，key如果是负数，就不输出了。还好本题都>= 0
-
-大佬，想问一下， & 操作什么意思
-求两个Counter中key的并集
-```
-
-```py
-class Solution(object):
-    def intersect(self, nums1, nums2):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        """
-        inter = set(nums1) & set(nums2)
-        l = []
-        for i in inter:
-            l += [i] * min(nums1.count(i), nums2.count(i))  
-        return l
-        看似简单，实则时间复杂度提升到n方了，count()的时间复杂度就是n
-
-
-"""
-哈希表
-"""
-from collections import Counter
-class Solution:
-    def intersect(self, nums1, nums2):
-        nums1 = Counter(nums1)
-        res = []
-        for i in nums2:
-            if i in nums1 and nums1[i]:
-                res.append(i)
-                nums1[i] -= 1
-        return res
 """
 排序后，再使用双指针
 """
@@ -14912,57 +14110,22 @@ class Solution:
                 l1 += 1
             else:
                 l2 += 1
-        return res
+        return res     
+
+
 """
-动态🚀规划
+哈希表
 """
+from collections import Counter
 class Solution:
     def intersect(self, nums1, nums2):
-        nums1 = sorted(nums1)
-        nums2 = sorted(nums2)
-        dp = [[[]] * (len(nums2)+1) for _ in range(len(nums1)+1)]
-        for i in range(1, len(nums1)+1):
-            for j in range(1, len(nums2)+1):
-                if nums1[i-1] == nums2[j-1]:
-                    dp[i][j] = dp[i-1][j-1] + [nums1[i-1]]
-                else:
-                    dp[i][j] = max(dp[i][j-1], dp[i-1][j], key=len).copy()
-        return dp[-1][-1]
-"""
-暴力
-"""
-class Solution:
-    def intersect(self, nums1, nums2):
+        nums1 = Counter(nums1)
         res = []
-        for i in range(len(nums1)):
-            for j in range(len(nums2)):
-                if nums1[i] == nums2[j]:
-                    res.append(nums1[i])
-                    nums2[j] = float("inf")
-                    break
+        for i in nums2:
+            if i in nums1 and nums1[i]:
+                res.append(i)
+                nums1[i] -= 1
         return res
-
-nums2[j] = float("inf")小白问这行代码什么作用
-
-暴力解法，如果nums2的长度大于nums1的长度，就会缺数据，需要先找到最长的数组再进行遍历
-
-这行代码很关键。
-
-假设num1和num2的重复元素为x，个数分别为n1和n2，
-
-由于返回的是nums1中的x，即返回n1个x，如果n1<n2，没有问题，
-
-如果n1>n2，没有这行代码的话，就有问题了。
-
-这行代码的作用就是删除nums2中x，这样nums1中多余的x在nums2中就没有匹配，
-
-最后返回的x的个数就是min(n1, n2)。
-
-一句话总结，这句话的作用就是，确保返回nums1和nums2中重复元素个数的较小值。
-
-这里不一定是赋值 float('inf')，只要不在元素取值范围内即可，
-
-0 <= nums1[i], nums2[i] <= 1000。PS: 写得好像挺啰嗦的~
 ```
 
 ```scala
@@ -15271,66 +14434,23 @@ class Solution:
 
 ###  1.172. <a name='CombinationSumIV'></a>377. 【动态🚀规划】Combination Sum IV
 
+####  1.172.1. <a name='416494377'></a>类似题目：416题，494题，不可以重复，377重复
+
 [花花酱](https://www.bilibili.com/video/BV1gW411y7uz?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1zA411L7nu?spm_id_from=333.999.0.0)
 
 ```py
-# 我们需要一个一维数组dp，其中dp[i]表示目标数为i的解的个数，
-# 然后我们从1遍历到target，对于每一个数i，遍历nums数组，
-# 如果i>=x, dp[i] += dp[i - x]。这个也很好理解，
-# 比如说对于[1,2,3] 4，这个例子，当我们在计算dp[3]的时候，3可以拆分为1+x，
-# 而x即为dp[2]，3也可以拆分为2+x，此时x为dp[1]，3同样可以拆为3+x，
-# 此时x为dp[0]，我们把所有的情况加起来就是组成3的所有情况了
-class Solution(object):
-    def combinationSum4(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target
-        :rtype: List[List[int]]
-        """
-        dp = [0 for i in range(target+1)]
-
-        dp[0] = 1
-
-        for i in range(target+1):
-            for candidate in candidates:
-                if i >= candidate:
-                    dp[i] += dp[i - candidate]
-        return dp[-1]
 class Solution:
-    def combinationSum4(self, nums, target):
+    def combinationSum4(self, nums: List[int], target: int) -> int:
         dp = [0] * (target + 1)
         dp[0] = 1
-
-        for i in range(1, target+1):
-            for j in nums:
-                if i >= j:
-                    dp[i] += dp[i - j]
-
-        return dp[-1]
-class Solution:
-    def combinationSum4(self, nums: List[int], target) -> int:
-        dp = [0]*(target+1)
-        dp[0] = 1 # i - num = 0 ----> i = num时，表示只取 i 一个数 就是一种，因此这里赋值为1。
-        nums.sort()
-        for i in range(1,target+1):
-            for num in nums: 
-                if i - num >= 0:
-                    dp[i] += dp[i-num]
-        return dp[target]
-# 不需要sort吧，如果你sort的话，可以在 if i - num >= 0: 
-
-# dp[i] += dp[i-num] 后面加一个 else： break 不然白白sort了
-class Solution:
-    def combinationSum4(self, nums: List[int], target) -> int:
-        dp = [1] + [0] * target
-        for i in range(1, target + 1):
+        # 易错点：for i in range(nums[0], target+1): 不适用于 nums = [3,1,2,3]
+        for i in range(1, target+1): # 一定要先target再num，这样才能有重复
             for num in nums:
-                if num <= i:
+                if i >= num:
                     dp[i] += dp[i - num]
-        
-        return dp[target]
+        return dp[-1]
 ```
 
 ###  1.173. <a name='K'></a>378-有序矩阵中第K小的元素
@@ -15776,99 +14896,24 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV19f4y197yS?spm_id_from=333.999.0.0)
 
+动态🚀规划
+
 ```py
 class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
-        n, m = len(s), len(t)
-        i = j = 0
-        while i < n and j < m:
-            if s[i] == t[j]:
-                i += 1
-            j += 1
-        return i == n
-
-
-
-class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
-        n, m = len(s), len(t)
-        f = [[0] * 26 for _ in range(m)]
-        f.append([m] * 26)
-
-        for i in range(m - 1, -1, -1):
-            for j in range(26):
-                f[i][j] = i if ord(t[i]) == j + ord('a') else f[i + 1][j]
-        
-        add = 0
-        for i in range(n):
-            if f[add][ord(s[i]) - ord('a')] == m:
-                return False
-            add = f[add][ord(s[i]) - ord('a')] + 1
-        
-        return True
-
-
-
-
-这题就是 公共最长子序列LCS的翻版。。代码一模一样，只需要最后判定 LCS长度是否等于短字符串长度即可，这样最好理解。。。
-
-class Solution(object):
-    def isSubsequence(self, s, t):
-        m, n = len(s), len(t)
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        for i in range(1, m + 1, 1):
-            for j in range(1, n + 1, 1):
-                if s[i - 1] == t[j - 1]:
-                    dp[i][j] = dp[i - 1][j - 1] + 1
+    def isSubsequence(self, t: str, s: str) -> bool:
+        dp = [[False] * (len(s) + 1) for _ in range(len(t) + 1)]
+        for j in range(len(s)+1):
+            dp[0][j] = True
+        for i in range(1, len(t)+1):
+            for j in range(1, len(s)+1):
+                if t[i-1] == s[j-1]:
+                    dp[i][j] = dp[i-1][j-1]
                 else:
-                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
-        return True if dp[m][n] == m else False
+                    dp[i][j] = dp[i][j-1]
+        return dp[-1][-1]
 ```
 
 ```py
-dp挺难理解的,代码加了注释希望帮助理解吧
-
-class Solution2:
-    def isSubsequence(self, s: str, t: str) -> bool:
-        '''动态🚀规划,挺难理解的'''
-        n, m = len(s), len(t)
-        f = [[0] * 26 for _ in range(m)] # 初始化m个长度为26的列表记录字母a-z的位置
-        f.append([m] * 26)
-
-        for i in range(m - 1, -1, -1):
-            for j in range(26):
-                # 记录字母a-z在t[i:]中的位置,如果第i个字符等于字符[a-z][j],那么j在i的位置,
-                #否则j在t[i+1:]范围,这里倒序遍历,如果j不存在那么f[i][j]的值就是m
-                f[i][j] = i if ord(t[i]) == j + ord('a') else f[i + 1][j]
-
-        add = 0
-        for i in range(n):
-            if f[add][ord(s[i]) - ord('a')] == m: # 从t的第0个字符开始,如果f[0][j]==m,
-                # 也就是说字母j不在t内,返回false,[ord(s[i]) - ord('a')]表示j,也就是在f数组中
-                #的位置
-                return False
-            add = f[add][ord(s[i]) - ord('a')] + 1
-
-        return True
-
-
-
-思路一：库函数
-
-class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool: 
-        loc = -1
-        for a in s:
-            loc = t.find(a, loc + 1)
-            if loc == -1:
-                return False
-        return True
-思路二：生成迭代器
-
-class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
-        t = iter(t)
-        return all(c in t for c in s)
 思路三：双指针
 
 class Solution:
@@ -15883,50 +14928,34 @@ class Solution:
             else:
                 j += 1    
         return i == len(s)
-思路四：二分法
 
 class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:  
-        from collections import defaultdict
-        import bisect
-        lookup = defaultdict(list)
-        for idx, val in enumerate(t):
-            lookup[val].append(idx)
-        # print(lookup)
-        loc = -1
-        for a in s:
-            j = bisect.bisect_left(lookup[a], loc + 1)
-            if j >= len(lookup[a]): return False
-            loc = lookup[a][j]
-        return True
-
+    def isSubsequence(self, s: str, t: str) -> bool:
+        n, m = len(s), len(t)
+        i = j = 0
+        while i < n and j < m:
+            if s[i] == t[j]:
+                i += 1
+            j += 1
+        return i == n
 
 ```
 
 ```py
 
+思路二：生成迭代器
 简单粗暴.
 
 class Solution(object):
     def isSubsequence(self, s, t):
-        """
-        :type a: str
-        :type b: str
-        :rtype: bool
-        """
         t = iter(t)
-        return all(i in t for i in s) 
+        return all(char in t for char in s) 
 
 
 翻译了一下
 
 class Solution(object):
     def isSubsequence(self, s, t):
-        """
-        :type s: str
-        :type t: str
-        :rtype: bool
-        """
         t = iter(t)
         res = []
         for c in s:
@@ -16635,27 +15664,19 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV13f4y167YZ?spm_id_from=333.999.0.0)
 
 ```py
-# 双指针，不用递归不用动态🚀规划，i代表数列起始位置，j代表数列终结位置，
-# 如果不满足等差数列，就把i移动到j-1处，满足就计数（不是+1，而是＋j-i-1）
+class Solution:
+    def numberOfArithmeticSlices(self, nums: List[int]) -> int:
+        tmp = []
+        for i in range(1,len(nums)):
+            tmp.append(nums[i]-nums[i-1])
+        
+        dp = [0] * len(tmp)
+        for i in range(1,len(tmp)):
+            if tmp[i] == tmp[i-1]:
+                dp[i] = 1 + dp[i-1]
+        return sum(dp)
 
-class Solution(object):
-    def numberOfArithmeticSlices(self, nums):
-        n=len(nums)
-        if n<3:
-            return 0
-        i=0
-        j=2
-        c=0
-        while(j<n):
-            if j-i<2:
-                j+=1
-                continue
-            if nums[j]-nums[j-1]==nums[j-1]-nums[j-2]:
-                c+=j-i-1
-                j+=1
-            else:
-                i=j-1
-        return c
+其他写法：
 
 class Solution:
     def numberOfArithmeticSlices(self, nums):
@@ -16664,52 +15685,6 @@ class Solution:
         for i in range(2,n):
             dp[i] = dp[i-1]+1 if nums[i]-nums[i-1]==nums[i-1]-nums[i-2] else 0
         return sum(dp)
-
-class Solution:
-    def numberOfArithmeticSlices(self, nums):
-        if len(nums) < 3: return 0
-        dp = [0] * len(nums)
-        for i in range(2, len(nums)):
-            if nums[i] - nums[i-1] == nums[i-1] - nums[i-2]:
-                # 如果能和前两位数字组成等差数列
-                # 以i为结尾的数字可以和前两位组成新的等差数列（1个）
-                # 以i-1位置数字为结尾的等差数列加上i位置的数字可以组成新的等差数列（dp[i-1]）
-                # 因此以i位置数字结尾的等差数列为上面两种等差数列数量的和
-                dp[i] = dp[i-1] + 1
-        return sum(dp)
-
-class Solution:
-    def numberOfArithmeticSlices(self, nums):
-        i, res = 0, 0
-        while i <= len(nums)-3:
-            j = i + 1
-            differ = nums[j] - nums[i]
-            while j + 1 < len(nums) and nums[j+1] - nums[j] == differ:
-                j += 1
-            
-            res += (j - i) * (j - i - 1) // 2
-            i = j
-
-        return res
-
-class Solution:
-    def numberOfArithmeticSlices(self, nums):
-        if len(nums)<3:return 0
-        ans=0
-        lenth=2
-        nums[0]=nums[1]-nums[0]
-        for i in range(2,len(nums)):
-            nums[i-1]=nums[i]-nums[i-1]
-            if nums[i-1]==nums[i-2]:
-                lenth+=1
-            elif lenth>2:
-                ans+=(lenth-2)*(lenth-1)//2
-                lenth=2
-            else:
-                lenth=2
-        if lenth>2:
-            return (lenth-2)*(lenth-1)//2+ans
-        return ans
 ```
 
 ###  1.195. <a name='ThirdMaximumNumber'></a>414. Third Maximum Number
@@ -16720,7 +15695,9 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
 
-###  1.197. <a name='PartitionEqualSubsetSum'></a>416. 【动态🚀规划】Partition Equal Subset Sum
+###  1.197. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
+
+####  1.197.1. <a name='494'></a>相似题目：494题
 
 [花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
 
@@ -16728,105 +15705,9 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1oZ4y1G7QY?spm_id_from=333.999.0.0)
 
-```py
-# python 一行：
-from functools import reduce 
-class Solution(object):
-    def canPartition(self, s):
-        return 1-sum(s)%2==reduce(lambda x,y:x|(x<<y), s, 1)>>sum(s)//2&1
-# 思路很简单，就是每次循环拿一个数字，在和既有的求和结果组合。
-
-# 但是能想到这个是真的厉害。牛逼。 我把字典换成集合，加了点注释
-
-class Solution:
-    # 讨论区看到的一种解法，很巧妙。
-    def canPartition(self, nums: List[int]) -> bool:
-        # 常规判定
-        if len(nums) < 2:
-            return  False
-
-        ac = sum(nums)
-        if ac % 2 == 1:
-            return  False
-
-        res_ = ac / 2
-        # 利用集合记录各种组合下来的和
-        d = set()
-        #最开始，什么都不取。这也是为了后面，对应不取某个数字的操作
-        d.add(0)
-        # 顺次取数字
-        for num in nums:
-            # 和既有的和操作，key = 0时，说明不取这个数，
-            for k in list(d):
-                r = num + k
-                # 每次判定是否达标
-                if r == res_:
-                    return True
-                # 计算的和加入字典
-                d.add(r)
-        return False
-
-class Solution(object):
-    def canPartition(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: bool
-        """
-        if not nums or len(nums) == 0:
-            return True
-        if sum(nums) % 2 != 0: ## 总和必须为偶数，否则肯定无法取两个集合的sum相等
-            return False
-        half_sum = sum(nums)//2
-        dp = [False] * (half_sum+1)
-        dp[0] = True
-        for i in range(len(nums)):
-            for j in range(half_sum, nums[i]-1, -1):
-                dp[j] = dp[j] or dp[j-nums[i]]
-        print(dp)
-        return dp[half_sum]
-
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        taraget = sum(nums)
-        if taraget % 2 == 1: return False
-        taraget //= 2
-        dp = [0] * 10001
-        for i in range(len(nums)):
-            for j in range(taraget, nums[i] - 1, -1):
-                dp[j] = max(dp[j], dp[j - nums[i]] + nums[i])
-        return taraget == dp[taraget]
-# 可以看成重量和价值都为nums的01背包问题
-
-class Solution(object):
-    def canPartition(self, nums):
-        sums = sum(nums)
-        if sums%2==1:
-            return False
-        sums= sums//2
-        dp = [0 for i in range(sums+1)]
-        for i in range(1,len(nums)+1):
-            for j in range(sums,0,-1):
-                if j>=nums[i-1]:
-                    dp[j] = max(dp[j],dp[j-nums[i-1]]+nums[i-1])
-        return dp[-1]==sums
-
-# python递归...
-
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        # @lru_cache(None)
-        def dp(i,N):                                #dp(i,N)返回nums[0...i]中且当前和为N的状态下，能否凑成和为target的结果
-            if N>target or i<0:return False
-            if N==target:return True
-            return dp(i-1,N+nums[i]) or dp(i-1,N)   #每次可以选择将nums[i]加进N，或者不将nums[i]加进N
-
-        if sum(nums)%2!=0:return False              #目标和为奇数时不能分割成两个元素相等的子集
-        target=sum(nums)//2                         #原问题等价于将nums划分为元素和为nums一半的两个子集的划分方式是否存在
-        return dp(len(nums)-1,0)
-```
+“动态🚀规划” 的解法
 
 ```py
-
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
         n = len(nums)
@@ -16842,9 +15723,51 @@ class Solution:
         for i, num in enumerate(nums):
             for j in range(target, num - 1, -1):
                 dp[j] |= dp[j - num]
+                # dp[j] = dp[j] or dp[j-num]
         
         return dp[target]
+
+根据494题修改的动态规划：
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        if sums % 2 == 1: return False
+        bagSize = sums // 2
+        # 构建dp，numLen在外围
+        dp = [0] * (bagSize+1)
+        # 赋值，dp的第一个元素
+        dp[0] = 1
+        for num in nums:
+            for j in range(bagSize,num-1,-1):
+                dp[j] += dp[j-num] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对弈2个num，bagsize的填满情况
+        return dp[-1] != 0
 ```
+
+```py
+# python递归...
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        # @lru_cache(None)
+        def dp(i,N):                                #dp(i,N)返回nums[0...i]中且当前和为N的状态下，能否凑成和为target的结果
+            if N>target or i<0:return False
+            if N==target: return True
+            # 这个很巧妙每次可以选择将nums[i]加进N，或者不将nums[i]加进N
+            return dp(i-1, N+nums[i]) or dp(i-1,N)   
+
+        if sum(nums)%2 != 0: return False              #目标和为奇数时不能分割成两个元素相等的子集
+        target = sum(nums) // 2                         #原问题等价于将nums划分为元素和为nums一半的两个子集的划分方式是否存在
+        return dp(len(nums)-1, 0)
+```
+
+
 
 ###  1.198. <a name='PacificAtlanticWaterFlow'></a>417. Pacific Atlantic Water Flow
 
@@ -18739,7 +17662,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1az4y1f7Hn?spm_id_from=333.999.0.0)
 
-###  1.241. <a name='TargetSum'></a>494. 【动态🚀规划 + 背包】Target Sum
+###  1.241. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
 
@@ -18748,52 +17671,36 @@ class Solution:
 0-1背包（二维动态规划）
 
 ```py
-
-# 官方的动态🚀规划
 class Solution:
     def findTargetSumWays(self, nums: List[int], target) -> int:
         n = len(nums)
-        total = sum(nums)
-        neg = total - target
-        if neg < 0 or neg % 2 == 1:
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        bagSize = sums + target
+        # 也可以写成：bagSize = sums - target
+
+        if bagSize % 2 == 1 or bagSize < 0:
             return 0
-        neg = neg // 2
-        dp = [[0] * (neg + 1) for _ in range(n + 1)]
+        bagSize = bagSize // 2
+        # 构建dp，numLen在外围
+        dp = [[0] * (bagSize+1) for _ in range(n+1)]
+        # 赋值，dp的第一个元素
         dp[0][0] = 1
-        for i in range(1, n + 1):
-            num = nums[i - 1]
-            for j in range(neg + 1):
-                dp[i][j] += dp[i - 1][j]
-                if j >= num:
-                    dp[i][j] += dp[i - 1][j - num]
-        return dp[-1][-1]
-
-# 二维数组的外层循环，一般不都是从0到nums.length-1吗，为什么这里是从1到nums.length+1，百思不得其解
-class Solution(object):
-    def findTargetSumWays(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target
-        :rtype
-        """
-        su = sum(nums)
-
-        if (su + target) % 2 == 1 or su < target: return 0
-
-        new_target = (su - target) // 2
-
-        dp = [[0 for _ in  range(new_target + 1)] for _ in range(len(nums) + 1)] 
-        dp[0][0] = 1
-
-        for i in range(1, len(nums) + 1):
-            u = nums[i-1]
-            for j in range(0, new_target + 1):
-                if j >= u:
-                    dp[i][j] = dp[i-1][j] + dp[i-1][j-u]
+        for i in range(1,n+1):
+            num = nums[i-1] # 易错点: num = nums[i-1]单独提出来写，不容易出错
+            for j in range(bagSize+1):
+                if j-num >= 0: # 易错点: 这里必需要是>=
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-num]
                 else:
                     dp[i][j] = dp[i-1][j]
-
-        return dp[len(nums)][new_target]
+#    [[1, 0, 0, 0, 0], 
+#     [1, 1, 0, 0, 0], 
+#     [1, 2, 1, 0, 0], 
+#     [1, 3, 3, 1, 0], 
+#     [1, 4, 6, 4, 1], 
+#     [1, 5, 10, 10, 5]]
+        return dp[-1][-1]
 ```
 
 0-1背包（一维动态规划）
@@ -18801,43 +17708,26 @@ class Solution(object):
 ```py
 class Solution:
     def findTargetSumWays(self, nums: List[int], target) -> int:
-        s = sum(nums)
-        if (target+s)&1: return 0
-        
-        bagSize = (target+s) >> 1
-        dp = [1] + [0]*bagSize
-        for num in nums:
-            for i in range(bagSize, num-1, -1):
-                dp[i] += dp[i-num]
-        return dp[-1]
-
-class Solution:
-    def findTargetSumWays(self, nums, target) -> int:
-        tmp = sum(nums)-target
-        if tmp<0 or tmp&1:return 0
-        neg = tmp>>1
-        dp = [1] + [0]*neg
-        for num in nums:
-            for j in range(neg,num-1,-1):
-                dp[j] += dp[j-num]
-        return dp[-1]
-# 感觉用sum-target返回0会剪枝更多 速度稍微快那么一点点
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        sumValue = sum(nums)
-        if target > sumValue or (sumValue + target) % 2 == 1: 
+        n = len(nums)
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        bagSize = sums + target
+        # 也可以写成：bagSize = sums - target
+        if bagSize % 2 == 1 or bagSize < 0:
             return 0
-
-        bagSize = (sumValue + target) // 2
-        dp = [0] * (bagSize + 1)
-        if dp:
-            dp[0] = 1
-
+        bagSize = bagSize // 2
+        # 构建dp，numLen在外围
+        dp = [0] * (bagSize+1)
+        # 赋值，dp的第一个元素
+        dp[0] = 1
         for num in nums:
-            for j in range(bagSize, num - 1, -1):
-                dp[j] += dp[j - num]
-        return dp[bagSize] if dp else 0
+            for j in range(bagSize,num-1,-1):
+                dp[j] += dp[j-num] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对弈2个num，bagsize的填满情况
+        return dp[-1]
 
 数字： 1 dp: [1, 0, 0, 0, 0]
 数字： 1 dp: [1, 0, 0, 0, 0]
@@ -18865,24 +17755,25 @@ class Solution:
 数字： 1 dp: [1, 5, 10, 10, 5]
 --------------------
 
-
-
 class Solution:
     def findTargetSumWays(self, nums: List[int], target) -> int:
-        if not nums or sum(nums) < target or (sum(nums) + target)%2 == 1:
+        n = len(nums)
+        sums = sum(nums)
+        bagSize = sums + target
+        if bagSize % 2 == 1 or bagSize < 0:
             return 0
+        bagSize = bagSize // 2
 
-        s = (sum(nums) + target)//2 #只一个子集，使得子集和为s
+        @cache
+        def dfs(startI,total):
+            # 如果要写递归，那么这个递归的结束条件一定要背出来
+            if startI == len(nums):
+                return 1 if total == 0 else 0
+            # 如果要写递归，那么这个递归的结束条件一定要背出来
+            return dfs(startI+1,total-nums[startI]) + dfs(startI+1,total)
 
-        # 对于每一个数都有加入和不加入两种情况，因此可以使用背包问题的方法求解
-        dp = [0 for _ in range(s+1)]
-        if dp:
-            dp[0] = 1 # 当i - num =0也就是这个数加入/不加入正好可以满足要求时，解法为1（这个地方确实想了很久，看了题解）
-        for num in nums:
-            for i in range(s,num-1,-1):#参考背包问题的自顶向下
-                dp[i] = dp[i] + dp[i - num]
+        return dfs(0,bagSize)
 
-        return dp[-1] if dp else 0
 ```
 
 ```py
