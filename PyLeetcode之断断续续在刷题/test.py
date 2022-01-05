@@ -1,18 +1,10 @@
 class Solution:
-    def lengthOfLIS(self, nums):
-        res = []
-        for num in nums:
-            if not res or num > res[-1]:
-                res.append(num)
-            else:
-                l, r = 0, len(res) - 1
-                idx = r
-                while l <= r:
-                    mid = (l + r) // 2
-                    if res[mid] >= num:
-                        idx = mid
-                        r = mid - 1
-                    else:
-                        l = mid + 1
-                res[idx] = num
-        return len(res)
+    def maxProduct(self, nums: List[int]) -> int:
+        if not nums: return 
+        res = nums[0]
+        maxdp = nums[0]
+        mindp = nums[0]
+        for num in nums[1:]:
+            maxdp, mindp = max(maxdp * num, mindp * num, num), min(maxdp * num, mindp * num, num)
+            res = max(res, maxdp)
+        return res

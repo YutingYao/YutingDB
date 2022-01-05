@@ -4,7 +4,7 @@
 * 3. [题目](#-1)
 	* 3.1. [1 Two Sum](#TwoSum)
 	* 3.2. [2. Add Two Numbers](#AddTwoNumbers)
-	* 3.3. [3. 数组中重复的数字 Longest Substring Without Repeating Characters](#LongestSubstringWithoutRepeatingCharacters)
+	* 3.3. [3. 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters](#LongestSubstringWithoutRepeatingCharacters)
 	* 3.4. [4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays](#MedianofTwoSortedArrays)
 	* 3.5. [5. Longest Palindromic Substring -最长回文子串](#LongestPalindromicSubstring-)
 	* 3.6. [6. ZigZag Conversion](#ZigZagConversion)
@@ -23,7 +23,7 @@
 	* 3.19. [20-Valid parentheses](#Validparentheses)
 	* 3.20. [21-Merge two sorted lists](#Mergetwosortedlists)
 	* 3.21. [22. Generate Parentheses](#GenerateParentheses)
-	* 3.22. [23. Merge k Sorted Lists](#MergekSortedLists)
+	* 3.22. [23. 【最小堆🌵】Merge k Sorted Lists](#MergekSortedLists)
 	* 3.23. [24-Swap Nodes in Pairs](#SwapNodesinPairs)
 	* 3.24. [26-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray)
 	* 3.25. [27-python-Remove element](#python-Removeelement)
@@ -48,7 +48,7 @@
 	* 3.44. [49 Group Anagrams](#GroupAnagrams)
 	* 3.45. [50 Pow(x, n)](#Powxn)
 	* 3.46. [51. 数组中的逆序对](#-1)
-	* 3.47. [53-Maximum subarray](#Maximumsubarray)
+	* 3.47. [53-【贪心🧡】Maximum subarray](#Maximumsubarray)
 	* 3.48. [54. Spiral Matrix](#SpiralMatrix)
 	* 3.49. [55 Jump Game](#JumpGame)
 	* 3.50. [56-I. 数组中数字出现的次数](#I.)
@@ -71,7 +71,7 @@
 	* 3.67. [73. Set Matrix Zeroes](#SetMatrixZeroes)
 	* 3.68. [74 Search a 2D Matrix](#Searcha2DMatrix)
 	* 3.69. [75. Sort Colors](#SortColors)
-	* 3.70. [76-最小覆盖子串](#-1)
+	* 3.70. [76-【滑动窗口🔹】最小覆盖子串](#-1)
 	* 3.71. [77. 组合](#-1)
 	* 3.72. [78. Subsets 78-子集](#Subsets78-)
 	* 3.73. [79. Word Search](#WordSearch)
@@ -545,7 +545,7 @@ object Solution {
   }
 ```
 
-###  3.3. <a name='LongestSubstringWithoutRepeatingCharacters'></a>3. 数组中重复的数字 Longest Substring Without Repeating Characters
+###  3.3. <a name='LongestSubstringWithoutRepeatingCharacters'></a>3. 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters
 
 [哈哈哈](https://www.bilibili.com/video/BV1h54y1B7No?spm_id_from=333.999.0.0)
 
@@ -3339,7 +3339,7 @@ object Solution {
 
 ```
 
-###  3.22. <a name='MergekSortedLists'></a>23. Merge k Sorted Lists
+###  3.22. <a name='MergekSortedLists'></a>23. 【最小堆🌵】Merge k Sorted Lists
 
 [花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
 
@@ -6347,7 +6347,7 @@ object Solution2-1 {
 
 [官方](https://www.bilibili.com/video/BV1Qk4y1r7u5?spm_id_from=333.999.0.0)
 
-###  3.47. <a name='Maximumsubarray'></a>53-Maximum subarray
+###  3.47. <a name='Maximumsubarray'></a>53-【贪心🧡】Maximum subarray
 
 [哈哈哈](https://www.bilibili.com/video/BV1QJ411R75H?spm_id_from=333.999.0.0)
 
@@ -8383,7 +8383,7 @@ class Solution:
                 idx += 1
 ```
 
-###  3.70. <a name='-1'></a>76-最小覆盖子串
+###  3.70. <a name='-1'></a>76-【滑动窗口🔹】最小覆盖子串
 
 [哈哈哈](https://www.bilibili.com/video/BV1PM4y1K7p6?spm_id_from=333.999.0.0)
 
