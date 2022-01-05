@@ -1125,168 +1125,100 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV11W411Z7jG?spm_id_from=333.999.0.0)
 
-###  1.20. <a name=''></a>547 【🍒并查集】朋友圈
+###  1.20. <a name=''></a>547 【🍒并查集 + dfs + 队列】朋友圈
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ta411F7rk?spm_id_from=333.999.0.0)
 
 [郭郭](https://www.bilibili.com/video/BV1eX4y157jr?from=search&seid=13286624680279107242&spm_id_from=333.337.0.0)
 
+🍒并查集
+
+```py
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def find(i: int) -> int:
+            if parent[i] != i:
+                parent[i] = find(parent[i])
+            return parent[i]
+        
+        def union(i: int, j: int):
+            parent[find(i)] = find(j)
+        
+        proN = len(isConnected)
+        parent = list(range(proN))
+        
+        for i in range(proN):
+            for j in range(i + 1, proN):
+                if isConnected[i][j] == 1:
+                    union(i, j)
+        
+        res = sum(parent[i] == i for i in range(proN))
+        # 求出 i 就是 parent 的总和
+        return res
+```
+
 ```py
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         def dfs(i: int):
-            for j in range(provinces):
+            for j in range(proN):
                 if isConnected[i][j] == 1 and j not in visited:
                     visited.add(j)
                     dfs(j)
         
-        provinces = len(isConnected)
+        proN = len(isConnected)
         visited = set()
-        circles = 0
+        res = 0
 
-        for i in range(provinces):
+        for i in range(proN):
             if i not in visited:
                 dfs(i)
-                circles += 1
+                res += 1
         
-        return circles
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-provinces/solution/sheng-fen-shu-liang-by-leetcode-solution-eyk0/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-class Solution:
-    def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        provinces = len(isConnected)
-        visited = set()
-        circles = 0
-        
-        for i in range(provinces):
-            if i not in visited:
-                Q = collections.deque([i])
-                while Q:
-                    j = Q.popleft()
-                    visited.add(j)
-                    for k in range(provinces):
-                        if isConnected[j][k] == 1 and k not in visited:
-                            Q.append(k)
-                circles += 1
-        
-        return circles
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-provinces/solution/sheng-fen-shu-liang-by-leetcode-solution-eyk0/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        def find(index: int) -> int:
-            if parent[index] != index:
-                parent[index] = find(parent[index])
-            return parent[index]
-        
-        def union(index1: int, index2: int):
-            parent[find(index1)] = find(index2)
-        
-        provinces = len(isConnected)
-        parent = list(range(provinces))
-        
-        for i in range(provinces):
-            for j in range(i + 1, provinces):
-                if isConnected[i][j] == 1:
-                    union(i, j)
-        
-        circles = sum(parent[i] == i for i in range(provinces))
-        return circles
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-provinces/solution/sheng-fen-shu-liang-by-leetcode-solution-eyk0/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        n = len(isConnected)
-        ### 传说江湖中有各种门派 ###
-        # 初始化 数组中存放每个城市i的上一级节点
-        pre = [-1]*n
-
-        ### 打架之前先自报家门 ###
-        # 找每个省份的省会
-        def find(root):
-            son = root
-            ### 我不认识掌门啊 让我师傅去问问？ ###
-            # 让root一直向上查找直到找到省会
-            while pre[root] >= 0:
-                root = pre[root]
-        
-            ### 当徒孙多没意思 直接拜倒掌门门下 辈分高 有牌面儿 ### 
-            # 路径压缩
-            while son != root:
-                # 让查找路径上的所有城市都直接连到省会
-                tmp = pre[son]
-                pre[son] = root
-                son = tmp
-            
-            ### 说出我家掌门 吓你一跳 ###
-            return root
-        
-        ### 弱肉强食 小门派终究还是要被大门派兼并 ###
-        # 按秩归并 pre数组存放的是下面连接的城市数量
-        def union(root1,root2):
-            if pre[root2] < pre[root1]:
-                pre[root2] += pre[root1]
-                pre[root1] = root2
-            else:
-                pre[root1] += pre[root2]
-                pre[root2] = root1
-
-        # 因为是对称的 只需要遍历右上区域
-        for i in range(n):
-            for j in range(i+1,n):
-                if isConnected[i][j] == 1:
-                    ### 我师从名门 识相的就快点投降 ###
-                    # 找到i和j的省会
-                    root1 = find(i)
-                    root2 = find(j)
-                    ### 江湖规矩 我们不打自家人 ###
-                    # 如果i和j不在一个省但是彼此相连 将他们连到同一个省会
-                    if root1 != root2:
-                        union(root1,root2)
-        
-        ### 腥风血雨过后门派所剩无几 这就是"江湖" ###
-        # 统计省会个数
-        cnt = 0
-        for i in range(n):
-            if pre[i] < 0:
-                cnt += 1
-        return cnt
+        return res
 ```
 
 ```py
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        proN = len(isConnected)
+        visited = set()
+        res = 0
+        
+        for i in range(proN):
+            if i not in visited:
+                peopleQ = collections.deque([i])
+                while peopleQ:
+                    peo = peopleQ.popleft()
+                    visited.add(peo)
+                    for fri in range(proN):
+                        if isConnected[peo][fri] == 1 and fri not in visited:
+                            peopleQ.append(fri)
+                res += 1
+        
+        return res
+
 不用递归，可以实现双100%：
 
 class Solution:
-    def findCircleNum(self, M: List[List[int]]) -> int:
-        candidates = set(range(1, len(M)))
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        candidates = set(range(1, len(isConnected)))
+        # candidates就是not visited
         if not candidates:
             return 1
-        count = 0
-        peoples = [0]
+        res = 0
+        peopleQ = [0]
         while candidates:
-            while peoples:
-                people = peoples.pop()
-                friends = [i for i in candidates if M[people][i]]
+            while peopleQ:
+                peo = peopleQ.pop()
+                friends = [fri for fri in candidates if isConnected[peo][fri]]
                 for i in friends:
-                    peoples.append(i)
+                    peopleQ.append(i)
                     candidates.remove(i)
-            count += 1
+            res += 1
             if candidates:
-                peoples = [list(candidates)[0]]
-        return count
+                peopleQ = [list(candidates)[0]]
+        return res
 ```
 
 ```scala
@@ -1480,9 +1412,82 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1KV41117ho?spm_id_from=333.999.0.0)
 
-###  1.25. <a name='ArrayNesting'></a>565 【🍒并查集】Array Nesting
+###  1.25. <a name='ArrayNesting'></a>565 【为什么不用🍒并查集？成环的🌈】Array Nesting
 
 [郭郭](https://www.bilibili.com/video/BV11V411e7fv?from=search&seid=16576806175247069118&spm_id_from=333.337.0.0)
+
+```py
+class Solution(object):
+	def arrayNesting(self, nums):
+		r = 0
+		for i in xrange(0, len(nums)):
+			if nums[i] == -1:
+				continue
+			usedlist = set({})
+			while i not in usedlist:
+				usedlist.add(i)
+				i = nums[i]
+			r = max(r, len(usedlist))
+			for i in usedlist:
+				nums[i] = -1
+		return r
+```
+题目类似于找最大环的长度
+
+因为没有重复元素，所以每个元素都属于一个环，
+
+每个环只计算一次，每个走过的元素置为-1（也可以置为负数）。
+
+从开头遍历数组，如果该元素为-1则跳过
+
+时间复杂度O（n），空间复杂度O（1）
+
+```py
+class Solution:
+    def arrayNesting(self, nums: List[int]) -> int:
+        res = 0
+        for i in range(len(nums)):
+            if nums[i] == -1:
+                continue
+            temp = 1
+            path_index = i
+            while nums[path_index] != i:
+                nums[path_index], path_index = -1, nums[path_index]
+                temp += 1
+            nums[path_index] = -1
+            res = max(temp, res)
+        return res
+```
+
+```py
+class Solution:
+    def arrayNesting(self, nums: List[int]) -> int:
+        # 最大环问题
+        # 环问题 快指针走2步, 慢指针走1步
+
+        visited = [False]*len(nums) # 记录是否遍历过
+        def measure_len(i):
+            fast = slow = i
+            ans = 0
+            while True:
+                fast = nums[nums[fast]]
+                slow = nums[slow]
+                visited[fast] = True
+                visited[slow] = True
+                ans += 1
+                if fast == slow:
+                    break
+            
+            return ans
+
+        ans = 0
+        for i in nums:
+            if not visited[i]: # 如果没遍历过则进行查看 有 i 元素的环最大长度
+                ans = max(ans, measure_len(i))
+
+        return ans
+```
+
 
 ###  1.26. <a name='PermutationinString567-'></a>567. 【滑动窗口🔹】Permutation in String 567-字符串的排列
 
@@ -2588,50 +2593,87 @@ class Solution:
 [郭郭](https://www.bilibili.com/video/BV1oQ4y1U7dH?from=search&seid=13286624680279107242&spm_id_from=333.337.0.0)
 
 ```py
-class Solution:
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        p = {i: {i} for i in range(1, len(edges) + 1)}  #🍒并查集初始化
-        for x, y in edges:
-            if p[x] is not p[y]:    #如果两个集合地址不一样
-                p[x] |= p[y]        #合并集合
-                for z in p[y]:
-                    p[z] = p[x]     #修改元素集合标记的指针地址
-            else:
-                return [x, y]
-
-
-from collections import defaultdict
-class Solution:
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        f = {}
-        def find(x):
-            f.setdefault(x,x)
-            if f[x] != x:
-                f[x] = find(f[x])
-            return f[x]
-        def union(x,y):
-            if find(x) != find(y):
-                f[find(y)] = find(x)
-        for x,y in edges:
-            if find(x) == find(y):
-                return [x,y]
-            else:
-                union(x,y)
+        # 🍒并查集元素初始化的三种写法
+        p = list(range(len(edges) + 1))
+        p = [i for i in range(len(edges) + 1)]
+        p = [*range(len(edges) + 1)]     
 ```
 
 ```py
+写法一：
+class Solution:
+
+    def __init__(self):
+        self.size = 1005
+        self.parent = list(range(self.size))
+
+    def find(self, u):
+        # while u != self.parent[u]:
+        #     u = self.parent[u]
+        # return u
+        # 下面，这个更快一点
+        if u != self.parent[u]: 
+            self.parent[u] = self.find(self.parent[u])
+        return self.parent[u]
+
+    def union(self, u, v):
+        self.parent[self.find(u)] = self.find(v)
+
+
+    def isConnected(self, u, v ):
+        return self.find(u) == self.find(v)
+
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        for x, y in edges:
+            if self.isConnected(x, y) :
+                return [x, y]
+            else :
+                self.union(x, y)
+        return []
+        # for i in range(len(edges)):
+        #     if self.isConnected(edges[i][0], edges[i][1]) :
+        #         return edges[i]
+        #     else :
+        #         self.union(edges[i][0], edges[i][1])
+        # return []
+
+写法二：用dic
+class Solution:
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        parent = {}
+        
+        def find(x):
+            # 这一行很关键，如果键不存在于字典中，将会添加x并将值设为默认值。
+            parent.setdefault(x,x)
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+    
+        def union(x,y):
+            if find(x) != find(y):
+                parent[find(y)] = find(x)
+
+        # 如果遍历边的过程中，发现两个点已经成环了，这时就可以输出了。
+        for x, y in edges:
+            if find(x) == find(y):
+                return [x, y]
+            else:
+                union(x,y)  #检查集合，领导节点是否相同，如果集合不同就合并     
+
+写法三：用list
+
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         n = len(edges)
         parent = list(range(n + 1))
 
-        def find(index: int) -> int:
-            if parent[index] != index:
-                parent[index] = find(parent[index])
-            return parent[index]
+        def find(x: int) -> int:
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
         
-        def union(index1: int, index2: int):
-            parent[find(index1)] = find(index2)
+        def union(x: int, y: int):
+            parent[find(x)] = find(y)
 
         for node1, node2 in edges:
             if find(node1) != find(node2):
@@ -2641,125 +2683,77 @@ class Solution:
         
         return []
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/redundant-connection/solution/rong-yu-lian-jie-by-leetcode-solution-pks2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
-1，🍒并查集思想解题
-🍒并查集的初始化就是每个点只属于自己标记的集合，即p[x]=x。
-遍历边，如果两个点集合不同，那就合并进同一个集合，这里用了递归修改集合。
-如果遍历边的过程中，发现两个点已经加进过之前的集合了，那就说明成环了，这时就可以输出了。
-这就是传统🍒并查集的做法。
-class Solution:
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        p = [i for i in range(len(edges) + 1)]
-        p = [*range(len(edges) + 1)]      #🍒并查集元素初始化
-        def f(x):
-            if p[x] != x:       #递归修改所属集合,看上面dsu定义
-                p[x] = f(p[x])  #如果结点是它自己的父结点，我们将其称为连接结点的领导者，保证p[x]=x这就是求领导节点的函数
-            return p[x]
-        for x, y in edges:      #遍历边
-            px, py = f(x), f(y)
-            if px != py:        #检查集合，领导节点是否相同，如果集合不同就合并
-                p[py] = px
-            else:
-                return [x, y]   #集合相同就返回答案
+写法四：不推荐
 
 利用py集合特性也可以做🍒并查集，本质上没有区别，不过不用递归了，其实就是靠字典实现的🍒并查集
+
+parent[x] |= parent[y]：
+
+{1} {2}
+{1, 2} {2}
+--------------------
+{1, 2} {3}
+{1, 2, 3} {3}
+--------------------
+
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        p = {i: {i} for i in range(1, len(edges) + 1)}  #🍒并查集初始化，{1: {1}, 2: {2}, 3: {3}, 4: {4}}
+        parent = {i: {i} for i in range(1, len(edges) + 1)}  
+        #🍒并查集初始化，{1: {1}, 2: {2}, 3: {3}, 4: {4}}
         for x, y in edges:
-            if p[x] is not p[y]:    #如果两个集合地址不一样
-                p[x] |= p[y]        #合并集合
-                for z in p[y]:
-                    p[z] = p[x]     #修改元素集合标记的指针地址
+            if parent[x] is not parent[y]:    #如果两个集合地址不一样
+                parent[x] |= parent[y]        #合并集合
+                for z in parent[y]:
+                    parent[z] = parent[x]     #修改元素集合标记的指针地址
             else:
                 return [x, y]
-
-2，拓扑排序
-利用数组degree记录各顶点的度。
-利用数组neighbor记录各顶点的邻接顶点。
-从度为1的节点出发进行拓扑排序，剩余边中在edges中排最后的那条即为答案。
-拓扑排序步骤：
-1.寻找出最开始的结点（因为是有向图，可以按箭头方向。无向图可任意）。
-2.记住，记录一个点后，与这个点有关的所有边全部删除。如：记录点A后，那么A->B、A->C、A->D之间的边全部删除。
-3.再一次寻找新的开始结点。。。重复以上步骤。。。。。。。。。。。。
-直接看代码
-
-# 🍒并查集
-class Solution1:
-    def findRedundantConnection(self, edges):
-        p = [i for i in range(len(edges) + 1)]
-        p = [*range(len(edges) + 1)]      #🍒并查集元素初始化
-        def f(x):
-            if p[x] != x:       #递归修改所属集合,看上面dsu定义
-                p[x] = f(p[x])  #如果结点是它自己的父结点，我们将其称为连接结点的领导者，保证p[x]=x这就是求领导节点的函数
-            return p[x]
-        for x, y in edges:      #遍历边
-            px, py = f(x), f(y)
-            if px != py:        #检查集合，领导节点是否相同，如果集合不同就合并
-                p[py] = px
-            else:
-                return [x, y]   #集合相同就返回答案
-
-
-
-class Solution:
-
-    def __init__(self):
-        """
-        初始化
-        """
-        self.n = 1005
-        self.father = [i for i in range(self.n)]
-
-
-    def find(self, u):
-        """
-        🍒并查集里寻根的过程
-        """
-        if u == self.father[u]:
-            return u
-        self.father[u] = self.find(self.father[u])
-        return self.father[u]
-
-    def join(self, u, v):
-        """
-        将v->u 这条边加入🍒并查集
-        """
-        u = self.find(u)
-        v = self.find(v)
-        if u == v : return
-        self.father[v] = u
-        pass
-
-
-    def same(self, u, v ):
-        """
-        判断 u 和 v是否找到同一个根，本题用不上
-        """
-        u = self.find(u)
-        v = self.find(v)
-        return u == v
-
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        for i in range(len(edges)):
-            if self.same(edges[i][0], edges[i][1]) :
-                return edges[i]
-            else :
-                self.join(edges[i][0], edges[i][1])
-        return []
 ```
 
-###  1.59. <a name='RedundantConnectionII'></a>685. 【🍒并查集】Redundant Connection II
+###  1.59. <a name='RedundantConnectionII'></a>685. 【🍒并查集 + hard】Redundant Connection II
 
 [花花酱](https://www.bilibili.com/video/BV1St411J7Ur?spm_id_from=333.999.0.0)
 
 ```py
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+    
+    def union(self, x: int, y: int):
+        self.parent[self.find(x)] = self.find(y)
+    
+    def find(self, x: int) -> int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+class Solution:
+    def findRedundantDirectedConnection(self, edges: List[List[int]]) -> List[int]:
+        n = len(edges)
+        uf = UnionFind(n + 1)
+        parent = list(range(n + 1))
+        error = -1
+        cycle = -1
+        for i, (x, y) in enumerate(edges):
+            if parent[y] != y:
+                error = i
+            else:
+                parent[y] = x
+                if uf.find(x) == uf.find(y):
+                    cycle = i
+                else:
+                    uf.union(x, y)
+
+        if error < 0:
+            return [edges[cycle][0], edges[cycle][1]]
+        else:
+            errorEdge = edges[error]
+            if cycle >= 0:
+                return [parent[errorEdge[1]], errorEdge[1]]
+            else:
+                return [errorEdge[0], errorEdge[1]]
+
+
+
 class Solution:
     def findRedundantDirectedConnection(self, edges: List[List[int]]) -> List[int]:
         def find(f,x):
@@ -3401,6 +3395,211 @@ object Solution1-1 {
 
 [edo](https://www.bilibili.com/video/BV1wK4y1p7f1?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
 
+```py
+import heapq
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        def find(x):
+            f.setdefault(x,x)
+            while x != f[x]:
+                f[x] = f[f[x]]
+                x = f[x]
+            return x
+            
+        def union(i, j):
+            rooti = find(i)
+            rootj = find(j)
+            if rootj != rooti:
+                f[rootj] = rooti
+        f = {}
+        for i in range(len(accounts)):
+            for mail in accounts[i][1:]:
+                union(i, mail)
+
+        res = defaultdict(list)
+        for mail, name in f.items():
+            if type(mail) == str:
+                heappush(res[find(name)], mail)
+        ans = [[] for _ in range(len(res))]
+        index = 0
+        for name, mail in res.items():
+            ans[index].append(accounts[name][0])
+            while mail:
+                ans[index].append(heappop(mail))
+            index += 1
+        return ans
+```
+
+```py
+class Solution:
+    """并查集"""
+    '''
+    root 存放accounts里面每个节点的parent
+    mail 存放每个邮箱地址的第一次出现parent
+    '''
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        root = [i for i in range(len(accounts))]
+        mail = {}
+        
+        # 并查集find
+        def find(i):
+            if root[i] != i:
+                return find(root[i])
+            return root[i]
+        
+        
+        for i in range(len(accounts)):
+            for email in accounts[i][1:]:
+                if email not in mail:
+                    mail[email] = i
+                else:
+                    # 通过find找到i的最终parent，然后将parent的parent改写为mail通过find找到的parent
+                    # 由于mail里存放的节点的父节点也可能被更新所以要通过find找到最终parent
+                    
+                    root[find(i)] = find(mail[email])
+        
+        # 存放子账户
+        delt = set()
+        for i in range(len(root)):
+            if root[i] != i:
+                # 通过find找到i的最终parent，然后把i添加进最终parent
+                accounts[find(root[i])].extend(accounts[i][1:])
+                delt.add(i)
+        # 筛选出不含子账户的最终账户存入result
+        result = []
+        for i in range(len(accounts)):
+            if i not in delt:
+                result.append(accounts[i][:1]+sorted(list(set(accounts[i][1:]))))
+        return result
+```
+
+```py
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+
+    def union(self, index1: int, index2: int):
+        self.parent[self.find(index2)] = self.find(index1)
+
+    def find(self, index: int) -> int:
+        if self.parent[index] != index:
+            self.parent[index] = self.find(self.parent[index])
+        return self.parent[index]
+
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        emailToIndex = dict()
+        emailToName = dict()
+
+        for account in accounts:
+            name = account[0]
+            for email in account[1:]:
+                if email not in emailToIndex:
+                    emailToIndex[email] = len(emailToIndex)
+                    emailToName[email] = name
+        
+        uf = UnionFind(len(emailToIndex))
+        for account in accounts:
+            firstIndex = emailToIndex[account[1]]
+            for email in account[2:]:
+                uf.union(firstIndex, emailToIndex[email])
+        
+        indexToEmails = collections.defaultdict(list)
+        for email, index in emailToIndex.items():
+            index = uf.find(index)
+            indexToEmails[index].append(email)
+        
+        ans = list()
+        for emails in indexToEmails.values():
+            ans.append([emailToName[emails[0]]] + sorted(emails))
+        return ans
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/accounts-merge/solution/zhang-hu-he-bing-by-leetcode-solution-3dyq/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        belongs = collections.defaultdict(list)
+        for i, j in enumerate(accounts):
+            for email in j[1:]:
+                belongs[email].append(i)
+        emial_visited = set()
+        id_visited = set()
+        def dfs(id):
+            if id in id_visited:
+                return
+            id_visited.add(id)
+            for email in accounts[id][1:]:
+                if email in emial_visited:
+                    continue
+                emial_visited.add(email)
+                ans[-1].append(email)
+                for i in belongs[email]:
+                    dfs(i)
+        ans = []
+        for i in range(len(accounts)):
+            if i not in id_visited:
+                ans.append(accounts[i][:1])
+                dfs(i)
+        for i in range(len(ans)):
+            ans[i] = ans[i][:1] + sorted(ans[i][1:])
+        return ans
+```
+
+```py
+Python并查集解法
+
+from collections import defaultdict
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        dic = {}
+        email2name = {}
+        def find(x):
+            if x != dic.setdefault(x, x):
+                dic[x] = find(dic[x])
+            return dic[x]
+        for it in accounts:
+            email2name[it[1]] = it[0] # 记录一下第一个邮件地址对应的用户名
+            root = find(it[1]) # find(it[1])这步不能少，因为有可能出现没有it[2]的情况
+            for mail in it[2:]:
+                dic[find(mail)] = root # 将所有的邮件地址归并到第一个邮件地址上
+        # 返回处理
+        ret = defaultdict(list)
+        for key in dic: # 这点我之前不是很熟悉，可以通过遍历dic的方法查看所有在并查集中注册的元素！
+            ret[find(key)].append(key) # 这里不能写成ret[dic[key]]，因为find()的过程也是更新dic字典的过程
+        return [[email2name[k]] + sorted(v) for k, v in ret.items()]
+附上Python的DFS解法
+
+from collections import defaultdict
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        # 先构建网站之间的关系图
+        dic = defaultdict(set)
+        for it in accounts:
+            for i in range(1, len(it)):
+                dic[it[i]] |= set(it[1:i] + it[i+1:])
+        # DFS算法，目标是通过DFS以及关系图dic将与mail相关联的所有网站都汇总起来
+        seen = set()
+        def dfs(mail):
+            if mail in seen:
+                return set()
+            ret = {mail}
+            seen.add(mail)
+            for t in dic[mail]:
+                ret |= dfs(t)
+            return ret
+        # 主函数
+        ret = []
+        for it in accounts:
+            if it[1] not in seen:
+                ret.append([it[0]] + sorted(dfs(it[1])))
+        return ret
+```
+
 ###  1.82. <a name='FindPivotIndex'></a>724. Find Pivot Index
 
 [花花酱](https://www.bilibili.com/video/BV1KW411S7nG?spm_id_from=333.999.0.0)
@@ -3758,9 +3957,54 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ca4y177LW?spm_id_from=333.999.0.0)
 
-###  1.99. <a name='CouplesHoldingHands'></a>765. 【🍒并查集】情侣牵手 Couples Holding Hands
+###  1.99. <a name='CouplesHoldingHands'></a>765. 【🍒并查集 + 困难】情侣牵手 Couples Holding Hands
 
 [官方](https://www.bilibili.com/video/BV1pv411Y7wX?spm_id_from=333.999.0.0)
+
+```py
+扒掉你的并查集皮，哈希表真香。
+
+class Solution:
+    def minSwapsCouples(self, row: List[int]) -> int:
+        # 使用哈希表维护字符索引，每次遍历一对交换
+        d = {num: idx for idx, num in enumerate(row)}
+        cnt = 0
+        for i in range(0, len(row), 2):
+            flag = -1 if row[i] & 1 else 1
+            if row[i+1] != row[i] + flag:  # 当前是奇数/偶数
+                row[i+1], row[d[row[i]+flag]] = row[d[row[i]+flag]], row[i+1]
+                x, y = row[i+1], row[d[row[i]+flag]]
+                d[x], d[y] = d[y], d[x]
+                cnt += 1
+        return cnt
+```
+
+```py
+本来想随便写下先试错的，结果居然直接过了还是100%。。。虽然100%但还是要烧了你们。。
+
+class Solution(object):
+    def minSwapsCouples(self, row):
+        """
+        每两个座位成一对，假定左边的人都是合法的不变，如果TA右边的人与TA匹配则
+        跳过，不匹配则找到TA的匹配对象的与TA右边的人交换。
+        """
+        def find_another(n):
+            if n % 2 == 0:
+                return n + 1
+            else:
+                return n - 1
+
+        c = 0
+        for i in range(0, len(row), 2):
+            p1 = row[i]
+            p2 = find_another(p1)
+            if row[i+1] != p2:
+                j = row.index(p2)
+                row[i+1], row[j] = row[j], row[i+1]
+                c += 1
+
+        return c
+```
 
 ###  1.100. <a name='MaxChunksToMakeSorted'></a>769. Max Chunks To Make Sorted
 
@@ -3853,7 +4097,7 @@ class Solution:
                judge(genIdx(start,'R'),genIdx(end,'R'),lambda x,y:x<=y)
 ```
 
-###  1.105. <a name='DijkstraSwiminRisingWater'></a>778. 【Dijkstra🚗 + 🍒并查集】Swim in Rising Water
+###  1.105. <a name='DijkstraSwiminRisingWater'></a>778. 【Dijkstra🚗 + 🍒并查集 + 困难】Swim in Rising Water
 
 [花花酱](https://www.bilibili.com/video/BV1ab411k7TH?spm_id_from=333.999.0.0)
 
@@ -3862,84 +4106,36 @@ class Solution:
 [一俩三四五](https://www.bilibili.com/video/BV1MJ411g7LM?from=search&seid=4056121790831106424&spm_id_from=333.337.0.0)
 
 ```py
+# 可以背一背
 class Solution:
     def swimInWater(self, grid: List[List[int]]) -> int:
         #两点的边长为两点中最大的高度。建立一个边长集合，升序排序。
-        n=len(grid)
-        edges=[]
+        n = len(grid)
+        edges = []
         for i in range(n):
             for j in range(n):
-                p = i*n+j
-                if i<n-1:
-                    edges.append([max(grid[i][j],grid[i+1][j]),p,p+n])
-                if j<n-1:
-                    edges.append([max(grid[i][j],grid[i][j+1]),p,p+1])
+                ID = i * n + j
+                if i < n-1:
+                    edges.append([max(grid[i][j],grid[i+1][j]),ID,ID+n])
+                if j < n-1:
+                    edges.append([max(grid[i][j],grid[i][j+1]),ID,ID+1])
         edges.sort()
         
         #🍒并查集初始化
-        father={i:i for i in range(n*n)}
+        parent={i:i for i in range(n*n)}
         def find(x):
-            if x!=father[x]:
-                father[x]=find(father[x])
-            return father[x]
+            if x != parent[x]:
+                parent[x] = find(parent[x])
+            return parent[x]
         def union(x,y):
-            a=find(x)
-            b=find(y)
-            father[a]=b
+            parent[find(x)] = find(y)
         
         #从小到大遍历加入每一条边，如果加入一条边后，首尾联通，那么返回加入的边长
-        for edge in edges:
-            union(edge[1],edge[2])
-            if find(0)==find((n*n)-1):
-                return edge[0]
-        
-        return 0
-```
-
-```py
-可以说和昨天的一模一样
-
-class Solution:
-    def init_tree(self, n):
-        self.fa = [i for i in range(n)]
-    
-    def find(self, x):
-        r = x
-        while self.fa[r] != r:
-            r = self.fa[r]
-        while self.fa[x] != x:
-            temp = self.fa[x]
-            self.fa[x] = r
-            x = temp
-        return r
-
-    def union(self, x1, x2):
-        r1 = self.find(x1)
-        r2 = self.find(x2)
-        if r1 == r2: return False
-        self.fa[r1] = r2
-        return True
-
-    def swimInWater(self, grid: List[List[int]]) -> int:
-        m = len(grid)
-        n = len(grid[0])
-        self.init_tree(m * n)
-        
-        edges = []
-        for i in range(m):
-            for j in range(n):
-                id = i*n + j
-                if i > 0:
-                    edges.append((id - n, id, max(grid[i - 1][j], grid[i][j])))
-                if j > 0:
-                    edges.append((id - 1, id, max(grid[i][j - 1], grid[i][j])))
-        
-        edges.sort(key=lambda x:x[2], reverse=False)
-
-        for a, b, level in edges:
-            self.union(a, b)
-            if self.find(0) == self.find(m*n - 1):
+        for level, start, end in edges:
+            union(start, end)
+            if find(0) == find((n*n)-1):
                 return level
+        return 0
 ```
 
 ###  1.106. <a name='LetterCasePermutation'></a>784. Letter Case Permutation
@@ -4330,7 +4526,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1FW411o7tL?spm_id_from=333.999.0.0) 
 
-###  1.115. <a name='BricksFallingWhenHit'></a>803. 【🍒并查集】Bricks Falling When Hit 
+###  1.115. <a name='BricksFallingWhenHit'></a>803. 【🍒并查集 + 困难】Bricks Falling When Hit 
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7kA?spm_id_from=333.999.0.0)
 
@@ -4541,6 +4737,157 @@ class Solution(object):
 [edo](https://www.bilibili.com/video/BV1jA411L7BY?from=search&seid=13338604369462419980&spm_id_from=333.337.0.0)
 
 [郭郭](https://www.bilibili.com/video/BV1E64y1b7xd?from=search&seid=13286624680279107242&spm_id_from=333.337.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6owto1xqj040.webp)
+
+```py
+class Solution:
+    def numSimilarGroups(self, strs: List[str]) -> int:
+        def similarity(s, t):
+            ans = 0
+            for i in range(len(s)):
+                if s[i] != t[i]:
+                    ans += 1
+                if ans > 2: return False
+            return ans == 2 or ans == 0
+        def dfs(graph, i, visit):
+            visit.add(i)
+            for v in graph[i]:
+                if v not in visit:
+                    dfs(graph, v, visit)
+        n = len(strs)
+        graph = defaultdict(set)
+        for i in range(n):
+            for j in range(i + 1, n):
+                if similarity(strs[i], strs[j]):
+                    graph[i].add(j)
+                    graph[j].add(i)
+        ans = 0
+        visit = set()
+        for i in range(n):
+            if i not in visit:
+                ans += 1
+                dfs(graph, i, visit)
+        return ans
+```
+
+```py
+class Solution:
+    def numSimilarGroups(self, strs: List[str]) -> int:
+        n=len(strs)
+        parent=list(range(n))
+        size=[1]*n
+        nSet=n
+
+        def find(a):
+            if parent[a]!=a:
+                parent[a]=find(parent[a])
+            return parent[a]
+
+        def union(a,b):
+            a,b=find(a),find(b)
+            if a==b: return False
+            if size[a]<size[b]:
+                a,b=b,a
+            parent[b]=a
+            size[a]+=size[b]
+            nonlocal nSet
+            nSet-=1
+            return True
+
+        l=len(strs[0])
+        for i in range(n-1):
+            for j in range(i+1,n):
+                diff=None
+                for k in range(l):
+                    c1,c2=strs[i][k],strs[j][k]
+                    if c1!=c2:
+                        if diff is None:
+                            diff=(c1,c2)
+                        elif diff==(c2,c1):
+                            diff=0
+                        else: break
+                else:
+                    union(i,j)
+        return nSet
+```
+
+```py
+class Solution:
+    def numSimilarGroups(self, strs: List[str]) -> int:
+        n, m = len(strs), len(strs[0])
+        uf = UnionFind(n)
+        for i in range(n):
+            for j in range(i + 1, n):
+                count = 0
+                for k in range(m):
+                    if strs[i][k] != strs[j][k]:
+                        count += 1
+                        if count > 2:
+                            break
+                if count in {0, 2}:
+                    uf.union(i, j)
+        return uf.count
+
+
+class UnionFind:
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.count = n
+
+    def find(self, x):
+        if self.parent[x] == x:
+            return x
+        self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y):
+        x, y = self.find(x), self.find(y)
+        if x != y:
+            self.parent[x] = y
+            self.count -= 1
+
+作者：T-RexInTheBronx
+链接：https://leetcode-cn.com/problems/similar-string-groups/solution/python3-shi-yong-bing-cha-ji-ji-lu-lian-clfgm/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def numSimilarGroups(self, strs: List[str]) -> int:
+        n = len(strs)
+        f = list(range(n))
+
+        def find(x: int) -> int:
+            if f[x] == x:
+                return x
+            f[x] = find(f[x])
+            return f[x]
+        
+        def check(a: str, b: str) -> bool:
+            num = 0
+            for ac, bc in zip(a, b):
+                if ac != bc:
+                    num += 1
+                    if num > 2:
+                        return False
+            return True
+        
+        for i in range(n):
+            for j in range(i + 1, n):
+                fi, fj = find(i), find(j)
+                if fi == fj:
+                    continue
+                if check(strs[i], strs[j]):
+                    f[fi] = fj
+        
+        ret = sum(1 for i in range(n) if f[i] == i)
+        return ret
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/similar-string-groups/solution/xiang-si-zi-fu-chuan-zu-by-leetcode-solu-8jt9/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ###  1.129. <a name='KeysandRooms'></a>841 Keys and Rooms
 
@@ -5136,11 +5483,40 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV11W411Z71N?spm_id_from=333.999.0.0)
 
-###  1.151. <a name='PossibleBipartition'></a>886. Possible Bipartition
+###  1.151. <a name='PossibleBipartition'></a>886. 【🍒并查集】Possible Bipartition
 
 [花花酱](https://www.bilibili.com/video/BV1DW411Z7G6?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1FT4y1g77u?spm_id_from=333.999.0.0)
+
+```py
+🍒并查集
+
+class Solution:
+    def possibleBipartition(self, n: int, dislikes: List[List[int]]) -> bool:
+        teams = [0] * (n + 1)
+        graph = collections.defaultdict(list)
+        for a, b in dislikes:
+            graph[a].append(b)
+            graph[b].append(a)
+        # print(graph):
+        # defaultdict(<class 'list'>, {1: [2, 3], 2: [1, 4], 3: [1], 4: [2]})
+
+        parent = list(range(n+1))
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+        
+        def union(x, y):
+            parent[find(x)] = parent[find(y)]
+
+        for AA in range(1, n+1):
+            for BB in graph[AA]: # AA 不能和 BB 在一起
+                if find(AA) == find(BB): return False
+                union(BB, graph[AA][0])
+        return True
+```
 
 ```py
 class Solution(object):
@@ -5161,13 +5537,32 @@ class Solution(object):
                    for node in range(1, N+1)
                    if node not in color)
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/possible-bipartition/solution/ke-neng-de-er-fen-fa-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
+python, 二刷, 图+dfs搜索, 缓存搜索中的分组号, 降低时间复杂度
 
-```py
+class Solution:
+    def possibleBipartition(self, N: int, dislikes: List[List[int]]) -> bool:
+        graph = collections.defaultdict(list)   # 刻画a, b两人的关系图, 无向图
+        for s, e in dislikes:
+            graph[s].append(e)
+            graph[e].append(s)
+        
+        group = dict()
+
+        @functools.lru_cache(None)               # 缓存dfs搜索中间结果, 下次i相同就相当于表查询, 时间复杂度为O(n)
+        def dfs(i, g=1):
+            if i in group:
+                return group[i] == g            # i的组划分,已经判定在了group当中, 所以判断是否矛盾
+            group[i] = g                        # 不矛盾的话, 判定给组g
+            for con in graph[i]:                # 如果i的邻接节点,都能不矛盾地"安排", 返回true
+                if not dfs(con, -1 * g):
+                    return False
+            return True
+        
+        for i in range(1, N + 1):
+            if i not in group and not dfs(i):   # 此处必须强调i不在group, 因为前面搜索中可能将
+                return False                    # i判定给了-1, 但是此时如果再次dfs搜索, 将其默认为1,会矛盾
+        return True
+
 DFS
 
 class Solution:
@@ -5210,55 +5605,8 @@ class Solution:
                             teams[neighbor] = -teams[p]
                             Q.append(neighbor)
         return True
-🍒并查集
 
-class Solution:
-    def possibleBipartition(self, n: int, dislikes: List[List[int]]) -> bool:
-        teams = [0] * (n + 1)
-        graph = collections.defaultdict(list)
-        for a, b in dislikes:
-            graph[a].append(b)
-            graph[b].append(a)
-        parent = list(range(n+1))
 
-        def find(x):
-            if parent[x] != x:
-                parent[x] = find(parent[x])
-            return parent[x]
-        
-        def union(x, y):
-            parent[find(x)] = parent[find(y)]
-
-        for i in range(1, n+1):
-            for j in graph[i]:
-                if find(i) == find(j): return False
-                union(j, graph[i][0])
-        return True
-python, 二刷, 图+dfs搜索, 缓存搜索中的分组号, 降低时间复杂度
-
-class Solution:
-    def possibleBipartition(self, N: int, dislikes: List[List[int]]) -> bool:
-        graph = collections.defaultdict(list)   # 刻画a, b两人的关系图, 无向图
-        for s, e in dislikes:
-            graph[s].append(e)
-            graph[e].append(s)
-        
-        group = dict()
-
-        @functools.lru_cache(None)               # 缓存dfs搜索中间结果, 下次i相同就相当于表查询, 时间复杂度为O(n)
-        def dfs(i, g=1):
-            if i in group:
-                return group[i] == g            # i的组划分,已经判定在了group当中, 所以判断是否矛盾
-            group[i] = g                        # 不矛盾的话, 判定给组g
-            for con in graph[i]:                # 如果i的邻接节点,都能不矛盾地"安排", 返回true
-                if not dfs(con, -1 * g):
-                    return False
-            return True
-        
-        for i in range(1, N + 1):
-            if i not in group and not dfs(i):   # 此处必须强调i不在group, 因为前面搜索中可能将
-                return False                    # i判定给了-1, 但是此时如果再次dfs搜索, 将其默认为1,会矛盾
-        return True
 ```
 
 ###  1.152. <a name='SuperEggDrop'></a>887. Super Egg Drop
@@ -5775,6 +6123,267 @@ class Solution(object):
 [官方](https://www.bilibili.com/video/BV1Nr4y1K7Gj?spm_id_from=333.999.0.0)
 
 [郭郭](https://www.bilibili.com/video/BV1Tq4y157i8?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
+
+```py
+并查集，真好用，
+
+一次AC不是梦！
+
+我们全家都用它，
+
+效果真是顶呱呱.
+
+又好写来又好懂，
+
+脑壳再也不会痛.
+
+class UFS():
+    def __init__(self, N):
+        self.p = range(N)
+
+    def find(self, x):
+        if self.p[x] != x:
+            self.p[x] = self.find(self.p[x])
+        return self.p[x]
+    
+    def union(self, x, y):
+        xr = self.find(x)
+        yr = self.find(y)
+        self.p[xr] = yr
+
+class Solution(object):
+    def removeStones(self, stones):
+        ufs = UFS(20000)
+        for x,y in stones:
+            ufs.union(x,y+10000)
+        return len(stones)-len({ufs.find(x) for x,y in stones})
+```
+
+```py
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        def union(x: int, y: int):
+            parent[find(x)] = find(parent[y])
+
+        def find(idx: int) -> int:
+            if parent[idx] != idx:
+                parent[idx] = find(parent[idx])
+            return parent[idx]
+
+        n = len(stones)
+        parent = list(range(n))
+        row_map, col_map = {}, {}
+        for i in range(n):
+            if stones[i][0] not in row_map:
+                row_map[stones[i][0]] = i
+            else:
+                union(i, row_map[stones[i][0]])
+            if stones[i][1] not in col_map:
+                col_map[stones[i][1]] = i
+            else:
+                union(i, col_map[stones[i][1]])
+        graph = set()
+        for i in range(n):
+            graph.add(find(i))
+        return n - len(graph)
+```
+
+```py
+并查集能想到，难的是想了半天怎么把每个点之间的连通的关系表示出来，一看题解好家伙+10000，太妙了
+
+class DSU:
+    def __init__(self,nodecount):
+        self.node_relation_list=[-1]*nodecount
+    def find(self,node):
+        temp=node
+        while self.node_relation_list[node]!=-1:
+            node=self.node_relation_list[node]
+        if temp!=node:
+            self.node_relation_list[temp]=node
+        return node
+    def merge(self,node1,node2):
+        node1boss=self.find(node1)
+        node2boss=self.find(node2)
+        if node1boss!=node2boss:
+            self.node_relation_list[node1boss]=node2boss
+        return 
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        ufs = DSU(20000)
+        for x,y in stones:
+            ufs.merge(x,y+10000)#所有点按横坐标连通
+        return len(stones)-len({ufs.find(x) for x,y in stones})#后者是算有几个集合
+
+使用并查集。其实不需要像官方题解那样 +10000。 
+
+由于题目没有直接给出石头的连接关系，可以记录两个dict。 
+
+dict的key为石头的横/纵坐标，value是上一个相同横/纵坐标的石头的编号。 
+
+这样遍历所有石头，每次从两个dict中取出上一个与该石头有相同横/纵坐标的石头，
+
+把它们在并查集中连通即可。
+
+    def removeStones(self, stones):
+        father = range(len(stones))
+        def find(x):
+            if father[x] != x:
+                father[x] = find(father[x])
+            return father[x]
+        
+        def union(x, y):
+            if y is not None:
+                father[find(x)] = find(y)
+        
+        c_dict, r_dict = {}, {}
+        for i in range(len(stones)):
+            union(i, c_dict.get(stones[i][0]))
+            c_dict[stones[i][0]] = i
+            union(i, r_dict.get(stones[i][1]))
+            r_dict[stones[i][1]] = i
+        return len(stones) - len({find(x) for x in father})
+```
+
+```py
+class DSU:
+    def __init__(self,n: int):
+        self.p = [i for i in range(n)]
+    
+    def find(self,x: int) -> int:
+        if x != self.p[x]: self.p[x] = self.find(self.p[x])
+        return self.p[x]
+    
+    def merge(self,x: int,y: int):
+        rx , ry = self.find(x) , self.find(y)
+        if rx == ry: return 
+        self.p[rx] = ry
+        return
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        n = len(stones)
+        dsu = DSU(n)
+        for i in range(len(stones)):
+            for j in range(i+1,len(stones)):
+                if stones[i][0] == stones[j][0] or stones[i][1] == stones[j][1]:
+                    dsu.merge(i,j)
+        cnt = 0
+        for i in range(len(dsu.p)):
+            if dsu.p[i] == i:
+                cnt += 1
+        return n - cnt
+```
+
+```py
+贡献一个python3 80ms 97%
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        dict_X = collections.defaultdict(list)
+        dict_Y = collections.defaultdict(list)
+        for x, y in stones:
+            dict_X[x].append((x, y))
+            dict_Y[y].append((x, y))
+        visited = set()
+
+        def dfs(node):
+            if node in visited:
+                return
+            visited.add(node)
+            x, y = node
+            for i in dict_X[x]:
+                dfs(i)
+            for i in dict_Y[y]:
+                dfs(i)
+        
+        ans = 0
+        for i in stones:
+            i = tuple(i)
+            if i not in visited:
+                ans += 1
+                dfs(i)
+        
+        return len(stones) - ans
+```
+
+```py
+贡献一个并查集 Python3 76ms 96%的代码。。。
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        uf = UnionFindSet()
+        for s in stones:
+            x, y = s[0], s[1] + 10000
+            # print('add:', x, y)
+            uf.add(x)
+            uf.add(y)
+            uf.union(x, y)
+        return len(stones) - uf.count()
+
+
+class UnionFindSet:
+
+    def __init__(self):
+        self.dic_set = {}
+        self.sets = set()
+
+    def add(self, x):
+        if x not in self.dic_set:
+            s = {x}
+            self.dic_set[x] = s
+            self.sets.add(id(s))
+    
+    def find(self, x):
+        if x not in self.dic_set:
+            return None
+        return self.dic_set[x]
+    
+    def union(self, x, y):
+        x_set, y_set = self.find(x), self.find(y)
+        if x_set is y_set:
+            return
+        
+        if len(x_set) < len(y_set):
+            x_set, y_set = y_set, x_set
+
+        x_set |= y_set
+        for item in y_set:
+            self.dic_set[item] = x_set
+
+        self.sets.remove(id(y_set))
+
+    def is_connected(self, x, y):
+        return self.find(x) is self.find(y)
+
+    def count(self):
+        return len(self.sets)
+
+我原来尝试过在并查集里加上 add() 方法，
+
+在 add() 方法里判断某个里在并查集里是不是存在。
+
+后来感觉弄个 add() 方法让外部调用可能不太好。
+
+但是每次在 find() 方法里面判断其实是比较不划算的。选择困难啊。
+
+---------------------------------------
+
+的确如此，我比较倾向于不给出 add()方法，
+
+根据具体题目编写初始化函数或者 add()方法 ；
+
+最初看你编写的并查集教程里头，就是疑惑如果元素不存在于并查集里怎么办，
+
+dict[x]如果x不存在难道不异常么。。。结果清一色的，全是用数组初始化、或者字典初始化，
+
+保证了x元素必然存在（同时self.parent[x]也必然存在），真是个大大的思维盲区。 
+
+不过根据今天的题目，我总结了一下适合我理解的并查集模型，
+
+给出add方法虽然初始化效率会低一些，但是代码逻辑比较统一，
+
+集成了并查集+路径压缩+权重优化+结果集，执行效率会高一些，综合来看还是比较合适的。
+```
 
 ###  1.179. <a name='BagofTokens'></a>948 Bag of Tokens
 
