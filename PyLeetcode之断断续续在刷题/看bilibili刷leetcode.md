@@ -3262,9 +3262,8 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1ZQ4y1A74H?spm_id_from=333.999.0.0)
 
 这个functools.lru_cache(None)的底层是怎么做的呀？ 
-为什么不加会TLE,加上就能过（特别地，如果在这个后面print(pizza)会print不出来，代表着他把pizza清空了？但是f函数里面还是能正常print(pizza)，这个是为啥？）是底层把反复调用pizza[x:i]这种切片的时间省掉了所以不会TLE吗？
-保存对应参数的结果，下次遇到同样的参数直接返回上次的结果。底层是拿字典存，我可以给你写个简化版
 
+```py
 def lru(f):
     d={}
     def wrapper(*args):
@@ -3272,76 +3271,84 @@ def lru(f):
             d[args]=f(*args)
         return d[args]
     return wrapper
+```
+
 加个前缀和预处理，时间减少一半：
 
-```py
-
-from clecode import decorator_default
-import collections
-
+```py 
+# 利用 super().__init__()
 class LRUCache(collections.OrderedDict):
 
     def __init__(self, capacity: int):
+        # super() 继承 collections.OrderedDict
         super().__init__()
         self.capacity = capacity
 
 
     def get(self, key: int) -> int:
+        # 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 
         if key not in self:
             return -1
         self.move_to_end(key)
         return self[key]
 
     def put(self, key: int, value: int) -> None:
+        # 如果关键字 key 已经存在，则变更其数据值 value
         if key in self:
             self.move_to_end(key)
+        # 如果不存在，则向缓存中插入该组 key-value
         self[key] = value
+        # 如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
         if len(self) > self.capacity:
             self.popitem(last=False)
-
-
-if __name__ == "__main__":  
-    import doctest  
-    
-    doctest.testmod()
 ```
 
 
 ```py
-import collections
+# 利用 self.cache = collections.OrderedDict()
 class LRUCache:
     def __init__(self, capacity):
-        """
-        :type capacity: int
-        """
         self.capacity = capacity
         self.cache = collections.OrderedDict()
 
+    写法 1：无 move_to_end
     def get(self, key):
-        """
-        :type key: int
-        :rtype: int
-        """
+        # 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 
         if key in self.cache:
             value = self.cache.pop(key)
             self.cache[key] = value
             return value
-            
         return -1
 
+    写法 2：有 move_to_end
+    def get(self, key):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+            return self.cache[key]
+        return -1
+
+    写法 1：无 move_to_end
     def put(self, key, value):
-        """
-        :type key: int
-        :type value: int
-        :rtype: void
-        """
+        # 如果关键字 key 已经存在，则变更其数据值 value
         if key in self.cache:
             self.cache.pop(key)
-        else:
-            if len(self.cache) == self.capacity:
-                self.cache.popitem(last=False)
+        # 如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
+        if len(self.cache) == self.capacity:
+            self.cache.popitem(last=False)
                 
+        # 如果不存在，则向缓存中插入该组 key-value
         self.cache[key] = value
+
+    写法 2：有 move_to_end
+    def put(self, key, value):
+        # 如果关键字 key 已经存在，则变更其数据值 value
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        # 如果不存在，则向缓存中插入该组 key-value
+        self.cache[key] = value
+        # 如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
 
 ```
 
@@ -4060,79 +4067,59 @@ object Solution1 {
 
 [官方](https://www.bilibili.com/video/BV1ja4y1Y7vY?spm_id_from=333.999.0.0)
 
+   
+关键在于  def getMi
+
 ```py
+我认为这个解法是错误的：
 class MinStack:
     def __init__(self):
         self.stack = []
-        self.min_stack = [math.inf]
+        self.minStack = [math.inf]
 
     def push(self, x: int) -> None:
         self.stack.append(x)
-        self.min_stack.append(min(x, self.min_stack[-1]))
+        self.minStack.append(min(x, self.minStack[-1]))
+        # 导致 min 被 append 多次
 
     def pop(self) -> None:
         self.stack.pop()
-        self.min_stack.pop()
+        self.minStack.pop()
+        # 这样，当 min 被 pop 掉了，minStack 仍然存有 min
 
     def top(self) -> int:
         return self.stack[-1]
 
     def getMin(self) -> int:
-        return self.min_stack[-1]
+        return self.minStack[-1]
 
-面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
 
-class MinStack:
-    def __init__(self):
-        """
-        initialize your data structure here.
-        """
-        self.stack = []
-        self.min_value = -1
 
-    def push(self, x: int) -> None:
-        if not self.stack:
-            self.stack.append(0)
-            self.min_value = x
-        else:
-            diff = x-self.min_value
-            self.stack.append(diff)
-            self.min_value = self.min_value if diff > 0 else x
-
-    def pop(self) -> None:
-        if self.stack:
-            diff = self.stack.pop()
-            if diff < 0:
-                top = self.min_value
-                self.min_value = top - diff
-            else:
-                top = self.min_value + diff
-            return top
-
-    def top(self) -> int:
-        return self.min_value if self.stack[-1] < 0 else self.stack[-1] + self.min_value
-
-    def getMin(self) -> int:
-        return self.min_value if self.stack else -1
 
 class MinStack:
 
     def __init__(self):
         # 另外用一个stack，栈顶表示原栈里所有值的最小值
-        self.min_stack = []
+        self.minStack = []
         self.stack = []
 
     def push(self, val: int) -> None:
         self.stack.append(val)
-        if self.min_stack == []:
-            self.min_stack.append(val)
+        if self.minStack == [] or self.minStack[-1] >= val:
+            self.minStack.append(val)
+            
+    这样速度更快一点点：
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if self.minStack == []:
+            self.minStack.append(val)
             return
-        if self.min_stack[-1] >= val:
-            self.min_stack.append(val)
+        if self.minStack[-1] >= val:
+            self.minStack.append(val)
 
     def pop(self) -> None:
-        if self.stack[-1] == self.min_stack[-1]:
-            self.min_stack.pop()
+        if self.stack[-1] == self.minStack[-1]:
+            self.minStack.pop()
         return self.stack.pop()
 
     def top(self) -> int:
@@ -4140,7 +4127,45 @@ class MinStack:
 
 
     def getMin(self) -> int:
-        return self.min_stack[-1]        
+        return self.minStack[-1]        
+```
+
+```py
+面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
+
+class MinStack:
+    def __init__(self):
+
+        self.diffstack = []
+        self.mins = -1
+
+    def push(self, x: int) -> None:
+        if not self.diffstack:
+            self.diffstack.append(0)
+            self.mins = x
+        else:
+            diff = x-self.mins
+            self.diffstack.append(diff)
+            self.mins = self.mins if diff > 0 else x
+            # mins 是会变化的
+
+    def pop(self) -> None:
+        if self.diffstack:
+            diff = self.diffstack.pop()
+            if diff < 0: 
+                # [3,2,1,4] [0,-1,-1, 3]
+                # mins = 3, 2, 1, 1
+                top = self.mins # 第一步：顺序不能错
+                self.mins = self.mins - diff # 第二步：如果 diff < 0, 那就需要还原 self.mins
+            else:     # 如果 diff 一直都 > 0, 那就非常好
+                top = self.mins + diff
+            return top
+
+    def top(self) -> int:
+        return self.mins if self.diffstack[-1] < 0 else self.diffstack[-1] + self.mins
+
+    def getMin(self) -> int:
+        return self.mins if self.diffstack else -1
 ```
 
 
@@ -4897,213 +4922,54 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV1qK41137h1?spm_id_from=333.999.0.0)
 
 ```py
-# 在数据上设计迭代器的话，是「一定」不能修改原始的数据的。
-# ------
-# 借楼贴个 Morris 遍历。O(1) 空间复杂度，均摊 O(1) 时间复杂度。
-
-class BSTIterator:
-    def __init__(self, root: TreeNode):
-        self.curr = root
-
-    def next(self) -> int:
-        while self.curr.left:
-            left = self.curr.left
-            while left.right and left.right != self.curr:
-                left = left.right
-            # left child has been visited
-            if left.right:
-                left.right = None
-                break
-            # left child has not been visited
-            else:
-                left.right = self.curr
-                self.curr = self.curr.left
-        # visit current node and go right
-        ans = self.curr.val
-        self.curr = self.curr.right
-        return ans
-
-    def hasNext(self) -> bool:
-        return True if self.curr else False
-
-# 这并不是一种好办法。如果在数据上设计迭代器的话，
-# 是「一定」不能修改原始的数据的。
-# 请教下为什么不能修改原始数据？
-# 是因为某些情况下会造成迭代器失效吗？
-# 有些迭代器设计时也允许这种情况，比如STL中的某些容器。Thanks!
-# 是「迭代器在迭代的过程中不能修改原始的数据结构」，
-# 不是「不能通过迭代器本身修改原始的数据」。
-# 想一想 const iterator 就知道是怎么回事了
-
-# Python 72ms 击败100%，关键是构建一个最小值存储栈，实现O(h)空间复杂度。
+# next() 和 hasNext() 操作均摊时间复杂度为 O(1) ，并使用 O(h) 内存。其中 h 是树的高度。
 
 class BSTIterator(object):
 
     def __init__(self, root):
-        """
-        :type root: TreeNode
-        """
         self.stack = []
         while root:
             self.stack.append(root)
             root = root.left
 
     def next(self):
-        """
-        @return the next smallest number
-        :rtype: int
-        """
-        temp = self.stack.pop()
-        res = temp.val
-        temp = temp.right
-        while temp:
-            self.stack.append(temp)
-            temp = temp.left
+        tmp = self.stack.pop()
+        res = tmp.val
+
+        tmp = tmp.right
+        while tmp:
+            self.stack.append(tmp)
+            tmp = tmp.left
         return res
 
     def hasNext(self):
-        """
-        @return whether we have a next smallest number
-        :rtype: bool
-        """
+        # 直接写也可以：return self.stack 
         return self.stack != []
 
-# 在next中回溯的，这个用的是非递归，栈的方法来遍历的
-# 在next中 ，把pop 的节点看做root， 将其右节点压入栈。自下往上
-# 每一次调用next都是在return 之余去看一下当前节点的右子节点，
-# 如果有右子节点，那么树的深度会比当前遍历深度大，
-# 也就是说，next在右子节点代表的子树中，
-# 那就按照正常遍历左子树的思路去遍历该子树即可，就跟init一样；
-# 如果没有右子树，那么当前子树达到最大深度，next就得往上一层找，
-# 就是说继续从stack中pop，因为stack中存的是每一层的左子树，
-# pop到上一层再看看有没有右子树，如果有，还是一样的道理，去遍历该右子树的左子树。
-# 总的来说stack总能pop出树的最小值，也就是当前状态下的左子树的最深左节点。
+
 
 class BSTIterator(object):
     def __init__(self, root):
-
-        #二叉搜索树中序遍历是递增数组
-        self.res = []
-
-        def inorder(root):
-            if root == None:
-                return
-            inorder(root.left)
-            self.res.append(root.val)
-            inorder(root.right)
-        inorder(root)
-        self.index = 0
-
-
-    def next(self):
-        """
-        :rtype: int
-        """
-        self.index += 1
-        return self.res[self.index-1]
-
-    def hasNext(self):
-        """
-        :rtype: bool
-        """
-        if self.index < len(self.res):
-            return True
-        else:
-            return False
-# 这样似乎空间复杂度大于题目要求的O(h)了吧
-# 是的 不能用递归 应该用迭代
-
-# 还是用栈空间吧
-
-class BSTIterator:
-    def __init__(self, root: TreeNode):
-        self.data = []
-        self.enqueue(root)
-        
-    def enqueue(self, root):
-        while root:
-            self.data.append(root)
-            root = root.left
-
-    def next(self) -> int:
-        res = self.data.pop()
-        self.enqueue(res.right)
-        return res.val
-
-    def hasNext(self) -> bool:
-        return bool(self.data)
-
-# 同样没有听题目要求，一开始就取巧，用InOrder，这样得到BSF有序排列，然后使用
-class BSTIterator(object):
-    def __init__(self, root):
-        """
-        :type root: TreeNode
-        """
-        self.root = root
-        self.lst = []
-        self.inOrder(root)
-        self.lst.reverse()
-
-    def hasNext(self):
-        """
-        :rtype: bool
-        """
-        return self.lst != []
-
-    def next(self):
-        """
-        :rtype: int
-        """
-        return self.lst.pop()
-    
-    def inOrder(self, root):
-        if root == None:
-            return
-        self.inOrder(root.left)
-        self.lst.append(root.val)
-        self.inOrder(root.right)
-
-# 谷歌了一下，得到如何满足题目要求的hint，从root开始，
-# 往左走，把左孩子压入stack，直到左边为空。
-
-# 然后开始取node，如果node有右孩子，
-# 则同样要把node的右孩子的所有左孩子全部append入stack，画了一个图，可行。
-class BSTIterator(object):
-    def __init__(self, root):
-        """
-        :type root: TreeNode
-        """
-        self.root = root
         self.stack = []
         self.pushAllLeft(root)
         
 
     def hasNext(self):
-        """
-        :rtype: bool
-        """
         return self.stack != []
         
 
     def next(self):
-        """
-        :rtype: int
-        """
-        if self.hasNext():
-            cur = self.stack.pop()
-            if cur.right:
-                self.pushAllLeft(cur.right)
-            return cur.val
+        tmp = self.stack.pop()
+        self.pushAllLeft(tmp.right)
+        return tmp.val
             
     def pushAllLeft(self, node):
-        """
-        :type node: TreeNode
-        """
-        cur = node
-        while cur:
-            self.stack.append(cur)
-            cur = cur.left
+        while node:
+            self.stack.append(node)
+            node = node.left
 ```
+
+递归解法不符合题目：不能用递归 应该用迭代
 
 ###  1.68. <a name='DungeonGame'></a>174 Dungeon Game
 
@@ -7160,40 +7026,9 @@ class Solution(object):
 [小明](https://www.bilibili.com/video/BV1Zz4y1R7j8?spm_id_from=333.999.0.0)
 
 ```py
-from collections import  defaultdict
-class TrieNode:
-    def __init__(self):
-        self.children = defaultdict(TrieNode)
-        self.isWord = False
-
-class Trie:
-    def __init__(self):
-        self.root = TrieNode()
-
-    def insert(self, word: str) -> None:
-        r = self.root
-        for c in word:
-            r = r.children[c]
-        r.isWord = True
-
-    def search(self, word: str) -> bool:
-        r = self.root
-        for c in word:
-            if c not in r.children:
-                return False
-            r = r.children[c]
-        return r.isWord
-
-    def startsWith(self, prefix: str) -> bool:
-        r = self.root
-        for c in prefix:
-            if c not in r.children:
-                return False
-            r = r.children[c]
-        return True
 # 简单版：直接用字典
 
-# char(key)->dict(value)
+# 写法一：
 
 class Trie:
     def __init__(self):
@@ -7218,7 +7053,8 @@ class Trie:
             if c not in r: return False
             r = r[c]
         return True
-# 改成树了，不用类，哈希树实现 时间超过 98.94
+
+# 写法二：
 
 class Trie:
 
@@ -7227,66 +7063,66 @@ class Trie:
 
 
     def insert(self, word: str) -> None:
-        cur_node = self.root
-        for char in word:
-            if not cur_node.get(char):
-                cur_node[char] = {}
-            cur_node = cur_node[char]
-        cur_node['end'] = True
+        r = self.root
+        for c in word:
+            if not r.get(c):
+                r[c] = {}
+            r = r[c]
+        r['end'] = True
 
 
     def search(self, word: str) -> bool:
-        cur_node = self.root
-        for char in word:
+        r = self.root
+        for c in word:
             try:
-                cur_node = cur_node[char]
+                r = r[c]
             except:
                 return False
-        if cur_node.get('end'):
-            return True
-        else:
-            return False
+        return 'end' in r
 
 
     def startsWith(self, prefix: str) -> bool:
-        cur_node = self.root
-        for char in prefix:
+        r = self.root
+        for c in prefix:
             try:
-                cur_node = cur_node[char]
+                r = r[c]
             except:
                 return False
         return True
-# Python, 写的时候忘了要写树
-# 两个集合，一个存word，一个存前缀
-# 插入word时倒序往prefixs集合中添加前缀，如果已经存在了，就说明后续都不用继续添加了
-# 时间、空间 分别打败77%，91%
+
+# 写法三：
+
 class Trie:
 
     def __init__(self):
-        self.words = set()
-        self.prefixs = set()
+        self.root = {}
+
 
     def insert(self, word: str) -> None:
-        try:
-            self.words.add(word)
-            for end_index in range(len(word)+1, 0, -1):
-                prefix = word[:end_index]
-                self.prefixs.add(prefix)
-        except:
-            return
+        r = self.root
+        for c in word:
+            if c not in r:
+                r[c] = {}
+            r = r[c]
+        r['end'] = True
+
 
     def search(self, word: str) -> bool:
-        if word in self.words:
-            return True
-        else:
-            return False
+        r = self.root
+        for c in word:
+            if c not in r:
+                return False
+            r = r[c]
+        return 'end' in r
 
 
     def startsWith(self, prefix: str) -> bool:
-        if prefix in self.prefixs:
-            return True
-        else:
-            return False
+        r = self.root
+        for c in prefix:
+            if c not in r:
+                return False
+            r = r[c]
+        return True
 ```
 
 ```scala
@@ -7924,90 +7760,47 @@ import scala.collection.mutable.ArrayBuffer
 
 [小明](https://www.bilibili.com/video/BV1x5411a77S?spm_id_from=333.999.0.0)
 
-###  1.90. <a name='WordSearchII'></a>212. 【构造🏰】Word Search II
+###  1.90. <a name='WordSearchII'></a>212. 【构造🏰 + 困难】Word Search II
 
 [花花酱](https://www.bilibili.com/video/BV184411d7i9?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1vi4y1G7NQ?spm_id_from=333.999.0.0)
 
 ```py
-
-如果把方向换成[[0,1], [1,0], [0,-1], [-1,0]]过不了：
-
-[["a","b","e"],["b","c","d"]]
-["abcdeb"]
-先检索abc（b用[0,1]）会记录这个结果不符合，再检索abc（b用[1,0]）会直接判断不行, lru_cache没法处理visited的差异
-
-
-class Solution:
-    def findWords(self, board: [[str]], words: [str]) -> [str]:
-        m, n = len(board), len(board[0])
-        res = set()
-        @lru_cache(None)
-        def dfs(x, y, ans, mark=set()):
-            mark.add((x, y))
-          
-            if ans in words:
-                res.add(ans)
-            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                if 0 <= x + dx < m and 0 <= y + dy < n and (x + dx, y + dy) not in mark:
-                    dfs(x + dx, y + dy, ans + board[x + dx][y + dy])
-            mark.remove((x, y))
-        for i in range(m):
-            for j in range(n):
-                dfs(i, j, board[i][j])
-        return list(res)
-```
-
-
-```py
-from collections import defaultdict
-
+from collections import  defaultdict
+class TrieNode:
+    def __init__(self):
+        self.children = defaultdict(TrieNode)
+        self.isWord = False
 
 class Trie:
     def __init__(self):
-        self.children = defaultdict(Trie)
-        self.word = ""
+        self.root = TrieNode()
 
-    def insert(self, word):
-        cur = self
+    def insert(self, word: str) -> None:
+        r = self.root
         for c in word:
-            cur = cur.children[c]
-        cur.is_word = True
-        cur.word = word
+            r = r.children[c]
+        r.isWord = True
 
+    def search(self, word: str) -> bool:
+        r = self.root
+        for c in word:
+            if c not in r.children:
+                return False
+            r = r.children[c]
+        return r.isWord
 
-class Solution:
-    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        trie = Trie()
-        for word in words:
-            trie.insert(word)
+    def startsWith(self, prefix: str) -> bool:
+        r = self.root
+        for c in prefix:
+            if c not in r.children:
+                return False
+            r = r.children[c]
+        return True
+```
 
-        def dfs(now, i1, j1):
-            if board[i1][j1] not in now.children:
-                return
-
-            ch = board[i1][j1]
-
-            now = now.children[ch]
-            if now.word != "":
-                ans.add(now.word)
-
-            board[i1][j1] = "#"
-            for i2, j2 in [(i1 + 1, j1), (i1 - 1, j1), (i1, j1 + 1), (i1, j1 - 1)]:
-                if 0 <= i2 < m and 0 <= j2 < n:
-                    dfs(now, i2, j2)
-            board[i1][j1] = ch
-
-        ans = set()
-        m, n = len(board), len(board[0])
-
-        for i in range(m):
-            for j in range(n):
-                dfs(trie, i, j)
-
-        return list(ans)
-
+```py
 from collections import defaultdict
 
 
@@ -8030,39 +7823,85 @@ class Solution:
         for word in words:
             trie.insert(word)
 		
-        def dfs(now, i1, j1):
-            if board[i1][j1] not in now.children:
+        def dfs(tries, x, y):
+            # 递归的结束：tries.children不能站在board上
+            if board[x][y] not in tries.children:
                 return
+            # 递归的开始：有一个tries.children能站在board上，那就是小c
+            char = board[x][y]
+            
+            # 递归的找到目标: 就是charSon，只有charSon才能判断是否是个单词
+            charSon = tries.children[char]
+            if charSon.word:
+                res.append(charSon.word)
+                charSon.word = "" # 把单词删掉
+                
+            # 找到/没有找到递归的目标: 就是charSon的Son
+            if charSon.children:
+                board[x][y] = "#" # 把charSon的father走过的路径删掉,避免重复
+                for newX, newY in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]:
+                    if 0 <= newX < m and 0 <= newY < n:
+                        dfs(charSon, newX, newY)
+                board[x][y] = char # 把charSon的father走过的路径恢复
 
-            ch = board[i1][j1]
+            # 没有找到递归的目标: char 就是走不通的，char杀死
+            if not charSon.children:
+                tries.children.pop(char)
 
-            nxt = now.children[ch]
-            if nxt.word != "":
-                ans.append(nxt.word)
-                nxt.word = ""
-
-            if nxt.children:
-                board[i1][j1] = "#"
-                for i2, j2 in [(i1 + 1, j1), (i1 - 1, j1), (i1, j1 + 1), (i1, j1 - 1)]:
-                    if 0 <= i2 < m and 0 <= j2 < n:
-                        dfs(nxt, i2, j2)
-                board[i1][j1] = ch
-
-            if not nxt.children:
-                now.children.pop(ch)
-
-        ans = []
+        res = []
         m, n = len(board), len(board[0])
 
         for i in range(m):
             for j in range(n):
                 dfs(trie, i, j)
 
-        return ans
-。
+        return res
 ```
 
 
+```py
+这个答案为什么不对呢？？
+# 如果把方向换成[[0,1], [1,0], [0,-1], [-1,0]]过不了：
+
+# [["a","b","e"],["b","c","d"]]
+# ["abcdeb"]
+
+# 先检索abc（b用[0,1]）会记录这个结果不符合，再检索abc（b用[1,0]）会直接判断不行, lru_cache没法处理visited的差异
+
+
+class Solution:
+
+    def __init__(self):
+        self.mark = set()
+
+    def findWords(self, board: [[str]], words: [str]) -> [str]:
+        m, n = len(board), len(board[0])
+        res = set()
+        @lru_cache(None)
+        def dfs(x, y, ans):
+            if ans in words:
+                res.add(ans)
+                return
+            # 对于这样一个case，还是应该要继续的
+            # [["o","a","b","n"],["o","t","a","e"],["a","h","k","r"],["a","f","l","v"]]
+            # ["oa","oaa"]        
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                if 0 <= x + dx < m and 0 <= y + dy < n and (x + dx, y + dy) not in self.mark:
+                    self.mark.add((x + dx, y + dy))
+                    dfs(x + dx, y + dy, ans + board[x + dx][y + dy])
+                    self.mark.remove((x + dx, y + dy))
+        for i in range(m):
+            for j in range(n):
+                self.mark = set(board[i][j])
+                dfs(i, j, board[i][j])
+        return list(res)
+
+if __name__ == "__main__":     
+    s = Solution()
+    board = [["a","b","c","e"],["z","z","d","z"],["z","z","c","z"],["z","a","b","z"]]
+    words = ["abcdce"]
+    print(s.findWords(board, words))
+```
 
 ```scala
 
@@ -8959,108 +8798,7 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1ep4y1Y77j?spm_id_from=333.999.0.0)
 
 ```py
-from collections import deque
 
-class MyStack:
-
-    def __init__(self):
-        """
-        Python普通的Queue或SimpleQueue没有类似于peek的功能
-        也无法用索引访问，在实现top的时候较为困难。
-
-        用list可以，但是在使用pop(0)的时候时间复杂度为O(n)
-        因此这里使用双向队列，我们保证只执行popleft()和append()，因为deque可以用索引访问，可以实现和peek相似的功能
-
-        in - 存所有数据
-        out - 仅在pop的时候会用到
-        """
-        self.queue_in = deque()
-        self.queue_out = deque()
-
-    def push(self, x: int) -> None:
-        """
-        直接append即可
-        """
-        self.queue_in.append(x)
-
-
-    def pop(self) -> int:
-        """
-        1. 首先确认不空
-        2. 因为队列的特殊性，FIFO，所以我们只有在pop()的时候才会使用queue_out
-        3. 先把queue_in中的所有元素（除了最后一个），依次出列放进queue_out
-        4. 交换in和out，此时out里只有一个元素
-        5. 把out中的pop出来，即是原队列的最后一个
-        
-        tip：这不能像栈实现队列一样，因为另一个queue也是FIFO，如果执行pop()它不能像
-        stack一样从另一个pop()，所以干脆in只用来存数据，pop()的时候两个进行交换
-        """
-        if self.empty():
-            return None
-
-        for i in range(len(self.queue_in) - 1):
-            self.queue_out.append(self.queue_in.popleft())
-        
-        self.queue_in, self.queue_out = self.queue_out, self.queue_in    # 交换in和out，这也是为啥in只用来存
-        return self.queue_out.popleft()
-
-    def top(self) -> int:
-        """
-        1. 首先确认不空
-        2. 我们仅有in会存放数据，所以返回第一个即可
-        """
-        if self.empty():
-            return None
-        
-        return self.queue_in[-1]
-
-
-    def empty(self) -> bool:
-        """
-        因为只有in存了数据，只要判断in是不是有数即可
-        """
-        return len(self.queue_in) == 0
-
-
-class MyStack:
-
-    def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.queue1 = collections.deque()
-        self.queue2 = collections.deque()
-
-
-    def push(self, x: int) -> None:
-        """
-        Push element x onto stack.
-        """
-        self.queue2.append(x)
-        while self.queue1:
-            self.queue2.append(self.queue1.popleft())
-        self.queue1, self.queue2 = self.queue2, self.queue1
-
-
-    def pop(self) -> int:
-        """
-        Removes the element on top of the stack and returns that element.
-        """
-        return self.queue1.popleft()
-
-
-    def top(self) -> int:
-        """
-        Get the top element.
-        """
-        return self.queue1[0]
-
-
-    def empty(self) -> bool:
-        """
-        Returns whether the stack is empty.
-        """
-        return not self.queue1
 
 
 class MyStack:
@@ -9101,9 +8839,9 @@ class MyStack:
         Returns whether the stack is empty.
         """
         return not self.queue
-
-
 ```
+
+以下两种写法，速度更快一点点，但是写法复杂
 
 ```py
 q2当作缓存队列
@@ -9123,24 +8861,16 @@ class MyStack:
     def pop(self) -> int:
         while len(self.q1) > 1:
             self.q2.append(self.q1.popleft())
-        t = self.q1
-        self.q1 = self.q2
-        self.q2 = t
+        self.q1,self.q2 = self.q2, self.q1
         return self.q2.popleft()
         
         
     def top(self) -> int:
-        while len(self.q1) > 1:
-            self.q2.append(self.q1.popleft())
-        res = self.q1.popleft()
-        t = self.q1
-        self.q1 = self.q2
-        self.q2 = t
-        self.q1.append(res)
-        return res
+        return self.q1[-1]
 
     def empty(self) -> bool:
         return not self.q1
+
 ```
 
 ```scala
@@ -9798,54 +9528,6 @@ object Solution {
 
 [图灵](https://www.bilibili.com/video/BV1Gf4y147Vj?spm_id_from=333.999.0.0)
 
-```py
-class MyQueue:
-
-    def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.s1 = []
-        self.s2 = []
-        self.front = None
-
-
-    def push(self, x: int) -> None:
-        """
-        Push element x to the back of queue.
-        """
-        if not self.s1: self.front = x
-        self.s1.append(x)
-        
-
-
-    def pop(self) -> int:
-        """
-        Removes the element from in front of queue and returns that element.
-        """
-        if not self.s2:
-            while self.s1:
-                self.s2.append(self.s1.pop())
-            self.front = None
-        return self.s2.pop()
-
-    def peek(self) -> int:
-        """
-        Get the front element.
-        """
-        if self.s2: 
-            return self.s2[-1]
-        return self.front
-
-
-    def empty(self) -> bool:
-        """
-        Returns whether the queue is empty.
-        """
-        if not self.s1 and not self.s2:
-            return True
-        return False
-```
 
 ```py
 class MyQueue:
@@ -9855,6 +9537,7 @@ class MyQueue:
         self.s2 = []
 
     def push(self, x):
+        # 要把新来的元素压入
         while self.s1:
             self.s2.append(self.s1.pop())
         self.s2.append(x)
@@ -9862,10 +9545,12 @@ class MyQueue:
             self.s1.append(self.s2.pop())
 
     def pop(self):
+        # 假装最后一个元素是开头
         return self.s1.pop() if self.s1 else None
         
 
     def peek(self):
+        # 假装最后一个元素是开头
         return self.s1[-1] if self.s1 else None
 
     def empty(self):
@@ -10600,46 +10285,6 @@ class Solution:
         return ans
 
 ```
-
-
-【构造🏰】
-
-```py
-class MyQueue: #单调队列（从大到小
-    def __init__(self):
-        self.queue = [] #使用list来实现单调队列
-    
-    #每次弹出的时候，比较当前要弹出的数值是否等于队列出口元素的数值，如果相等则弹出。
-    #同时pop之前判断队列当前是否为空。
-    def pop(self, value):
-        if self.queue and value == self.queue[0]:
-            self.queue.pop(0)#list.pop()时间复杂度为O(n),这里可以使用collections.deque()
-            
-    #如果push的数值大于入口元素的数值，那么就将队列后端的数值弹出，直到push的数值小于等于队列入口元素的数值为止。
-    #这样就保持了队列里的数值是单调从大到小的了。
-    def push(self, value):
-        while self.queue and value > self.queue[-1]:
-            self.queue.pop()
-        self.queue.append(value)
-        
-    #查询当前队列里的最大值 直接返回队列前端也就是front就可以了。
-    def front(self):
-        return self.queue[0]
-    
-class Solution:
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        que = MyQueue()
-        result = []
-        for i in range(k): #先将前k的元素放进队列
-            que.push(nums[i])
-        result.append(que.front()) #result 记录前k的元素的最大值
-        for i in range(k, len(nums)):
-            que.pop(nums[i - k]) #滑动窗口移除最前面元素
-            que.push(nums[i]) #滑动窗口前加入最后面的元素
-            result.append(que.front()) #记录对应的最大值
-        return result
-```
-
 
 ```scala
 
@@ -15860,88 +15505,6 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1by4y1h7ab?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def __init__(self):
-        self.result_all = None
-        # 分别表示上右下左
-        self.directs = [(-1, 0), (0, 1), (1, 0), (0, -1)]
-        self.m = 0
-        self.n = 0
-        # 表示能流到太平洋
-        self.po = None
-        # 表示能流到大西洋
-        self.ao = None
-        self.visited = None
-    
-    
-    def pacificAtlantic(self, matrix) :
-        # 初始化一些东西
-        self.result_all = []
-        self.m = len(matrix)
-        if self.m == 0:
-            return self.result_all
-        self.n = len(matrix[0])
-        self.ao = [[0] * self.n for _ in range(self.m)]
-        self.po = [[0] * self.n for _ in range(self.m)]
-        self.visited = [[0] * self.n for _  in range(self.m)]
-
-        # 本题顺着流不太好做，我们用逆流的方式来思考
-        # 从上面的太平洋逆流
-        for i in range(0, 1):
-            for j in range(self.n):
-                self.dfs(matrix, i, j, True)
-        # 从左边的太平洋逆流
-        self.visited = [[0] * self.n for _  in range(self.m)]
-        for i in range(self.m):
-            for j in range(0, 1):
-                self.dfs(matrix, i, j, True)
-        # 下面的大西洋
-        self.visited = [[0] * self.n for _  in range(self.m)]
-        for i in range(self.m - 1, self.m):
-            for j in range(self.n):
-                self.dfs(matrix, i, j, False)
-        # 右边的大西洋
-        self.visited = [[0] * self.n for _  in range(self.m)]
-        for i in range(self.m):
-            for j in range(self.n -1, self.n):
-                self.dfs(matrix, i, j, False)
-        
-        for i in range(self.m):
-            for j in range(self.n):
-                if self.po[i][j] == 1 and self.ao[i][j] == 1:
-                    self.result_all.append((i, j))
-        return self.result_all
-
-    def dfs(self, matrix, x, y, flag):
-        if self.visited[x][y] == 1:
-            return
-        self.visited[x][y] = 1
-        if flag:
-            # 表示是太平洋
-            self.po[x][y] = 1
-        else:
-            # 表示是大西洋
-            self.ao[x][y] = 1
-
-        for i in range(4):
-            newx = x + self.directs[i][0]
-            newy = y + self.directs[i][1]
-            if not self.in_area(newx, newy):
-                continue
-            if matrix[x][y] > matrix[newx][newy]:
-                continue
-            self.dfs(matrix, newx, newy, flag)
-        return
-    
-    def in_area(self, x, y):
-        return 0 <= x < self.m and 0 <= y < self.n
-
-
-作者：jawhiow
-链接：https://leetcode-cn.com/problems/pacific-atlantic-water-flow/solution/shen-du-sou-suo-dfs-by-jawhiow/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 class Solution:
     def bfs(self, heights: List[List[int]], src: List[List[int]], cnt: List[List[int]]) -> None:
         direction = [(-1, 0), (1, 0), (0, 1), (0, -1)]

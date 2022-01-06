@@ -3070,59 +3070,9 @@ class Solution:
 
 [图灵](https://www.bilibili.com/video/BV1g5411w7o8?spm_id_from=333.999.0.0)
 
+我怎么感觉是：返回倒数第k大的数
+
 ```py
-方法一：直接降序排序，然后取第k个元素返回，add时每次都再排序一次，这样时间复杂度为O(k*logk)
-
-# 1.直接排序
-class KthLargest:
-    def __init__(self, k: int, nums: List[int]):
-        self.nums = nums
-        self.k = k
-        self.nums.sort(reverse = True)
-        while len(self.nums) > k:
-            self.nums.pop()
-
-    def add(self, val: int) -> int:
-        self.nums.append(val)
-        self.nums.sort(reverse = True)
-        if len(self.nums) > self.k:
-            self.nums.pop()
-        return self.nums[-1]
-方法二：使用小顶堆实现的优先队列，Python 中标准库 heapq 就是小顶堆，时间复杂度降低为O(k)
-
-# 2.小顶堆
-import heapq
-class KthLargest:
-    def __init__(self, k: int, nums: List[int]):
-        self.pool = nums
-        heapq.heapify(self.pool)
-        self.k = k
-        while len(self.pool) > k:
-            heapq.heappop(self.pool)
-
-    def add(self, val: int) -> int:
-        if len(self.pool) < self.k:
-            heapq.heappush(self.pool, val)
-        elif val > self.pool[0]:
-            heapq.heapreplace(self.pool, val)
-        return self.pool[0]
-class KthLargest:
-
-    def __init__(self, k: int, nums: List[int]):
-        self.k = k
-        self.queue = []
-        for n in nums: self.add(n)
-
-    def add(self, val: int) -> int:
-        if len(self.queue) < self.k:
-            heapq.heappush(self.queue, val)
-        elif val > self.queue[0]:
-            heapq.heapreplace(self.queue, val)
-        return self.queue[0]
-
-
-
-python 3
 class KthLargest:
 
     def __init__(self, k: int, nums: List[int]):
@@ -3136,26 +3086,7 @@ class KthLargest:
         while len(self.nums) > self.k:
             heapq.heappop(self.nums)
         return self.nums[0]
-```
 
-```py
-一顿操作猛如虎，一看击败百分五
-
-class KthLargest:
-    def __init__(self, k: int, nums: List[int]):
-        self.k = k
-        t = sorted(nums)
-        t = t[::-1]
-        self.arr = t[:k]
-
-    def add(self, val: int) -> int:
-        for i in range(min(self.k, len(self.arr))):
-            if self.arr[i] < val:
-                self.arr.insert(i, val)
-                break
-        else:
-            self.arr.append(val)
-        return self.arr[self.k - 1]
 ```
 
 ```scala
@@ -3893,6 +3824,134 @@ class Solution:
 
 [熊羊一锅鲜](https://www.bilibili.com/video/BV1E341187W6?from=search&seid=4056121790831106424&spm_id_from=333.337.0.0)
 
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3h1htkp4rl40.webp)
+
+方法一：Dijkstra 算法
+
+```py
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        graph = [[float('inf')] * n for _ in range(n)]
+        for start, end, cost in times:
+            graph[start - 1][end - 1] = cost
+
+        costsum = [float('inf')] * n
+        costsum[k - 1] = 0
+        visited = [False] * n
+        for _ in range(n):
+            start = -1
+            for end, visit in enumerate(visited):
+                if not visit and (start == -1 or costsum[end] < costsum[start]):
+                    start = end
+            visited[start] = True
+            
+            for end, cost in enumerate(graph[start]):
+                costsum[end] = min(costsum[end], costsum[start] + cost)
+
+        res = max(costsum)
+        return res if res < float('inf') else -1
+
+Python 中海象运算符的三种用法
+
+https://www.cnblogs.com/wongbingming/p/12743802.html
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        graph = [[] for _ in range(n)]
+        for start, end, cost in times:
+            graph[start - 1].append((end - 1, cost))
+
+        costsum = [float('inf')] * n
+        costsum[k - 1] = 0
+        visited = [(0, k - 1)]
+        while visited:
+            cost, start = heapq.heappop(visited)
+            # 这个判断语句的作用是, 防止对同一节点的重复 relax操作. 
+            if costsum[start] < cost:
+                continue
+            # 例如 对于节点1, 
+
+            # 在 0 relax 时, 0 -> 1 被更新. 
+            # 在 2 relax 时, 2 -> 1 被更新. 
+            # 此时假设 2 -> 1 的 time 是 小于 0 -> 1 的. 
+
+            # 如果 在节点2 relax阶段, 2->1 time 最小, 也就是 dist[1] 最小, 就会被弹出, 
+            # 然后 对节点1 进行relax操作. 因为 0->1 已经进入队列, 
+
+            # 并且 q为空才会停止弹出, 所以 0->1 之后肯定要被弹出. 
+            # 这里 直接 过滤掉 0->1 , 防止再次对 节点 1进行relax操作.
+            for end, cost in graph[start]:
+                if (costnew := costsum[start] + cost) < costsum[end]:
+                    costsum[end] = costnew
+                    heapq.heappush(visited, (costnew, end))
+
+        res = max(costsum)
+        return res if res < float('inf') else -1
+
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        graph = [ [float('inf')] * n for _ in range(n)]
+        for start, end, cost in times: # convert to graph
+            graph[start-1][end-1] = cost
+        costsum = [float('inf')] * n
+        costsum[k-1] = 0
+        visited = [(0,k-1)]
+        
+        while visited:
+            cost, start = heapq.heappop(visited)
+            for end, cost in enumerate(graph[start]):
+                if costsum[start] + cost  < costsum[end]:
+                    costsum[end] = costsum[start] + cost
+                    heapq.heappush(visited, (costsum[end], end))
+        res = max(costsum)
+        return res if res != float('inf') else -1
+
+
+*** 大雪菜模板 击败97%
+
+import collections, heapq as hq
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        graph = collections.defaultdict(list)
+        visited = [False for i in range(n+1)]
+        costsum = [1e5]* (n+1)
+        visitHeap = []
+        costsum[k] = 0
+        hq.heappush(visitHeap,[0,k])
+        for row in times:
+            graph[row[0]].append([row[2],row[1]])
+
+        while len(visitHeap) != 0:
+            cost,start = hq.heappop(visitHeap)
+            if visited[start]: continue
+            visited[start] = True
+            for cost,end in graph[start]:
+                if costsum[end] > costsum[start] + cost:
+                    costsum[end] = costsum[start] + cost
+                    hq.heappush(visitHeap,[costsum[end],end])
+
+        res = -1
+        for i in range(1,n+1):
+            if costsum[i] == 1e5:
+                return -1
+            res = max(costsum[i],res)
+        return res
+
+Bellman-Ford算法
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        costsum = {node: float('inf') for node in range(1,n+1)}
+        costsum[k]=0
+        for _ in range(n-1):
+            for start, end, cost in times:
+                costsum[end] = min(costsum[end], costsum[start] + cost)
+        res = max(costsum.values())
+        return res if res != float('inf') else -1       
+```
+
 ###  1.94. <a name='PrefixandSuffixSearch'></a>745. Prefix and Suffix Search
 
 [花花酱](https://www.bilibili.com/video/BV1TW411k7PY?spm_id_from=333.999.0.0)
@@ -4116,9 +4175,9 @@ class Solution:
             for j in range(n):
                 ID = i * n + j
                 if i < n-1:
-                    edges.append([max(grid[i][j],grid[i+1][j]),ID,ID+n])
+                    edges.append([max(grid[i][j],grid[i+1][j]), ID, ID+n])
                 if j < n-1:
-                    edges.append([max(grid[i][j],grid[i][j+1]),ID,ID+1])
+                    edges.append([max(grid[i][j],grid[i][j+1]), ID, ID+1])
         edges.sort()
         
         #🍒并查集初始化
@@ -4411,19 +4470,19 @@ class Solution:
         if src == dst:
             return 0
         graph = collections.defaultdict(list)
-        for start, t, p in flights:
-            graph[start].append((t, p))
-        dist = {src: 0}
-        queue = [(0, src, 0)]
-        while queue:
-            price, start, interval = queue.pop(0)
+        for start, end, cost in flights:
+            graph[start].append((end, cost))
+        costsumDic = {src: 0}
+        visited = [(0, src, 0)]
+        while visited:
+            costsum, start, interval = visited.pop(0)
             if interval > k:
                 break
-            for end, p in graph[start]:
-                if price + p < dist.get(end, float("inf")):
-                    dist[end] = price + p
-                    queue.append((price + p, end, interval + 1))
-        return -1 if dist.get(dst, float("inf")) == float("inf") else dist[dst]
+            for end, cost in graph[start]:
+                if costsum + cost < costsumDic.get(end, float("inf")):
+                    costsumDic[end] = costsum + cost
+                    visited.append((costsum + cost, end, interval + 1))
+        return -1 if costsumDic.get(dst, float("inf")) == float("inf") else costsumDic[dst]
 
 # from xiaoming
 
@@ -4434,22 +4493,22 @@ class Solution:
         if src == dst:
             return 0
         graph = collections.defaultdict(list)
-        for f, t, p in flights:
-            graph[f].append((t, p))
-        dist = {}
-        queue = [(0, src, 0)]
-        while queue:
-            price, start, interval = heapq.heappop(queue)
+        for start, end, cost in flights:
+            graph[start].append((end, cost))
+        costsumDic = {}
+        visited = [(0, src, 0)]
+        while visited:
+            costsum, start, interval = heapq.heappop(visited)
             # 这个部分很重要，一定要k+1
             if interval > k+1:
                 continue
             if start == dst:
-                return price
-            for end, p in graph[start]:
+                return costsum
+            for end, cost in graph[start]:
                 # 这一步剪枝很重要
-                if price + p < dist.get((end,interval+1), float("inf")):
-                    heapq.heappush(queue, (price + p, end, interval + 1))
-                    dist[(end,interval+1)] = price + p
+                if costsum + cost < costsumDic.get((end,interval+1), float("inf")):
+                    heapq.heappush(visited, (costsum + cost, end, interval + 1))
+                    costsumDic[(end,interval+1)] = costsum + cost
                 # print(dist)
                 # {(1, 1): 100}
                 # {(1, 1): 100, (2, 1): 500}
@@ -4460,9 +4519,10 @@ class Solution:
 py 动态🚀规划
 
 ```py
+一维数组：
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
-        dp = [float('inf') for _ in range(n)]
+        dp = [float('inf')] * n
         dp[src] = 0
         for _ in range(K+1):
             tmp = dp[:]
@@ -4476,7 +4536,7 @@ class Solution:
                 # [0, 100, 200]
                 # [0, 100, 200]
         return dp[dst] if dp[dst] != float('inf') else -1
-
+二维数组：
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
         dp = [[float("inf")] * n for _ in range(k + 2)]
@@ -4487,21 +4547,6 @@ class Solution:
         
         res = min(dp[t][dst] for t in range(1, k + 2))
         return -1 if res == float("inf") else res
-
-class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        tmp = [float("inf")] * n
-        tmp[src] = 0
-        res = float("inf")
-        for _ in range(1, k + 2):
-            dp = [float("inf")] * n
-            for j, i, cost in flights:
-                dp[i] = min(dp[i], tmp[j] + cost)
-            tmp = dp
-            res = min(res, tmp[dst])
-        
-        return -1 if res == float("inf") else res
-
 ```
 
 
@@ -5721,55 +5766,52 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Jg4y1B74H?spm_id_from=333.999.0.0)
 
 ```py
-class StockSpanner(object):
-    def __init__(self):
-        self.stack = []
-
-    def next(self, price):
-        weight = 1
-        while self.stack and self.stack[-1][0] <= price:
-            weight += self.stack.pop()[1]
-        self.stack.append((price, weight))
-        return weight
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/online-stock-span/solution/gu-piao-jie-ge-kua-du-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 class StockSpanner:
 
     def __init__(self):
-        self.stack = [] # (price, span)
+        self.prices = []
+
 
     def next(self, price: int) -> int:
         span = 1
-        while self.stack and self.stack[-1][0] <= price:
-            span += self.stack.pop()[1]
-        self.stack.append((price, span))
+        while self.prices and self.prices[-1][0] <= price: # 易错点：不是self.prices[-1]
+                tmpspan = self.prices.pop()[1]
+                span += tmpspan
+        self.prices.append([price,span]) 
         return span
 ```
 
 ```py
+上一版本的错误写法：
+
+
 class StockSpanner:
-    """
-    用一个栈来存储过去股票的价格和对应的跨度，
-    如果当天的股票价格大于栈顶的股票价格，则出栈，
-    将对应的跨度加到今日股票价格的跨度上．
-    直到栈顶的股票价格大于当日股票价格，然后将当日股票价格和对应的跨度入栈
-    """
+
     def __init__(self):
-        self.his_prices = [(-999, 0)]
+        self.span = 1
+        self.prices = [10e6]
+
 
     def next(self, price: int) -> int:
-        span = 1
-        while self.his_prices:
-            if self.his_prices[-1][0] <= price:
-                span += self.his_prices.pop()[1]
-            else:
-                break
-        self.his_prices.append((price, span))
-        return span
+        if self.prices[-1] > price: 
+            self.prices.append(price) 
+            return 1
+        else:
+            while self.prices[-1] <= price: 
+                self.prices.pop()
+                self.span += 1
+            self.prices.append(price) 
+            return self.span
+
+
+# 输入：
+# ["StockSpanner","next","next","next","next","next"]
+# [[],[29],[91],[62],[76],[51]]
+# 输出：
+# [null,1,2,1,3,1]
+# 预期结果：
+# [null,1,2,1,2,1]
+
 ```
 
 ###  1.159. <a name='NumbersAtMostNGivenDigitSet'></a>902 Numbers At Most N Given Digit Set
@@ -6415,9 +6457,92 @@ dict[x]如果x不存在难道不异常么。。。结果清一色的，全是用
 
 [花花酱](https://www.bilibili.com/video/BV14t411v7VX?from=search&seid=1135814820928819139&spm_id_from=333.337.0.0)
 
-###  1.185. <a name='DijkstraLeastOperatorstoExpressNumber'></a>964. 【Dijkstra🚗】Least Operators to Express Number
+###  1.185. <a name='DijkstraLeastOperatorstoExpressNumber'></a>964. 【Dijkstra🚗 + 困难】Least Operators to Express Number
 
 [花花酱](https://www.bilibili.com/video/BV1Pt411k7qn?spm_id_from=333.999.0.0)
+
+```py
+from functools import lru_cache
+
+class Solution(object):
+    def leastOpsExpressTarget(self, x, target):
+        cost = list(range(40))
+        cost[0] = 2
+
+        @lru_cache(None)
+        def dp(i, targ):
+            if targ == 0: return 0
+            if targ == 1: return cost[i]
+            if i >= 39: return float('inf')
+
+            t, r = divmod(targ, x)
+            return min(r * cost[i] + dp(i+1, t),
+                       (x-r) * cost[i] + dp(i+1, t+1))
+
+        return dp(0, target) - 1
+
+作者：LeetCode
+链接：https://leetcode-cn.com/problems/least-operators-to-express-number/solution/biao-shi-shu-zi-de-zui-shao-yun-suan-fu-by-leetcod/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+## 思路:
+
+**动态规划**
+
+首先，这个问题一定有解，大不了我们一直用x/x = 1加到目标值。
+
+其次，因为要最少运算符，所以尽量使用乘法，快速增长到目标值附近。
+
+最后，到目标值附近，有三种可能（假如通过乘法到底目标值附近的值为cur）：
+
+cur = target，
+
+    这种情况直接输出即可；
+
+cur > target，
+
+    比如cur = 4，target = 3, x = 2，
+    这时候需要使用减法(比如4 - 2/2 )，
+    只需找到能求得cur - target的最小运算符是什么即可；
+
+cur < target，
+
+    比如cur = 3, target = 7, x = 3，这时候需要使用加法，
+    只需找到target - cur最小运算符是什么即可。
+
+但是，当target < x时候，比如target = 2, x = 3，
+我们有两种方法到达目标值，一种是3/3 + 3/3；一种是3- 3/3，
+换句话说，一种全是用1相加，一种先用x再减1，判断谁用操作符最少。
+
+所以，我们可以用带记忆法递归求的解，代码如下：
+
+## 代码:
+
+class Solution:
+    def leastOpsExpressTarget(self, x: int, target: int) -> int:
+        from functools import lru_cache
+
+        @lru_cache(None)
+        def dfs(cur):
+            # 当cur < x, 比如 cur = 2, x = 3, 需要判断使用 3/3 + 3/3 和 3 - 3/3,哪个用运算符最少
+            if cur < x:
+                return min(2 * cur - 1, (x - cur) * 2)
+            if cur == 0:
+                return 0
+            # 到cur 需要几个x相乘,
+            p = int(math.log(cur, x))
+            sums = x ** p
+            # cur < sums 的情况,就是要加
+            ans = dfs(cur - sums) + p
+            # sums > cur, 就是要减去多少才能到底目标值, 这个判断条件是有严格的数学证明的
+            if sums * x - cur < cur:
+                ans = min(ans, p + 1 + dfs(sums * x - cur))
+            return ans
+
+        return dfs(target)
+```
 
 ###  1.186. <a name='VowelSpellchecker'></a>966 Vowel Spellchecker
 
@@ -8269,9 +8394,189 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1tK4y1D7aV?spm_id_from=333.999.0.0)
 
-###  1.285. <a name='DijkstraFindtheCityWithSmallestNumberofNeighbors'></a>1334. 【Dijkstra🚗】Find the City With Smallest Number of Neighbors
+###  1.285. <a name='DijkstraFindtheCityWithSmallestNumberofNeighbors'></a>1334. 【Dijkstra🚗 + 做的人少跳过】Find the City With Smallest Number of Neighbors
 
 [花花酱](https://www.bilibili.com/video/BV1b7411z7Tb?spm_id_from=333.999.0.0)
+
+```py
+python3: Floyd算法
+
+INF = 10**4+1
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        distance = [[INF for i in range(n)] for i in range(n)]
+        for u,v,w in edges:
+            distance[u][v] = distance[v][u] = w
+        for i in range(n):
+            distance[i][i] = 0
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    if (shorter := distance[i][k]+distance[k][j]) < distance[i][j]:
+                        distance[i][j] = shorter
+        cnt = [0] * n
+        for i in range(n):
+            for j in range(n):
+                if i != j and distance[i][j] <= distanceThreshold:
+                    cnt[i] += 1
+        min_cnt = min(cnt)
+        for i in range(n-1, -1, -1):
+            if cnt[i] == min_cnt:
+                return i
+        return -1
+```
+
+```py
+dijkstra + 遍历
+
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        adj = [[] for i in range(n)]
+        for i, j, v in edges:
+            adj[i].append((j,  v))
+            adj[j].append((i, v))
+        
+        def dijkstra(start, pay=0):
+            dist = [distanceThreshold+1]*n
+            heap = [(pay, start)]
+            while heap:
+                cost, cur = heapq.heappop(heap)
+                if cost >= dist[cur]: continue
+                else:
+                    dist[cur] = cost
+                    for nxt, v in adj[cur]:
+                        if cost + v < dist[nxt]:
+                            heapq.heappush(heap, (cost+v, nxt))
+
+            return  sum(map(lambda x: x <= distanceThreshold, dist))
+        
+        res = [dijkstra(i) for i in range(n)]
+        ans = n-1
+        for i in range(n-1, -1, -1):
+            if res[ans] > res[i]:
+                ans = i
+        return ans
+```
+
+```py
+效率好低...不过代码还挺简洁的
+
+from collections import defaultdict
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        graph = defaultdict(list)
+        for edge in edges:
+            a, b, w = edge
+            graph[a].append((b, w))
+            graph[b].append((a, w))
+        def dfs(i, distance):
+            for j, w in graph[i]:
+                if j not in visited and distance+w <= distanceThreshold:
+                    visited[j] = distance + w
+                    dfs(j, distance+w)
+                elif distance+w <= distanceThreshold:
+                    if distance + w < visited[j]:
+                        visited[j] = distance + w
+                        dfs(j, distance + w)
+        mincity, j = 101, -1
+        for i in range(n):
+            visited = defaultdict(int)
+            visited[i] = 0
+            dfs(i, 0)
+            if mincity >= len(visited)-1:
+                mincity = len(visited)-1
+                j = i
+        return j
+```
+
+```py
+Floyed算法计算每个点到其余各点的最短路径即可。
+
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        graph = [[0x3f3f3f3f for _ in range(n)] for _ in range(n)]
+        for x, y, w in edges:
+            graph[x][y], graph[y][x] = w, w
+
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+
+        res = [0 for _ in range(n)]
+
+        index, cnt = -1, n
+
+        for i in range(n):
+            for j in range(n):
+                if graph[i][j] <= distanceThreshold and i != j:
+                    res[i] += 1
+
+        for i, v in enumerate(res):
+            if cnt >= v:
+                index, cnt = i, v
+
+        return index
+```
+
+```py
+这是一道图的题目，这道题的意思是，
+
+求出节点与节点之间路径权重和的最小值，对于每个节点，
+计算整个图中与该路径结点权重和不超过某个阈值distanceThreshold的结点的个数
+作为该节点邻居个数（注意这里的邻居可能是非直连的），
+选出整个图中邻居个数最小的那个节点，
+如果存在多个值，返回编号更大的那个。
+
+对于图的路径优化问题，
+常常采用弗洛伊德算法（floyd算法），
+我们知道图中节点与节点之间的权重，
+就可以根据floyd算法，计算出每个节点与节点之间的最小路径权重和。
+这里需要将整个图表示成临接矩阵的形式。
+
+有了两两节点之间的最小路径权重和，
+就可以按照题目的要求，计算每个节点的邻居个数，
+并根据邻居个数做节点的筛选和排序。
+
+from typing import List
+
+
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        distance = [[0 if i == j else float('inf') for j in range(n)] for i in range(n)]
+        for i, j, w in edges:
+            distance[i][j] = w
+            distance[j][i] = w
+
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    distance[i][j] = min(distance[i][j], distance[i][k]+distance[k][j])
+
+        neighbor = [sum(distance[i][j] <= distanceThreshold for j in range(n)) for i in range(n)]
+        return min(list(range(n)), key=lambda i: (neighbor[i], -i))
+
+
+s = Solution()
+print(s.findTheCity(4,[[0,1,3],[1,2,1],[1,3,4],[2,3,1]], 4))
+```
+
+```scala
+object Solution {
+  def findTheCity(N: Int, edges: Array[Array[Int]], distanceThreshold: Int): Int = {
+    val arr = Array.fill(N, N)(Int.MaxValue)
+    edges.foreach({ case Array(i, j, w) =>
+      arr(i)(j) = w
+      arr(j)(i) = w
+    })
+    (0 until N).foreach(k => (0 until N).foreach(i => (0 until N)
+      .withFilter(j => i != j && arr(i)(k) != Int.MaxValue && arr(k)(j) != Int.MaxValue)
+      .foreach(j => arr(i)(j) = arr(i)(j) min (arr(i)(k) + arr(k)(j)))
+    ))
+    arr.map(_.count(_ <= distanceThreshold)).zipWithIndex.reverse.minBy(_._1)._2
+  }
+}
+```
 
 ###  1.286. <a name='MinimumDifficultyofaJobSchedule'></a>1335. Minimum Difficulty of a Job Schedule
 
@@ -8408,9 +8713,157 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1g7411c793?spm_id_from=333.999.0.0)
 
-###  1.293. <a name='DijkstraMinimumCosttoMakeatLeastOneValidPath'></a>1368. 【Dijkstra🚗】Minimum Cost to Make at Least One Valid Path
+###  1.293. <a name='DijkstraMinimumCosttoMakeatLeastOneValidPath'></a>1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path
 
 [花花酱](https://www.bilibili.com/video/BV1oE411E74t?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def minCost(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        BIG = int(1e9)
+        dist = [0] + [BIG] * (m * n - 1)
+        seen = set()
+        q = [(0, 0, 0)]
+
+        while len(q) > 0:
+            cur_dis, x, y = heapq.heappop(q)
+            if (x, y) in seen:
+                continue
+            seen.add((x, y))
+            cur_pos = x * n + y
+            for i, (nx, ny) in enumerate([(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]):
+                new_pos = nx * n + ny
+                new_dis = dist[cur_pos] + (1 if grid[x][y] != i + 1 else 0)
+                if 0 <= nx < m and 0 <= ny < n and new_dis < dist[new_pos]:
+                    dist[new_pos] = new_dis
+                    heapq.heappush(q, (new_dis, nx, ny))
+        
+        return dist[m * n - 1]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/solution/shi-wang-ge-tu-zhi-shao-you-yi-tiao-you-xiao-lu-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def minCost(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        BIG = int(1e9)
+        dist = [0] + [BIG] * (m * n - 1)
+        seen = set()
+        q = collections.deque([(0, 0)])
+
+        while len(q) > 0:
+            x, y = q.popleft()
+            if (x, y) in seen:
+                continue
+            seen.add((x, y))
+            cur_pos = x * n + y
+            for i, (nx, ny) in enumerate([(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]):
+                new_pos = nx * n + ny
+                new_dis = dist[cur_pos] + (1 if grid[x][y] != i + 1 else 0)
+                if 0 <= nx < m and 0 <= ny < n and new_dis < dist[new_pos]:
+                    dist[new_pos] = new_dis
+                    if grid[x][y] == i + 1:
+                        q.appendleft((nx, ny))
+                    else:
+                        q.append((nx, ny))
+        
+        return dist[m * n - 1]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/solution/shi-wang-ge-tu-zhi-shao-you-yi-tiao-you-xiao-lu-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+0-1BFS
+
+class Solution:
+    def minCost(self, grid: List[List[int]]) -> int:
+        # 顺序不能乱，1234右左下上
+        dire = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        n, m = len(grid), len(grid[0])
+        dis = [[float('inf') for _ in range(m+1)] for _ in range(n+1)]
+        vis = [[0 for _ in range(m+1)] for _ in range(n+1)]
+        q = deque()
+        q.append((0, 0))
+        dis[0][0] = 0
+        while q:
+            x, y = q.popleft()
+            if vis[x][y]:
+                continue
+            vis[x][y] = 1
+            for i in range(4):
+                nx, ny = x+dire[i][0], y+dire[i][1]
+                if nx < 0 or ny < 0 or nx >= n or ny >= m:
+                    continue
+                w = 0 if (grid[x][y]-1) == i else 1
+                if dis[nx][ny] > dis[x][y] + w:
+                    dis[nx][ny] = dis[x][y] + w
+                    q.append((nx, ny)) if w else q.appendleft((nx, ny))
+        return dis[n-1][m-1]
+
+```
+
+```py
+没有想到大佬们的BFS 用了Dijkstra求单源点最短路径
+
+#python3
+from heapq import heappop,heappush
+class Solution:
+	def minCost(self,grid):
+		row,col=len(grid),len(grid[0])
+		pqueue,visit=[(0,0,0)],[[1]*col for _ in range(row)] #代替set 表示相应的节点是否被访问过了
+		while pqueue:
+			cost,x,y=heappop(pqueue)
+			if visit[x][y]:
+				visit[x][y]=0
+				if x==row-1 and y==col-1: #已经到达了目标的位置了
+					return cost
+				ori_flag=grid[x][y]
+				for flag,(movex,movey) in enumerate([(0,1),(0,-1),(1,0),(-1,0)],1):
+					nxtx,nxty=x+movex,y+movey
+					if -1<nxtx<row and -1<nxty<col and visit[nxtx][nxty]:
+						heappush(pqueue,(cost+(flag!=ori_flag),nxtx,nxty))
+```
+
+```scala
+import scala.collection.mutable
+
+object Solution {
+  val diff = Map(
+    (1, 0) -> 4,
+    (-1, 0) -> 3,
+    (0, -1) -> 1,
+    (0, 1) -> 2
+  )
+
+  def minCost(grid: Array[Array[Int]]): Int = {
+    val arr = Array.fill(grid.length, grid(0).length)(grid.length - 1 + grid(0).length - 1)
+    arr(grid.length - 1)(grid(0).length - 1) = 0
+    val pq = mutable.PriorityQueue[(Int, Int, Int)]()((x: (Int, Int, Int), y: (Int, Int, Int)) => y._3 - x._3)
+    pq += ((grid.length - 1, grid(0).length - 1, 0))
+    while (pq.nonEmpty) {
+      val (x, y, cost) = pq.dequeue()
+      if (arr(x)(y) >= cost)
+        diff.keys.withFilter({ case (dirX, dirY) => (x + dirX >= 0) && (x + dirX < grid.length) && (y + dirY >= 0) && (y + dirY < grid(0).length) }).foreach({ case (dirX, dirY) =>
+          val X = x + dirX
+          val Y = y + dirY
+          var cost = 1
+          if (diff((dirX, dirY)) == grid(X)(Y)) cost = 0
+          if (arr(X)(Y) > cost + arr(x)(y)) {
+            arr(X)(Y) = cost + arr(x)(y)
+            pq += ((X, Y, arr(X)(Y)))
+          }
+        })
+    }
+    arr(0)(0)
+  }
+}
+```
 
 ###  1.294. <a name='FindtheLongestSubstringContainingVowelsinEve'></a>1371. Find the Longest Substring Containing Vowels in Eve
 
@@ -8942,6 +9395,131 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Ak4y1B7yR?spm_id_from=333.999.0.0)
 
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6b3aa0foyu40.webp)
+
+```py
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        graph = collections.defaultdict(list)
+        for i, (x, y) in enumerate(edges):
+            graph[x].append((succProb[i], y))
+            graph[y].append((succProb[i], x))
+        
+        que = [(-1.0, start)]
+        prob = [0.0] * n
+        prob[start] = 1.0
+
+        while que:
+            pr, node = heapq.heappop(que)
+            pr = -pr
+            if pr < prob[node]:
+                continue
+            for prNext, nodeNext in graph[node]:
+                if prob[nodeNext] < prob[node] * prNext:
+                    prob[nodeNext] = prob[node] * prNext
+                    heapq.heappush(que, (-prob[nodeNext], nodeNext))
+        
+        return prob[end]
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/path-with-maximum-probability/solution/gai-lu-zui-da-de-lu-jing-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        d = [{} for _ in range(n)]
+        for (i, j), k in zip(edges, succProb):
+            d[i][j] = d[j][i] = k
+        q = [start]
+        v = [0] * n
+        v[start] = 1
+        for i in q:
+            for j in d[i]:
+                if (p := v[i] * d[i][j]) > v[j]:
+                    q.append(j)
+                    v[j] = p
+        return v[end]
+
+@typingMonkey 主楼的写法使用于edges比较小的情况，edges大了还是得循环迭代队列，可以降低临时空间的使用，用集合来替代迭代队列也会一定程度上减少重复遍历，不过在提交时间上没有显著体现。
+
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        d = [{} for _ in range(n)]
+        for (i, j), k in zip(edges, succProb):
+            d[i][j] = d[j][i] = k
+        q = {start}
+        v = [0] * n
+        v[start] = 1
+        while q:
+            t = set()
+            for i in q:
+                for j in d[i]:
+                    if (p := v[i] * d[i][j]) > v[j]:
+                        t.add(j)
+                        v[j] = p
+            q = t
+        return v[end]
+```
+
+```py
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+
+        graph = [[] for _ in range(n)]
+        for i in range(len(edges)):
+            u, v, w = *edges[i], succProb[i]
+            graph[u].append((v, w))
+            graph[v].append((u, w))
+
+        def dijkstra_algorithm():
+            pq = [(-1, start)]
+            probs, seen = [0] * n, [0] * n
+            probs[start] = -1
+
+            while pq:
+                dist, node = heapq.heappop(pq)
+                if seen[node]: continue
+                seen[node] = 1
+                if node == end:
+                    return -probs[end]; # 算一个小的剪枝
+
+                # 接下来就是广为人知的松驰操作
+                for nei, nei_w in graph[node]:
+                    if dist * nei_w < probs[nei]:
+                        probs[nei] = dist * nei_w
+                        heapq.heappush(pq, (dist * nei_w, nei))
+
+            return 0
+
+        return dijkstra_algorithm()
+```
+
+```py
+优先级队列 + BFS
+从源点出发，每次选择最短的路径终点，然后往后一个未访问过的节点扩展，如果扩展到目标节点则可以直接返回。
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        visited = [False] * n
+        graph = defaultdict(dict)
+        for ix, (i, j) in enumerate(edges):
+            graph[i][j] = succProb[ix]
+            graph[j][i] = succProb[ix]
+        queue = [(-1, start)]
+        ans = 0
+        while queue:
+            p, u = heapq.heappop(queue)
+            if u == end:
+                ans = -p
+                break
+            visited[u] = True
+            for v in graph[u]:
+                if not visited[v]:
+                    heapq.heappush(queue, (p*graph[u][v], v))
+        return ans
+```
+
 ###  1.336. <a name='BestPositionforaServiceCentre'></a>1515 Best Position for a Service Centre
 
 [小明](https://www.bilibili.com/video/BV1UA411e7PC?spm_id_from=333.999.0.0)
@@ -9112,34 +9690,138 @@ class Solution:
 
 ```py
 class Solution:
+    def minimumEffortPath(self, heights) -> int:
+        m, n = len(heights), len(heights[0])
+        distances = defaultdict(lambda: float('inf'))
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        que = []
+        heappush(que, (0, 0, 0))
+        while que:
+            effort, x, y = heappop(que)
+            if (x, y) == (m - 1, n - 1):
+                return effort
+            for dx, dy in dirs:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < m and 0 <= ny < n:
+                    tmp = max(effort, abs(heights[nx][ny] - heights[x][y]))
+                    if distances[(nx, ny)] > tmp:
+                        distances[(nx, ny)] = tmp
+                        heappush(que, (tmp, nx, ny))
+```
+
+```py
+class Solution:
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
         m, n = len(heights), len(heights[0])
-        left, right, ans = 0, 10**6 - 1, 0
+        que = [(0, 0, 0)]
+        diffHQ = [0] + [float("inf")] * (m * n - 1)
+        visited = set()
+
+        while que:
+            diff, x, y = heapq.heappop(que)
+            ID = x * n + y
+            if ID in visited:
+                continue
+            if (x, y) == (m - 1, n - 1):
+                break
+            
+            visited.add(ID)
+            for nx, ny in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
+                nID = nx * n + ny
+                if 0 <= nx < m and 0 <= ny < n and max(diff, abs(heights[x][y] - heights[nx][ny])) <= diffHQ[nID]:
+                    
+                    diffHQ[nID] = max(diff, abs(heights[x][y] - heights[nx][ny]))
+                    heapq.heappush(que, (diffHQ[nID], nx, ny))
+        
+        return diffHQ[m * n - 1]
+```
+
+二分法，yyds
+
+```py
+class Solution:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        m, n = len(heights), len(heights[0])
+        left, right = 0, 10**6 - 1
+        res = 0
 
         while left <= right:
             mid = (left + right) // 2
-            q = collections.deque([(0, 0)])
-            seen = {(0, 0)}
+            que = collections.deque([(0, 0)])
+            visited = {(0, 0)}
             
-            while q:
-                x, y = q.popleft()
+            while que:
+                x, y = que.popleft()
                 for nx, ny in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
-                    if 0 <= nx < m and 0 <= ny < n and (nx, ny) not in seen and abs(heights[x][y] - heights[nx][ny]) <= mid:
-                        q.append((nx, ny))
-                        seen.add((nx, ny))
+                    if 0 <= nx < m and 0 <= ny < n and (nx, ny) not in visited and abs(heights[x][y] - heights[nx][ny]) <= mid:
+                        que.append((nx, ny))
+                        visited.add((nx, ny))
             
-            if (m - 1, n - 1) in seen:
-                ans = mid
+            if (m - 1, n - 1) in visited:
+                res = mid
                 right = mid - 1
             else:
                 left = mid + 1
         
-        return ans
+        return res
+```
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/path-with-minimum-effort/solution/zui-xiao-ti-li-xiao-hao-lu-jing-by-leetc-3q2j/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+🍒并查集：
+
+
+```py
+1.先构建各点之间的边列表edges。 其中由edge=[x,y,d]组成，d为点x与y差的绝对值
+
+2.根据边列表中的 各点差的绝对值 从小到大排序
+
+3.依次遍历edges， 并将各点进行连通， 当最左上与最左下 第一次连通时结束，并输出 所遍历过edges中的最大d
+
+class Solution:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        m = len(heights)
+        n = len(heights[0])
+        parent = list(range(m*n))
+        edges =[]
+        def find(index):
+            if parent[index]!=index:
+                parent[index] = find(parent[index])
+            return parent[index]
+        def union(index1, index2):
+            u = find(index1)
+            v = find(index2)
+            parent[u] = v
+            
+        def is_valid(x,y):
+            # 判断 节点是否合理
+            return 0<=x<m and 0<=y<n
+
+        # 构建 edges 列表
+        # edge 为三元组[x,y,d] ，其中d为 x与y 差的绝对值
+        for i in range(m):
+            for j in range(n):
+                nx = i+1
+                ny = j
+                if is_valid(nx,ny):
+                    d = abs(heights[i][j]-heights[nx][ny])
+                    edges.append([i*n+j,nx*n+ny,d])
+                nx= i
+                ny = j+1
+                if is_valid(nx,ny):
+                    d = abs(heights[i][j] - heights[nx][ny])
+                    edges.append([i*n+j,nx*n+ny,d])
+        # 将 边 根据绝对差值 d 进行从小到大排序
+        edges = sorted(edges, key=lambda x:x[-1])
+
+        # 依次遍历 edges 并依次连通所遍历的节点，当左上与左下连通时，结束，输出所遍历过的最大 d
+        cost = 0
+        for edge in edges:
+            if find(0)==find(m*n-1):
+                break
+            x,y,d = edge
+            if find(x)!=find(y):
+                union(x,y)
+                cost=max(cost,d)
+        return cost
 
 # 🍒并查集模板
 class UnionFind:
@@ -9196,13 +9878,6 @@ class Solution:
         
         return ans
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/path-with-minimum-effort/solution/zui-xiao-ti-li-xiao-hao-lu-jing-by-leetc-3q2j/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-```py
 这个月已经熟练掌握🍒并查集了 python
 
 class UF():
@@ -9225,14 +9900,9 @@ class UF():
         leader_q = self.find(q)
         self.parent[leader_q] = leader_p
 
-
-
 class Solution(object):
     def minimumEffortPath(self, heights):
-        """
-        :type heights: List[List[int]]
-        :rtype: int
-        """
+
         value_list = []
         m = len(heights)
         n = len(heights[0])
@@ -9258,90 +9928,9 @@ class Solution(object):
                 uf.union(num1, num2)
                 if uf.connected(0, m*n-1):
                     return value
-
-class Solution:
-    def minimumEffortPath(self, heights: List[List[int]]) -> int:
-        m, n = len(heights), len(heights[0])
-        q = [(0, 0, 0)]
-        dist = [0] + [float("inf")] * (m * n - 1)
-        seen = set()
-
-        while q:
-            d, x, y = heapq.heappop(q)
-            iden = x * n + y
-            if iden in seen:
-                continue
-            if (x, y) == (m - 1, n - 1):
-                break
-            
-            seen.add(iden)
-            for nx, ny in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
-                if 0 <= nx < m and 0 <= ny < n and max(d, abs(heights[x][y] - heights[nx][ny])) <= dist[nx * n + ny]:
-                    dist[nx * n + ny] = max(d, abs(heights[x][y] - heights[nx][ny]))
-                    heapq.heappush(q, (dist[nx * n + ny], nx, ny))
-        
-        return dist[m * n - 1]
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/path-with-minimum-effort/solution/zui-xiao-ti-li-xiao-hao-lu-jing-by-leetc-3q2j/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-🍒并查集
-
-1.先构建各点之间的边列表edges。 其中由edge=[x,y,d]组成，d为点x与y差的绝对值
-
-2.根据边列表中的 各点差的绝对值 从小到大排序
-
-3.依次遍历edges， 并将各点进行连通， 当最左上与最左下 第一次连通时结束，并输出 所遍历过edges中的最大d
-
-class Solution:
-    def minimumEffortPath(self, heights: List[List[int]]) -> int:
-        m = len(heights)
-        n = len(heights[0])
-        parent = list(range(m*n))
-        edges =[]
-        def find(index):
-            if parent[index]!=index:
-                parent[index] = find(parent[index])
-            return parent[index]
-        def union(index1, index2):
-            u = find(index1)
-            v = find(index2)
-            parent[u] = v
-            
-        def is_valid(x,y):
-            # 判断 节点是否合理
-            return 0<=x<m and 0<=y<n
-
-        # 构建 edges 列表
-        # edge 为三元组[x,y,d] ，其中d为 x与y 差的绝对值
-        for i in range(m):
-            for j in range(n):
-                nx = i+1
-                ny = j
-                if is_valid(nx,ny):
-                    d = abs(heights[i][j]-heights[nx][ny])
-                    edges.append([i*n+j,nx*n+ny,d])
-                nx= i
-                ny = j+1
-                if is_valid(nx,ny):
-                    d = abs(heights[i][j] - heights[nx][ny])
-                    edges.append([i*n+j,nx*n+ny,d])
-        # 将 边 根据绝对差值 d 进行从小到大排序
-        edges = sorted(edges, key=lambda x:x[-1])
-
-        # 依次遍历 edges 并依次连通所遍历的节点，当左上与左下连通时，结束，输出所遍历过的最大 d
-        cost = 0
-        for edge in edges:
-            if find(0)==find(m*n-1):
-                break
-            x,y,d = edge
-            if find(x)!=find(y):
-                union(x,y)
-                cost=max(cost,d)
-        return cost
 ```
+
+
 
 ###  1.359. <a name='RankTransformofaMatrix'></a>1632 Rank Transform of a Matrix
 
@@ -9587,6 +10176,252 @@ class Solution:
 ###  1.390. <a name='DijkstraNumberofRestrictedPathsFromFirsttoLastNode'></a>1786. 【Dijkstra🚗】 Number of Restricted Paths From First to Last Node
 
 [花花酱](https://www.bilibili.com/video/BV1Df4y147TB?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        # 使用字典记录每个点u的邻边 u-v 及其对应的权重
+        dist_set=collections.defaultdict(list)
+        for u,v,weight in edges:
+            dist_set[u].append([v,weight])
+            dist_set[v].append([u,weight])
+        # 使用Dijkstra算法计算每个点到n点的最短路径
+        # 1. initialize the distance to node n
+        dist_to_n=collections.defaultdict(lambda: float('inf'))
+        # 2. update the distances to node n
+        que=[[0, n]]
+        visited=set()
+        while que:
+            dist_u, u= heapq.heappop(que)
+            # print('cur node = {} dist = {}'.format(u, dist_u))
+            if u in visited: continue
+            if len(visited)==n: break
+            dist_to_n[u]=dist_u
+            visited.add(u)
+            for v, weight in dist_set[u]:
+                if v not in visited:
+                    dist_to_n[v]=min(dist_to_n[v], dist_to_n[u]+weight)
+                    heapq.heappush(que, [dist_to_n[v], v])
+        # 动态规划求从v出发到n的受限路径的数目
+        # dp[v]是从v到n的受限路径的数目 
+        # dp[v]=sum{dp[u] | dist_to_n[v]>dist_to_n[u] and v-u相邻}
+        # 所以按照dist_to_n从小到大排序； 初始化 dp[n]=1
+        dp=defaultdict(int)
+        dp[n]=1
+        node_list=[x[0] for x in sorted(list(dist_to_n.items()), key=lambda x:x[1])]
+        for u in node_list:
+            for v,_ in dist_set[u]:
+                if dist_to_n[v]>dist_to_n[u]:
+                    dp[v]+=dp[u]
+            if u==1:
+                break
+        return dp[1]%(10**9+7)
+
+作者：yuer-flyfly
+链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/dijkstrasuan-fa-dong-tai-gui-hua-cong-di-9rfh/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        edge = defaultdict(dict)                #既是邻接矩阵，又是邻接表
+        for x,y,weight in edges:
+            edge[x][y] = weight
+            edge[y][x] = weight
+        #n为源点，dijkstra单源最短路径,n到各点的最短距离，就是各点到n的最短距离
+        dist = [float('inf') for _ in range(n + 1)]
+        dist[n] = 0
+        visited = set()
+        minHeap = [(0, n)]
+        while minHeap:
+            cloestDist, cloestNode = heapq.heappop(minHeap) #距离源节点最近的结点
+            if cloestNode in visited:           #已经在选中的区域里了，就不要再选了
+                continue
+            visited.add(cloestNode)             #未选择的点中，这是最小的。正式加入区域
+            for nxt in edge[cloestNode].keys():      #更新与它相连接的点
+                if dist[cloestNode] + edge[cloestNode][nxt] < dist[nxt]:
+                    dist[nxt] = dist[cloestNode] + edge[cloestNode][nxt]
+                    heapq.heappush(minHeap, (dist[nxt], nxt))              #有更小的了，就进minHeap
+        #动态规划 dp  更多的是一种贪心！！！！！！！！！
+        dp = [0 for _ in range(n + 1)]
+        dp[n] = 1
+        a = [node for node in range(1, n + 1)]
+        a.sort(key = lambda x: dist[x])
+
+        for node in a:
+            for nxt in edge[node].keys():
+                if dist[node] > dist[nxt]:
+                    dp[node] += dp[nxt]
+
+            if node == 1:   #a中右侧的点，距离都比1的远了，1的最短路径不可能经过他们到达n
+                break
+        
+        return dp[1] % (10**9 + 7)
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/c-python3-dan-yuan-zui-duan-lu-jing-dijk-ir3q/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution(object):
+    def countRestrictedPaths(self, n, edges):
+        """
+        :type n: int
+        :type edges: List[List[int]]
+        :rtype: int
+        """
+        mod = 10 ** 9 + 7
+        
+        connect = [dict() for _ in range(n)]
+        
+        for e, e_, w in edges:
+            connect[e-1][e_-1] = w
+            connect[e_-1][e-1] = w
+
+        t = []
+        heapq.heappush(t,(0,n-1))
+        dis = [float("inf")] * n
+        dis[-1] = 0
+        ans = [0] * n
+        ans[-1] = 1
+        visited = [False] * n
+
+        while True:
+            curr_dis, node = heapq.heappop(t)
+            if node == 0:
+                return ans[0] % mod
+            if visited[node]:
+                continue
+            visited[node] = True
+            for node_ in connect[node]:
+                if not visited[node_]:
+                    temp = dis[node] + connect[node_][node]
+                    if temp < dis[node_]:
+                        dis[node_] = temp
+                        heapq.heappush(t, (dis[node_],node_))
+                    if dis[node_] > dis[node]:
+                        ans[node_] += ans[node]
+
+
+作者：himymBen
+链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/python-you-xian-dui-lie-by-qubenhao-p1zl/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        dp = [{} for _ in range(n+1)]
+        for i, j, k in edges:
+            dp[i][j] = dp[j][i] = k 
+        q = [n]
+        v = [float('inf')]*(n+1)
+        v[n]=0
+        for i in q:            
+            for xdic in dp[i]:
+                p= v[i]+dp[xdic][i]
+                if p<v[xdic]:
+                    v[xdic] = p
+                    q.append(xdic)
+        # print(dp)
+        @functools.lru_cache(None)
+        def dfs(i):
+            if i == n:
+                return 1
+            ans = 0
+            for nei in dp[i].keys():
+                if v[i] > v[nei]:
+                    ans += dfs(nei)
+            return ans
+        dfs.cache_clear()
+        return dfs(1)%(1000000007)
+
+作者：sunrise-z
+链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/5699-cong-di-yi-ge-jie-dian-chu-fa-dao-z-igii/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        mod = 10 ** 9 + 7
+        cost = {}
+        graph = collections.defaultdict(list)
+        for x,y,c in edges:
+            graph[x - 1].append(y - 1)
+            graph[y - 1].append(x - 1)
+            cost[(x - 1,y - 1)] = c
+            cost[(y - 1,x - 1)] = c
+
+        dis = {n - 1:0}
+        queue = [[0,n - 1]]
+        while queue:
+            d,cur_node = heapq.heappop(queue)
+            for next_node in graph[cur_node]:
+                if next_node not in dis or dis[next_node] > d + cost[(cur_node,next_node)]:
+                    heapq.heappush(queue,[d + cost[(cur_node,next_node)],next_node])
+                    dis[next_node] = d + cost[(cur_node,next_node)]
+        
+        @lru_cache(None)
+        def dfs(cur_node):
+            nonlocal dis
+            if cur_node == n - 1:
+                return 1
+            ans = 0
+            for next_node in graph[cur_node]:
+                if dis[next_node] < dis[cur_node]:
+                    ans += dfs(next_node) % mod
+            return ans
+        
+        return dfs(0) % mod
+
+作者：ZhonghaoWang
+链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/py3-dijkstra-dfs-by-zhonghaowang-49es/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        dic=[[] for _ in range(n+1)]
+        for i,j,w in edges:
+            dic[i].append([j,w])
+            dic[j].append([i,w])
+
+        def dijkstra(n,edges):
+            import heapq
+            dis=[float('inf') for _ in range(n+1)]
+            dis[n]=0
+            h=[]
+            heapq.heappush(h,[0,n])
+
+            while h:
+                d,i=heapq.heappop(h)
+                for j,w in dic[i]:
+                    if d+w<dis[j]:
+                        dis[j]=d+w 
+                        heapq.heappush(h,[dis[j],j])
+            return dis
+        
+        dis=dijkstra(n,edges)
+        mod=10**9+7
+
+        import functools
+        @functools.lru_cache(None)
+        def dp(i):
+            if i==n:return 1
+            res=0
+            for j,_ in dic[i]:
+                if dis[j]<dis[i]:
+                    res+=dp(j)
+            return res%mod 
+        
+        return dp(1)
+
+作者：intoloop
+链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/python-by-intoloop-wt2v/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ###  1.391. <a name='MaximumAveragePassRatio'></a>1792. Maximum Average Pass Ratio
 
