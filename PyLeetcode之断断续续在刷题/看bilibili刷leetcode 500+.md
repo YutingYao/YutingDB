@@ -10181,246 +10181,190 @@ class Solution:
 class Solution:
     def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
         # 使用字典记录每个点u的邻边 u-v 及其对应的权重
-        dist_set=collections.defaultdict(list)
-        for u,v,weight in edges:
-            dist_set[u].append([v,weight])
-            dist_set[v].append([u,weight])
+        graph = collections.defaultdict(list)
+        for start,end,cost in edges:
+            graph[start].append([end,cost])
+            graph[end].append([start,cost])
         # 使用Dijkstra算法计算每个点到n点的最短路径
         # 1. initialize the distance to node n
-        dist_to_n=collections.defaultdict(lambda: float('inf'))
+        costsum = collections.defaultdict(lambda: float('inf'))
         # 2. update the distances to node n
-        que=[[0, n]]
-        visited=set()
+        que = [[0, n]]
+        visited = set()
         while que:
-            dist_u, u= heapq.heappop(que)
+            costmin, start = heapq.heappop(que)
             # print('cur node = {} dist = {}'.format(u, dist_u))
-            if u in visited: continue
-            if len(visited)==n: break
-            dist_to_n[u]=dist_u
-            visited.add(u)
-            for v, weight in dist_set[u]:
-                if v not in visited:
-                    dist_to_n[v]=min(dist_to_n[v], dist_to_n[u]+weight)
-                    heapq.heappush(que, [dist_to_n[v], v])
+            if start in visited: continue
+            if len(visited) == n: break
+            costsum[start] = costmin
+            visited.add(start)
+            for end, cost in graph[start]:
+                if end not in visited:
+                    costsum[end] = min(costsum[end], costsum[start] + cost)
+                    heapq.heappush(que, [costsum[end], end])
         # 动态规划求从v出发到n的受限路径的数目
         # dp[v]是从v到n的受限路径的数目 
         # dp[v]=sum{dp[u] | dist_to_n[v]>dist_to_n[u] and v-u相邻}
         # 所以按照dist_to_n从小到大排序； 初始化 dp[n]=1
-        dp=defaultdict(int)
-        dp[n]=1
-        node_list=[x[0] for x in sorted(list(dist_to_n.items()), key=lambda x:x[1])]
-        for u in node_list:
-            for v,_ in dist_set[u]:
-                if dist_to_n[v]>dist_to_n[u]:
-                    dp[v]+=dp[u]
-            if u==1:
+        dp = defaultdict(int)
+        dp[n] = 1
+        pathCntDP = [x[0] for x in sorted(list(costsum.items()), key=lambda x:x[1])]
+        for start in pathCntDP:
+            for end, _ in graph[start]:
+                if costsum[end] > costsum[start]:
+                    dp[end] += dp[start]
+            if start == 1:
                 break
         return dp[1]%(10**9+7)
 
-作者：yuer-flyfly
-链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/dijkstrasuan-fa-dong-tai-gui-hua-cong-di-9rfh/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
 class Solution:
     def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
-        edge = defaultdict(dict)                #既是邻接矩阵，又是邻接表
-        for x,y,weight in edges:
-            edge[x][y] = weight
-            edge[y][x] = weight
+        graph = defaultdict(dict)                #既是邻接矩阵，又是邻接表
+        for start,end,cost in edges:
+            graph[start][end] = cost
+            graph[end][start] = cost
         #n为源点，dijkstra单源最短路径,n到各点的最短距离，就是各点到n的最短距离
-        dist = [float('inf') for _ in range(n + 1)]
-        dist[n] = 0
+        costsum = [float('inf') for _ in range(n + 1)]
+        costsum[n] = 0
         visited = set()
-        minHeap = [(0, n)]
-        while minHeap:
-            cloestDist, cloestNode = heapq.heappop(minHeap) #距离源节点最近的结点
-            if cloestNode in visited:           #已经在选中的区域里了，就不要再选了
+        heap = [(0, n)]
+        while heap:
+            costmin, start = heapq.heappop(heap) #距离源节点最近的结点
+            if start in visited:           #已经在选中的区域里了，就不要再选了
                 continue
-            visited.add(cloestNode)             #未选择的点中，这是最小的。正式加入区域
-            for nxt in edge[cloestNode].keys():      #更新与它相连接的点
-                if dist[cloestNode] + edge[cloestNode][nxt] < dist[nxt]:
-                    dist[nxt] = dist[cloestNode] + edge[cloestNode][nxt]
-                    heapq.heappush(minHeap, (dist[nxt], nxt))              #有更小的了，就进minHeap
+            visited.add(start)             #未选择的点中，这是最小的。正式加入区域
+            for end in graph[start].keys():      #更新与它相连接的点
+                if costsum[start] + graph[start][end] < costsum[end]:
+                    costsum[end] = costsum[start] + graph[start][end]
+                    heapq.heappush(heap, (costsum[end], end))              #有更小的了，就进minHeap
         #动态规划 dp  更多的是一种贪心！！！！！！！！！
-        dp = [0 for _ in range(n + 1)]
-        dp[n] = 1
-        a = [node for node in range(1, n + 1)]
-        a.sort(key = lambda x: dist[x])
+        pathCntDP = [0 for _ in range(n + 1)]
+        pathCntDP[n] = 1
+        nodes = [node for node in range(1, n + 1)]
+        nodes.sort(key = lambda x: costsum[x])
 
-        for node in a:
-            for nxt in edge[node].keys():
-                if dist[node] > dist[nxt]:
-                    dp[node] += dp[nxt]
+        for start in nodes:
+            for end in graph[start].keys():
+                if costsum[start] > costsum[end]:
+                    pathCntDP[start] += pathCntDP[end]
 
-            if node == 1:   #a中右侧的点，距离都比1的远了，1的最短路径不可能经过他们到达n
+            if start == 1:   #a中右侧的点，距离都比1的远了，1的最短路径不可能经过他们到达n
                 break
         
-        return dp[1] % (10**9 + 7)
-
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/c-python3-dan-yuan-zui-duan-lu-jing-dijk-ir3q/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        return pathCntDP[1] % (10**9 + 7)
 
 class Solution(object):
     def countRestrictedPaths(self, n, edges):
-        """
-        :type n: int
-        :type edges: List[List[int]]
-        :rtype: int
-        """
         mod = 10 ** 9 + 7
         
-        connect = [dict() for _ in range(n)]
+        graph = [dict() for _ in range(n)]
         
-        for e, e_, w in edges:
-            connect[e-1][e_-1] = w
-            connect[e_-1][e-1] = w
+        for start, end, cost in edges:
+            graph[start-1][end-1] = cost
+            graph[end-1][start-1] = cost
 
         t = []
         heapq.heappush(t,(0,n-1))
-        dis = [float("inf")] * n
-        dis[-1] = 0
+        costsum = [float("inf")] * n
+        costsum[-1] = 0
         ans = [0] * n
         ans[-1] = 1
         visited = [False] * n
 
         while True:
-            curr_dis, node = heapq.heappop(t)
-            if node == 0:
+            costmin, start = heapq.heappop(t)
+            if start == 0:
                 return ans[0] % mod
-            if visited[node]:
+            if visited[start]:
                 continue
-            visited[node] = True
-            for node_ in connect[node]:
-                if not visited[node_]:
-                    temp = dis[node] + connect[node_][node]
-                    if temp < dis[node_]:
-                        dis[node_] = temp
-                        heapq.heappush(t, (dis[node_],node_))
-                    if dis[node_] > dis[node]:
-                        ans[node_] += ans[node]
+            visited[start] = True
+            for end in graph[start]:
+                if not visited[end]:
+                    temp = costsum[start] + graph[end][start]
+                    if temp < costsum[end]:
+                        costsum[end] = temp
+                        heapq.heappush(t, (costsum[end],end))
+                    if costsum[end] > costsum[start]:
+                        ans[end] += ans[start]
 
 
-作者：himymBen
-链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/python-you-xian-dui-lie-by-qubenhao-p1zl/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-class Solution:
-    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
-        dp = [{} for _ in range(n+1)]
-        for i, j, k in edges:
-            dp[i][j] = dp[j][i] = k 
-        q = [n]
-        v = [float('inf')]*(n+1)
-        v[n]=0
-        for i in q:            
-            for xdic in dp[i]:
-                p= v[i]+dp[xdic][i]
-                if p<v[xdic]:
-                    v[xdic] = p
-                    q.append(xdic)
-        # print(dp)
-        @functools.lru_cache(None)
-        def dfs(i):
-            if i == n:
-                return 1
-            ans = 0
-            for nei in dp[i].keys():
-                if v[i] > v[nei]:
-                    ans += dfs(nei)
-            return ans
-        dfs.cache_clear()
-        return dfs(1)%(1000000007)
-
-作者：sunrise-z
-链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/5699-cong-di-yi-ge-jie-dian-chu-fa-dao-z-igii/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
         mod = 10 ** 9 + 7
-        cost = {}
+        costdic = {}
         graph = collections.defaultdict(list)
-        for x,y,c in edges:
-            graph[x - 1].append(y - 1)
-            graph[y - 1].append(x - 1)
-            cost[(x - 1,y - 1)] = c
-            cost[(y - 1,x - 1)] = c
+        for start,end,c in edges:
+            graph[start - 1].append(end - 1)
+            graph[end - 1].append(start - 1)
+            costdic[(start - 1,end - 1)] = c
+            costdic[(end - 1,start - 1)] = c
 
-        dis = {n - 1:0}
+        costsum = {n - 1:0}
         queue = [[0,n - 1]]
         while queue:
-            d,cur_node = heapq.heappop(queue)
-            for next_node in graph[cur_node]:
-                if next_node not in dis or dis[next_node] > d + cost[(cur_node,next_node)]:
-                    heapq.heappush(queue,[d + cost[(cur_node,next_node)],next_node])
-                    dis[next_node] = d + cost[(cur_node,next_node)]
+            costmin, start = heapq.heappop(queue)
+            for end in graph[start]:
+                if end not in costsum or costsum[end] > costmin + costdic[(start,end)]:
+                    heapq.heappush(queue,[costmin + costdic[(start,end)],end])
+                    costsum[end] = costmin + costdic[(start,end)]
         
         @lru_cache(None)
-        def dfs(cur_node):
-            nonlocal dis
-            if cur_node == n - 1:
+        def dfs(start):
+            nonlocal costsum
+            if start == n - 1:
                 return 1
-            ans = 0
-            for next_node in graph[cur_node]:
-                if dis[next_node] < dis[cur_node]:
-                    ans += dfs(next_node) % mod
-            return ans
+            res = 0
+            for end in graph[start]:
+                if costsum[end] < costsum[start]:
+                    res += dfs(end) % mod
+            return res
         
         return dfs(0) % mod
 
-作者：ZhonghaoWang
-链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/py3-dijkstra-dfs-by-zhonghaowang-49es/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 class Solution:
     def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
-        dic=[[] for _ in range(n+1)]
-        for i,j,w in edges:
-            dic[i].append([j,w])
-            dic[j].append([i,w])
+        graph = [[] for _ in range(n+1)]
+        for start, end, cost in edges:
+            graph[start].append([end, cost])
+            graph[end].append([start, cost])
 
         def dijkstra(n,edges):
             import heapq
-            dis=[float('inf') for _ in range(n+1)]
-            dis[n]=0
-            h=[]
-            heapq.heappush(h,[0,n])
+            costsum = [float('inf') for _ in range(n+1)]
+            costsum[n] = 0
+            heap = []
+            heapq.heappush(heap,[0,n])
 
-            while h:
-                d,i=heapq.heappop(h)
-                for j,w in dic[i]:
-                    if d+w<dis[j]:
-                        dis[j]=d+w 
-                        heapq.heappush(h,[dis[j],j])
-            return dis
+            while heap:
+                costmin, start = heapq.heappop(heap)
+                for end, cost in graph[start]:
+                    if costmin + cost < costsum[end]:
+                        costsum[end] = costmin + cost 
+                        heapq.heappush(heap,[costsum[end],end])
+            return costsum
         
-        dis=dijkstra(n,edges)
-        mod=10**9+7
+        costsums = dijkstra(n,edges)
+        mod = 10**9 + 7
 
         import functools
         @functools.lru_cache(None)
-        def dp(i):
-            if i==n:return 1
-            res=0
-            for j,_ in dic[i]:
-                if dis[j]<dis[i]:
-                    res+=dp(j)
-            return res%mod 
+        def dp(start):
+            if start == n: return 1
+            res = 0
+            for end, _ in graph[start]:
+                if costsums[end] < costsums[start]:
+                    res += dp(end)
+            return res % mod 
         
         return dp(1)
 
-作者：intoloop
-链接：https://leetcode-cn.com/problems/number-of-restricted-paths-from-first-to-last-node/solution/python-by-intoloop-wt2v/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.391. <a name='MaximumAveragePassRatio'></a>1792. Maximum Average Pass Ratio
@@ -10451,30 +10395,211 @@ class Solution:
 
 https://cloud.tencent.com/developer/article/1873122
 
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1trojd2x8v40.webp)
+s
 ```py
-迪杰斯特拉 最短路径，优先队列
 class Solution:
     def countPaths(self, n: int, roads: List[List[int]]) -> int:
-        from queue import PriorityQueue
-        q = PriorityQueue()
-        g = [[] for _ in range(n)]
-        for r in roads:
-            g[r[0]].append((r[1], r[2]))
-            g[r[1]].append((r[0], r[2]))
-        time_roadnums = [[int(1e15), 0] for _ in range(n)]
-        # 存储 【最短时间，方案数】
-        time_roadnums[0][0] = 0
-        time_roadnums[0][1] = 1
-        q.put([0, 0]) # [时间，id] 第一个参数小的优先
-        while not q.empty():
-            t, id = q.get()
-            for it in g[id]:
-                nid, times = it
-                if time_roadnums[nid][0] > t+times: # 更短时间
-                    time_roadnums[nid][0] = t+times
-                    time_roadnums[nid][1] = time_roadnums[id][1] # 方案数清空，换成当前的
-                    q.put([t+times, nid])
-                elif time_roadnums[nid][0] == t+times: # 相同时间
-                    time_roadnums[nid][1] += time_roadnums[id][1]  # 方案数累加             
-        return time_roadnums[n-1][1]%int(1e9+7)
+        INF = 10 ** 16
+        MOD = 10 ** 9 + 7
+
+        graph = defaultdict(list)
+        for start, end, cost in roads:
+            graph[start].append((end, cost))
+            graph[end].append((start, cost))
+        
+        costsum = [INF for _ in range(n)]
+        costsum[0] = 0
+        pathCntDP = [0 for _ in range(n)]
+        pathCntDP[0] = 1
+        minHeap = []
+        heapq.heappush(minHeap, (0, 0))
+        while minHeap:
+            d, start = heapq.heappop(minHeap)
+            if d > costsum[start]:
+                continue
+            for end, cost in graph[start]:
+                if costsum[start] + cost < costsum[end]:
+                    costsum[end] = costsum[start] + cost
+                    pathCntDP[end] = pathCntDP[start]
+                    heapq.heappush(minHeap, (costsum[end], end))
+                elif costsum[start] + cost == costsum[end]:
+                    pathCntDP[end] += pathCntDP[start]
+        return pathCntDP[n - 1] % MOD
+
+```
+
+```py
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        graph = defaultdict(lambda: defaultdict(int))
+        for start, end, cost in roads: graph[start][end] = graph[end][start] = cost
+        que, costsum = [(0, 0)], [0] + [inf] * (n - 1)
+        while que:
+            cost, start = heapq.heappop(que)
+            for end in graph[start]:
+                if cost + graph[start][end] >= costsum[end]: continue
+                costsum[end] = cost + graph[start][end]
+                heapq.heappush(que, (costsum[end], end))
+        dfs = cache(lambda start: 1 if start == n - 1 else sum( dfs(end) for end in graph[start] if graph[start][end] == costsum[end] - costsum[start]) % 1000000007)
+        return dfs(0)
+
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        graph = defaultdict(lambda: defaultdict(int))
+        for start, end, cost in roads: graph[start][end] = graph[end][start] = cost
+        que, costsum, pathCntDP = [(0, 0)], [0] + [inf] * (n - 1), [1] + [0] * (n - 1)
+        while que:
+            cost, start = heapq.heappop(que)
+            for end in graph[start]:
+                if costsum[end] > cost + graph[start][end]:
+                    costsum[end] = cost + graph[start][end]
+                    pathCntDP[end] = pathCntDP[start]
+                    heapq.heappush(que, (costsum[end], end))
+                elif costsum[end] == cost + graph[start][end]:
+                    pathCntDP[end] += pathCntDP[start]
+        return pathCntDP[n - 1] % 1000000007
+
+```
+
+```py
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        # 先dj求出0到任意点点时间花费
+        # dj算法,注意最终答案记得取模
+        graph = collections.defaultdict(list)
+        for start, end, cost in roads:
+            graph[start].append((cost, end))
+            graph[end].append((cost, start))
+
+        costsum = [float("inf") for i in range(n)]
+        queue = [(0,0)] # （距离，节点编号）
+        costsum[0] = 0
+        pathCntDP = [0 for i in range(n)] # dp数组dp[i]的意思是0到i的可行路径数目
+        pathCntDP[0] = 1
+
+        while queue:
+            t0,start = heapq.heappop(queue)
+            if costsum[start] < t0:
+                continue
+            for t1, end in graph[start]:
+                if costsum[end] > t1 + t0:
+                    costsum[end] = t1 + t0
+                    pathCntDP[end] = pathCntDP[start] # 继承且重置
+                    heapq.heappush(queue,(t1 + t0,end))
+                elif costsum[end] == t1 + t0:
+                    pathCntDP[end] += pathCntDP[start] # 累加
+
+        
+        # print(distance)
+        # print(dp)
+        # 此时的distance数组表示起点到任意点的最短时间
+        # 进一步用动态规划
+        return pathCntDP[-1]%(10**9+7) 
+        
+
+
+from collections import defaultdict
+from typing import List
+from math import inf
+import heapq
+
+
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+
+        # 使用临接矩阵表达图中节点与节点之间的距离
+        graph = defaultdict(lambda: defaultdict(int))
+        for start, end, cost in roads:
+            graph[start][end] = cost
+            graph[end][start] = cost
+
+        # 使用数组表示到达各个节点的最短距离
+        costsum = [inf for _ in range(n)]
+        costsum[0] = 0
+
+        # 使用数组表示到达各个节点最短距离的路线数
+        pathCntDP = [0 for _ in range(n)]
+        pathCntDP[0] = 1
+
+        # 使用最小堆维护到达各个节点的最短距离
+        heap = []
+        heapq.heappush(heap, (0, 0))
+
+        while heap:
+            cost, start = heapq.heappop(heap)
+            if cost > costsum[start]:
+                continue
+            for end, cost in graph[start].items():
+                if costsum[start] + cost < costsum[end]:
+                    costsum[end] = costsum[start] + cost
+                    pathCntDP[end] = pathCntDP[start]
+                    heapq.heappush(heap, (costsum[end], end))
+                elif costsum[start] + cost == costsum[end]:
+                    pathCntDP[end] += pathCntDP[start]
+        return pathCntDP[n - 1] % (10 ** 9 + 7)
+
+
+
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        # 构建图
+        graph = defaultdict(list)
+        for start, end, t1 in roads:
+            graph[start].append((end, t1))
+            graph[end].append((start, t1))
+        # 记录每个站点的【最快到达时间，对应路径数】
+        dp = [[float('inf'),0] for i in range(n)]
+        dp[0] = [0,1]
+        # 优先队列，按时间排序的小根堆，由于在时间最短的路径
+        # 中，每个节点只会以最快速度经过一次，否则，要么是循
+        # 环路径意味着时间可以优化到更短，而由于是按小根堆排序
+        # 所以更快时间的路径一定更早出队，这与当前节点是第一次
+        # 出队相矛盾，所以最快速的路径一定只经过每个节点一次。
+        heap = [(0,0)]
+        visited = set()
+        while heap:
+            t0,start = heapq.heappop(heap)
+            if start in visited: continue
+            visited.add(start)
+            # 计算下一节点中的最快时间以及路径数
+            for end, t1 in graph[start]:
+                if t0 + t1 > dp[end][0]: continue
+                elif t0 + t1 == dp[end][0]: dp[end][1] = (dp[start][1]+dp[end][1])%1000000007
+                else: dp[end] = [t1 + t0,dp[start][1]]
+                heapq.heappush(heap,(t0 + t1,end))
+        return dp[-1][1]
+
+
+
+迪杰斯特拉算法 + 最小堆 + 动态规划
+
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        from heapq import heappush, heappop
+        from collections import defaultdict
+        graph = defaultdict(list)
+        for [start, end, cost] in roads:
+            graph[start].append((end, cost))
+            graph[end].append((start, cost))
+
+        mod = 10**9+7
+
+        pathCntDP = [0]*n
+        pathCntDP[0] = 1
+
+        dist = [float('inf')]*n
+        dist[0] = 0
+
+        heap = [(0, 0)]
+        while heap:
+            (t0, start) = heappop(heap)
+            for (end, t1) in graph[start]:
+                if (t0 + t1) < dist[end]:
+                    dist[end] = t0 + t1
+                    pathCntDP[end] = pathCntDP[start]
+                    heappush(heap, (t0 + t1, end))
+                elif t0 + t1 == dist[end]:
+                    pathCntDP[end] = (pathCntDP[end] + pathCntDP[start]) % mod
+        return pathCntDP[n-1]
 ```
