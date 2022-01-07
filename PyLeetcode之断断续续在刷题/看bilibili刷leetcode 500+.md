@@ -4484,25 +4484,31 @@ class Solution(object):
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5kql1xc5ggs0.webp)
 
 ```py
+
 class Solution:
-    # Dijkstra🚗+剪枝
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        if src == dst:
-            return 0
-        graph = collections.defaultdict(list)
-        for start, end, cost in flights:
-            graph[start].append((end, cost))
-        costsumDic = {src: 0}
-        visited = [(0, src, 0)]
-        while visited:
-            costsum, start, interval = visited.pop(0)
-            if interval > k:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
+
+        graph = [[float('inf')] * n for _ in range(n)]
+        for u,v,w in flights:
+            graph[u][v] = w
+
+        dist = {src: 0}
+
+        que = [(0, src, -1)]
+
+        while que:
+            costmin, start, interval = heapq.heappop(que)
+            if interval >= K: 
                 break
-            for end, cost in graph[start]:
-                if costsum + cost < costsumDic.get(end, float("inf")):
-                    costsumDic[end] = costsum + cost
-                    visited.append((costsum + cost, end, interval + 1))
-        return -1 if costsumDic.get(dst, float("inf")) == float("inf") else costsumDic[dst]
+            for end, cost in enumerate(graph[start]):
+                if (shorter := costmin + cost) < dist.get(end,float('inf')):
+                    dist[end] = shorter
+                    heapq.heappush(que, (shorter, end, interval+1)) # 下一层
+                    # 写 que.append, 要写 heapq.heappush
+        return dist[dst] if dist.get(dst,float('inf')) != float('inf') else -1
+
+
+
 
 # from xiaoming
 
@@ -4512,31 +4518,56 @@ class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
         if src == dst:
             return 0
+
         graph = collections.defaultdict(list)
+
         for start, end, cost in flights:
             graph[start].append((end, cost))
-        costsumDic = {}
-        visited = [(0, src, 0)]
-        while visited:
-            costsum, start, interval = heapq.heappop(visited)
+
+        disInter = {} # 这道题的难点在于 interval 和 dst, disInter 存储的是端点和interval)
+        que = [(0, src, -1)]
+        while que:
+            costmin, start, interval = heapq.heappop(que)
             # 这个部分很重要，一定要k+1
-            if interval > k+1:
+            if interval > k:
                 continue
             if start == dst:
-                return costsum
+                return costmin
             for end, cost in graph[start]:
-                # 这一步剪枝很重要
-                if costsum + cost < costsumDic.get((end,interval+1), float("inf")):
-                    heapq.heappush(visited, (costsum + cost, end, interval + 1))
-                    costsumDic[(end,interval+1)] = costsum + cost
-                # print(dist)
-                # {(1, 1): 100}
-                # {(1, 1): 100, (2, 1): 500}
-                # {(1, 1): 100, (2, 1): 500, (2, 2): 200}
+                if (shorter := costmin + cost) < disInter.get((end, interval + 1), float("inf")):
+                    heapq.heappush(que, (shorter, end, interval + 1))
+                    disInter[(end,interval+1)] = shorter
+        return -1 
+
+import heapq
+class Solution:
+    # Dijkstra🚗+剪枝
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        if src == dst:
+            return 0
+
+        graph = [[float('inf')] * n for _ in range(n)]
+        for u,v,w in flights:
+            graph[u][v] = w
+
+        disInter = {}
+        que = [(0, src, -1)]
+
+        while que:
+            costmin, start, interval = heapq.heappop(que)
+            # 这个部分很重要，一定要k+1
+            if interval > k:
+                continue
+            if start == dst:
+                return costmin
+            for end, cost in enumerate(graph[start]):
+                if (shorter := costmin + cost) < disInter.get((end, interval + 1), float("inf")):
+                    heapq.heappush(que, (shorter, end, interval + 1))
+                    disInter[(end,interval+1)] = shorter
         return -1 
 ```
 
-py 动态🚀规划
+py 动态🚀规划, 也就是 Bellman-Ford🌞
 
 ```py
 一维数组：
@@ -4544,15 +4575,36 @@ class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
         dp = [float('inf')] * n
         dp[src] = 0
-        for _ in range(K+1):
+        for _ in range(K+1): # K+1 对应于 Bellman-Ford🌞 的n-1
             tmp = dp[:]
             for start, end, cost in flights:
+                # if (shorter := dp[start] + cost) < dp[end]:
+                #     dp[end] = shorter
                 dp[end] = min(dp[end],tmp[start] + cost)
                 # print(dp)
                 # [0, 100, inf]
                 # [0, 100, inf]
                 # [0, 100, 500]
                 # [0, 100, 500]
+                # [0, 100, 200]
+                # [0, 100, 200]
+        return dp[dst] if dp[dst] != float('inf') else -1
+
+这么写是错误的，因为end存在两次，所以也会被跟新两次。所以tmp = dp[:]是必要的
+
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
+        dp = [float('inf')] * n
+        dp[src] = 0
+        for _ in range(K+1): # K+1 对应于 Bellman-Ford🌞 的n-1
+            for start, end, cost in flights:
+                if (shorter := dp[start] + cost) < dp[end]:
+                    dp[end] = shorter
+                # print(dp)
+                # [0, 100, inf]
+                # [0, 100, 200]
+                # [0, 100, 200]
+                # [0, 100, 200]
                 # [0, 100, 200]
                 # [0, 100, 200]
         return dp[dst] if dp[dst] != float('inf') else -1
@@ -9450,70 +9502,28 @@ class Solution:
             graph[stt].append((succProb[i], edd))
             graph[edd].append((succProb[i], stt))
         
-        que = [(-1.0, start)]
+        
         proDP = [0.0] * n
         proDP[start] = 1.0
 
+        que = [(-1.0, start)]
         while que:
-            pro, stt = heapq.heappop(que)
-            pro = -pro
-            if pro < proDP[stt]:
+            promin, stt = heapq.heappop(que)
+            promin = -promin
+            # ---------------这里是正数----------------
+            if promin < proDP[stt]:
                 continue
-            for proNxt, edd in graph[stt]:
-                if proDP[edd] < proDP[stt] * proNxt:
-                    proDP[edd] = proDP[stt] * proNxt
+            for pro, edd in graph[stt]:
+                if proDP[edd] < proDP[stt] * pro:
+                    proDP[edd] = proDP[stt] * pro
+            # ---------------这里是正数----------------
                     heapq.heappush(que, (-proDP[edd], edd))
         
         return proDP[end]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/path-with-maximum-probability/solution/gai-lu-zui-da-de-lu-jing-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-```py
-class Solution:
-    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
-        graph = [{} for _ in range(n)]
-        for (stt, edd), pro in zip(edges, succProb):
-            graph[stt][edd] = graph[edd][stt] = pro
-        que = [start]
-        proDP = [0] * n
-        proDP[start] = 1
-        for stt in que:
-            for edd in graph[stt]:
-                if (p := proDP[stt] * graph[stt][edd]) > proDP[edd]:
-                    que.append(edd)
-                    proDP[edd] = p
-        return proDP[end]
 
-@typingMonkey 主楼的写法使用于edges比较小的情况，
-
-edges大了还是得循环迭代队列，可以降低临时空间的使用，
-
-用集合来替代迭代队列也会一定程度上减少重复遍历，
-
-不过在提交时间上没有显著体现。
-
-class Solution:
-    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
-        graph = [{} for _ in range(n)]
-        for (stt, edd), k in zip(edges, succProb):
-            graph[stt][edd] = graph[edd][stt] = k
-        que = {start}
-        proDP = [0] * n
-        proDP[start] = 1
-        while que:
-            tmpque = set()
-            for stt in que:
-                for edd in graph[stt]:
-                    if (p := proDP[stt] * graph[stt][edd]) > proDP[edd]:
-                        tmpque.add(edd)
-                        proDP[edd] = p
-            que = tmpque
-        return proDP[end]
-```
 
 ```py
 class Solution:
@@ -9526,12 +9536,14 @@ class Solution:
             graph[edd].append((stt, pro))
 
         def dijkstra_algorithm():
-            heap = [(-1, start)]
             proDP, visited = [0] * n, [0] * n
             proDP[start] = -1
 
+            heap = [(-1, start)]
             while heap:
+            # ---------------这里是负数----------------
                 minpro, stt = heapq.heappop(heap)
+
                 if visited[stt]: continue
                 visited[stt] = 1
                 if stt == end:
@@ -9542,32 +9554,45 @@ class Solution:
                     if minpro * pro < proDP[edd]:
                         proDP[edd] = minpro * pro
                         heapq.heappush(heap, (minpro * pro, edd))
+            # ---------------这里是负数----------------
 
             return 0
 
         return dijkstra_algorithm()
 ```
 
+非标准做法：
+
 ```py
 优先级队列 + BFS
 从源点出发，每次选择最短的路径终点，然后往后一个未访问过的节点扩展，如果扩展到目标节点则可以直接返回。
+
+
 class Solution:
     def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
         visited = [False] * n
+
         graph = defaultdict(dict)
         for ix, (stt, edd) in enumerate(edges):
             graph[stt][edd] = succProb[ix]
             graph[edd][stt] = succProb[ix]
-        queue = [(-1, start)]
-        res = 0
+            
+        queue = [(-1, start)] # 取概率的负值
+        res = 0 #相当于 -proDP[end]
+        
         while queue:
             minpro, stt = heapq.heappop(queue)
+            if visited[stt]:
+                continue
+            visited[stt] = True
+            # 0 <= succProb[i] <= 1
+            # 如果不仅距离近,而且数字大的话.也就没有后面的事情了
+            # 所以这里省略了distance
             if stt == end:
                 res = -minpro
                 break
-            visited[stt] = True
             for edd in graph[stt]:
-                if not visited[edd]:
+                if not visited[edd]: # 剪枝,可有可无: 因为是双向的,所以最好还有 if not visited[edd]
                     heapq.heappush(queue, (minpro*graph[stt][edd], edd))
         return res
 ```
@@ -10232,6 +10257,51 @@ class Solution:
 ```py
 class Solution:
     def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
+        graph = defaultdict(dict)                #既是邻接矩阵，又是邻接表
+        for start,end,cost in edges:
+            graph[start][end] = cost
+            graph[end][start] = cost
+        #n为源点，dijkstra单源最短路径,n到各点的最短距离，就是各点到n的最短距离
+        costsum = [float('inf') for _ in range(n + 1)]
+        costsum[n] = 0
+        visited = set()
+        heap = [(0, n)]
+        while heap:
+            costmin, start = heapq.heappop(heap) #距离源节点最近的结点
+            if start in visited:           #已经在选中的区域里了，就不要再选了
+                continue
+            visited.add(start)             #未选择的点中，这是最小的。正式加入区域
+            for end in graph[start].keys():      #更新与它相连接的点
+                if costsum[start] + graph[start][end] < costsum[end]:
+                    costsum[end] = costsum[start] + graph[start][end]
+                    heapq.heappush(heap, (costsum[end], end))              #有更小的了，就进minHeap
+        #动态规划 dp  更多的是一种贪心！！！！！！！！！
+        pathCntDP = [0 for _ in range(n + 1)]
+        pathCntDP[n] = 1
+        nodes = [node for node in range(1, n + 1)]
+        nodes.sort(key = lambda x: costsum[x])
+
+        for start in nodes:
+            for end in graph[start].keys():
+                if costsum[start] > costsum[end]:
+                    pathCntDP[start] += pathCntDP[end]
+                    print(costsum[start],costsum[end],pathCntDP)
+                    # (4,2,1,6,0)
+                    # 1 0 [0, 0, 0, 1, 0, 1]
+                    # 2 1 [0, 0, 1, 1, 0, 1]
+                    # 2 0 [0, 0, 2, 1, 0, 1]
+                    # 4 2 [0, 2, 2, 1, 0, 1]
+                    # 4 1 [0, 3, 2, 1, 0, 1]
+
+            if start == 1:   #a中右侧的点，距离都比1的远了，1的最短路径不可能经过他们到达n
+                break
+        
+        return pathCntDP[1] % (10**9 + 7)
+```
+
+```py
+class Solution:
+    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
         # 使用字典记录每个点u的邻边 u-v 及其对应的权重
         graph = collections.defaultdict(list)
         for start,end,cost in edges:
@@ -10272,41 +10342,7 @@ class Solution:
 ```
 
 ```py
-class Solution:
-    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
-        graph = defaultdict(dict)                #既是邻接矩阵，又是邻接表
-        for start,end,cost in edges:
-            graph[start][end] = cost
-            graph[end][start] = cost
-        #n为源点，dijkstra单源最短路径,n到各点的最短距离，就是各点到n的最短距离
-        costsum = [float('inf') for _ in range(n + 1)]
-        costsum[n] = 0
-        visited = set()
-        heap = [(0, n)]
-        while heap:
-            costmin, start = heapq.heappop(heap) #距离源节点最近的结点
-            if start in visited:           #已经在选中的区域里了，就不要再选了
-                continue
-            visited.add(start)             #未选择的点中，这是最小的。正式加入区域
-            for end in graph[start].keys():      #更新与它相连接的点
-                if costsum[start] + graph[start][end] < costsum[end]:
-                    costsum[end] = costsum[start] + graph[start][end]
-                    heapq.heappush(heap, (costsum[end], end))              #有更小的了，就进minHeap
-        #动态规划 dp  更多的是一种贪心！！！！！！！！！
-        pathCntDP = [0 for _ in range(n + 1)]
-        pathCntDP[n] = 1
-        nodes = [node for node in range(1, n + 1)]
-        nodes.sort(key = lambda x: costsum[x])
 
-        for start in nodes:
-            for end in graph[start].keys():
-                if costsum[start] > costsum[end]:
-                    pathCntDP[start] += pathCntDP[end]
-
-            if start == 1:   #a中右侧的点，距离都比1的远了，1的最短路径不可能经过他们到达n
-                break
-        
-        return pathCntDP[1] % (10**9 + 7)
 
 class Solution(object):
     def countRestrictedPaths(self, n, edges):
