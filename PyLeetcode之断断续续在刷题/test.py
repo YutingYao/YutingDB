@@ -1,32 +1,14 @@
 class Solution:
-    def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:
-        mod = 10 ** 9 + 7
-        costdic = {}
-        graph = collections.defaultdict(list)
-        for start,end,c in edges:
-            graph[start - 1].append(end - 1)
-            graph[end - 1].append(start - 1)
-            costdic[(start - 1,end - 1)] = c
-            costdic[(end - 1,start - 1)] = c
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        graph = [[0 if i == j else float('inf') for j in range(n)] for i in range(n)]
+        for start, end, w in edges:
+            graph[start][end] = w
+            graph[end][start] = w
 
-        costsum = {n - 1:0}
-        queue = [[0,n - 1]]
-        while queue:
-            costmin, start = heapq.heappop(queue)
-            for end in graph[start]:
-                if end not in costsum or costsum[end] > costmin + costdic[(start,end)]:
-                    heapq.heappush(queue,[costmin + costdic[(start,end)],end])
-                    costsum[end] = costmin + costdic[(start,end)]
-        
-        @lru_cache(None)
-        def dfs(start):
-            nonlocal costsum
-            if start == n - 1:
-                return 1
-            res = 0
-            for end in graph[start]:
-                if costsum[end] < costsum[start]:
-                    res += dfs(end) % mod
-            return res
-        
-        return dfs(0) % mod
+        for k in range(n):
+            for start in range(n):
+                for end in range(n):
+                    graph[start][end] = min(graph[start][end], graph[start][k]+graph[k][end])
+
+        neighbors = [sum(graph[i][j] <= distanceThreshold for j in range(n)) for i in range(n)]
+        return min(list(range(n)), key=lambda i: (neighbors[i], -i))

@@ -1,3 +1,27 @@
+# dijkstra 模板
+
+que = PriorityQueue()
+
+INF = sys.maxsize
+edges = [[], [[2, 7], [3, 9], [6, 14]], [[1, 7], [3, 10], [4, 15]], [[1, 9], [2, 10], [6, 2], [4, 11]], [[3, 11], [5, 6]], [[4, 6], [6, 9]], [[3, 2], [5, 9]]] # 邻接表存储边
+dis = [sys.maxsize for _ in range(8)] # 记录s到其他点的距离
+s = 1
+que.push(s, 0)
+dis[s] = 0
+visited = {}
+
+while not que.empty():
+    u = que.pop()
+    if u in visited:
+        continue
+    visited[u] = True
+    for v, l in edges[u]:
+        if v not in visited and dis[u] + l < dis[v]:
+            dis[v] = dis[u] + l
+            que.push(v, dis[v])
+
+print(dis)
+
 # a = 0011 1100
 
 # b = 0000 1101

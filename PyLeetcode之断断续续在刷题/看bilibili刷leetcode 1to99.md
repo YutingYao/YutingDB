@@ -6,11 +6,11 @@
 	* 3.2. [2. Add Two Numbers](#AddTwoNumbers)
 	* 3.3. [3. 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters](#LongestSubstringWithoutRepeatingCharacters)
 	* 3.4. [4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays](#MedianofTwoSortedArrays)
-	* 3.5. [5. Longest Palindromic Substring -最长回文子串](#LongestPalindromicSubstring-)
+	* 3.5. [5. 【回文🌈】Longest Palindromic Substring -最长回文🌈子串](#LongestPalindromicSubstring-)
 	* 3.6. [6. ZigZag Conversion](#ZigZagConversion)
 	* 3.7. [7 Reverse Integer](#ReverseInteger)
 	* 3.8. [8. String to Integer(atoi)](#StringtoIntegeratoi)
-	* 3.9. [9-Palindrome](#Palindrome)
+	* 3.9. [9-【回文🌈】Palindrome](#Palindrome)
 	* 3.10. [11. Container With Most Water](#ContainerWithMostWater)
 	* 3.11. [12. Integer to Roman](#IntegertoRoman)
 	* 3.12. [13. 机器人的运动范围](#-1)
@@ -779,7 +779,7 @@ object Solution {
 
 [官方](https://www.bilibili.com/video/BV1Xv411z76J?spm_id_from=333.999.0.0)
 
-###  3.5. <a name='LongestPalindromicSubstring-'></a>5. Longest Palindromic Substring -最长回文子串
+###  3.5. <a name='LongestPalindromicSubstring-'></a>5. 【回文🌈】Longest Palindromic Substring -最长回文🌈子串
 
 [花花酱](https://www.bilibili.com/video/BV18J411j7Pb?spm_id_from=333.999.0.0)
 
@@ -1349,7 +1349,7 @@ class Solution:
         # 要加小括号(1<<31)
 ```
 
-###  3.9. <a name='Palindrome'></a>9-Palindrome
+###  3.9. <a name='Palindrome'></a>9-【回文🌈】Palindrome
 
 [哈哈哈](https://www.bilibili.com/video/BV1hJ411S7kt?spm_id_from=333.999.0.0)
 

@@ -25,14 +25,14 @@
 	* 1.23. [122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II](#II122-BestTimetoBuyandSellStockII)
 	* 1.24. [123-买卖股票的最佳时机 III](#III)
 	* 1.25. [124. Binary Tree Maximum Path Sum](#BinaryTreeMaximumPathSum)
-	* 1.26. [125-Valid Palindrome](#ValidPalindrome)
+	* 1.26. [125 【回文🌈】Valid Palindrome](#ValidPalindrome)
 	* 1.27. [126. (bfs好难暂时放弃) Word Ladder II](#bfsWordLadderII)
 	* 1.28. [127. Word Ladder](#WordLadder)
 	* 1.29. [128. 【🍒并查集】Longest Consecutive Sequence](#LongestConsecutiveSequence)
 	* 1.30. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
 	* 1.31. [130. 【🍒并查集】Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
-	* 1.32. [131- 分割回文串](#-1)
-	* 1.33. [132. 【动态🚀规划】Palindrome Partitioning II](#PalindromePartitioningII)
+	* 1.32. [131 【回文🌈】分割回文🌈串](#-1)
+	* 1.33. [132. 【动态🚀规划 + 回文🌈】Palindrome Partitioning II](#PalindromePartitioningII)
 	* 1.34. [133. Clone Graph](#CloneGraph)
 	* 1.35. [134. Gas Station](#GasStation)
 	* 1.36. [138 Copy List with Random Pointer](#CopyListwithRandomPointer)
@@ -89,7 +89,7 @@
 	* 1.87. [209-长度最小的子数组](#-1)
 	* 1.88. [210. Course Schedule II 210-课程表II](#CourseScheduleII210-II)
 	* 1.89. [211 Add and Search Word](#AddandSearchWord)
-	* 1.90. [212. 【构造🏰】Word Search II](#WordSearchII)
+	* 1.90. [212. 【构造🏰 + 困难】Word Search II](#WordSearchII)
 	* 1.91. [213.【动态🚀规划】 House Robber II 213-打家劫舍II](#HouseRobberII213-II)
 	* 1.92. [216. Combination Sum III 216-组合总和 III](#CombinationSumIII216-III)
 	* 1.93. [217. Contains Duplicate](#ContainsDuplicate)
@@ -108,7 +108,7 @@
 	* 1.106. [230 Kth Smallest Element in a B](#KthSmallestElementinaB)
 	* 1.107. [231. Power of Two](#PowerofTwo)
 	* 1.108. [232-【构造🏰】Implement Queue using Stacks](#ImplementQueueusingStacks)
-	* 1.109. [234. Palindrome Linked List](#PalindromeLinkedList)
+	* 1.109. [234. 【回文🌈】Palindrome Linked List](#PalindromeLinkedList)
 	* 1.110. [235. Lowest Common Ancestor of a Binary Search Tree](#LowestCommonAncestorofaBinarySearchTree)
 	* 1.111. [236-二叉树的最近公共祖先](#-1)
 	* 1.112. [237. Delete Node in a Linked List](#DeleteNodeinaLinkedList)
@@ -187,13 +187,13 @@
 	* 1.184. [393. UTF-8 Validation](#UTF-8Validation)
 	* 1.185. [394 Decode String](#DecodeString)
 	* 1.186. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
-	* 1.187. [399. 【🍒并查集】Evaluate Division](#EvaluateDivision)
+	* 1.187. [399. 【🍒并查集 + floyd 🌞】Evaluate Division](#floydEvaluateDivision)
 	* 1.188. [402 Remove K Digits](#RemoveKDigits)
 	* 1.189. [404. Sum of Left Leaves](#SumofLeftLeaves)
 	* 1.190. [405-Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
 	* 1.191. [406. Queue Reconstruction by Height](#QueueReconstructionbyHeight)
 	* 1.192. [408. Valid Word Abbreviation](#ValidWordAbbreviation)
-	* 1.193. [409. Longest Palindrome](#LongestPalindrome)
+	* 1.193. [409. 【回文🌈】Longest Palindrome](#LongestPalindrome)
 	* 1.194. [410. Split Array Largest Sum](#SplitArrayLargestSum)
 	* 1.195. [412. Fizz Buzz](#FizzBuzz)
 	* 1.196. [413-【动态🚀规划】等差数列划分](#-1)
@@ -211,7 +211,7 @@
 	* 1.207. [432. All O`one Data Structure](#AllOoneDataStructure)
 	* 1.208. [435-Non-overlapping Intervals](#Non-overlappingIntervals)
 	* 1.209. [436 Find Right Interval](#FindRightInterval)
-	* 1.210. [437 Path Sum III](#PathSumIII)
+	* 1.210. [437 【前缀和🎨】Path Sum III](#PathSumIII)
 	* 1.211. [438. 【滑动窗口🔹】Find All Anagrams in a String](#FindAllAnagramsinaString)
 	* 1.212. [441 Arranging Coins](#ArrangingCoins)
 	* 1.213. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
@@ -338,7 +338,7 @@ object Solution {
 
 [官方](https://www.bilibili.com/video/BV1xv41167z8?spm_id_from=333.999.0.0)
 
-> Python 迭代：其实就是层序遍历，然后检查每一层是不是回文数组
+> Python 迭代：其实就是层序遍历，然后检查每一层是不是回文🌈数组
 
 ```py
 class Solution(object):
@@ -1872,7 +1872,7 @@ object Solution1 {
 }
 ```
 
-###  1.26. <a name='ValidPalindrome'></a>125-Valid Palindrome
+###  1.26. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
 
 [哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
 
@@ -2333,7 +2333,7 @@ class Solution:
 
 
 
-###  1.32. <a name='-1'></a>131- 分割回文串
+###  1.32. <a name='-1'></a>131 【回文🌈】分割回文🌈串
 
 [哈哈哈](https://www.bilibili.com/video/BV1dK411p7eU?spm_id_from=333.999.0.0)
 
@@ -2444,9 +2444,9 @@ python3 用回溯递归的方法去试探每一种可能性 对于一个字符�
 
 有len(s)种方法把它分成左右两个部分（分割方法看代码），
 
-假如左侧的不是回文，则舍弃这次尝试；
+假如左侧的不是回文🌈，则舍弃这次尝试；
 
-假如左侧的是回文串，则把右侧的进行递归的分割，并返回右侧的分割的所有情况
+假如左侧的是回文🌈串，则把右侧的进行递归的分割，并返回右侧的分割的所有情况
 
 class Solution:
     @cache
@@ -2503,11 +2503,11 @@ class Solution:
         for char in s[1:]:
             for path in res[:]: # 一定要写成res[:],而不是res
                 
-# + 判断前一个位置每个分割结果中最后一个回文串和当前字母s[i]是否组成回文串得到的结果 --> 也就是偶数个回文
+# + 判断前一个位置每个分割结果中最后一个回文🌈串和当前字母s[i]是否组成回文🌈串得到的结果 --> 也就是偶数个回文🌈
                 if len(path[-1]) == 1 and path[-1] == char:
                     res.append(path[:-1] + [char + char])
                     
-# + 判断前一个位置每个分割结果中最后两个回文串和当前字母s[i]是否组成回文串得到的结果 --> 也就是奇数个回文
+# + 判断前一个位置每个分割结果中最后两个回文🌈串和当前字母s[i]是否组成回文🌈串得到的结果 --> 也就是奇数个回文🌈
                 if len(path) > 1 and len(path[-2]) == 1 and path[-2] == char:
                     res.append(path[:-2] + [char + path[-1] + char])
                     
@@ -2515,7 +2515,7 @@ class Solution:
         return res
 ```
 
-###  1.33. <a name='PalindromePartitioningII'></a>132. 【动态🚀规划】Palindrome Partitioning II
+###  1.33. <a name='PalindromePartitioningII'></a>132. 【动态🚀规划 + 回文🌈】Palindrome Partitioning II
 
 [花花酱](https://www.bilibili.com/video/BV1NJ411v7k9?spm_id_from=333.999.0.0)
 
@@ -2542,10 +2542,10 @@ class Solution:
 
         cutDP = [float("inf")] * n
         for endcut in range(n):
-            # 如果前一小段是回文
+            # 如果前一小段是回文🌈
             if isPalinDP[0][endcut]:
                 cutDP[endcut] = 0
-            # 如果前一小段不是回文，则从start开始继续拆分
+            # 如果前一小段不是回文🌈，则从start开始继续拆分
             else:
                 for startcut in range(endcut):
                     if isPalinDP[startcut + 1][endcut]:
@@ -9608,7 +9608,7 @@ class MyQueue() {
 
 ```
 
-###  1.109. <a name='PalindromeLinkedList'></a>234. Palindrome Linked List
+###  1.109. <a name='PalindromeLinkedList'></a>234. 【回文🌈】Palindrome Linked List
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7ML?spm_id_from=333.999.0.0)
 
@@ -9652,7 +9652,7 @@ class Solution:
 
 ```py
 秒啊，就是有可能数字太大
-可以理解成字符串(链表)转数字，如果是回文从前往后与从后往前得到的数字是一样的
+可以理解成字符串(链表)转数字，如果是回文🌈从前往后与从后往前得到的数字是一样的
 虽然没有深入想，但是这个算法在经过证明之前，真心不敢用。有可能在特定测试例下失败
 只有python 能做，只要用强制类型语言都会越界。
 class Solution(object):
@@ -10135,7 +10135,7 @@ class Solution:
 # 先把输出数组当作 L 数组来计算，然后再动态构造 R 数组得到结果。
 # 让我们来看看基于这个思想的算法。
       
-# python 思想：前缀积，前缀积和前缀和差不多
+# python 思想：前缀积，前缀积和前缀和🎨差不多
 # 用一个数组来存储每一个数的左边的数的乘积，那么 ans[i] = ans[i-1]*nums[i]， 
 # 第一个数左边没有数，认为ans[0] = 1。
 # 再用一个数 R 来存储右边的数的乘积，
@@ -14801,7 +14801,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
 
-###  1.187. <a name='EvaluateDivision'></a>399. 【🍒并查集】Evaluate Division
+###  1.187. <a name='floydEvaluateDivision'></a>399. 【🍒并查集 + floyd 🌞】Evaluate Division
 
 [花花酱](https://www.bilibili.com/video/BV1iW41167Nb?spm_id_from=333.999.0.0)
 
@@ -15222,7 +15222,7 @@ class Solution:
 
 [小梦想家](https://www.bilibili.com/video/BV1A4411q74A?spm_id_from=333.999.0.0)
 
-###  1.193. <a name='LongestPalindrome'></a>409. Longest Palindrome
+###  1.193. <a name='LongestPalindrome'></a>409. 【回文🌈】Longest Palindrome
 
 [小梦想家](https://www.bilibili.com/video/BV1B441127W2?spm_id_from=333.999.0.0)
 
@@ -15291,7 +15291,7 @@ class Solution:
         return ans + int(ans < len(s)) # 如果ans比原字符串短，就说明可以拿一个字符做中心
 
 
-直接统计s，最后按照字符数除以2向下取整乘以2，如果某一个字符出现奇数次，组合的回文数加1；
+直接统计s，最后按照字符数除以2向下取整乘以2，如果某一个字符出现奇数次，组合的回文🌈数加1；
 
 
 class Solution:
@@ -15893,9 +15893,39 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1YT4y1w7EP?spm_id_from=333.999.0.0)
 
-###  1.210. <a name='PathSumIII'></a>437 Path Sum III
+###  1.210. <a name='PathSumIII'></a>437 【前缀和🎨】Path Sum III
 
 [小明](https://www.bilibili.com/video/BV1tZ4y1M7JR?spm_id_from=333.999.0.0)
+
+时间复杂度 O(n), 空间复杂度 O(n)
+
+```py
+def pathSum(self, root, sum):
+    
+    self.dicts = {0: 1}
+    self.res = 0
+    def helper(root, prefix_sum, sum):
+        if not root:
+            return 0
+            
+        prefix_sum += root.val
+        
+        if prefix_sum - sum in self.dicts:
+            self.res += self.dicts[prefix_sum - sum]
+            
+        
+        self.dicts[prefix_sum] = self.dicts.get(prefix_sum, 0) + 1
+        
+        helper(root.left, prefix_sum, sum)
+        
+        helper(root.right, prefix_sum, sum)
+        
+        # Note: 回到上一层时, 需要将当前的前缀和对应的路径数目减1      
+        self.dicts[prefix_sum] -= 1
+    
+    helper(root, 0, sum)
+    return res    
+```
 
 ###  1.211. <a name='FindAllAnagramsinaString'></a>438. 【滑动窗口🔹】Find All Anagrams in a String
 

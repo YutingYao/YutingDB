@@ -4,7 +4,7 @@
 	* 1.2. [503 【栈】Next Greater Element II](#NextGreaterElementII)
 	* 1.3. [504-Base 7](#Base7)
 	* 1.4. [509. 【动态🚀规划 + 递归】Fibonacci Number](#FibonacciNumber)
-	* 1.5. [516. 【回文】【动态🚀规划】Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
+	* 1.5. [516. 【回文🌈 + 动态🚀规划】Longest Palindromic Subsequence](#LongestPalindromicSubsequence)
 		* 1.5.1. [类似题目：1143. 最长公共子序列](#1143.)
 	* 1.6. [518 Coin Change 2](#CoinChange2)
 	* 1.7. [520. Detect Capital](#DetectCapital)
@@ -20,14 +20,14 @@
 	* 1.17. [542. 01 矩阵 01 Matrix](#Matrix)
 	* 1.18. [543 Diameter of Binary Tree](#DiameterofBinaryTree)
 	* 1.19. [546 Remove Boxes](#RemoveBoxes)
-	* 1.20. [547 【🍒并查集】朋友圈](#)
+	* 1.20. [547 【🍒并查集 + dfs + 队列】朋友圈](#dfs)
 	* 1.21. [554 Brick Wall](#BrickWall)
 	* 1.22. [556 Next Greater Element III](#NextGreaterElementIII)
-	* 1.23. [560. Subarray Sum Equals K 和为K的子数组](#SubarraySumEqualsKK)
+	* 1.23. [560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组](#SubarraySumEqualsKK)
 	* 1.24. [563 Binary Tree Tilt](#BinaryTreeTilt)
-	* 1.25. [565 【🍒并查集】Array Nesting](#ArrayNesting)
+	* 1.25. [565 【为什么不用🍒并查集？成环的🌈】Array Nesting](#ArrayNesting)
 	* 1.26. [567. 【滑动窗口🔹】Permutation in String 567-字符串的排列](#PermutationinString567-)
-	* 1.27. [572-另一个树的子树](#-1)
+	* 1.27. [572-另一个树的子树](#)
 	* 1.28. [575 Distribute Candies](#DistributeCandies)
 	* 1.29. [576. Out of Boundary Paths](#OutofBoundaryPaths)
 	* 1.30. [581 Shortest Unsorted Continuous Suba](#ShortestUnsortedContinuousSuba)
@@ -46,7 +46,7 @@
 	* 1.43. [643. Maximum Average Subarray I](#MaximumAverageSubarrayI)
 	* 1.44. [645-错误的集合](#-1)
 	* 1.45. [646-【动态🚀规划 + 贪心🧡】最长数对链](#-1)
-	* 1.46. [647 【动态🚀规划 + 中心拓展】Palindromic Substrings](#PalindromicSubstrings)
+	* 1.46. [647 【动态🚀规划 + 回文🌈】Palindromic Substrings](#PalindromicSubstrings)
 	* 1.47. [650-只有两个键的键盘](#-1)
 	* 1.48. [652. Find Duplicate Subtrees](#FindDuplicateSubtrees)
 	* 1.49. [653. Two Sum IV](#TwoSumIV)
@@ -56,10 +56,10 @@
 	* 1.53. [669 Trim a Binary Search Tree](#TrimaBinarySearchTree)
 	* 1.54. [673 Number of Longest Increasing Subse](#NumberofLongestIncreasingSubse)
 	* 1.55. [678 Valid Parenthesis String](#ValidParenthesisString)
-	* 1.56. [680-Valid Palindrome II](#ValidPalindromeII)
+	* 1.56. [680 【回文🌈】Valid Palindrome II](#ValidPalindromeII)
 	* 1.57. [683. K Empty Slots](#KEmptySlots)
 	* 1.58. [684. 【🍒并查集】Redundant Connection 684-冗余连接](#RedundantConnection684-)
-	* 1.59. [685. 【🍒并查集】Redundant Connection II](#RedundantConnectionII)
+	* 1.59. [685. 【🍒并查集 + hard】Redundant Connection II](#hardRedundantConnectionII)
 	* 1.60. [687. Longest Univalue Path](#LongestUnivaluePath)
 	* 1.61. [688. Knight Probability in Chessboard](#KnightProbabilityinChessboard)
 	* 1.62. [690. Employee Importance](#EmployeeImportance)
@@ -85,7 +85,7 @@
 	* 1.82. [724. Find Pivot Index](#FindPivotIndex)
 	* 1.83. [725. Split Linked List in Parts](#SplitLinkedListinParts)
 	* 1.84. [726. Number of Atoms](#NumberofAtoms)
-	* 1.85. [730. Count Different Palindromic Subsequences](#CountDifferentPalindromicSubsequences)
+	* 1.85. [730. 【回文🌈】Count Different Palindromic Subsequences](#CountDifferentPalindromicSubsequences)
 	* 1.86. [732. My Calendar III](#MyCalendarIII)
 	* 1.87. [733. 图像渲染 Flood Fill](#FloodFill)
 	* 1.88. [735 Asteroid Collision](#AsteroidCollision)
@@ -93,19 +93,19 @@
 	* 1.90. [739-Daily Temperatures](#DailyTemperatures)
 	* 1.91. [740. 【动态🚀规划】 Delete and Earn](#DeleteandEarn)
 	* 1.92. [741. Cherry Pickup](#CherryPickup)
-	* 1.93. [743. 【Dijkstra🚗】Network Delay Time](#DijkstraNetworkDelayTime)
+	* 1.93. [743. 【Dijkstra🚗 + floyd 🌞】Network Delay Time](#DijkstrafloydNetworkDelayTime)
 	* 1.94. [745. Prefix and Suffix Search](#PrefixandSuffixSearch)
 	* 1.95. [746. 【动态🚀规划】Min Cost Climbing Stairs](#MinCostClimbingStairs)
 	* 1.96. [748. Shortest Completing Word](#ShortestCompletingWord)
 	* 1.97. [752. Open the Lock](#OpentheLock)
 	* 1.98. [763 Partition Labels](#PartitionLabels)
-	* 1.99. [765. 【🍒并查集】情侣牵手 Couples Holding Hands](#CouplesHoldingHands)
+	* 1.99. [765. 【🍒并查集 + 困难】情侣牵手 Couples Holding Hands](#CouplesHoldingHands)
 	* 1.100. [769. Max Chunks To Make Sorted](#MaxChunksToMakeSorted)
 	* 1.101. [771 Jewels and Stones](#JewelsandStones)
 	* 1.102. [773. Sliding Puzzle](#SlidingPuzzle)
 	* 1.103. [775. Global and Local Inversions](#GlobalandLocalInversions)
 	* 1.104. [777](#-1)
-	* 1.105. [778. 【Dijkstra🚗 + 🍒并查集】Swim in Rising Water](#DijkstraSwiminRisingWater)
+	* 1.105. [778. 【Dijkstra🚗 + 🍒并查集 + 困难】Swim in Rising Water](#DijkstraSwiminRisingWater)
 	* 1.106. [784. Letter Case Permutation](#LetterCasePermutation)
 	* 1.107. [785-判断二分图](#-1)
 	* 1.108. [786. K-th Smallest Prime Fraction](#K-thSmallestPrimeFraction)
@@ -115,7 +115,7 @@
 	* 1.112. [797 All Paths From Source to Target](#AllPathsFromSourcetoTarget)
 	* 1.113. [799 Champagne Tower](#ChampagneTower)
 	* 1.114. [801. Minimum Swaps To Make Sequences Increasing](#MinimumSwapsToMakeSequencesIncreasing)
-	* 1.115. [803. 【🍒并查集】Bricks Falling When Hit](#BricksFallingWhenHit)
+	* 1.115. [803. 【🍒并查集 + 困难】Bricks Falling When Hit](#BricksFallingWhenHit)
 	* 1.116. [804 Unique Morse Code Words](#UniqueMorseCodeWords)
 	* 1.117. [813. Largest Sum of Averages](#LargestSumofAverages)
 	* 1.118. [815. Bus Routes](#BusRoutes)
@@ -151,7 +151,7 @@
 	* 1.148. [880 Decoded String at Index](#DecodedStringatIndex)
 	* 1.149. [881 Boats to Save People](#BoatstoSavePeople)
 	* 1.150. [882. Reachable Nodes In Subdivided Graph](#ReachableNodesInSubdividedGraph)
-	* 1.151. [886. Possible Bipartition](#PossibleBipartition)
+	* 1.151. [886. 【🍒并查集】Possible Bipartition](#PossibleBipartition)
 	* 1.152. [887. Super Egg Drop](#SuperEggDrop)
 	* 1.153. [889. Construct Binary Tree from Preorder and Postorder](#ConstructBinaryTreefromPreorderandPostorder)
 	* 1.154. [891. Sum of Subsequence Widths](#SumofSubsequenceWidths)
@@ -162,7 +162,7 @@
 	* 1.159. [902 Numbers At Most N Given Digit Set](#NumbersAtMostNGivenDigitSet)
 	* 1.160. [904-水果成篮](#-1)
 	* 1.161. [905 Sort Array By Parity](#SortArrayByParity)
-	* 1.162. [906 Super Palindromes](#SuperPalindromes)
+	* 1.162. [906 【回文🌈】Super Palindromes](#SuperPalindromes)
 	* 1.163. [909. Snakes and Ladders](#SnakesandLadders)
 	* 1.164. [910 Smallest Range II](#SmallestRangeII)
 	* 1.165. [916 Word Subsetse](#WordSubsetse)
@@ -185,14 +185,14 @@
 	* 1.182. [953 Verifying an Alien Dictionary](#VerifyinganAlienDictionary)
 	* 1.183. [954 Array of Doubled Pairs](#ArrayofDoubledPairs)
 	* 1.184. [959. 【🍒并查集】由斜杠划分区域 Regions Cut By Slashes](#RegionsCutBySlashes)
-	* 1.185. [964. 【Dijkstra🚗】Least Operators to Express Number](#DijkstraLeastOperatorstoExpressNumber)
+	* 1.185. [964. 【Dijkstra🚗 + 困难】Least Operators to Express Number](#DijkstraLeastOperatorstoExpressNumber)
 	* 1.186. [966 Vowel Spellchecker](#VowelSpellchecker)
 	* 1.187. [967. Numbers With Same Consecutive Differences](#NumbersWithSameConsecutiveDifferences)
 	* 1.188. [968 Binary Tree Cameras](#BinaryTreeCameras)
 	* 1.189. [969 Pancake Sorting](#PancakeSorting)
 	* 1.190. [971 Flip Binary Tree To Match Preorder](#FlipBinaryTreeToMatchPreorder)
 	* 1.191. [973 K Closest Points to Origin](#KClosestPointstoOrigin)
-	* 1.192. [974. 和可被 K 整除的子数组 Subarray Sums Divisible by K](#KSubarraySumsDivisiblebyK)
+	* 1.192. [974. 【前缀和🎨】和可被 K 整除的子数组 Subarray Sums Divisible by K](#KSubarraySumsDivisiblebyK)
 	* 1.193. [975. Odd Even Jump](#OddEvenJump)
 	* 1.194. [976 Middle of the Linked List](#MiddleoftheLinkedList-1)
 	* 1.195. [977 Squares of a Sorted Array](#SquaresofaSortedArray)
@@ -246,7 +246,7 @@
 	* 1.243. [1137. N-th Tribonacci Number](#N-thTribonacciNumber)
 	* 1.244. [1140. Stone Game II](#StoneGameII)
 	* 1.245. [1143 【二维动态🚀规划】Longest Common Subsequence](#LongestCommonSubsequence)
-		* 1.245.1. [类似题目：516最长回文子序列](#516)
+		* 1.245.1. [类似题目：516最长回文🌈子序列](#516)
 	* 1.246. [1145. Binary Tree Coloring Game](#BinaryTreeColoringGame)
 	* 1.247. [1155. Number of Dice Rolls With Target Sum](#NumberofDiceRollsWithTargetSum)
 	* 1.248. [1160. 拼写单词 Find Words That Can Be Formed by Characters](#FindWordsThatCanBeFormedbyCharacters)
@@ -264,12 +264,12 @@
 	* 1.260. [1220. Count Vowels Permutation](#CountVowelsPermutation)
 	* 1.261. [1223 Dice Roll Simulation](#DiceRollSimulation)
 	* 1.262. [1240 Tiling a Rectangle with the Fewest Squares](#TilingaRectanglewiththeFewestSquares)
-	* 1.263. [1248-统计「优美子数组」](#-1)
+	* 1.263. [1248-【前缀和🎨】统计「优美子数组」](#-1)
 	* 1.264. [1249 Minimum Remove to Make Valid Pare](#MinimumRemovetoMakeValidPare)
 	* 1.265. [1252 1253 1254 1255](#-1)
 	* 1.266. [1263. Minimum Moves to Move a Box to Their Target](#MinimumMovestoMoveaBoxtoTheirTarget)
 	* 1.267. [1277. 【二维动态🚀规划】统计全为1的正方形子矩阵](#-1)
-	* 1.268. [1278. Palindrome Partitioning III](#PalindromePartitioningIII)
+	* 1.268. [1278. 【回文🌈】Palindrome Partitioning III](#PalindromePartitioningIII)
 	* 1.269. [1283 Find the Smallest Divisor Given a](#FindtheSmallestDivisorGivena)
 	* 1.270. [1284. Minimum Number of Flips to Convert Binary Matrix](#MinimumNumberofFlipstoConvertBinaryMatrix)
 	* 1.271. [1290. 二进制链表转整数 (Convert Binary Number in a Linked List](#ConvertBinaryNumberinaLinkedList)
@@ -281,12 +281,12 @@
 	* 1.277. [1305 All Elements in Two Binary Search](#AllElementsinTwoBinarySearch)
 	* 1.278. [1306 Jump Game III](#JumpGameIII)
 	* 1.279. [1310. XOR Queries of a Subarray](#XORQueriesofaSubarray)
-	* 1.280. [1312. Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
+	* 1.280. [1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
 	* 1.281. [1319. 【🍒并查集】Number of Operations to Make Network Connected](#NumberofOperationstoMakeNetworkConnected)
 	* 1.282. [1320. Minimum Distance to Type a Word Using Two Finger](#MinimumDistancetoTypeaWordUsingTwoFinger)
 	* 1.283. [1329 Sort the Matrix Diagonally](#SorttheMatrixDiagonally)
-	* 1.284. [1332 Remove Palindromic Subsequences](#RemovePalindromicSubsequences)
-	* 1.285. [1334. 【Dijkstra🚗】Find the City With Smallest Number of Neighbors](#DijkstraFindtheCityWithSmallestNumberofNeighbors)
+	* 1.284. [1332 【回文🌈】Remove Palindromic Subsequences](#RemovePalindromicSubsequences)
+	* 1.285. [1334. 【Dijkstra🚗 + floyd 🌞】Find the City With Smallest Number of Neighbors](#DijkstrafloydFindtheCityWithSmallestNumberofNeighbors)
 	* 1.286. [1335. Minimum Difficulty of a Job Schedule](#MinimumDifficultyofaJobSchedule)
 	* 1.287. [1337 The K Weakest Rows in a Matrix](#TheKWeakestRowsinaMatrix)
 	* 1.288. [1339 Maximum Product of Splitt](#MaximumProductofSplitt)
@@ -294,7 +294,7 @@
 	* 1.290. [1349. Maximum Students Taking Exam](#MaximumStudentsTakingExam)
 	* 1.291. [1353. Maximum Number of Events That Can Be Attended](#MaximumNumberofEventsThatCanBeAttended)
 	* 1.292. [1354. Construct Target Array With Multiple Sums](#ConstructTargetArrayWithMultipleSums)
-	* 1.293. [1368. 【Dijkstra🚗】Minimum Cost to Make at Least One Valid Path](#DijkstraMinimumCosttoMakeatLeastOneValidPath)
+	* 1.293. [1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path](#DijkstraMinimumCosttoMakeatLeastOneValidPath)
 	* 1.294. [1371. Find the Longest Substring Containing Vowels in Eve](#FindtheLongestSubstringContainingVowelsinEve)
 	* 1.295. [1373. Maximum Sum BST in Binary Tree](#MaximumSumBSTinBinaryTree)
 	* 1.296. [1377. Frog Position After T Seconds](#FrogPositionAfterTSeconds)
@@ -320,7 +320,7 @@
 	* 1.316. [1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
 	* 1.317. [1451 Rearrange Words in a Sentence](#RearrangeWordsinaSentence)
 	* 1.318. [1453 Maximum Number of Darts Inside of a Circular Dartb](#MaximumNumberofDartsInsideofaCircularDartb)
-	* 1.319. [1457 Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
+	* 1.319. [1457 【回文🌈】Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
 	* 1.320. [1461 Check If a String Contains All Binar](#CheckIfaStringContainsAllBinar)
 	* 1.321. [1463 Cherry Pickup II](#CherryPickupII)
 	* 1.322. [1473. Paint House III](#PaintHouseIII)
@@ -386,10 +386,10 @@
 	* 1.382. [1713. Minimum Operations to Make a Subsequence](#MinimumOperationstoMakeaSubsequence)
 	* 1.383. [1721 Swapping Nodes in a Linked List](#SwappingNodesinaLinkedList)
 	* 1.384. [1727. Largest Submatrix With Rearrangements](#LargestSubmatrixWithRearrangements)
-	* 1.385. [1745. Palindrome Partitioning IV](#PalindromePartitioningIV)
+	* 1.385. [1745. 【回文🌈】Palindrome Partitioning IV](#PalindromePartitioningIV)
 	* 1.386. [1760. Minimum Limit of Balls in a Bag](#MinimumLimitofBallsinaBag)
 	* 1.387. [1770. Maximum Score from Performing Multiplication](#MaximumScorefromPerformingMultiplication)
-	* 1.388. [1771. Maximize Palindrome Length From Subsequences](#MaximizePalindromeLengthFromSubsequences)
+	* 1.388. [1771. 【回文🌈】Maximize Palindrome Length From Subsequences](#MaximizePalindromeLengthFromSubsequences)
 	* 1.389. [1775. Equal Sum Arrays With Minimum Number of Operatio](#EqualSumArraysWithMinimumNumberofOperatio)
 	* 1.390. [1786. 【Dijkstra🚗】 Number of Restricted Paths From First to Last Node](#DijkstraNumberofRestrictedPathsFromFirsttoLastNode)
 	* 1.391. [1792. Maximum Average Pass Ratio](#MaximumAveragePassRatio)
@@ -648,7 +648,7 @@ object Solution3 {
 
 ```
 
-###  1.5. <a name='LongestPalindromicSubsequence'></a>516. 【回文】【动态🚀规划】Longest Palindromic Subsequence
+###  1.5. <a name='LongestPalindromicSubsequence'></a>516. 【回文🌈 + 动态🚀规划】Longest Palindromic Subsequence
 
 ####  1.5.1. <a name='1143.'></a>类似题目：1143. 最长公共子序列
 
@@ -657,7 +657,7 @@ object Solution3 {
 ```py
 class Solution:
     def longestPalindromeSubseq(self, s: str) -> int:
-        #dp 最长回文串个数
+        #dp 最长回文🌈串个数
         n = len(s)
         #if not s or n < 2: return n
 
@@ -1125,7 +1125,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV11W411Z7jG?spm_id_from=333.999.0.0)
 
-###  1.20. <a name=''></a>547 【🍒并查集 + dfs + 队列】朋友圈
+###  1.20. <a name='dfs'></a>547 【🍒并查集 + dfs + 队列】朋友圈
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ta411F7rk?spm_id_from=333.999.0.0)
 
@@ -1351,7 +1351,7 @@ class UnionFind(M: Int) {
 
 [小明](https://www.bilibili.com/video/BV19t4y167yb?spm_id_from=333.999.0.0)
 
-###  1.23. <a name='SubarraySumEqualsKK'></a>560. Subarray Sum Equals K 和为K的子数组
+###  1.23. <a name='SubarraySumEqualsKK'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d71i?spm_id_from=333.999.0.0)
 
@@ -1733,7 +1733,7 @@ object Solution1-3 {
 }
 ```
 
-###  1.27. <a name='-1'></a>572-另一个树的子树
+###  1.27. <a name=''></a>572-另一个树的子树
 
 [哈哈哈](https://www.bilibili.com/video/BV1cA411t7zD?spm_id_from=333.999.0.0)
 
@@ -2235,7 +2235,7 @@ class Solution:
 
 
 
-###  1.46. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 中心拓展】Palindromic Substrings
+###  1.46. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
 
 [小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
 
@@ -2272,7 +2272,7 @@ class Solution(object):
 
 ```py
 # Python3中心扩展法非常简洁代码
-# 直接利用中心扩展法, 依次计数找到的所有的回文子串即可；
+# 直接利用中心扩展法, 依次计数找到的所有的回文🌈子串即可；
 # 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
 # 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
 ### 代码
@@ -2512,7 +2512,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1ap4y1X7nu?spm_id_from=333.999.0.0)
 
-###  1.56. <a name='ValidPalindromeII'></a>680-Valid Palindrome II
+###  1.56. <a name='ValidPalindromeII'></a>680 【回文🌈】Valid Palindrome II
 
 [哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
 
@@ -2709,7 +2709,7 @@ class Solution:
                 return [x, y]
 ```
 
-###  1.59. <a name='RedundantConnectionII'></a>685. 【🍒并查集 + hard】Redundant Connection II
+###  1.59. <a name='hardRedundantConnectionII'></a>685. 【🍒并查集 + hard】Redundant Connection II
 
 [花花酱](https://www.bilibili.com/video/BV1St411J7Ur?spm_id_from=333.999.0.0)
 
@@ -3543,7 +3543,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV11W411U7KT?spm_id_from=333.999.0.0)
 
-###  1.85. <a name='CountDifferentPalindromicSubsequences'></a>730. Count Different Palindromic Subsequences
+###  1.85. <a name='CountDifferentPalindromicSubsequences'></a>730. 【回文🌈】Count Different Palindromic Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV12W41167vQ?spm_id_from=333.999.0.0)
 
@@ -3818,7 +3818,9 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1tW41167jy?spm_id_from=333.999.0.0)
 
-###  1.93. <a name='DijkstraNetworkDelayTime'></a>743. 【Dijkstra🚗】Network Delay Time
+###  1.93. <a name='DijkstrafloydNetworkDelayTime'></a>743. 【Dijkstra🚗 + floyd 🌞 + Bellman-Ford🌞】Network Delay Time
+
+#### 类似题目：787、1514
 
 [花花酱](https://www.bilibili.com/video/BV1UW411r7S8?spm_id_from=333.999.0.0)
 
@@ -3826,16 +3828,98 @@ class Solution:
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3h1htkp4rl40.webp)
 
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1b4gaffx5yps.webp)
+
 方法一：Dijkstra 算法
 
+我们每次选择的都是距离最小的未访问过的点。
+
+假设当前的点是u，我们找到了一个已经访问过的点v，
+
+是不可能存在dis[u] + l < dis[v]的，
+
+因为dis[v]必然要小于dis[u]，v才有可能先于u访问。
+
+但是这有一个前提，就是每条边的长度不能是负数。
+
 ```py
+堆的写法复杂度如下：
+
+时间复杂度：O(mlogm)，其中 m 是数组 times 的长度。
+
+空间复杂度：O(n+m)。
+
+用List[List[int]]存graph，需要记得-1，并且enumerate
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        graph = [[float('inf')] * n for _ in range(n)]
+
+        # 用一个数组dis记录源点s到其他点的最短距离
+        # 起始时dis[s] = 0，其他值设为无穷大
+        dist = [float('inf')] * n
+        dist[k-1] = 0      # 易错点：不要忘记[k-1] = 0 
+
+        for u,v,w in times:
+            graph[u-1][v-1] = w # 易错点：一定要-1
+        
+        que = [(0, k-1)] #(cost,起始点)
+        while que:
+            costmin, start = heapq.heappop(que)
+            for end, cost in enumerate(graph[start]):
+                if (shorter := dist[start] + cost) < dist[end]:
+                    dist[end] = shorter
+                    heapq.heappush(que,(shorter,end))
+        res = max(dist)
+        return res if res != float('inf') else -1
+
+加入visited以后速度更快了
+
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        graph = [[float('inf')] * n for _ in range(n)]
+
+        dist = [float('inf')] * n
+        dist[k-1] = 0      # 易错点：不要忘记[k-1] = 0 
+
+        visited = [False] * n
+        
+        for u,v,w in times:
+            graph[u-1][v-1] = w # 易错点：一定要-1
+        
+        que = [(0, k-1)] #(cost,起始点)
+        while que:
+            costmin, start = heapq.heappop(que)
+
+            if visited[start]: continue
+            visited[start] = True
+
+            for end, cost in enumerate(graph[start]):
+                if (shorter := dist[start] + cost) < dist[end]:
+                    dist[end] = shorter
+                    heapq.heappush(que,(shorter,end))
+        res = max(dist)
+        return res if res != float('inf') else -1
+
+
+```
+
+```py
+枚举写法的复杂度如下：
+
+时间复杂度：O(n^2+m)
+空间复杂度：O(n^2)
+
+邻接矩阵：需占用 O(n^2) 的空间。
+
+ 
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         graph = [[float('inf')] * n for _ in range(n)]
         for start, end, cost in times:
             graph[start - 1][end - 1] = cost
-
-        costsum = [float('inf')] * n
+        costsum = [float('inf')] * n 
         costsum[k - 1] = 0
         visited = [False] * n
         for _ in range(n):
@@ -3855,101 +3939,37 @@ Python 中海象运算符的三种用法
 
 https://www.cnblogs.com/wongbingming/p/12743802.html
 
-class Solution:
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        graph = [[] for _ in range(n)]
-        for start, end, cost in times:
-            graph[start - 1].append((end - 1, cost))
+也可以用字典存graph （略）
 
-        costsum = [float('inf')] * n
-        costsum[k - 1] = 0
-        visited = [(0, k - 1)]
-        while visited:
-            cost, start = heapq.heappop(visited)
-            # 这个判断语句的作用是, 防止对同一节点的重复 relax操作. 
-            if costsum[start] < cost:
-                continue
-            # 例如 对于节点1, 
+------------------------------------------------------------
 
-            # 在 0 relax 时, 0 -> 1 被更新. 
-            # 在 2 relax 时, 2 -> 1 被更新. 
-            # 此时假设 2 -> 1 的 time 是 小于 0 -> 1 的. 
+Bellman-Ford算法 - 该算法也是「单源最短路」算法
 
-            # 如果 在节点2 relax阶段, 2->1 time 最小, 也就是 dist[1] 最小, 就会被弹出, 
-            # 然后 对节点1 进行relax操作. 因为 0->1 已经进入队列, 
+    时间复杂度： O(n*m), 这里m比较大，所以运算慢一点点
+    空间复杂度： O(m)
 
-            # 并且 q为空才会停止弹出, 所以 0->1 之后肯定要被弹出. 
-            # 这里 直接 过滤掉 0->1 , 防止再次对 节点 1进行relax操作.
-            for end, cost in graph[start]:
-                if (costnew := costsum[start] + cost) < costsum[end]:
-                    costsum[end] = costnew
-                    heapq.heappush(visited, (costnew, end))
+    BF算法关注的是边，枚举所有边
+    DJ算法关注的是点
 
-        res = max(costsum)
-        return res if res < float('inf') else -1
+    可以求负权边，但不能求负权回路
+    如果在两重循环完成后，还是存在dis[start] + cost < dis[end]，则存在回路
+
+    流程：
+        第一次：对每条边都要松弛
+        第二次：------
+        第 n-1 次
 
 
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        graph = [ [float('inf')] * n for _ in range(n)]
-        for start, end, cost in times: # convert to graph
-            graph[start-1][end-1] = cost
-        costsum = [float('inf')] * n
-        costsum[k-1] = 0
-        visited = [(0,k-1)]
-        
-        while visited:
-            cost, start = heapq.heappop(visited)
-            for end, cost in enumerate(graph[start]):
-                if costsum[start] + cost  < costsum[end]:
-                    costsum[end] = costsum[start] + cost
-                    heapq.heappush(visited, (costsum[end], end))
-        res = max(costsum)
-        return res if res != float('inf') else -1
-
-
-*** 大雪菜模板 击败97%
-
-import collections, heapq as hq
-
-class Solution:
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        graph = collections.defaultdict(list)
-        visited = [False for i in range(n+1)]
-        costsum = [1e5]* (n+1)
-        visitHeap = []
-        costsum[k] = 0
-        hq.heappush(visitHeap,[0,k])
-        for row in times:
-            graph[row[0]].append([row[2],row[1]])
-
-        while len(visitHeap) != 0:
-            cost,start = hq.heappop(visitHeap)
-            if visited[start]: continue
-            visited[start] = True
-            for cost,end in graph[start]:
-                if costsum[end] > costsum[start] + cost:
-                    costsum[end] = costsum[start] + cost
-                    hq.heappush(visitHeap,[costsum[end],end])
-
-        res = -1
-        for i in range(1,n+1):
-            if costsum[i] == 1e5:
-                return -1
-            res = max(costsum[i],res)
-        return res
-
-Bellman-Ford算法
-
-class Solution:
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        costsum = {node: float('inf') for node in range(1,n+1)}
-        costsum[k]=0
+        dist = {node:float('inf') for node in range(1,n+1)}
+        dist[k] = 0
         for _ in range(n-1):
-            for start, end, cost in times:
-                costsum[end] = min(costsum[end], costsum[start] + cost)
-        res = max(costsum.values())
-        return res if res != float('inf') else -1       
+            for start,end,cost in times:
+                if (shorter := dist[start] + cost) < dist[end]:
+                    dist[end] = shorter
+        res = max(dist.values())
+        return res if res != float('inf') else -1    
 ```
 
 ###  1.94. <a name='PrefixandSuffixSearch'></a>745. Prefix and Suffix Search
@@ -4455,7 +4475,7 @@ class Solution(object):
 
 [花花酱](https://www.bilibili.com/video/BV1AW411o7oi?spm_id_from=333.999.0.0)
 
-###  1.109. <a name='DijkstraCheapestFlightsWithinKStops'></a>787. 【Dijkstra🚗 + 动态🚀规划 + 最小堆🌵】Cheapest Flights Within K Stops
+###  1.109. <a name='DijkstraCheapestFlightsWithinKStops'></a>787. 【Dijkstra🚗 + 动态🚀规划 + 最小堆🌵 + Bellman-Ford🌞】Cheapest Flights Within K Stops
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7wc?spm_id_from=333.999.0.0)
 
@@ -5826,7 +5846,7 @@ class StockSpanner:
 
 [小明](https://www.bilibili.com/video/BV1Xk4y117rK?spm_id_from=333.999.0.0)
 
-###  1.162. <a name='SuperPalindromes'></a>906 Super Palindromes
+###  1.162. <a name='SuperPalindromes'></a>906 【回文🌈】Super Palindromes
 
 [小明](https://www.bilibili.com/video/BV1LA41157Wf?spm_id_from=333.999.0.0)
 
@@ -6639,9 +6659,13 @@ def numsSameConsecDiff(self, N, K):
 
 [小明](https://www.bilibili.com/video/BV1Vf4y1278J?spm_id_from=333.999.0.0)
 
-###  1.192. <a name='KSubarraySumsDivisiblebyK'></a>974. 和可被 K 整除的子数组 Subarray Sums Divisible by K 
+###  1.192. <a name='KSubarraySumsDivisiblebyK'></a>974. 【前缀和🎨】和可被 K 整除的子数组 Subarray Sums Divisible by K 
 
 [官方](https://www.bilibili.com/video/BV19z4y1X79a?spm_id_from=333.999.0.0)
+
+```py
+
+```
 
 ###  1.193. <a name='OddEvenJump'></a>975. Odd Even Jump
 
@@ -7647,7 +7671,7 @@ class Solution:
 
 ###  1.245. <a name='LongestCommonSubsequence'></a>1143 【二维动态🚀规划】Longest Common Subsequence
 
-####  1.245.1. <a name='516'></a>类似题目：516最长回文子序列
+####  1.245.1. <a name='516'></a>类似题目：516最长回文🌈子序列
 
 [小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
 
@@ -7658,7 +7682,7 @@ class Solution:
 
 2、 base case
 
-3、 状态的转移：对于`回文/LCS`之类的问题则是考虑当前字串和已经计算过的子串之间的关系
+3、 状态的转移：对于`回文🌈/LCS`之类的问题则是考虑当前字串和已经计算过的子串之间的关系
 
 4、 由`状态的转移`来确定 loop的边界
 
@@ -7912,11 +7936,43 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1UE411t7Gb?spm_id_from=333.999.0.0)
 
-###  1.263. <a name='-1'></a>1248-统计「优美子数组」
+###  1.263. <a name='-1'></a>1248-【前缀和🎨】统计「优美子数组」
 
 [哈哈哈](https://www.bilibili.com/video/BV1FU4y1H76T?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Wk4y1r7t7?spm_id_from=333.999.0.0)
+
+```py
+def numberOfSubarrays(nums, k):
+    if not nums or len(nums) < k:
+        return 0
+        
+    res = 0
+    
+    # 值表示所有可能的奇数个数, 及其对应的子数组的个数
+    dicts = {0: 1}
+    
+    # 表示从索引为0的位置到当前位置, 奇数的个数
+    prefix_sum = 0
+    
+    n = len(nums)
+    
+    for i in range(n):
+        if nums[i] % 2:
+            prefix_sum += 1
+            
+        if prefix_sum - k in dicts:
+            res += dicts[prefix_sum - k]
+            
+        if prefix_sum not in dicts:
+            dicts[prefix_sum] = 0
+        
+        # 奇数个数为prefix_sum的子数组个数加1
+        dicts[prefix_sum] += 1
+        
+    return res
+
+```
 
 ```py
 class Solution(object):
@@ -8110,7 +8166,7 @@ class Solution:
         return ans
 ```
 
-###  1.268. <a name='PalindromePartitioningIII'></a>1278. Palindrome Partitioning III
+###  1.268. <a name='PalindromePartitioningIII'></a>1278. 【回文🌈】Palindrome Partitioning III
 
 [花花酱](https://www.bilibili.com/video/BV1HJ411q7nc?spm_id_from=333.999.0.0)
 
@@ -8370,7 +8426,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1oJ411L78Y?spm_id_from=333.999.0.0)
 
-###  1.280. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. Minimum Insertion Steps to Make a String Palindrom
+###  1.280. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
 
 [花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
 
@@ -8390,39 +8446,39 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1hU4y147b1?spm_id_from=333.999.0.0)
 
-###  1.284. <a name='RemovePalindromicSubsequences'></a>1332 Remove Palindromic Subsequences
+###  1.284. <a name='RemovePalindromicSubsequences'></a>1332 【回文🌈】Remove Palindromic Subsequences
 
 [小明](https://www.bilibili.com/video/BV1tK4y1D7aV?spm_id_from=333.999.0.0)
 
-###  1.285. <a name='DijkstraFindtheCityWithSmallestNumberofNeighbors'></a>1334. 【Dijkstra🚗 + 做的人少跳过】Find the City With Smallest Number of Neighbors
+###  1.285. <a name='DijkstrafloydFindtheCityWithSmallestNumberofNeighbors'></a>1334. 【Dijkstra🚗 + floyd 🌞】Find the City With Smallest Number of Neighbors
 
 [花花酱](https://www.bilibili.com/video/BV1b7411z7Tb?spm_id_from=333.999.0.0)
 
 ```py
 python3: Floyd算法
 
-INF = 10**4+1
+inf = 10**4+1
 class Solution:
     def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
-        distance = [[INF for i in range(n)] for i in range(n)]
-        for u,v,w in edges:
-            distance[u][v] = distance[v][u] = w
-        for i in range(n):
-            distance[i][i] = 0
-        for k in range(n):
-            for i in range(n):
-                for j in range(n):
-                    if (shorter := distance[i][k]+distance[k][j]) < distance[i][j]:
-                        distance[i][j] = shorter
-        cnt = [0] * n
-        for i in range(n):
-            for j in range(n):
-                if i != j and distance[i][j] <= distanceThreshold:
-                    cnt[i] += 1
-        min_cnt = min(cnt)
-        for i in range(n-1, -1, -1):
-            if cnt[i] == min_cnt:
-                return i
+        graph = [[inf for _ in range(n)] for _ in range(n)]
+        for stt,edd,cost in edges:
+            graph[stt][edd] = graph[edd][stt] = cost
+        for stt in range(n):
+            graph[stt][stt] = 0
+        for mid in range(n):
+            for stt in range(n):
+                for edd in range(n):
+                    if (shorter := graph[stt][mid]+graph[mid][edd]) < graph[stt][edd]:
+                        graph[stt][edd] = shorter
+        cntDP = [0] * n
+        for stt in range(n):
+            for edd in range(n):
+                if stt != edd and graph[stt][edd] <= distanceThreshold:
+                    cntDP[stt] += 1
+        mincnt = min(cntDP)
+        for node in range(n-1, -1, -1):
+            if cntDP[node] == mincnt:
+                return node
         return -1
 ```
 
@@ -8431,31 +8487,31 @@ dijkstra + 遍历
 
 class Solution:
     def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
-        adj = [[] for i in range(n)]
+        graph = [[] for i in range(n)]
         for i, j, v in edges:
-            adj[i].append((j,  v))
-            adj[j].append((i, v))
+            graph[i].append((j,  v))
+            graph[j].append((i, v))
         
         def dijkstra(start, pay=0):
             dist = [distanceThreshold+1]*n
             heap = [(pay, start)]
             while heap:
-                cost, cur = heapq.heappop(heap)
-                if cost >= dist[cur]: continue
+                costmin, start = heapq.heappop(heap)
+                if costmin >= dist[start]: continue
                 else:
-                    dist[cur] = cost
-                    for nxt, v in adj[cur]:
-                        if cost + v < dist[nxt]:
-                            heapq.heappush(heap, (cost+v, nxt))
+                    dist[start] = costmin
+                    for end, cost in graph[start]:
+                        if costmin + cost < dist[end]:
+                            heapq.heappush(heap, (costmin+cost, end))
 
             return  sum(map(lambda x: x <= distanceThreshold, dist))
         
         res = [dijkstra(i) for i in range(n)]
-        ans = n-1
+        node = n - 1
         for i in range(n-1, -1, -1):
-            if res[ans] > res[i]:
-                ans = i
-        return ans
+            if res[node] > res[i]:
+                node = i
+        return node
 ```
 
 ```py
@@ -8469,24 +8525,24 @@ class Solution:
             a, b, w = edge
             graph[a].append((b, w))
             graph[b].append((a, w))
-        def dfs(i, distance):
-            for j, w in graph[i]:
-                if j not in visited and distance+w <= distanceThreshold:
-                    visited[j] = distance + w
-                    dfs(j, distance+w)
-                elif distance+w <= distanceThreshold:
-                    if distance + w < visited[j]:
-                        visited[j] = distance + w
-                        dfs(j, distance + w)
-        mincity, j = 101, -1
+        def dfs(start, distance):
+            for end, cost in graph[start]:
+                if end not in visited and distance+cost <= distanceThreshold:
+                    visited[end] = distance + cost
+                    dfs(end, distance+cost)
+                elif distance+cost <= distanceThreshold:
+                    if distance + cost < visited[end]:
+                        visited[end] = distance + cost
+                        dfs(end, distance + cost)
+        mincity, node = 101, -1
         for i in range(n):
             visited = defaultdict(int)
             visited[i] = 0
             dfs(i, 0)
             if mincity >= len(visited)-1:
                 mincity = len(visited)-1
-                j = i
-        return j
+                node = i
+        return node
 ```
 
 ```py
@@ -8499,24 +8555,24 @@ class Solution:
             graph[x][y], graph[y][x] = w, w
 
         for k in range(n):
-            for i in range(n):
-                for j in range(n):
-                    graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+            for nodeI in range(n):
+                for end in range(n):
+                    graph[nodeI][end] = min(graph[nodeI][end], graph[nodeI][k] + graph[k][end])
 
         res = [0 for _ in range(n)]
 
-        index, cnt = -1, n
+        node, cnt = -1, n
 
-        for i in range(n):
-            for j in range(n):
-                if graph[i][j] <= distanceThreshold and i != j:
-                    res[i] += 1
+        for nodeI in range(n):
+            for end in range(n):
+                if graph[nodeI][end] <= distanceThreshold and nodeI != end:
+                    res[nodeI] += 1
 
-        for i, v in enumerate(res):
-            if cnt >= v:
-                index, cnt = i, v
+        for nodeI, cntI in enumerate(res):
+            if cnt >= cntI:
+                node, cnt = nodeI, cntI
 
-        return index
+        return node
 ```
 
 ```py
@@ -8543,22 +8599,19 @@ from typing import List
 
 class Solution:
     def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
-        distance = [[0 if i == j else float('inf') for j in range(n)] for i in range(n)]
-        for i, j, w in edges:
-            distance[i][j] = w
-            distance[j][i] = w
+        graph = [[0 if i == j else float('inf') for j in range(n)] for i in range(n)]
+        for start, end, w in edges:
+            graph[start][end] = w
+            graph[end][start] = w
 
         for k in range(n):
-            for i in range(n):
-                for j in range(n):
-                    distance[i][j] = min(distance[i][j], distance[i][k]+distance[k][j])
+            for start in range(n):
+                for end in range(n):
+                    graph[start][end] = min(graph[start][end], graph[start][k]+graph[k][end])
 
-        neighbor = [sum(distance[i][j] <= distanceThreshold for j in range(n)) for i in range(n)]
-        return min(list(range(n)), key=lambda i: (neighbor[i], -i))
+        neighbors = [sum(graph[i][j] <= distanceThreshold for j in range(n)) for i in range(n)]
+        return min(list(range(n)), key=lambda i: (neighbors[i], -i))
 
-
-s = Solution()
-print(s.findTheCity(4,[[0,1,3],[1,2,1],[1,3,4],[2,3,1]], 4))
 ```
 
 ```scala
@@ -8721,61 +8774,53 @@ class Solution:
 class Solution:
     def minCost(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])
-        BIG = int(1e9)
-        dist = [0] + [BIG] * (m * n - 1)
-        seen = set()
-        q = [(0, 0, 0)]
+        inf = int(1e9)
+        disDP = [0] + [inf] * (m * n - 1)
+        visited = set()
+        que = [(0, 0, 0)]
 
-        while len(q) > 0:
-            cur_dis, x, y = heapq.heappop(q)
-            if (x, y) in seen:
+        while que:
+            cur_dis, x, y = heapq.heappop(que)
+            if (x, y) in visited:
                 continue
-            seen.add((x, y))
-            cur_pos = x * n + y
+            visited.add((x, y))
+            ID = x * n + y
             for i, (nx, ny) in enumerate([(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]):
-                new_pos = nx * n + ny
-                new_dis = dist[cur_pos] + (1 if grid[x][y] != i + 1 else 0)
-                if 0 <= nx < m and 0 <= ny < n and new_dis < dist[new_pos]:
-                    dist[new_pos] = new_dis
-                    heapq.heappush(q, (new_dis, nx, ny))
+                nID = nx * n + ny
+                newdis = disDP[ID] + (1 if grid[x][y] != i + 1 else 0)
+                if 0 <= nx < m and 0 <= ny < n and newdis < disDP[nID]:
+                    disDP[nID] = newdis
+                    heapq.heappush(que, (newdis, nx, ny))
         
-        return dist[m * n - 1]
+        return disDP[m * n - 1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/solution/shi-wang-ge-tu-zhi-shao-you-yi-tiao-you-xiao-lu-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def minCost(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])
-        BIG = int(1e9)
-        dist = [0] + [BIG] * (m * n - 1)
-        seen = set()
-        q = collections.deque([(0, 0)])
+        inf = int(1e9)
+        disDP = [0] + [inf] * (m * n - 1)
+        visited = set()
+        que = collections.deque([(0, 0)])
 
-        while len(q) > 0:
-            x, y = q.popleft()
-            if (x, y) in seen:
+        while len(que) > 0:
+            x, y = que.popleft()
+            if (x, y) in visited:
                 continue
-            seen.add((x, y))
-            cur_pos = x * n + y
+            visited.add((x, y))
+            ID = x * n + y
             for i, (nx, ny) in enumerate([(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]):
-                new_pos = nx * n + ny
-                new_dis = dist[cur_pos] + (1 if grid[x][y] != i + 1 else 0)
-                if 0 <= nx < m and 0 <= ny < n and new_dis < dist[new_pos]:
-                    dist[new_pos] = new_dis
+                nID = nx * n + ny
+                newdis = disDP[ID] + (1 if grid[x][y] != i + 1 else 0)
+                if 0 <= nx < m and 0 <= ny < n and newdis < disDP[nID]:
+                    disDP[nID] = newdis
                     if grid[x][y] == i + 1:
-                        q.appendleft((nx, ny))
+                        que.appendleft((nx, ny))
                     else:
-                        q.append((nx, ny))
+                        que.append((nx, ny))
         
-        return dist[m * n - 1]
+        return disDP[m * n - 1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/solution/shi-wang-ge-tu-zhi-shao-you-yi-tiao-you-xiao-lu-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
@@ -8784,27 +8829,27 @@ class Solution:
 class Solution:
     def minCost(self, grid: List[List[int]]) -> int:
         # 顺序不能乱，1234右左下上
-        dire = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         n, m = len(grid), len(grid[0])
-        dis = [[float('inf') for _ in range(m+1)] for _ in range(n+1)]
-        vis = [[0 for _ in range(m+1)] for _ in range(n+1)]
-        q = deque()
-        q.append((0, 0))
-        dis[0][0] = 0
-        while q:
-            x, y = q.popleft()
-            if vis[x][y]:
+        disDP = [[float('inf') for _ in range(m+1)] for _ in range(n+1)]
+        visited = [[0 for _ in range(m+1)] for _ in range(n+1)]
+        que = deque()
+        que.append((0, 0))
+        disDP[0][0] = 0
+        while que:
+            x, y = que.popleft()
+            if visited[x][y]:
                 continue
-            vis[x][y] = 1
+            visited[x][y] = 1
             for i in range(4):
-                nx, ny = x+dire[i][0], y+dire[i][1]
+                nx, ny = x + dirs[i][0], y + dirs[i][1]
                 if nx < 0 or ny < 0 or nx >= n or ny >= m:
                     continue
-                w = 0 if (grid[x][y]-1) == i else 1
-                if dis[nx][ny] > dis[x][y] + w:
-                    dis[nx][ny] = dis[x][y] + w
-                    q.append((nx, ny)) if w else q.appendleft((nx, ny))
-        return dis[n-1][m-1]
+                cost = 0 if (grid[x][y]-1) == i else 1
+                if disDP[nx][ny] > disDP[x][y] + cost:
+                    disDP[nx][ny] = disDP[x][y] + cost
+                    que.append((nx, ny)) if cost else que.appendleft((nx, ny))
+        return disDP[n-1][m-1]
 
 ```
 
@@ -8815,19 +8860,19 @@ class Solution:
 from heapq import heappop,heappush
 class Solution:
 	def minCost(self,grid):
-		row,col=len(grid),len(grid[0])
-		pqueue,visit=[(0,0,0)],[[1]*col for _ in range(row)] #代替set 表示相应的节点是否被访问过了
-		while pqueue:
-			cost,x,y=heappop(pqueue)
-			if visit[x][y]:
-				visit[x][y]=0
-				if x==row-1 and y==col-1: #已经到达了目标的位置了
+		m, n = len(grid), len(grid[0])
+		que, visited = [(0,0,0)],[[1]*n for _ in range(m)] #代替set 表示相应的节点是否被访问过了
+		while que:
+			cost, x, y = heappop(que)
+			if visited[x][y]:
+				visited[x][y] = 0
+				if x == m-1 and y == n - 1 : #已经到达了目标的位置了
 					return cost
-				ori_flag=grid[x][y]
-				for flag,(movex,movey) in enumerate([(0,1),(0,-1),(1,0),(-1,0)],1):
-					nxtx,nxty=x+movex,y+movey
-					if -1<nxtx<row and -1<nxty<col and visit[nxtx][nxty]:
-						heappush(pqueue,(cost+(flag!=ori_flag),nxtx,nxty))
+				preFlag = grid[x][y]
+				for nxtFlag, (dx,dy) in enumerate([(0,1),(0,-1),(1,0),(-1,0)],1):
+					nx, ny = x+dx, y+dy
+					if -1<nx<m and -1<ny<n and visited[nx][ny]:
+						heappush(que,(cost + (nxtFlag != preFlag), nx, ny))
 ```
 
 ```scala
@@ -9238,7 +9283,7 @@ object P1449 {
 
 [小明](https://www.bilibili.com/video/BV1Ut4y117jp?spm_id_from=333.999.0.0)
 
-###  1.319. <a name='Pseudo-PalindromicPathsinaBin'></a>1457 Pseudo-Palindromic Paths in a Bin
+###  1.319. <a name='Pseudo-PalindromicPathsinaBin'></a>1457 【回文🌈】Pseudo-Palindromic Paths in a Bin
 
 [小明](https://www.bilibili.com/video/BV1t54y1t7KK?spm_id_from=333.999.0.0)
 
@@ -9391,7 +9436,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1pr4y1w7ao?spm_id_from=333.999.0.0)
 
-###  1.335. <a name='DijkstraPathwithMaximumProbability'></a>1514 【Dijkstra🚗】Path with Maximum Probability
+###  1.335. <a name='DijkstraPathwithMaximumProbability'></a>1514 【Dijkstra🚗 + Bellman-Ford🌞】Path with Maximum Probability
 
 [小明](https://www.bilibili.com/video/BV1Ak4y1B7yR?spm_id_from=333.999.0.0)
 
@@ -9401,25 +9446,25 @@ class Solution:
 class Solution:
     def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
         graph = collections.defaultdict(list)
-        for i, (x, y) in enumerate(edges):
-            graph[x].append((succProb[i], y))
-            graph[y].append((succProb[i], x))
+        for i, (stt, edd) in enumerate(edges):
+            graph[stt].append((succProb[i], edd))
+            graph[edd].append((succProb[i], stt))
         
         que = [(-1.0, start)]
-        prob = [0.0] * n
-        prob[start] = 1.0
+        proDP = [0.0] * n
+        proDP[start] = 1.0
 
         while que:
-            pr, node = heapq.heappop(que)
-            pr = -pr
-            if pr < prob[node]:
+            pro, stt = heapq.heappop(que)
+            pro = -pro
+            if pro < proDP[stt]:
                 continue
-            for prNext, nodeNext in graph[node]:
-                if prob[nodeNext] < prob[node] * prNext:
-                    prob[nodeNext] = prob[node] * prNext
-                    heapq.heappush(que, (-prob[nodeNext], nodeNext))
+            for proNxt, edd in graph[stt]:
+                if proDP[edd] < proDP[stt] * proNxt:
+                    proDP[edd] = proDP[stt] * proNxt
+                    heapq.heappush(que, (-proDP[edd], edd))
         
-        return prob[end]
+        return proDP[end]
 
 作者：LeetCode-Solution
 链接：https://leetcode-cn.com/problems/path-with-maximum-probability/solution/gai-lu-zui-da-de-lu-jing-by-leetcode-solution/
@@ -9430,38 +9475,44 @@ class Solution:
 ```py
 class Solution:
     def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
-        d = [{} for _ in range(n)]
-        for (i, j), k in zip(edges, succProb):
-            d[i][j] = d[j][i] = k
-        q = [start]
-        v = [0] * n
-        v[start] = 1
-        for i in q:
-            for j in d[i]:
-                if (p := v[i] * d[i][j]) > v[j]:
-                    q.append(j)
-                    v[j] = p
-        return v[end]
+        graph = [{} for _ in range(n)]
+        for (stt, edd), pro in zip(edges, succProb):
+            graph[stt][edd] = graph[edd][stt] = pro
+        que = [start]
+        proDP = [0] * n
+        proDP[start] = 1
+        for stt in que:
+            for edd in graph[stt]:
+                if (p := proDP[stt] * graph[stt][edd]) > proDP[edd]:
+                    que.append(edd)
+                    proDP[edd] = p
+        return proDP[end]
 
-@typingMonkey 主楼的写法使用于edges比较小的情况，edges大了还是得循环迭代队列，可以降低临时空间的使用，用集合来替代迭代队列也会一定程度上减少重复遍历，不过在提交时间上没有显著体现。
+@typingMonkey 主楼的写法使用于edges比较小的情况，
+
+edges大了还是得循环迭代队列，可以降低临时空间的使用，
+
+用集合来替代迭代队列也会一定程度上减少重复遍历，
+
+不过在提交时间上没有显著体现。
 
 class Solution:
     def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
-        d = [{} for _ in range(n)]
-        for (i, j), k in zip(edges, succProb):
-            d[i][j] = d[j][i] = k
-        q = {start}
-        v = [0] * n
-        v[start] = 1
-        while q:
-            t = set()
-            for i in q:
-                for j in d[i]:
-                    if (p := v[i] * d[i][j]) > v[j]:
-                        t.add(j)
-                        v[j] = p
-            q = t
-        return v[end]
+        graph = [{} for _ in range(n)]
+        for (stt, edd), k in zip(edges, succProb):
+            graph[stt][edd] = graph[edd][stt] = k
+        que = {start}
+        proDP = [0] * n
+        proDP[start] = 1
+        while que:
+            tmpque = set()
+            for stt in que:
+                for edd in graph[stt]:
+                    if (p := proDP[stt] * graph[stt][edd]) > proDP[edd]:
+                        tmpque.add(edd)
+                        proDP[edd] = p
+            que = tmpque
+        return proDP[end]
 ```
 
 ```py
@@ -9470,27 +9521,27 @@ class Solution:
 
         graph = [[] for _ in range(n)]
         for i in range(len(edges)):
-            u, v, w = *edges[i], succProb[i]
-            graph[u].append((v, w))
-            graph[v].append((u, w))
+            stt, edd, pro = *edges[i], succProb[i]
+            graph[stt].append((edd, pro))
+            graph[edd].append((stt, pro))
 
         def dijkstra_algorithm():
-            pq = [(-1, start)]
-            probs, seen = [0] * n, [0] * n
-            probs[start] = -1
+            heap = [(-1, start)]
+            proDP, visited = [0] * n, [0] * n
+            proDP[start] = -1
 
-            while pq:
-                dist, node = heapq.heappop(pq)
-                if seen[node]: continue
-                seen[node] = 1
-                if node == end:
-                    return -probs[end]; # 算一个小的剪枝
+            while heap:
+                minpro, stt = heapq.heappop(heap)
+                if visited[stt]: continue
+                visited[stt] = 1
+                if stt == end:
+                    return -proDP[end]; # 算一个小的剪枝
 
                 # 接下来就是广为人知的松驰操作
-                for nei, nei_w in graph[node]:
-                    if dist * nei_w < probs[nei]:
-                        probs[nei] = dist * nei_w
-                        heapq.heappush(pq, (dist * nei_w, nei))
+                for edd, pro in graph[stt]:
+                    if minpro * pro < proDP[edd]:
+                        proDP[edd] = minpro * pro
+                        heapq.heappush(heap, (minpro * pro, edd))
 
             return 0
 
@@ -9500,24 +9551,25 @@ class Solution:
 ```py
 优先级队列 + BFS
 从源点出发，每次选择最短的路径终点，然后往后一个未访问过的节点扩展，如果扩展到目标节点则可以直接返回。
+class Solution:
     def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
         visited = [False] * n
         graph = defaultdict(dict)
-        for ix, (i, j) in enumerate(edges):
-            graph[i][j] = succProb[ix]
-            graph[j][i] = succProb[ix]
+        for ix, (stt, edd) in enumerate(edges):
+            graph[stt][edd] = succProb[ix]
+            graph[edd][stt] = succProb[ix]
         queue = [(-1, start)]
-        ans = 0
+        res = 0
         while queue:
-            p, u = heapq.heappop(queue)
-            if u == end:
-                ans = -p
+            minpro, stt = heapq.heappop(queue)
+            if stt == end:
+                res = -minpro
                 break
-            visited[u] = True
-            for v in graph[u]:
-                if not visited[v]:
-                    heapq.heappush(queue, (p*graph[u][v], v))
-        return ans
+            visited[stt] = True
+            for edd in graph[stt]:
+                if not visited[edd]:
+                    heapq.heappush(queue, (minpro*graph[stt][edd], edd))
+        return res
 ```
 
 ###  1.336. <a name='BestPositionforaServiceCentre'></a>1515 Best Position for a Service Centre
@@ -10153,7 +10205,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1XT4y1N7gy?spm_id_from=333.999.0.0)
 
-###  1.385. <a name='PalindromePartitioningIV'></a>1745. Palindrome Partitioning IV
+###  1.385. <a name='PalindromePartitioningIV'></a>1745. 【回文🌈】Palindrome Partitioning IV
 
 [花花酱](https://www.bilibili.com/video/BV1yo4y1R75T?spm_id_from=333.999.0.0)
 
@@ -10165,7 +10217,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1Li4y1T7j6?spm_id_from=333.999.0.0)
 
-###  1.388. <a name='MaximizePalindromeLengthFromSubsequences'></a>1771. Maximize Palindrome Length From Subsequences
+###  1.388. <a name='MaximizePalindromeLengthFromSubsequences'></a>1771. 【回文🌈】Maximize Palindrome Length From Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV1Cp4y1H7Xq?spm_id_from=333.999.0.0)
 
