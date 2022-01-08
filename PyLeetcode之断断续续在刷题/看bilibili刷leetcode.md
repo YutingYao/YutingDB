@@ -2769,6 +2769,21 @@ object Solution {
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ro27dupbn40.webp)
 
 ```py
+细节：
+
+需要注意的是，如果使用的语言对「有符号整数类型」和「无符号整数类型」没有区分，
+
+那么可能会得到错误的答案。
+
+这是因为「有符号整数类型」（即 int 类型）的第 31 个二进制位（即最高位）是补码意义下的符号位，对应着 -2^{31}
+
+而「无符号整数类型」由于没有符号，第 31 个二进制位对应着 2^{31}
+
+因此在某些语言（例如 Python ）中需要对最高位进行特殊判断。
+
+时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
+
+空间复杂度：O(1)
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
         ans = 0
@@ -2782,55 +2797,24 @@ class Solution:
                     ans |= (1 << i)
         return ans
 
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        X,Y=0,0
-        for Z in nums:
-            Y=Y^Z & ~X
-            X=X^Z & ~Y
-        return Y
-
-作者：tankcode
-链接：https://leetcode-cn.com/problems/single-number-ii/solution/luo-ji-dian-lu-jiao-du-xiang-xi-fen-xi-gai-ti-si-l/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        ones, twos = 0, 0
-        for num in nums:
-            ones = ones ^ num & ~twos
-            twos = twos ^ num & ~ones
-        return ones
-
-作者：jyd
-链接：https://leetcode-cn.com/problems/single-number-ii/solution/single-number-ii-mo-ni-san-jin-zhi-fa-by-jin407891/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        counts = [0] * 32
-        for num in nums:
-            for j in range(32):
-                counts[j] += num & 1
-                num >>= 1
-        res, m = 0, 3
-        for i in range(32):
-            res <<= 1
-            res |= counts[31 - i] % m
-        return res if counts[31] % m == 0 else ~(res ^ 0xffffffff)
-
-作者：jyd
-链接：https://leetcode-cn.com/problems/single-number-ii/solution/single-number-ii-mo-ni-san-jin-zhi-fa-by-jin407891/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
+这个解法看不懂，放弃：
 
 
 时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
 
 空间复杂度：O(1)
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ones, twos = 0, 0
+        for num in nums:
+            ones = ones ^ num & ~ twos
+            twos = twos ^ num & ~ ones
+        return ones
+```
+
+
+
 
 
 ###  1.39. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
@@ -4779,19 +4763,14 @@ class Solution:
         for i in range(32):
             ones = 0
             for n in nums:
-                ones += (n >> i)& 1
+                ones += (n >> i) & 1
                 if ones > k:
                     if i == 31:
-                        res -= 2**31
+                        res -= 1 << i
                     else:
-                        res += 1 << i
+                        res |= 1 << i
                     break
         return res
-
-作者：coldme-2
-链接：https://leetcode-cn.com/problems/majority-element/solution/majority-element-by-coldme-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
@@ -5142,96 +5121,57 @@ class Solution:
 空间复杂度：O(N)。
 
 ```py
-L = 10
+resLen = 10
 bin = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
 
 class Solution:
     def findRepeatedDnaSequences(self, s: str) -> List[str]:
         n = len(s)
-        if n <= L:
+        if n <= resLen:
             return []
-        ans = []
+        res = []
         x = 0
-        for ch in s[:L - 1]:
-            x = (x << 2) | bin[ch]
-        cnt = defaultdict(int)
-        for i in range(n - L + 1):
-            x = ((x << 2) | bin[s[i + L - 1]]) & ((1 << (L * 2)) - 1)
-            cnt[x] += 1
-            if cnt[x] == 2:
-                ans.append(s[i : i + L])
-        return ans
+        # 把字符串变成二进制，前9个字符
+        for char in s[:resLen - 1]:
+            x = (x << 2) | bin[char]
+        cntDIC = defaultdict(int)
+        # 迭代次数 = n - 9
+        for i in range(n - resLen + 1):
+            x = ((x << 2) | bin[s[i + resLen - 1]]) & ((1 << (resLen * 2)) - 1)
+            # (x << 2) 滑动窗口右移动， & ((1 << (resLen * 2)) - 1) 滑动窗口左移
+            cntDIC[x] += 1
+            if cntDIC[x] == 2:
+                res.append(s[i : i + resLen])
+        return res
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/zhong-fu-de-dnaxu-lie-by-leetcode-soluti-z8zn/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def findRepeatedDnaSequences(self, s: str) -> List[str]:
         if len(s) < 11: return []
 
-        d = { "A":  0,
+        bin = { "A":  0,
               "C" : 1,
               "G":  2,
               "T":  3 }
 
         ans = []
-        dict_ = {} # record the appearance time
+        cntDIC = {} # record the appearance time
 
-        t = 0
+        x = 0
         for i in range(10): # use former 10 chars to init
-            t += d[s[i]] << (i * 2)
-        dict_[t] = 1
+            x += bin[s[i]] << (i * 2)
+        cntDIC[x] = 1
         
         for i in range(10, len(s)):
-            t >>= 2  # remove the left char
-            t += d[s[i]] << 18 # add the right char
+            x >>= 2  # remove the left char
+            x += bin[s[i]] << 18 # add the right char
 
-            dict_[t] = dict_.get(t, 0) + 1
-            if dict_[t] == 2:
+            cntDIC[x] = cntDIC.get(x, 0) + 1
+            if cntDIC[x] == 2:
                 ans.append(s[i - 9:i + 1]) # find the result
 
         return ans
 
-
-作者：derek-64
-链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/bit-with-hashmap-by-derek-64/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution(object):
-    def findRepeatedDnaSequences(self, s):
-        """
-        :type s: str
-        :rtype: List[str]
-        """
-        if len(s) < 10:
-            return []
-        tDict = {"A":0,"C":1,"G":2,"T":3}
-        hash_map = {}
-        h = 0
-        sh = [tDict[s[i]] for i in range(len(s))]
-        r = []
-        for i in range(len(s)):
-            if i < 10:
-                h = h << 2 | sh[i]
-                if i == 9:
-                    hash_map[h] = 1
-            else:
-                h = h << 2 & 0xfffff | sh[i]
-                hash_map[h] = hash_map.get(h,0) + 1
-                if hash_map[h] > 1:
-                    r.append(s[i - 9:i + 1])
-                    hash_map[h] = -float('inf')
-        return r
-
-
-
-作者：mnm135
-链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/wei-yun-suan-fang-fa-ben-zhi-huan-shi-gou-jian-yi-/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.72. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
@@ -5527,34 +5467,6 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1qv411i7Wg?spm_id_from=333.999.0.0)
 
 ```py
-解题思路
-从n的右侧开始，逐个检查是否是1（利用一个s）
-ans逐渐<<1，如果当前n&s==s，则说明此位为1，ans+=1
-最后ans就是n的二进制位的颠倒了
-
-代码
-
-执行用时：28 ms, 在所有 Python3 提交中击败了92.53%的用户
-内存消耗：14.9 MB, 在所有 Python3 提交中击败了21.75%的用户
-
-class Solution:
-    def reverseBits(self, n: int) -> int:
-        ans = 0
-        s = 1
-        for _ in range(31):
-            if n&s == s:   #说明此位为1，那么ans中也+1
-                ans += 1
-            ans = ans<<1  #最先加入的，到最后就是最前面的数字
-            s = s<<1  #1,10,100,1000...
-        if n & s == s:   #最后处理一次
-            ans += 1
-        return ans
-
-作者：bluegreenred
-链接：https://leetcode-cn.com/problems/reverse-bits/solution/190-dian-dao-er-jin-zhi-wei-python-wei-y-6tis/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 class Solution:
     def reverseBits(self, n: int) -> int:
         ret = 0
@@ -5563,33 +5475,15 @@ class Solution:
             n >>= 1
         return ret
 
-
-作者：dc3a2nLETu
-链接：https://leetcode-cn.com/problems/reverse-bits/solution/wei-yun-suan-jie-jue-dian-dao-er-jin-zhi-1eaf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-# 从n的右侧开始，逐个检查是否是1（利用一个s）
-
-# ans逐渐<<1，如果当前n&s==s，则说明此位为1，ans+=1
-
-# 最后ans就是n的二进制位的颠倒了
-
-
-class Solution:
-    def reverseBits(self, n: int) -> int:
-        ans = 0
-        s = 1
-        for _ in range(31):
-            if n&s == s:   #说明此位为1，那么ans中也+1
-                ans += 1
-            ans = ans<<1  #最先加入的，到最后就是最前面的数字
-            s = s<<1  #1,10,100,1000...
-        if n & s == s:   #最后处理一次
-            ans += 1
-        return ans
-
 # 每次只对最低位进行操作，理论上效率高于对 31 的循环
+
+
+ 10001111011110101
+ b & (-b) = 1
+ b & (-b) = 100
+ b & (-b) = 10000
+
+这个解法很妙，好好体会
 
 class Solution:
     def reverseBits(self, n: int) -> int:
@@ -5597,16 +5491,24 @@ class Solution:
         base = 1 << 31
         ans = 0
         while b:
-            ans |=  base // (b & (-b))
-            b &= b-1
+            ans |=  base // (b & (-b)) # b & (-b)找到最后一个 1
+            # ans |=  base 表示移动项
+            b &= b-1 # 消掉最后一个1
         return ans    
 ```
+
+字符串转整数
 
 ```py
 class Solution:
     def reverseBits(self, n):
         return int(bin(n)[2:].zfill(32)[::-1],2)
+        # print(bin(n)[2:])
+        # print(bin(n))
+        # 10100101000001111010011100
+        # 0b 10100101000001111010011100
 ```
+
 
 ```scala
 object Solution {
@@ -6168,82 +6070,20 @@ object Solution {
 
 
 ```py
-class Solution:
-    def rangeBitwiseAnd(self, m: int, n: int) -> int:
-        shift = 0   
-        # 找到公共前缀
-        while m < n:
-            m = m >> 1
-            n = n >> 1
-            shift += 1
-        return m << shift
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/bitwise-and-of-numbers-range/solution/shu-zi-fan-wei-an-wei-yu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def rangeBitwiseAnd(self, left: int, right: int) -> int:
-        shift = 0
-        while left < right:
-            left = left >> 1
-            right = right >> 1
-            shift += 1
-        return right << shift
-
-
-作者：SanctusAmbrosius
-链接：https://leetcode-cn.com/problems/bitwise-and-of-numbers-range/solution/201-shu-zi-fan-wei-an-wei-yu-python-wei-xyxk4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 时间复杂度：
 log(n)
 
 空间复杂度：
 1
 
-
-//我们知道，数组的数字是连续的，
-// 那么m,n范围内的二进制表示的末尾相同位置一定会出现不同的0,1.我们只要找出m,n的做左边起的最长相同的二进制头部即可呀。
-//
-//如[5, 7]里共有三个数字，分别写出它们的二进制为：
-//
-//101　　110　　111
-//
-//相与后的结果为100，仔细观察我们可以得出，最后的数是该数字范围内所有的数的左边共同的部分（即m,n左边的共同部分），
-// 如果上面那个例子不太明显，我们再来看一个范围[26, 30]，它们的二进制如下：
-//
-//11010　　11011　　11100　　11101　　11110
-//
-//也是前两位是11，后面3位在不同数字中一定会出现0和1、相与即为0了。
-
-因为 只要有一个0，那么无论有多少个 1都是 0
-
-比如：从 5到 7
-
-5:0 1 0 1
-6:0 1 1 0
-7:0 1 1 1
------------
-  0 1 0 0
-所以，代码如下：
+我们知道，数组的数字是连续的，
+我们只要找出m,n的做左边起的最长相同的二进制头部即可呀。
 ```
 
 ```py
-class Solution:
-    def rangeBitwiseAnd(self, m: int, n: int) -> int:
-        shift = 0   
-        # 找到公共前缀
-        while m < n:
-            m = m >> 1
-            n = n >> 1
-            shift += 1
-        return m << shift
+关键在于找规律：
 
-？？？
-当两个数位数不同时，中间一定会有一个1000...0 这样的进位数，这个数与比他小的数&操作都是0       
+当二进制位数不同时，一定为0     
 class Solution:
     def rangeBitwiseAnd(self, m: int, n: int) -> int:
         while m < n:
@@ -6269,7 +6109,6 @@ class Solution:
 
 
 ```scala
-
   object Solution {
     def rangeBitwiseAnd(m: Int, n: Int): Int = {
       var count = 0
@@ -6283,7 +6122,6 @@ class Solution:
       m1<<count
     }
   }
-
 ```
 
 ###  1.80. <a name='HappyNumber'></a>202. 快乐数 Happy Number
@@ -9754,16 +9592,12 @@ class Solution:
     def isPowerOfTwo(self, n: int) -> bool:
         return n > 0 and (n & (n - 1)) == 0
 
-class Solution:
-    def isPowerOfTwo(self, n: int) -> bool:
-        return True if  n >0 and log2(n) == int(log2(n)) else False
+
 class Solution:
     def isPowerOfTwo(self, n: int) -> bool:
         return bin(n).count('1') == 1 and n > 0
 
-class Solution:
-    def isPowerOfTwo(self, n):
-        return n > 0 and not (n & (n - 1))
+
 
 class Solution:
     def isPowerOfTwo(self, n: int) -> bool:
@@ -9779,11 +9613,9 @@ class Solution(object):
 
         
 class Solution:
-
-    BIG = 2**30
-
     def isPowerOfTwo(self, n: int) -> bool:
-        return n > 0 and Solution.BIG % n == 0
+        BIG = 1<<30 # 我试了一下，30,31,32都对
+        return n > 0 and BIG % n == 0
 ```
 
 ```scala
@@ -11265,6 +11097,10 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1QK411J7dN?spm_id_from=333.999.0.0)
 
+难点在于只出现一次的数字不止一个，
+
+但是刚好有且只有两个
+
 ```py
 
 class Solution:
@@ -11272,10 +11108,6 @@ class Solution:
         freq = Counter(nums)
         return [num for num, occ in freq.items() if occ == 1]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/single-number-iii/solution/zhi-chu-xian-yi-ci-de-shu-zi-iii-by-leet-4i8e/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```py
@@ -11285,55 +11117,24 @@ class Solution:
 
 空间复杂度：O(1)。
 
-
-
 class Solution:
     def singleNumber(self, nums: List[int]) -> List[int]:
         xorsum = 0
         for num in nums:
-            xorsum ^= num
+            xorsum ^= num # 找到这两个数的差异
         
-        lsb = xorsum & (-xorsum)
+        lsb = xorsum & (-xorsum) # 找到这两个数的差异的最后一位1
         type1 = type2 = 0
         for num in nums:
-            if num & lsb:
+            if num & lsb: # 这里只能用 &，来决num & lsb == 100 or 0
                 type1 ^= num
             else:
                 type2 ^= num
         
         return [type1, type2]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/single-number-iii/solution/zhi-chu-xian-yi-ci-de-shu-zi-iii-by-leet-4i8e/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 思路, 先全部异或一次, 得到的结果, 考察其的某个非0位(比如最高非0位), 那么只出现一次的两个数中, 在这个位上一个为0, 一个为1, 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
-
-class Solution(object):
-    def singleNumber(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[int]
-        """
-        acc = 0
-        for i in nums:
-            acc ^=i
-        n = len(bin(acc))-3
-        a,b=0,0
-        for i in nums:
-            if i>>n&1:
-                a^=i
-            else:
-                b^=i
-        return b,a
-
- 为什么使用的是len(bin(acc))-3呢？在为负数的时候，应该如何理解呢？
- 就是求二进制位不相同在哪一位: 如果是两个正数,就是最高位, 如果是两个负数,那么就是对应补码的最低数, 如果一正一负, 那么就是正数最高位+1.
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> List[int]:
-        return [k for k,v in collections.Counter(nums).items() if v == 1]    
 ```
 
 ###  1.122. <a name='UglyNumber'></a>263 Ugly Number
@@ -11463,10 +11264,6 @@ class Solution:
                 return i
         return len(nums)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/missing-number/solution/diu-shi-de-shu-zi-by-leetcode-solution-naow/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
@@ -11475,22 +11272,8 @@ class Solution:
             if i not in s:
                 return i
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/missing-number/solution/diu-shi-de-shu-zi-by-leetcode-solution-naow/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        xor = 0
-        for i, num in enumerate(nums):
-            xor ^= i ^ num
-        return xor ^ len(nums)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/missing-number/solution/diu-shi-de-shu-zi-by-leetcode-solution-naow/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
@@ -11499,27 +11282,38 @@ class Solution:
         arrSum = sum(nums)
         return total - arrSum
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/missing-number/solution/diu-shi-de-shu-zi-by-leetcode-solution-naow/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 ```
 
 ```py
-（python）排序比较 O(n*logn)
+枚举法：
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        xor = len(nums)
+        for i, num in enumerate(nums):
+            xor ^= i
+            xor ^= num
+        return xor
 
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
-        res=0
-        nums.sort()
-        n=len(nums)
-        for i in range(n):
-            if res==nums[i]:
-                res+=1
-            else:
-                return res 
-        return n 
+        xor = 0
+        for i, num in enumerate(nums):
+            xor ^= i ^ num
+        return xor ^ len(nums)
+
+进阶解法 用可能出现的所有数的和 - 实际出现的数的和 = 未出现的数 res
+
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        res = len(nums)
+        # 用可能出现的所有数(n + range(n))的和 - 实际出现的数 nums 的和 = 未出现的数 res
+        for i, num in enumerate(nums) :
+            res += i - num
+        return res
+```
+
+```py
 （python）集合做差 O(n)
 
 class Solution:
@@ -11537,33 +11331,26 @@ class Solution:
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
         return list({i for i in range(0, len(nums)+1)} - set(nums))[0]
+```
 
-进阶解法 用可能出现的所有数的和 - 实际出现的数的和 = 未出现的数 res
+```py
+（python）排序比较 O(n*logn)
 
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
-        res = len(nums)
-        # 用可能出现的所有数(n + range(n))的和 - 实际出现的数 nums 的和 = 未出现的数 res
-        for i, num in enumerate(nums) :
-            res += i - num
-        return res
+        res = 0
+        nums.sort()
+        n = len(nums)
+        for i in range(n):
+            if res == nums[i]:
+                res += 1
+            else:
+                return res 
+        return n 
 
 如果直接求和的最大的和为 49995000 未超出 int 的范围 
 
-(虽然 python 本来就不怎么考虑范围(手动狗头))， 
 
-所以可以直接计算，注意让 n * (n+1) 计算后再 / 2 以避免奇数整除2后导致结果错误
-
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        return (len(nums) + 1) * len(nums) // 2 - sum(nums) 
-
-Python 前n项和减去数组总和
-
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        n=len(nums)
-        return n*(n+1)//2-sum(nums)
 ```
 
 ```scala
@@ -12013,7 +11800,7 @@ class Solution:
         return (sum(nums)-sum(set(nums)))//(len(nums) - len(set(nums)))
 ```
 
-###  1.133. <a name='GameofLife'></a>289. 【位运算😜】Game of Life
+###  1.133. <a name='GameofLife'></a>289. Game of Life
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7ji?spm_id_from=333.999.0.0)
 
@@ -13058,7 +12845,7 @@ class Solution:
         return res
 ```
 
-###  1.147. <a name='-1'></a>318【位运算😜】
+###  1.147. <a name='-1'></a>318【】
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.fgtvti63s9c.webp)
 
@@ -13074,7 +12861,7 @@ class Solution:
         def hepler(s:str):
             res = 0 
             for i in s:
-                res |= 1<<(ord(i)-97)
+                res |= 1 << (ord(i)-97) # ord('a') = 97，将字符串转化为二进制
             return res
 
         cache = dict()
@@ -13087,14 +12874,9 @@ class Solution:
         res = 0
         for i in range(n):
             for j in range(i+1, n):
-                if (k[i] & k[j]) == 0:
+                if (k[i] & k[j]) == 0: # 没有相同位的判断
                     res = max(res, cache[k[i]]*cache[k[j]])
         return res
-
-作者：1uciusy
-链接：https://leetcode-cn.com/problems/maximum-product-of-word-lengths/solution/python3-you-hua-ban-wei-yun-suan-by-1uci-qv90/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.148. <a name='-1'></a>319
@@ -13335,7 +13117,7 @@ class Solution:
         # 另一种方法是，因为在 int 范围内 3 的最大次方是 3^19 = 1162261467，
         # 如果 n 是 3 的整数次方，那么 1162261467 除以 n 的余数一定是零。
         # return n > 0 and 1162261467 % n == 0
-位运算😜 x*3 = x*(2+1) = x * 2 + x = (x<<1) + x
+ x*3 = x*(2+1) = x * 2 + x = (x<<1) + x
 
 常规递归：
 
@@ -13822,7 +13604,7 @@ class Solution:
         return max(val1, val2)
 ```
 
-###  1.158. <a name='CountingBits'></a>338 【位运算😜】Counting Bits
+###  1.158. <a name='CountingBits'></a>338 【动态规划 + 位运算😜】Counting Bits
 
 [小明](https://www.bilibili.com/video/BV1VK411s7xi?spm_id_from=333.999.0.0)
 
@@ -13839,7 +13621,7 @@ class Solution:
         bits = [countOnes(i) for i in range(n + 1)]
         return bits
 
-
+动态规划 方法1：
 class Solution:
     def countBits(self, n: int) -> List[int]:
         bits = [0]
@@ -13847,57 +13629,23 @@ class Solution:
         for i in range(1, n + 1):
             if i & (i - 1) == 0:
                 highBit = i
-            bits.append(bits[i - highBit] + 1)
+            bits.append(bits[i - highBit] + 1) # 只去掉最右边的 1
         return bits
-
-。
 
 class Solution:
     def countBits(self, n: int) -> List[int]:
         bits = [0]
         for i in range(1, n + 1):
-            bits.append(bits[i >> 1] + (i & 1))
+            bits.append(bits[i & (i - 1)] + 1) # 只去掉最右边的 1
         return bits
 
-
+动态规划 方法二：
 class Solution:
     def countBits(self, n: int) -> List[int]:
         bits = [0]
         for i in range(1, n + 1):
-            bits.append(bits[i & (i - 1)] + 1)
+            bits.append(bits[i >> 1] + (i & 1)) # 最右边的 1 or 0
         return bits
-
-```
-
-```py
-class Solution(object):
-    def countBits(self, num):
-        """ 
-        1: 0001     3:  0011      0: 0000
-        2: 0010     6:  0110      1: 0001
-        4: 0100     12: 1100      2: 0010 
-        8: 1000     24: 11000     3: 0011
-        16:10000    48: 110000    4: 0100
-        32:100000   96: 1100000   5: 0101
-        
-        由上可见：
-        1、如果 i 为偶数，那么f(i) = f(i/2) ,因为 i/2 本质上是i的二进制左移一位，低位补零，所以1的数量不变。
-        2、如果 i 为奇数，那么f(i) = f(i - 1) + 1， 因为如果i为奇数，那么 i - 1必定为偶数，而偶数的二进制最低位一定是0，
-        那么该偶数 +1 后最低位变为1且不会进位，所以奇数比它上一个偶数bit上多一个1，即 f(i) = f(i - 1) + 1。
-        :type num: int
-        :rtype: List[int]
-        """
-        ret = [0]
-        for i in xrange(1, num + 1):
-            if i % 2 == 0: # 偶数
-                ret.append(ret[i/2])
-            else: # 奇数
-                ret.append(ret[i - 1] + 1)
-        return ret
-
-写得太好了，对二进制了解得很透彻
-
-谢谢层主的题解。我在python3中使用下述代码可运行成功，系统提示xrange未定义，所以我用了range，另一方面i/2我改成i//2。
 
 class Solution:
     def countBits(self, num: int) -> List[int]:
@@ -13909,12 +13657,12 @@ class Solution:
                 res.append(res[i-1]+1)
         return res
 
+```
+
+```py
 class Solution(object):
     def countBits(self, n):
-        """
-        :type n: int
-        :rtype: List[int]
-        """
+
         return [bin(i)[2:].count('1') for i in range(n+1)]
 ```
 

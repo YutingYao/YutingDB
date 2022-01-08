@@ -8713,6 +8713,8 @@ class Solution:
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.xmmpwe7mlzk.webp)
 
+时间复杂度：O(n·2^n)
+
 ```py
 
 class Solution:
@@ -8720,8 +8722,10 @@ class Solution:
         size = len(nums)
         n = 1 << size
         res = []
+        # i = 0,1,2,3,4,5,6,7
         for i in range(n):
             cur = []
+            # j = 0,1,2
             for j in range(size):
                 if i >> j & 1:
                     cur.append(nums[j])

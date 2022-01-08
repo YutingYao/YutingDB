@@ -1,31 +1,26 @@
-import heapq
 class Solution:
-    # Dijkstra🚗+剪枝
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        if src == dst:
-            return 0
+    def findRepeatedDnaSequences(self, s: str) -> List[str]:
+        if len(s) < 11: return []
 
-        graph = collections.defaultdict(list)
+        bin = { "A":  0,
+              "C" : 1,
+              "G":  2,
+              "T":  3 }
 
-        for start, end, cost in flights:
-            graph[start].append((end, cost))
+        ans = []
+        cntDIC = {} # record the appearance time
 
-        disInter = {}
-        que = [(0, src, -1)]
-        while que:
-            costmin, start, interval = heapq.heappop(visited)
-            # 这个部分很重要，一定要k+1
-            if interval > k:
-                continue
-            if start == dst:
-                return costmin
-            for end, cost in graph[start]:
-                # 这一步剪枝很重要
-                if costmin + cost < disInter.get((end,interval+1), float("inf")):
-                    heapq.heappush(visited, (costmin + cost, end, interval + 1))
-                    disInter[(end,interval+1)] = costmin + cost
-                # print(dist)
-                # {(1, 1): 100}
-                # {(1, 1): 100, (2, 1): 500}
-                # {(1, 1): 100, (2, 1): 500, (2, 2): 200}
-        return -1 
+        x = 0
+        for i in range(10): # use former 10 chars to init
+            x += bin[s[i]] << (i * 2)
+        cntDIC[x] = 1
+        
+        for i in range(10, len(s)):
+            x >>= 2  # remove the left char
+            x += bin[s[i]] << 18 # add the right char
+
+            cntDIC[x] = cntDIC.get(x, 0) + 1
+            if cntDIC[x] == 2:
+                ans.append(s[i - 9:i + 1]) # find the result
+
+        return ans
