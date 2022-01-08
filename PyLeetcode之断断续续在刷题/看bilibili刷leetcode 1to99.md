@@ -62,7 +62,7 @@
 	* 3.58. [63 Unique Paths II](#UniquePathsII)
 	* 3.59. [64. Minimum Path Sum 64-最小路径和](#MinimumPathSum64-)
 	* 3.60. [65 Valid Number](#ValidNumber)
-	* 3.61. [66-Plus one](#Plusone)
+	* 3.61. [66 Plus one](#Plusone)
 	* 3.62. [67-Add Binary](#AddBinary)
 	* 3.63. [69 Sqrt(x)](#Sqrtx)
 	* 3.64. [70. Climbing Stairs](#ClimbingStairs)
@@ -73,7 +73,7 @@
 	* 3.69. [75. Sort Colors](#SortColors)
 	* 3.70. [76-【滑动窗口🔹】最小覆盖子串](#-1)
 	* 3.71. [77. 组合](#-1)
-	* 3.72. [78. Subsets 78-子集](#Subsets78-)
+	* 3.72. [78. 【位运算😜】Subsets 子集](#Subsets)
 	* 3.73. [79. Word Search](#WordSearch)
 	* 3.74. [80 Remove Duplicates from Sorted Array II](#RemoveDuplicatesfromSortedArrayII)
 	* 3.75. [82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List](#IIRemoveDuplicatesfromSortedList)
@@ -7457,13 +7457,15 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1hK4y1975b?spm_id_from=333.999.0.0)
 
-###  3.61. <a name='Plusone'></a>66-Plus one
+###  3.61. <a name='Plusone'></a>66 Plus one
 
 [哈哈哈](https://www.bilibili.com/video/BV1jJ411d7Ry?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411i7b1?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1gi4y137GW?spm_id_from=333.999.0.0)
+
+
 
 ```py
 class Solution:
@@ -8699,7 +8701,7 @@ class Solution:
             return res
 ```
 
-###  3.72. <a name='Subsets78-'></a>78. Subsets 78-子集
+###  3.72. <a name='Subsets'></a>78. 【位运算😜】Subsets 子集
 
 [花花酱](https://www.bilibili.com/video/BV1jt411k7py?spm_id_from=333.999.0.0)
 
@@ -8708,6 +8710,25 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1YK4y1s7pq?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1154y1R72Q?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.xmmpwe7mlzk.webp)
+
+```py
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        size = len(nums)
+        n = 1 << size
+        res = []
+        for i in range(n):
+            cur = []
+            for j in range(size):
+                if i >> j & 1:
+                    cur.append(nums[j])
+            res.append(cur)
+        return res
+
+```
 
 ```py
 class Solution(object):

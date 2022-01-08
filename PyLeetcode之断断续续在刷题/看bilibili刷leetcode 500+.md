@@ -44,7 +44,7 @@
 	* 1.41. [637 Average of Levels in Binary Tree](#AverageofLevelsinBinaryTree)
 	* 1.42. [639. Decode Ways II](#DecodeWaysII)
 	* 1.43. [643. Maximum Average Subarray I](#MaximumAverageSubarrayI)
-	* 1.44. [645-错误的集合](#-1)
+	* 1.44. [645-【位运算😜】错误的集合](#-1)
 	* 1.45. [646-【动态🚀规划 + 贪心🧡】最长数对链](#-1)
 	* 1.46. [647 【动态🚀规划 + 回文🌈】Palindromic Substrings](#PalindromicSubstrings)
 	* 1.47. [650-只有两个键的键盘](#-1)
@@ -64,7 +64,7 @@
 	* 1.61. [688. Knight Probability in Chessboard](#KnightProbabilityinChessboard)
 	* 1.62. [690. Employee Importance](#EmployeeImportance)
 	* 1.63. [692. Top K Frequent Words](#TopKFrequentWords)
-	* 1.64. [693](#-1)
+	* 1.64. [ 693 【位运算😜】](#693)
 	* 1.65. [695-岛屿的最大面积](#-1)
 	* 1.66. [696 Count Binary Substrings](#CountBinarySubstrings)
 	* 1.67. [699. Falling Squares](#FallingSquares)
@@ -93,7 +93,8 @@
 	* 1.90. [739-Daily Temperatures](#DailyTemperatures)
 	* 1.91. [740. 【动态🚀规划】 Delete and Earn](#DeleteandEarn)
 	* 1.92. [741. Cherry Pickup](#CherryPickup)
-	* 1.93. [743. 【Dijkstra🚗 + floyd 🌞】Network Delay Time](#DijkstrafloydNetworkDelayTime)
+	* 1.93. [743. 【Dijkstra🚗 + floyd 🌞 + Bellman-Ford🌞】Network Delay Time](#DijkstrafloydBellman-FordNetworkDelayTime)
+		* 1.93.1. [类似题目：787、1514](#7871514)
 	* 1.94. [745. Prefix and Suffix Search](#PrefixandSuffixSearch)
 	* 1.95. [746. 【动态🚀规划】Min Cost Climbing Stairs](#MinCostClimbingStairs)
 	* 1.96. [748. Shortest Completing Word](#ShortestCompletingWord)
@@ -109,7 +110,7 @@
 	* 1.106. [784. Letter Case Permutation](#LetterCasePermutation)
 	* 1.107. [785-判断二分图](#-1)
 	* 1.108. [786. K-th Smallest Prime Fraction](#K-thSmallestPrimeFraction)
-	* 1.109. [787. 【Dijkstra🚗 + 动态🚀规划 + 最小堆🌵】Cheapest Flights Within K Stops](#DijkstraCheapestFlightsWithinKStops)
+	* 1.109. [787. 【Dijkstra🚗 + 动态🚀规划 + 最小堆🌵 + Bellman-Ford🌞】Cheapest Flights Within K Stops](#DijkstraBellman-FordCheapestFlightsWithinKStops)
 	* 1.110. [790. Domino and Tromino Tiling](#DominoandTrominoTiling)
 	* 1.111. [792. Number of Matching Subsequences](#NumberofMatchingSubsequences)
 	* 1.112. [797 All Paths From Source to Target](#AllPathsFromSourcetoTarget)
@@ -140,7 +141,7 @@
 	* 1.137. [859 Buddy Strings](#BuddyStrings)
 	* 1.138. [863. All Nodes Distance K in Binary Tree](#AllNodesDistanceKinBinaryTree)
 	* 1.139. [864. Shortest Path to Get All Keys](#ShortestPathtoGetAllKeys)
-	* 1.140. [869 Reordered Power of 2](#ReorderedPowerof2)
+	* 1.140. [869 【位运算😜】Reordered Power of 2](#ReorderedPowerof2)
 	* 1.141. [865. Smallest Subtree with all the Deepest Nodes](#SmallestSubtreewithalltheDeepestNodes)
 	* 1.142. [871. Minimum Number of Refueling Stops](#MinimumNumberofRefuelingStops)
 	* 1.143. [873. Length of Longest Fibonacci Subsequence](#LengthofLongestFibonacciSubsequence)
@@ -282,123 +283,127 @@
 	* 1.278. [1306 Jump Game III](#JumpGameIII)
 	* 1.279. [1310. XOR Queries of a Subarray](#XORQueriesofaSubarray)
 	* 1.280. [1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
-	* 1.281. [1319. 【🍒并查集】Number of Operations to Make Network Connected](#NumberofOperationstoMakeNetworkConnected)
-	* 1.282. [1320. Minimum Distance to Type a Word Using Two Finger](#MinimumDistancetoTypeaWordUsingTwoFinger)
-	* 1.283. [1329 Sort the Matrix Diagonally](#SorttheMatrixDiagonally)
-	* 1.284. [1332 【回文🌈】Remove Palindromic Subsequences](#RemovePalindromicSubsequences)
-	* 1.285. [1334. 【Dijkstra🚗 + floyd 🌞】Find the City With Smallest Number of Neighbors](#DijkstrafloydFindtheCityWithSmallestNumberofNeighbors)
-	* 1.286. [1335. Minimum Difficulty of a Job Schedule](#MinimumDifficultyofaJobSchedule)
-	* 1.287. [1337 The K Weakest Rows in a Matrix](#TheKWeakestRowsinaMatrix)
-	* 1.288. [1339 Maximum Product of Splitt](#MaximumProductofSplitt)
-	* 1.289. [1340. 【动态🚀规划】Jump Game V](#JumpGameV)
-	* 1.290. [1349. Maximum Students Taking Exam](#MaximumStudentsTakingExam)
-	* 1.291. [1353. Maximum Number of Events That Can Be Attended](#MaximumNumberofEventsThatCanBeAttended)
-	* 1.292. [1354. Construct Target Array With Multiple Sums](#ConstructTargetArrayWithMultipleSums)
-	* 1.293. [1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path](#DijkstraMinimumCosttoMakeatLeastOneValidPath)
-	* 1.294. [1371. Find the Longest Substring Containing Vowels in Eve](#FindtheLongestSubstringContainingVowelsinEve)
-	* 1.295. [1373. Maximum Sum BST in Binary Tree](#MaximumSumBSTinBinaryTree)
-	* 1.296. [1377. Frog Position After T Seconds](#FrogPositionAfterTSeconds)
-	* 1.297. [1379 Find Corresponding Node of Binary Tree in a Clone](#FindCorrespondingNodeofBinaryTreeinaClone)
-	* 1.298. [1382. Balance a Binary Search Tree](#BalanceaBinarySearchTree)
-	* 1.299. [1395. Count Number of Teams](#CountNumberofTeams)
-	* 1.300. [1396 Design Underground System](#DesignUndergroundSystem)
-	* 1.301. [1406. Stone Game III](#StoneGameIII)
-	* 1.302. [1409. Queries on a Permutation With Key](#QueriesonaPermutationWithKey)
-	* 1.303. [1416. Restore The Array](#RestoreTheArray)
-	* 1.304. [1424. Diagonal Traverse II](#DiagonalTraverseII)
-	* 1.305. [1425. Constrained Subset Sum](#ConstrainedSubsetSum)
-	* 1.306. [1426  Counting Elements](#CountingElements)
-	* 1.307. [1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie](#KidsWiththeGreatestNumberofCandie)
-	* 1.308. [1437 Check If All 1's Are at Least Length](#CheckIfAll1sAreatLeastLength)
-	* 1.309. [1438. Longest Continuous Subarray With Absolute](#LongestContinuousSubarrayWithAbsolute)
-	* 1.310. [1441 Build an Array With Stack Operations](#BuildanArrayWithStackOperations)
-	* 1.311. [1442. Count Triplets That Can Form Two Arrays of Equal](#CountTripletsThatCanFormTwoArraysofEqual)
-	* 1.312. [1443. Minimum Time to Collect All Apples in a Tree](#MinimumTimetoCollectAllApplesinaTree)
-	* 1.313. [1444. 【二维动态🚀规划 + 前缀和🎨 + 递归】Number of Ways of Cutting a Pizza](#NumberofWaysofCuttingaPizza)
-	* 1.314. [1446 Consecutive Characters](#ConsecutiveCharacters)
-	* 1.315. [1448 Count Good Nodes in Binary Tree](#CountGoodNodesinBinaryTree)
-	* 1.316. [1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
-	* 1.317. [1451 Rearrange Words in a Sentence](#RearrangeWordsinaSentence)
-	* 1.318. [1453 Maximum Number of Darts Inside of a Circular Dartb](#MaximumNumberofDartsInsideofaCircularDartb)
-	* 1.319. [1457 【回文🌈】Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
-	* 1.320. [1461 Check If a String Contains All Binar](#CheckIfaStringContainsAllBinar)
-	* 1.321. [1463 Cherry Pickup II](#CherryPickupII)
-	* 1.322. [1473. Paint House III](#PaintHouseIII)
-	* 1.323. [1475. Final Prices With a Special Discount in a Sho](#FinalPricesWithaSpecialDiscountinaSho)
-	* 1.324. [1483. Kth Ancestor of a Tree Node](#KthAncestorofaTreeNode)
-	* 1.325. [1488. Avoid Flood in The City](#AvoidFloodinTheCity)
-	* 1.326. [1489. 【🍒并查集】Find Critical and Pseudo-Critical Edges in](#FindCriticalandPseudo-CriticalEdgesin)
-	* 1.327. [1492 The kth Factor of n](#ThekthFactorofn)
-	* 1.328. [1493. Longest Subarray of 1's After Deleting One](#LongestSubarrayof1sAfterDeletingOne)
-	* 1.329. [1499. Max Value of Equation](#MaxValueofEquation)
-	* 1.330. [1502 Can Make Arithmetic Progression From Sequence](#CanMakeArithmeticProgressionFromSequence)
-	* 1.331. [1503 Last Moment Before All Ants Fall Out of a Plank](#LastMomentBeforeAllAntsFallOutofaPlank)
-	* 1.332. [1505. Minimum Possible Integer After at Most K Adjacent](#MinimumPossibleIntegerAfteratMostKAdjacent)
-	* 1.333. [1508. Range Sum of Sorted Subarray Sums](#RangeSumofSortedSubarraySums)
-	* 1.334. [1510 Stone Game IV](#StoneGameIV)
-	* 1.335. [1514 【Dijkstra🚗】Path with Maximum Probability](#DijkstraPathwithMaximumProbability)
-	* 1.336. [1515 Best Position for a Service Centre](#BestPositionforaServiceCentre)
-	* 1.337. [1520. Maximum Number of Non-Overlapping Substrings](#MaximumNumberofNon-OverlappingSubstrings)
-	* 1.338. [1530. Number of Good Leaf Nodes Pairs](#NumberofGoodLeafNodesPairs)
-	* 1.339. [1531. String Compression II](#StringCompressionII)
-	* 1.340. [1534 Count Good Triplets](#CountGoodTriplets)
-	* 1.341. [1535 Find the Winner of an Array Game](#FindtheWinnerofanArrayGame)
-	* 1.342. [1537. Get the Maximum Score](#GettheMaximumScore)
-	* 1.343. [1539. Kth Missing Positive Number](#KthMissingPositiveNumber)
-	* 1.344. [1542. Find Longest Awesome Substring](#FindLongestAwesomeSubstring)
-	* 1.345. [1546. Maximum Number of Non-Overlapping Subarrays With Sum](#MaximumNumberofNon-OverlappingSubarraysWithSum)
-	* 1.346. [1550. Three Consecutive Odds](#ThreeConsecutiveOdds)
-	* 1.347. [1551 Minimum Operations to Make Array](#MinimumOperationstoMakeArray)
-	* 1.348. [1553. Minimum Number of Days to Eat N Oranges](#MinimumNumberofDaystoEatNOranges)
-	* 1.349. [1556. Thousand Separator](#ThousandSeparator)
-	* 1.350. [1558. Minimum Numbers of Function Calls to Make Target](#MinimumNumbersofFunctionCallstoMakeTarget)
-	* 1.351. [1563. Stone Game V](#StoneGameV)
-	* 1.352. [1569. Number of Ways to Reorder Array to Get Sa](#NumberofWaystoReorderArraytoGetSa)
-	* 1.353. [1573. Number of Ways to Split a String](#NumberofWaystoSplitaString)
-	* 1.354. [1585. Check If String Is Transformable With](#CheckIfStringIsTransformableWith)
-	* 1.355. [1593. Split a String Into the Max Number of Unique Substri](#SplitaStringIntotheMaxNumberofUniqueSubstri)
-	* 1.356. [1595. Minimum Cost to Connect Two Groups of Points](#MinimumCosttoConnectTwoGroupsofPoints)
-	* 1.357. [1621. Number of Sets of K Non-Overlapping Line](#NumberofSetsofKNon-OverlappingLine)
-	* 1.358. [1631. 【Dijkstra🚗 + 最小堆🌵】Path With Minimum Effort](#DijkstraPathWithMinimumEffort)
-	* 1.359. [1632 Rank Transform of a Matrix](#RankTransformofaMatrix)
-	* 1.360. [1640 Check Array Formation Through](#CheckArrayFormationThrough)
-	* 1.361. [1641 Count Sorted Vowel Strings](#CountSortedVowelStrings)
-	* 1.362. [1642. Furthest Building You Can Reach](#FurthestBuildingYouCanReach)
-	* 1.363. [1646 Get Maximum in Generated Array](#GetMaximuminGeneratedArray)
-	* 1.364. [1648. Sell Diminishing-Valued Colored Balls](#SellDiminishing-ValuedColoredBalls)
-	* 1.365. [1649 Create Sorted Array through Instru](#CreateSortedArraythroughInstru)
-	* 1.366. [1655. Distribute Repeating Integers](#DistributeRepeatingIntegers)
-	* 1.367. [1657 Determine if Two Strings Are Close](#DetermineifTwoStringsAreClose)
-	* 1.368. [1658 Minimum Operations to Reduce X](#MinimumOperationstoReduceX)
-	* 1.369. [1659. Maximize Grid Happiness](#MaximizeGridHappiness)
-	* 1.370. [1662 Check If Two String Arrays are Equi](#CheckIfTwoStringArraysareEqui)
-	* 1.371. [1663 Smallest String With A Given Numer](#SmallestStringWithAGivenNumer)
-	* 1.372. [1673 Find the Most Competitive Subseq](#FindtheMostCompetitiveSubseq)
-	* 1.373. [1674. Minimum Moves to Make Array Complement](#MinimumMovestoMakeArrayComplement)
-	* 1.374. [1675. Minimize Deviation in Array](#MinimizeDeviationinArray)
-	* 1.375. [1679 Max Number of K-Sum Pairs】](#MaxNumberofK-SumPairs)
-	* 1.376. [1680 Concatenation of Consecutive Bina](#ConcatenationofConsecutiveBina)
-	* 1.377. [1681. Minimum Incompatibility](#MinimumIncompatibility)
-	* 1.378. [1690. Stone Game VII](#StoneGameVII)
-	* 1.379. [1696. 【动态🚀规划 O(n-k) * 优先队列 O(1) + 最小堆🌵】 Jump Game VI](#On-kO1JumpGameVI)
-	* 1.380. [1704 Determine if String Halves Are Alike](#DetermineifStringHalvesAreAlike)
-	* 1.381. [1707. Maximum XOR With an Element From Array](#MaximumXORWithanElementFromArray)
-	* 1.382. [1713. Minimum Operations to Make a Subsequence](#MinimumOperationstoMakeaSubsequence)
-	* 1.383. [1721 Swapping Nodes in a Linked List](#SwappingNodesinaLinkedList)
-	* 1.384. [1727. Largest Submatrix With Rearrangements](#LargestSubmatrixWithRearrangements)
-	* 1.385. [1745. 【回文🌈】Palindrome Partitioning IV](#PalindromePartitioningIV)
-	* 1.386. [1760. Minimum Limit of Balls in a Bag](#MinimumLimitofBallsinaBag)
-	* 1.387. [1770. Maximum Score from Performing Multiplication](#MaximumScorefromPerformingMultiplication)
-	* 1.388. [1771. 【回文🌈】Maximize Palindrome Length From Subsequences](#MaximizePalindromeLengthFromSubsequences)
-	* 1.389. [1775. Equal Sum Arrays With Minimum Number of Operatio](#EqualSumArraysWithMinimumNumberofOperatio)
-	* 1.390. [1786. 【Dijkstra🚗】 Number of Restricted Paths From First to Last Node](#DijkstraNumberofRestrictedPathsFromFirsttoLastNode)
-	* 1.391. [1792. Maximum Average Pass Ratio](#MaximumAveragePassRatio)
-	* 1.392. [1799. Maximize Score After N Operations](#MaximizeScoreAfterNOperations)
-	* 1.393. [1815. Maximum Number of Groups Getting Fresh Donuts](#MaximumNumberofGroupsGettingFreshDonuts)
-	* 1.394. [1838. Frequency of the Most Frequent Element](#FrequencyoftheMostFrequentElement)
-	* 1.395. [1847. Closest Room](#ClosestRoom)
-	* 1.396. [1872. Stone Game VIII](#StoneGameVIII)
-	* 1.397. [ 1976. 【Dijkstra🚗】到达目的地的方案数](#1976.Dijkstra)
+	* 1.281. [【位运算😜】1318](#1318)
+	* 1.282. [1319. 【🍒并查集】Number of Operations to Make Network Connected](#NumberofOperationstoMakeNetworkConnected)
+	* 1.283. [1320. Minimum Distance to Type a Word Using Two Finger](#MinimumDistancetoTypeaWordUsingTwoFinger)
+	* 1.284. [1329 Sort the Matrix Diagonally](#SorttheMatrixDiagonally)
+	* 1.285. [1332 【回文🌈】Remove Palindromic Subsequences](#RemovePalindromicSubsequences)
+	* 1.286. [1334. 【Dijkstra🚗 + floyd 🌞】Find the City With Smallest Number of Neighbors](#DijkstrafloydFindtheCityWithSmallestNumberofNeighbors)
+	* 1.287. [1335. Minimum Difficulty of a Job Schedule](#MinimumDifficultyofaJobSchedule)
+	* 1.288. [1337 The K Weakest Rows in a Matrix](#TheKWeakestRowsinaMatrix)
+	* 1.289. [1339 Maximum Product of Splitt](#MaximumProductofSplitt)
+	* 1.290. [1340. 【动态🚀规划】Jump Game V](#JumpGameV)
+	* 1.291. [1349. Maximum Students Taking Exam](#MaximumStudentsTakingExam)
+	* 1.292. [1353. Maximum Number of Events That Can Be Attended](#MaximumNumberofEventsThatCanBeAttended)
+	* 1.293. [1354. Construct Target Array With Multiple Sums](#ConstructTargetArrayWithMultipleSums)
+	* 1.294. [ 1356 【位运算😜】](#1356)
+	* 1.295. [1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path](#DijkstraMinimumCosttoMakeatLeastOneValidPath)
+	* 1.296. [1371. Find the Longest Substring Containing Vowels in Eve](#FindtheLongestSubstringContainingVowelsinEve)
+	* 1.297. [1373. Maximum Sum BST in Binary Tree](#MaximumSumBSTinBinaryTree)
+	* 1.298. [1377. Frog Position After T Seconds](#FrogPositionAfterTSeconds)
+	* 1.299. [1379 Find Corresponding Node of Binary Tree in a Clone](#FindCorrespondingNodeofBinaryTreeinaClone)
+	* 1.300. [1382. Balance a Binary Search Tree](#BalanceaBinarySearchTree)
+	* 1.301. [1395. Count Number of Teams](#CountNumberofTeams)
+	* 1.302. [1396 Design Underground System](#DesignUndergroundSystem)
+	* 1.303. [1404【位运算😜】](#-1)
+	* 1.304. [1406. Stone Game III](#StoneGameIII)
+	* 1.305. [1409. Queries on a Permutation With Key](#QueriesonaPermutationWithKey)
+	* 1.306. [1416. Restore The Array](#RestoreTheArray)
+	* 1.307. [1424. Diagonal Traverse II](#DiagonalTraverseII)
+	* 1.308. [1425. Constrained Subset Sum](#ConstrainedSubsetSum)
+	* 1.309. [1426  Counting Elements](#CountingElements)
+	* 1.310. [1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie](#KidsWiththeGreatestNumberofCandie)
+	* 1.311. [1437 Check If All 1's Are at Least Length](#CheckIfAll1sAreatLeastLength)
+	* 1.312. [1438. Longest Continuous Subarray With Absolute](#LongestContinuousSubarrayWithAbsolute)
+	* 1.313. [1441 Build an Array With Stack Operations](#BuildanArrayWithStackOperations)
+	* 1.314. [1442. Count Triplets That Can Form Two Arrays of Equal](#CountTripletsThatCanFormTwoArraysofEqual)
+	* 1.315. [1443. Minimum Time to Collect All Apples in a Tree](#MinimumTimetoCollectAllApplesinaTree)
+	* 1.316. [1444. 【二维动态🚀规划 + 前缀和🎨 + 递归】Number of Ways of Cutting a Pizza](#NumberofWaysofCuttingaPizza)
+	* 1.317. [1446 Consecutive Characters](#ConsecutiveCharacters)
+	* 1.318. [1448 Count Good Nodes in Binary Tree](#CountGoodNodesinBinaryTree)
+	* 1.319. [1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add](#FormLargestIntegerWithDigitsThatAdd)
+	* 1.320. [1451 Rearrange Words in a Sentence](#RearrangeWordsinaSentence)
+	* 1.321. [1453 Maximum Number of Darts Inside of a Circular Dartb](#MaximumNumberofDartsInsideofaCircularDartb)
+	* 1.322. [1457 【回文🌈】Pseudo-Palindromic Paths in a Bin](#Pseudo-PalindromicPathsinaBin)
+	* 1.323. [1461 Check If a String Contains All Binar](#CheckIfaStringContainsAllBinar)
+	* 1.324. [1463 Cherry Pickup II](#CherryPickupII)
+	* 1.325. [1473. Paint House III](#PaintHouseIII)
+	* 1.326. [1475. Final Prices With a Special Discount in a Sho](#FinalPricesWithaSpecialDiscountinaSho)
+	* 1.327. [1483. Kth Ancestor of a Tree Node](#KthAncestorofaTreeNode)
+	* 1.328. [1488. Avoid Flood in The City](#AvoidFloodinTheCity)
+	* 1.329. [1489. 【🍒并查集】Find Critical and Pseudo-Critical Edges in](#FindCriticalandPseudo-CriticalEdgesin)
+	* 1.330. [1492 The kth Factor of n](#ThekthFactorofn)
+	* 1.331. [1493. Longest Subarray of 1's After Deleting One](#LongestSubarrayof1sAfterDeletingOne)
+	* 1.332. [1499. Max Value of Equation](#MaxValueofEquation)
+	* 1.333. [1502 Can Make Arithmetic Progression From Sequence](#CanMakeArithmeticProgressionFromSequence)
+	* 1.334. [1503 Last Moment Before All Ants Fall Out of a Plank](#LastMomentBeforeAllAntsFallOutofaPlank)
+	* 1.335. [1505. Minimum Possible Integer After at Most K Adjacent](#MinimumPossibleIntegerAfteratMostKAdjacent)
+	* 1.336. [1508. Range Sum of Sorted Subarray Sums](#RangeSumofSortedSubarraySums)
+	* 1.337. [1510 Stone Game IV](#StoneGameIV)
+	* 1.338. [1514 【Dijkstra🚗 + Bellman-Ford🌞】Path with Maximum Probability](#DijkstraBellman-FordPathwithMaximumProbability)
+	* 1.339. [1515 Best Position for a Service Centre](#BestPositionforaServiceCentre)
+	* 1.340. [1520. Maximum Number of Non-Overlapping Substrings](#MaximumNumberofNon-OverlappingSubstrings)
+	* 1.341. [1530. Number of Good Leaf Nodes Pairs](#NumberofGoodLeafNodesPairs)
+	* 1.342. [1531. String Compression II](#StringCompressionII)
+	* 1.343. [1534 Count Good Triplets](#CountGoodTriplets)
+	* 1.344. [1535 Find the Winner of an Array Game](#FindtheWinnerofanArrayGame)
+	* 1.345. [1537. Get the Maximum Score](#GettheMaximumScore)
+	* 1.346. [1539. Kth Missing Positive Number](#KthMissingPositiveNumber)
+	* 1.347. [1542. Find Longest Awesome Substring](#FindLongestAwesomeSubstring)
+	* 1.348. [1546. Maximum Number of Non-Overlapping Subarrays With Sum](#MaximumNumberofNon-OverlappingSubarraysWithSum)
+	* 1.349. [1550. Three Consecutive Odds](#ThreeConsecutiveOdds)
+	* 1.350. [1551 Minimum Operations to Make Array](#MinimumOperationstoMakeArray)
+	* 1.351. [1553. Minimum Number of Days to Eat N Oranges](#MinimumNumberofDaystoEatNOranges)
+	* 1.352. [1556. Thousand Separator](#ThousandSeparator)
+	* 1.353. [1558. Minimum Numbers of Function Calls to Make Target](#MinimumNumbersofFunctionCallstoMakeTarget)
+	* 1.354. [1563. Stone Game V](#StoneGameV)
+	* 1.355. [1569. Number of Ways to Reorder Array to Get Sa](#NumberofWaystoReorderArraytoGetSa)
+	* 1.356. [1573. Number of Ways to Split a String](#NumberofWaystoSplitaString)
+	* 1.357. [1585. Check If String Is Transformable With](#CheckIfStringIsTransformableWith)
+	* 1.358. [1593. Split a String Into the Max Number of Unique Substri](#SplitaStringIntotheMaxNumberofUniqueSubstri)
+	* 1.359. [1595. Minimum Cost to Connect Two Groups of Points](#MinimumCosttoConnectTwoGroupsofPoints)
+	* 1.360. [1621. Number of Sets of K Non-Overlapping Line](#NumberofSetsofKNon-OverlappingLine)
+	* 1.361. [1631. 【Dijkstra🚗 + 最小堆🌵】Path With Minimum Effort](#DijkstraPathWithMinimumEffort)
+	* 1.362. [1632 Rank Transform of a Matrix](#RankTransformofaMatrix)
+	* 1.363. [1640 Check Array Formation Through](#CheckArrayFormationThrough)
+	* 1.364. [1641 Count Sorted Vowel Strings](#CountSortedVowelStrings)
+	* 1.365. [1642. Furthest Building You Can Reach](#FurthestBuildingYouCanReach)
+	* 1.366. [1646 Get Maximum in Generated Array](#GetMaximuminGeneratedArray)
+	* 1.367. [1648. Sell Diminishing-Valued Colored Balls](#SellDiminishing-ValuedColoredBalls)
+	* 1.368. [1649 Create Sorted Array through Instru](#CreateSortedArraythroughInstru)
+	* 1.369. [1655. Distribute Repeating Integers](#DistributeRepeatingIntegers)
+	* 1.370. [1657 Determine if Two Strings Are Close](#DetermineifTwoStringsAreClose)
+	* 1.371. [1658 Minimum Operations to Reduce X](#MinimumOperationstoReduceX)
+	* 1.372. [1659. Maximize Grid Happiness](#MaximizeGridHappiness)
+	* 1.373. [1662 Check If Two String Arrays are Equi](#CheckIfTwoStringArraysareEqui)
+	* 1.374. [1663 Smallest String With A Given Numer](#SmallestStringWithAGivenNumer)
+	* 1.375. [1673 Find the Most Competitive Subseq](#FindtheMostCompetitiveSubseq)
+	* 1.376. [1674. Minimum Moves to Make Array Complement](#MinimumMovestoMakeArrayComplement)
+	* 1.377. [1675. Minimize Deviation in Array](#MinimizeDeviationinArray)
+	* 1.378. [1679 Max Number of K-Sum Pairs】](#MaxNumberofK-SumPairs)
+	* 1.379. [1680 Concatenation of Consecutive Bina](#ConcatenationofConsecutiveBina)
+	* 1.380. [1681. Minimum Incompatibility](#MinimumIncompatibility)
+	* 1.381. [1690. Stone Game VII](#StoneGameVII)
+	* 1.382. [1696. 【动态🚀规划 O(n-k) * 优先队列 O(1) + 最小堆🌵】 Jump Game VI](#On-kO1JumpGameVI)
+	* 1.383. [1704 Determine if String Halves Are Alike](#DetermineifStringHalvesAreAlike)
+	* 1.384. [1707. Maximum XOR With an Element From Array](#MaximumXORWithanElementFromArray)
+	* 1.385. [1713. Minimum Operations to Make a Subsequence](#MinimumOperationstoMakeaSubsequence)
+	* 1.386. [1721 Swapping Nodes in a Linked List](#SwappingNodesinaLinkedList)
+	* 1.387. [1727. Largest Submatrix With Rearrangements](#LargestSubmatrixWithRearrangements)
+	* 1.388. [1734 【位运算😜】](#-1)
+	* 1.389. [1745. 【回文🌈】Palindrome Partitioning IV](#PalindromePartitioningIV)
+	* 1.390. [1760. Minimum Limit of Balls in a Bag](#MinimumLimitofBallsinaBag)
+	* 1.391. [1770. Maximum Score from Performing Multiplication](#MaximumScorefromPerformingMultiplication)
+	* 1.392. [1771. 【回文🌈】Maximize Palindrome Length From Subsequences](#MaximizePalindromeLengthFromSubsequences)
+	* 1.393. [1775. Equal Sum Arrays With Minimum Number of Operatio](#EqualSumArraysWithMinimumNumberofOperatio)
+	* 1.394. [1786. 【Dijkstra🚗】 Number of Restricted Paths From First to Last Node](#DijkstraNumberofRestrictedPathsFromFirsttoLastNode)
+	* 1.395. [1792. Maximum Average Pass Ratio](#MaximumAveragePassRatio)
+	* 1.396. [1799. Maximize Score After N Operations](#MaximizeScoreAfterNOperations)
+	* 1.397. [1815. Maximum Number of Groups Getting Fresh Donuts](#MaximumNumberofGroupsGettingFreshDonuts)
+	* 1.398. [1838. Frequency of the Most Frequent Element](#FrequencyoftheMostFrequentElement)
+	* 1.399. [1847. Closest Room](#ClosestRoom)
+	* 1.400. [1872. Stone Game VIII](#StoneGameVIII)
+	* 1.401. [ 1976. 【Dijkstra🚗】到达目的地的方案数](#1976.Dijkstra)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -2098,11 +2103,56 @@ class Solution(object):
 
 [小梦想家](https://www.bilibili.com/video/BV1dV411k7i6?spm_id_from=333.999.0.0)
 
-###  1.44. <a name='-1'></a>645-错误的集合
+###  1.44. <a name='-1'></a>645-【位运算😜】错误的集合
 
 [哈哈哈](https://www.bilibili.com/video/BV1az411e7zU?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Pf4y1479j?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3bqrq9m7kk00.webp)
+
+```py
+class Solution:
+    # 位运算😜+数学方法
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        # 计算 nums 异或值 与 [1,n] 异或值 的 异或值，结果为 缺失值 与 重复值 的异或值
+        s = functools.reduce(operator.xor, nums) ^ functools.reduce(operator.xor, range(1, n + 1))
+        # 计算 缺失值 与 重复值 的差值
+        d = (1 + n) * n // 2 - sum(nums)
+        # 用于排除 异或值相同的数对 例如 1,9 和 2,10
+        st = set(nums)
+        for i in range(1, n + 1):
+            if i + d > 0 and i + d not in st and i ^ (i + d) == s:
+                return [i, i + d]
+        return -1
+
+作者：meteordream
+链接：https://leetcode-cn.com/problems/set-mismatch/solution/cuo-wu-de-ji-he-jie-ti-ji-lu-by-meteordr-9n6y/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+将nums中每个num以及1..n异或运算，其中重复数字x参与了三次，缺失数字y参与了一次，结合a^0=a a^a=0，则运算结果位x^y
+哈希结构统计重复数字
+
+
+class Solution:
+
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        error_num, unique, ans = len(nums), set(), []
+        for i, num in enumerate(nums):
+            error_num ^= (i ^ num)
+            if num in unique:
+                ans.append(num)
+            unique.add(num)
+        ans.append(error_num ^ ans[0])
+        return ans
+
+作者：qianlizhixing
+链接：https://leetcode-cn.com/problems/set-mismatch/solution/wei-yi-huo-yun-suan-hash-by-qianlizhixin-8613/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ```py
 数学解题
@@ -2805,9 +2855,106 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1Mt41137eL?spm_id_from=333.999.0.0)
 
-###  1.64. <a name='-1'></a>693
+###  1.64. <a name='693'></a> 693 【位运算😜】
+
+
 
 ```py
+方法一：依次比较相邻位
+
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        if n == 1:
+            return True
+        pre = n & 1
+        n >>= 1
+        while n:
+            cur = n & 1
+            if cur == pre:
+                return False
+            pre = cur
+            n >>= 1
+        return True
+方法二：直接看二进制表达中有无'11'或者'00'
+
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        bit = bin(n)[2:]
+        if '11' in bit or '00' in bit:
+            return False
+        return True
+方法三：异或
+
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        # 因为相邻两位数字不相同， 那么 n ^ (n>>1)应该为全1
+        n = n ^ ( n >> 1)
+        return n & (n+1) == 0
+
+作者：ray-king-ray
+链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/693-jiao-ti-wei-er-jin-zhi-shu-by-ray-ki-c1tf/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+解题思路
+将n右移一位之后异或n本身，最后检查结果是否全为1。
+
+
+这里主要是需要注意 n&(n-1)和 n&(n+1)的区别
+
+代码
+
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        n ^= n>>1
+        return n & (n+1) == 0
+
+作者：yerikshu
+链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/wei-yun-suan-lian-xi-by-yerikshu-qc08/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+解题思路
+此处撰写解题思路
+
+代码
+
+class Solution(object):
+    def hasAlternatingBits(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        mask1 = bin(0xaaaaaaaa)[2:]
+        mask2 = bin(0x55555555)[2:]
+        str_num = bin(n)[2:]
+        if str_num in mask1 or str_num in mask2:
+            return True
+        else:
+            return False
+        
+
+作者：mnm135
+链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/zi-fu-chuan-fang-fa-by-mnm135/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+class Solution(object):
+    def hasAlternatingBits(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        temp = n ^ (n >> 1)
+        return temp & (temp + 1) == 0
+        
+
+作者：mnm135
+链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/wei-yun-suan-you-yi-hou-yi-huo-pan-duan-shi-fou-qu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 class Solution:
     def hasAlternatingBits(self, n: int) -> bool:
         while n:
@@ -3818,9 +3965,9 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1tW41167jy?spm_id_from=333.999.0.0)
 
-###  1.93. <a name='DijkstrafloydNetworkDelayTime'></a>743. 【Dijkstra🚗 + floyd 🌞 + Bellman-Ford🌞】Network Delay Time
+###  1.93. <a name='DijkstrafloydBellman-FordNetworkDelayTime'></a>743. 【Dijkstra🚗 + floyd 🌞 + Bellman-Ford🌞】Network Delay Time
 
-#### 类似题目：787、1514
+####  1.93.1. <a name='7871514'></a>类似题目：787、1514
 
 [花花酱](https://www.bilibili.com/video/BV1UW411r7S8?spm_id_from=333.999.0.0)
 
@@ -4475,7 +4622,7 @@ class Solution(object):
 
 [花花酱](https://www.bilibili.com/video/BV1AW411o7oi?spm_id_from=333.999.0.0)
 
-###  1.109. <a name='DijkstraCheapestFlightsWithinKStops'></a>787. 【Dijkstra🚗 + 动态🚀规划 + 最小堆🌵 + Bellman-Ford🌞】Cheapest Flights Within K Stops
+###  1.109. <a name='DijkstraBellman-FordCheapestFlightsWithinKStops'></a>787. 【Dijkstra🚗 + 动态🚀规划 + 最小堆🌵 + Bellman-Ford🌞】Cheapest Flights Within K Stops
 
 [花花酱](https://www.bilibili.com/video/BV13W411o7wc?spm_id_from=333.999.0.0)
 
@@ -5192,9 +5339,92 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1LW411d7th?spm_id_from=333.999.0.0)
 
-###  1.140. <a name='ReorderedPowerof2'></a>869 Reordered Power of 2
+###  1.140. <a name='ReorderedPowerof2'></a>869 【位运算😜】Reordered Power of 2
 
 [小明](https://www.bilibili.com/video/BV1M64y1D78v?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2pr4b3ii8xk0.webp)
+
+```py
+class Solution:
+    def reorderedPowerOf2(self, n: int) -> bool:
+        # lowbit判断是否为2的幂
+        def check(A):
+            x=0
+            for a in A:
+                x=x*10+int(a)
+            return x&(x-1)==0 
+
+        arr=list(str(n))
+        # 排序
+        arr.sort()
+        n=len(arr)
+        visited=set()
+        # 计算全排列
+        def permutations(nums):            
+            if len(nums)==n and check(nums):
+                return True
+
+            for i,num in enumerate(arr):
+                # 首项不为0
+                if not nums and arr[i]=='0':continue
+                # 去重
+                if i>0 and arr[i]==arr[i-1] and i-1 not in visited:continue
+                if i not in visited:
+                    visited.add(i)
+                    if permutations(nums+[arr[i]]):
+                        return True
+                    visited.remove(i)
+            return False
+
+        return permutations([])
+
+作者：yim-6
+链接：https://leetcode-cn.com/problems/reordered-power-of-2/solution/python3-liang-chong-fang-fa-pan-duan-shi-t7sx/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3ds0zmfkn4q0.webp)
+
+```py
+class Solution:
+    def reorderedPowerOf2(self, n: int) -> bool:
+        cnt=Counter(str(n))
+        # 因为n<10^9,而2^31>10^9所以枚举到2^31即可
+        for i in range(32):
+            x=1<<i
+            if Counter(str(x))==cnt:
+                return True
+        return False
+
+作者：yim-6
+链接：https://leetcode-cn.com/problems/reordered-power-of-2/solution/python3-liang-chong-fang-fa-pan-duan-shi-t7sx/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+思路和心得：
+
+1.如果枚举所有的排列组合，再判断 x&(x-1)==0
+时间和空间复杂度会很高
+
+2.2的幂只有31个，统计判断比较简单
+
+python3c++
+
+class Solution:
+    def reorderedPowerOf2(self, n: int) -> bool:
+        a = collections.Counter(str(n))
+        for i in range(31):
+            if collections.Counter(str(1 << i)) == a:
+                return True
+        return False
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/reordered-power-of-2/solution/cpython3-2de-mi-you-31ge-yi-ci-bi-jiao-d-b9tt/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ###  1.141. <a name='SmallestSubtreewithalltheDeepestNodes'></a>865. Smallest Subtree with all the Deepest Nodes
 
@@ -7821,6 +8051,128 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1x441117vz?spm_id_from=333.999.0.0)
 
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5d9vk0mstgw0.webp)
+
+```py
+Python3 Code:
+
+
+
+class Solution:
+    def findNumOfValidWords(self, words: List[str], puzzles: List[str]) -> List[int]:
+        counts = collections.defaultdict(int)
+        ans = [0] * len(puzzles)
+        for word in words:
+            bit = 0 # bit 是 word 的二进制表示
+            for c in word:
+                bit |= 1 << ord(c) - ord("a")
+            counts[bit] += 1
+        for i, puzzle in enumerate(puzzles):
+            bit = 0 # bit 是 puzzle 的二进制表示
+            for c in puzzle:
+                bit |= 1 << ord(c) - ord("a")
+            j = bit # j 是 bit 的子集
+            # 倒序枚举 bit 的子集 j
+            while j:
+                # 单词 word 需要包含谜面的第一个字母
+                if 1 << ord(puzzle[0]) - ord("a") & j:
+                    ans[i] += counts[j]
+                j = bit & (j - 1)
+        return ans
+
+代码
+
+class Solution:
+    def findNumOfValidWords(self, words: List[str], puzzles: List[str]) -> List[int]:
+        # 存储谜底（即words），words中可能包含重复元素，因此需要统计count
+        freq = collections.Counter()
+        for word in words:
+            mask = 0
+            for c in word:
+                # |=为按位的或运算
+                # ord(c) - ord('a')，例字母c，ord差为2，二进制中将1左移2位，100
+                mask |= 1 << (ord(c) - ord('a'))
+            # 每完成一次word计算，words中此word出现的次数+1
+            freq[mask] += 1
+        res = []
+        for puzzle in puzzles:
+            total = 0
+            # 先求出每个puzzle单词除首字母外的所有子集
+            for perm in self.subsets(puzzle[1:]):
+                # 计算首字母的二进制压缩值
+                mask = 1 << (ord(puzzle[0]) - ord('a'))
+                # 对于首字母以外的子集加上首字母进行位的或运算，得到的每个子集都包含首字母
+                # 例如'abc'除去首字母'a'，子集为'b','c','bc'，得到包含首字母子集'ab','ac','abc'
+                for c in perm:
+                    mask |= 1 << (ord(c) - ord('a'))
+                # 如果freq中出现过，就对total+对应元素出现过的次数
+                total += freq[mask]
+            res.append(total)
+        return res
+
+    # 查找子集
+    def subsets(self, words):
+        res = [""]
+        for i in words:
+            res = res + [i + word for word in res]
+        return res
+无注释版本
+
+class Solution:
+    def findNumOfValidWords(self, words: List[str], puzzles: List[str]) -> List[int]:
+        freq = collections.Counter()
+        for word in words:
+            mask = 0
+            for c in word:
+                mask |= 1 << (ord(c) - ord('a'))
+            freq[mask] += 1
+        res = []
+        for puzzle in puzzles:
+            total = 0
+            for perm in self.subsets(puzzle[1:]):
+                mask = 1 << (ord(puzzle[0]) - ord('a'))
+                for c in perm:
+                    mask |= 1 << (ord(c) - ord('a'))
+                total += freq[mask]
+            res.append(total)
+        return res
+
+    def subsets(self, words):
+        res = [""]
+        for i in words:
+            res = res + [i + word for word in res]
+        return res
+
+作者：ashley2333
+链接：https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle/solution/1178-cai-zi-mi-xiao-bai-ye-neng-kan-dong-vycw/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+状态压缩，枚举子集
+
+class Solution:
+    def findNumOfValidWords(self, words: List[str], ps: List[str]) -> List[int]:
+        d = defaultdict(int)
+        for word in words:
+            k = 0
+            for c in word:
+                k |= 1 << (ord(c) - ord("a"))
+            d[k] += 1
+        ans = []
+        for p in ps:
+            k, h = 0, 1 << (ord(p[0]) - ord("a"))
+            for c in p:
+                if c != p[0]:
+                    k |= 1 << (ord(c) - ord("a"))
+            s = k
+            ans.append(0)
+            while s:
+                ans[-1] += d[h | s]
+                s = s - 1 & k
+            ans[-1] += d[h]
+        return ans
+```
+
 ###  1.251. <a name='MakeArrayStrictlyIncreasing'></a>1187. Make Array Strictly Increasing
 
 [花花酱](https://www.bilibili.com/video/BV1sJ411N7jD?spm_id_from=333.999.0.0)
@@ -8482,7 +8834,211 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
 
-###  1.281. <a name='NumberofOperationstoMakeNetworkConnected'></a>1319. 【🍒并查集】Number of Operations to Make Network Connected
+###  1.281. <a name='1318'></a>【位运算😜】1318
+
+位运算😜 状态压缩的前奏 法1:除法 法2:移位
+
+思路和心得:
+
+1.逐位比较
+
+2.利用位运算😜进行状态压缩的前奏
+
+（一）除法
+
+（二）移位
+
+```py
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        res = 0
+        while a > 0 or b > 0 or c > 0:
+            bit_a = a % 2
+            bit_b = b % 2
+            bit_c = c % 2
+            if bit_c == 0:
+                res += (bit_a + bit_b)
+            else:
+                if bit_a == 0 and bit_b == 0:
+                    res += 1
+            a //= 2
+            b //= 2
+            c //= 2
+        return res
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/cpython3-wei-yun-suan-zhuang-tai-ya-suo-engoa/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        res = 0
+        for i in range(0, 32):
+            bit_a = (a >> i) & 1
+            bit_b = (b >> i) & 1
+            bit_c = (c >> i) & 1
+            if bit_c == 0:
+                res += (bit_a + bit_b)
+            else:
+                if bit_a == 0 and bit_b == 0:
+                    res += 1
+
+        return res
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/cpython3-wei-yun-suan-zhuang-tai-ya-suo-engoa/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+对于每一位，解空间固定，字典dct记录所有可能性
+
+将a,b,c分别跟1相与可以取到末位二进制数值,不断右移就可以遍历到每一位
+
+python
+
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        dct = {
+            (0, 0, 0): 0,
+            (0, 0, 1): 1,
+            (0, 1, 0): 1,
+            (0, 1, 1): 0,
+            (1, 0, 0): 1,
+            (1, 0, 1): 0,
+            (1, 1, 0): 2,
+            (1, 1, 1): 0,
+        }
+        res = 0
+        for _ in range(32):
+            res += dct[(a & 1, b & 1, c & 1)]
+            a >>= 1
+            b >>= 1
+            c >>= 1
+
+        return res
+
+作者：desti
+链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/1318-wei-yun-suan-ha-xi-by-desti-sjgg/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+简单题，逐位判断或运算是否相等，不相等时，如果 c 的那位是 0，说明 a，b 同位都得为 0，如果是 1，则只需变一个。
+
+代码如下：
+
+c++cpythonjavascript
+
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        res = 0
+        for i in range(31):
+            x = (a >> i) & 1
+            y = (b >> i) & 1
+            z = (c >> i) & 1
+            if (x | y) != z:
+                res += 1 if z else x + y
+        return res
+
+作者：cml-r
+链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/1318-huo-yun-suan-de-zui-xiao-fan-zhuan-8q45e/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+循环遍历每一个数位，根据c的每一位判断需要反转的次数，这里利用右移保证我们每次只需要判断末位，循环条件保证我们会遍历abc的每一个数位
+
+代码
+
+class Solution(object):
+    def minFlips(self, a, b, c):
+        """
+        :type a: int
+        :type b: int
+        :type c: int
+        :rtype: int
+        """
+        self.res = 0
+        # 遍历每个数位，以c为基准，根据c的每一位是1还是0判断需要a，b反转次数
+        # 当三个数都为空时，说明我们遍历了所有的数位（数位不够的默认高位为0）
+        while(a or b or c):
+            # c的末位为1，则ab末位中有一个1即可
+            if c & 1:
+                if not b & 1 and not a & 1:
+                    self.res += 1
+            # c的末位为0，则ab末位中有一个1需要反转一次
+            else:
+                self.res += a & 1
+                self.res += b & 1
+            # abc都右移一位，让原来第二位变成末位，进行循环判断
+            a = a >> 1
+            b = b >> 1
+            c = c >> 1
+        return self.res
+
+作者：number1roy
+链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/xun-huan-bian-li-yi-wei-mo-wei-pan-duan-fqi2h/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+关于位运算😜有两个基本知识是这道题用到的：
+
+第一，如何取出某个整数n在指定二进制位（从右数第i位）上的值，需要将n向右移动，并与1做与运算，即：(n>>i)&1。
+
+第二，或运算的计算法则：两个操作数只要有一个是1，则结果是1，两个操作数都是零，结果是零。
+
+设a_，b_，c_为a，b，c中对应的二进制位，则三者的数值与需要翻转的次数存在下面的关系：
+
+    flip = {(0, 0, 0): 0,       # ab不需要翻转，c才为零
+            (0, 1, 0): 1,       # b翻转成0
+            (1, 0, 0): 1,       # a翻转成0
+            (1, 1, 0): 2,       # ab需要都翻转成0，两次翻转
+            (0, 0, 1): 1,       # a或b翻转成1，c为1
+            (0, 1, 1): 0,       # 不需要翻转
+            (1, 0, 1): 0,
+            (1, 1, 1): 0,
+            }
+因此，我们可以对每一位计算需要翻转的次数，并求和作为结果，注意整型变量总位数为32。
+
+
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+
+        flip = {(0, 0, 0): 0,       # ab不需要翻转，c才为零
+                (0, 1, 0): 1,       # b翻转成0
+                (1, 0, 0): 1,       # a翻转成0
+                (1, 1, 0): 2,       # ab需要都翻转成0，两次翻转
+                (0, 0, 1): 1,       # a或b翻转成1，c为1
+                (0, 1, 1): 0,       # 不需要翻转
+                (1, 0, 1): 0,
+                (1, 1, 1): 0,
+                }
+
+        return sum(flip[((a >> i) & 1, (b >> i) & 1, (c >> i) & 1)] for i in range(32))
+
+
+s = Solution()
+print(s.minFlips(2,6,5))
+根据逻辑做情况合并也是可以的：
+
+
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        ans = 0
+        for i in range(32):
+            bit_a, bit_b, bit_c = (a >> i) & 1, (b >> i) & 1, (c >> i) & 1
+            if bit_c == 0:
+                ans += bit_a + bit_b
+            else:
+                ans += bit_a + bit_b == 0
+        return ans
+
+作者：skx
+链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/jian-dan-de-wei-yun-suan-by-skx-my64/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.282. <a name='NumberofOperationstoMakeNetworkConnected'></a>1319. 【🍒并查集】Number of Operations to Make Network Connected
 
 [花花酱](https://www.bilibili.com/video/BV1jJ411n7dc?from=search&seid=16576806175247069118&spm_id_from=333.337.0.0)
 
@@ -8490,19 +9046,19 @@ class Solution:
 
 ```
 
-###  1.282. <a name='MinimumDistancetoTypeaWordUsingTwoFinger'></a>1320. Minimum Distance to Type a Word Using Two Finger
+###  1.283. <a name='MinimumDistancetoTypeaWordUsingTwoFinger'></a>1320. Minimum Distance to Type a Word Using Two Finger
 
 [花花酱](https://www.bilibili.com/video/BV11J411n7fN?spm_id_from=333.999.0.0)
 
-###  1.283. <a name='SorttheMatrixDiagonally'></a>1329 Sort the Matrix Diagonally
+###  1.284. <a name='SorttheMatrixDiagonally'></a>1329 Sort the Matrix Diagonally
 
 [小明](https://www.bilibili.com/video/BV1hU4y147b1?spm_id_from=333.999.0.0)
 
-###  1.284. <a name='RemovePalindromicSubsequences'></a>1332 【回文🌈】Remove Palindromic Subsequences
+###  1.285. <a name='RemovePalindromicSubsequences'></a>1332 【回文🌈】Remove Palindromic Subsequences
 
 [小明](https://www.bilibili.com/video/BV1tK4y1D7aV?spm_id_from=333.999.0.0)
 
-###  1.285. <a name='DijkstrafloydFindtheCityWithSmallestNumberofNeighbors'></a>1334. 【Dijkstra🚗 + floyd 🌞】Find the City With Smallest Number of Neighbors
+###  1.286. <a name='DijkstrafloydFindtheCityWithSmallestNumberofNeighbors'></a>1334. 【Dijkstra🚗 + floyd 🌞】Find the City With Smallest Number of Neighbors
 
 [花花酱](https://www.bilibili.com/video/BV1b7411z7Tb?spm_id_from=333.999.0.0)
 
@@ -8683,19 +9239,19 @@ object Solution {
 }
 ```
 
-###  1.286. <a name='MinimumDifficultyofaJobSchedule'></a>1335. Minimum Difficulty of a Job Schedule
+###  1.287. <a name='MinimumDifficultyofaJobSchedule'></a>1335. Minimum Difficulty of a Job Schedule
 
 [花花酱](https://www.bilibili.com/video/BV1K7411r7xj?spm_id_from=333.999.0.0)
 
-###  1.287. <a name='TheKWeakestRowsinaMatrix'></a>1337 The K Weakest Rows in a Matrix
+###  1.288. <a name='TheKWeakestRowsinaMatrix'></a>1337 The K Weakest Rows in a Matrix
 
 [小明](https://www.bilibili.com/video/BV1bX4y157ju?spm_id_from=333.999.0.0)
 
-###  1.288. <a name='MaximumProductofSplitt'></a>1339 Maximum Product of Splitt
+###  1.289. <a name='MaximumProductofSplitt'></a>1339 Maximum Product of Splitt
 
 [小明](https://www.bilibili.com/video/BV1Ch411i7yS?spm_id_from=333.999.0.0)
 
-###  1.289. <a name='JumpGameV'></a>1340. 【动态🚀规划】Jump Game V
+###  1.290. <a name='JumpGameV'></a>1340. 【动态🚀规划】Jump Game V
 
 [花花酱](https://www.bilibili.com/video/BV1h7411W7wS?spm_id_from=333.999.0.0)
 
@@ -8806,19 +9362,122 @@ class Solution:
 
 ```
 
-###  1.290. <a name='MaximumStudentsTakingExam'></a>1349. Maximum Students Taking Exam
+###  1.291. <a name='MaximumStudentsTakingExam'></a>1349. Maximum Students Taking Exam
 
 [花花酱](https://www.bilibili.com/video/BV1w7411V7eC?spm_id_from=333.999.0.0)
 
-###  1.291. <a name='MaximumNumberofEventsThatCanBeAttended'></a>1353. Maximum Number of Events That Can Be Attended 
+###  1.292. <a name='MaximumNumberofEventsThatCanBeAttended'></a>1353. Maximum Number of Events That Can Be Attended 
 
 [花花酱](https://www.bilibili.com/video/BV1C7411j7YJ?spm_id_from=333.999.0.0)
 
-###  1.292. <a name='ConstructTargetArrayWithMultipleSums'></a>1354. Construct Target Array With Multiple Sums
+###  1.293. <a name='ConstructTargetArrayWithMultipleSums'></a>1354. Construct Target Array With Multiple Sums
 
 [花花酱](https://www.bilibili.com/video/BV1g7411c793?spm_id_from=333.999.0.0)
 
-###  1.293. <a name='DijkstraMinimumCosttoMakeatLeastOneValidPath'></a>1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path
+###  1.294. <a name='1356'></a> 1356 【位运算😜】
+
+```py
+代码
+
+class Solution:
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        return [i for i, j in sorted([[val, collections.Counter(bin(val))['1']] for val in arr], 
+                key = lambda a: (a[1],a[0]))]
+自己写函数统计1的个数
+
+class Solution:
+
+    def getNumOfOne(self, num):
+        res = 0
+        while num:
+            res += num&1
+            num = num >> 1
+        return res
+
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        return [i for i, j in sorted([[val, self.getNumOfOne(val)] for val in arr], 
+                key = lambda a: (a[1],a[0]))]
+
+作者：LeahChao
+链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/yi-xing-pythondai-ma-by-leahchao/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+这题的核心是计算每个数字的1的个数。如果用库自带的函数就没意思了。
+这里参考java的java.lang.Integer#bitCount函数。（题外话：在java语境下跑此函数会触发Intrinsic优化，直接执行cpu指令更快）。
+先贴代码：
+
+
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        def bitcount(i: int) -> int:
+            i = i - ((i >> 1) & 0x55555555)
+            i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
+            i = (i + (i >> 4)) & 0x0f0f0f0f
+            i = i + (i >> 8)
+            return i & 0x1f
+        return sorted(arr, key=lambda x: (bitcount(x), x))
+很神奇，五行代码就搞定了。思路是将位数两两相加。
+第一行代码将0，1位相加、2，3位相加......。
+第二行代码将0，1，2，3位相加、4，5，6，7位相加......。
+第三行代码将0-7位相加、8-15位相加......。
+第四行代码将1-15位相加......。
+最后一行mask一下返回结果。
+
+需要注意的是题目的数字范围是0 <= arr[i] <= 10^4，因此只需要14位二进制位表示，这里取16位计算。
+二进制位运算😜能加快运行效率，且使代码更加简洁。但同时让代码晦涩难懂。慎用慎用。
+
+作者：wo-shi-yi-zhi
+链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/pythonwei-yun-suan-ji-suan-bitcount-by-wo-shi-yi-z/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+如何计算二进制中1的数量 位运算😜+记忆化
+
+class Solution:
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        @lru_cache(None)
+        def count_1(n):
+            return 0 if n==0 else count_1(n&(n-1))+1
+        
+        arr.sort(key=lambda x:(count_1(x), x))
+        return arr
+
+作者：seam
+链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/ru-he-ji-suan-er-jin-zhi-zhong-1de-shu-liang-wei-y/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+按照题意来解答的，技巧性不多，纯粹是使用python的内嵌函数，不过这个方式真的要归类的话，应该是属于模拟。
+
+
+
+代码
+
+class Solution:
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        # 创建一个dict，value的结构为list
+        dic = defaultdict(list)
+
+        for i in iter(arr):
+            # 统计二进制为1的数目，分类添加，这个其实有桶的感觉
+            dic[bin(i).count("1")].append(i)
+        
+        # 对key进行排序
+        dic = sorted(dic.items(), key = lambda x:x[0])
+
+        res = list()
+        for k,v in dic:
+            # 对排序后的结果进行添加
+            res.extend(sorted(v))
+        return res
+
+作者：yerikshu
+链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/wei-yun-suan-lian-xi-by-yerikshu-07q8/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.295. <a name='DijkstraMinimumCosttoMakeatLeastOneValidPath'></a>1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path
 
 [花花酱](https://www.bilibili.com/video/BV1oE411E74t?spm_id_from=333.999.0.0)
 
@@ -8962,83 +9621,154 @@ object Solution {
 }
 ```
 
-###  1.294. <a name='FindtheLongestSubstringContainingVowelsinEve'></a>1371. Find the Longest Substring Containing Vowels in Eve
+###  1.296. <a name='FindtheLongestSubstringContainingVowelsinEve'></a>1371. Find the Longest Substring Containing Vowels in Eve
 
 [花花酱](https://www.bilibili.com/video/BV1CE411K7hb?spm_id_from=333.999.0.0)
 
-###  1.295. <a name='MaximumSumBSTinBinaryTree'></a>1373. Maximum Sum BST in Binary Tree
+###  1.297. <a name='MaximumSumBSTinBinaryTree'></a>1373. Maximum Sum BST in Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV17E411u797?spm_id_from=333.999.0.0)
 
-###  1.296. <a name='FrogPositionAfterTSeconds'></a>1377. Frog Position After T Seconds
+###  1.298. <a name='FrogPositionAfterTSeconds'></a>1377. Frog Position After T Seconds
 
 [花花酱](https://www.bilibili.com/video/BV1mE411K7vc?spm_id_from=333.999.0.0)
 
-###  1.297. <a name='FindCorrespondingNodeofBinaryTreeinaClone'></a>1379 Find Corresponding Node of Binary Tree in a Clone
+###  1.299. <a name='FindCorrespondingNodeofBinaryTreeinaClone'></a>1379 Find Corresponding Node of Binary Tree in a Clone
 
 [小明](https://www.bilibili.com/video/BV1A54y147HN?spm_id_from=333.999.0.0)
 
-###  1.298. <a name='BalanceaBinarySearchTree'></a>1382. Balance a Binary Search Tree
+###  1.300. <a name='BalanceaBinarySearchTree'></a>1382. Balance a Binary Search Tree
 
 [花花酱](https://www.bilibili.com/video/BV1y7411f7v2?spm_id_from=333.999.0.0)
 
-###  1.299. <a name='CountNumberofTeams'></a>1395. Count Number of Teams
+###  1.301. <a name='CountNumberofTeams'></a>1395. Count Number of Teams
 
 [花花酱](https://www.bilibili.com/video/BV1cc411h73E?spm_id_from=333.999.0.0)
 
-###  1.300. <a name='DesignUndergroundSystem'></a>1396 Design Underground System
+###  1.302. <a name='DesignUndergroundSystem'></a>1396 Design Underground System
 
 [小明](https://www.bilibili.com/video/BV1uA411N7q6?spm_id_from=333.999.0.0)
 
-###  1.301. <a name='StoneGameIII'></a>1406. Stone Game III
+###  1.303. <a name='-1'></a>1404【位运算😜】
+
+```py
+当前位置为'1'时，需要两次消灭，当前位置为'0'时，需要一次消灭
+代码
+
+class Solution:
+    def numSteps(self, s: str) -> int:
+        res=0
+        n=len(s)
+        sign=0
+        for i in range(n-1,0,-1):
+            if s[i]=='0':
+                if sign:
+                    res+=2
+                else:
+                    res+=1
+            else:
+                if sign:
+                    res+=1
+                else:
+                    res+=2
+                    sign=1
+        # 最后一位只需要转为0即可
+        if sign:res+=1
+        return res
+
+作者：yim-6
+链接：https://leetcode-cn.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/solution/python3-er-jin-zhi-xiao-chu-by-yim-6-79zo/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
+用c表示进位，从后往前扫描
+
+1：
+没有进位，需要2次操作（先加1，再消除）
+有进位，需要1次操作（当前虽然是1，实际上是0）
+0：
+没有进位，需要1次操作（直接除以2）
+有进位，需要2次操作（与1时没有进位相同，先加1，再消除）
+最后单独考虑第一位，若此时有进位，则加1（这个与之前的情况相同），若没有进位，则不加了（就是1了，不需要另外操作了）
+
+class Solution:
+    def numSteps(self, s: str) -> int:
+        c = 0
+        ans = 0
+        n = len(s)
+        for i in range(n-1, 0, -1):
+            if s[i] == '0':
+                if c == 0:
+                    ans += 1
+                else:
+                    ans += 2
+            else:
+                if c == 0:
+                    ans += 2
+                    c = 1
+                else:
+                    ans += 1
+        if c == 1:
+            ans += 1
+        return ans
+
+作者：hualeizhuu
+链接：https://leetcode-cn.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/solution/jin-wei-yi-ci-sao-miao-by-hualeizhuu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.304. <a name='StoneGameIII'></a>1406. Stone Game III
 
 [花花酱](https://www.bilibili.com/video/BV1zT4y1G7Tb?spm_id_from=333.999.0.0)
 
-###  1.302. <a name='QueriesonaPermutationWithKey'></a>1409. Queries on a Permutation With Key
+###  1.305. <a name='QueriesonaPermutationWithKey'></a>1409. Queries on a Permutation With Key
 
 [花花酱](https://www.bilibili.com/video/BV1mz411b7Uw?spm_id_from=333.999.0.0)
 
-###  1.303. <a name='RestoreTheArray'></a>1416. Restore The Array
+###  1.306. <a name='RestoreTheArray'></a>1416. Restore The Array
 
 [花花酱](https://www.bilibili.com/video/BV1gK4y1k7Rv?spm_id_from=333.999.0.0)
 
-###  1.304. <a name='DiagonalTraverseII'></a>1424. Diagonal Traverse II
+###  1.307. <a name='DiagonalTraverseII'></a>1424. Diagonal Traverse II
 
 [花花酱](https://www.bilibili.com/video/BV1r5411x7Tm?spm_id_from=333.999.0.0)
 
-###  1.305. <a name='ConstrainedSubsetSum'></a>1425. Constrained Subset Sum
+###  1.308. <a name='ConstrainedSubsetSum'></a>1425. Constrained Subset Sum
 
 [花花酱](https://www.bilibili.com/video/BV13t4y1m7fD?spm_id_from=333.999.0.0)
 
-###  1.306. <a name='CountingElements'></a>1426  Counting Elements
+###  1.309. <a name='CountingElements'></a>1426  Counting Elements
 
 [小明](https://www.bilibili.com/video/BV1Eg4y187vx?spm_id_from=333.999.0.0)
 
-###  1.307. <a name='KidsWiththeGreatestNumberofCandie'></a>1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie
+###  1.310. <a name='KidsWiththeGreatestNumberofCandie'></a>1431. 拥有最多糖果的孩子 Kids With the Greatest Number of Candie
 
 [官方](https://www.bilibili.com/video/BV1vD4y1D7yo?spm_id_from=333.999.0.0)
 
-###  1.308. <a name='CheckIfAll1sAreatLeastLength'></a>1437 Check If All 1's Are at Least Length
+###  1.311. <a name='CheckIfAll1sAreatLeastLength'></a>1437 Check If All 1's Are at Least Length
 
 [小明](https://www.bilibili.com/video/BV1Yo4y1R78P?spm_id_from=333.999.0.0)
 
-###  1.309. <a name='LongestContinuousSubarrayWithAbsolute'></a>1438. Longest Continuous Subarray With Absolute
+###  1.312. <a name='LongestContinuousSubarrayWithAbsolute'></a>1438. Longest Continuous Subarray With Absolute
 
 [花花酱](https://www.bilibili.com/video/BV1Cf4y1m7aN?spm_id_from=333.999.0.0)
 
-###  1.310. <a name='BuildanArrayWithStackOperations'></a>1441 Build an Array With Stack Operations
+###  1.313. <a name='BuildanArrayWithStackOperations'></a>1441 Build an Array With Stack Operations
 
 [小明](https://www.bilibili.com/video/BV1Gg4y167ZD?spm_id_from=333.999.0.0)
 
-###  1.311. <a name='CountTripletsThatCanFormTwoArraysofEqual'></a>1442. Count Triplets That Can Form Two Arrays of Equal
+###  1.314. <a name='CountTripletsThatCanFormTwoArraysofEqual'></a>1442. Count Triplets That Can Form Two Arrays of Equal
 
 [花花酱](https://www.bilibili.com/video/BV17g4y1B7yo?spm_id_from=333.999.0.0)
 
-###  1.312. <a name='MinimumTimetoCollectAllApplesinaTree'></a>1443. Minimum Time to Collect All Apples in a Tree
+###  1.315. <a name='MinimumTimetoCollectAllApplesinaTree'></a>1443. Minimum Time to Collect All Apples in a Tree
 
 [花花酱](https://www.bilibili.com/video/BV1e541147oZ?spm_id_from=333.999.0.0)
 
-###  1.313. <a name='NumberofWaysofCuttingaPizza'></a>1444. 【二维动态🚀规划 + 前缀和🎨 + 递归】Number of Ways of Cutting a Pizza
+###  1.316. <a name='NumberofWaysofCuttingaPizza'></a>1444. 【二维动态🚀规划 + 前缀和🎨 + 递归】Number of Ways of Cutting a Pizza
 
 [花花酱](https://www.bilibili.com/video/BV1CK411W7nR?spm_id_from=333.999.0.0)
 
@@ -9191,7 +9921,7 @@ object Solution {
 }
 ```
 
-###  1.314. <a name='ConsecutiveCharacters'></a>1446 Consecutive Characters
+###  1.317. <a name='ConsecutiveCharacters'></a>1446 Consecutive Characters
 
 [小明](https://www.bilibili.com/video/BV1QA411j7Qt?spm_id_from=333.999.0.0)
 
@@ -9238,11 +9968,11 @@ class Solution:
 		return max(map(len,(pattern.findall(s))))
 ```
 
-###  1.315. <a name='CountGoodNodesinBinaryTree'></a>1448 Count Good Nodes in Binary Tree
+###  1.318. <a name='CountGoodNodesinBinaryTree'></a>1448 Count Good Nodes in Binary Tree
 
 [小明](https://www.bilibili.com/video/BV1Zg4y1q7kc?spm_id_from=333.999.0.0)
 
-###  1.316. <a name='FormLargestIntegerWithDigitsThatAdd'></a>1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add
+###  1.319. <a name='FormLargestIntegerWithDigitsThatAdd'></a>1449. 【背包 + 动态🚀规划】Form Largest Integer With Digits That Add
 
 [花花酱](https://www.bilibili.com/video/BV19Q4y1A7Rf?spm_id_from=333.999.0.0)
 
@@ -9327,19 +10057,19 @@ object P1449 {
 }
 ```
 
-###  1.317. <a name='RearrangeWordsinaSentence'></a>1451 Rearrange Words in a Sentence
+###  1.320. <a name='RearrangeWordsinaSentence'></a>1451 Rearrange Words in a Sentence
 
 [小明](https://www.bilibili.com/video/BV1UA411t7Eg?spm_id_from=333.999.0.0)
 
-###  1.318. <a name='MaximumNumberofDartsInsideofaCircularDartb'></a>1453 Maximum Number of Darts Inside of a Circular Dartb
+###  1.321. <a name='MaximumNumberofDartsInsideofaCircularDartb'></a>1453 Maximum Number of Darts Inside of a Circular Dartb
 
 [小明](https://www.bilibili.com/video/BV1Ut4y117jp?spm_id_from=333.999.0.0)
 
-###  1.319. <a name='Pseudo-PalindromicPathsinaBin'></a>1457 【回文🌈】Pseudo-Palindromic Paths in a Bin
+###  1.322. <a name='Pseudo-PalindromicPathsinaBin'></a>1457 【回文🌈】Pseudo-Palindromic Paths in a Bin
 
 [小明](https://www.bilibili.com/video/BV1t54y1t7KK?spm_id_from=333.999.0.0)
 
-###  1.320. <a name='CheckIfaStringContainsAllBinar'></a>1461 Check If a String Contains All Binar
+###  1.323. <a name='CheckIfaStringContainsAllBinar'></a>1461 Check If a String Contains All Binar
 
 [小明](https://www.bilibili.com/video/BV13Z4y1w7K9?spm_id_from=333.999.0.0)
 
@@ -9432,63 +10162,63 @@ class Solution:
 
 ```
 
-###  1.321. <a name='CherryPickupII'></a>1463 Cherry Pickup II
+###  1.324. <a name='CherryPickupII'></a>1463 Cherry Pickup II
 
 [小明](https://www.bilibili.com/video/BV1AA411s7Tc?spm_id_from=333.999.0.0)
 
-###  1.322. <a name='PaintHouseIII'></a>1473. Paint House III
+###  1.325. <a name='PaintHouseIII'></a>1473. Paint House III
 
 [花花酱](https://www.bilibili.com/video/BV15K411p7nT?spm_id_from=333.999.0.0)
 
-###  1.323. <a name='FinalPricesWithaSpecialDiscountinaSho'></a>1475. Final Prices With a Special Discount in a Sho
+###  1.326. <a name='FinalPricesWithaSpecialDiscountinaSho'></a>1475. Final Prices With a Special Discount in a Sho
 
 [花花酱](https://www.bilibili.com/video/BV1na4y1Y7VU?spm_id_from=333.999.0.0)
 
-###  1.324. <a name='KthAncestorofaTreeNode'></a>1483. Kth Ancestor of a Tree Node
+###  1.327. <a name='KthAncestorofaTreeNode'></a>1483. Kth Ancestor of a Tree Node
 
 [花花酱](https://www.bilibili.com/video/BV1kt4y1X7fk?spm_id_from=333.999.0.0)
 
-###  1.325. <a name='AvoidFloodinTheCity'></a>1488. Avoid Flood in The City
+###  1.328. <a name='AvoidFloodinTheCity'></a>1488. Avoid Flood in The City
 
 [花花酱](https://www.bilibili.com/video/BV1af4y1y7uW?spm_id_from=333.999.0.0)
 
-###  1.326. <a name='FindCriticalandPseudo-CriticalEdgesin'></a>1489. 【🍒并查集】Find Critical and Pseudo-Critical Edges in
+###  1.329. <a name='FindCriticalandPseudo-CriticalEdgesin'></a>1489. 【🍒并查集】Find Critical and Pseudo-Critical Edges in
 
 [花花酱](https://www.bilibili.com/video/BV1cV41167oi?spm_id_from=333.999.0.0)
 
-###  1.327. <a name='ThekthFactorofn'></a>1492 The kth Factor of n
+###  1.330. <a name='ThekthFactorofn'></a>1492 The kth Factor of n
 
 [小明](https://www.bilibili.com/video/BV1ha4y1H7vz?spm_id_from=333.999.0.0)
 
-###  1.328. <a name='LongestSubarrayof1sAfterDeletingOne'></a>1493. Longest Subarray of 1's After Deleting One
+###  1.331. <a name='LongestSubarrayof1sAfterDeletingOne'></a>1493. Longest Subarray of 1's After Deleting One
 
 [花花酱](https://www.bilibili.com/video/BV1rC4y18751?spm_id_from=333.999.0.0)
 
-###  1.329. <a name='MaxValueofEquation'></a>1499. Max Value of Equation
+###  1.332. <a name='MaxValueofEquation'></a>1499. Max Value of Equation
 
 [花花酱](https://www.bilibili.com/video/BV1VK411H7zy?spm_id_from=333.999.0.0)
 
-###  1.330. <a name='CanMakeArithmeticProgressionFromSequence'></a>1502 Can Make Arithmetic Progression From Sequence
+###  1.333. <a name='CanMakeArithmeticProgressionFromSequence'></a>1502 Can Make Arithmetic Progression From Sequence
 
 [小明](https://www.bilibili.com/video/BV12T4y177vU?spm_id_from=333.999.0.0)
 
-###  1.331. <a name='LastMomentBeforeAllAntsFallOutofaPlank'></a>1503 Last Moment Before All Ants Fall Out of a Plank
+###  1.334. <a name='LastMomentBeforeAllAntsFallOutofaPlank'></a>1503 Last Moment Before All Ants Fall Out of a Plank
 
 [小明](https://www.bilibili.com/video/BV1Fg4y1i7na?spm_id_from=333.999.0.0)
 
-###  1.332. <a name='MinimumPossibleIntegerAfteratMostKAdjacent'></a>1505. Minimum Possible Integer After at Most K Adjacent
+###  1.335. <a name='MinimumPossibleIntegerAfteratMostKAdjacent'></a>1505. Minimum Possible Integer After at Most K Adjacent
 
 [花花酱](https://www.bilibili.com/video/BV1YD4y1S7BQ?spm_id_from=333.999.0.0)
 
-###  1.333. <a name='RangeSumofSortedSubarraySums'></a>1508. Range Sum of Sorted Subarray Sums
+###  1.336. <a name='RangeSumofSortedSubarraySums'></a>1508. Range Sum of Sorted Subarray Sums
 
 [花花酱](https://www.bilibili.com/video/BV1fg4y1v7qe?spm_id_from=333.999.0.0)
 
-###  1.334. <a name='StoneGameIV'></a>1510 Stone Game IV
+###  1.337. <a name='StoneGameIV'></a>1510 Stone Game IV
 
 [小明](https://www.bilibili.com/video/BV1pr4y1w7ao?spm_id_from=333.999.0.0)
 
-###  1.335. <a name='DijkstraPathwithMaximumProbability'></a>1514 【Dijkstra🚗 + Bellman-Ford🌞】Path with Maximum Probability
+###  1.338. <a name='DijkstraBellman-FordPathwithMaximumProbability'></a>1514 【Dijkstra🚗 + Bellman-Ford🌞】Path with Maximum Probability
 
 [小明](https://www.bilibili.com/video/BV1Ak4y1B7yR?spm_id_from=333.999.0.0)
 
@@ -9597,35 +10327,35 @@ class Solution:
         return res
 ```
 
-###  1.336. <a name='BestPositionforaServiceCentre'></a>1515 Best Position for a Service Centre
+###  1.339. <a name='BestPositionforaServiceCentre'></a>1515 Best Position for a Service Centre
 
 [小明](https://www.bilibili.com/video/BV1UA411e7PC?spm_id_from=333.999.0.0)
 
-###  1.337. <a name='MaximumNumberofNon-OverlappingSubstrings'></a>1520. Maximum Number of Non-Overlapping Substrings
+###  1.340. <a name='MaximumNumberofNon-OverlappingSubstrings'></a>1520. Maximum Number of Non-Overlapping Substrings
 
 [花花酱](https://www.bilibili.com/video/BV1yz4y1D7p3?spm_id_from=333.999.0.0)
 
-###  1.338. <a name='NumberofGoodLeafNodesPairs'></a>1530. Number of Good Leaf Nodes Pairs
+###  1.341. <a name='NumberofGoodLeafNodesPairs'></a>1530. Number of Good Leaf Nodes Pairs
 
 [花花酱](https://www.bilibili.com/video/BV1bv411q7SD?spm_id_from=333.999.0.0)
 
-###  1.339. <a name='StringCompressionII'></a>1531. String Compression II
+###  1.342. <a name='StringCompressionII'></a>1531. String Compression II
 
 [花花酱](https://www.bilibili.com/video/BV1aK4y1v7B9?spm_id_from=333.999.0.0)
 
-###  1.340. <a name='CountGoodTriplets'></a>1534 Count Good Triplets
+###  1.343. <a name='CountGoodTriplets'></a>1534 Count Good Triplets
 
 [小明](https://www.bilibili.com/video/BV11k4y1m7rV?spm_id_from=333.999.0.0)
 
-###  1.341. <a name='FindtheWinnerofanArrayGame'></a>1535 Find the Winner of an Array Game
+###  1.344. <a name='FindtheWinnerofanArrayGame'></a>1535 Find the Winner of an Array Game
 
 [小明](https://www.bilibili.com/video/BV1Xp4y1i7ey?spm_id_from=333.999.0.0)
 
-###  1.342. <a name='GettheMaximumScore'></a>1537. Get the Maximum Score
+###  1.345. <a name='GettheMaximumScore'></a>1537. Get the Maximum Score
 
 [小梦想家](https://www.bilibili.com/video/BV1KC4y1t7P8?spm_id_from=333.999.0.0)
 
-###  1.343. <a name='KthMissingPositiveNumber'></a>1539. Kth Missing Positive Number
+###  1.346. <a name='KthMissingPositiveNumber'></a>1539. Kth Missing Positive Number
 
 [小梦想家](https://www.bilibili.com/video/BV1SC4y147Eo?spm_id_from=333.999.0.0)
 
@@ -9703,63 +10433,63 @@ class Solution:
         return list(set(range(2001)) - set(arr))[k]
 ```
 
-###  1.344. <a name='FindLongestAwesomeSubstring'></a>1542. Find Longest Awesome Substring
+###  1.347. <a name='FindLongestAwesomeSubstring'></a>1542. Find Longest Awesome Substring
 
 [花花酱](https://www.bilibili.com/video/BV1ZD4y1U79Y?spm_id_from=333.999.0.0)
 
-###  1.345. <a name='MaximumNumberofNon-OverlappingSubarraysWithSum'></a>1546. Maximum Number of Non-Overlapping Subarrays With Sum
+###  1.348. <a name='MaximumNumberofNon-OverlappingSubarraysWithSum'></a>1546. Maximum Number of Non-Overlapping Subarrays With Sum
 
 [小梦想家](https://www.bilibili.com/video/BV1LA411n7L8?spm_id_from=333.999.0.0)
 
-###  1.346. <a name='ThreeConsecutiveOdds'></a>1550. Three Consecutive Odds
+###  1.349. <a name='ThreeConsecutiveOdds'></a>1550. Three Consecutive Odds
 
 [小梦想家](https://www.bilibili.com/video/BV1aV411m7fy?spm_id_from=333.999.0.0)
 
-###  1.347. <a name='MinimumOperationstoMakeArray'></a>1551 Minimum Operations to Make Array
+###  1.350. <a name='MinimumOperationstoMakeArray'></a>1551 Minimum Operations to Make Array
 
 [小明](https://www.bilibili.com/video/BV1u64y1S7fx?spm_id_from=333.999.0.0)
 
-###  1.348. <a name='MinimumNumberofDaystoEatNOranges'></a>1553. Minimum Number of Days to Eat N Oranges
+###  1.351. <a name='MinimumNumberofDaystoEatNOranges'></a>1553. Minimum Number of Days to Eat N Oranges
 
 [花花酱](https://www.bilibili.com/video/BV1Qf4y197Zk?spm_id_from=333.999.0.0)
 
-###  1.349. <a name='ThousandSeparator'></a>1556. Thousand Separator
+###  1.352. <a name='ThousandSeparator'></a>1556. Thousand Separator
 
 [小梦想家](https://www.bilibili.com/video/BV1Ka4y177HV?spm_id_from=333.999.0.0)
 
-###  1.350. <a name='MinimumNumbersofFunctionCallstoMakeTarget'></a>1558. Minimum Numbers of Function Calls to Make Target
+###  1.353. <a name='MinimumNumbersofFunctionCallstoMakeTarget'></a>1558. Minimum Numbers of Function Calls to Make Target
 
 [花花酱](https://www.bilibili.com/video/BV1xC4y1t7Q3?spm_id_from=333.999.0.0)
 
-###  1.351. <a name='StoneGameV'></a>1563. Stone Game V 
+###  1.354. <a name='StoneGameV'></a>1563. Stone Game V 
 
 [花花酱](https://www.bilibili.com/video/BV1B54y1U77f?spm_id_from=333.999.0.0)
 
-###  1.352. <a name='NumberofWaystoReorderArraytoGetSa'></a>1569. Number of Ways to Reorder Array to Get Sa
+###  1.355. <a name='NumberofWaystoReorderArraytoGetSa'></a>1569. Number of Ways to Reorder Array to Get Sa
 
 [花花酱](https://www.bilibili.com/video/BV1pZ4y1T7TY?spm_id_from=333.999.0.0)
 
-###  1.353. <a name='NumberofWaystoSplitaString'></a>1573. Number of Ways to Split a String
+###  1.356. <a name='NumberofWaystoSplitaString'></a>1573. Number of Ways to Split a String
 
 [花花酱](https://www.bilibili.com/video/BV1bi4y1u7c3?spm_id_from=333.999.0.0)
 
-###  1.354. <a name='CheckIfStringIsTransformableWith'></a>1585. Check If String Is Transformable With
+###  1.357. <a name='CheckIfStringIsTransformableWith'></a>1585. Check If String Is Transformable With
 
 [花花酱](https://www.bilibili.com/video/BV1a54y1m75Y?spm_id_from=333.999.0.0)
 
-###  1.355. <a name='SplitaStringIntotheMaxNumberofUniqueSubstri'></a>1593. Split a String Into the Max Number of Unique Substri
+###  1.358. <a name='SplitaStringIntotheMaxNumberofUniqueSubstri'></a>1593. Split a String Into the Max Number of Unique Substri
 
 [花花酱](https://www.bilibili.com/video/BV14y4y1k77x?spm_id_from=333.999.0.0) 
 
-###  1.356. <a name='MinimumCosttoConnectTwoGroupsofPoints'></a>1595. Minimum Cost to Connect Two Groups of Points
+###  1.359. <a name='MinimumCosttoConnectTwoGroupsofPoints'></a>1595. Minimum Cost to Connect Two Groups of Points
 
 [花花酱](https://www.bilibili.com/video/BV1Xf4y1D7SW?spm_id_from=333.999.0.0)
 
-###  1.357. <a name='NumberofSetsofKNon-OverlappingLine'></a>1621. Number of Sets of K Non-Overlapping Line
+###  1.360. <a name='NumberofSetsofKNon-OverlappingLine'></a>1621. Number of Sets of K Non-Overlapping Line
 
 [花花酱](https://www.bilibili.com/video/BV1JV411y7eK?spm_id_from=333.999.0.0)
 
-###  1.358. <a name='DijkstraPathWithMinimumEffort'></a>1631. 【Dijkstra🚗 + 最小堆🌵】Path With Minimum Effort
+###  1.361. <a name='DijkstraPathWithMinimumEffort'></a>1631. 【Dijkstra🚗 + 最小堆🌵】Path With Minimum Effort
 
 [花花酱](https://www.bilibili.com/video/BV1tr4y1w725?spm_id_from=333.999.0.0)
 
@@ -10009,67 +10739,67 @@ class Solution(object):
 
 
 
-###  1.359. <a name='RankTransformofaMatrix'></a>1632 Rank Transform of a Matrix
+###  1.362. <a name='RankTransformofaMatrix'></a>1632 Rank Transform of a Matrix
 
 [小明](https://www.bilibili.com/video/BV1KX4y1F7UA?spm_id_from=333.999.0.0)
 
-###  1.360. <a name='CheckArrayFormationThrough'></a>1640 Check Array Formation Through
+###  1.363. <a name='CheckArrayFormationThrough'></a>1640 Check Array Formation Through
 
 [小明](https://www.bilibili.com/video/BV1uh411274P?spm_id_from=333.999.0.0)
 
-###  1.361. <a name='CountSortedVowelStrings'></a>1641 Count Sorted Vowel Strings
+###  1.364. <a name='CountSortedVowelStrings'></a>1641 Count Sorted Vowel Strings
 
 [小明](https://www.bilibili.com/video/BV1jf4y1k7bJ?spm_id_from=333.999.0.0)
 
-###  1.362. <a name='FurthestBuildingYouCanReach'></a>1642. Furthest Building You Can Reach
+###  1.365. <a name='FurthestBuildingYouCanReach'></a>1642. Furthest Building You Can Reach
 
 [花花酱](https://www.bilibili.com/video/BV1az4y1C7Pk?spm_id_from=333.999.0.0)
 
-###  1.363. <a name='GetMaximuminGeneratedArray'></a>1646 Get Maximum in Generated Array
+###  1.366. <a name='GetMaximuminGeneratedArray'></a>1646 Get Maximum in Generated Array
 
 [小明](https://www.bilibili.com/video/BV1W54y1s7mg?spm_id_from=333.999.0.0)
 
-###  1.364. <a name='SellDiminishing-ValuedColoredBalls'></a>1648. Sell Diminishing-Valued Colored Balls
+###  1.367. <a name='SellDiminishing-ValuedColoredBalls'></a>1648. Sell Diminishing-Valued Colored Balls
 
 [花花酱](https://www.bilibili.com/video/BV11z4y1C7PC?spm_id_from=333.999.0.0)
 
-###  1.365. <a name='CreateSortedArraythroughInstru'></a>1649 Create Sorted Array through Instru
+###  1.368. <a name='CreateSortedArraythroughInstru'></a>1649 Create Sorted Array through Instru
 
 [小明](https://www.bilibili.com/video/BV1ua4y1H7KK?spm_id_from=333.999.0.0)
 
-###  1.366. <a name='DistributeRepeatingIntegers'></a>1655. Distribute Repeating Integers
+###  1.369. <a name='DistributeRepeatingIntegers'></a>1655. Distribute Repeating Integers
 
 [花花酱](https://www.bilibili.com/video/BV1qt4y1a7Lm?spm_id_from=333.999.0.0)
 
-###  1.367. <a name='DetermineifTwoStringsAreClose'></a>1657 Determine if Two Strings Are Close
+###  1.370. <a name='DetermineifTwoStringsAreClose'></a>1657 Determine if Two Strings Are Close
 
 [小明](https://www.bilibili.com/video/BV18z4y1S779?spm_id_from=333.999.0.0)
 
-###  1.368. <a name='MinimumOperationstoReduceX'></a>1658 Minimum Operations to Reduce X
+###  1.371. <a name='MinimumOperationstoReduceX'></a>1658 Minimum Operations to Reduce X
 
 [小明](https://www.bilibili.com/video/BV18t4y1z7Hq?spm_id_from=333.999.0.0)
 
-###  1.369. <a name='MaximizeGridHappiness'></a>1659. Maximize Grid Happiness
+###  1.372. <a name='MaximizeGridHappiness'></a>1659. Maximize Grid Happiness
 
 [花花酱](https://www.bilibili.com/video/BV1kf4y1v7Js?spm_id_from=333.999.0.0)
 
-###  1.370. <a name='CheckIfTwoStringArraysareEqui'></a>1662 Check If Two String Arrays are Equi
+###  1.373. <a name='CheckIfTwoStringArraysareEqui'></a>1662 Check If Two String Arrays are Equi
 
 [小明](https://www.bilibili.com/video/BV1LV411t7v4?spm_id_from=333.999.0.0)
 
-###  1.371. <a name='SmallestStringWithAGivenNumer'></a>1663 Smallest String With A Given Numer
+###  1.374. <a name='SmallestStringWithAGivenNumer'></a>1663 Smallest String With A Given Numer
 
 [小明](https://www.bilibili.com/video/BV1gv411e7Ly?spm_id_from=333.999.0.0)
 
-###  1.372. <a name='FindtheMostCompetitiveSubseq'></a>1673 Find the Most Competitive Subseq
+###  1.375. <a name='FindtheMostCompetitiveSubseq'></a>1673 Find the Most Competitive Subseq
 
 [小明](https://www.bilibili.com/video/BV1yK4y1H7ni?spm_id_from=333.999.0.0)
 
-###  1.373. <a name='MinimumMovestoMakeArrayComplement'></a>1674. Minimum Moves to Make Array Complement
+###  1.376. <a name='MinimumMovestoMakeArrayComplement'></a>1674. Minimum Moves to Make Array Complement
 
 [花花酱](https://www.bilibili.com/video/BV1qz4y1k7Cm?spm_id_from=333.999.0.0)
 
-###  1.374. <a name='MinimizeDeviationinArray'></a>1675. Minimize Deviation in Array
+###  1.377. <a name='MinimizeDeviationinArray'></a>1675. Minimize Deviation in Array
 
 [花花酱](https://www.bilibili.com/video/BV15541157p6?spm_id_from=333.999.0.0)
 
@@ -10111,23 +10841,23 @@ class Solution:
 
 ```
 
-###  1.375. <a name='MaxNumberofK-SumPairs'></a>1679 Max Number of K-Sum Pairs】
+###  1.378. <a name='MaxNumberofK-SumPairs'></a>1679 Max Number of K-Sum Pairs】
 
 [小明](https://www.bilibili.com/video/BV16t4y1z7kY?spm_id_from=333.999.0.0)
 
-###  1.376. <a name='ConcatenationofConsecutiveBina'></a>1680 Concatenation of Consecutive Bina
+###  1.379. <a name='ConcatenationofConsecutiveBina'></a>1680 Concatenation of Consecutive Bina
 
 [小明](https://www.bilibili.com/video/BV1Py4y117o5?spm_id_from=333.999.0.0)
 
-###  1.377. <a name='MinimumIncompatibility'></a>1681. Minimum Incompatibility
+###  1.380. <a name='MinimumIncompatibility'></a>1681. Minimum Incompatibility
 
 [花花酱](https://www.bilibili.com/video/BV16p4y1z79z?spm_id_from=333.999.0.0)
 
-###  1.378. <a name='StoneGameVII'></a>1690. Stone Game VII
+###  1.381. <a name='StoneGameVII'></a>1690. Stone Game VII
 
 [花花酱](https://www.bilibili.com/video/BV1wf4y1e7xH?spm_id_from=333.999.0.0)
 
-###  1.379. <a name='On-kO1JumpGameVI'></a>1696. 【动态🚀规划 O(n-k) * 优先队列 O(1) + 最小堆🌵】 Jump Game VI
+###  1.382. <a name='On-kO1JumpGameVI'></a>1696. 【动态🚀规划 O(n-k) * 优先队列 O(1) + 最小堆🌵】 Jump Game VI
 
 [花花酱](https://www.bilibili.com/video/BV1554y1t7Tz?spm_id_from=333.999.0.0)
 
@@ -10210,47 +10940,197 @@ class Solution:
         return res
 ```
 
-###  1.380. <a name='DetermineifStringHalvesAreAlike'></a>1704 Determine if String Halves Are Alike
+###  1.383. <a name='DetermineifStringHalvesAreAlike'></a>1704 Determine if String Halves Are Alike
 
 [小明](https://www.bilibili.com/video/BV1WA41157sf?spm_id_from=333.999.0.0)
 
-###  1.381. <a name='MaximumXORWithanElementFromArray'></a>1707. Maximum XOR With an Element From Array
+###  1.384. <a name='MaximumXORWithanElementFromArray'></a>1707. Maximum XOR With an Element From Array
 
 [花花酱](https://www.bilibili.com/video/BV13v411t742?spm_id_from=333.999.0.0)
 
-###  1.382. <a name='MinimumOperationstoMakeaSubsequence'></a>1713. Minimum Operations to Make a Subsequence
+###  1.385. <a name='MinimumOperationstoMakeaSubsequence'></a>1713. Minimum Operations to Make a Subsequence
 
 [花花酱](https://www.bilibili.com/video/BV1Yy4y127DQ?spm_id_from=333.999.0.0)
 
-###  1.383. <a name='SwappingNodesinaLinkedList'></a>1721 Swapping Nodes in a Linked List
+###  1.386. <a name='SwappingNodesinaLinkedList'></a>1721 Swapping Nodes in a Linked List
 
 [小明](https://www.bilibili.com/video/BV1Ji4y1P7Xc?spm_id_from=333.999.0.0)
 
-###  1.384. <a name='LargestSubmatrixWithRearrangements'></a>1727. Largest Submatrix With Rearrangements
+###  1.387. <a name='LargestSubmatrixWithRearrangements'></a>1727. Largest Submatrix With Rearrangements
 
 [花花酱](https://www.bilibili.com/video/BV1XT4y1N7gy?spm_id_from=333.999.0.0)
 
-###  1.385. <a name='PalindromePartitioningIV'></a>1745. 【回文🌈】Palindrome Partitioning IV
+###  1.388. <a name='-1'></a>1734 【位运算😜】
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.74nhfv2c3vc0.webp)
+
+```py
+
+class Solution:
+    def decode(self, encoded: List[int]) -> List[int]:
+        n = len(encoded) + 1
+        total = reduce(xor, range(1, n + 1))
+        odd = 0
+        for i in range(1, n - 1, 2):
+            odd ^= encoded[i]
+        
+        perm = [total ^ odd]
+        for i in range(n - 1):
+            perm.append(perm[-1] ^ encoded[i])
+        
+        return perm
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/jie-ma-yi-huo-hou-de-pai-lie-by-leetcode-9gw4/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.34qwdjugdos0.webp)
+
+```py
+
+class Solution:
+    def decode(self, encoded: List[int]) -> List[int]:
+        n, a, b = len(encoded) + 1, 0, 0
+        ans = [0] * n
+        for i in range(0,n - 1,2):
+            a ^= encoded[i]
+        for i in range(1,n + 1):
+            b ^= i
+        ans[n - 1] =  a ^ b
+        for i in range(n - 2,-1,-1):
+            ans[i] = ans[i + 1] ^ encoded[i]
+        return ans
+
+作者：AC_OIer
+链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/gong-shui-san-xie-note-bie-pian-li-yong-zeh6o/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ah0nekr8934.webp)
+
+```py
+class Solution:
+    def decode(self, encoded: List[int]) -> List[int]:
+        n = len(encoded) + 1
+        all_xor = 0     #题目的说法有点不清晰
+        for x in range(1, n + 1):
+            all_xor ^= x
+        
+        all_xor_without_first = 0
+        for i in range (1, n, 2):
+            e = encoded[i]
+            all_xor_without_first ^= e
+        
+        first = all_xor ^ all_xor_without_first
+        res = [first]
+        for e in encoded:
+            res.append(res[-1] ^ e) 
+        return res
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/cpython3-wei-yun-suan-yi-huo-xing-zhi-sh-3vus/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+首先找到所有值的异或结果，就是从1到encoded长度+1的所有值的异或结果
+
+再找到第一个值的异或结果，先找规律
+ans 是前 n 个正整数的排列
+encoded[0] = ans[0] ^ ans[1]
+encoded[1] = ans[1] ^ ans[2]
+encoded[2] = ans[2] ^ ans[3]
+encoded[3] = ans[3] ^ ans[4]
+……
+encoded[n] = ans[n] ^ ans[n+1]
+
+根据上面的规律，发现encoded数组所有奇数值的异或结果就是答案数组中除去第一个值的结果
+encoded[1] = ans[1] ^ ans[2]
+encoded[3] = ans[3] ^ ans[4]
+encoded[5] = ans[5] ^ ans[6]
+……
+encoded[n] = ans[n] ^ ans[n+1]
+
+将encoded奇数值的异或结果与所有值的异或结果进行异或，得到第一个值
+
+根据第一个值进行递推找到最终答案数组
+
+代码
+
+class Solution:
+    def decode(self, encoded: List[int]) -> List[int]:
+
+        # 所有值异或结果
+        allxor = 0
+        for num in range(1, len(encoded) + 2):
+            allxor = allxor ^ num
+
+        # 除了第一个值异或结果，就encoded列表中 奇数数字异或结果
+        oddxor = 0
+        for num in range(1, len(encoded) +1, 2):
+            oddxor = oddxor ^ encoded[num]
+        
+        # 最终找到答案列表第一个值
+        last = oddxor ^ allxor
+        ans = [last]
+        # 根据第一个值递推出整个列表
+        for i in range(len(encoded)):
+            last = last ^ encoded[i]
+            ans.append(last)
+        return ans
+
+作者：lovely-9
+链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/1734-jie-ma-yi-huo-hou-de-pai-lie-xian-z-g3pm/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def decode(self, encoded: List[int]) -> List[int]:
+        result = 0
+        retret = 0
+        #      全排列的整数数组,按照单数下标取encoded中值异或 相当于 对原排列数组取除第一个值之外的所有值异或
+        for vv in range(1, len(encoded), 2):
+            result ^= encoded[vv]
+        #      将encoded中单数值异或后与1~n异或,结果就是缺失的值也就是encoded的第一个值
+        for vv in range(1, len(encoded) + 2):
+            retret ^= vv
+        result ^= retret
+        resres = [result]
+        #      得到encoded第一个值后与enconded每个值异或就得到原全排列数组
+        for vv in range(len(encoded)):
+            resres.append(encoded[vv] ^ resres[-1])
+        return resres
+
+作者：wu-yi-xh
+链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/python-by-wu-yi-xh-rgb4/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.389. <a name='PalindromePartitioningIV'></a>1745. 【回文🌈】Palindrome Partitioning IV
 
 [花花酱](https://www.bilibili.com/video/BV1yo4y1R75T?spm_id_from=333.999.0.0)
 
-###  1.386. <a name='MinimumLimitofBallsinaBag'></a>1760. Minimum Limit of Balls in a Bag
+###  1.390. <a name='MinimumLimitofBallsinaBag'></a>1760. Minimum Limit of Balls in a Bag
 
 [花花酱](https://www.bilibili.com/video/BV1bK4y1H7Ly?spm_id_from=333.999.0.0)
 
-###  1.387. <a name='MaximumScorefromPerformingMultiplication'></a>1770. Maximum Score from Performing Multiplication
+###  1.391. <a name='MaximumScorefromPerformingMultiplication'></a>1770. Maximum Score from Performing Multiplication
 
 [花花酱](https://www.bilibili.com/video/BV1Li4y1T7j6?spm_id_from=333.999.0.0)
 
-###  1.388. <a name='MaximizePalindromeLengthFromSubsequences'></a>1771. 【回文🌈】Maximize Palindrome Length From Subsequences
+###  1.392. <a name='MaximizePalindromeLengthFromSubsequences'></a>1771. 【回文🌈】Maximize Palindrome Length From Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV1Cp4y1H7Xq?spm_id_from=333.999.0.0)
 
-###  1.389. <a name='EqualSumArraysWithMinimumNumberofOperatio'></a>1775. Equal Sum Arrays With Minimum Number of Operatio
+###  1.393. <a name='EqualSumArraysWithMinimumNumberofOperatio'></a>1775. Equal Sum Arrays With Minimum Number of Operatio
 
 [花花酱](https://www.bilibili.com/video/BV1Di4y1T7nF?spm_id_from=333.999.0.0)
 
-###  1.390. <a name='DijkstraNumberofRestrictedPathsFromFirsttoLastNode'></a>1786. 【Dijkstra🚗】 Number of Restricted Paths From First to Last Node
+###  1.394. <a name='DijkstraNumberofRestrictedPathsFromFirsttoLastNode'></a>1786. 【Dijkstra🚗】 Number of Restricted Paths From First to Last Node
 
 [花花酱](https://www.bilibili.com/video/BV1Df4y147TB?spm_id_from=333.999.0.0)
 
@@ -10455,31 +11335,31 @@ class Solution:
 
 ```
 
-###  1.391. <a name='MaximumAveragePassRatio'></a>1792. Maximum Average Pass Ratio
+###  1.395. <a name='MaximumAveragePassRatio'></a>1792. Maximum Average Pass Ratio
 
 [花花酱](https://www.bilibili.com/video/BV1qb4y197zc?spm_id_from=333.999.0.0)
 
-###  1.392. <a name='MaximizeScoreAfterNOperations'></a>1799. Maximize Score After N Operations
+###  1.396. <a name='MaximizeScoreAfterNOperations'></a>1799. Maximize Score After N Operations
 
 [花花酱](https://www.bilibili.com/video/BV1Sf4y1x7Cy?spm_id_from=333.999.0.0)
 
-###  1.393. <a name='MaximumNumberofGroupsGettingFreshDonuts'></a>1815. Maximum Number of Groups Getting Fresh Donuts
+###  1.397. <a name='MaximumNumberofGroupsGettingFreshDonuts'></a>1815. Maximum Number of Groups Getting Fresh Donuts
 
 [花花酱](https://www.bilibili.com/video/BV1CU4y187tk?spm_id_from=333.999.0.0)
 
-###  1.394. <a name='FrequencyoftheMostFrequentElement'></a>1838. Frequency of the Most Frequent Element
+###  1.398. <a name='FrequencyoftheMostFrequentElement'></a>1838. Frequency of the Most Frequent Element
 
 [花花酱](https://www.bilibili.com/video/BV1Ai4y1P7Yt?spm_id_from=333.999.0.0)
 
-###  1.395. <a name='ClosestRoom'></a>1847. Closest Room
+###  1.399. <a name='ClosestRoom'></a>1847. Closest Room
 
 [花花酱](https://www.bilibili.com/video/BV1cy4y1x7sz?spm_id_from=333.999.0.0)
 
-###  1.396. <a name='StoneGameVIII'></a>1872. Stone Game VIII
+###  1.400. <a name='StoneGameVIII'></a>1872. Stone Game VIII
 
 [花花酱](https://www.bilibili.com/video/BV1vb4y1z7wx?spm_id_from=333.999.0.0)
 
-###  1.397. <a name='1976.Dijkstra'></a> 1976. 【Dijkstra🚗】到达目的地的方案数
+###  1.401. <a name='1976.Dijkstra'></a> 1976. 【Dijkstra🚗】到达目的地的方案数
 
 https://cloud.tencent.com/developer/article/1873122
 

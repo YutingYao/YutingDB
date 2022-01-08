@@ -36,8 +36,8 @@
 	* 1.34. [133. Clone Graph](#CloneGraph)
 	* 1.35. [134. Gas Station](#GasStation)
 	* 1.36. [138 Copy List with Random Pointer](#CopyListwithRandomPointer)
-	* 1.37. [136-Single Number](#SingleNumber)
-	* 1.38. [137 Single Number II](#SingleNumberII)
+	* 1.37. [136 【位运算😜】Single Number](#SingleNumber)
+	* 1.38. [137 【位运算😜】Single Number II](#SingleNumberII)
 	* 1.39. [139 【动态🚀规划 + 背包】Word Break](#WordBreak)
 	* 1.40. [140 Word Break II](#WordBreakII)
 	* 1.41. [141-Linked List Cycle](#LinkedListCycle)
@@ -63,22 +63,22 @@
 	* 1.61. [166. Fraction to Recurring Decimal](#FractiontoRecurringDecimal)
 	* 1.62. [167-Two Sum II - Input array is sorted](#TwoSumII-Inputarrayissorted)
 	* 1.63. [168-Excel Sheet Column Title](#ExcelSheetColumnTitle)
-	* 1.64. [169. Majority Element](#MajorityElement)
+	* 1.64. [169. 【位运算😜】Majority Element](#MajorityElement)
 	* 1.65. [171. Excel Sheet Column Number](#ExcelSheetColumnNumber)
 	* 1.66. [172-Factorial Trailing Zeroes](#FactorialTrailingZeroes)
 	* 1.67. [173 【构造🏰】Binary Search Tree Iterator](#BinarySearchTreeIterator)
 	* 1.68. [174 Dungeon Game](#DungeonGame)
 	* 1.69. [179 Largest Number](#LargestNumber)
 	* 1.70. [186. Reverse Words in a String II](#ReverseWordsinaStringII)
-	* 1.71. [187 Repeated DNA Sequences](#RepeatedDNASequences)
+	* 1.71. [187 【位运算😜】Repeated DNA Sequences](#RepeatedDNASequences)
 	* 1.72. [188 【动态🚀规划】Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
 	* 1.73. [189. Rotate Array](#RotateArray)
-	* 1.74. [190. Reverse Bits](#ReverseBits)
+	* 1.74. [190. 【位运算😜】Reverse Bits](#ReverseBits)
 	* 1.75. [191 Number of 1 Bits](#Numberof1Bits)
 	* 1.76. [198. 【动态🚀规划】House Robber 198-打家劫舍](#HouseRobber198-)
 	* 1.77. [199 Binary Tree Right Side View](#BinaryTreeRightSideView)
 	* 1.78. [200 【🍒并查集】岛屿数量](#-1)
-	* 1.79. [201 Bitwise AND of Numbers Range](#BitwiseANDofNumbersRange)
+	* 1.79. [201 【位运算😜】Bitwise AND of Numbers Range](#BitwiseANDofNumbersRange)
 	* 1.80. [202. 快乐数 Happy Number](#HappyNumber)
 	* 1.81. [203. Remove Linked List Elements](#RemoveLinkedListElements)
 	* 1.82. [204-Count Primes](#CountPrimes)
@@ -106,7 +106,7 @@
 	* 1.104. [228 Summary Ranges](#SummaryRanges)
 	* 1.105. [229. Majority Element II](#MajorityElementII)
 	* 1.106. [230 Kth Smallest Element in a B](#KthSmallestElementinaB)
-	* 1.107. [231. Power of Two](#PowerofTwo)
+	* 1.107. [231. 【位运算😜】Power of Two](#PowerofTwo)
 	* 1.108. [232-【构造🏰】Implement Queue using Stacks](#ImplementQueueusingStacks)
 	* 1.109. [234. 【回文🌈】Palindrome Linked List](#PalindromeLinkedList)
 	* 1.110. [235. Lowest Common Ancestor of a Binary Search Tree](#LowestCommonAncestorofaBinarySearchTree)
@@ -120,10 +120,10 @@
 	* 1.118. [246. Strobogrammatic Number](#StrobogrammaticNumber)
 	* 1.119. [257-二叉树的所有路径](#-1)
 	* 1.120. [258. Add Digits](#AddDigits)
-	* 1.121. [260-只出现一次的数字 III](#III-1)
+	* 1.121. [260-【位运算😜】只出现一次的数字 III](#III-1)
 	* 1.122. [263 Ugly Number](#UglyNumber)
 	* 1.123. [264. 【动态🚀规划 + 3指针】Ugly Number II](#UglyNumberII)
-	* 1.124. [268 Missing Number](#MissingNumber)
+	* 1.124. [268 【位运算😜】Missing Number](#MissingNumber)
 	* 1.125. [270. Closest Binary Search Tree Value](#ClosestBinarySearchTreeValue)
 	* 1.126. [274 H-Index](#H-Index)
 	* 1.127. [278. First Bad Version](#FirstBadVersion)
@@ -132,7 +132,7 @@
 	* 1.130. [283. Move Zeros](#MoveZeros)
 	* 1.131. [284 Peeking Iterator](#PeekingIterator)
 	* 1.132. [287 Find the Duplicate Number](#FindtheDuplicateNumber)
-	* 1.133. [289. Game of Life](#GameofLife)
+	* 1.133. [289. 【位运算😜】Game of Life](#GameofLife)
 	* 1.134. [290. Word Pattern](#WordPattern)
 	* 1.135. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
 	* 1.136. [299. Bulls and Cows](#BullsandCows)
@@ -146,108 +146,110 @@
 	* 1.144. [312 Burst Balloons](#BurstBalloons)
 	* 1.145. [315. Count of Smaller Numbers After Self](#CountofSmallerNumbersAfterSelf)
 	* 1.146. [316 【贪心🧡】Remove Duplicate Letters](#RemoveDuplicateLetters)
-	* 1.147. [319](#-1)
-	* 1.148. [321. Create Maximum Number](#CreateMaximumNumber)
-	* 1.149. [322. 【动态🚀规划 + 背包 + dfs】Coin Change](#dfsCoinChange)
-	* 1.150. [324](#-1)
-	* 1.151. [326. Power of Three](#PowerofThree)
-	* 1.152. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
-	* 1.153. [329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix](#dfsLongestIncreasingPathinaMatrix)
-	* 1.154. [332 Reconstruct Itinerary](#ReconstructItinerary)
-	* 1.155. [334 Increasing Triplet Subseque](#IncreasingTripletSubseque)
-	* 1.156. [337 House Robber III](#HouseRobberIII)
-	* 1.157. [338 Counting Bits](#CountingBits)
-	* 1.158. [342. Power of Four](#PowerofFour)
-	* 1.159. [343-整数拆分](#-1)
-	* 1.160. [344. Reverse String](#ReverseString)
-	* 1.161. [345. Reverse Vowels of a String](#ReverseVowelsofaString)
-	* 1.162. [346 Moving Average from Data Stream](#MovingAveragefromDataStream)
-	* 1.163. [347. 【最小堆🌵】Top K Frequent Elements](#TopKFrequentElements)
-	* 1.164. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
-	* 1.165. [350. 【动态🚀规划 + 双指针 + 哈希表】Intersection of Two Arrays II](#IntersectionofTwoArraysII)
-	* 1.166. [ 351 【🍒并查集】Android Unlocking Pattern](#351AndroidUnlockingPattern)
-	* 1.167. [355. 设计推特 Design Twitter](#DesignTwitter)
-	* 1.168. [359 Logger Rate Limiter](#LoggerRateLimiter)
-	* 1.169. [367. Valid Perfect Square](#ValidPerfectSquare)
-	* 1.170. [368 Largest Divisible Subset](#LargestDivisibleSubset)
-	* 1.171. [373. Find K Pairs with Smallest Sums查找和最小的k对数字](#FindKPairswithSmallestSumsk)
-	* 1.172. [374. Guess Number Higher or Lower](#GuessNumberHigherorLower)
-	* 1.173. [376-摆动序列](#-1)
-	* 1.174. [377. 【动态🚀规划】Combination Sum IV](#CombinationSumIV)
-		* 1.174.1. [类似题目：416题，494题，不可以重复，377重复](#416494377)
-	* 1.175. [378-【最小堆🌵】有序矩阵中第K小的元素](#K)
-	* 1.176. [380 Insert Delete GetRandom O(1)](#InsertDeleteGetRandomO1)
-	* 1.177. [382 Linked List Random Node](#LinkedListRandomNode)
-	* 1.178. [383 Ransom Note](#RansomNote)
-	* 1.179. [386](#-1)
-	* 1.180. [387. First Unique Character in a String](#FirstUniqueCharacterinaString)
-	* 1.181. [389. Find the Difference](#FindtheDifference)
-	* 1.182. [391. Perfect Rectangle](#PerfectRectangle)
-	* 1.183. [392. 【动态🚀规划】Is Subsequence](#IsSubsequence)
-	* 1.184. [393. UTF-8 Validation](#UTF-8Validation)
-	* 1.185. [394 Decode String](#DecodeString)
-	* 1.186. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
-	* 1.187. [399. 【🍒并查集 + floyd 🌞】Evaluate Division](#floydEvaluateDivision)
-	* 1.188. [402 Remove K Digits](#RemoveKDigits)
-	* 1.189. [404. Sum of Left Leaves](#SumofLeftLeaves)
-	* 1.190. [405-Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
-	* 1.191. [406. Queue Reconstruction by Height](#QueueReconstructionbyHeight)
-	* 1.192. [408. Valid Word Abbreviation](#ValidWordAbbreviation)
-	* 1.193. [409. 【回文🌈】Longest Palindrome](#LongestPalindrome)
-	* 1.194. [410. Split Array Largest Sum](#SplitArrayLargestSum)
-	* 1.195. [412. Fizz Buzz](#FizzBuzz)
-	* 1.196. [413-【动态🚀规划】等差数列划分](#-1)
-	* 1.197. [414. Third Maximum Number](#ThirdMaximumNumber)
-	* 1.198. [415-Add Strings](#AddStrings)
-	* 1.199. [416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum](#dfsstartIforPartitionEqualSubsetSum)
-		* 1.199.1. [相似题目：494题](#494)
-	* 1.200. [417. 【构造🏰】Pacific Atlantic Water Flow](#PacificAtlanticWaterFlow)
-	* 1.201. [419. Battleships in a Board](#BattleshipsinaBoard)
-	* 1.202. [421 Maximum XOR of Two Numbers in an Array](#MaximumXORofTwoNumbersinanArray)
-	* 1.203. [423 Reconstruct Original Digits from English](#ReconstructOriginalDigitsfromEnglish)
-	* 1.204. [424. 替换后的最长重复字符 Longest Repeating Character Replacem](#LongestRepeatingCharacterReplacem)
-	* 1.205. [429. N-ary Tree Level Order Traversal](#N-aryTreeLevelOrderTraversal)
-	* 1.206. [430 Flatten a Multilevel Doubly Linked List](#FlattenaMultilevelDoublyLinkedList)
-	* 1.207. [432. All O`one Data Structure](#AllOoneDataStructure)
-	* 1.208. [435-Non-overlapping Intervals](#Non-overlappingIntervals)
-	* 1.209. [436 Find Right Interval](#FindRightInterval)
-	* 1.210. [437 【前缀和🎨】Path Sum III](#PathSumIII)
-	* 1.211. [438. 【滑动窗口🔹】Find All Anagrams in a String](#FindAllAnagramsinaString)
-	* 1.212. [441 Arranging Coins](#ArrangingCoins)
-	* 1.213. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
-	* 1.214. [443. String Compression](#StringCompression)
-	* 1.215. [445-Add Two Numbers II](#AddTwoNumbersII)
-	* 1.216. [447. Number of Boomerangs](#NumberofBoomerangs)
-	* 1.217. [448. Find All Numbers Disappeared in an Array](#FindAllNumbersDisappearedinanArray)
-	* 1.218. [449. Serialize and Deserialize BST](#SerializeandDeserializeBST)
-	* 1.219. [450. Delete Node in a BST](#DeleteNodeinaBST)
-	* 1.220. [451 Sort Characters By Frequency](#SortCharactersByFrequency)
-	* 1.221. [454 4Sum II](#SumII)
-	* 1.222. [452. 【贪心🧡】Minimum Number of Arrows to Burst Balloons](#MinimumNumberofArrowstoBurstBalloons)
-	* 1.223. [455-Assign Cookies](#AssignCookies)
-	* 1.224. [456 132 Pattern](#Pattern)
-	* 1.225. [458 Poor Pigs](#PoorPigs)
-	* 1.226. [459 Repeated Substring Pattern](#RepeatedSubstringPattern)
-	* 1.227. [460. 【构造🏰】LFU Cache / O(1)](#LFUCacheO1)
-	* 1.228. [461 Hamming Distance](#HammingDistance)
-	* 1.229. [463 Island Perimeter](#IslandPerimeter)
-	* 1.230. [464. Can I Win](#CanIWin)
-	* 1.231. [466. 统计重复个数 Count The Repetitions](#CountTheRepetitions)
-	* 1.232. [468 Validate IP Address](#ValidateIPAddress)
-	* 1.233. [470. Implement Rand10() Using Rand7()](#ImplementRand10UsingRand7)
-	* 1.234. [475. Heaters](#Heaters)
-	* 1.235. [476. Number Complement](#NumberComplement)
-	* 1.236. [477. Total Hamming Distance](#TotalHammingDistance)
-	* 1.237. [478 Generate Random Point in a Circle](#GenerateRandomPointinaCircle)
-	* 1.238. [480. 【滑动窗口🔹】Sliding Window Median](#SlidingWindowMedian)
-	* 1.239. [484 Find Permutation](#FindPermutation)
-	* 1.240. [485. Max Consecutive Ones](#MaxConsecutiveOnes)
-	* 1.241. [486. Predict the Winner](#PredicttheWinner)
-	* 1.242. [490 The Maze](#TheMaze)
-	* 1.243. [494. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Target Sum](#dfsstartIforTargetSum)
-	* 1.244. [495 Teemo Attacking](#TeemoAttacking)
-	* 1.245. [496. 下一个更大元素 I (Next Greater Element I)](#INextGreaterElementI)
-	* 1.246. [497 Random Point in Non-overlapping](#RandomPointinNon-overlapping)
+	* 1.147. [318【位运算😜】](#-1)
+	* 1.148. [319](#-1)
+	* 1.149. [321. Create Maximum Number](#CreateMaximumNumber)
+	* 1.150. [322. 【动态🚀规划 + 背包 + dfs】Coin Change](#dfsCoinChange)
+	* 1.151. [324](#-1)
+	* 1.152. [326. Power of Three](#PowerofThree)
+	* 1.153. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
+	* 1.154. [329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix](#dfsLongestIncreasingPathinaMatrix)
+	* 1.155. [332 Reconstruct Itinerary](#ReconstructItinerary)
+	* 1.156. [334 Increasing Triplet Subseque](#IncreasingTripletSubseque)
+	* 1.157. [337 House Robber III](#HouseRobberIII)
+	* 1.158. [338 【位运算😜】Counting Bits](#CountingBits)
+	* 1.159. [342. 【位运算😜】Power of Four](#PowerofFour)
+	* 1.160. [343-整数拆分](#-1)
+	* 1.161. [344. Reverse String](#ReverseString)
+	* 1.162. [345. Reverse Vowels of a String](#ReverseVowelsofaString)
+	* 1.163. [346 Moving Average from Data Stream](#MovingAveragefromDataStream)
+	* 1.164. [347. 【最小堆🌵】Top K Frequent Elements](#TopKFrequentElements)
+	* 1.165. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
+	* 1.166. [350. 【动态🚀规划 + 双指针 + 哈希表】Intersection of Two Arrays II](#IntersectionofTwoArraysII)
+	* 1.167. [ 351 【🍒并查集】Android Unlocking Pattern](#351AndroidUnlockingPattern)
+	* 1.168. [355. 设计推特 Design Twitter](#DesignTwitter)
+	* 1.169. [359 Logger Rate Limiter](#LoggerRateLimiter)
+	* 1.170. [367. Valid Perfect Square](#ValidPerfectSquare)
+	* 1.171. [368 Largest Divisible Subset](#LargestDivisibleSubset)
+	* 1.172. [371【位运算😜】](#-1)
+	* 1.173. [373. Find K Pairs with Smallest Sums查找和最小的k对数字](#FindKPairswithSmallestSumsk)
+	* 1.174. [374. Guess Number Higher or Lower](#GuessNumberHigherorLower)
+	* 1.175. [376-摆动序列](#-1)
+	* 1.176. [377. 【动态🚀规划】Combination Sum IV](#CombinationSumIV)
+		* 1.176.1. [类似题目：416题，494题，不可以重复，377重复](#416494377)
+	* 1.177. [378-【最小堆🌵】有序矩阵中第K小的元素](#K)
+	* 1.178. [380 Insert Delete GetRandom O(1)](#InsertDeleteGetRandomO1)
+	* 1.179. [382 Linked List Random Node](#LinkedListRandomNode)
+	* 1.180. [383 Ransom Note](#RansomNote)
+	* 1.181. [386](#-1)
+	* 1.182. [387. First Unique Character in a String](#FirstUniqueCharacterinaString)
+	* 1.183. [389. 【位运算😜】Find the Difference](#FindtheDifference)
+	* 1.184. [391. Perfect Rectangle](#PerfectRectangle)
+	* 1.185. [392. 【动态🚀规划】Is Subsequence](#IsSubsequence)
+	* 1.186. [393. UTF-8 Validation](#UTF-8Validation)
+	* 1.187. [394 Decode String](#DecodeString)
+	* 1.188. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
+	* 1.189. [399. 【🍒并查集 + floyd 🌞】Evaluate Division](#floydEvaluateDivision)
+	* 1.190. [402 Remove K Digits](#RemoveKDigits)
+	* 1.191. [404. Sum of Left Leaves](#SumofLeftLeaves)
+	* 1.192. [405 【位运算😜】Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
+	* 1.193. [406. Queue Reconstruction by Height](#QueueReconstructionbyHeight)
+	* 1.194. [408. Valid Word Abbreviation](#ValidWordAbbreviation)
+	* 1.195. [409. 【回文🌈】Longest Palindrome](#LongestPalindrome)
+	* 1.196. [410. Split Array Largest Sum](#SplitArrayLargestSum)
+	* 1.197. [412. Fizz Buzz](#FizzBuzz)
+	* 1.198. [413-【动态🚀规划】等差数列划分](#-1)
+	* 1.199. [414. Third Maximum Number](#ThirdMaximumNumber)
+	* 1.200. [415-Add Strings](#AddStrings)
+	* 1.201. [416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum](#dfsstartIforPartitionEqualSubsetSum)
+		* 1.201.1. [相似题目：494题](#494)
+	* 1.202. [417. 【构造🏰】Pacific Atlantic Water Flow](#PacificAtlanticWaterFlow)
+	* 1.203. [419. Battleships in a Board](#BattleshipsinaBoard)
+	* 1.204. [421 Maximum XOR of Two Numbers in an Array](#MaximumXORofTwoNumbersinanArray)
+	* 1.205. [423 Reconstruct Original Digits from English](#ReconstructOriginalDigitsfromEnglish)
+	* 1.206. [424. 替换后的最长重复字符 Longest Repeating Character Replacem](#LongestRepeatingCharacterReplacem)
+	* 1.207. [429. N-ary Tree Level Order Traversal](#N-aryTreeLevelOrderTraversal)
+	* 1.208. [430 Flatten a Multilevel Doubly Linked List](#FlattenaMultilevelDoublyLinkedList)
+	* 1.209. [432. All O`one Data Structure](#AllOoneDataStructure)
+	* 1.210. [435-Non-overlapping Intervals](#Non-overlappingIntervals)
+	* 1.211. [436 Find Right Interval](#FindRightInterval)
+	* 1.212. [437 【前缀和🎨】Path Sum III](#PathSumIII)
+	* 1.213. [438. 【滑动窗口🔹】Find All Anagrams in a String](#FindAllAnagramsinaString)
+	* 1.214. [441 Arranging Coins](#ArrangingCoins)
+	* 1.215. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
+	* 1.216. [443. String Compression](#StringCompression)
+	* 1.217. [445-Add Two Numbers II](#AddTwoNumbersII)
+	* 1.218. [447. Number of Boomerangs](#NumberofBoomerangs)
+	* 1.219. [448. Find All Numbers Disappeared in an Array](#FindAllNumbersDisappearedinanArray)
+	* 1.220. [449. Serialize and Deserialize BST](#SerializeandDeserializeBST)
+	* 1.221. [450. Delete Node in a BST](#DeleteNodeinaBST)
+	* 1.222. [451 Sort Characters By Frequency](#SortCharactersByFrequency)
+	* 1.223. [454 4Sum II](#SumII)
+	* 1.224. [452. 【贪心🧡】Minimum Number of Arrows to Burst Balloons](#MinimumNumberofArrowstoBurstBalloons)
+	* 1.225. [455-Assign Cookies](#AssignCookies)
+	* 1.226. [456 132 Pattern](#Pattern)
+	* 1.227. [458 Poor Pigs](#PoorPigs)
+	* 1.228. [459 Repeated Substring Pattern](#RepeatedSubstringPattern)
+	* 1.229. [460. 【构造🏰】LFU Cache / O(1)](#LFUCacheO1)
+	* 1.230. [461 【位运算😜】Hamming Distance](#HammingDistance)
+	* 1.231. [463 Island Perimeter](#IslandPerimeter)
+	* 1.232. [464. Can I Win](#CanIWin)
+	* 1.233. [466. 统计重复个数 Count The Repetitions](#CountTheRepetitions)
+	* 1.234. [468 Validate IP Address](#ValidateIPAddress)
+	* 1.235. [470. Implement Rand10() Using Rand7()](#ImplementRand10UsingRand7)
+	* 1.236. [475. Heaters](#Heaters)
+	* 1.237. [476. 【位运算😜】Number Complement](#NumberComplement)
+	* 1.238. [477. 【位运算😜】Total Hamming Distance](#TotalHammingDistance)
+	* 1.239. [478 Generate Random Point in a Circle](#GenerateRandomPointinaCircle)
+	* 1.240. [480. 【滑动窗口🔹】Sliding Window Median](#SlidingWindowMedian)
+	* 1.241. [484 Find Permutation](#FindPermutation)
+	* 1.242. [485. Max Consecutive Ones](#MaxConsecutiveOnes)
+	* 1.243. [486. Predict the Winner](#PredicttheWinner)
+	* 1.244. [490 The Maze](#TheMaze)
+	* 1.245. [494. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Target Sum](#dfsstartIforTargetSum)
+	* 1.246. [495 Teemo Attacking](#TeemoAttacking)
+	* 1.247. [496. 下一个更大元素 I (Next Greater Element I)](#INextGreaterElementI)
+	* 1.248. [497 Random Point in Non-overlapping](#RandomPointinNon-overlapping)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -2725,7 +2727,7 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1BN411R7a8?spm_id_from=333.999.0.0)
 
-###  1.37. <a name='SingleNumber'></a>136-Single Number
+###  1.37. <a name='SingleNumber'></a>136 【位运算😜】Single Number
 
 [哈哈哈](https://www.bilibili.com/video/BV1g7411a7bf?spm_id_from=333.999.0.0)
 
@@ -2758,9 +2760,78 @@ object Solution {
 }
 ```
 
-###  1.38. <a name='SingleNumberII'></a>137 Single Number II
+###  1.38. <a name='SingleNumberII'></a>137 【位运算😜】Single Number II
 
 [小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
+
+方法二：依次确定每一个二进制位
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ro27dupbn40.webp)
+
+```py
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ans = 0
+        for i in range(32):
+            total = sum((num >> i) & 1 for num in nums)
+            if total % 3:
+                # Python 这里对于最高位需要特殊判断
+                if i == 31:
+                    ans -= (1 << i)
+                else:
+                    ans |= (1 << i)
+        return ans
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        X,Y=0,0
+        for Z in nums:
+            Y=Y^Z & ~X
+            X=X^Z & ~Y
+        return Y
+
+作者：tankcode
+链接：https://leetcode-cn.com/problems/single-number-ii/solution/luo-ji-dian-lu-jiao-du-xiang-xi-fen-xi-gai-ti-si-l/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ones, twos = 0, 0
+        for num in nums:
+            ones = ones ^ num & ~twos
+            twos = twos ^ num & ~ones
+        return ones
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/single-number-ii/solution/single-number-ii-mo-ni-san-jin-zhi-fa-by-jin407891/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        counts = [0] * 32
+        for num in nums:
+            for j in range(32):
+                counts[j] += num & 1
+                num >>= 1
+        res, m = 0, 3
+        for i in range(32):
+            res <<= 1
+            res |= counts[31 - i] % m
+        return res if counts[31] % m == 0 else ~(res ^ 0xffffffff)
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/single-number-ii/solution/single-number-ii-mo-ni-san-jin-zhi-fa-by-jin407891/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+
+时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
+
+空间复杂度：O(1)
+
 
 ###  1.39. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
 
@@ -4689,13 +4760,39 @@ class Solution(object):
         return res
 ```
 
-###  1.64. <a name='MajorityElement'></a>169. Majority Element
+###  1.64. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element
 
 [花花酱](https://www.bilibili.com/video/BV1hb411c7bF?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7pW?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Ff4y1U7Vn?spm_id_from=333.999.0.0)
+
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.45eeyfyac6g0.webp)
+
+```py
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        res = 0
+        k = len(nums)//2
+        for i in range(32):
+            ones = 0
+            for n in nums:
+                ones += (n >> i)& 1
+                if ones > k:
+                    if i == 31:
+                        res -= 2**31
+                    else:
+                        res += 1 << i
+                    break
+        return res
+
+作者：coldme-2
+链接：https://leetcode-cn.com/problems/majority-element/solution/majority-element-by-coldme-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ```py
 class Solution:
@@ -5034,9 +5131,108 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV1GV411Z7fo?spm_id_from=333.999.0.0)
 
-###  1.71. <a name='RepeatedDNASequences'></a>187 Repeated DNA Sequences
+###  1.71. <a name='RepeatedDNASequences'></a>187 【位运算😜】Repeated DNA Sequences
 
 [小明](https://www.bilibili.com/video/BV1mp4y1r7v5?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7cqchvpxojw0.webp)
+
+时间复杂度：O(N)，其中 N 是字符串 s 的长度。
+
+空间复杂度：O(N)。
+
+```py
+L = 10
+bin = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+
+class Solution:
+    def findRepeatedDnaSequences(self, s: str) -> List[str]:
+        n = len(s)
+        if n <= L:
+            return []
+        ans = []
+        x = 0
+        for ch in s[:L - 1]:
+            x = (x << 2) | bin[ch]
+        cnt = defaultdict(int)
+        for i in range(n - L + 1):
+            x = ((x << 2) | bin[s[i + L - 1]]) & ((1 << (L * 2)) - 1)
+            cnt[x] += 1
+            if cnt[x] == 2:
+                ans.append(s[i : i + L])
+        return ans
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/zhong-fu-de-dnaxu-lie-by-leetcode-soluti-z8zn/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def findRepeatedDnaSequences(self, s: str) -> List[str]:
+        if len(s) < 11: return []
+
+        d = { "A":  0,
+              "C" : 1,
+              "G":  2,
+              "T":  3 }
+
+        ans = []
+        dict_ = {} # record the appearance time
+
+        t = 0
+        for i in range(10): # use former 10 chars to init
+            t += d[s[i]] << (i * 2)
+        dict_[t] = 1
+        
+        for i in range(10, len(s)):
+            t >>= 2  # remove the left char
+            t += d[s[i]] << 18 # add the right char
+
+            dict_[t] = dict_.get(t, 0) + 1
+            if dict_[t] == 2:
+                ans.append(s[i - 9:i + 1]) # find the result
+
+        return ans
+
+
+作者：derek-64
+链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/bit-with-hashmap-by-derek-64/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution(object):
+    def findRepeatedDnaSequences(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        if len(s) < 10:
+            return []
+        tDict = {"A":0,"C":1,"G":2,"T":3}
+        hash_map = {}
+        h = 0
+        sh = [tDict[s[i]] for i in range(len(s))]
+        r = []
+        for i in range(len(s)):
+            if i < 10:
+                h = h << 2 | sh[i]
+                if i == 9:
+                    hash_map[h] = 1
+            else:
+                h = h << 2 & 0xfffff | sh[i]
+                hash_map[h] = hash_map.get(h,0) + 1
+                if hash_map[h] > 1:
+                    r.append(s[i - 9:i + 1])
+                    hash_map[h] = -float('inf')
+        return r
+
+
+
+作者：mnm135
+链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/wei-yun-suan-fang-fa-ben-zhi-huan-shi-gou-jian-yi-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ###  1.72. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
 
@@ -5324,13 +5520,55 @@ class Solution:
         nums[: ] = (nums[i] for i in range(-(k % len(nums)), len(nums) - k % len(nums)))
 ```
 
-###  1.74. <a name='ReverseBits'></a>190. Reverse Bits
+###  1.74. <a name='ReverseBits'></a>190. 【位运算😜】Reverse Bits
 
 [花花酱](https://www.bilibili.com/video/BV1NJ411k7VP?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1qv411i7Wg?spm_id_from=333.999.0.0)
 
 ```py
+解题思路
+从n的右侧开始，逐个检查是否是1（利用一个s）
+ans逐渐<<1，如果当前n&s==s，则说明此位为1，ans+=1
+最后ans就是n的二进制位的颠倒了
+
+代码
+
+执行用时：28 ms, 在所有 Python3 提交中击败了92.53%的用户
+内存消耗：14.9 MB, 在所有 Python3 提交中击败了21.75%的用户
+
+class Solution:
+    def reverseBits(self, n: int) -> int:
+        ans = 0
+        s = 1
+        for _ in range(31):
+            if n&s == s:   #说明此位为1，那么ans中也+1
+                ans += 1
+            ans = ans<<1  #最先加入的，到最后就是最前面的数字
+            s = s<<1  #1,10,100,1000...
+        if n & s == s:   #最后处理一次
+            ans += 1
+        return ans
+
+作者：bluegreenred
+链接：https://leetcode-cn.com/problems/reverse-bits/solution/190-dian-dao-er-jin-zhi-wei-python-wei-y-6tis/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def reverseBits(self, n: int) -> int:
+        ret = 0
+        for i in range(32):
+            ret = (ret << 1) + (n & 1)
+            n >>= 1
+        return ret
+
+
+作者：dc3a2nLETu
+链接：https://leetcode-cn.com/problems/reverse-bits/solution/wei-yun-suan-jie-jue-dian-dao-er-jin-zhi-1eaf/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 # 从n的右侧开始，逐个检查是否是1（利用一个s）
 
 # ans逐渐<<1，如果当前n&s==s，则说明此位为1，ans+=1
@@ -5924,12 +6162,49 @@ object Solution {
 
 ```
 
-###  1.79. <a name='BitwiseANDofNumbersRange'></a>201 Bitwise AND of Numbers Range
+###  1.79. <a name='BitwiseANDofNumbersRange'></a>201 【位运算😜】Bitwise AND of Numbers Range
 
 [小明](https://www.bilibili.com/video/BV1dT4y1g75m?spm_id_from=333.999.0.0)
 
 
 ```py
+class Solution:
+    def rangeBitwiseAnd(self, m: int, n: int) -> int:
+        shift = 0   
+        # 找到公共前缀
+        while m < n:
+            m = m >> 1
+            n = n >> 1
+            shift += 1
+        return m << shift
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/bitwise-and-of-numbers-range/solution/shu-zi-fan-wei-an-wei-yu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def rangeBitwiseAnd(self, left: int, right: int) -> int:
+        shift = 0
+        while left < right:
+            left = left >> 1
+            right = right >> 1
+            shift += 1
+        return right << shift
+
+
+作者：SanctusAmbrosius
+链接：https://leetcode-cn.com/problems/bitwise-and-of-numbers-range/solution/201-shu-zi-fan-wei-an-wei-yu-python-wei-xyxk4/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+时间复杂度：
+log(n)
+
+空间复杂度：
+1
+
+
 //我们知道，数组的数字是连续的，
 // 那么m,n范围内的二进制表示的末尾相同位置一定会出现不同的0,1.我们只要找出m,n的做左边起的最长相同的二进制头部即可呀。
 //
@@ -9468,7 +9743,7 @@ object Solution2-2 {
 
 
 
-###  1.107. <a name='PowerofTwo'></a>231. Power of Two
+###  1.107. <a name='PowerofTwo'></a>231. 【位运算😜】Power of Two
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
 
@@ -10984,13 +11259,14 @@ class Solution:
         return num - int((num - 1) / 9) * 9
 ```
 
-###  1.121. <a name='III-1'></a>260-只出现一次的数字 III
+###  1.121. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
 
 [哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1QK411J7dN?spm_id_from=333.999.0.0)
 
 ```py
+
 class Solution:
     def singleNumber(self, nums: List[int]) -> List[int]:
         freq = Counter(nums)
@@ -11003,6 +11279,14 @@ class Solution:
 ```
 
 ```py
+复杂度分析
+
+时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+
+空间复杂度：O(1)。
+
+
+
 class Solution:
     def singleNumber(self, nums: List[int]) -> List[int]:
         xorsum = 0
@@ -11059,6 +11343,29 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Mb41157Pa?spm_id_from=333.999.0.0)
 
 ```py
+class Solution:
+    def isUgly(self, n: int) -> bool:
+        # 特判，整数n为1时，即为丑数，返回true
+        if n == 1:
+            return True
+        # 如果整数n为0时，直接返回false
+        elif n == 0:
+            return False
+
+        # 对整数n判断是只包含质因数2、3、5
+        while n != 1:
+            if n % 2 == 0:
+                n /= 2
+            elif n % 3 == 0:
+                n /= 3
+            elif n % 5 == 0:
+                n /= 5
+            else:
+                return False
+        # 否则就为丑数，返回true
+        return True
+
+
 class Solution:
     def isUgly(self, n: int) -> bool:
         if n <= 0:
@@ -11140,9 +11447,12 @@ class Solution(object):
 
 ```
 
-###  1.124. <a name='MissingNumber'></a>268 Missing Number
+###  1.124. <a name='MissingNumber'></a>268 【位运算😜】Missing Number
+
 
 [小明](https://www.bilibili.com/video/BV1LU4y1p7n7?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1caw225arjj4.webp)
 
 ```py
 class Solution:
@@ -11703,13 +12013,88 @@ class Solution:
         return (sum(nums)-sum(set(nums)))//(len(nums) - len(set(nums)))
 ```
 
-###  1.133. <a name='GameofLife'></a>289. Game of Life
+###  1.133. <a name='GameofLife'></a>289. 【位运算😜】Game of Life
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7ji?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1hp4y1B7D5?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1vz4y1R7DJ?spm_id_from=333.999.0.0)
+
+```py
+解题思路
+思路，原地修改的前提是，数字特征值记录迭代前死活，本人的思路是校验奇偶，即定义：
+活->活 1->1
+活->死 1->3
+死->活 0->2
+死->死 0->0
+只有死活转换的时候需要改变board值，也就是说：
+board以前是活的时候，需要判断现在是否要死过去
+board以前是死的时候，需要判断现在是否要活过来
+检查原状态的时候，只需要%2即可知道原状态，&1和%2效果一样
+计数函数，遍历九个格子，不能越界，不能原地比较：不能ij同时为0
+
+作者：tangchuqi
+链接：https://leetcode-cn.com/problems/game-of-life/solution/py3yuan-di-xiu-gai-jian-duan-gao-xiao-by-liu-xian-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        n,m=len(board),len(board[0])
+        for i in range(n):
+            for j in range(m):
+                C=0
+                for x in (-1,0,1):
+                    for y in (-1,0,1):
+                        if(x or y)and 0<=i+x<n and 0<=j+y<m and board[x+i][j+y]&1:C+=1
+                if board[i][j]&1 and(C<2 or C>3):board[i][j]=3
+                if board[i][j]&1==0 and C==3:board[i][j]=2
+        for i in range(n):
+            for j in range(m):
+                board[i][j]=int(0<board[i][j]<3)
+
+作者：tangchuqi
+链接：https://leetcode-cn.com/problems/game-of-life/solution/py3yuan-di-xiu-gai-jian-duan-gao-xiao-by-liu-xian-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。、
+
+board中只有0和1两种状态，只占用了int的最低位，我们可以把int的高位利用起来
+
+第一次遍历board，当我们确定(i, j)位置的cell更新后的状态是存活，就把高位的值置为1
+board[i][j] |= 2
+
+第二次遍历board，把高位挪回低位
+board[i][j] >>= 1
+
+python
+
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        offsets = ((-1, -1), (-1, 0), (-1, 1), (0, -1),
+                   (0, 1), (1, -1), (1, 0), (1, 1))
+        m, n = len(board), len(board[0])
+        for i in range(m):
+            for j in range(n):
+                alive = 0
+                for offset in offsets:
+                    x, y = i + offset[0], j + offset[1]
+                    if x >= 0 and x < m and y >= 0 and y < n:
+                        alive += board[x][y] & 1
+                if alive == 3 or alive == 2 and board[i][j]:
+                    board[i][j] |= 2
+        for i in range(m):
+            for j in range(n):
+                board[i][j] >>= 1
+
+作者：DarkArmed
+链接：https://leetcode-cn.com/problems/game-of-life/solution/pythonyuan-di-wei-yun-suan-ti-jie-by-darkarmed/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ```py
 # 生命在于调库
@@ -12673,7 +13058,46 @@ class Solution:
         return res
 ```
 
-###  1.147. <a name='-1'></a>319
+###  1.147. <a name='-1'></a>318【位运算😜】
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.fgtvti63s9c.webp)
+
+```py
+class Solution:
+    def maxProduct(self, words: List[str]) -> int:
+        masks = [reduce(lambda a, b: a | (1 << (ord(b) - ord('a'))), word, 0) for word in words]
+        return max((len(x[1]) * len(y[1]) for x, y in product(zip(masks, words), repeat=2) if x[0] & y[0] == 0), default=0)
+
+
+class Solution:
+    def maxProduct(self, words: List[str]) -> int:
+        def hepler(s:str):
+            res = 0 
+            for i in s:
+                res |= 1<<(ord(i)-97)
+            return res
+
+        cache = dict()
+        for i in words:
+            digit = hepler(i)
+            cache[digit] = max(cache.get(digit, 0), len(i))
+
+        k = list(cache.keys())
+        n = len(k)
+        res = 0
+        for i in range(n):
+            for j in range(i+1, n):
+                if (k[i] & k[j]) == 0:
+                    res = max(res, cache[k[i]]*cache[k[j]])
+        return res
+
+作者：1uciusy
+链接：https://leetcode-cn.com/problems/maximum-product-of-word-lengths/solution/python3-you-hua-ban-wei-yun-suan-by-1uci-qv90/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.148. <a name='-1'></a>319
 
 ```py
 class Solution(object):
@@ -12693,11 +13117,11 @@ class Solution(object):
         return bulb.count(1)
 ```
 
-###  1.148. <a name='CreateMaximumNumber'></a>321. Create Maximum Number
+###  1.149. <a name='CreateMaximumNumber'></a>321. Create Maximum Number
 
 [花花酱](https://www.bilibili.com/video/BV11W411U7NR?spm_id_from=333.999.0.0)
 
-###  1.149. <a name='dfsCoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change
+###  1.150. <a name='dfsCoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change
 
 [花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
 
@@ -12858,7 +13282,7 @@ object Solution {
 
 ```
 
-###  1.150. <a name='-1'></a>324
+###  1.151. <a name='-1'></a>324
 
 ```py
 class Solution(object):
@@ -12872,7 +13296,7 @@ class Solution(object):
         nums[::2], nums[1::2] = nums[:half][::-1], nums[half:][::-1]
 ```
 
-###  1.151. <a name='PowerofThree'></a>326. Power of Three
+###  1.152. <a name='PowerofThree'></a>326. Power of Three
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7QC?spm_id_from=333.999.0.0)
 
@@ -12911,7 +13335,7 @@ class Solution:
         # 另一种方法是，因为在 int 范围内 3 的最大次方是 3^19 = 1162261467，
         # 如果 n 是 3 的整数次方，那么 1162261467 除以 n 的余数一定是零。
         # return n > 0 and 1162261467 % n == 0
-位运算 x*3 = x*(2+1) = x * 2 + x = (x<<1) + x
+位运算😜 x*3 = x*(2+1) = x * 2 + x = (x<<1) + x
 
 常规递归：
 
@@ -12961,7 +13385,7 @@ class Solution:
         return False
 ```
 
-###  1.152. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
+###  1.153. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
 
 [洛阳](https://www.bilibili.com/video/BV1v64y1u7AH?spm_id_from=333.999.0.0)
 
@@ -13101,7 +13525,7 @@ class Solution(object):
         return head 
 ```
 
-###  1.153. <a name='dfsLongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
+###  1.154. <a name='dfsLongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
 
 [花花酱](https://www.bilibili.com/video/BV1mW411d7q8?spm_id_from=333.999.0.0)
 
@@ -13252,11 +13676,11 @@ class Solution:
         return max(dfs(i, j) for i in range(row) for j in range(col))
 ```
 
-###  1.154. <a name='ReconstructItinerary'></a>332 Reconstruct Itinerary
+###  1.155. <a name='ReconstructItinerary'></a>332 Reconstruct Itinerary
 
 [小明](https://www.bilibili.com/video/BV1qa4y1h7Ti?spm_id_from=333.999.0.0)
 
-###  1.155. <a name='IncreasingTripletSubseque'></a>334 Increasing Triplet Subseque
+###  1.156. <a name='IncreasingTripletSubseque'></a>334 Increasing Triplet Subseque
 
 [小明](https://www.bilibili.com/video/BV1Kr4y1F7m9?spm_id_from=333.999.0.0)
 
@@ -13322,7 +13746,7 @@ class Solution(object):
         return False
 ```
 
-###  1.156. <a name='HouseRobberIII'></a>337 House Robber III
+###  1.157. <a name='HouseRobberIII'></a>337 House Robber III
 
 [小明](https://www.bilibili.com/video/BV1WD4y1X7JQ?spm_id_from=333.999.0.0)
 
@@ -13398,7 +13822,7 @@ class Solution:
         return max(val1, val2)
 ```
 
-###  1.157. <a name='CountingBits'></a>338 Counting Bits
+###  1.158. <a name='CountingBits'></a>338 【位运算😜】Counting Bits
 
 [小明](https://www.bilibili.com/video/BV1VK411s7xi?spm_id_from=333.999.0.0)
 
@@ -13554,7 +13978,7 @@ object Solution2 {
 }
 ```
 
-###  1.158. <a name='PowerofFour'></a>342. Power of Four
+###  1.159. <a name='PowerofFour'></a>342. 【位运算😜】Power of Four
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7D5?spm_id_from=333.999.0.0)
 
@@ -13596,11 +14020,11 @@ class Solution:
         return False if n != 1 else True 
 ```
 
-###  1.159. <a name='-1'></a>343-整数拆分
+###  1.160. <a name='-1'></a>343-整数拆分
 
 [哈哈哈](https://www.bilibili.com/video/BV1Dp4y1U79P?spm_id_from=333.999.0.0)
 
-###  1.160. <a name='ReverseString'></a>344. Reverse String
+###  1.161. <a name='ReverseString'></a>344. Reverse String
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7Ha?spm_id_from=333.999.0.0)
 
@@ -13668,15 +14092,15 @@ object Solution {
 
 ```
 
-###  1.161. <a name='ReverseVowelsofaString'></a>345. Reverse Vowels of a String
+###  1.162. <a name='ReverseVowelsofaString'></a>345. Reverse Vowels of a String
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7JH?spm_id_from=333.999.0.0)
 
-###  1.162. <a name='MovingAveragefromDataStream'></a>346 Moving Average from Data Stream
+###  1.163. <a name='MovingAveragefromDataStream'></a>346 Moving Average from Data Stream
 
 [小明](https://www.bilibili.com/video/BV1xV411m73u?spm_id_from=333.999.0.0)
 
-###  1.163. <a name='TopKFrequentElements'></a>347. 【最小堆🌵】Top K Frequent Elements 
+###  1.164. <a name='TopKFrequentElements'></a>347. 【最小堆🌵】Top K Frequent Elements 
 
 [花花酱](https://www.bilibili.com/video/BV1Mt411371T?spm_id_from=333.999.0.0)
 
@@ -13774,11 +14198,11 @@ object Solution {
 
 ```
 
-###  1.164. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
+###  1.165. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
 
 [小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
 
-###  1.165. <a name='IntersectionofTwoArraysII'></a>350. 【动态🚀规划 + 双指针 + 哈希表】Intersection of Two Arrays II 
+###  1.166. <a name='IntersectionofTwoArraysII'></a>350. 【动态🚀规划 + 双指针 + 哈希表】Intersection of Two Arrays II 
 
 [小梦想家](https://www.bilibili.com/video/BV1gx411X7q8?spm_id_from=333.999.0.0)
 
@@ -13897,19 +14321,19 @@ object Solution {
 
 ```
 
-###  1.166. <a name='351AndroidUnlockingPattern'></a> 351 【🍒并查集】Android Unlocking Pattern
+###  1.167. <a name='351AndroidUnlockingPattern'></a> 351 【🍒并查集】Android Unlocking Pattern
 
 [郭郭](https://www.bilibili.com/video/BV1Qq4y1r7WH?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
 
-###  1.167. <a name='DesignTwitter'></a>355. 设计推特 Design Twitter
+###  1.168. <a name='DesignTwitter'></a>355. 设计推特 Design Twitter
 
 [官方](https://www.bilibili.com/video/BV1aQ4y1N72N?spm_id_from=333.999.0.0)
 
-###  1.168. <a name='LoggerRateLimiter'></a>359 Logger Rate Limiter
+###  1.169. <a name='LoggerRateLimiter'></a>359 Logger Rate Limiter
 
 [小明](https://www.bilibili.com/video/BV1k64y1F7dE?spm_id_from=333.999.0.0)
 
-###  1.169. <a name='ValidPerfectSquare'></a>367. Valid Perfect Square
+###  1.170. <a name='ValidPerfectSquare'></a>367. Valid Perfect Square
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411X7Ke?spm_id_from=333.999.0.0)
 
@@ -14006,19 +14430,137 @@ class Solution:
         return False
 ```
 
-###  1.170. <a name='LargestDivisibleSubset'></a>368 Largest Divisible Subset
+###  1.171. <a name='LargestDivisibleSubset'></a>368 Largest Divisible Subset
 
 [小明](https://www.bilibili.com/video/BV15D4y1Q74b?spm_id_from=333.999.0.0)
 
-###  1.171. <a name='FindKPairswithSmallestSumsk'></a>373. Find K Pairs with Smallest Sums查找和最小的k对数字
+###  1.172. <a name='-1'></a>371【位运算😜】
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6oayqs4ig3g0.webp)
+
+```py
+MASK1 = 4294967296  # 2^32
+MASK2 = 2147483648  # 2^31
+MASK3 = 2147483647  # 2^31-1
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        a %= MASK1
+        b %= MASK1
+        while b != 0:
+            carry = ((a & b) << 1) % MASK1
+            a = (a ^ b) % MASK1
+            b = carry
+        if a & MASK2:  # 负数
+            return ~((a ^ MASK2) ^ MASK3)
+        else:  # 正数
+            return a
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/liang-zheng-shu-zhi-he-by-leetcode-solut-c1s3/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution(object):
+    def getSum(self, a, b):
+        """
+        :type a: int
+        :type b: int
+        :rtype: int
+        """
+        # 2^32
+        MASK = 0x100000000
+        # 整型最大值
+        MAX_INT = 0x7FFFFFFF
+        MIN_INT = MAX_INT + 1
+        while b != 0:
+            # 计算进位
+            carry = (a & b) << 1 
+            # 取余范围限制在 [0, 2^32-1] 范围内
+            a = (a ^ b) % MASK
+            b = carry % MASK
+        return a if a <= MAX_INT else ~((a % MIN_INT) ^ MAX_INT)   
+
+作者：jalan
+链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/wei-yun-suan-xiang-jie-yi-ji-zai-python-zhong-xu-y/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        a &= 0xFFFFFFFF
+        b &= 0xFFFFFFFF
+        while b:
+            carry = a & b
+            a ^= b
+            b = ((carry) << 1) & 0xFFFFFFFF
+            # print((a, b))
+        return a if a < 0x80000000 else ~(a^0xFFFFFFFF)
+
+作者：lih627
+链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/python-wei-yun-suan-yi-xie-keng-by-lih/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        return ((a + b) << 1) + (a ^ b)
+
+作者：michael_chou
+链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/0371-liang-zheng-shu-zhi-he-wei-yun-suan-kmze/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+Iteration
+
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        # 2 ^ 32
+        MASK = 0x100000000
+        MM = 0xFFFFFFFF
+        MAX_INT = 0x7FFFFFFF
+        MIN_INT = 0x80000000
+        while b != 0:
+            carry = (a & b) << 1
+            a = (a ^ b) % MASK
+            b = carry % MASK
+        return a if a <= MAX_INT else ~(a ^ MM)
+
+Recursion
+
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        # 2 ^ 32
+        MASK = 0x100000000
+        MM = 0xFFFFFFFF
+        MAX_INT = 0x7FFFFFFF
+        MIN_INT = 0x80000000
+
+        if 0 == b:
+            return a if a <= MAX_INT else ~(a ^ MM)
+
+        carry = (a & b) << 1
+        a = (a ^ b) % MASK
+        b = carry % MASK                    
+        return self.getSum(a, b)
+
+作者：xiang-lee
+链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/pythonfu-shu-yi-chu-by-xiang-lee-5lvu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.173. <a name='FindKPairswithSmallestSumsk'></a>373. Find K Pairs with Smallest Sums查找和最小的k对数字
 
 [图灵](https://www.bilibili.com/video/BV1Mv4y1Z79v?spm_id_from=333.999.0.0)
 
-###  1.172. <a name='GuessNumberHigherorLower'></a>374. Guess Number Higher or Lower
+###  1.174. <a name='GuessNumberHigherorLower'></a>374. Guess Number Higher or Lower
 
 [小梦想家](https://www.bilibili.com/video/BV1Hx41197ou?spm_id_from=333.999.0.0)
 
-###  1.173. <a name='-1'></a>376-摆动序列
+###  1.175. <a name='-1'></a>376-摆动序列
 
 [哈哈哈](https://www.bilibili.com/video/BV1sk4y167wV?spm_id_from=333.999.0.0)
 
@@ -14158,9 +14700,9 @@ class Solution:
 
 
 
-###  1.174. <a name='CombinationSumIV'></a>377. 【动态🚀规划】Combination Sum IV
+###  1.176. <a name='CombinationSumIV'></a>377. 【动态🚀规划】Combination Sum IV
 
-####  1.174.1. <a name='416494377'></a>类似题目：416题，494题，不可以重复，377重复
+####  1.176.1. <a name='416494377'></a>类似题目：416题，494题，不可以重复，377重复
 
 [花花酱](https://www.bilibili.com/video/BV1gW411y7uz?spm_id_from=333.999.0.0)
 
@@ -14179,7 +14721,7 @@ class Solution:
         return dp[-1]
 ```
 
-###  1.175. <a name='K'></a>378-【最小堆🌵】有序矩阵中第K小的元素
+###  1.177. <a name='K'></a>378-【最小堆🌵】有序矩阵中第K小的元素
 
 [哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
 
@@ -14256,19 +14798,19 @@ class Solution(object):
 ```
 
 
-###  1.176. <a name='InsertDeleteGetRandomO1'></a>380 Insert Delete GetRandom O(1)
+###  1.178. <a name='InsertDeleteGetRandomO1'></a>380 Insert Delete GetRandom O(1)
 
 [小明](https://www.bilibili.com/video/BV1Fg4y1q7Ru?spm_id_from=333.999.0.0)
 
-###  1.177. <a name='LinkedListRandomNode'></a>382 Linked List Random Node
+###  1.179. <a name='LinkedListRandomNode'></a>382 Linked List Random Node
 
 [小明](https://www.bilibili.com/video/BV1xZ4y1G7ie?spm_id_from=333.999.0.0)
 
-###  1.178. <a name='RansomNote'></a>383 Ransom Note
+###  1.180. <a name='RansomNote'></a>383 Ransom Note
 
 [小明](https://www.bilibili.com/video/BV1GQ4y1N7Q5?spm_id_from=333.999.0.0)
 
-###  1.179. <a name='-1'></a>386
+###  1.181. <a name='-1'></a>386
 
 ```py
 class Solution:
@@ -14377,7 +14919,7 @@ class Solution(object):
         return res
 ```
 
-###  1.180. <a name='FirstUniqueCharacterinaString'></a>387. First Unique Character in a String
+###  1.182. <a name='FirstUniqueCharacterinaString'></a>387. First Unique Character in a String
 
 [小梦想家](https://www.bilibili.com/video/BV1y4411A7d2?spm_id_from=333.999.0.0)
 
@@ -14531,11 +15073,82 @@ res3: Option[(Char, Int)] = Some((k,1))
 
 ```
 
-###  1.181. <a name='FindtheDifference'></a>389. Find the Difference
+###  1.183. <a name='FindtheDifference'></a>389. 【位运算😜】Find the Difference
 
 [小梦想家](https://www.bilibili.com/video/BV1Et411K7jP?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1f5411L7r4?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5j9pjpm6f080.webp)
+
+```py
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        # 初始化 ans 为 0
+        ans = 0
+        # 对字符串 s 的字符进行异或
+        for ch in s:
+            ans ^= ord(ch)
+        # 对字符串 t 的字符进行异或
+        for ch in t:
+            ans ^= ord(ch)
+        # 最终结果转换为 ASCII 字符
+        return chr(ans)
+
+作者：yiluolion
+链接：https://leetcode-cn.com/problems/find-the-difference/solution/389-zhao-bu-tong-ji-shu-wei-yun-suan-qiu-zir1/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
+
+解题思路
+因为字符串 t 是由字符串 s 随机重排，然后在随机位置添加一个字母。
+即对s和t中所有字符进行异或运算会剩下一字母也就是添加进去的那一个。如：
+
+
+s = "abcd", t = "abcde"
+其中abcd都是成双成对的（异或运算结果为0），剩下一个e（再次进行异或运算得e）
+
+作者：xun-luo
+链接：https://leetcode-cn.com/problems/find-the-difference/solution/389-zhao-bu-tong-wei-yun-suan-by-xun-luo-4q4z/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        # 利用字典
+        # d = {}
+        # for i in s:
+        #     if i in d:
+        #         d[i] += 1
+        #     else:
+        #         d[i] = 1
+        
+        # for i in t:
+        #     if i in d:
+        #         if d[i] == 0:return i
+        #         d[i] -= 1
+        #    else:
+        #         return i
+
+        # 位运算😜
+        ans = 0
+        for i in s:
+            ans ^= ord(i)
+
+        for i in t:
+             ans ^= ord(i)
+        
+        return chr(ans)
+
+作者：xun-luo
+链接：https://leetcode-cn.com/problems/find-the-difference/solution/389-zhao-bu-tong-wei-yun-suan-by-xun-luo-4q4z/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ```py
 class Solution:
@@ -14569,7 +15182,7 @@ Counter O(n)：
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
         return next((Counter(t)-Counter(s)).elements())
-位运算 O(n)：
+位运算😜 O(n)：
 
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
@@ -14610,11 +15223,11 @@ class Solution:
 
 
 
-###  1.182. <a name='PerfectRectangle'></a>391. Perfect Rectangle
+###  1.184. <a name='PerfectRectangle'></a>391. Perfect Rectangle
 
 [花花酱](https://www.bilibili.com/video/BV184411c7cs?spm_id_from=333.999.0.0)
 
-###  1.183. <a name='IsSubsequence'></a>392. 【动态🚀规划】Is Subsequence
+###  1.185. <a name='IsSubsequence'></a>392. 【动态🚀规划】Is Subsequence
 
 [小梦想家](https://www.bilibili.com/video/BV1fg4y1q7eT?spm_id_from=333.999.0.0)
 
@@ -14694,11 +15307,11 @@ class Solution(object):
         return all(res)
 ```
 
-###  1.184. <a name='UTF-8Validation'></a>393. UTF-8 Validation
+###  1.186. <a name='UTF-8Validation'></a>393. UTF-8 Validation
 
 [花花酱](https://www.bilibili.com/video/BV1SE411w7no?spm_id_from=333.999.0.0)
 
-###  1.185. <a name='DecodeString'></a>394 Decode String
+###  1.187. <a name='DecodeString'></a>394 Decode String
 
 [小明](https://www.bilibili.com/video/BV145411V75E?spm_id_from=333.999.0.0)
 
@@ -14797,11 +15410,11 @@ class Solution:
         return res
 ```
 
-###  1.186. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
+###  1.188. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
 
 [小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
 
-###  1.187. <a name='floydEvaluateDivision'></a>399. 【🍒并查集 + floyd 🌞】Evaluate Division
+###  1.189. <a name='floydEvaluateDivision'></a>399. 【🍒并查集 + floyd 🌞】Evaluate Division
 
 [花花酱](https://www.bilibili.com/video/BV1iW41167Nb?spm_id_from=333.999.0.0)
 
@@ -15004,11 +15617,11 @@ class Solution:
         return rst
 ```
 
-###  1.188. <a name='RemoveKDigits'></a>402 Remove K Digits
+###  1.190. <a name='RemoveKDigits'></a>402 Remove K Digits
 
 [小明](https://www.bilibili.com/video/BV1PV411C79X?spm_id_from=333.999.0.0)
 
-###  1.189. <a name='SumofLeftLeaves'></a>404. Sum of Left Leaves
+###  1.191. <a name='SumofLeftLeaves'></a>404. Sum of Left Leaves
 
 [小梦想家](https://www.bilibili.com/video/BV1Et411K7wa?spm_id_from=333.999.0.0)
 
@@ -15121,11 +15734,100 @@ class Solution:
         return res
 ```
 
-###  1.190. <a name='ConvertaNumbertoHexadecimal'></a>405-Convert a Number to Hexadecimal
+###  1.192. <a name='ConvertaNumbertoHexadecimal'></a>405 【位运算😜】Convert a Number to Hexadecimal
 
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
 
 ```py
+三种方法
+
+1.第一种库函数(汉明重量的题目也可以使用库函数)
+2.第二种不用位运算😜，整除求余一顿操作，逆向取余，搞定
+3.第三种使用位运算😜，把第二中的整除换做位移，求余换做与运算
+详细思路看代码
+代码
+
+# 库函数作弊通过
+# class Solution:
+#     def toHex(self, num: int) -> str:
+#         return hex(num & 0xFFFFFFFF)[2:]
+
+# 这里手法先粗糙一点不使用高级的位运算😜
+# class Solution:
+#     # 其实做法跟转二进制是一模一样的都是逆向取余法
+#     def toHex(self, num: int) -> str:
+#         num &= 0xFFFFFFFF
+#         if num == 0:
+#             return '0'
+#         res = ''
+#         match = "abcdef"
+#         while num:
+#             num1 = num % 16
+#             s1 = str(num1)  if num1 < 10  else match[num1-10]
+#             res += s1
+#             num //= 16
+#         return res[::-1]
+
+# 接下来一模一样的代码换成二进制的位运算😜即可
+class Solution:
+    def toHex(self, num: int) -> str:
+        num &= 0xFFFFFFFF
+        if num == 0:
+            return '0'
+        res = ''
+        match = "abcdef"
+        while num:
+            num1 = num & 15 # 等价于求余16
+
+作者：nong-ma-yi-sheng-1
+链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/qi-shi-gen-zhuan-er-jin-zhi-mei-sha-qu-b-mxgl/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+学习大牛的思路，记下来慢慢品。
+32位整数，每4位1个字节，一个字节转成16进制刚好是0—f之间的一个字符；最多需要转换8次，可能有几个“0”，最后去掉就是了。
+
+
+class Solution:
+    def toHex(self, num: int) -> str:
+        if num==0:
+            return "0"
+        template="0123456789abcdef"
+        ans=[]
+        for _ in range(8):
+            ans.append(template[num%16])
+            num//=16
+        ans.reverse()
+        return "".join(ans).lstrip("0")
+
+作者：vincent-492
+链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/pythonwei-yun-suan-by-vincent-492-zo20/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+注意python中对负数的处理
+class Solution(object):
+    def toHex(self, num):
+        """
+        :type num: int
+        :rtype: str
+        """
+        num = num & 0xffffffff
+        result = ""
+        lib = "0123456789abcdef"
+        if num == 0:
+            return "0"
+        while num != 0:
+            result = lib[num % 16] + result
+            num /= 16
+
+        return result
+
+作者：mnm135
+链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/zhu-yi-pythonzhong-dui-fu-shu-de-chu-li-by-mnm135/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 class Solution:
     def toHex(self, num):
         """
@@ -15176,7 +15878,7 @@ class Solution(object):
         return ''.join(result[::-1])
 ```
 
-###  1.191. <a name='QueueReconstructionbyHeight'></a>406. Queue Reconstruction by Height 
+###  1.193. <a name='QueueReconstructionbyHeight'></a>406. Queue Reconstruction by Height 
 
 [小明](https://www.bilibili.com/video/BV1xC4y1a72W?spm_id_from=333.999.0.0)
 
@@ -15218,11 +15920,11 @@ class Solution:
         return ans
 ```
 
-###  1.192. <a name='ValidWordAbbreviation'></a>408. Valid Word Abbreviation
+###  1.194. <a name='ValidWordAbbreviation'></a>408. Valid Word Abbreviation
 
 [小梦想家](https://www.bilibili.com/video/BV1A4411q74A?spm_id_from=333.999.0.0)
 
-###  1.193. <a name='LongestPalindrome'></a>409. 【回文🌈】Longest Palindrome
+###  1.195. <a name='LongestPalindrome'></a>409. 【回文🌈】Longest Palindrome
 
 [小梦想家](https://www.bilibili.com/video/BV1B441127W2?spm_id_from=333.999.0.0)
 
@@ -15310,11 +16012,11 @@ class Solution:
 
 
 
-###  1.194. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
+###  1.196. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
 
-###  1.195. <a name='FizzBuzz'></a>412. Fizz Buzz
+###  1.197. <a name='FizzBuzz'></a>412. Fizz Buzz
 
 [小梦想家](https://www.bilibili.com/video/BV1xE411R7yK?spm_id_from=333.999.0.0)
 
@@ -15386,7 +16088,7 @@ object Solution {
 
 ```
 
-###  1.196. <a name='-1'></a>413-【动态🚀规划】等差数列划分
+###  1.198. <a name='-1'></a>413-【动态🚀规划】等差数列划分
 
 [哈哈哈](https://www.bilibili.com/video/BV13a4y1i7tR?spm_id_from=333.999.0.0)
 
@@ -15416,17 +16118,17 @@ class Solution:
         return sum(dp)
 ```
 
-###  1.197. <a name='ThirdMaximumNumber'></a>414. Third Maximum Number
+###  1.199. <a name='ThirdMaximumNumber'></a>414. Third Maximum Number
 
 [小梦想家](https://www.bilibili.com/video/BV1UE411X7k1?spm_id_from=333.999.0.0)
 
-###  1.198. <a name='AddStrings'></a>415-Add Strings
+###  1.200. <a name='AddStrings'></a>415-Add Strings
 
 [哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
 
-###  1.199. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
+###  1.201. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
 
-####  1.199.1. <a name='494'></a>相似题目：494题
+####  1.201.1. <a name='494'></a>相似题目：494题
 
 [花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
 
@@ -15498,7 +16200,7 @@ class Solution:
 
 
 
-###  1.200. <a name='PacificAtlanticWaterFlow'></a>417. 【构造🏰】Pacific Atlantic Water Flow
+###  1.202. <a name='PacificAtlanticWaterFlow'></a>417. 【构造🏰】Pacific Atlantic Water Flow
 
 [花花酱](https://www.bilibili.com/video/BV1Kb411K7ty?spm_id_from=333.999.0.0)
 
@@ -15614,11 +16316,11 @@ class Solution:
         return [[i, j] for i, j in bfs(A) & bfs(B)]
 ```
 
-###  1.201. <a name='BattleshipsinaBoard'></a>419. Battleships in a Board 
+###  1.203. <a name='BattleshipsinaBoard'></a>419. Battleships in a Board 
 
 [小梦想家](https://www.bilibili.com/video/BV1TJ411j7QZ?spm_id_from=333.999.0.0)
 
-###  1.202. <a name='MaximumXORofTwoNumbersinanArray'></a>421 Maximum XOR of Two Numbers in an Array
+###  1.204. <a name='MaximumXORofTwoNumbersinanArray'></a>421 Maximum XOR of Two Numbers in an Array
 
 [小明](https://www.bilibili.com/video/BV1s64y1F7Wm?spm_id_from=333.999.0.0)
 
@@ -15671,15 +16373,15 @@ class Solution(object):
         return answer
 ```
 
-###  1.203. <a name='ReconstructOriginalDigitsfromEnglish'></a>423 Reconstruct Original Digits from English
+###  1.205. <a name='ReconstructOriginalDigitsfromEnglish'></a>423 Reconstruct Original Digits from English
 
 [小明](https://www.bilibili.com/video/BV1554y1h73S?spm_id_from=333.999.0.0)
 
-###  1.204. <a name='LongestRepeatingCharacterReplacem'></a>424. 替换后的最长重复字符 Longest Repeating Character Replacem
+###  1.206. <a name='LongestRepeatingCharacterReplacem'></a>424. 替换后的最长重复字符 Longest Repeating Character Replacem
 
 [官方](https://www.bilibili.com/video/BV14r4y1K7rN?spm_id_from=333.999.0.0)
 
-###  1.205. <a name='N-aryTreeLevelOrderTraversal'></a>429. N-ary Tree Level Order Traversal
+###  1.207. <a name='N-aryTreeLevelOrderTraversal'></a>429. N-ary Tree Level Order Traversal
 
 [小梦想家](https://www.bilibili.com/video/BV1CE411Q7BQ?spm_id_from=333.999.0.0)
 
@@ -15790,15 +16492,15 @@ class Solution:
         return res
 ```
 
-###  1.206. <a name='FlattenaMultilevelDoublyLinkedList'></a>430 Flatten a Multilevel Doubly Linked List
+###  1.208. <a name='FlattenaMultilevelDoublyLinkedList'></a>430 Flatten a Multilevel Doubly Linked List
 
 [小明](https://www.bilibili.com/video/BV1754y1q7Kb?spm_id_from=333.999.0.0)
 
-###  1.207. <a name='AllOoneDataStructure'></a>432. All O`one Data Structure
+###  1.209. <a name='AllOoneDataStructure'></a>432. All O`one Data Structure
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d7qR?spm_id_from=333.999.0.0)
 
-###  1.208. <a name='Non-overlappingIntervals'></a>435-Non-overlapping Intervals
+###  1.210. <a name='Non-overlappingIntervals'></a>435-Non-overlapping Intervals
 
 [哈哈哈](https://www.bilibili.com/video/BV1i7411p7pv?spm_id_from=333.999.0.0)
 
@@ -15889,11 +16591,11 @@ class Solution:
 ```
 
 
-###  1.209. <a name='FindRightInterval'></a>436 Find Right Interval
+###  1.211. <a name='FindRightInterval'></a>436 Find Right Interval
 
 [小明](https://www.bilibili.com/video/BV1YT4y1w7EP?spm_id_from=333.999.0.0)
 
-###  1.210. <a name='PathSumIII'></a>437 【前缀和🎨】Path Sum III
+###  1.212. <a name='PathSumIII'></a>437 【前缀和🎨】Path Sum III
 
 [小明](https://www.bilibili.com/video/BV1tZ4y1M7JR?spm_id_from=333.999.0.0)
 
@@ -15927,7 +16629,7 @@ def pathSum(self, root, sum):
     return res    
 ```
 
-###  1.211. <a name='FindAllAnagramsinaString'></a>438. 【滑动窗口🔹】Find All Anagrams in a String
+###  1.213. <a name='FindAllAnagramsinaString'></a>438. 【滑动窗口🔹】Find All Anagrams in a String
 
 [花花酱](https://www.bilibili.com/video/BV1iW411d7Nb?spm_id_from=333.999.0.0)
 
@@ -16163,19 +16865,19 @@ object Solution2-1 {
 
 ```
 
-###  1.212. <a name='ArrangingCoins'></a>441 Arranging Coins
+###  1.214. <a name='ArrangingCoins'></a>441 Arranging Coins
 
 [小明](https://www.bilibili.com/video/BV1eV411k7rg?spm_id_from=333.999.0.0)
 
-###  1.213. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
+###  1.215. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
 
 [小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
 
-###  1.214. <a name='StringCompression'></a>443. String Compression
+###  1.216. <a name='StringCompression'></a>443. String Compression
 
 [小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
 
-###  1.215. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
+###  1.217. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
 
 [哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
 
@@ -16249,15 +16951,15 @@ class Solution:
         return functools.reduce(Node,map(int,reversed(str(f(l1)+f(l2)))),None)
 ```
 
-###  1.216. <a name='NumberofBoomerangs'></a>447. Number of Boomerangs
+###  1.218. <a name='NumberofBoomerangs'></a>447. Number of Boomerangs
 
 [小梦想家](https://www.bilibili.com/video/BV1hE411o7V2?spm_id_from=333.999.0.0)
 
-###  1.217. <a name='FindAllNumbersDisappearedinanArray'></a>448. Find All Numbers Disappeared in an Array
+###  1.219. <a name='FindAllNumbersDisappearedinanArray'></a>448. Find All Numbers Disappeared in an Array
 
 [小梦想家](https://www.bilibili.com/video/BV1SE411d7FM?spm_id_from=333.999.0.0)
 
-###  1.218. <a name='SerializeandDeserializeBST'></a>449. Serialize and Deserialize BST
+###  1.220. <a name='SerializeandDeserializeBST'></a>449. Serialize and Deserialize BST
 
 [花花酱](https://www.bilibili.com/video/BV1ab411c75V?spm_id_from=333.999.0.0)
 
@@ -16519,7 +17221,7 @@ class Codec:
         return root
 ```
 
-###  1.219. <a name='DeleteNodeinaBST'></a>450. Delete Node in a BST
+###  1.221. <a name='DeleteNodeinaBST'></a>450. Delete Node in a BST
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d7yU?spm_id_from=333.999.0.0)
 
@@ -16606,15 +17308,15 @@ class Solution:
 # 这实际就没实现删除节点这个功能，只是把结果找到了
 ```
 
-###  1.220. <a name='SortCharactersByFrequency'></a>451 Sort Characters By Frequency
+###  1.222. <a name='SortCharactersByFrequency'></a>451 Sort Characters By Frequency
 
 [小明](https://www.bilibili.com/video/BV18v411z7iy?spm_id_from=333.999.0.0)
 
-###  1.221. <a name='SumII'></a>454 4Sum II
+###  1.223. <a name='SumII'></a>454 4Sum II
 
 [小明](https://www.bilibili.com/video/BV1ny4y1D7UL?spm_id_from=333.999.0.0)
 
-###  1.222. <a name='MinimumNumberofArrowstoBurstBalloons'></a>452. 【贪心🧡】Minimum Number of Arrows to Burst Balloons
+###  1.224. <a name='MinimumNumberofArrowstoBurstBalloons'></a>452. 【贪心🧡】Minimum Number of Arrows to Burst Balloons
 
 [花花酱](https://www.bilibili.com/video/BV1bW411d77B?spm_id_from=333.999.0.0)
 
@@ -16717,7 +17419,7 @@ class Solution:
         return res
 ```
 
-###  1.223. <a name='AssignCookies'></a>455-Assign Cookies
+###  1.225. <a name='AssignCookies'></a>455-Assign Cookies
 
 [哈哈哈](https://www.bilibili.com/video/BV157411s7b9?spm_id_from=333.999.0.0)
 
@@ -16785,7 +17487,7 @@ class Solution:
         return count
 ```
 
-###  1.224. <a name='Pattern'></a>456 132 Pattern
+###  1.226. <a name='Pattern'></a>456 132 Pattern
 
 [小明](https://www.bilibili.com/video/BV18f4y1i734?spm_id_from=333.999.0.0)
 
@@ -16903,15 +17605,15 @@ class Solution:
 不能， 因为要保证递减栈pop出的_MIN在原数组中下标要是最大的，先压入栈的数下标要最大，这个_MIN其实就是题目描述中的ak
 ```
 
-###  1.225. <a name='PoorPigs'></a>458 Poor Pigs
+###  1.227. <a name='PoorPigs'></a>458 Poor Pigs
 
 [小明](https://www.bilibili.com/video/BV1g5411576M?spm_id_from=333.999.0.0)
 
-###  1.226. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
+###  1.228. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
 
 [小明](https://www.bilibili.com/video/BV1Yt4y1S7XZ?spm_id_from=333.999.0.0)
 
-###  1.227. <a name='LFUCacheO1'></a>460. 【构造🏰】LFU Cache / O(1)
+###  1.229. <a name='LFUCacheO1'></a>460. 【构造🏰】LFU Cache / O(1)
 
 [花花酱](https://www.bilibili.com/video/BV1gt411Y7PR?spm_id_from=333.999.0.0)
 
@@ -17083,27 +17785,173 @@ class LFUCache:
 
 ```
 
-###  1.228. <a name='HammingDistance'></a>461 Hamming Distance
+###  1.230. <a name='HammingDistance'></a>461 【位运算😜】Hamming Distance
 
 [小明](https://www.bilibili.com/video/BV1M5411Y79g?spm_id_from=333.999.0.0)
 
-###  1.229. <a name='IslandPerimeter'></a>463 Island Perimeter
+```py
+用(x&d) ^ (y&d)来判断两个数二进制的某一位是否不同
+
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        cnt, d = 0, 1
+        for i in range(32):
+            if (x&d) ^ (y&d) != 0:
+                cnt += 1
+            d <<= 1
+        return cnt
+
+作者：bluegreenred
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/461-yi-ming-ju-chi-python-wei-yun-suan-b-ru8t/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+思路和心得：
+
+1.基本的位运算😜，注意数据范围
+
+2.异或常考
+
+python3c++
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        res = 0
+        z = x ^ y
+        for i in range(30, -1, -1):
+            if (z >> i) & 1: 
+                res += 1
+        return res
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/cpython3-ji-ben-wei-yun-suan-mei-shi-yao-726y/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+位运算😜
+
+
+ def hammingDistance(self, x, y):
+        # 取异或值得到明汉值 0 相同 1 不同 1的个数就是明汉距离
+        s = x ^ y
+        ret = 0
+        while s:
+            # 依次位移明汉值 和1取与，1与1的1 就累加
+            ret += s & 1
+            s >>= 1
+        return ret
+题解
+内置函数
+
+
+    def hammingDistance(self, x, y):
+        return len(list(filter(lambda x: x == '1', bin(x ^ y))))
+
+作者：rookie_ygl
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/python-ming-yi-ju-chi-by-rookie_ygl-shyf/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+先求异或，再送入func递归计算1的个数(LC191)
+
+代码
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        def func(n):
+            return 0 if n <= 0 else 1 + func(n & (n-1))
+        return func(x ^ y)
+        
+
+作者：dadaluoyu
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/ji-jian-di-gui-wei-yun-suan-yu-lc191you-yi-qu-tong/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+代码
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        s = x^y
+        res = 0
+        while s:
+            res+=1
+            s ^= s&(-s)
+        return res
+
+作者：yyq9012
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/syi-huo-sde-lowbit-by-yyq9012-iaic/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        num = x ^ y
+        count = 0
+        while num:
+            if num & 1 == 1:
+                count += 1
+            num = num >> 1
+        return count
+
+作者：luo-tuo-de-di-san-feng
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/461-yi-ming-ju-chi-by-luo-tuo-de-di-san-redbf/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+这道题目很简单吧，主要是两个关键点：一个是意识到计算两数字间的汉明距离需要使用异或运算，另一个是可以通过使用与运算避免对于异或运算结果中0的循环。
+
+第一点我想到了，但是第二点没有想到，参考题解之后才意识到。
+
+代码
+原始代码：
+
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        res = 0
+        z = x ^ y
+        while z:
+            res += z % 2
+            z = z >> 1
+        return res
+修改后代码：
+
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        res = 0
+        z = x ^ y
+        while z:
+            res += 1
+            z = z & (z-1)
+        return res
+虽然在时间复杂度上来说是相同的，但是后者在大部分情况下花费的时间都是比较少的。
+
+作者：xuezihao
+链接：https://leetcode-cn.com/problems/hamming-distance/solution/yi-ming-ju-chi-by-xuezihao-uwt7/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.231. <a name='IslandPerimeter'></a>463 Island Perimeter
 
 [小明](https://www.bilibili.com/video/BV16V41167bF?spm_id_from=333.999.0.0)
 
-###  1.230. <a name='CanIWin'></a>464. Can I Win
+###  1.232. <a name='CanIWin'></a>464. Can I Win
 
 [花花酱](https://www.bilibili.com/video/BV1KW411o7m2?spm_id_from=333.999.0.0)
 
-###  1.231. <a name='CountTheRepetitions'></a>466. 统计重复个数 Count The Repetitions
+###  1.233. <a name='CountTheRepetitions'></a>466. 统计重复个数 Count The Repetitions
 
 [官方](https://www.bilibili.com/video/BV1Qk4y1678m?spm_id_from=333.999.0.0)
 
-###  1.232. <a name='ValidateIPAddress'></a>468 Validate IP Address
+###  1.234. <a name='ValidateIPAddress'></a>468 Validate IP Address
 
 [小明](https://www.bilibili.com/video/BV1tg4y1q7Kq?spm_id_from=333.999.0.0)
 
-###  1.233. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
+###  1.235. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411Z7KX?spm_id_from=333.999.0.0)
 
@@ -17218,15 +18066,108 @@ class Solution:
              
 ```
 
-###  1.234. <a name='Heaters'></a>475. Heaters
+###  1.236. <a name='Heaters'></a>475. Heaters
 
 [小梦想家](https://www.bilibili.com/video/BV1vJ41117VH?spm_id_from=333.999.0.0)
 
-###  1.235. <a name='NumberComplement'></a>476. Number Complement
+###  1.237. <a name='NumberComplement'></a>476. 【位运算😜】Number Complement
 
 [花花酱](https://www.bilibili.com/video/BV1PW411y7mv?spm_id_from=333.999.0.0)
 
-###  1.236. <a name='TotalHammingDistance'></a>477. Total Hamming Distance
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.pvl104ml1dc.webp)
+
+时间复杂度：O(log num)。找出 num 二进制表示最高位的 11 需要的时间为 O(log num)。
+
+空间复杂度：O(1) 。
+
+
+```py
+class Solution:
+    def findComplement(self, num: int) -> int:
+        highbit = 0
+        for i in range(1, 30 + 1):
+            if num >= (1 << i):
+                highbit = i
+            else:
+                break
+        
+        mask = (1 << (highbit + 1)) - 1
+        return num ^ mask
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/number-complement/solution/shu-zi-de-bu-shu-by-leetcode-solution-xtn8/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def findComplement(self, num: int) -> int:
+        #----先找二进制的最高位（最左1的bit位）
+        most_high_bit = 0
+        for i in range(31):
+            if (num >> i) & 1:
+                most_high_bit = i
+        
+        mask = 0x7fffffff if most_high_bit == 30 else (1 << (most_high_bit + 1)) - 1
+        return mask ^ num
+
+
+作者：Hanxin_Hanxin
+链接：https://leetcode-cn.com/problems/number-complement/solution/cpython3java-1wei-yun-suan-mo-ni-by-hanx-haq1/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+1.num对2取模，结果1变0，0变1；然后按当前位数左移位，结果求和；num减半。
+2.终止条件：num已经减为0。
+
+
+class Solution:
+    def findComplement(self, num: int) -> int:
+        res=0
+        for i in range(32):
+            cur=not num%2
+            res+=cur<<i
+            num>>=1
+            if not num:
+                return res
+        return res
+
+作者：vincent-492
+链接：https://leetcode-cn.com/problems/number-complement/solution/pythonwei-yun-suan-by-vincent-492-87kl/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7057rnkw8r40.webp)
+
+```py
+
+class Solution:
+    def findComplement(self, num):
+        val = len(bin(num)) - 2
+        return num ^ ((1 << val) - 1)
+
+作者：suze
+链接：https://leetcode-cn.com/problems/number-complement/solution/476-shu-zi-de-bu-shu-pythonjie-fa-by-suz-pmmf/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+由题可得，num与补数的和，转换为二进制，恰好为与num相同二进制位数的所有位值为1的二进制数：
+num + num的步数 == 与num二进制相同位数的各位为1的二进制数
+
+代码
+
+class Solution:
+    def findComplement(self, num: int) -> int:
+        return (pow(2, len(bin(num))-2) - 1) - num
+
+作者：yi-ge-liang-ge-si-ge-san-ge
+链接：https://leetcode-cn.com/problems/number-complement/solution/wei-yun-suan-by-yi-ge-liang-ge-si-ge-san-8j32/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+###  1.238. <a name='TotalHammingDistance'></a>477. 【位运算😜】Total Hamming Distance
 
 [花花酱](https://www.bilibili.com/video/BV1SW411r78m?spm_id_from=333.999.0.0)
 
@@ -17315,31 +18256,31 @@ class Solution:
 ```
 
 
-###  1.237. <a name='GenerateRandomPointinaCircle'></a>478 Generate Random Point in a Circle
+###  1.239. <a name='GenerateRandomPointinaCircle'></a>478 Generate Random Point in a Circle
 
 [小明](https://www.bilibili.com/video/BV1Nz4y127a1?spm_id_from=333.999.0.0)
 
-###  1.238. <a name='SlidingWindowMedian'></a>480. 【滑动窗口🔹】Sliding Window Median
+###  1.240. <a name='SlidingWindowMedian'></a>480. 【滑动窗口🔹】Sliding Window Median
 
 [花花酱](https://www.bilibili.com/video/BV15W411C7iy?spm_id_from=333.999.0.0)
 
-###  1.239. <a name='FindPermutation'></a>484 Find Permutation
+###  1.241. <a name='FindPermutation'></a>484 Find Permutation
 
 [小明](https://www.bilibili.com/video/BV1NT4y1L76i?spm_id_from=333.999.0.0)
 
-###  1.240. <a name='MaxConsecutiveOnes'></a>485. Max Consecutive Ones
+###  1.242. <a name='MaxConsecutiveOnes'></a>485. Max Consecutive Ones
 
 [小梦想家](https://www.bilibili.com/video/BV1zJ411R7SJ?spm_id_from=333.999.0.0)
 
-###  1.241. <a name='PredicttheWinner'></a>486. Predict the Winner
+###  1.243. <a name='PredicttheWinner'></a>486. Predict the Winner
 
 [花花酱](https://www.bilibili.com/video/BV1kW411d7R2?spm_id_from=333.999.0.0)
 
-###  1.242. <a name='TheMaze'></a>490 The Maze
+###  1.244. <a name='TheMaze'></a>490 The Maze
 
 [小明](https://www.bilibili.com/video/BV1az4y1f7Hn?spm_id_from=333.999.0.0)
 
-###  1.243. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Target Sum
+###  1.245. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
 
@@ -17518,15 +18459,15 @@ class Solution(object):
 
 
 
-###  1.244. <a name='TeemoAttacking'></a>495 Teemo Attacking
+###  1.246. <a name='TeemoAttacking'></a>495 Teemo Attacking
 
 [小明](https://www.bilibili.com/video/BV1LK4y1Y75e?spm_id_from=333.999.0.0)
 
-###  1.245. <a name='INextGreaterElementI'></a>496. 下一个更大元素 I (Next Greater Element I)
+###  1.247. <a name='INextGreaterElementI'></a>496. 下一个更大元素 I (Next Greater Element I)
 
 [洛阳](https://www.bilibili.com/video/BV1Ce411W7pW?spm_id_from=333.999.0.0)
 
-###  1.246. <a name='RandomPointinNon-overlapping'></a>497 Random Point in Non-overlapping
+###  1.248. <a name='RandomPointinNon-overlapping'></a>497 Random Point in Non-overlapping
 
 [小明](https://www.bilibili.com/video/BV12K4y1Y7r6?spm_id_from=333.999.0.0)
 
