@@ -14833,6 +14833,15 @@ res3: Option[(Char, Int)] = Some((k,1))
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5j9pjpm6f080.webp)
 
 ```py
+这应该是最简单的方法了吧
+
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        ret = 0
+        for c in s + t:
+            ret ^= ord(c)
+        return chr(ret)
+
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
         # 初始化 ans 为 0
@@ -14845,74 +14854,55 @@ class Solution:
             ans ^= ord(ch)
         # 最终结果转换为 ASCII 字符
         return chr(ans)
-
-作者：yiluolion
-链接：https://leetcode-cn.com/problems/find-the-difference/solution/389-zhao-bu-tong-ji-shu-wei-yun-suan-qiu-zir1/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-
-
-解题思路
-因为字符串 t 是由字符串 s 随机重排，然后在随机位置添加一个字母。
-即对s和t中所有字符进行异或运算会剩下一字母也就是添加进去的那一个。如：
-
-
-s = "abcd", t = "abcde"
-其中abcd都是成双成对的（异或运算结果为0），剩下一个e（再次进行异或运算得e）
-
-作者：xun-luo
-链接：https://leetcode-cn.com/problems/find-the-difference/solution/389-zhao-bu-tong-wei-yun-suan-by-xun-luo-4q4z/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        # 利用字典
-        # d = {}
-        # for i in s:
-        #     if i in d:
-        #         d[i] += 1
-        #     else:
-        #         d[i] = 1
-        
-        # for i in t:
-        #     if i in d:
-        #         if d[i] == 0:return i
-        #         d[i] -= 1
-        #    else:
-        #         return i
-
-        # 位运算😜
-        ans = 0
-        for i in s:
-            ans ^= ord(i)
-
-        for i in t:
-             ans ^= ord(i)
-        
-        return chr(ans)
-
-作者：xun-luo
-链接：https://leetcode-cn.com/problems/find-the-difference/solution/389-zhao-bu-tong-wei-yun-suan-by-xun-luo-4q4z/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
+注意：Counter 和 count 的区别
+
 ```py
+
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
+        return [x for x in t if t.count(x)-s.count(x)==1][0]   
+
+
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        # t中字母一定多
         for c in t:
             if t.count(c)!=s.count(c):
                 return c
         return ""
 
+Counter是一个容器对象,主要的作用是用来统计散列对象,可以使用三种方式来初始化
+
+参数里面参数可迭代对象 Counter("success")
+
+传入关键字参数Counter((s=3,c=2,e=1,u=1))
+
+传入字典 Counter({"s":3,"c"=2,"e"=1,"u"=1})
+
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
         return next(iter(Counter(t)-Counter(s)))
+        
+iter(xxx) 和 xxx.elements() 都是迭代器
 
+Counter O(n)：
+
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        return next((Counter(t)-Counter(s)).elements())
+
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        return (collections.Counter(t) - collections.Counter(s)).popitem()[0] # 返回 ('e', 1)
+```
+
+注意：reduce 和 map 的 区别
+
+https://zhuanlan.zhihu.com/p/77311224
+
+```py
 Python 1行 ASCII 和之差
 
 class Solution:
@@ -14924,51 +14914,20 @@ ord 函数将单个字符转换为 ASCII 码， chr相反
 
 👆👆👆 py3 1行(列表生成器 and 生成器，这就是你py3写不到一行代码的差距 没说你)
 
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        return [x for x in t if t.count(x)-s.count(x)==1][0]
 
-Counter O(n)：
-
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        return next((Counter(t)-Counter(s)).elements())
 位运算😜 O(n)：
 
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
-        return chr(reduce(xor, map(ord, s+t)))
-```
-
-```py
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        return (collections.Counter(t) - collections.Counter(s)).popitem()[0]
+        return chr(reduce(xor, map(ord, s + t)))
 
 python reduce+lambda 一行。ord()取字符对应ascii码,chr()返回ascii码对应字符
 
 class Solution(object):
     def findTheDifference(self, s, t):
-        return reduce(lambda x,y: chr(ord(x) ^ ord(y)),s+t)
-
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        return [x for x in t if t.count(x)-s.count(x)==1][0]      
-
-这应该是最简单的方法了吧
-
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        ret = 0
-        for c in s + t:
-            ret ^= ord(c)
-        return chr(ret)
-
-一行极简
-
-class Solution:
-    def findTheDifference(self, s: str, t: str) -> str:
-        return [x for x in t if t.count(x)-s.count(x)==1][0]
+        return reduce(lambda x,y: chr(ord(x) ^ ord(y)), s + t)
+# sum1 = reduce(add, [1,2,3,4,5])   # 计算列表和：1+2+3+4+5
+# sum2 = reduce(lambda x, y: x+y, [1,2,3,4,5])  # 使用 lambda 匿名函数
 ```
 
 
@@ -15499,134 +15458,61 @@ class Solution:
 代码
 
 # 库函数作弊通过
-# class Solution:
-#     def toHex(self, num: int) -> str:
-#         return hex(num & 0xFFFFFFFF)[2:]
-
-# 这里手法先粗糙一点不使用高级的位运算😜
-# class Solution:
-#     # 其实做法跟转二进制是一模一样的都是逆向取余法
-#     def toHex(self, num: int) -> str:
-#         num &= 0xFFFFFFFF
-#         if num == 0:
-#             return '0'
-#         res = ''
-#         match = "abcdef"
-#         while num:
-#             num1 = num % 16
-#             s1 = str(num1)  if num1 < 10  else match[num1-10]
-#             res += s1
-#             num //= 16
-#         return res[::-1]
-
-# 接下来一模一样的代码换成二进制的位运算😜即可
 class Solution:
     def toHex(self, num: int) -> str:
-        num &= 0xFFFFFFFF
-        if num == 0:
-            return '0'
-        res = ''
-        match = "abcdef"
-        while num:
-            num1 = num & 15 # 等价于求余16
-
-作者：nong-ma-yi-sheng-1
-链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/qi-shi-gen-zhuan-er-jin-zhi-mei-sha-qu-b-mxgl/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        return hex(num & 0xFFFFFFFF)[2:] # 0xFFFFFFFF 2 ^ 32 - 1
 ```
 
 ```py
-学习大牛的思路，记下来慢慢品。
+学习大牛的思路，记下来慢慢
 32位整数，每4位1个字节，一个字节转成16进制刚好是0—f之间的一个字符；最多需要转换8次，可能有几个“0”，最后去掉就是了。
 
-
+直接 ans = []
 class Solution:
     def toHex(self, num: int) -> str:
-        if num==0:
+        if num == 0:
             return "0"
-        template="0123456789abcdef"
-        ans=[]
+        template = "0123456789abcdef"
+        ans = []
         for _ in range(8):
-            ans.append(template[num%16])
-            num//=16
+            ans.append(template[num % 16])
+            num //= 16
         ans.reverse()
         return "".join(ans).lstrip("0")
 
-作者：vincent-492
-链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/pythonwei-yun-suan-by-vincent-492-zo20/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-注意python中对负数的处理
+直接 result = ""
+
 class Solution(object):
     def toHex(self, num):
-        """
-        :type num: int
-        :rtype: str
-        """
+
         num = num & 0xffffffff
         result = ""
         lib = "0123456789abcdef"
         if num == 0:
             return "0"
-        while num != 0:
-            result = lib[num % 16] + result
-            num /= 16
+        while num:
+            result = lib[num % 16] + result # 一定要加在右边
+            num //= 16
 
         return result
 
-作者：mnm135
-链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/zhu-yi-pythonzhong-dui-fu-shu-de-chu-li-by-mnm135/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-class Solution:
-    def toHex(self, num):
-        """
-        :type num: int
-        :rtype: str
-        """
-        if num<0:
-            num = (1<<32)+num
-        return format(num, '0x')
+format的用法很多，值得深入学习
+
+print((1 << 32) + (-32))
+print(bin((1 << 32) + (-32)))
+print(format(((1 << 32) + (-32)), '0o'))
+print(format(((1 << 32) + (-32)), '0x'))
+4294967264
+0b11111111111111111111111111100000
+37777777740
+ffffffe0
 
 class Solution:
     def toHex(self, num):
-        """
-        :type num: int
-        :rtype: str
-        """
-        if num == 0:
-            return '0'
+
         if num < 0:
-            num += 2 ** 32
-
-        # --------核心代码，确实厉害--------
-        ans = ''
-        hexdigits = '0123456789abcdef'
-        while num:
-            ans += hexdigits[num % 16]
-            num //= 16
-        return ans[::-1]
-        # --------核心代码，确实厉害--------
-
-class Solution(object):
-    def toHex(self, num):
-        """
-        :type num: int
-        :rtype: str
-        """
-        if not num :
-            return "0"
-
-        result = []
-        hexStr ="0123456789abcdef"
-        while num and len(result) != 8:
-            h = num & 15
-            result.append(hexStr[h])
-            # num >>= 4,等效
-            num //= 16
-
-        return ''.join(result[::-1])
+            num = (1 << 32) + num
+        return format(num, '0x')
 ```
 
 ###  1.193. <a name='QueueReconstructionbyHeight'></a>406. Queue Reconstruction by Height 
@@ -17564,7 +17450,7 @@ class Solution:
 
 2.异或常考
 
-python3c++
+python3
 
 class Solution:
     def hammingDistance(self, x: int, y: int) -> int:
@@ -17575,15 +17461,12 @@ class Solution:
                 res += 1
         return res
 
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/hamming-distance/solution/cpython3-ji-ben-wei-yun-suan-mei-shi-yao-726y/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 位运算😜
 
 
- def hammingDistance(self, x, y):
+class Solution:
+    def hammingDistance(self, x, y):
         # 取异或值得到明汉值 0 相同 1 不同 1的个数就是明汉距离
         s = x ^ y
         ret = 0
@@ -17592,21 +17475,18 @@ class Solution:
             ret += s & 1
             s >>= 1
         return ret
-题解
+
 内置函数
 
+filter 的 函数 返回布尔值
 
+
+class Solution:
     def hammingDistance(self, x, y):
         return len(list(filter(lambda x: x == '1', bin(x ^ y))))
 
-作者：rookie_ygl
-链接：https://leetcode-cn.com/problems/hamming-distance/solution/python-ming-yi-ju-chi-by-rookie_ygl-shyf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 先求异或，再送入func递归计算1的个数(LC191)
-
-代码
 
 class Solution:
     def hammingDistance(self, x: int, y: int) -> int:
@@ -17615,26 +17495,16 @@ class Solution:
         return func(x ^ y)
         
 
-作者：dadaluoyu
-链接：https://leetcode-cn.com/problems/hamming-distance/solution/ji-jian-di-gui-wei-yun-suan-yu-lc191you-yi-qu-tong/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-代码
-
 class Solution:
     def hammingDistance(self, x: int, y: int) -> int:
-        s = x^y
+        s = x ^ y
         res = 0
         while s:
-            res+=1
-            s ^= s&(-s)
+            res += 1
+            s ^= s & (-s)
+            # 找到并消掉最后的那个1
         return res
 
-作者：yyq9012
-链接：https://leetcode-cn.com/problems/hamming-distance/solution/syi-huo-sde-lowbit-by-yyq9012-iaic/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 class Solution:
     def hammingDistance(self, x: int, y: int) -> int:
@@ -17646,28 +17516,6 @@ class Solution:
             num = num >> 1
         return count
 
-作者：luo-tuo-de-di-san-feng
-链接：https://leetcode-cn.com/problems/hamming-distance/solution/461-yi-ming-ju-chi-by-luo-tuo-de-di-san-redbf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-这道题目很简单吧，主要是两个关键点：一个是意识到计算两数字间的汉明距离需要使用异或运算，另一个是可以通过使用与运算避免对于异或运算结果中0的循环。
-
-第一点我想到了，但是第二点没有想到，参考题解之后才意识到。
-
-代码
-原始代码：
-
-
-class Solution:
-    def hammingDistance(self, x: int, y: int) -> int:
-        res = 0
-        z = x ^ y
-        while z:
-            res += z % 2
-            z = z >> 1
-        return res
-修改后代码：
 
 
 class Solution:
@@ -17678,12 +17526,7 @@ class Solution:
             res += 1
             z = z & (z-1)
         return res
-虽然在时间复杂度上来说是相同的，但是后者在大部分情况下花费的时间都是比较少的。
 
-作者：xuezihao
-链接：https://leetcode-cn.com/problems/hamming-distance/solution/yi-ming-ju-chi-by-xuezihao-uwt7/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.231. <a name='IslandPerimeter'></a>463 Island Perimeter
@@ -17845,77 +17688,32 @@ class Solution:
         mask = (1 << (highbit + 1)) - 1
         return num ^ mask
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-complement/solution/shu-zi-de-bu-shu-by-leetcode-solution-xtn8/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def findComplement(self, num: int) -> int:
-        #----先找二进制的最高位（最左1的bit位）
-        most_high_bit = 0
-        for i in range(31):
-            if (num >> i) & 1:
-                most_high_bit = i
-        
-        mask = 0x7fffffff if most_high_bit == 30 else (1 << (most_high_bit + 1)) - 1
-        return mask ^ num
-
-
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/number-complement/solution/cpython3java-1wei-yun-suan-mo-ni-by-hanx-haq1/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-1.num对2取模，结果1变0，0变1；然后按当前位数左移位，结果求和；num减半。
-2.终止条件：num已经减为0。
-
-
-class Solution:
-    def findComplement(self, num: int) -> int:
-        res=0
-        for i in range(32):
-            cur=not num%2
-            res+=cur<<i
-            num>>=1
-            if not num:
-                return res
-        return res
-
-作者：vincent-492
-链接：https://leetcode-cn.com/problems/number-complement/solution/pythonwei-yun-suan-by-vincent-492-87kl/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 ```
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7057rnkw8r40.webp)
 
 ```py
+A = 1111
+B = 1100
+C = 0011
+
+C = A ^ B
+C = A - B
 
 class Solution:
     def findComplement(self, num):
         val = len(bin(num)) - 2
         return num ^ ((1 << val) - 1)
 
-作者：suze
-链接：https://leetcode-cn.com/problems/number-complement/solution/476-shu-zi-de-bu-shu-pythonjie-fa-by-suz-pmmf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 由题可得，num与补数的和，转换为二进制，恰好为与num相同二进制位数的所有位值为1的二进制数：
 num + num的步数 == 与num二进制相同位数的各位为1的二进制数
 
-代码
-
 class Solution:
     def findComplement(self, num: int) -> int:
-        return (pow(2, len(bin(num))-2) - 1) - num
+        val = len(bin(num)) - 2
+        return (pow(2, val) - 1) - num
 
-作者：yi-ge-liang-ge-si-ge-san-ge
-链接：https://leetcode-cn.com/problems/number-complement/solution/wei-yun-suan-by-yi-ge-liang-ge-si-ge-san-8j32/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.238. <a name='TotalHammingDistance'></a>477. 【位运算😜】Total Hamming Distance
@@ -17923,89 +17721,43 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV1SW411r78m?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def totalHammingDistance(self, nums: List[int]) -> int:
-        s_nums = [bin(s)[2:].rjust(32, "0") for s in nums]
-        res = 0
-        for item in zip(*s_nums):
-            res += item.count("1") * item.count("0")
-        return res
-
 # 第一想法就是暴力，直接超时
 class Solution(object): # 此法超时
     def totalHammingDistance(self, nums):
-        """
-        :type nums: List[int]
-        :rtype
-        """
         res = 0
         for i in range(len(nums)):
-            for j in range(i+1, len(nums)):
-                res += bin(nums[i]^nums[j]).count('1')
+            for j in range(i + 1, len(nums)):
+                res += bin(nums[i] ^ nums[j]).count('1')
         return res
+
 class Solution(object): # 此法超时
     def totalHammingDistance(self, nums):
-        """
-        :type nums: List[int]
-        :rtype
-        """
         return sum(b.count('0') * b.count('1') for b in zip(*map('{:032b}'.format, nums)))
 ```
 
 ```py
+这个方法妙啊！
 class Solution:
     def totalHammingDistance(self, nums: List[int]) -> int:
-        res, n = 0, len(nums)
-        for i in range(32):
-            cnt_1 = 0
-            for j in range(n):
-                cnt_1 += (nums[j] >> i) & 1
-            res += (n - cnt_1) * cnt_1
-        return res 
-
-class Solution:
-    def totalHammingDistance(self, nums: List[int]) -> int:
-        n = len(nums)
-        ans = 0
-        for i in range(30):
-            c = sum(((val >> i) & 1) for val in nums)
-            ans += c * (n - c)
-        return ans
-
-class Solution(object):
-    def totalHammingDistance(self, nums):
-        """
-        :type nums: List[int]
-        :rtype
-        """
-        # iterate thru "column" or bit position
-        # Note: you could stop at 10^9 as stated in the problem if you want to optimize
+        s_nums = [bin(s)[2:].rjust(32, "0") for s in nums]
         res = 0
-        for i in range(32):
-            mask = 1 << i
-            count_ones, count_zeros = 0, 0
-            for num in nums:
-                if num & mask != 0:
-                    count_ones += 1
-                else:
-                    count_zeros += 1
-            res += count_ones * count_zeros
+        for item in zip(*s_nums): # 字符串zip的时候要加星号
+            res += item.count("1") * item.count("0")
         return res
 
 class Solution:
     def totalHammingDistance(self, nums: List[int]) -> int:
-        c0,c1,sm=0,0,0
+        c0, c1, sm=0,0,0
         for i in range(31):
-            c0=c1=0
+            c0 = c1 = 0
             for n in nums:
-                if (n>>i)&1:
-                    c1+=1
+                if (n >> i) & 1:
+                    c1 += 1 # count("1")
                 else:
-                    c0+=1
-            sm+=c0*c1
+                    c0 += 1 # count("0")
+            sm += c0 * c1
         return sm
 ```
-
 
 ###  1.239. <a name='GenerateRandomPointinaCircle'></a>478 Generate Random Point in a Circle
 
