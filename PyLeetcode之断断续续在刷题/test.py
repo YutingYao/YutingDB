@@ -1,26 +1,16 @@
+MASK1 = 0x100000000  # 2^32
+minInt1000 = 0x80000000  # 2^31
+maxInt0111 = 0X7FFFFFFF  # 2^31-1
+
 class Solution:
-    def findRepeatedDnaSequences(self, s: str) -> List[str]:
-        if len(s) < 11: return []
-
-        bin = { "A":  0,
-              "C" : 1,
-              "G":  2,
-              "T":  3 }
-
-        ans = []
-        cntDIC = {} # record the appearance time
-
-        x = 0
-        for i in range(10): # use former 10 chars to init
-            x += bin[s[i]] << (i * 2)
-        cntDIC[x] = 1
-        
-        for i in range(10, len(s)):
-            x >>= 2  # remove the left char
-            x += bin[s[i]] << 18 # add the right char
-
-            cntDIC[x] = cntDIC.get(x, 0) + 1
-            if cntDIC[x] == 2:
-                ans.append(s[i - 9:i + 1]) # find the result
-
-        return ans
+    def getSum(self, a: int, b: int) -> int:
+        a %= MASK1
+        b %= MASK1
+        while b != 0:
+            carry = ((a & b) << 1) % MASK1
+            a = (a ^ b) % MASK1
+            b = carry
+        if a & minInt1000:  # 负数，也就是第31位有东西
+            return ~((a ^ minInt1000) ^ maxInt0111)
+        else:  # 正数，也就是第31位没有东西
+            return a

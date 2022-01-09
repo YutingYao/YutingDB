@@ -2784,6 +2784,7 @@ object Solution {
 时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
 
 空间复杂度：O(1)
+
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
         ans = 0
@@ -13735,30 +13736,23 @@ object Solution2 {
 ```py
 class Solution:
     def isPowerOfFour(self, n: int) -> bool:
-        return n > 0 and (n & (n - 1)) == 0 and (n & 0xaaaaaaaa) == 0
+        return n > 0 and (n & (n - 1)) == 0 and n % 3 == 1
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/power-of-four/solution/4de-mi-by-leetcode-solution-b3ya/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
 
 class Solution:
     def isPowerOfFour(self, n: int) -> bool:
-        return n > 0 and (n & (n - 1)) == 0 and n % 3 == 1
+        return n > 0 and (n & (n - 1)) == 0 and (n & 0xaaaaaaaa) == 0
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/power-of-four/solution/4de-mi-by-leetcode-solution-b3ya/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
 
 class Solution:
     def isPowerOfFour(self, n: int) -> bool:
         return n > 0 and n & n - 1 == 0 and n & 0b1010101010101010101010101010101 == n
 
-class Solution:
-    def isPowerOfFour(self, n: int) -> bool:
-        d=[1,4,16,64,256,1024,4096,16384,65536,262144,1048576,4194304,16777216,67108864,268435456,1073741824]
-        return n in d
 ```
 
 ```py
@@ -14182,57 +14176,103 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV15D4y1Q74b?spm_id_from=333.999.0.0)
 
-###  1.172. <a name='-1'></a>371【位运算😜】
+###  1.172. <a name='-1'></a>371【位运算😜 + 有点难，再看看】
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6oayqs4ig3g0.webp)
 
 ```py
-MASK1 = 4294967296  # 2^32
-MASK2 = 2147483648  # 2^31
-MASK3 = 2147483647  # 2^31-1
+MAX = 1024
+MAX_INT = 1023
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        """
+        a 001
+        b 010
+        a^b 011
+        -------
+        a 010
+        b 011
+        a^b 001
+        ===> 统计所有进位的1
+        a^b^((a&b)<<1)
+        -------
+        a 010100
+        b 011110
+        a^b 001010
+        所有进位 101010
+        进位的异或还可能有进位!
+        所以要使用循环or迭代处理
+        -------
+        负数补码总会提供最左的1，按位取反，要特殊处理负数
+        Python需要要做整数的溢出
+        既然数据范围是1000，那我们认定最大的整数是1024-1做溢出即可
+        """
+        def int_overflow(val):
+            if not -MAX <= val <= MAX_INT:
+                val = (val + MAX) % (2 * MAX) - MAX
+            return val
+        while b:
+            a,b = int_overflow(a^b), int_overflow((a & b) << 1)
+        return a
+
+作者：himymBen
+链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/pythonjava-wei-yun-suan-di-gui-or-die-da-7esn/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+MASK1 = 0x100000000  # 2^32
+minInt1000 = 0x80000000  # 2^31
+maxInt0111 = 0X7FFFFFFF  # 2^31-1
 
 class Solution:
     def getSum(self, a: int, b: int) -> int:
-        a %= MASK1
-        b %= MASK1
         while b != 0:
-            carry = ((a & b) << 1) % MASK1
+            carry = ((a & b) << 1)
             a = (a ^ b) % MASK1
             b = carry
-        if a & MASK2:  # 负数
-            return ~((a ^ MASK2) ^ MASK3)
-        else:  # 正数
+        return a if a <= maxInt0111 else ~((a % minInt1000) ^ maxInt0111)   
+
+MM = 0xFFFFFFFF # 2^32-1
+MASK1 = 0x100000000  # 2^32
+minInt1000 = 0x80000000  # 2^31
+maxInt0111 = 0X7FFFFFFF  # 2^31-1
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        while b != 0:
+            carry = ((a & b) << 1)
+            a = (a ^ b) % MASK1
+            b = carry
+        return a if a <= maxInt0111 else ~ (a ^ MM)
+
+MASK1 = 0x100000000  # 2^32
+minInt1000 = 0x80000000  # 2^31
+maxInt0111 = 0X7FFFFFFF  # 2^31-1
+
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        while b != 0:
+            carry = ((a & b) << 1)
+            a = (a ^ b) % MASK1
+            b = carry
+        if a & minInt1000:  # 负数，也就是第31位有东西
+            return ~((a ^ minInt1000) ^ maxInt0111)
+        else:  # 正数，也就是第31位没有东西
             return a
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/liang-zheng-shu-zhi-he-by-leetcode-solut-c1s3/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+MASK1 = 0x100000000  # 2^32
+minInt1000 = 0x80000000  # 2^31
+maxInt0111 = 0X7FFFFFFF  # 2^31-1
 
-class Solution(object):
-    def getSum(self, a, b):
-        """
-        :type a: int
-        :type b: int
-        :rtype: int
-        """
-        # 2^32
-        MASK = 0x100000000
-        # 整型最大值
-        MAX_INT = 0x7FFFFFFF
-        MIN_INT = MAX_INT + 1
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
         while b != 0:
-            # 计算进位
-            carry = (a & b) << 1 
-            # 取余范围限制在 [0, 2^32-1] 范围内
-            a = (a ^ b) % MASK
-            b = carry % MASK
-        return a if a <= MAX_INT else ~((a % MIN_INT) ^ MAX_INT)   
-
-作者：jalan
-链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/wei-yun-suan-xiang-jie-yi-ji-zai-python-zhong-xu-y/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+            carry = ((a & b) << 1)
+            a = (a ^ b) % MASK1
+            b = carry
+        return ~((a ^ minInt1000) ^ maxInt0111) if a & minInt1000 else a   
 
 class Solution:
     def getSum(self, a: int, b: int) -> int:
@@ -14242,41 +14282,9 @@ class Solution:
             carry = a & b
             a ^= b
             b = ((carry) << 1) & 0xFFFFFFFF
-            # print((a, b))
-        return a if a < 0x80000000 else ~(a^0xFFFFFFFF)
-
-作者：lih627
-链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/python-wei-yun-suan-yi-xie-keng-by-lih/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def getSum(self, a: int, b: int) -> int:
-        return ((a + b) << 1) + (a ^ b)
-
-作者：michael_chou
-链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/0371-liang-zheng-shu-zhi-he-wei-yun-suan-kmze/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-Iteration
-
-
-class Solution:
-    def getSum(self, a: int, b: int) -> int:
-        # 2 ^ 32
-        MASK = 0x100000000
-        MM = 0xFFFFFFFF
-        MAX_INT = 0x7FFFFFFF
-        MIN_INT = 0x80000000
-        while b != 0:
-            carry = (a & b) << 1
-            a = (a ^ b) % MASK
-            b = carry % MASK
-        return a if a <= MAX_INT else ~(a ^ MM)
+        return a if a < 0x80000000 else ~ (a ^ 0xFFFFFFFF)
 
 Recursion
-
 
 class Solution:
     def getSum(self, a: int, b: int) -> int:
@@ -14287,17 +14295,12 @@ class Solution:
         MIN_INT = 0x80000000
 
         if 0 == b:
-            return a if a <= MAX_INT else ~(a ^ MM)
+            return a if a <= MAX_INT else ~ (a ^ MM)
 
         carry = (a & b) << 1
         a = (a ^ b) % MASK
-        b = carry % MASK                    
+        b = carry        
         return self.getSum(a, b)
-
-作者：xiang-lee
-链接：https://leetcode-cn.com/problems/sum-of-two-integers/solution/pythonfu-shu-yi-chu-by-xiang-lee-5lvu/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.173. <a name='FindKPairswithSmallestSumsk'></a>373. Find K Pairs with Smallest Sums查找和最小的k对数字
