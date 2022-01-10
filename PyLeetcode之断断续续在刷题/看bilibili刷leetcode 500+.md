@@ -2829,6 +2829,12 @@ class Solution:
 ```py
 方法一：依次比较相邻位
 
+class Solution(object):
+    def hasAlternatingBits(self, n):
+        tmp = str(bin(n))[2:]
+        res = [tmp[i] != tmp[i-1] for i in range(1, len(tmp))]
+        return all(res)
+
 class Solution:
     def hasAlternatingBits(self, n: int) -> bool:
         if n == 1:
@@ -2842,7 +2848,12 @@ class Solution:
             pre = cur
             n >>= 1
         return True
+
 方法二：直接看二进制表达中有无'11'或者'00'
+
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        return not('11' in bin(n) or '00' in bin(n))
 
 class Solution:
     def hasAlternatingBits(self, n: int) -> bool:
@@ -2850,6 +2861,7 @@ class Solution:
         if '11' in bit or '00' in bit:
             return False
         return True
+
 方法三：异或
 
 class Solution:
@@ -2858,138 +2870,25 @@ class Solution:
         n = n ^ ( n >> 1)
         return n & (n+1) == 0
 
-作者：ray-king-ray
-链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/693-jiao-ti-wei-er-jin-zhi-shu-by-ray-ki-c1tf/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-解题思路
-将n右移一位之后异或n本身，最后检查结果是否全为1。
-
-
 这里主要是需要注意 n&(n-1)和 n&(n+1)的区别
 
-代码
-
-class Solution:
-    def hasAlternatingBits(self, n: int) -> bool:
-        n ^= n>>1
-        return n & (n+1) == 0
-
-作者：yerikshu
-链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/wei-yun-suan-lian-xi-by-yerikshu-qc08/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-解题思路
-此处撰写解题思路
-
-代码
-
 class Solution(object):
     def hasAlternatingBits(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        mask1 = bin(0xaaaaaaaa)[2:]
-        mask2 = bin(0x55555555)[2:]
+        mask = bin(0xaaaaaaaa)[2:] # 10101010101010101010101010101010
         str_num = bin(n)[2:]
-        if str_num in mask1 or str_num in mask2:
+        if str_num in mask:
             return True
         else:
             return False
-        
-
-作者：mnm135
-链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/zi-fu-chuan-fang-fa-by-mnm135/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 
 class Solution(object):
     def hasAlternatingBits(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        temp = n ^ (n >> 1)
-        return temp & (temp + 1) == 0
-        
-
-作者：mnm135
-链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits/solution/wei-yun-suan-you-yi-hou-yi-huo-pan-duan-shi-fou-qu/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def hasAlternatingBits(self, n: int) -> bool:
-        while n:
-            prenum = (n//2) & 1 # 背一背，和16进制差不多
-            nownum = n%2
-            if prenum == nownum:
-                return False
-            n>>=1
-        return True
-
-class Solution:
-    def hasAlternatingBits(self, n: int) -> bool:
-        while n:
-            x = n & 1 # 如果两个相应位都为1,则该位的结果为1
-            n>>=1 # 把">>"左边的运算数的各二进位全部右移1位
-            y = n & 1
-            if x==y:
-                return False
-        return True
-
-class Solution(object):
-    def hasAlternatingBits(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        tmp = str(bin(n))[2:]
-        res = [tmp[i] != tmp[i-1] for i in range(1, len(tmp))]
-        return all(res)
-
-class Solution(object):
-    def hasAlternatingBits(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        return not ('11' in str(bin(n)) or '00' in str(bin(n)))
-
-class Solution:
-    def hasAlternatingBits(self, n: int) -> bool:
-        return not('11' in bin(n) or '00' in bin(n))
-
-class Solution(object):
-    def hasAlternatingBits(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        n = str(bin(n))[2:]
-        for i in range(0, len(n)-1):
-            if n[i] == n[i+1]:
-                return False
-        return True
-
-# bin()本身返回的就是字符串
-
-class Solution(object):
-    def hasAlternatingBits(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        b = n >> 1
-        res = bin(b^n)[2:]
-        if '0' in res:
-            return False
-        else:
+        mask = bin(0x55555555)[2:] # 1010101010101010101010101010101
+        str_num = bin(n)[2:]
+        if str_num in mask:
             return True
+        else:
+            return False
 ```
 
 ###  1.65. <a name='-1'></a>695-岛屿的最大面积
@@ -5310,65 +5209,18 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1M64y1D78v?spm_id_from=333.999.0.0)
 
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.2pr4b3ii8xk0.webp)
-
-```py
-class Solution:
-    def reorderedPowerOf2(self, n: int) -> bool:
-        # lowbit判断是否为2的幂
-        def check(A):
-            x=0
-            for a in A:
-                x=x*10+int(a)
-            return x&(x-1)==0 
-
-        arr=list(str(n))
-        # 排序
-        arr.sort()
-        n=len(arr)
-        visited=set()
-        # 计算全排列
-        def permutations(nums):            
-            if len(nums)==n and check(nums):
-                return True
-
-            for i,num in enumerate(arr):
-                # 首项不为0
-                if not nums and arr[i]=='0':continue
-                # 去重
-                if i>0 and arr[i]==arr[i-1] and i-1 not in visited:continue
-                if i not in visited:
-                    visited.add(i)
-                    if permutations(nums+[arr[i]]):
-                        return True
-                    visited.remove(i)
-            return False
-
-        return permutations([])
-
-作者：yim-6
-链接：https://leetcode-cn.com/problems/reordered-power-of-2/solution/python3-liang-chong-fang-fa-pan-duan-shi-t7sx/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3ds0zmfkn4q0.webp)
 
 ```py
 class Solution:
     def reorderedPowerOf2(self, n: int) -> bool:
-        cnt=Counter(str(n))
+        cnt = Counter(str(n))
         # 因为n<10^9,而2^31>10^9所以枚举到2^31即可
         for i in range(32):
-            x=1<<i
-            if Counter(str(x))==cnt:
+            x = 1 << i
+            if Counter(str(x)) == cnt:
                 return True
         return False
-
-作者：yim-6
-链接：https://leetcode-cn.com/problems/reordered-power-of-2/solution/python3-liang-chong-fang-fa-pan-duan-shi-t7sx/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 思路和心得：
 
@@ -5377,20 +5229,6 @@ class Solution:
 
 2.2的幂只有31个，统计判断比较简单
 
-python3c++
-
-class Solution:
-    def reorderedPowerOf2(self, n: int) -> bool:
-        a = collections.Counter(str(n))
-        for i in range(31):
-            if collections.Counter(str(1 << i)) == a:
-                return True
-        return False
-
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/reordered-power-of-2/solution/cpython3-2de-mi-you-31ge-yi-ci-bi-jiao-d-b9tt/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.141. <a name='SmallestSubtreewithalltheDeepestNodes'></a>865. Smallest Subtree with all the Deepest Nodes
@@ -8816,28 +8654,26 @@ class Solution:
 （二）移位
 
 ```py
+我的写法
+
 class Solution:
     def minFlips(self, a: int, b: int, c: int) -> int:
-        res = 0
-        while a > 0 or b > 0 or c > 0:
-            bit_a = a % 2
-            bit_b = b % 2
-            bit_c = c % 2
-            if bit_c == 0:
-                res += (bit_a + bit_b)
-            else:
-                if bit_a == 0 and bit_b == 0:
-                    res += 1
-            a //= 2
-            b //= 2
-            c //= 2
-        return res
+        cnt = 0
+        # while(a or b or c):
+        while c >= 1 or a >= 1 or b >= 1:
+            # c的末位为1，则ab末位中有一个1即可
+            if c & 1: # 当 c 为 1 时
+                if a & 1 == 0 and b & 1 == 0:
+                    cnt += 1
+            # c的末位为0，则ab末位中有一个1需要反转一次
+            else: # 当 c 为 0 时
+                cnt += (a & 1) + (b & 1)
+            a >>= 1
+            b >>= 1
+            c >>= 1
+        return cnt
 
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/cpython3-wei-yun-suan-zhuang-tai-ya-suo-engoa/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
+其他人的写法：需要将n向右移动，并与1做与运算，即：(n>>i)&1。
 class Solution:
     def minFlips(self, a: int, b: int, c: int) -> int:
         res = 0
@@ -8853,49 +8689,6 @@ class Solution:
 
         return res
 
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/cpython3-wei-yun-suan-zhuang-tai-ya-suo-engoa/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-对于每一位，解空间固定，字典dct记录所有可能性
-
-将a,b,c分别跟1相与可以取到末位二进制数值,不断右移就可以遍历到每一位
-
-python
-
-class Solution:
-    def minFlips(self, a: int, b: int, c: int) -> int:
-        dct = {
-            (0, 0, 0): 0,
-            (0, 0, 1): 1,
-            (0, 1, 0): 1,
-            (0, 1, 1): 0,
-            (1, 0, 0): 1,
-            (1, 0, 1): 0,
-            (1, 1, 0): 2,
-            (1, 1, 1): 0,
-        }
-        res = 0
-        for _ in range(32):
-            res += dct[(a & 1, b & 1, c & 1)]
-            a >>= 1
-            b >>= 1
-            c >>= 1
-
-        return res
-
-作者：desti
-链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/1318-wei-yun-suan-ha-xi-by-desti-sjgg/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-简单题，逐位判断或运算是否相等，不相等时，如果 c 的那位是 0，说明 a，b 同位都得为 0，如果是 1，则只需变一个。
-
-代码如下：
-
-c++cpythonjavascript
-
 class Solution:
     def minFlips(self, a: int, b: int, c: int) -> int:
         res = 0
@@ -8906,86 +8699,6 @@ class Solution:
             if (x | y) != z:
                 res += 1 if z else x + y
         return res
-
-作者：cml-r
-链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/1318-huo-yun-suan-de-zui-xiao-fan-zhuan-8q45e/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-循环遍历每一个数位，根据c的每一位判断需要反转的次数，这里利用右移保证我们每次只需要判断末位，循环条件保证我们会遍历abc的每一个数位
-
-代码
-
-class Solution(object):
-    def minFlips(self, a, b, c):
-        """
-        :type a: int
-        :type b: int
-        :type c: int
-        :rtype: int
-        """
-        self.res = 0
-        # 遍历每个数位，以c为基准，根据c的每一位是1还是0判断需要a，b反转次数
-        # 当三个数都为空时，说明我们遍历了所有的数位（数位不够的默认高位为0）
-        while(a or b or c):
-            # c的末位为1，则ab末位中有一个1即可
-            if c & 1:
-                if not b & 1 and not a & 1:
-                    self.res += 1
-            # c的末位为0，则ab末位中有一个1需要反转一次
-            else:
-                self.res += a & 1
-                self.res += b & 1
-            # abc都右移一位，让原来第二位变成末位，进行循环判断
-            a = a >> 1
-            b = b >> 1
-            c = c >> 1
-        return self.res
-
-作者：number1roy
-链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/xun-huan-bian-li-yi-wei-mo-wei-pan-duan-fqi2h/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-关于位运算😜有两个基本知识是这道题用到的：
-
-第一，如何取出某个整数n在指定二进制位（从右数第i位）上的值，需要将n向右移动，并与1做与运算，即：(n>>i)&1。
-
-第二，或运算的计算法则：两个操作数只要有一个是1，则结果是1，两个操作数都是零，结果是零。
-
-设a_，b_，c_为a，b，c中对应的二进制位，则三者的数值与需要翻转的次数存在下面的关系：
-
-    flip = {(0, 0, 0): 0,       # ab不需要翻转，c才为零
-            (0, 1, 0): 1,       # b翻转成0
-            (1, 0, 0): 1,       # a翻转成0
-            (1, 1, 0): 2,       # ab需要都翻转成0，两次翻转
-            (0, 0, 1): 1,       # a或b翻转成1，c为1
-            (0, 1, 1): 0,       # 不需要翻转
-            (1, 0, 1): 0,
-            (1, 1, 1): 0,
-            }
-因此，我们可以对每一位计算需要翻转的次数，并求和作为结果，注意整型变量总位数为32。
-
-
-class Solution:
-    def minFlips(self, a: int, b: int, c: int) -> int:
-
-        flip = {(0, 0, 0): 0,       # ab不需要翻转，c才为零
-                (0, 1, 0): 1,       # b翻转成0
-                (1, 0, 0): 1,       # a翻转成0
-                (1, 1, 0): 2,       # ab需要都翻转成0，两次翻转
-                (0, 0, 1): 1,       # a或b翻转成1，c为1
-                (0, 1, 1): 0,       # 不需要翻转
-                (1, 0, 1): 0,
-                (1, 1, 1): 0,
-                }
-
-        return sum(flip[((a >> i) & 1, (b >> i) & 1, (c >> i) & 1)] for i in range(32))
-
-
-s = Solution()
-print(s.minFlips(2,6,5))
-根据逻辑做情况合并也是可以的：
 
 
 class Solution:
@@ -8998,11 +8711,6 @@ class Solution:
             else:
                 ans += bit_a + bit_b == 0
         return ans
-
-作者：skx
-链接：https://leetcode-cn.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/solution/jian-dan-de-wei-yun-suan-by-skx-my64/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.282. <a name='NumberofOperationstoMakeNetworkConnected'></a>1319. 【🍒并查集】Number of Operations to Make Network Connected
@@ -9344,61 +9052,7 @@ class Solution:
 ###  1.294. <a name='1356'></a> 1356 【位运算😜】
 
 ```py
-代码
-
-class Solution:
-    def sortByBits(self, arr: List[int]) -> List[int]:
-        return [i for i, j in sorted([[val, collections.Counter(bin(val))['1']] for val in arr], 
-                key = lambda a: (a[1],a[0]))]
-自己写函数统计1的个数
-
-class Solution:
-
-    def getNumOfOne(self, num):
-        res = 0
-        while num:
-            res += num&1
-            num = num >> 1
-        return res
-
-    def sortByBits(self, arr: List[int]) -> List[int]:
-        return [i for i, j in sorted([[val, self.getNumOfOne(val)] for val in arr], 
-                key = lambda a: (a[1],a[0]))]
-
-作者：LeahChao
-链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/yi-xing-pythondai-ma-by-leahchao/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-这题的核心是计算每个数字的1的个数。如果用库自带的函数就没意思了。
-这里参考java的java.lang.Integer#bitCount函数。（题外话：在java语境下跑此函数会触发Intrinsic优化，直接执行cpu指令更快）。
-先贴代码：
-
-
-    def sortByBits(self, arr: List[int]) -> List[int]:
-        def bitcount(i: int) -> int:
-            i = i - ((i >> 1) & 0x55555555)
-            i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
-            i = (i + (i >> 4)) & 0x0f0f0f0f
-            i = i + (i >> 8)
-            return i & 0x1f
-        return sorted(arr, key=lambda x: (bitcount(x), x))
-很神奇，五行代码就搞定了。思路是将位数两两相加。
-第一行代码将0，1位相加、2，3位相加......。
-第二行代码将0，1，2，3位相加、4，5，6，7位相加......。
-第三行代码将0-7位相加、8-15位相加......。
-第四行代码将1-15位相加......。
-最后一行mask一下返回结果。
-
-需要注意的是题目的数字范围是0 <= arr[i] <= 10^4，因此只需要14位二进制位表示，这里取16位计算。
-二进制位运算😜能加快运行效率，且使代码更加简洁。但同时让代码晦涩难懂。慎用慎用。
-
-作者：wo-shi-yi-zhi
-链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/pythonwei-yun-suan-ji-suan-bitcount-by-wo-shi-yi-z/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-如何计算二进制中1的数量 位运算😜+记忆化
+如何计算二进制中1的数量 位运算😜+记忆化 + 递归
 
 class Solution:
     def sortByBits(self, arr: List[int]) -> List[int]:
@@ -9406,19 +9060,31 @@ class Solution:
         def count_1(n):
             return 0 if n==0 else count_1(n&(n-1))+1
         
-        arr.sort(key=lambda x:(count_1(x), x))
+        arr.sort(key = lambda x:(count_1(x), x)) # 按照count的大小排序，按照x的值大小排序
         return arr
 
-作者：seam
-链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/ru-he-ji-suan-er-jin-zhi-zhong-1de-shu-liang-wei-y/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+Counter
 
-按照题意来解答的，技巧性不多，纯粹是使用python的内嵌函数，不过这个方式真的要归类的话，应该是属于模拟。
+class Solution:
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        return [i for i, j in sorted([[val, collections.Counter(bin(val))['1']] for val in arr], 
+                key = lambda a: (a[1],a[0]))]
 
+自己写函数统计1的个数
 
+class Solution:
 
-代码
+    def getNumOfOne(self, num):
+        res = 0
+        while num:
+            res += num & 1
+            num = num >> 1
+        return res
+
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        return [i for i, j in sorted([[val, self.getNumOfOne(val)] for val in arr], 
+                key = lambda a: (a[1],a[0]))]
+
 
 class Solution:
     def sortByBits(self, arr: List[int]) -> List[int]:
@@ -9427,21 +9093,22 @@ class Solution:
 
         for i in iter(arr):
             # 统计二进制为1的数目，分类添加，这个其实有桶的感觉
-            dic[bin(i).count("1")].append(i)
+            dic[bin(i).count("1")].append(i) # dic[键].append(值)
         
         # 对key进行排序
-        dic = sorted(dic.items(), key = lambda x:x[0])
+        dic = sorted(dic.items(), key = lambda x: x[0])
 
         res = list()
         for k,v in dic:
             # 对排序后的结果进行添加
+            # print(v):
+            # [0]
+            # [1, 2, 4, 8]
+            # [3, 5, 6]
+            # [7]
             res.extend(sorted(v))
         return res
 
-作者：yerikshu
-链接：https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/solution/wei-yun-suan-lian-xi-by-yerikshu-07q8/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.295. <a name='DijkstraMinimumCosttoMakeatLeastOneValidPath'></a>1368. 【Dijkstra🚗 + 困难跳过】Minimum Cost to Make at Least One Valid Path
@@ -9616,75 +9283,39 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV1uA411N7q6?spm_id_from=333.999.0.0)
 
-###  1.303. <a name='-1'></a>1404【位运算😜】
+###  1.303. <a name='-1'></a> 1404【位运算😜】
 
 ```py
-当前位置为'1'时，需要两次消灭，当前位置为'0'时，需要一次消灭
-代码
+当前位置为'1'时，需要两次消灭，
+
+当前位置为'0'时，需要一次消灭
 
 class Solution:
     def numSteps(self, s: str) -> int:
-        res=0
-        n=len(s)
-        sign=0
-        for i in range(n-1,0,-1):
-            if s[i]=='0':
-                if sign:
-                    res+=2
+        cnt = 0
+        carry = 0
+        s = s[1:]
+        for char in s[::-1]:
+            if char == '1':
+                if carry:
+                    carry = 1
+                    cnt += 1
                 else:
-                    res+=1
-            else:
-                if sign:
-                    res+=1
+                    carry = 1
+                    cnt += 2
+            if char == '0':
+                if carry:
+                    carry = 1
+                    cnt += 2
                 else:
-                    res+=2
-                    sign=1
-        # 最后一位只需要转为0即可
-        if sign:res+=1
-        return res
+                    carry = 0
+                    cnt += 1
+        # 最后一个1单独分开考虑
+        # 注意：1001 和 10 的区别
+        if carry == 1: 
+            cnt += 1
+        return cnt
 
-作者：yim-6
-链接：https://leetcode-cn.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/solution/python3-er-jin-zhi-xiao-chu-by-yim-6-79zo/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-
-用c表示进位，从后往前扫描
-
-1：
-没有进位，需要2次操作（先加1，再消除）
-有进位，需要1次操作（当前虽然是1，实际上是0）
-0：
-没有进位，需要1次操作（直接除以2）
-有进位，需要2次操作（与1时没有进位相同，先加1，再消除）
-最后单独考虑第一位，若此时有进位，则加1（这个与之前的情况相同），若没有进位，则不加了（就是1了，不需要另外操作了）
-
-class Solution:
-    def numSteps(self, s: str) -> int:
-        c = 0
-        ans = 0
-        n = len(s)
-        for i in range(n-1, 0, -1):
-            if s[i] == '0':
-                if c == 0:
-                    ans += 1
-                else:
-                    ans += 2
-            else:
-                if c == 0:
-                    ans += 2
-                    c = 1
-                else:
-                    ans += 1
-        if c == 1:
-            ans += 1
-        return ans
-
-作者：hualeizhuu
-链接：https://leetcode-cn.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/solution/jin-wei-yi-ci-sao-miao-by-hualeizhuu/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.304. <a name='StoneGameIII'></a>1406. Stone Game III
@@ -10931,78 +10562,9 @@ class Solution:
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.74nhfv2c3vc0.webp)
 
-```py
-
-class Solution:
-    def decode(self, encoded: List[int]) -> List[int]:
-        n = len(encoded) + 1
-        total = reduce(xor, range(1, n + 1))
-        odd = 0
-        for i in range(1, n - 1, 2):
-            odd ^= encoded[i]
-        
-        perm = [total ^ odd]
-        for i in range(n - 1):
-            perm.append(perm[-1] ^ encoded[i])
-        
-        return perm
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/jie-ma-yi-huo-hou-de-pai-lie-by-leetcode-9gw4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-```
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.34qwdjugdos0.webp)
-
-```py
-
-class Solution:
-    def decode(self, encoded: List[int]) -> List[int]:
-        n, a, b = len(encoded) + 1, 0, 0
-        ans = [0] * n
-        for i in range(0,n - 1,2):
-            a ^= encoded[i]
-        for i in range(1,n + 1):
-            b ^= i
-        ans[n - 1] =  a ^ b
-        for i in range(n - 2,-1,-1):
-            ans[i] = ans[i + 1] ^ encoded[i]
-        return ans
-
-作者：AC_OIer
-链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/gong-shui-san-xie-note-bie-pian-li-yong-zeh6o/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ah0nekr8934.webp)
 
 ```py
-class Solution:
-    def decode(self, encoded: List[int]) -> List[int]:
-        n = len(encoded) + 1
-        all_xor = 0     #题目的说法有点不清晰
-        for x in range(1, n + 1):
-            all_xor ^= x
-        
-        all_xor_without_first = 0
-        for i in range (1, n, 2):
-            e = encoded[i]
-            all_xor_without_first ^= e
-        
-        first = all_xor ^ all_xor_without_first
-        res = [first]
-        for e in encoded:
-            res.append(res[-1] ^ e) 
-        return res
-
-作者：Hanxin_Hanxin
-链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/cpython3-wei-yun-suan-yi-huo-xing-zhi-sh-3vus/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 首先找到所有值的异或结果，就是从1到encoded长度+1的所有值的异或结果
 
 再找到第一个值的异或结果，先找规律
@@ -11015,6 +10577,7 @@ encoded[3] = ans[3] ^ ans[4]
 encoded[n] = ans[n] ^ ans[n+1]
 
 根据上面的规律，发现encoded数组所有奇数值的异或结果就是答案数组中除去第一个值的结果
+
 encoded[1] = ans[1] ^ ans[2]
 encoded[3] = ans[3] ^ ans[4]
 encoded[5] = ans[5] ^ ans[6]
@@ -11025,11 +10588,9 @@ encoded[n] = ans[n] ^ ans[n+1]
 
 根据第一个值进行递推找到最终答案数组
 
-代码
-
 class Solution:
     def decode(self, encoded: List[int]) -> List[int]:
-
+        # 给你一个整数数组 perm ，它是前 n 个正整数的排列
         # 所有值异或结果
         allxor = 0
         for num in range(1, len(encoded) + 2):
@@ -11037,7 +10598,7 @@ class Solution:
 
         # 除了第一个值异或结果，就encoded列表中 奇数数字异或结果
         oddxor = 0
-        for num in range(1, len(encoded) +1, 2):
+        for num in range(1, len(encoded) +1, 2): 
             oddxor = oddxor ^ encoded[num]
         
         # 最终找到答案列表第一个值
@@ -11048,33 +10609,6 @@ class Solution:
             last = last ^ encoded[i]
             ans.append(last)
         return ans
-
-作者：lovely-9
-链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/1734-jie-ma-yi-huo-hou-de-pai-lie-xian-z-g3pm/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def decode(self, encoded: List[int]) -> List[int]:
-        result = 0
-        retret = 0
-        #      全排列的整数数组,按照单数下标取encoded中值异或 相当于 对原排列数组取除第一个值之外的所有值异或
-        for vv in range(1, len(encoded), 2):
-            result ^= encoded[vv]
-        #      将encoded中单数值异或后与1~n异或,结果就是缺失的值也就是encoded的第一个值
-        for vv in range(1, len(encoded) + 2):
-            retret ^= vv
-        result ^= retret
-        resres = [result]
-        #      得到encoded第一个值后与enconded每个值异或就得到原全排列数组
-        for vv in range(len(encoded)):
-            resres.append(encoded[vv] ^ resres[-1])
-        return resres
-
-作者：wu-yi-xh
-链接：https://leetcode-cn.com/problems/decode-xored-permutation/solution/python-by-wu-yi-xh-rgb4/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ###  1.389. <a name='PalindromePartitioningIV'></a>1745. 【回文🌈】Palindrome Partitioning IV
