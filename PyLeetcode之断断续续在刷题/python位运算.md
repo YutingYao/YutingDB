@@ -163,9 +163,15 @@ def func(n):
 return func(？？)
 ```
 
+## 645题
 
-
-
+```py
+a = 1011
+b = 1100
+xors = a^b = 0111
+a^xors = b
+b^xors = a
+```
 
 
 

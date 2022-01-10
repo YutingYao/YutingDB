@@ -2127,13 +2127,9 @@ class Solution:
                 return [i, i + d]
         return -1
 
-作者：meteordream
-链接：https://leetcode-cn.com/problems/set-mismatch/solution/cuo-wu-de-ji-he-jie-ti-ji-lu-by-meteordr-9n6y/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-将nums中每个num以及1..n异或运算，其中重复数字x参与了三次，缺失数字y参与了一次，结合a^0=a a^a=0，则运算结果位x^y
-哈希结构统计重复数字
+将nums中每个num以及1..n异或运算，
+其中重复数字x参与了三次，缺失数字y参与了一次，
+结合a^0=a a^a=0，则运算结果位x^y
 
 
 class Solution:
@@ -2144,42 +2140,33 @@ class Solution:
             error_num ^= (i ^ num)
             if num in unique:
                 ans.append(num)
+            # 哈希结构统计重复数字
             unique.add(num)
         ans.append(error_num ^ ans[0])
         return ans
 
-作者：qianlizhixing
-链接：https://leetcode-cn.com/problems/set-mismatch/solution/wei-yi-huo-yun-suan-hash-by-qianlizhixin-8613/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+利用了这样的性质：
+a = 1011
+b = 1100
+xors = a^b = 0111
+a^xors = b
+b^xors = a
+
 ```
 
-```py
 数学解题
 
+```py
 class Solution:
     def findErrorNums(self, nums):
         ln, total = len(nums), sum(set(nums))
         return [sum(nums) - total, (1 + ln) * ln // 2 - total]
-循环数组解题
 
-class Solution:
-    def findErrorNums(self, nums):
-        ln = len(nums)
-        repeat = lose = -1
-        nums.sort()
-        if nums[0] != 1:
-            lose = 1
-        elif nums[-1] != ln:
-            lose = ln
-        for i in range(1, ln):
-            if nums[i] == nums[i - 1]:
-                repeat = nums[i]
-            if nums[i] - nums[i - 1] == 2:
-                lose = nums[i] - 1
-        return [repeat, lose]
+```
+
 哈希表解题
 
+```py
 from collections import Counter
 
 class Solution:
@@ -2194,9 +2181,7 @@ class Solution:
             elif tmp == 2:
                 repeat = i
         return [repeat, lose]
-```
 
-```py
 在英文站抄的，很有意思
 
 将1，n的bool初始为None
@@ -2216,24 +2201,6 @@ class Solution:
             flag[each] = not flag[each]
         return [flag.index(False),flag.index(None)]
 
-
-
-数学方法，求1+2...+N的和，nums唯一set()的和，和nums的和对应做减法直接得到结果
-
-class Solution:
-    def findErrorNums(self, nums: List[int]) -> List[int]:
-        S = sum(set(nums))
-        return [sum(nums)-S ,len(nums)*(len(nums)+1)//2-S]
-        # len(nums)*(len(nums)+1)//2表示1+2+...+n = n*(n+1)/2, 减去 除了丢失数的和就是第二个结果
-这题给我整抑郁了。。。。死磕遍历的方法不太行。。。
-
-那就直接无脑算吧：
-
-class Solution:
-    def findErrorNums(self, nums: List[int]) -> List[int]:
-        dup = sum(nums) - sum(set(nums))
-        err = abs(sum(range(len(nums)+1)) - (sum(nums) - dup))
-        return [dup, err]
 ```
 
 ###  1.45. <a name='-1'></a>646-【动态🚀规划 + 贪心🧡】最长数对链
