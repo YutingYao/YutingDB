@@ -1,12 +1,78 @@
 ### 数据在数据库中如何存储?
 
+https://mp.weixin.qq.com/s/U5WtjbgXFGoij9rIDQKaRQ
+
+https://mp.weixin.qq.com/s/h5qysXyiOpXNvJT8pbTN3g
+
+https://mp.weixin.qq.com/s/_3SzbOKz8bxZH7PuRZ5xHw
+
+https://mp.weixin.qq.com/s/0ejRJq78ikQjxcB8t1EQbg
+
+https://mp.weixin.qq.com/s/DSHIVtd4CLKqiem6_3K-rw
+
+https://mp.weixin.qq.com/s/WIgU8ExhLkqazLOSNTTY2g
+
+https://mp.weixin.qq.com/s/PhaB7GAQW81di4Q0lqSc0w
+
+https://mp.weixin.qq.com/s/V1sn4I2cb8GjBFfsGtpz8Q
+
+https://mp.weixin.qq.com/s/_yBk5zai1yhX3LmOjODcIA
+
+https://mp.weixin.qq.com/s/kYugnod1dxE9Gjjjd7ZiCg
+
+https://mp.weixin.qq.com/s/k9VPSPPMxDA42kfGvHTdGg
+
 ### orical和SQL server之间如何联系
+
+全球市场中最主流的数据库分别是 `Oracle`、`SQL Server`、`Db2` 三大`商业数据库`
+
+和 `MySQL`、`PostgreSQL` 两种`开源数据库`。
+
+`SQL Server` 马上要超过 `Oracle` 了，主要是因为其拥抱`云的转型`。
 
 ### 如何确定数据库大小以及需要的服务器个数
 
+https://mp.weixin.qq.com/s/FdhEryE1rkcAFMTw8nswkA
+
+https://mp.weixin.qq.com/s/VKC_ORn6Pc35I2vKrcVaUA
+
+https://mp.weixin.qq.com/s/u3RLE6knpzkp5YStCrqttA
+
 ### 『多表间查询，分组』
 
+https://mp.weixin.qq.com/s/j32qmk6pLK3rM8OhBWDaxg
+
+https://mp.weixin.qq.com/s/At70WcOIq0HXAZSh_cvMTg
+
+https://mp.weixin.qq.com/s/A39Th9WKodHGzUQ85fqXQg
+
+https://mp.weixin.qq.com/s/JZevS43wDTUXU11jeWb-qw
+
+https://mp.weixin.qq.com/s/2GUHHen9T6UqqBn0oajauQ
+
+https://mp.weixin.qq.com/s/fwm5BUeASC9479pMklv37w
+
+https://mp.weixin.qq.com/s/KtC49EImMb1jY88_wHeJRw
+
+https://mp.weixin.qq.com/s/oNCea6vcSsz-GsBfKz23PQ
+
+https://mp.weixin.qq.com/s/aeUg7hkQy00WfirXU-d-Sg
+
+https://mp.weixin.qq.com/s/LNoy5YemEW1l73wAvop0Hw
+
 ### 对排序的认识：说明快速派序的思路，还知道哪些排序方法?
+
+https://mp.weixin.qq.com/s/ufViNQMGwx8KIX23x4rmOw
+
+https://mp.weixin.qq.com/s/l-LIb_WVhNr1m4nJKpM8Tg
+
+https://mp.weixin.qq.com/s/ACeSNB4b8CnNQ1RgLYLuSQ
+
+https://mp.weixin.qq.com/s/GaDtsn4DDnOqP5R3ovo23Q
+
+https://mp.weixin.qq.com/s/FfhFrHcM2uW5D8R8c9YWsw
+
+https://mp.weixin.qq.com/s/AFTC2AL2xvn75G_gDi3g9w
 
 ### 175. 组合两个表
 
