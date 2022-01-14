@@ -12689,7 +12689,7 @@ object Solution1-3 {
 
 ###  1.142. <a name='NumberofIsland'></a>305 【🍒并查集】Number of Island
 
-[郭郭](https://www.bilibili.com/video/BV1pV41147SZ?from=search&seid=13286624680279107242&spm_id_from=333.337.0.0)
+[郭郭](https://www.bilibili.com/video/BV1pV41147SZ?from=search&seid=13286624680279107&spm_id_from=333.337.0.0)
 
 ###  1.143. <a name='MinimumHeightTrees'></a>310 Minimum Height Trees
 
@@ -16017,6 +16017,308 @@ class Solution(object):
 ###  1.206. <a name='LongestRepeatingCharacterReplacem'></a>424. 替换后的最长重复字符 Longest Repeating Character Replacem
 
 [官方](https://www.bilibili.com/video/BV14r4y1K7rN?spm_id_from=333.999.0.0)
+
+### 426【剑指36】. 将二叉搜索树转化为排序的双向链表【字节跳动】-
+将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表 。
+
+对于双向循环列表，你可以将左右孩子指针作为双向循环链表的前驱和后继指针，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+
+特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
+
+![](https://s3.bmp.ovh/imgs/2022/01/11d8ac60b4c3deb6.png)
+
+```py
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root: return
+        path = []
+        def inorder(root):
+            if not root: return 
+            inorder(root.left)
+            path.append(root)
+            inorder(root.right)    
+        inorder(root)
+        for i in range(len(path)):
+            path[i].left = path[i-1]
+            path[i].right = path[(i+1)%len(path)]
+        return path[0]
+        
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        a, f = [], lambda r: r and (f(r.left) or a.append(r) or f(r.right))
+        f(root)
+        n = len(a)
+        for i, r in enumerate(a):
+            r.left, r.right = a[i - 1], a[i + 1 - n]
+        return n and a[0] or None
+
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        def dfs(cur):
+            if not cur: return
+            dfs(cur.left) # 递归左子树
+            if self.pre: # 修改节点引用
+                self.pre.right, cur.left = cur, self.pre
+            else: # 记录头节点
+                self.head = cur
+            self.pre = cur # 保存 cur
+            dfs(cur.right) # 递归右子树
+        
+        if not root: return
+        self.pre = None
+        dfs(root)
+        self.head.left, self.pre.right = self.pre, self.head
+        return self.head
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/solution/mian-shi-ti-36-er-cha-sou-suo-shu-yu-shuang-xian-5/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+## 思路:
+
+其实就是左右节点指向改变，右节点指向下一个比它大的数，左节点指向比它小的数。又是二叉搜索树，自然想到中序遍历。
+
+思路一：中序遍历（非递归和递归）
+
+写法一：用栈(非递归)
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:return 
+        # 当一个中间节点
+        head = Node(-1, None, None)
+        # 记录为先前节点,找到下一个节点才能串起来
+        prev = head
+        # 中序遍历的非递归
+        stack = []
+        p = root
+        while p or stack:
+            while p:
+                stack.append(p)
+                p = p.left
+            p = stack.pop()
+            # 改变左右方向
+            prev.right = p
+            p.left = prev
+            # 改变先前节点
+            prev = p
+            p = p.right
+        # 将head 删掉   
+        head.right.left = prev
+        prev.right = head.right
+        return head.right
+写法二：递归
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:return 
+        # 当一个中间节点
+        head = Node(-1, None, None)
+        # 记录为先前节点,找到下一个节点才能串起来
+        prev = head
+
+        # 中序遍历的递归
+        def inorder(root):
+            nonlocal prev
+            if not root:
+                return 
+            inorder(root.left)
+            prev.right = root
+            root.left = prev
+            prev = prev.right
+            inorder(root.right)
+        
+        inorder(root)
+        # 将head 删掉   
+        head.right.left = prev
+        prev.right = head.right
+        return head.right
+思路二：分治
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root: return
+        left = self.treeToDoublyList(root.left)
+        right = self.treeToDoublyList(root.right)
+        root.left = root
+        root.right = root
+        return self.connect(self.connect(left, root), right)
+
+    def connect(self, node1, node2):
+        if not (node1 and node2):
+            return node1 or node2
+        tail1, tail2 = node1.left, node2.left
+        tail1.right = node2
+        node2.left = tail1
+        tail2.right = node1
+        node1.left = tail2
+        return node1
+```
+
+```py
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def myinorderTraversal(self, root: 'Node') -> 'Node':
+        ''' traversal order:  right subtree -> root -> left subtree '''
+
+        # conrer case
+        if not root: return None
+
+        sentinel = Node()    # 虚拟哨兵尾节点
+        successor = sentinel # 后驱指针
+
+        def inorder(r = root):
+            nonlocal successor
+            if not r: return
+        
+            inorder(r.right)
+            # 不建议初学这么写
+            r.right, successor.left, successor = successor, r, r
+            inorder(r.left)
+
+        inorder()
+        successor.left = sentinel.left
+        sentinel.left.right = successor
+        return successor
+
+    def inorderTraversal(self, root: 'Node') -> 'Node':
+        ''' traversal order:  left subtree -> root -> right subtree '''
+
+        # conrer case
+        if not root: return None
+
+        sentinel = Node()      # 虚拟哨兵头节点
+        predecessor = sentinel # 前驱指针
+
+        def inorder(r = root):
+            nonlocal predecessor
+            if not r: return
+        
+            inorder(r.left)
+            # 不建议初学这么写
+            predecessor.right, r.left, predecessor = r, predecessor, r
+            inorder(r.right)
+
+        inorder()
+        sentinel.right.left = predecessor
+        predecessor.right = sentinel.right
+        return sentinel.right
+
+
+    treeToDoublyList = myinorderTraversal
+    # treeToDoublyList = inorderTraversal
+```
+
+```py
+辅助栈
+
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        # 辅助栈        
+        helper, start = [], None
+        current, pre = root, None
+        while len(helper) != 0 or current != None:
+            if current != None:
+                helper.append(current)
+                current = current.left
+            else:
+                current = helper.pop()
+                if pre != None:
+                    current.left = pre
+                    pre.right = current
+                else:
+                    start = current
+                pre = current
+                current = current.right
+        start.left = pre
+        pre.right = start
+        return start
+
+迭代
+
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        # left : pre right: nex
+        dummy = Node(None)
+        p = dummy
+        if not root:
+            return root
+        stack = [[root, False]]
+        while stack:
+            node, visited = stack.pop()
+            if not visited:
+                if node.right:
+                    stack.append([node.right, False])
+                stack.append([node, True])
+                if node.left:
+                    stack.append([node.left, False])
+            else:
+                node.left = p
+                node.right = None
+                p.right = node
+                p = p.right
+        head = dummy.right
+        head.left = p
+        p.right = head
+        return head
+
+def treeToDoublyList(self, root: 'Node') -> 'Node':
+        pre = None
+        head = None
+        def inorder(root):
+            nonlocal pre
+            nonlocal head
+            if not root:
+                return 
+
+            inorder(root.left)
+            if pre:
+                pre.right, root.left = root, pre
+            else:
+                head = root #第一个节点,bst最小的节点
+            pre = root
+            inorder(root.right)
+
+        if not root:
+            return
+        inorder(root)
+        pre.right, head.left = head, pre
+        return head
+```
 
 ###  1.207. <a name='N-aryTreeLevelOrderTraversal'></a>429. N-ary Tree Level Order Traversal
 
