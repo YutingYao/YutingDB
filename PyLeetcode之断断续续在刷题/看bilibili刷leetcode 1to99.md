@@ -7544,7 +7544,7 @@ class Solution:
         return res[::-1]
 ```
 
-###  3.63. <a name='Sqrtx'></a>69 Sqrt(x)
+###  3.63. <a name='Sqrtx'></a>69 Sqrt(x) 见 HJ107 求解立方根
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7YN?spm_id_from=333.999.0.0)
 
@@ -7611,6 +7611,15 @@ class Solution:
 空间复杂度：O(1)
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3g2xmodb40u0.png)
+
+```py
+class Solution:
+    def mySqrt(self, num: int) -> int:
+        x = 1 # 背一背这个套路
+        while abs(x**2 - num) > 0.001:
+            x -= (x**2 - num) / (2 * x) # 注意这里是减号
+        return floor(x)
+```
 
 ```py
 class Solution:

@@ -77,28 +77,11 @@ https://mp.weixin.qq.com/s/AFTC2AL2xvn75G_gDi3g9w
 ### 175. 组合两个表
 
 ```sql
-select FirstName, LastName, City, State
-from Person left join Address
-on Person.PersonId = Address.PersonId
-;
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/combine-two-tables/solution/zu-he-liang-ge-biao-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-
-```sql
-select p.FirstName,p.LastName,a.City,a.State
-from
-person p left join address a
-on
-p.personid=a.personid
-```
-
-```sql
 由于看数据知道应该是左连接 所以直接开干
+
+使用联表查询，由题意，无论 person 是否有地址信息，都要提供FirstName, LastName, City, State 的信息，
+所以我们将 person 作左表，Address 作右表，因为要左表的全部信息，所以使用左查询，
+on 的用法就是寻找两边相同的字段，
 
 select FirstName, LastName, City, State
 from Person  left join Address on Person.PersonId = Address.PersonId;
@@ -113,36 +96,6 @@ select
     (select City from Address a where a.PersonId=p.PersonId) as City, 
     (select State from Address a where a.PersonId=p.PersonId) as State  
 from Person p
-```
-
-```sql
-使用联表查询，由题意，无论 person 是否有地址信息，都要提供FirstName, LastName, City, State 的信息，所以我们将 person 作左表，Address 作右表，因为要左表的全部信息，所以使用左查询，on 的用法就是寻找两边相同的字段，起别名然后让他们相等即可
-
-select FirstName, LastName, City, State
-from Person as p
-left join Address as a
-on p.PersonId = a.PersonId
-```
-
-```sql
-二刷sql题库= =争取每道题都能写个答案
-
-select p.FirstName, p.LastName, a.City, a.State
-from person p
-left join address a
-on p.PersonId = a.PersonId
-```
-
-```sql
-
-```
-
-```sql
-
-```
-
-```sql
-
 ```
 
 ### 176. 第二高的薪水
