@@ -101,102 +101,26 @@ from Person p
 ### 176. 第二高的薪水
 
 ```sql
-SELECT DISTINCT
-    Salary AS SecondHighestSalary
-FROM
-    Employee
+SELECT DISTINCT Salary AS SecondHighestSalary FROM Employee
 ORDER BY Salary DESC
 LIMIT 1 OFFSET 1
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/second-highest-salary/solution/di-er-gao-de-xin-shui-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 SELECT
-    (SELECT DISTINCT
-            Salary
-        FROM
-            Employee
+    (SELECT DISTINCT Salary FROM Employee
         ORDER BY Salary DESC
         LIMIT 1 OFFSET 1) AS SecondHighestSalary
-;
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/second-highest-salary/solution/di-er-gao-de-xin-shui-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-SELECT
-    IFNULL(
-      (SELECT DISTINCT Salary
-       FROM Employee
+SELECT IFNULL(
+      (SELECT DISTINCT Salary FROM Employee 
        ORDER BY Salary DESC
-        LIMIT 1 OFFSET 1),
-    NULL) AS SecondHighestSalary
+        LIMIT 1 OFFSET 1), NULL) AS SecondHighestSalary
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/second-highest-salary/solution/di-er-gao-de-xin-shui-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-oracle mysql 通用
-
-select max(Salary) SecondHighestSalary 
-from Employee
+select max(Salary) as SecondHighestSalary from Employee
 where Salary < (select max(Salary) from Employee)
+ 
 
-
-```
-
-```sql
-select distinct salary from Employee order by salary desc limit 1,1 
-就可以，但是输不出null，所以外面再加一层
-
-select (select distinct salary from Employee order by salary desc limit 1,1) as SecondHighestSalary 
-```
-
-```sql
-要想获取第二高，需要排序，使用 order by（默认是升序 asc，即从小到大），若想降序则使用关键字 desc
-
-去重，如果有多个相同的数据，使用关键字 distinct 去重
-
-判断临界输出，如果不存在第二高的薪水，查询应返回 null，使用 ifNull（查询，null）方法
-
-起别名，使用关键字 as ...
-
-因为去了重，又按顺序排序，使用 limit（）方法，查询第二大的数据，即第二高的薪水，即 limit(1,1) （因为默认从0开始，所以第一个1是查询第二大的数，第二个1是表示往后显示多少条数据，这里只需要一条）
-
-select ifNull((
-select distinct Salary
-from Employee
-order by Salary desc limit 1,1),null) as SecondHighestSalary
-```
-
-```sql
-select max(Salary) SecondHighestSalary
-from employee
-where
-salary<(select max(salary) from employee)
-```
-
-```sql
-select IFNULL((select distinct(Salary) 
-from Employee
-order by Salary desc
-limit 1,1),null) as SecondHighestSalary
-加个IFNULL吧，可读性好一点
-```
-
-```sql
-不是最大数的最大数。
-
-SELECT max(Salary) SecondHighestSalary
- FROM Employee  
-where Salary != (select max(Salary) from Employee ); 
-```
-
-```sql
 select
     max(s1.salary) as SecondHighestSalary
 from
@@ -205,112 +129,6 @@ where
     s1.salary < s2.salary
 ```
 
-```sql
-#解法1
-select max(Salary) as SecondHighestSalary 
-from Employee 
-where Salary<(select max(Salary) from Employee where Salary)
-
-
-
-解法2
-select
-(
-    select distinct salary 
-    from employee 
-    order by salary desc 
-    limit 1,1
-) 
-as SecondHighestSalary
-
-
-
-#解法3
-select
-(
-    select e1.Salary
-    from Employee e1,Employee e2
-    where e1.Salary<=e2.Salary
-    group by e1.Salary
-    having count(distinct e2.Salary)=2
-) as SecondHighestSalary
-
-
-#解法4
-select
-(
-    select distinct e1.Salary
-    from Employee e1,Employee e2
-    group by e1.Id,e1.Salary
-    having sum(e1.Salary<e2.Salary)=1
-) as SecondHighestSalary
-```
-
-```sql
-第二高的薪水--高说明需要降序排序,第二这里需要用limit来定位数据
-
-order by salary  desc limit 1,1
-如果不存在第二高的薪水，那么查询应返回 null--需要isNull或者coalesce函数处理；
-
- coalese(*,null)
-例子中的SecondHighestSalary--说明需要取别名；
-
-select coalese(*,null) as SecondHighestSalary；
-需要考虑查询的数据有可能出现重复的薪水，比如，最高薪水有两条记录，直接取数据就会取错，所以数据需要去重定位后返回
-
- select coalesce((select distinct Salary
-    from Employee order by Salary desc limit 1,1),null)
-as SecondHighestSalary
-```
-
-```sql
-1.解法一：利用 limit 进行限制 此方法可适用于求第N高的薪水，且数据越复杂，速度优势越明显
-
-select
-(select distinct salary from employee 
-order by salary desc limit 1,1) 
-as SecondHighestSalary
-附加一个嵌套查询，内层查询结果为为空时，将 Null 附给 SecondHighestSalary 使得其返回值为 Null；
-
-limit 的用法为： select * from tableName limit i,n
-tableName：表名
-i：为查询结果的索引值(默认从0开始)，当i=0时可省略i
-n：为查询结果返回的数量
-i与n之间使用英文逗号","隔开
-2.解法二：去掉最高薪水后，再取最高薪水；
-
-select distinct max(salary) as SecondHighestSalary 
-from employee 
-where salary < (select max(salary) from employee)
-```
-
-```sql
-ifnull(x，y)，若x不为空则返回x，否则返回y，这道题y=null
-limit x，y，找到对应的记录就停止
-distinct，过滤关键字
-
-
-select 
-ifnull
-(
-    (select distinct Salary
-    from Employee
-    order by Salary desc
-    limit 1,1),
-    null
-)as 'SecondHighestSalary'
-```
-
-```sql
-为什么Oracle下提交后显示解答错误？？？结果是对的啊
-
-select nvl(salary,null) as SecondHighestSalary
-from
-    (select salary 
-    from 
-        (select salary,rank() over(order by salary ) as rank from employee)
-    where rank = 2)
-```
 
 ### 177. 第N高的薪水
 
