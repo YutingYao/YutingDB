@@ -19,3 +19,26 @@ sort 是应用在 list 上的方法，sorted 可以对所有可迭代的对象�
 ' '.join(字符串列表)
 注意，一定要是 字符串
 ```
+
+```py
+from functools import reduce
+```
+
+```py
+zip(list,list)
+或者
+zip(*arr)
+
+需要转换成list(zip())
+```
+
+```py
+print('{:.2f}'.format(cc))
+
+保留小数点后2位
+```
+
+```py
+dp((num>>1)-1)
+位运算一定要加小括号
+```
