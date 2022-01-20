@@ -3785,7 +3785,7 @@ object Solution {
 
 ```
 
-###  3.27. <a name='NextPermutation'></a>31 Next Permutation
+###  3.27. <a name='NextPermutation'></a>31 ★ Next Permutation
 
 [小明](https://www.bilibili.com/video/BV1Uz4y1m72N?spm_id_from=333.999.0.0)
 
@@ -5774,7 +5774,31 @@ class Solution:
         return dp[-1]
 ```
 
-###  3.41. <a name='-1'></a>46-全排列
+###  3.41. <a name='-1'></a>46- ★ 全排列
+
+类似题目：
+
+https://leetcode-cn.com/problems/permutation-i-lcci/
+
+```py
+class Solution:
+    def permutation(self, S: str) -> List[str]:
+        res = []
+        path = ''
+        def backtrack(S, path):
+            if S == '':
+                res.append(path) # 这里不需要：path[:]
+                return 
+
+            for i in range(len(S)):
+                cur = S[i]
+                backtrack(S[:i] + S[i+1:], path + cur)
+                
+        backtrack(S, path)
+
+        return res
+
+```
 
 [哈哈哈](https://www.bilibili.com/video/BV1YA411v7zF?spm_id_from=333.999.0.0)
 
@@ -5783,35 +5807,35 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1oa4y1v7Kz?spm_id_from=333.999.0.0)
 
 ```py
+# class Solution:
+#     def permute(self, nums: List[int]) -> List[List[int]]:
+#         res = []
+#         path = []
+#         def dfs(nums):
+#             if not nums: 
+#                 res.append(path[:]) 
+#                 return
+#             else:
+#                 for i in range(len(nums)):
+#                     path.append(nums[i])
+#                     dfs(nums[:i]+nums[i+1:]) 
+#                     path.pop()
+#         dfs(nums)
+#         return res
+
+# 另一种写法😋
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
-        path = []
         # n = len(nums)
-        def dfs(nums):
+        def dfs(nums,path):
             # 易错点：if len(path) == n:
             if not nums: # 判断条件应该是这个
                 res.append(path[:]) # 易错点：path[:]
                 return
             else:
                 for i in range(len(nums)):
-                    path.append(nums[i])
-                    dfs(nums[:i]+nums[i+1:]) # 易错点：n是不断变小的
-                    path.pop()
-        dfs(nums)
-        return res
-
-# 另一种写法😋
-class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
-        res = []
-        def dfs(nums,path):
-            if not nums: 
-                res.append(path[:]) 
-                return
-            else:
-                for i in range(len(nums)):
-                    dfs(nums[:i]+nums[i+1:],path + [nums[i]]) 
+                    dfs(nums[:i]+nums[i+1:],path + [nums[i]]) # 易错点：n是不断变小的
         dfs(nums,[])
         return res
 ```
@@ -5854,7 +5878,29 @@ object Solution {
 
 ```
 
-###  3.42. <a name='II-'></a>47-全排列 II-剪枝版
+###  3.42. <a name='II-'></a> 47 - ★ 全排列 II-剪枝版
+
+类似题目：
+
+https://leetcode-cn.com/problems/permutation-ii-lcci/
+
+```py
+class Solution:
+    def permutation(self, S: str) -> List[str]:
+        res = []
+        S = sorted(S)
+        def dfs(S,path):
+            if not S:
+                res.append(path)
+            else:
+                for i in range(len(S)):
+                    if i > 0 and S[i] == S[i-1]:
+                        continue
+                    dfs(S[:i]+S[i+1:],path + S[i])
+
+        dfs(S,'')
+        return res
+```
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ev411672A?spm_id_from=333.999.0.0)
 
@@ -5872,7 +5918,7 @@ class Solution:
                 res.append(path[:])
             else:
                 for i in range(len(nums)):
-                    if i>0 and nums[i] == nums[i-1]:
+                    if i > 0 and nums[i] == nums[i-1]:
                         continue
                     dfs(nums[:i]+nums[i+1:],path + [nums[i]])
 
@@ -7456,6 +7502,44 @@ class Solution:
 ###  3.60. <a name='ValidNumber'></a>65 Valid Number
 
 [小明](https://www.bilibili.com/video/BV1hK4y1975b?spm_id_from=333.999.0.0)
+
+```py
+k = 6, k-1 = 5
+n = 4, n-1 = 3
+
+1234
+1243
+1324
+1342
+1423
+1432 这个
+4*3*2*1
+
+math.factorial(3) = 6
+
+
+divmod(5, 6) 整数部分是0，小数部分是5
+pop出来1，剩余234
+divmod(5, 2) 整数部分是2，小数部分是1
+pop出来4，剩余23
+divmod(1, 1) 整数部分是1，小数部分是0
+pop出来3，剩余2
+divmod(0, 0) 整数部分是1，小数部分是0
+pop出来3，剩余2
+
+class Solution:
+    def getPermutation(self, n: int, k: int) -> str:
+        import math
+        tokens = [str(i) for i in range(1, n+1)] # 这样子可以保证没有重复元素
+        res = ''
+        k = k-1
+        while n > 0:
+            n -= 1
+            a, k = divmod(k, math.factorial(n))
+            res += tokens.pop(a) # 这样子可以保证没有重复元素
+        return res
+
+```
 
 ###  3.61. <a name='Plusone'></a>66 Plus one
 

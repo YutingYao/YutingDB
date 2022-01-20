@@ -1,16 +1,23 @@
-MASK1 = 0x100000000  # 2^32
-minInt1000 = 0x80000000  # 2^31
-maxInt0111 = 0X7FFFFFFF  # 2^31-1
-
-class Solution:
-    def getSum(self, a: int, b: int) -> int:
-        a %= MASK1
-        b %= MASK1
-        while b != 0:
-            carry = ((a & b) << 1) % MASK1
-            a = (a ^ b) % MASK1
-            b = carry
-        if a & minInt1000:  # 负数，也就是第31位有东西
-            return ~((a ^ minInt1000) ^ maxInt0111)
-        else:  # 正数，也就是第31位没有东西
-            return a
+class Solution(object):
+    def subarraysWithKDistinct(self, nums, K):
+        return self.atMostK(nums, K) - self.atMostK(nums, K - 1)
+    
+    def atMostK(self, A, K):
+        N = len(A)
+        left, right = 0, 0
+        counter = collections.Counter()
+        distinct = 0
+        res = 0
+        while right < N:
+            if counter[A[right]] == 0:
+                distinct += 1
+            counter[A[right]] += 1
+            while distinct > K:
+                counter[A[left]] -= 1
+                if counter[A[left]] == 0:
+                    distinct -= 1
+                left += 1
+            res += right - left + 1
+            print(left, right, res)
+            right += 1
+        return res

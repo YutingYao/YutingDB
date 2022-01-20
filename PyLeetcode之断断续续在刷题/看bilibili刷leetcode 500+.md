@@ -1494,7 +1494,9 @@ class Solution:
 ```
 
 
-###  1.26. <a name='PermutationinString567-'></a>567. 【滑动窗口🔹】Permutation in String 567-字符串的排列
+###  1.26. <a name='PermutationinString567-'></a>567. ★ 【滑动窗口🔹双指针计数，counter】Permutation in String 567-字符串的排列
+
+#### 不类似239
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7g6?spm_id_from=333.999.0.0)
 
@@ -1505,153 +1507,41 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1154y1X7qB?spm_id_from=333.999.0.0)
 
 ```py
-觉得写的不错，Python的胸弟们点个赞支持一下，过了年就会有对象的~
-
-class Solution:
-    def checkInclusion(self, s1: str, s2: str) -> bool:
-        '''
-        思路：怎么判断s2的字串和s1的排列之一相等，假如排序的话，遍历s2的同时，每次都排序，总的时间复杂度太高了。
-        因此，我们采用一个有序字典来比较，由于只包含小写字母，我们采用数组来模拟有序字典，
-        这样判断s2的子串和s1的排列之一相等就很容易了。总的时间复杂度为O(n),n为s2的长度。
-        空间复杂度为:O(26)*2 == O(1) 
-
-        '''
-        m1 = len(s1)
-        m2 = len(s2)
-        if m1 > m2:
-            return False
-        dic1 = [0]*26
-        dic2 = [0]*26
-        for i in range(m1):
-            dic1[ord(s1[i])-ord('a')] += 1
-            dic2[ord(s2[i])-ord('a')] += 1
-        if dic1 == dic2:
-            return True
-
-        for i in range(m1,m2):
-            dic2[ord(s2[i-m1])-ord('a')] -= 1
-            dic2[ord(s2[i])-ord('a')] += 1
-            if dic1 == dic2:
-                return True
-        return False
-方法1：其实就是滑动窗口哈希表（更新边界法），对应上面的方法五
-class Solution(object):
-    def checkInclusion(self, s1, s2):
-        """
-        :type s1: str
-        :type s2: str
-        :rtype: bool
-        """
-        l1, l2 = len(s1), len(s2)
-        c1 = collections.Counter(s1) #s1的哈希表，实质是字典
-        c2 = collections.Counter() #实例化一个counter类
-        p = q = 0  #设定下标初始化为0，滑动窗口就是[p,q]
-        #下面就是不断在s2上面进行滑动窗口，不断更新哈希表进行比较，这是采用的边界更新法哦，因此是方法五，而不是方法三
-        #这里补充一下，为什么滑动窗口用while没用for，其实都是一样的，你也可以改成for
-        #但是对于有些情况，就只能用while，比如在回溯算法里面，即循环变量需要频繁的加减，显然此题并不是
-        #因此对于此题，用for也可以，整体来说while的应用场合更加广泛
-        while q < l2:
-            c2[s2[q]] += 1   #统计字典哈希表
-            if c1 == c2:
-                return True  #注意，这种结果性条件判断一定是写在前面
-            q += 1           #s2滑动窗口，下标后移
-            if q - p + 1 > l1:   #为什么有这个呢？因为第一个滑动窗口比较特殊，要先构造第一个完整的滑动窗口，后面才是更新边界
-                c2[s2[p]] -= 1   #字典哈希表移除最前面的字符
-                if c2[s2[p]] == 0:  #由于counter特性，如果value为0，就删除它
-                #否则会出现s1的map没有a，但是s2的map的a为0，此时是成立的，但是导致了这两个map不相等，结果出错
-                    del c2[s2[p]]
-                p += 1     #最前面的下标右移动
-        return False  #遍历所有滑动窗口过后，仍然没返回true，那就是不合题意
-        
-方法2：优化的滑动窗口（变量统计法），其实就是上面的方法六
-class Solution(object):
-    def checkInclusion(self, s1, s2):
-        """
-        :type s1: str
-        :type s2: str
-        :rtype: bool
-        """
-        l1, l2 = len(s1), len(s2)
-        c1 = collections.Counter(s1)
-        c2 = collections.Counter()
-        cnt = 0 #统计变量，全部26个字符，频率相同的个数，当cnt==s1字母的个数的时候，就是全部符合题意，返回真
-        p = q = 0 #滑动窗口[p,q]
-        while q < l2:
-            c2[s2[q]] += 1
-            if c1[s2[q]] == c2[s2[q]]: #对于遍历到的字母，如果出现次数相同
-                cnt += 1               #统计变量+1
-            if cnt == len(c1):         #判断结果写在前面，此时证明s2滑动窗口和s1全部字符相同，返回真
-                return True
-            q += 1                     #滑动窗口右移
-            if q - p + 1 > l1:         #这是构造第一个滑动窗口的特殊判断，里面内容是维护边界滑动窗口
-                if c1[s2[p]] == c2[s2[p]]:    #判断性的if写在前面，因为一旦频率变化，这个统计变量就减1
-                    cnt -= 1
-                c2[s2[p]] -= 1                #字典哈希表移除最前面的字符
-                if c2[s2[p]] == 0:            #由于counter特性，如果value为0，必须删除它
-                    del c2[s2[p]]
-                p += 1                        #最前面的下标右移动
-        return False
-
-class Solution(object):
-    def checkInclusion(self, s1, s2):
-        """
-        :type s1: str
-        :type s2: str
-        :rtype: bool
-        """
-        l1, l2 = len(s1), len(s2)
-        c1 = collections.Counter(s1)
-        c2 = collections.Counter()
-        cnt = 0 #统计变量，全部26个字符，频率相同的个数，当cnt==s1字母的个数的时候，就是全部符合题意，返回真
-        p = q = 0 #滑动窗口[p,q]
-        while q < l2:
-            c2[s2[q]] += 1
-            if c1[s2[q]] == c2[s2[q]]: #对于遍历到的字母，如果出现次数相同
-                cnt += 1               #统计变量+1
-            if cnt == len(c1):         #判断结果写在前面，此时证明s2滑动窗口和s1全部字符相同，返回真
-                return True
-            q += 1                     #滑动窗口右移
-            if q - p + 1 > l1:         #这是构造第一个滑动窗口的特殊判断，里面内容是维护边界滑动窗口
-                if c1[s2[p]] == c2[s2[p]]:    #判断性的if写在前面，因为一旦频率变化，这个统计变量就减1
-                    cnt -= 1
-                c2[s2[p]] -= 1                #字典哈希表移除最前面的字符
-                if c2[s2[p]] == 0:            #由于counter特性，如果value为0，必须删除它
-                    del c2[s2[p]]
-                p += 1                        #最前面的下标右移动
-        return False
-
-
-```
-
-```py
 
 Python 92% 配注释。
 
-思路为维护一个窗口，用mp2存放窗口内元素出现的次数。当mp2 == mp1，返回True；否则，返回False。
-
 时间复杂度：O(n)
 
-空间复杂度：O(2 * 26)渐进为O(1)，2 * 是因为两个字典。26是因为最多26个字母。
+空间复杂度：O(2 * 26)，2 * 是因为两个字典。26是因为最多26个字母。
 
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
         n = len(s2)
-        mp1 = collections.Counter(s1)
-        mp2 = collections.defaultdict(int)
+        
+        tarDic = collections.Counter(s1)
+        winDic = collections.defaultdict(int)
+        
         l = 0 # 左窗
         for r in range(n):
-            ele = s2[r]
-            if ele not in mp1: # 当r指向元素不在mp1里时，将mp2清空，重新下一轮记数。
+            cur = s2[r]
+            if cur not in tarDic: 
+                # 左窗率先到达右窗
                 l = r + 1
-                mp2 = collections.defaultdict(int) 
-            else: # 如果r指向元素在mp1里，检查指向元素频率是否大于mp1内对应元素。如果是，一直移动窗口左侧。
-                mp2[ele] += 1
-                while mp2[ele] > mp1[ele]:
-                    mp2[s2[l]] -= 1
+                winDic = collections.defaultdict(int) 
+            else: 
+                # 右窗可以不断前进
+                winDic[cur] += 1
+
+                # 如果窗子太大了
+                while winDic[cur] > tarDic[cur]:
+                    winDic[s2[l]] -= 1
                     l += 1
-                if mp2 == mp1: return True
+                # 如果一模一样
+                if winDic == tarDic: return True
         return False
 ```
+
+
 
 ```scala
 
@@ -4230,61 +4120,38 @@ class Solution:
         return 0
 ```
 
-###  1.106. <a name='LetterCasePermutation'></a>784. Letter Case Permutation
+###  1.106. <a name='LetterCasePermutation'></a>784. ★ Letter Case Permutation
 
 [花花酱](https://www.bilibili.com/video/BV1wW411o7WK?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Sv411a7Gx?spm_id_from=333.999.0.0)
 
 ```py
-class Solution(object):
-    def letterCasePermutation(self, S):
-        ans = [[]]
+class Solution:
+    def letterCasePermutation(self, s: str) -> List[str]:
+        res = [s]
+        # 双重for循环，出现一次字母，res就复制一次
+        for i in range(len(s)):
+            
+            if s[i]>='a' and s[i]<='z':  
+                lenRes = len(res)  
+                for j in range(lenRes):
+                    res.append(res[j][0:i]+s[i].upper()+res[j][i+1:])
 
-        for char in S:
-            n = len(ans)
-            if char.isalpha():
-                for i in xrange(n):
-                    ans.append(ans[i][:])
-                    ans[i].append(char.lower())
-                    ans[n+i].append(char.upper())
-            else:
-                for i in xrange(n):
-                    ans[i].append(char)
+            elif s[i]>='A' and s[i]<='Z':
+                lenRes = len(res)
+                for j in range(lenRes):
+                    res.append(res[j][0:i]+s[i].lower()+res[j][i+1:])
+                    
+        return res
+```
 
-        return map("".join, ans)
+[Python itertools模块中的product函数](https://www.cnblogs.com/zywscq/p/10713390.html)
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/letter-case-permutation/solution/zi-mu-da-xiao-xie-quan-pai-lie-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+product 区别于 permutations
 
-class Solution(object):
-    def letterCasePermutation(self, S):
-        B = sum(letter.isalpha() for letter in S)
-        ans = []
+```py
 
-        for bits in xrange(1 << B):
-            b = 0
-            word = []
-            for letter in S:
-                if letter.isalpha():
-                    if (bits >> b) & 1:
-                        word.append(letter.lower())
-                    else:
-                        word.append(letter.upper())
-
-                    b += 1
-                else:
-                    word.append(letter)
-
-            ans.append("".join(word))
-        return ans
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/letter-case-permutation/solution/zi-mu-da-xiao-xie-quan-pai-lie-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 from typing import List
 from itertools import product
@@ -4292,41 +4159,28 @@ from itertools import product
 # S 的长度不超过12。
 
 
+import itertools
 class Solution:
     def letterCasePermutation(self, s: str) -> List[str]:
-        available = [set([char.lower(), char.upper()]) for char in s]
+        available = [[char.lower(), char.upper()] for char in s]
+        # available是set类型：
+        # [{'A', 'a'}, {'1'}, {'b', 'B'}, {'2'}]
+        # print(list(itertools.permutations(range(2), r=3)))
+        # []
+        # print(list(itertools.permutations(range(3), r=2)))
+        # [(0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)]  
+        # print(list(itertools.permutations('ABC')))
+        # [('A', 'B', 'C'), ('A', 'C', 'B'), ('B', 'A', 'C'), ('B', 'C', 'A'), ('C', 'A', 'B'), ('C', 'B', 'A')]  
+        # print(list(product('ABCD', 'xy')))
+        # [('A', 'x'), ('A', 'y'), ('B', 'x'), ('B', 'y'), ('C', 'x'), ('C', 'y'), ('D', 'x'), ('D', 'y')]    
+        # print(list(product(range(2), repeat=3)))
+        # [(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), (1, 0, 0), (1, 0, 1), (1, 1, 0), (1, 1, 1)]
+        # print(list(product(*available)))
+        # tuple类型：
+        # [('A', '1', 'B', '2'), ('A', '1', 'b', '2'), ('a', '1', 'B', '2'), ('a', '1', 'b', '2')]
         return [''.join(t) for t in product(*available)]
-class Solution(object):
-    def letterCasePermutation(self, S):
-        f = lambda x: (x.lower(), x.upper()) if x.isalpha() else x
-        return map("".join, itertools.product(*map(f, S)))
 
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/letter-case-permutation/solution/zi-mu-da-xiao-xie-quan-pai-lie-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-BitMap Bitmap法，字符串S的长度为l， 则总共会有 2** l种结果，换成二进制就是0 ~ 2 **l - 1个数，
-对于每个数，如果某个位上是0， 就放小写；是1， 就放大写。
-
-class Solution(object):
-    def letterCasePermutation(self, S):
-        l = len(S)
-        n = 2 ** l
-        res = list()
-        if l == 0:
-            res.append("")
-        for i in range(0, n): #得到0 ~ 2 ** l 的每个数
-            temp = ""
-
-            for j in range(0, l):
-                if ((2 ** j) &i) == 0:#当前位是0， 放小写
-                    temp += S[j].lower()
-                else: #放大写
-                    temp += S[j].upper()
-            if temp not in res:
-                res.append(temp)
-        return res
 
 以前竟然还没写出来，今天随机到这一题，报仇雪恨了，其实很简单啊，不信你看，击败98%
 
@@ -4335,30 +4189,13 @@ class Solution:
         res = ['']
         for c in s:
             if c in 'abcdefghijkmlnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':
-                res = [r+c.lower() for r in res] + [r+c.upper() for r in res]
+                res = [r + c.lower() for r in res] + [r + c.upper() for r in res]
             else:
-                res = [r+c for r in res]
+                res = [r + c for r in res]
         return res
 
-这不比官方的好懂
-
-def letterCasePermutation(s):
-    result = [s]
-    for i in range(len(s)):
-        if s[i]>='a' and s[i]<='z':  
-            length = len(result)  # 遍历到length，就是上一个字符串对应的长度
-            for j in range(length):
-                result.append(result[j][0:i]+s[i].upper()+result[j][i+1:])
-        elif s[i]>='A' and s[i]<='Z':
-            length = len(result)
-            for j in range(length):
-                result.append(result[j][0:i]+s[i].lower()+result[j][i+1:])
-    return result
 ```
 
-```py
-
-```
 
 ###  1.107. <a name='-1'></a>785-判断二分图
 
@@ -6234,6 +6071,68 @@ class Solution(object):
 ###  1.169. <a name='-1'></a>930-【滑动窗口🔹 + 前缀和🎨】和相同的二元子数组
 
 [哈哈哈](https://www.bilibili.com/video/BV1iy4y1T7M3?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        methods = []
+        cnt = 1
+        for num in nums:
+            if num == 0:
+                cnt += 1
+            else:
+                methods.append(cnt)
+                cnt = 1
+        methods.append(cnt)
+        
+        res = 0
+        # 对于示例1，methods为[1,2,2,1]  1*2+2*1
+        if goal > 0:
+            for i in range(len(methods)-goal):
+                res += methods[i]*methods[i+goal]
+        # 对于示例2，methods为[6]  5+4+3+2+1
+        else:
+            for m in methods:
+                res += m*(m-1)/2
+        return int(res)
+
+```
+
+```py
+超时
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        n = len(nums)
+        for i in range(1,n):
+            nums[i] += nums[i-1]
+        nums = [0] + nums
+        cnt = 0
+        for l in range(n):
+            for r in range(l+1,n+1):
+                if nums[r] - nums[l] == goal:
+                    cnt +=  1
+        return cnt
+```
+
+```py
+仍然超时
+import bisect
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        n = len(nums)
+        for i in range(1,n):
+            nums[i] += nums[i-1]
+        nums = [0] + nums
+        cnt = 0
+        lend = bisect.bisect_right(nums,nums[-1]-goal)
+        rstart = bisect.bisect_left(nums,goal)
+        # print(nums,lend,rstart)
+        for l in range(lend):
+            for r in range(max(rstart,l+1),n+1):
+                if nums[r] - nums[l] == goal:
+                    cnt +=  1
+        return cnt
+```
 
 ###  1.170. <a name='NumberofRecentCalls'></a>933 Number of Recent Calls
 
@@ -8136,6 +8035,16 @@ class Solution:
 ###  1.260. <a name='CountVowelsPermutation'></a>1220. Count Vowels Permutation
 
 [花花酱](https://www.bilibili.com/video/BV1FJ411c7pT?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def countVowelPermutation(self, n: int) -> int:
+        dpstart = [1,1,1,1,1]
+        for i in range(n-1):
+            dpend = [dpstart[1]+dpstart[2]+dpstart[4],dpstart[0]+dpstart[2],dpstart[1]+dpstart[3],dpstart[2],dpstart[2]+dpstart[3]]
+            dpstart = dpend
+        return mod(sum(dpstart),10**9+7)
+```
 
 ###  1.261. <a name='DiceRollSimulation'></a>1223 Dice Roll Simulation
 
@@ -11071,4 +10980,27 @@ class Solution:
                 elif t0 + t1 == dist[end]:
                     pathCntDP[end] = (pathCntDP[end] + pathCntDP[start]) % mod
         return pathCntDP[n-1]
+```
+
+## 2029 因该不考
+
+```py
+class Solution:
+    def stoneGameIX(self, stones: List[int]) -> bool:
+        # 2和1可以抵消掉，
+        # 0和0也可以抵消掉
+        # 111 alice输 false
+        # 222 alice输 false
+        # 1  alice输 false
+        # 2  alice输 false
+        # 0  alice输 false
+        # 12 bob输
+        # 200111111  bob输
+        # 20111111  bob赢 false
+        # 2111111  bob输
+        # 2211
+        # 2211 bob输
+        stones = [mod(i,3) for i in stones]
+        cnt = collections.Counter(stones)
+        return abs(cnt[1] - cnt[2]) > 2 if cnt[0] & 1 else cnt[1] * cnt[2] != 0
 ```

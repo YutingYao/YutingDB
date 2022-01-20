@@ -42,3 +42,33 @@ print('{:.2f}'.format(cc))
 dp((num>>1)-1)
 位运算一定要加小括号
 ```
+
+```py
+注意，从collections中import，并且是三层括号
+queue = collections.deque([(root, 1)])
+```
+
+```py
+s.sort() 不能用于字符串
+
+但可以
+
+s = sorted(s)
+```
+
+```py
+collections.Counter(s1)
+和
+collections.defaultdict(int)
+的用法其实是一样的
+```
+
+```py
+哈哈，想不到吧
+math.factorial(0) = 1
+```
+
+```py
+可以得到前缀和
+list(accumulate(nums))
+```

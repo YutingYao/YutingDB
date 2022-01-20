@@ -5111,7 +5111,9 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV1GV411Z7fo?spm_id_from=333.999.0.0)
 
-###  1.71. <a name='RepeatedDNASequences'></a>187 【位运算😜】Repeated DNA Sequences
+###  1.71. <a name='RepeatedDNASequences'></a>187. ★【位运算😜】【滑动窗口，dic】Repeated DNA Sequences
+
+#### 类似567，但这里用了dic进行比较
 
 [小明](https://www.bilibili.com/video/BV1mp4y1r7v5?spm_id_from=333.999.0.0)
 
@@ -5122,52 +5124,30 @@ class Solution:
 空间复杂度：O(N)。
 
 ```py
-resLen = 10
-bin = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
-
-class Solution:
-    def findRepeatedDnaSequences(self, s: str) -> List[str]:
-        n = len(s)
-        if n <= resLen:
-            return []
-        res = []
-        x = 0
-        # 把字符串变成二进制，前9个字符
-        for char in s[:resLen - 1]:
-            x = (x << 2) | bin[char]
-        cntDIC = defaultdict(int)
-        # 迭代次数 = n - 9
-        for i in range(n - resLen + 1):
-            x = ((x << 2) | bin[s[i + resLen - 1]]) & ((1 << (resLen * 2)) - 1)
-            # (x << 2) 滑动窗口右移动， & ((1 << (resLen * 2)) - 1) 滑动窗口左移
-            cntDIC[x] += 1
-            if cntDIC[x] == 2:
-                res.append(s[i : i + resLen])
-        return res
 
 
 class Solution:
     def findRepeatedDnaSequences(self, s: str) -> List[str]:
         if len(s) < 11: return []
 
-        bin = { "A":  0,
+        bins = { "A":  0,
               "C" : 1,
               "G":  2,
               "T":  3 }
 
         ans = []
-        cntDIC = {} # record the appearance time
+        cntDIC = defaultdict(int) # record the appearance time
 
         x = 0
-        for i in range(10): # use former 10 chars to init
-            x += bin[s[i]] << (i * 2)
+        for i in range(10): # 转换成二进制存储起来可以减小空间复杂度
+            x += bins[s[i]] << (i * 2)
         cntDIC[x] = 1
         
         for i in range(10, len(s)):
-            x >>= 2  # remove the left char
-            x += bin[s[i]] << 18 # add the right char
+            x >>= 2  # 滑动窗口
+            x += bins[s[i]] << 18 # 滑动窗口
 
-            cntDIC[x] = cntDIC.get(x, 0) + 1
+            cntDIC[x] = cntDIC[x] + 1
             if cntDIC[x] == 2:
                 ans.append(s[i - 9:i + 1]) # find the result
 
@@ -10287,35 +10267,71 @@ object Solution {
 
 ```
 
-###  1.114. <a name='SlidingWindowMaximum'></a>239. 【最小堆🌵 + 滑动窗口🔹】Sliding Window Maximum
+###  1.114. <a name='SlidingWindowMaximum'></a>239. ★【最小堆🌵 + 滑动窗口🔹单调队列】Sliding Window Maximum
+
+#### 不类似567，567类似187
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C763?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1Bf4y1v758?spm_id_from=333.999.0.0)
 
+这个窗口里面，每一个值都可能有用的
+
+包含：
+
+52343  k=4
+
+- 新加入的值 3
+- 将要被弹出的值 5
+- 过去的最大值 5
+
+
 ```py
-思路：维护窗口，向右移动时左侧超出窗口的值弹出，
+思路：
 
-因为需要的是窗口内的最大值，所以只要保证窗口内的值是递减的即可，
+维护：最大值的pos、最接近右边的最大值的pos
+# winQ []
+# winQ [0]
+# winQ [0, 1]
+# winQ [0, 2]
+# winQ [0, 3]
 
-小于新加入的值全部弹出。最左端即为窗口最大值 python解法：
+s = Solution()
+print(s.maxSlidingWindow([5,2,3,4,3],4))
+```
 
+```py
 class Solution(object):
     def maxSlidingWindow(self, nums, k):
-        winQ, res = [], []
+        winpos, maxnums = [], []
 
         for i, v in enumerate(nums):
-            while winQ and nums[winQ[-1]] <= v: 
-                winQ.pop()
-            winQ.append(i)
+            # 小于新加入的值全部弹出。最左端即为窗口最大值 
+            while winpos and nums[winpos[-1]] <= v: 
+                winpos.pop()
+            winpos.append(i)
 
-            if i >= k and winQ[0] <= i - k: 
-                winQ.pop(0)
+            # 弹出出界的left
+            if i >= k and winpos[0] <= i - k: 
+                winpos.pop(0)
 
+            # 开始写入答案
             if i >= k - 1: 
-                res.append(nums[winQ[0]])
+                maxnums.append(nums[winpos[0]])
                 
-        return res
+        return maxnums
+        
+# print(winpos)
+# [1,3,-1,-3,5,3,6,7]
+保证窗口内的值是递减的即可
+# []
+# [0]
+# [1]
+# [1, 2]
+# [1, 2, 3]
+# [4]
+# [4, 5]
+# [6]
 
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
@@ -16570,6 +16586,8 @@ def pathSum(self, root, sum):
 
 ###  1.213. <a name='FindAllAnagramsinaString'></a>438. 【滑动窗口🔹】Find All Anagrams in a String
 
+#### 类似567
+
 [花花酱](https://www.bilibili.com/video/BV1iW411d7Nb?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1254y1X7HV?spm_id_from=333.999.0.0)
@@ -16577,101 +16595,26 @@ def pathSum(self, root, sum):
 ```py
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
-        s_len, p_len = len(s), len(p)
-        
-        if s_len < p_len:
-            return []
-
-        ans = []
-        s_count = [0] * 26
-        p_count = [0] * 26
-        for i in range(p_len):
-            s_count[ord(s[i]) - 97] += 1
-            p_count[ord(p[i]) - 97] += 1
-
-        if s_count == p_count:
-            ans.append(0)
-
-        for i in range(s_len - p_len):
-            s_count[ord(s[i]) - 97] -= 1
-            s_count[ord(s[i + p_len]) - 97] += 1
-            
-            if s_count == p_count:
-                ans.append(i + 1)
-
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/solution/zhao-dao-zi-fu-chuan-zhong-suo-you-zi-mu-xzin/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def findAnagrams(self, s: str, p: str) -> List[int]:
-        s_len, p_len = len(s), len(p)
-
-        if s_len < p_len:
-            return []
-
-        ans = []
-        count = [0] * 26
-        for i in range(p_len):
-            count[ord(s[i]) - 97] += 1
-            count[ord(p[i]) - 97] -= 1
-
-        differ = [c != 0 for c in count].count(True)
-
-        if differ == 0:
-            ans.append(0)
-
-        for i in range(s_len - p_len):
-            if count[ord(s[i]) - 97] == 1:  # 窗口中字母 s[i] 的数量与字符串 p 中的数量从不同变得相同
-                differ -= 1
-            elif count[ord(s[i]) - 97] == 0:  # 窗口中字母 s[i] 的数量与字符串 p 中的数量从相同变得不同
-                differ += 1
-            count[ord(s[i]) - 97] -= 1
-
-            if count[ord(s[i + p_len]) - 97] == -1:  # 窗口中字母 s[i+p_len] 的数量与字符串 p 中的数量从不同变得相同
-                differ -= 1
-            elif count[ord(s[i + p_len]) - 97] == 0:  # 窗口中字母 s[i+p_len] 的数量与字符串 p 中的数量从相同变得不同
-                differ += 1
-            count[ord(s[i + p_len]) - 97] += 1
-            
-            if differ == 0:
-                ans.append(i + 1)
-
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/solution/zhao-dao-zi-fu-chuan-zhong-suo-you-zi-mu-xzin/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        tarDIC = collections.Counter(p)
+        ns = len(s)
+        np = len(p)
+        res = []
+        for i in range(len(s)-len(p)+1):
+            if collections.Counter(s[i:i+np]) == tarDIC:
+                res.append(i)
+        return res
 ```
 
 ```py
-class Solution(object):
-    def findAnagrams(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: List[int]
-        """
-        if len(p) > len(s):
-            return []
-        p = sorted(p)
-        
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        tarDIC = sorted(p)
+        ns = len(s)
+        np = len(p)
         res = []
-        Map = {}
-        for i in range(len(s)-len(p) + 1):
-            s1 = s[i: i+len(p)]
-            if s1 in Map:
-                Map[s1] += 1
+        for i in range(len(s)-len(p)+1):
+            if sorted(s[i:i+np]) == tarDIC:
                 res.append(i)
-                continue
-            if sorted(s1) == p:
-                res.append(i)
-                Map[s1] = 1
-            
         return res
 ```
 
@@ -18065,9 +18008,68 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1Nz4y127a1?spm_id_from=333.999.0.0)
 
-###  1.240. <a name='SlidingWindowMedian'></a>480. 【滑动窗口🔹】Sliding Window Median
+###  1.240. <a name='SlidingWindowMedian'></a>480. ★【滑动窗口🔹中位数暴力】Sliding Window Median
 
 [花花酱](https://www.bilibili.com/video/BV15W411C7iy?spm_id_from=333.999.0.0)
+
+
+```py
+import bisect
+
+class Solution:
+    def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
+        median = lambda a: (a[(len(a)-1)//2] + a[len(a)//2]) / 2
+        a = sorted(nums[:k])
+        res = [median(a)]
+        for i, j in zip(nums[:-k], nums[k:]):
+            a.remove(i)
+            bisect.insort_left(a, j)
+            res.append(median(a))
+        return res
+```
+
+
+```py
+import bisect
+
+class Solution:
+    def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
+        median = lambda a: (a[(len(a)-1)//2] + a[len(a)//2]) / 2
+        a = sorted(nums[:k])
+        res = [median(a)]
+        for i, j in zip(nums[:-k], nums[k:]):
+            a.pop(bisect.bisect_left(a, i))
+            bisect.insort_left(a, j)
+            res.append(median(a))
+        return res
+
+```
+
+
+
+直接暴力求解
+
+```py
+class Solution:
+    def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
+        res = []
+        mididx, n = k//2, len(nums)
+        for i in range(n-k+1):
+            tmp = sorted(nums[i:i+k])
+            mid = tmp[mididx] if k % 2 == 1 else 1.0*(tmp[mididx-1] + tmp[mididx])/2
+            res.append(mid)
+        return res
+
+```
+
+```py
+import numpy as np
+import scipy
+
+class Solution(object):
+    def medianSlidingWindow(self, nums, k):
+        return [np.median(nums[i:i+k]) for i in range(len(nums)-k+1)]
+```
 
 ###  1.241. <a name='FindPermutation'></a>484 Find Permutation
 
