@@ -1,32 +1,39 @@
 <!-- vscode-markdown-toc -->
-	* 1. [lag和lead 分析函数](#laglead)
-	* 2. [数据在数据库中如何存储?](#)
-	* 3. [orical和SQL server之间如何联系](#oricalSQLserver)
-	* 4. [如何确定数据库大小以及需要的服务器个数](#-1)
-	* 5. [『多表间查询，分组』](#-1)
-	* 6. [对排序的认识：说明快速派序的思路，还知道哪些排序方法?](#-1)
-	* 7. [175. 组合两个表](#-1)
-	* 8. [176. 第二高的薪水](#-1)
-	* 9. [177. 第N高的薪水](#N)
-	* 10. [178. 分数排名](#-1)
-	* 11. [180. 连续出现的数字](#-1)
-	* 12. [181. 超过经理收入的员工](#-1)
-	* 13. [182. 查找重复的电子邮箱](#-1)
-	* 14. [183. 从不订购的客户](#-1)
-	* 15. [184. 部门工资最高的员工](#-1)
-	* 16. [185. 部门工资前三高的所有员工](#-1)
-	* 17. [196. 删除重复的电子邮箱](#-1)
-	* 18. [197. 上升的温度](#-1)
-	* 19. [262. 行程和用户](#-1)
-	* 20. [595. 大的国家](#-1)
-	* 21. [596. 超过5名学生的课](#-1)
-	* 22. [601. 体育馆的人流量](#-1)
-	* 23. [620. 有趣的电影](#-1)
-	* 24. [626. 换座位](#-1)
-	* 25. [627. 变更性别](#-1)
-	* 26. [1179. 重新格式化部门表](#-1)
-	* 27. [总结1](#1)
-	* 28. [总结2](#2)
+* 1. [sql基础](#sql)
+	* 1.1. [sql执行顺序](#sql-1)
+	* 1.2. [执行效率](#)
+	* 1.3. [ 行列转换](#-1)
+* 2. [窗口函数应用](#-1)
+	* 2.1. [lag和lead 分析函数](#laglead)
+* 3. [面试题](#-1)
+	* 3.1. [数据在数据库中如何存储?](#-1)
+	* 3.2. [orical和SQL server之间如何联系](#oricalSQLserver)
+	* 3.3. [如何确定数据库大小以及需要的服务器个数](#-1)
+	* 3.4. [『多表间查询，分组』](#-1)
+	* 3.5. [对排序的认识：说明快速派序的思路，还知道哪些排序方法?](#-1)
+* 4. [笔试题](#-1)
+	* 4.1. [175. 组合两个表](#-1)
+	* 4.2. [176. 第二高的薪水](#-1)
+	* 4.3. [177. 第N高的薪水](#N)
+	* 4.4. [178. 分数排名](#-1)
+	* 4.5. [180. 连续出现的数字](#-1)
+	* 4.6. [181. 超过经理收入的员工](#-1)
+	* 4.7. [182. 查找重复的电子邮箱](#-1)
+	* 4.8. [183. 从不订购的客户](#-1)
+	* 4.9. [184. 部门工资最高的员工](#-1)
+	* 4.10. [185. 部门工资前三高的所有员工](#-1)
+	* 4.11. [196. 删除重复的电子邮箱](#-1)
+	* 4.12. [197. 上升的温度](#-1)
+	* 4.13. [262. 行程和用户](#-1)
+	* 4.14. [595. 大的国家](#-1)
+	* 4.15. [596. 超过5名学生的课](#-1)
+	* 4.16. [601. 体育馆的人流量](#-1)
+	* 4.17. [620. 有趣的电影](#-1)
+	* 4.18. [626. 换座位](#-1)
+	* 4.19. [627. 变更性别](#-1)
+	* 4.20. [1179. 重新格式化部门表](#-1)
+	* 4.21. [总结1](#1)
+	* 4.22. [总结2](#2)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -34,7 +41,9 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-### sql执行顺序
+##  1. <a name='sql'></a>sql基础
+
+###  1.1. <a name='sql-1'></a>sql执行顺序
 
 ```sql
 (8) SELECT (9)DISTINCT<select_list> 
@@ -49,7 +58,7 @@
 (11) LIMIT <limit_number>
 ```
 
-### 执行效率
+###  1.2. <a name=''></a>执行效率
 
 ```s
 num id  str
@@ -137,7 +146,7 @@ ORDER BY
 2 rows in set (0.06 sec)
 ```
 
-###  行列转换
+###  1.3. <a name='-1'></a> 行列转换
 
 经常用sql中的函数`case when`、`pivot`来实现行转列；
 
@@ -179,7 +188,53 @@ PIVOT (score FOR subject IN('语文','数学','英语')) AS PVT
 
 ```
 
-###  1. <a name='laglead'></a>lag和lead 分析函数
+```sql
+如若需要把上例结果表形式转化为原表形式，即列转行:
+
+/*第1种方式：使用union函数*/
+select user_id,'语文' as subject,语文 as score from user_score t1 
+union
+select user_id,'数学' as subject,数学 as score from user_score t2 
+union
+select user_id,'英语' as subject,英语 as score from user_score t3
+
+/*第2种方式：使用unpivot函数*/ UNPIVOT + FOR + IN
+SELECT * 
+FROM user_score
+UNPIVOT(score FOR subject IN('语文','数学','英语')) as pvt
+```
+
+##  2. <a name='-1'></a>窗口函数
+
+### 窗口函数主要有以下几类:
+
+专有窗口函数
+
+```sql
+row_number() over()：排序，排序为连续值且不重复，例如，1，2，3，4，5，6，7
+rank() over()：排序，排序值可能不连续，例如，1，1，1，4，5，5，7
+dense_rank() over()：排序，排序为连续值可能有重复，例如，1，1，1，2，3，3，4
+ntile() over()：切片函数
+```
+
+聚合类窗口函数
+
+```sql
+sum() over()：累计计算，例如查询出2019-2020年每月的支付总额和当年累计支付总额
+count() over()：计数，例如查询出2019-2020年每月的支付用户数和当年累计支付用户数
+avg() over()：移动平均，例如查询出2021年每个月的近三月移动平均支付金额
+max() over()：最大，例如查询出每四个月的最大月总支付金额
+min() over()：最小，查询出每四个月的最小月总支付金额
+```
+
+偏移分析函数
+
+```sql
+lag() over()：向上偏移
+lead() over() ：向下偏移
+```
+
+###  2.1. <a name='laglead'></a>lag和lead 分析函数
 
 ```sql
 select * from kkk; 
@@ -244,9 +299,105 @@ select id,name,lead(name,1,0) over ( order by id )  from kkk;
          5 5name                alsdfjlasdjfsaf 
 ```
 
-### 
+```s
+求用户连续登录(内容连续更新)、断登(内容断更)情况
 
-###  2. <a name=''></a>数据在数据库中如何存储?
+app为了摸清用户在平台的活跃情况，常常需要统计用户的连续登陆以及登陆间隔情况。
+
+例子：假设某公司的APP活跃表为表login_detail，字段如下：
+
+字段	     类型
+user_id	    string
+login_date	date
+```
+
+step1: 出每个用户的最大登陆间隔:
+
+```sql
+
+select user_id, max(datediff(lead_dates,login_date)) as '最大登陆间隔'
+from
+    (select user_id, login_date, lead(login_date) over (partition by user_id order by login_date asc) as lead_dates from login_detail) a
+    把表往上拽一点点，一个个求差
+group by user_id
+```
+
+step2: 求出每个用户最大持续登陆天数：
+
+```sql
+第1种方式:
+
+select user_id,max(num)
+-- 最后对每个用户的连续登录天数取最大值即可。 
+from(
+    select user_id,date,count(date) as num 
+    from(
+        select user_id,date_sub(login_date,interval rank1 day) as date
+        -- 用每个用户的`每次登录时间`减去`排序序号天数`作为date
+        -- （理论上如果用户一直连续登陆，date的值为同一日期），
+        from(select user_id,login_date,row_number() over(partition by user_id order by login_date asc) as rank1 from login_detail
+            -- 先对每个用户的登录时间升序排序，
+            )a
+        )b
+    group by user_id,date
+    -- 然后按用户和date分组，对date不去重计数，
+    )c
+group by user_id
+
+第2种方式，使用变量来统计连续值。
+
+SELECT user_id, max(cxgx)
+FROM(
+    SELECT *,IF(dg = 0, @row := @row + 1, @row:=1) cxgx
+    FROM (
+        SELECT *, DATEDIFF(login_date,lag1)-1 as dg, @row := 1 
+        from (
+            SELECT user_id, login_date, lag(login_date) over (PARTITION by user_id ORDER BY login_date) lag1 FROM login_detail
+            ) t1 
+        )t2
+    GROUP BY user_id,login_date
+    ) t3
+GROUP BY user_id
+```
+
+> 接下来两步采用自连接，计算效率可能比较慢
+
+step3: 求该app当日登陆用户数，第二日留存用户数，第三日留存用户数，第八日留存用户数；
+
+```sql
+select a.login_date,
+    count(distinct case when datediff(b.login_date,a.login_date) = 0 then a.user_id else null end) as '当日登陆用户数',
+    count(distinct case when datediff(b.login_date,a.login_date) = 1 then a.user_id else null end) as '第二日留存用户数',
+    count(distinct case when datediff(b.login_date,a.login_date) = 2 then a.user_id else null end) as '第三日留存用户数',
+    count(distinct case when datediff(b.login_date,a.login_date) = 7 then a.user_id else null end) as '第八日留存用户数'
+from login_detail as a
+left join login_detail as b on a.user_id = b.user_id and b.login_date >= a.login_date
+group by a.login_date
+```
+
+step4: 求该app当日登陆用户数，次日留存率，二日留存率，7日留存率
+
+```sql
+
+select t.dates, curr_nums as '当日登陆用户数', 
+    concat(cast(1st_nums/curr_nums*100 as decimal(18,2)),'%') as '次日留存率', 
+    concat(cast(2nd_nums/curr_nums*100 as decimal(18,2)),'%') as '二日留存率', 
+    concat(cast(7th_nums/curr_nums*100 as decimal(18,2)),'%') as '七日留存率'                                      
+from (
+    select a.dates,
+        count(distinct case when datediff(b.login_date,a.login_date)=0 then a.user_id else null end) as curr_nums,
+        count(distinct case when datediff(b.login_date,a.login_date)=1 then a.user_id else null end) as 1st_nums,
+        count(distinct case when datediff(b.login_date,a.login_date)=2 then a.user_id else null end) as 2nd_nums,
+        count(distinct case when datediff(b.login_date,a.login_date)=7 then a.user_id else null end) as 7th_nums
+    from login_detail a
+    left join login_detail b on a.user_id=b.user_id and b.login_date>=a.login_date
+    group by a.login_date
+    ) t
+```
+
+##  3. <a name='-1'></a>面试题
+
+###  3.1. <a name='-1'></a>数据在数据库中如何存储?
 
 https://mp.weixin.qq.com/s/U5WtjbgXFGoij9rIDQKaRQ
 
@@ -270,7 +421,7 @@ https://mp.weixin.qq.com/s/kYugnod1dxE9Gjjjd7ZiCg
 
 https://mp.weixin.qq.com/s/k9VPSPPMxDA42kfGvHTdGg
 
-###  3. <a name='oricalSQLserver'></a>orical和SQL server之间如何联系
+###  3.2. <a name='oricalSQLserver'></a>orical和SQL server之间如何联系
 
 全球市场中最主流的数据库分别是 `Oracle`、`SQL Server`、`Db2` 三大`商业数据库`
 
@@ -278,7 +429,7 @@ https://mp.weixin.qq.com/s/k9VPSPPMxDA42kfGvHTdGg
 
 `SQL Server` 马上要超过 `Oracle` 了，主要是因为其拥抱`云的转型`。
 
-###  4. <a name='-1'></a>如何确定数据库大小以及需要的服务器个数
+###  3.3. <a name='-1'></a>如何确定数据库大小以及需要的服务器个数
 
 https://mp.weixin.qq.com/s/FdhEryE1rkcAFMTw8nswkA
 
@@ -286,7 +437,7 @@ https://mp.weixin.qq.com/s/VKC_ORn6Pc35I2vKrcVaUA
 
 https://mp.weixin.qq.com/s/u3RLE6knpzkp5YStCrqttA
 
-###  5. <a name='-1'></a>『多表间查询，分组』
+###  3.4. <a name='-1'></a>『多表间查询，分组』
 
 https://mp.weixin.qq.com/s/j32qmk6pLK3rM8OhBWDaxg
 
@@ -308,7 +459,7 @@ https://mp.weixin.qq.com/s/aeUg7hkQy00WfirXU-d-Sg
 
 https://mp.weixin.qq.com/s/LNoy5YemEW1l73wAvop0Hw
 
-###  6. <a name='-1'></a>对排序的认识：说明快速派序的思路，还知道哪些排序方法?
+###  3.5. <a name='-1'></a>对排序的认识：说明快速派序的思路，还知道哪些排序方法?
 
 https://mp.weixin.qq.com/s/ufViNQMGwx8KIX23x4rmOw
 
@@ -322,7 +473,9 @@ https://mp.weixin.qq.com/s/FfhFrHcM2uW5D8R8c9YWsw
 
 https://mp.weixin.qq.com/s/AFTC2AL2xvn75G_gDi3g9w
 
-###  7. <a name='-1'></a>175. 组合两个表
+##  4. <a name='-1'></a>笔试题
+
+###  4.1. <a name='-1'></a>175. 组合两个表
 
 ```sql
 由于看数据知道应该是左连接 所以直接开干
@@ -346,7 +499,7 @@ select
 from Person p
 ```
 
-###  8. <a name='-1'></a>176. 第二高的薪水
+###  4.2. <a name='-1'></a>176. 第二高的薪水
 
 ```sql
 SELECT DISTINCT Salary AS SecondHighestSalary FROM Employee
@@ -378,7 +531,7 @@ where
 ```
 
 
-###  9. <a name='N'></a>177. 第N高的薪水
+###  4.3. <a name='N'></a>177. 第N高的薪水
 
 ```sql
 思路1：单表查询
@@ -594,7 +747,7 @@ SET N = N-1;  # 从0开始索引，一定要设置n = n-1
 END
 ```
 
-###  10. <a name='-1'></a>178. 分数排名
+###  4.4. <a name='-1'></a>178. 分数排名
 
 ```sql
 最后的结果包含两个部分，第一部分是降序排列的分数，第二部分是每个分数对应的排名。
@@ -700,7 +853,7 @@ group by s1.Id
 order by s1.Score desc;
 ```
 
-###  11. <a name='-1'></a>180. 连续出现的数字
+###  4.5. <a name='-1'></a>180. 连续出现的数字
 
 ```sql
 算法
@@ -881,7 +1034,7 @@ having count(num)>=3
 @满脑子都是暴力破解 没有考虑id从0开始的情况，还是要自己建立一个row_number列
 ```
 
-###  12. <a name='-1'></a>181. 超过经理收入的员工
+###  4.6. <a name='-1'></a>181. 超过经理收入的员工
 
 ```sql
 方法 1：使用 WHERE 语句
@@ -1062,7 +1215,7 @@ select Salary from Employee where Id = E.ManagerId
 )
 ```
 
-###  13. <a name='-1'></a>182. 查找重复的电子邮箱
+###  4.7. <a name='-1'></a>182. 查找重复的电子邮箱
 
 ```sql
 方法一：使用 GROUP BY 和临时表
@@ -1203,7 +1356,7 @@ select distinct Email from (
 where tmp2.times>1;
 ```
 
-###  14. <a name='-1'></a>183. 从不订购的客户
+###  4.8. <a name='-1'></a>183. 从不订购的客户
 
 ```sql
 方法：使用子查询和 NOT IN 子句
@@ -1327,7 +1480,7 @@ SELECT name as customers from customers as c where c.id not in (SELECT customeri
 select Name as Customers from Customers left join Orders on Customers.Id = Orders.CustomersId where Orders.CustomerId is null
 ```
 
-###  15. <a name='-1'></a>184. 部门工资最高的员工
+###  4.9. <a name='-1'></a>184. 部门工资最高的员工
 
 ```sql
 方法：使用 JOIN 和 IN 语句
@@ -1595,7 +1748,7 @@ FROM Employee E INNER JOIN Department D ON E.DepartmentId = D.Id
 WHERE E.Salary = MaxSalary
 ```
 
-###  16. <a name='-1'></a>185. 部门工资前三高的所有员工
+###  4.10. <a name='-1'></a>185. 部门工资前三高的所有员工
 
 ```sql
 方法：使用 JOIN 和子查询
@@ -1957,7 +2110,7 @@ left join Department t2 on t1.DepartmentId = t2.Id
 where t1.n < 4;
 ```
 
-###  17. <a name='-1'></a>196. 删除重复的电子邮箱
+###  4.11. <a name='-1'></a>196. 删除重复的电子邮箱
 
 ```sql
 方法：使用 DELETE 和 WHERE 子句
@@ -2168,7 +2321,7 @@ from person p1 join person p2
 on p1.email=p2.email and p1.id>p2.id
 ```
 
-###  18. <a name='-1'></a>197. 上升的温度
+###  4.12. <a name='-1'></a>197. 上升的温度
 
 ```sql
 方法：使用 JOIN 和 DATEDIFF() 子句
@@ -2358,7 +2511,7 @@ where DATE_SUB(a.recordDate, INTERVAL 1 DAY)=b.recordDate
 and a.temperature>b.temperature;
 ```
 
-###  19. <a name='-1'></a>262. 行程和用户
+###  4.13. <a name='-1'></a>262. 行程和用户
 
 ```sql
 SELECT T.request_at AS `Day`, 
@@ -2568,7 +2721,7 @@ order by 1
 如何给这边团队报错？这题真的搞得我贼上火。
 ```
 
-###  20. <a name='-1'></a>595. 大的国家
+###  4.14. <a name='-1'></a>595. 大的国家
 
 ```sql
 方法一：使用 WHERE 子句和 OR【通过】
@@ -2673,7 +2826,7 @@ where
     population > 25000000 or area > 3000000
 ```
 
-###  21. <a name='-1'></a>596. 超过5名学生的课
+###  4.15. <a name='-1'></a>596. 超过5名学生的课
 
 ```sql
 方法一：使用 GROUP BY 子句和子查询【通过】
@@ -2831,7 +2984,7 @@ having count(*) >=5;
 select class from courses group by class having count(distinct student)>=5
 ```
 
-###  22. <a name='-1'></a>601. 体育馆的人流量
+###  4.16. <a name='-1'></a>601. 体育馆的人流量
 
 ```sql
 方法：使用 JOIN 和 WHERE 子句【通过】
@@ -3230,7 +3383,7 @@ s.id <= c.id and s.id + 3 > c.id
 @萤火 遇到consec为3的记录 除了输出这条记录之后的 还要把这条记录之前的两天也输出
 ```
 
-###  23. <a name='-1'></a>620. 有趣的电影
+###  4.17. <a name='-1'></a>620. 有趣的电影
 
 
 ```sql
@@ -3360,7 +3513,7 @@ order by rating desc
 @user7795y 用id%2不等于0避免了 id=1？ 那mod(id，2)=1能否包含id=1呢？
 ```
 
-###  24. <a name='-1'></a>626. 换座位
+###  4.18. <a name='-1'></a>626. 换座位
 
 ```sql
 方法一：使用 CASE【通过】
@@ -3670,7 +3823,7 @@ order by id asc;
 @会飞的鱼 你太谦虚了，写出这个代码就很棒啦。 看了你的代码更简洁，棒棒的啊
 ```
 
-###  25. <a name='-1'></a>627. 变更性别
+###  4.19. <a name='-1'></a>627. 变更性别
 
 ```sql
 方法：使用 UPDATE 和 CASE...WHEN
@@ -3830,7 +3983,7 @@ update salary set sex = char ( ASCII(sex) ^ ASCII('m') ^ ASCII('f'))
 @zhaohan 我也想用异或 ，但没有成功，原来要这么用
 ```
 
-###  26. <a name='-1'></a>1179. 重新格式化部门表
+###  4.20. <a name='-1'></a>1179. 重新格式化部门表
 
 ```sql
 SQL
@@ -3969,7 +4122,7 @@ sum(case `month` when 'Dec' then revenue else null  end) as 'Dec_Revenue'
  group by id
 ```
 
-###  27. <a name='1'></a>总结1
+###  4.21. <a name='1'></a>总结1
 
 ```sql
   本篇文章介绍平时自己使用次数非常多的SQL查询语句，总结起来方便以后复习查看
@@ -4268,7 +4421,7 @@ SELECT * FROM emp WHERE emp.`salary` = (SELECT MAX(salary) FROM emp);
 
 ```
 
-###  28. <a name='2'></a>总结2
+###  4.22. <a name='2'></a>总结2
 
 ```sql
 MYSQL:
