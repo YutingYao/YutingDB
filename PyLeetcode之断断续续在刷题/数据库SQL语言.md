@@ -1,4 +1,252 @@
-### 数据在数据库中如何存储?
+<!-- vscode-markdown-toc -->
+	* 1. [lag和lead 分析函数](#laglead)
+	* 2. [数据在数据库中如何存储?](#)
+	* 3. [orical和SQL server之间如何联系](#oricalSQLserver)
+	* 4. [如何确定数据库大小以及需要的服务器个数](#-1)
+	* 5. [『多表间查询，分组』](#-1)
+	* 6. [对排序的认识：说明快速派序的思路，还知道哪些排序方法?](#-1)
+	* 7. [175. 组合两个表](#-1)
+	* 8. [176. 第二高的薪水](#-1)
+	* 9. [177. 第N高的薪水](#N)
+	* 10. [178. 分数排名](#-1)
+	* 11. [180. 连续出现的数字](#-1)
+	* 12. [181. 超过经理收入的员工](#-1)
+	* 13. [182. 查找重复的电子邮箱](#-1)
+	* 14. [183. 从不订购的客户](#-1)
+	* 15. [184. 部门工资最高的员工](#-1)
+	* 16. [185. 部门工资前三高的所有员工](#-1)
+	* 17. [196. 删除重复的电子邮箱](#-1)
+	* 18. [197. 上升的温度](#-1)
+	* 19. [262. 行程和用户](#-1)
+	* 20. [595. 大的国家](#-1)
+	* 21. [596. 超过5名学生的课](#-1)
+	* 22. [601. 体育馆的人流量](#-1)
+	* 23. [620. 有趣的电影](#-1)
+	* 24. [626. 换座位](#-1)
+	* 25. [627. 变更性别](#-1)
+	* 26. [1179. 重新格式化部门表](#-1)
+	* 27. [总结1](#1)
+	* 28. [总结2](#2)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+### sql执行顺序
+
+```sql
+(8) SELECT (9)DISTINCT<select_list> 
+(1) FROM <left_table> 
+(3) <join_type> JOIN <right_table> 
+(2) ON <join_condition> 
+(4) WHERE <where_condition> 
+(5) GROUP BY <group_by_list> 
+(6) WITH {CUBE|ROLLUP} 
+(7) HAVING <having_condition> 
+(10) ORDER BY <order_by_list> 
+(11) LIMIT <limit_number>
+```
+
+### 执行效率
+
+```s
+num id  str
+1	1	A
+2	3	A
+3	5	A
+4	8	A
+1	2	B
+2	7	B
+1	4	C
+2	6	C
+```
+
+1. 最快的方法：MySQL变量，一次全扫描搞定。文件排序是因为没有索引。
+
+```sql
+SELECT
+-- 变量赋值
+    @num := IF(@str = str, @num + 1, 1) num,
+    id,
+    @str := str str
+FROM
+-- 初始化
+    tem, (SELECT @str := '', @num := 0) t1
+ORDER BY
+    str, id;
+```
+
+```s
++----+-------------+------------+--------+------+----------------+
+| id | select_type | table      | type   | rows | Extra          |
++----+-------------+------------+--------+------+----------------+
+|  1 | PRIMARY     | <derived2> | system |    1 |                |
+|  1 | PRIMARY     | tem        | ALL    |    8 | Using filesort |
+|  2 | DERIVED     | NULL       | NULL   | NULL | No tables used |
++----+-------------+------------+--------+------+----------------+
+3 rows in set (0.06 sec)
+```
+
+2. 子查询：两次全扫描，而且只用到了文件排序，如果加上索引，文件排序也可以避免。
+
+```sql
+SELECT
+-- 注意，COUNT(*) FROM tem t2是从t2里面的
+    (SELECT COUNT(*) FROM tem t2 WHERE t1.str = t2.str AND t1.id >= t2.id) num,
+    t1.*
+FROM
+    tem t1
+ORDER BY
+    t1.str, t1.id;
+```
+
+```s
++----+--------------------+-------+------+---------------+------+----------------+
+| id | select_type        | table | type | possible_keys | rows | Extra          |
++----+--------------------+-------+------+---------------+------+----------------+
+|  1 | PRIMARY            | t1    | ALL  | NULL          |    8 | Using filesort |
+|  2 | DEPENDENT SUBQUERY | t2    | ALL  | PRIMARY       |    8 | Using where    |
++----+--------------------+-------+------+---------------+------+----------------+
+2 rows in set (0.06 sec)
+```
+
+3. 连表查询：非常低效：临时表、文件排序、循环嵌套都用上了
+
+```sql
+SELECT
+    count(*) num,
+    t1.*
+FROM
+    tem t1
+    INNER JOIN tem t2 ON t1.str = t2.str AND t1.id >= t2.id
+GROUP BY
+    t1.id
+ORDER BY
+    t1.str, t1.id;
+```
+
+```s
++----+-------------+-------+------+---------------+------+-------------------------------------------------+
+| id | select_type | table | type | possible_keys | rows | Extra                                           |
++----+-------------+-------+------+---------------+------+-------------------------------------------------+
+|  1 | SIMPLE      | t1    | ALL  | PRIMARY       |    8 | Using temporary; Using filesort                 |
+|  1 | SIMPLE      | t2    | ALL  | PRIMARY       |    8 | Using where; Using join buffer (flat, BNL join) |
++----+-------------+-------+------+---------------+------+-------------------------------------------------+
+2 rows in set (0.06 sec)
+```
+
+###  行列转换
+
+经常用sql中的函数`case when`、`pivot`来实现行转列；
+
+使用`union`、`unpivot`来实现列转行。
+
+```s
+例子 ：有学生成绩表`user_score`如下所示：
+
+user_id	subject	score
+1		语文	89
+1		数学	97
+2		数学	90
+3		英语	70
+……		……		……
+
+
+想要把每个科目单独作为一列展示，如下：
+
+user_id	语文	数学	英语
+1		89		97		78
+……		……		……		……
+
+```
+
+```sql
+
+/*第一种方式：使用case when函数*/
+SELECT user_id,
+  CASE subject WHEN '语文' THEN score ELSE 0 END AS '语文',
+  CASE subject WHEN '数学' THEN score ELSE 0 END AS '数学',
+  CASE subject WHEN '英语' THEN score ELSE 0 END AS '英语'
+FROM user_score 
+GROUP BY user_id
+
+/*第2种方式：使用PIVOT函数*/ PIVOT + FOR + IN
+SELECT PVT.user_id,PVT.语文,PVT.数学,PVT.英语
+FROM user_score
+PIVOT (score FOR subject IN('语文','数学','英语')) AS PVT
+
+```
+
+###  1. <a name='laglead'></a>lag和lead 分析函数
+
+```sql
+select * from kkk; 
+```
+
+```s
+        ID NAME                                                   
+---------- --------------------                                   
+         1 1name                                                  
+         2 2name                                                  
+         3 3name                                                  
+         4 4name                                                  
+         5 5name                         
+```
+
+lag就是往下拽
+
+```sql
+select id, name, lag(name,1,0) over ( order by id )  from kkk; 
+```
+
+第一个参数是列名，第二个参数是偏移的offset，第三个参数是 超出记录窗口时的默认值）
+
+```s
+        ID NAME                 LAG(NAME,1,0)OVER(ORDERBYID)      
+---------- -------------------- ----------------------------      
+         1 1name                0                                 
+         2 2name                1name                             
+         3 3name                2name                             
+         4 4name                3name                             
+         5 5name                4name                             
+```
+
+lead就是往上拽：
+
+```sql
+select id,name,lead(name,1,0) over ( order by id )  from kkk;
+```
+
+```s
+        ID NAME                 LEAD(NAME,1,0)OVER(ORDERBYID)     
+---------- -------------------- -----------------------------     
+         1 1name                2name                             
+         2 2name                3name                             
+         3 3name                4name                             
+         4 4name                5name                             
+         5 5name                0         
+```
+
+```sql
+ select id,name,lead(name,1,'alsdfjlasdjfsaf') over ( order by id )  from kkk; 
+```
+
+```s
+                                                                                  
+        ID NAME                 LEAD(NAME,1,'ALSDFJLASDJFSAF')                    
+---------- -------------------- ------------------------------                    
+         1 1name                2name                                             
+         2 2name                3name                                             
+         3 3name                4name                                             
+         4 4name                5name                                             
+         5 5name                alsdfjlasdjfsaf 
+```
+
+### 
+
+###  2. <a name=''></a>数据在数据库中如何存储?
 
 https://mp.weixin.qq.com/s/U5WtjbgXFGoij9rIDQKaRQ
 
@@ -22,7 +270,7 @@ https://mp.weixin.qq.com/s/kYugnod1dxE9Gjjjd7ZiCg
 
 https://mp.weixin.qq.com/s/k9VPSPPMxDA42kfGvHTdGg
 
-### orical和SQL server之间如何联系
+###  3. <a name='oricalSQLserver'></a>orical和SQL server之间如何联系
 
 全球市场中最主流的数据库分别是 `Oracle`、`SQL Server`、`Db2` 三大`商业数据库`
 
@@ -30,7 +278,7 @@ https://mp.weixin.qq.com/s/k9VPSPPMxDA42kfGvHTdGg
 
 `SQL Server` 马上要超过 `Oracle` 了，主要是因为其拥抱`云的转型`。
 
-### 如何确定数据库大小以及需要的服务器个数
+###  4. <a name='-1'></a>如何确定数据库大小以及需要的服务器个数
 
 https://mp.weixin.qq.com/s/FdhEryE1rkcAFMTw8nswkA
 
@@ -38,7 +286,7 @@ https://mp.weixin.qq.com/s/VKC_ORn6Pc35I2vKrcVaUA
 
 https://mp.weixin.qq.com/s/u3RLE6knpzkp5YStCrqttA
 
-### 『多表间查询，分组』
+###  5. <a name='-1'></a>『多表间查询，分组』
 
 https://mp.weixin.qq.com/s/j32qmk6pLK3rM8OhBWDaxg
 
@@ -60,7 +308,7 @@ https://mp.weixin.qq.com/s/aeUg7hkQy00WfirXU-d-Sg
 
 https://mp.weixin.qq.com/s/LNoy5YemEW1l73wAvop0Hw
 
-### 对排序的认识：说明快速派序的思路，还知道哪些排序方法?
+###  6. <a name='-1'></a>对排序的认识：说明快速派序的思路，还知道哪些排序方法?
 
 https://mp.weixin.qq.com/s/ufViNQMGwx8KIX23x4rmOw
 
@@ -74,7 +322,7 @@ https://mp.weixin.qq.com/s/FfhFrHcM2uW5D8R8c9YWsw
 
 https://mp.weixin.qq.com/s/AFTC2AL2xvn75G_gDi3g9w
 
-### 175. 组合两个表
+###  7. <a name='-1'></a>175. 组合两个表
 
 ```sql
 由于看数据知道应该是左连接 所以直接开干
@@ -98,7 +346,7 @@ select
 from Person p
 ```
 
-### 176. 第二高的薪水
+###  8. <a name='-1'></a>176. 第二高的薪水
 
 ```sql
 SELECT DISTINCT Salary AS SecondHighestSalary FROM Employee
@@ -130,7 +378,7 @@ where
 ```
 
 
-### 177. 第N高的薪水
+###  9. <a name='N'></a>177. 第N高的薪水
 
 ```sql
 思路1：单表查询
@@ -346,7 +594,7 @@ SET N = N-1;  # 从0开始索引，一定要设置n = n-1
 END
 ```
 
-### 178. 分数排名
+###  10. <a name='-1'></a>178. 分数排名
 
 ```sql
 最后的结果包含两个部分，第一部分是降序排列的分数，第二部分是每个分数对应的排名。
@@ -452,7 +700,7 @@ group by s1.Id
 order by s1.Score desc;
 ```
 
-### 180. 连续出现的数字
+###  11. <a name='-1'></a>180. 连续出现的数字
 
 ```sql
 算法
@@ -633,7 +881,7 @@ having count(num)>=3
 @满脑子都是暴力破解 没有考虑id从0开始的情况，还是要自己建立一个row_number列
 ```
 
-### 181. 超过经理收入的员工
+###  12. <a name='-1'></a>181. 超过经理收入的员工
 
 ```sql
 方法 1：使用 WHERE 语句
@@ -814,7 +1062,7 @@ select Salary from Employee where Id = E.ManagerId
 )
 ```
 
-### 182. 查找重复的电子邮箱
+###  13. <a name='-1'></a>182. 查找重复的电子邮箱
 
 ```sql
 方法一：使用 GROUP BY 和临时表
@@ -955,7 +1203,7 @@ select distinct Email from (
 where tmp2.times>1;
 ```
 
-### 183. 从不订购的客户
+###  14. <a name='-1'></a>183. 从不订购的客户
 
 ```sql
 方法：使用子查询和 NOT IN 子句
@@ -1079,7 +1327,7 @@ SELECT name as customers from customers as c where c.id not in (SELECT customeri
 select Name as Customers from Customers left join Orders on Customers.Id = Orders.CustomersId where Orders.CustomerId is null
 ```
 
-### 184. 部门工资最高的员工
+###  15. <a name='-1'></a>184. 部门工资最高的员工
 
 ```sql
 方法：使用 JOIN 和 IN 语句
@@ -1347,7 +1595,7 @@ FROM Employee E INNER JOIN Department D ON E.DepartmentId = D.Id
 WHERE E.Salary = MaxSalary
 ```
 
-### 185. 部门工资前三高的所有员工
+###  16. <a name='-1'></a>185. 部门工资前三高的所有员工
 
 ```sql
 方法：使用 JOIN 和子查询
@@ -1709,7 +1957,7 @@ left join Department t2 on t1.DepartmentId = t2.Id
 where t1.n < 4;
 ```
 
-### 196. 删除重复的电子邮箱
+###  17. <a name='-1'></a>196. 删除重复的电子邮箱
 
 ```sql
 方法：使用 DELETE 和 WHERE 子句
@@ -1920,7 +2168,7 @@ from person p1 join person p2
 on p1.email=p2.email and p1.id>p2.id
 ```
 
-### 197. 上升的温度
+###  18. <a name='-1'></a>197. 上升的温度
 
 ```sql
 方法：使用 JOIN 和 DATEDIFF() 子句
@@ -2110,7 +2358,7 @@ where DATE_SUB(a.recordDate, INTERVAL 1 DAY)=b.recordDate
 and a.temperature>b.temperature;
 ```
 
-### 262. 行程和用户
+###  19. <a name='-1'></a>262. 行程和用户
 
 ```sql
 SELECT T.request_at AS `Day`, 
@@ -2320,7 +2568,7 @@ order by 1
 如何给这边团队报错？这题真的搞得我贼上火。
 ```
 
-### 595. 大的国家
+###  20. <a name='-1'></a>595. 大的国家
 
 ```sql
 方法一：使用 WHERE 子句和 OR【通过】
@@ -2425,7 +2673,7 @@ where
     population > 25000000 or area > 3000000
 ```
 
-### 596. 超过5名学生的课
+###  21. <a name='-1'></a>596. 超过5名学生的课
 
 ```sql
 方法一：使用 GROUP BY 子句和子查询【通过】
@@ -2583,7 +2831,7 @@ having count(*) >=5;
 select class from courses group by class having count(distinct student)>=5
 ```
 
-### 601. 体育馆的人流量
+###  22. <a name='-1'></a>601. 体育馆的人流量
 
 ```sql
 方法：使用 JOIN 和 WHERE 子句【通过】
@@ -2982,7 +3230,7 @@ s.id <= c.id and s.id + 3 > c.id
 @萤火 遇到consec为3的记录 除了输出这条记录之后的 还要把这条记录之前的两天也输出
 ```
 
-### 620. 有趣的电影
+###  23. <a name='-1'></a>620. 有趣的电影
 
 
 ```sql
@@ -3112,7 +3360,7 @@ order by rating desc
 @user7795y 用id%2不等于0避免了 id=1？ 那mod(id，2)=1能否包含id=1呢？
 ```
 
-### 626. 换座位
+###  24. <a name='-1'></a>626. 换座位
 
 ```sql
 方法一：使用 CASE【通过】
@@ -3422,7 +3670,7 @@ order by id asc;
 @会飞的鱼 你太谦虚了，写出这个代码就很棒啦。 看了你的代码更简洁，棒棒的啊
 ```
 
-### 627. 变更性别
+###  25. <a name='-1'></a>627. 变更性别
 
 ```sql
 方法：使用 UPDATE 和 CASE...WHEN
@@ -3582,7 +3830,7 @@ update salary set sex = char ( ASCII(sex) ^ ASCII('m') ^ ASCII('f'))
 @zhaohan 我也想用异或 ，但没有成功，原来要这么用
 ```
 
-### 1179. 重新格式化部门表
+###  26. <a name='-1'></a>1179. 重新格式化部门表
 
 ```sql
 SQL
@@ -3721,7 +3969,7 @@ sum(case `month` when 'Dec' then revenue else null  end) as 'Dec_Revenue'
  group by id
 ```
 
-### 总结1
+###  27. <a name='1'></a>总结1
 
 ```sql
   本篇文章介绍平时自己使用次数非常多的SQL查询语句，总结起来方便以后复习查看
@@ -4020,7 +4268,7 @@ SELECT * FROM emp WHERE emp.`salary` = (SELECT MAX(salary) FROM emp);
 
 ```
 
-### 总结2
+###  28. <a name='2'></a>总结2
 
 ```sql
 MYSQL:
