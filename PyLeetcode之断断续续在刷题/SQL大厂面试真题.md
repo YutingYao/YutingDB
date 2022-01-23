@@ -1133,6 +1133,14 @@ order by a.dt asc
 
 https://www.nowcoder.com/practice/aef5adcef574468c82659e8911bb297f?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
+日期：12345789
+
+rank：12345678
+
+日期-rank：00000111
+
+partition排序：12345123  
+
 ```sql
 #给确定每个人每个签到阶段的起始日期
 select uid,date_format(dt,'%Y%m') as month
@@ -1522,6 +1530,24 @@ order by product_id asc
 https://www.nowcoder.com/practice/65de67f666414c0e8f9a34c08d4a8ba6?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
+replace(profit_rate,'%','') > 24.9
+TRIM   (TRAILING '%' FROM profit_rate)>24.9
+(1-in_sum/sale_sum) > 0.249
+```
+
+```sql
+TRIM(BOTH 'O' FROM 'OOHELLO') 
+TRIM(LEADING 'O' FROM 'OOHELLO')
+TRIM(TRAILING 'O' FROM 'OOHELLO') 
+```
+
+难点在于要求'店铺汇总'
+
+可以用 
+
+group by a.product_id with rollup + ifnull(product_id,'店铺汇总')
+
+```sql
 select ifnull(product_id,'店铺汇总') product_id,concat(profit_rate,'%') profit_rate from
 (
     select a.product_id,round((1-sum(in_price*cnt)/sum(price*cnt))*100,1) profit_rate
@@ -1533,6 +1559,10 @@ select ifnull(product_id,'店铺汇总') product_id,concat(profit_rate,'%') prof
     having profit_rate>24.9 or a.product_id is null) as d
 order by profit_rate
 ```
+
+或者
+
+union all
 
 ```sql
 (select "店铺汇总" as "product_id",concat(round((1-sum(in_price*cnt)/sum(price*cnt))*100,1),"%") as "profit_rate"
@@ -1549,9 +1579,9 @@ and order_id in (select order_id from tb_order_overall where status=1 and
                  event_time>"2021-10-01")
 group by a.product_id having 1-avg(in_price)/avg(price)>0.249
 order by a.product_id)
-
-
 ```
+
+UNION ALL
 
 ```sql
 with one as(
@@ -1565,6 +1595,7 @@ and a.shop_id = 901 and b.status=1
 group by a.product_id
 having rate>0.249
 order by product_id),
+
 two as(
 select
 '店铺汇总' product_id,
@@ -1597,6 +1628,8 @@ from result
 
 ```
 
+GROUP by t1.product_id  with rollup + ifnull(t1.product_id,'店铺汇总')
+
 ```sql
 select * from (select ifnull(t1.product_id,'店铺汇总') product_id,
 concat(ROUND((1-sum(t2.in_price*t1.cnt)/sum(t1.price*t1.cnt))*100,1),'%') profit_rate 
@@ -1607,6 +1640,8 @@ where t1.order_id in (SELECT order_id FROM tb_order_overall
 GROUP by t1.product_id  with rollup 
 ORDER BY field(product_id,'店铺汇总'),product_id)t where product_id='店铺汇总' or replace(profit_rate,'%','') >24.9
 ```
+
+union
 
 ```sql
 select '店铺汇总' as product_id,
@@ -1625,8 +1660,9 @@ LEFT JOIN tb_order_overall t2 ON t3.order_id=t2.order_id
 WHERE DATE_FORMAT(event_time,'%Y-%m')>='2021-10' AND shop_id='901'
 GROUP BY product_id
 HAVING TRIM(TRAILING '%' FROM profit_rate)>24.9;
-       
 ```
+
+union
 
 ```sql
 #select '店铺汇总' product_id,
@@ -1672,6 +1708,10 @@ where (1-in_sum/sale_sum)>0.249
 order by product_id);
 ```
 
+
+
+UNION
+
 ```sql
 select '店铺汇总' as product_id,
 concat(round((1-sum(in_price*cnt)/sum(price*cnt))*100,1),'%') profit_rate 
@@ -1695,6 +1735,8 @@ and overall.status=1
 GROUP by detail.product_id 
 having TRIM(TRAILING '%' FROM profit_rate)>24.9
 ```
+
+union all
 
 ```sql
 (
@@ -1838,6 +1880,12 @@ limit 3
 
 https://www.nowcoder.com/practice/d15ee0798e884f829ae8bd27e10f0d64?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
+用户首单的表示方法：
+
+RANK() OVER(PARTITION BY uid ORDER BY event_time) AS order_rank
+
+WHERE order_rank = 1
+
 ```sql
 SELECT
     ROUND(SUM(total_amount) / COUNT(uid), 1) AS avg_amount,
@@ -1850,7 +1898,7 @@ FROM
     FROM 
         (SELECT
             *,
-            RANK()OVER(PARTITION BY uid ORDER BY event_time) AS order_rank
+            RANK() OVER(PARTITION BY uid ORDER BY event_time) AS order_rank
         FROM tb_order_overall) AS t1
     WHERE
         order_rank = 1
@@ -1865,6 +1913,8 @@ JOIN
 ON t2.order_id = t3.order_id;
 
 ```
+
+where (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
 
 ```sql
 # select round(avg(avg_a),1) avg_amount,round(avg(avg_in-avg_a),1) as avg_cost from
@@ -1891,6 +1941,10 @@ where date_format(event_time,'%Y-%m')='2021-10'
 and (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
 ```
 
+row_number() over(partition by uid order by event_time) rk
+
+where rk = 1
+
 ```sql
 
 select round(avg(total_amount),1) avg_amount,round(avg(sum_price-total_amount),1) avg_cost
@@ -1911,6 +1965,8 @@ where rk = 1
 and date_format(event_time,'%Y-%m')='2021-10'
 
 ```
+
+where DATE(event_time) in (select min(date(event_time)) from tb_order_overall group by uid)
 
 ```sql
 #将订单总表中符合10月新用户的信息挑出
@@ -1938,6 +1994,7 @@ group by de.order_id )as b
 on a.order_id=b.order_id;
 ```
 
+(uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
 
 ```sql
 # SELECT ROUND(SUM(total_amount) / COUNT(distinct order_id), 1) AS avg_amount,
@@ -1968,15 +2025,24 @@ and (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_ov
 https://www.nowcoder.com/practice/e7837f66e8fb4b45b694d24ea61f0dc9?tpId=268&tqId=2286659&ru=/practice/5005cbf5308249eda1fbf666311753bf&qru=/ta/sql-factory-interview/question-ranking
 
 ```sql
-select dt1,round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),tb3.product_id,null)),3) sale_rate,
-1-round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),tb3.product_id,null)),3) unsale_rate
-from (select date(event_time) dt1 from tb_order_overall having dt1 between '2021-10-01' and '2021-10-03') tb2 
-,
-(select b.product_id,date(event_time) dt from 
-tb_order_overall a left join tb_order_detail b on a.order_id=b.order_id left join tb_product_info c on b.product_id=c.product_id
-where shop_id=901) tb1 
-left join tb_product_info tb3 
-on tb1.product_id=tb3.product_id 
+select dt1,
+round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),
+tb3.product_id,null)),3) sale_rate,
+1-round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),
+tb3.product_id,null)),3) unsale_rate
+from (
+    select date(event_time) dt1 
+    from tb_order_overall 
+    having dt1 between '2021-10-01' and '2021-10-03'
+    ) tb2,
+    (
+    select b.product_id,date(event_time) dt 
+    from tb_order_overall a 
+    left join tb_order_detail b on a.order_id=b.order_id 
+    left join tb_product_info c on b.product_id=c.product_id
+    where shop_id=901
+    ) tb1 
+left join tb_product_info tb3 on tb1.product_id=tb3.product_id 
 where shop_id=901
 group by dt1 
 
@@ -1987,29 +2053,30 @@ SELECT dt, sale_rate, 1 - sale_rate as unsale_rate
 FROM (
     SELECT dt, ROUND(MIN(sale_pid_cnt) / COUNT(all_pid), 3) as sale_rate
     FROM (
-
-
-SELECT dt, COUNT(DISTINCT IF(shop_id!=901, NULL, product_id)) as sale_pid_cnt
+        SELECT dt, COUNT(DISTINCT IF(shop_id!=901, NULL, product_id)) as sale_pid_cnt
         FROM (
             SELECT DISTINCT DATE(event_time) as dt
             FROM tb_order_overall
             WHERE DATE(event_time) BETWEEN '2021-10-01' AND '2021-10-03'
-        ) as t_dates
+            ) as t_dates
+            LEFT JOIN (
+                    SELECT DISTINCT DATE(event_time) as event_dt, product_id
+                    FROM tb_order_overall
+                    JOIN tb_order_detail USING(order_id)
+                    ) as t_dt_pid 
+                ON DATEDIFF(dt,event_dt) BETWEEN 0 AND 6
+                LEFT JOIN tb_product_info USING(product_id)
+                group by dt
+        ) as t_dt_901_pid_cnt
         LEFT JOIN (
-            SELECT DISTINCT DATE(event_time) as event_dt, product_id
-            FROM tb_order_overall
-            JOIN tb_order_detail USING(order_id)
-        ) as t_dt_pid ON DATEDIFF(dt,event_dt) BETWEEN 0 AND 6
-        LEFT JOIN tb_product_info USING(product_id)
-        group by dt) as t_dt_901_pid_cnt
-    LEFT JOIN (
-        -- 店铺901每个商品上架日期
-        SELECT DATE(release_time) as release_dt, product_id as all_pid
-        FROM tb_product_info
-        WHERE shop_id=901
-    ) as t_release_dt ON dt >= release_dt # 当天店铺901已上架在售的商品
-    GROUP BY dt
-) as t_dt_sr
+            -- 店铺901每个商品上架日期
+                SELECT DATE(release_time) as release_dt, product_id as all_pid
+                FROM tb_product_info
+                WHERE shop_id=901
+                ) as t_release_dt 
+            ON dt >= release_dt # 当天店铺901已上架在售的商品
+            GROUP BY dt
+    ) as t_dt_sr
 ```
 
 ```sql
@@ -2017,11 +2084,11 @@ select dt,
 round(count(distinct product_id)/(select count(product_id) from tb_product_info where shop_id = 901),3),
 round(1-count(distinct product_id)/(select count(product_id) from tb_product_info where shop_id = 901),3)
 from
-(select date(event_time) dt from tb_order_overall
-where date(event_time) between '2021-10-01' and '2021-10-03') a
+    (select date(event_time) dt from tb_order_overall
+    where date(event_time) between '2021-10-01' and '2021-10-03') a
 left join
-(select date(c.event_time) fdt,b.product_id product_id
-from tb_order_detail b left join tb_order_overall c using(order_id)
+    (select date(c.event_time) fdt,b.product_id product_id
+    from tb_order_detail b left join tb_order_overall c using(order_id)
 left join tb_product_info d using(product_id)
 where d.shop_id = 901) f 
 on datediff(a.dt,f.fdt) between 0 and 6
@@ -2055,14 +2122,16 @@ FROM (SELECT dt, ROUND(MIN(sale_pid_cnt)/COUNT(all_pid), 3) sale_rate
 ```sql
 select lt dt,round(sr,3) sr,round((1-sr),3) nsr
 from
-(select lt,count(distinct if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0,t2.product_id,null))/
-count(distinct t2.product_id) sr
+    (select lt,count(distinct if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0,t2.product_id,null))/
+    count(distinct t2.product_id) sr
 from
-(SELECT date_format(event_time,'%Y-%m-%d') lt from tb_product_info a,tb_order_overall b,tb_order_detail c 
-where a.product_id=c.product_id and b.order_id=c.order_id and status=1 and event_time>20211001 and event_time<20211004
-group by date_format(event_time,'%Y-%m-%d')
-having count(date_format(event_time,'%Y-%m-%d'))>=1) a,
-tb_order_overall t1
+    (SELECT date_format(event_time,'%Y-%m-%d') lt 
+    from tb_product_info a,tb_order_overall b,tb_order_detail c 
+    where a.product_id=c.product_id and b.order_id=c.order_id and status=1 and event_time>20211001 and event_time<20211004
+    group by date_format(event_time,'%Y-%m-%d')
+    having count(date_format(event_time,'%Y-%m-%d'))>=1
+    ) a,
+    tb_order_overall t1
 left join tb_order_detail t2 on t1.order_id=t2.order_id
 left join tb_product_info t3 on t2.product_id=t3.product_id
 where DATEDIFF(lt,release_time)>=0 and shop_id=901
@@ -2073,27 +2142,31 @@ order by dt
 ```sql
 select
     lt dt,round(sr,3) sr,round((1-sr),3) nsr
-from(select lt,count(distinct if(
-        DATEDIFF(lt,event_time)<=6
-        and DATEDIFF(lt,event_time)>=0,t2.product_id,null))/
-    count(distinct t2.product_id) sr
-from(SELECT date_format(event_time,'%Y-%m-%d') lt
-    from tb_product_info a,tb_order_overall b,tb_order_detail c
-    where a.product_id=c.product_id
-    and b.order_id=c.order_id
-    and status=1 and event_time>20211001
-    and event_time<20211004
-group by date_format(event_time,'%Y-%m-%d')
-having count(date_format(event_time,'%Y-%m-%d'))>=1) a,
-    tb_order_overall t1
-left join tb_order_detail t2
-    on t1.order_id=t2.order_id
-left join tb_product_info t3
-    on t2.product_id=t3.product_id
-where DATEDIFF(lt,release_time)>=0
-    and shop_id=901
-group by lt) aa
-    order by dt asc;
+from(
+    select 
+        lt,
+        count(distinct if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0,t2.product_id,null))
+        /count(distinct t2.product_id) sr
+    from(
+        SELECT date_format(event_time,'%Y-%m-%d') lt
+        from tb_product_info a,tb_order_overall b,tb_order_detail c
+        where a.product_id=c.product_id
+        and b.order_id=c.order_id
+        and status=1 and event_time>20211001
+        and event_time<20211004
+        group by date_format(event_time,'%Y-%m-%d')
+        having count(date_format(event_time,'%Y-%m-%d'))>=1
+        ) a,
+        tb_order_overall t1
+    left join tb_order_detail t2
+        on t1.order_id=t2.order_id
+    left join tb_product_info t3
+        on t2.product_id=t3.product_id
+    where DATEDIFF(lt,release_time)>=0
+        and shop_id=901
+    group by lt
+    ) aa
+order by dt asc;
 ```
 
 ## SQL19 2021年国庆在北京接单3次及以上的司机统计信息
@@ -2110,22 +2183,26 @@ from (select city, driver_id, count(tb_get_car_order.order_id) as order_num, sum
       on tb_get_car_record.order_id = tb_get_car_order.order_id
       where city = "北京" and date(event_time) between date("2021-10-01") and date("2021-10-07")
       group by city, driver_id
-      having count(tb_get_car_order.order_id) >= 3) as t1
+      having count(tb_get_car_order.order_id) >= 3
+      ) as t1
 
 ```
 
 ```sql
-select "北京" as city,round(avg(b.cnt),3)as avg_order_num,round(avg(b.income),3) asavg_income
-from
-(select b.driver_id,count(b.order_id)as cnt,sum(b.fare) as income
- from tb_get_car_record a
-inner join 
-  tb_get_car_order b
- on a.order_id=b.order_id
-    where a.city="北京"
- and date(b.order_time) between '2021-10-01' and '2021-10-07'
+select 
+    "北京" as city,
+    round(avg(b.cnt),3) as avg_order_num,
+    round(avg(b.income),3) as asavg_income
+from(
+    select b.driver_id, count(b.order_id) as cnt, sum(b.fare) as income
+    from tb_get_car_record a
+    inner join 
+        tb_get_car_order b
+    on a.order_id=b.order_id
+    where a.city="北京" and date(b.order_time) between '2021-10-01' and '2021-10-07'
     group by b.driver_id
-    having count(b.order_id)>=3) b
+    having count(b.order_id)>=3
+    ) b
 ```
 
 ```sql
@@ -2133,15 +2210,15 @@ select city,
     round(avg(order_num),3) avg_order_num,
     round(avg(income),3) avg_income
 FROM
-(SELECT city,driver_id,
-    COUNT(driver_id) order_num,
-    SUM(fare) income
-FROM tb_get_car_order o JOIN tb_get_car_record r 
-on o.order_id = r.order_id
-where order_time BETWEEN "2021-10-01" and "2021-10-07"
-and city = "北京"
-group by driver_id
-HAVING order_num >= 3) b 
+    (SELECT city,driver_id,
+        COUNT(driver_id) order_num,
+        SUM(fare) income
+    FROM tb_get_car_order o JOIN tb_get_car_record r 
+    on o.order_id = r.order_id
+    where order_time BETWEEN "2021-10-01" and "2021-10-07" and city = "北京"
+    group by driver_id
+    HAVING order_num >= 3
+    ) b 
 GROUP BY city
 ```
 
@@ -2196,14 +2273,14 @@ group by city
 ```sql
 select t.city,round(avg(avg_order_num),3),round(avg(avg_income),3)
 from (
-select driver_id,city,count(o.order_id) as avg_order_num, sum(fare) as avg_income
-from tb_get_car_record as r
-join tb_get_car_order as o
-on r.order_id = o.order_id
-where city = '北京' and event_time between '2021-10-01' and '2021-10-07'
-group by driver_id
-having count(*) > 2
-) as t
+    select driver_id,city,count(o.order_id) as avg_order_num, sum(fare) as avg_income
+    from tb_get_car_record as r
+    join tb_get_car_order as o
+    on r.order_id = o.order_id
+    where city = '北京' and event_time between '2021-10-01' and '2021-10-07'
+    group by driver_id
+    having count(*) > 2
+    ) as t
 group by city
 
 
@@ -2215,8 +2292,8 @@ https://www.nowcoder.com/practice/f022c9ec81044d4bb7e0711ab794531a?tpId=268&tqId
 
 ```sql
 select
-coalesce(o.driver_id,'总体') as driver_id,
-round(avg(o.grade),1) as avg_grade
+    coalesce(o.driver_id,'总体') as driver_id,
+    round(avg(o.grade),1) as avg_grade
 from tb_get_car_order o
 where driver_id in(
              select distinct driver_id 
@@ -2235,7 +2312,8 @@ WHERE driver_id in (
     SELECT driver_id
     FROM tb_get_car_order
     WHERE DATE_FORMAT(order_time, "%Y-%m")='2021-10' AND ISNULL(fare)
-) AND NOT ISNULL(grade)
+    ) 
+    AND NOT ISNULL(grade)
 GROUP BY driver_id
 WITH ROLLUP;
 ```
@@ -2250,14 +2328,19 @@ driver_id in(
     where start_time is NULL and finish_time is not null
     and DATE_FORMAT(finish_time,'%Y%m')='202110')
 group by driver_id
+
 union ALL
+
 select '总体',round(sum(grade)/count(grade),1)
 from tb_get_car_order
 where  driver_id in(
     select distinct(o.driver_id)
     from tb_get_car_order o 
-    where start_time is NULL and finish_time is not null
-    and DATE_FORMAT(finish_time,'%Y%m')='202110')
+    where 
+        start_time is NULL and 
+        finish_time is not null and 
+        DATE_FORMAT(finish_time,'%Y%m')='202110'
+    )
 
 
 ```
@@ -2266,8 +2349,9 @@ where  driver_id in(
 select ifnull(driver_id,'总体') driver_id,
        round(avg(grade),1) avg_grade
 from tb_get_car_order 
-where start_time is not null 
-and driver_id in (select driver_id
+where 
+    start_time is not null and 
+    driver_id in (select driver_id
                   from tb_get_car_order b
                   where start_time is null )
 group by driver_id with ROLLUP
@@ -2275,15 +2359,18 @@ group by driver_id with ROLLUP
 
 ```sql
 with driverid as(
-select driver_id
-from tb_get_car_order
-where month(finish_time)=10 and start_time is null
-)
+        select driver_id
+        from tb_get_car_order
+        where month(finish_time)=10 and start_time is null
+        )
 
-select coalesce(tb.driver_id, '总体') as driver_id, 
-round(avg(grade),1) as avg_grade
-from tb_get_car_order tb inner join driverid
-on tb.driver_id=driverid.driver_id
+select 
+    coalesce(tb.driver_id, '总体') as driver_id, 
+    round(avg(grade),1) as avg_grade
+from tb_get_car_order tb 
+inner join 
+    driverid
+    on tb.driver_id=driverid.driver_id
 where grade is not null
 group by tb.driver_id with rollup
  
@@ -2292,15 +2379,17 @@ group by tb.driver_id with rollup
 ```sql
 (SELECT driver_id,round(avg(grade),1) as avg_grade FROM tb_get_car_order
 where driver_id in
-(SELECT driver_id FROM tb_get_car_order
-where start_time is null and grade is NULL)
+    (SELECT driver_id FROM tb_get_car_order
+    where start_time is null and grade is NULL)
 group by driver_id 
 order by driver_id)
+
 union 
+
 (SELECT '总体' as driver_id,round(avg(grade),1) as avg_grade FROM tb_get_car_order
 where driver_id in
-(SELECT driver_id FROM tb_get_car_order
-where start_time is null and grade is NULL));
+    (SELECT driver_id FROM tb_get_car_order
+    where start_time is null and grade is NULL));
 ```
 
 ## SQL21 每个城市中评分最高的司机信息
@@ -2310,30 +2399,35 @@ https://www.nowcoder.com/practice/dcc4adafd0fe41b5b2fc03ad6a4ac686?tpId=268&tags
 ```sql
 select city,driver_id,avg_grade,avg_order_num,avg_mileage
 from
-(select city,driver_id,avg_grade,avg_order_num,avg_mileage,
-dense_rank() over(partition by city order by avg_grade desc) as rank_grade
-from
-(select city,driver_id,round(avg(grade),1)avg_grade,
-round(count(ord.order_id)/count(distinct date_format(order_time,"%Y-%m-%d")),1)avg_order_num,
-round(sum(mileage)/count(distinct date_format(order_time,"%Y-%m-%d")),3)avg_mileage
-from tb_get_car_order ord
-left join tb_get_car_record re
-on ord.order_id=re.order_id
-group by city,driver_id)a )b
+    (select 
+        city,driver_id,avg_grade,avg_order_num,avg_mileage,
+        dense_rank() over(partition by city order by avg_grade desc) as rank_grade
+    from
+        (select 
+            city,driver_id,round(avg(grade),1)avg_grade,
+            round(count(ord.order_id)/count(distinct date_format(order_time,"%Y-%m-%d")),1)avg_order_num,
+            round(sum(mileage)/count(distinct date_format(order_time,"%Y-%m-%d")),3)avg_mileage
+        from tb_get_car_order ord
+        left join tb_get_car_record re
+        on ord.order_id=re.order_id
+        group by city,driver_id
+        )a 
+    )b
 where rank_grade=1
 order by avg_order_num;
 ```
 
 ```sql
 select city,driver_id,avg_grade,avg_order_num,avg_mileage from
-(select r.city,o.driver_id,
-round(avg(o.grade),1) avg_grade,
-round(count(o.order_id)/(count(distinct date(order_time))),1) avg_order_num,
-round(sum(o.mileage)/(count(distinct date(order_time))),3) avg_mileage,
-dense_rank() over (partition by r.city order by round(avg(o.grade),1) desc) t_rank
-from tb_get_car_order o 
-inner join tb_get_car_record r on r.order_id=o.order_id
-group by r.city,o.driver_id) as a
+    (select r.city,o.driver_id,
+    round(avg(o.grade),1) avg_grade,
+    round(count(o.order_id)/(count(distinct date(order_time))),1) avg_order_num,
+    round(sum(o.mileage)/(count(distinct date(order_time))),3) avg_mileage,
+    dense_rank() over (partition by r.city order by round(avg(o.grade),1) desc) t_rank
+    from tb_get_car_order o 
+    inner join tb_get_car_record r on r.order_id=o.order_id
+    group by r.city,o.driver_id
+    ) as a
 where t_rank = 1
 order by avg_order_num
 ```
@@ -2363,22 +2457,23 @@ ORDER BY avg_order_num;
 
 ```sql
 select 
-t.city,
-t.driver_id,
-t.avg_grade,
-t.avg_order_num,
-t.avg_mileage
+    t.city,
+    t.driver_id,
+    t.avg_grade,
+    t.avg_order_num,
+    t.avg_mileage
 from
-(select 
-r.city as city,
-o.driver_id as driver_id,
-round(avg(o.grade) ,1) as avg_grade,
-round(count(*)/count(distinct date(finish_time)),1)as avg_order_num,
-round(sum(o.mileage)/count(distinct date(finish_time)),3)as avg_mileage,
-rank() over (partition by r.city order by round(avg(o.grade) ,1) desc) as ranking
-from tb_get_car_order o
-join tb_get_car_record r using(order_id)
-group by r.city, o.driver_id) as t
+    (select 
+    r.city as city,
+    o.driver_id as driver_id,
+    round(avg(o.grade) ,1) as avg_grade,
+    round(count(*)/count(distinct date(finish_time)),1)as avg_order_num,
+    round(sum(o.mileage)/count(distinct date(finish_time)),3)as avg_mileage,
+    rank() over (partition by r.city order by round(avg(o.grade) ,1) desc) as ranking
+    from tb_get_car_order o
+    join tb_get_car_record r using(order_id)
+    group by r.city, o.driver_id
+    ) as t
 where t.ranking=1
 order by t.avg_order_num
 ```
@@ -2424,12 +2519,12 @@ https://www.nowcoder.com/practice/2b330aa6cc994ec2a988704a078a0703?tpId=268&tqId
 select dt, finish_num_7d, cancel_num_7d
 from (
     select 
-DATE_FORMAT(order_time,'%Y-%m-%d') dt,
-round(avg(count(start_time)) over (order by DATE_FORMAT(order_time, '%Y-%m-%d') rows 6 preceding), 2) finish_num_7d,
-round(avg(sum(case when start_time is null then 1 else 0 end)) over (order by date_format(order_time, '%Y-%m-%d') rows 6 preceding), 2) cancel_num_7d
+        DATE_FORMAT(order_time,'%Y-%m-%d') dt,
+        round(avg(count(start_time)) over (order by DATE_FORMAT(order_time, '%Y-%m-%d') rows 6 preceding), 2) finish_num_7d,
+        round(avg(sum(case when start_time is null then 1 else 0 end)) over (order by date_format(order_time, '%Y-%m-%d') rows 6 preceding), 2) cancel_num_7d
     from tb_get_car_order
     group by dt
-) as a
+    ) as a
 where dt between '2021-10-01' and '2021-10-03'
 order by dt
 ```
@@ -2437,31 +2532,40 @@ order by dt
 
 ```sql
 select *
-from(select dt,
-       round(sum(finish_num)over(order by dt rows 6 preceding)/7,2) as finish_num_7d,
-       round(sum(cancel_num)over(order by dt rows 6 preceding)/7,2) as cancel_num_7d
-     from(select date(order_time) dt,
+from(select 
+        dt,
+        round(sum(finish_num)over(order by dt rows 6 preceding)/7,2) as finish_num_7d,
+        round(sum(cancel_num)over(order by dt rows 6 preceding)/7,2) as cancel_num_7d
+    from(
+        select 
+            date(order_time) dt,
             sum(case when start_time is not null then 1 else 0 end) as finish_num,
             sum(case when start_time is null then 1 else 0 end) as cancel_num
-          from tb_get_car_order
-          group by date(order_time)
-          order by dt) t ) a 
+        from tb_get_car_order
+        group by date(order_time)
+        order by dt) t 
+    ) a 
 where dt between '2021-10-01' and '2021-10-03'
 
 ```
 
 ```sql
 SELECT *
-FROM ( SELECT dt, 
-              round(sum(finish_num) over (order by dt rows 6 preceding) / 7, 2) as finish_num_7d,
-              round(sum(cancel_num) over (order by dt rows 6 preceding) / 7, 2) as cancel_num_7d
-       FROM (SELECT DATE(order_time) as dt,
-                    sum(IF(start_time is not NULL, 1, 0)) as finish_num,
-                    sum(IF(start_time is NULL, 1, 0)) as cancel_num
-             FROM tb_get_car_order
-             GROUP BY DATE(order_time)
-             ORDER BY dt) t 
-) tt
+FROM(
+    SELECT 
+        dt, 
+        round(sum(finish_num) over (order by dt rows 6 preceding) / 7, 2) as finish_num_7d,
+        round(sum(cancel_num) over (order by dt rows 6 preceding) / 7, 2) as cancel_num_7d
+    FROM(
+        SELECT 
+            DATE(order_time) as dt,
+            sum(IF(start_time is not NULL, 1, 0)) as finish_num,
+            sum(IF(start_time is NULL, 1, 0)) as cancel_num
+        FROM tb_get_car_order
+        GROUP BY DATE(order_time)
+        ORDER BY dt
+        ) t 
+    ) tt
 WHERE dt BETWEEN '2021-10-01' and '2021-10-03'
 ```
 
@@ -2475,32 +2579,34 @@ WHERE dt BETWEEN '2021-10-01' and '2021-10-03'
 #      from   
 #     )
 #order by dt asc
+
 select * from 
-(select date_format(order_time,'%Y-%m-%d') dt,
-round(avg(count(start_time)) over (order by date_format(order_time,'%Y-%m-%d')  rows 6 preceding),2) finish_num_7d,
-round(avg(sum(case when start_time is null then 1 else 0 end)) over (order by date_format(order_time,'%Y-%m-%d') rows 6 preceding),2) cancel_num_7d
-from tb_get_car_order
-group by dt) as a 
+    (select 
+        date_format(order_time,'%Y-%m-%d') dt,
+        round(avg(count(start_time)) over (order by date_format(order_time,'%Y-%m-%d')  rows 6 preceding),2) finish_num_7d,
+        round(avg(sum(case when start_time is null then 1 else 0 end)) over (order by date_format(order_time,'%Y-%m-%d') rows 6 preceding),2) cancel_num_7d
+    from tb_get_car_order
+    group by dt
+    ) as a 
 where dt between '2021-10-01' and '2021-10-03'
 order by dt
 ```
 
 ```sql
-select
-*
-from(
-select
-dates,
-round(avg(finish_cnt) over (order by dates rows between 6 preceding and current row),2),
-round(avg(cancel_cnt) over (order by dates rows between 6 preceding and current row),2)
-from
-(
-select
-date(order_time) dates,
-count(start_time) finish_cnt,
-sum(if(start_time is null,1,0)) cancel_cnt
-from tb_get_car_order
-group by date(order_time))a)b
+select * from (
+    select
+        dates,
+        round(avg(finish_cnt) over (order by dates rows between 6 preceding and current row),2),
+        round(avg(cancel_cnt) over (order by dates rows between 6 preceding and current row),2)
+    from(
+        select
+            date(order_time) dates,
+            count(start_time) finish_cnt,
+            sum(if(start_time is null,1,0)) cancel_cnt
+        from tb_get_car_order
+        group by date(order_time)
+        )a
+    )b
 where dates in ('2021-10-01','2021-10-02','2021-10-03')
 
 ```
@@ -2513,12 +2619,13 @@ https://www.nowcoder.com/practice/34f88f6d6dc549f6bc732eb2128aa338?tpId=268&tags
 ```sql
 SELECT period, COUNT(event_time) order_num, ROUND(AVG(wait_time), 1), ROUND(SUM(dispatch_time)/COUNT(dispatch_time), 1)
 FROM(
-	SELECT event_time,  CASE
+	SELECT event_time,  
+            CASE
 			WHEN RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00' THEN '早高峰'
 			WHEN RIGHT(event_time, 8) >='09:00:00' AND RIGHT(event_time, 8) < '17:00:00' THEN '工作时间'
 			WHEN RIGHT(event_time, 8) >='17:00:00' AND RIGHT(event_time, 8) < '20:00:00' THEN '晚高峰'
 			ELSE '休息时间'
-		 END period,
+		    END period,
 		 TIMESTAMPDIFF(SECOND, event_time, end_time)/60 wait_time,
 		 TIMESTAMPDIFF(SECOND, order_time, start_time)/60 dispatch_time
 	FROM tb_get_car_record tgcr
@@ -2547,11 +2654,11 @@ select
     round(
         avg(TIMESTAMPdiff(second, event_time, order_time))/60,
         1
-    ) AS avg_wait_time,
+        ) AS avg_wait_time,
     round(
         avg(Timestampdiff(second, order_time, start_time))/60,
         1
-    ) AS avg_dispatch_time
+        ) AS avg_dispatch_time
 from
     tb_get_car_record a
     JOIN tb_get_car_order b ON a.order_id = b.order_id
@@ -2563,19 +2670,20 @@ ORDER BY get_car_num
 
 ```sql
 select
-period, count(period)as get_car_num,
-round(avg(wait_time),1)as avg_wait_time,
-round(avg(dispatch_time),1)as avg_dispatch_time
+    period, count(period)as get_car_num,
+    round(avg(wait_time),1)as avg_wait_time,
+    round(avg(dispatch_time),1)as avg_dispatch_time
 from
-(SELECT 
-(case when date_format(event_time,'%T')>='07:00:00'and date_format(event_time,'%T')<'09:00:00' then'早高峰'
-      when date_format(event_time,'%T')>='09:00:00'and date_format(event_time,'%T')<'17:00:00' then'工作时间'
-      when date_format(event_time,'%T')>='17:00:00'and date_format(event_time,'%T')<'20:00:00' then'晚高峰'
-      else '休息时间' end)as period,
-round(TIMESTAMPDIFF(second,event_time,order_time)/60,1)as wait_time,
-round(TIMESTAMPDIFF(second,order_time,start_time)/60,1)as dispatch_time
-FROM tb_get_car_order o left join tb_get_car_record r on o.order_id=r.order_id
-where (WEEKDAY(order_time) between 0 and 4) and event_time is not null)t
+    (SELECT 
+        (case when date_format(event_time,'%T')>='07:00:00'and date_format(event_time,'%T')<'09:00:00' then'早高峰'
+            when date_format(event_time,'%T')>='09:00:00'and date_format(event_time,'%T')<'17:00:00' then'工作时间'
+            when date_format(event_time,'%T')>='17:00:00'and date_format(event_time,'%T')<'20:00:00' then'晚高峰'
+            else '休息时间' end)as period,
+        round(TIMESTAMPDIFF(second,event_time,order_time)/60,1)as wait_time,
+        round(TIMESTAMPDIFF(second,order_time,start_time)/60,1)as dispatch_time
+    FROM tb_get_car_order o left join tb_get_car_record r on o.order_id=r.order_id
+    where (WEEKDAY(order_time) between 0 and 4) and event_time is not null
+    )t
 GROUP by period
 order by get_car_num
 ```
@@ -2599,7 +2707,7 @@ FROM (
     FROM tb_get_car_record
     JOIN tb_get_car_order USING(order_id)
     WHERE DAYOFWEEK(event_time) BETWEEN 2 AND 6
-) as t_wait_dispatch_time
+    ) as t_wait_dispatch_time
 GROUP BY period
 ORDER BY get_car_num;
 
@@ -2639,15 +2747,17 @@ SELECT city, MAX(sum_wait_num)
 FROM(
 	SELECT city, time, SUM(if_wait) OVER(PARTITION BY city, left(time, 10) ORDER BY time, if_wait DESC) sum_wait_num
 	FROM(
-	SELECT city, event_time time, 1 if_wait
-	FROM tb_get_car_record
-	UNION ALL
-	SELECT city, IFNULL(start_time, finish_time) time, -1 if_wait
-	FROM tb_get_car_order
-	JOIN tb_get_car_record
-	USING(order_id)
+        SELECT city, event_time time, 1 if_wait
+        FROM tb_get_car_record
+
+        UNION ALL
+
+        SELECT city, IFNULL(start_time, finish_time) time, -1 if_wait
+        FROM tb_get_car_order
+        JOIN tb_get_car_record
+        USING(order_id)
 		)a
-        )b
+    )b
 WHERE LEFT(time, 7) = '2021-10'
 GROUP BY city
 ORDER BY MAX(sum_wait_num), city
@@ -2656,41 +2766,43 @@ ORDER BY MAX(sum_wait_num), city
 ```sql
 select city,left(max(sumd),1) mdd
 from (
-select city,date(a.dt) dtt,
-sum(diff) over (partition by city,date(a.dt) order by a.dt,diff desc) sumd
-from (
-(select city,event_time dt,'1' as diff
-from tb_get_car_record
-where date_format(event_time,'%Y-%m') = '2021-10')
-union all
-(select city,start_time dt,'-1' as diff
-from tb_get_car_record t1 left join tb_get_car_order t2 on t1.order_id = t2.order_id
-where date_format(start_time,'%Y-%m') = '2021-10')) a
-) b
+    select city,date(a.dt) dtt,
+    sum(diff) over (partition by city,date(a.dt) order by a.dt,diff desc) sumd
+    from (
+        (select city,event_time dt,'1' as diff
+        from tb_get_car_record
+        where date_format(event_time,'%Y-%m') = '2021-10')
+
+        union all
+
+        (select city,start_time dt,'-1' as diff
+        from tb_get_car_record t1 left join tb_get_car_order t2 on t1.order_id = t2.order_id
+        where date_format(start_time,'%Y-%m') = '2021-10')
+        ) a
+    ) b
 group by city,b.dtt
 order by mdd,city
 ```
 
 ```sql
 select 
-city, 
-max(wait_uv)
-from
-(
+    city, 
+    max(wait_uv)
+from(
     select 
-    city, t, sum(num) over(partition by city, date(t) order by t asc, num desc) wait_uv
+        city, t, sum(num) over(partition by city, date(t) order by t asc, num desc) wait_uv
     from
-    (
+        (
         select city, event_time as t, 1 num
         from tb_get_car_record
         UNION all
         select city, COALESCE(start_time, finish_time) t, -1 num
         from tb_get_car_order
         left join tb_get_car_record using(order_id)
-    ) a
+        ) a
     where LEFT(t, 7) = '2021-10'
     order by 2
-) b
+    ) b
 group by 1
 order by 2, 1
 ```
@@ -2698,19 +2810,23 @@ order by 2, 1
 ```sql
 with tmp as 
     (select city, event_time,
-            case when r.order_id is null then end_time
+            case 
+            when r.order_id is null then end_time
             when start_time is null then finish_time
-            when start_time is not null then start_time end out_time
+            when start_time is not null then start_time 
+            end out_time
      from tb_get_car_record r left join tb_get_car_order o using(order_id)
      where date_format(event_time,'%Y%m')='202110')
+
 select city, max(uv_num) max_wait_uv
 from 
     (select city, 
             sum(num) over(partition by city,date(dt) order by dt, num desc) uv_num
      from 
-     (select city, event_time dt, 1 num from tmp
-     union all 
-     select city, out_time dt, -1 num from tmp)tmp2
+        (select city, event_time dt, 1 num from tmp
+        union all 
+        select city, out_time dt, -1 num from tmp
+        )tmp2
     ) tmp3
 group by city
 order by max_wait_uv, city
@@ -2737,16 +2853,27 @@ order by max_wait_uv,city*/
 
 
 select city,max(wait_uv) max_wait_uv from
-(select city,date_format(dt,'%Y-%m-%d') dt1,
-sum(if_wait) over (partition by city,date_format(dt,'%Y-%m-%d') order by dt asc,if_wait desc) wait_uv
-from
-(select city,event_time dt,1 if_wait from tb_get_car_record
-where date_format(event_time,'%Y-%m')='2021-10'
-union all
-select r.city,
-(case when o.start_time is null then o.finish_time else o.start_time end) dt,-1 if_wait
-from tb_get_car_record r left join tb_get_car_order o on o.order_id=r.order_id
-where date_format(o.finish_time,'%Y-%m')='2021-10') as a) as b
+    (select 
+        city,
+        date_format(dt,'%Y-%m-%d') dt1,
+        sum(if_wait) over (partition by city,date_format(dt,'%Y-%m-%d') order by dt asc,if_wait desc) wait_uv
+    from
+        (select city,event_time dt,1 if_wait from tb_get_car_record
+        where date_format(event_time,'%Y-%m')='2021-10'
+
+        union all
+
+        select 
+            r.city,
+            (
+            case when o.start_time is null then o.finish_time 
+            else o.start_time end
+            ) dt,
+            -1 if_wait
+        from tb_get_car_record r left join tb_get_car_order o on o.order_id=r.order_id
+        where date_format(o.finish_time,'%Y-%m')='2021-10'
+        ) as a
+    ) as b
 group by city
 order by max_wait_uv,city
 ```
