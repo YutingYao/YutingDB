@@ -2020,7 +2020,7 @@ where date_format(event_time,'%Y-%m')='2021-10'
 and (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
 ```
 
-## SQL18 店铺901国庆期间的7日动销率和滞销率
+## SQL18 店铺901国庆期间的7日动销率和滞销率（区别于22题）
 
 https://www.nowcoder.com/practice/e7837f66e8fb4b45b694d24ea61f0dc9?tpId=268&tqId=2286659&ru=/practice/5005cbf5308249eda1fbf666311753bf&qru=/ta/sql-factory-interview/question-ranking
 
@@ -2290,6 +2290,16 @@ group by city
 
 https://www.nowcoder.com/practice/f022c9ec81044d4bb7e0711ab794531a?tpId=268&tqId=2294893&ru=/practice/e7837f66e8fb4b45b694d24ea61f0dc9&qru=/ta/sql-factory-interview/question-ranking
 
+
+```sql
+coalesce(o.driver_id,'总体')
+ =
+IFNULL(driver_id, "总体")
+
+
+group by tb.driver_id with rollup
+```
+
 ```sql
 select
     coalesce(o.driver_id,'总体') as driver_id,
@@ -2515,6 +2525,12 @@ order by
 
 https://www.nowcoder.com/practice/2b330aa6cc994ec2a988704a078a0703?tpId=268&tqId=2299819&ru=/practice/f022c9ec81044d4bb7e0711ab794531a&qru=/ta/sql-factory-interview/question-ranking
 
+- order by date_format(order_time, '%Y-%m-%d') rows 6 preceding
+
+- order by dt rows 6 preceding
+
+- order by dates rows between 6 preceding and current row
+
 ```sql
 select dt, finish_num_7d, cancel_num_7d
 from (
@@ -2614,6 +2630,32 @@ where dates in ('2021-10-01','2021-10-02','2021-10-03')
 ## SQL23 工作日各时段叫车量、等待接单时间和调度时间
 
 https://www.nowcoder.com/practice/34f88f6d6dc549f6bc732eb2128aa338?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
+
+早高峰的表示方法：
+
+```sql
+RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00'
+
+subString_index(event_time, ' ', -1) between '07:00:00' and '08:59:59'
+
+date_format(event_time,'%T')>='07:00:00'and date_format(event_time,'%T')<'09:00:00'
+
+HOUR(event_time) IN (7, 8)
+
+hour(event_time) >= 7 and hour(event_time) < 9
+```
+
+工作日的表示方法
+
+```sql
+DATE_FORMAT(event_time, '%w') BETWEEN 1 AND 5
+
+WEEKDAY(order_time) NOT IN(5, 6)
+
+WEEKDAY(order_time) between 0 and 4
+
+DAYOFWEEK(event_time) BETWEEN 2 AND 6
+```
 
 
 ```sql
