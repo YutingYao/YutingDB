@@ -298,7 +298,11 @@ ORDER BY author,total_fans
 
 ## SQL5 国庆期间每类视频点赞量和转发量
 
+注意时间的表达方式：
+
 https://www.nowcoder.com/practice/f90ce4ee521f400db741486209914a11?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
+
+ORDER BY dt DESC rows BETWEEN CURRENT ROW AND 6 FOLLOWING：
 
 ```sql
 SELECT * FROM
@@ -316,6 +320,8 @@ WHERE dt BETWEEN '2021-10-01' AND '2021-10-04'
 ORDER BY tag DESC, dt ASC
 ```
 
+rows 6 preceding
+
 ```sql
 select * from (
 
@@ -332,6 +338,8 @@ from (
     order by tag desc,dt
     
 ```
+
+order by dt desc rows between current row and 6 following
 
 ```sql
 select *
@@ -354,6 +362,8 @@ order by tag desc,dt
 
 ```
 
+rows 6 preceding
+
 ```sql
 select t2.*
 from (select t1.tag,t1.d
@@ -370,6 +380,8 @@ where t2.d between '2021-10-01' and '2021-10-03'
 order by t2.tag desc,t2.d
 
 ```
+
+ROWS 6 PRECEDIN 
 
 ```sql
 SELECT tag, dt, sum_like_cnt_7d, max_retweet_cnt_7d
@@ -395,6 +407,18 @@ ORDER BY tag DESC, dt ASC
 ## SQL6 近一个月发布的视频中热度最高的top3视频
 
 https://www.nowcoder.com/practice/0226c7b2541c41e59c3b8aec588b09ff?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
+
+注意：
+
+date((select max(end_time) from tb_user_video_log))
+
+和
+
+max(date(end_time))
+
+group by video_id
+
+的区别
 
 ```sql
 select video_id,
@@ -433,6 +457,12 @@ from(select video_id,duration,sum(if_like) like1,
 order by a1 desc
 limit 3
 ```
+
+timestampdiff(day,xxx,xxx) <= 29
+
+等效于
+
+datediff(xxx,xxx)<=29
 
 ```sql
 select vid,round((a_c+s_l+s_c+s_r)/
@@ -552,6 +582,12 @@ group by date_format(tl.in_time, '%Y-%m-%d')
 order by avg_view_len_sec
 ```
 
+date_format(in_time, '%Y-%m-%d')
+
+等效于
+
+date(in_time)
+
 ```sql
 SELECT
      date(in_time)as dt,
@@ -574,6 +610,8 @@ order by b ;
 ## SQL8 每篇文章同一时刻最大在看人数
 
 https://www.nowcoder.com/practice/fe24c93008b84e9592b35faa15755e48?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
+
+注意一定要按照 in_time 和 out_time 的升序排序
 
 ```sql
 with t as
@@ -815,6 +853,8 @@ order by dt
 
 ## SQL10 统计活跃间隔对用户分级结果
 
+https://www.nowcoder.com/practice/6765b4a4f260455bae513a60b6eed0af?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
+
 ```sql
 select user_grade,round(count(uid)/(select count(distinct uid) from tb_user_log),2) q
 from  
@@ -851,6 +891,18 @@ from ( SELECT uid,
 GROUP BY user_grade
 ORDER BY ratio desc
 ```
+
+count(uid) over()
+
+group by uid
+
+和
+
+count(uid)
+
+group by uid
+
+的区别
 
 ```sql
 -- 2021年12月13日
@@ -1260,6 +1312,8 @@ SELECT uid, DATE_FORMAT(dt,'%Y%m')as month ,sum(bin_num)coin FROM con_num GROUP 
 ```
 
 ## SQL13 计算商城中2021年每月的GMV
+
+https://www.nowcoder.com/practice/5005cbf5308249eda1fbf666311753bf?tpId=268&tqId=2285515&ru=/practice/dbbc9b03794a48f6b34f1131b1a903eb&qru=/ta/sql-factory-interview/question-ranking
 
 ```sql
 select date_format(event_time,'%Y-%m') as month,round(sum(total_amount),0) as GMV
@@ -1911,6 +1965,8 @@ and (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_ov
 
 ## SQL18 店铺901国庆期间的7日动销率和滞销率
 
+https://www.nowcoder.com/practice/e7837f66e8fb4b45b694d24ea61f0dc9?tpId=268&tqId=2286659&ru=/practice/5005cbf5308249eda1fbf666311753bf&qru=/ta/sql-factory-interview/question-ranking
+
 ```sql
 select dt1,round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),tb3.product_id,null)),3) sale_rate,
 1-round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),tb3.product_id,null)),3) unsale_rate
@@ -2155,6 +2211,8 @@ group by city
 
 ## SQL20 有取消订单记录的司机平均评分
 
+https://www.nowcoder.com/practice/f022c9ec81044d4bb7e0711ab794531a?tpId=268&tqId=2294893&ru=/practice/e7837f66e8fb4b45b694d24ea61f0dc9&qru=/ta/sql-factory-interview/question-ranking
+
 ```sql
 select
 coalesce(o.driver_id,'总体') as driver_id,
@@ -2360,6 +2418,7 @@ order by
 
 ## SQL22 国庆期间近7日日均取消订单量
 
+https://www.nowcoder.com/practice/2b330aa6cc994ec2a988704a078a0703?tpId=268&tqId=2299819&ru=/practice/f022c9ec81044d4bb7e0711ab794531a&qru=/ta/sql-factory-interview/question-ranking
 
 ```sql
 select dt, finish_num_7d, cancel_num_7d
