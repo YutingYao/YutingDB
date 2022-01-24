@@ -81,6 +81,8 @@ ${ } 属于变量替换
 
 ##  2. <a name='SHELL1'></a>SHELL1 统计文件的行数
 
+https://www.nowcoder.com/practice/205ccba30b264ae697a78f425f276779?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1&gioEnter=menu
+
 ###  2.1. <a name='wc'></a>wc命令
 
 ```sh
@@ -215,6 +217,8 @@ echo $line
 
 ##  3. <a name='SHELL25'></a>SHELL2 打印文件的最后5行
 
+https://www.nowcoder.com/practice/ff6f36d357d24ce5a0eb817a0ef85ee2?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
 ###  3.1. <a name='sed-1'></a>sed 命令
 
 ```sh
@@ -329,6 +333,8 @@ done<nowcoder.txt
 ```
 
 ##  4. <a name='SHELL37'></a>SHELL3 输出7的倍数
+
+https://www.nowcoder.com/practice/8b85768394304511b0eb887244e51872?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
 
 ###  4.1. <a name='seq'></a>seq 命令
 
@@ -466,6 +472,8 @@ for i in {0..500..7}; do echo $i; done;
 ```
 
 ##  5. <a name='SHELL45'></a>SHELL4 输出第5行的内容
+
+https://www.nowcoder.com/practice/1d5978c6136d4252904757b4fa0c9296?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
 
 ###  5.1. <a name='sed-1'></a>sed 命令
 
@@ -682,6 +690,8 @@ done < ./nowcoder.txt
 
 ##  6. <a name='SHELL5'></a>SHELL5 打印空行的行号
 
+https://www.nowcoder.com/practice/030fc368e42e44b8b1f8985a8d6ad255?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
 ###  6.1. <a name='awk-1'></a>awk 命令
 
 awk是数据解析工具 对文件或管道数据、终端输入数据逐行解析 默认以空格分隔
@@ -806,6 +816,8 @@ do
 ```
 
 ##  7. <a name='SHELL6'></a>SHELL6 去掉空行
+
+https://www.nowcoder.com/practice/0372acd5725d40669640fd25e9fb7b0f?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
 
 ###  7.1. <a name='awk-1'></a>awk 命令
 
@@ -964,6 +976,8 @@ done
 
 ##  8. <a name='SHELL78'></a>SHELL7 打印字母数小于8的单词
 
+https://www.nowcoder.com/practice/bd5b5d4b93a04226a81afbabf0be797d?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
 ###  8.1. <a name='trawk'></a>tr + awk
 
 ```sh
@@ -989,16 +1003,36 @@ cat nowcoder.txt | xargs -n 1 | awk 'length($1)<8 {print $1}'
 ```sh
 #!/bin/bash
 # awk的NF变量  print NF
-awk -F" " '{for(i=1;i<=NF;i++){if(length($i) < 8){print $i}}}' nowcoder.txt
-awk -F " " '{for(i=1;i<=NF;i++){if(length($i) < 8) print $i}}' nowcoder.txt
+awk -F" " '{
+    for(i=1;i<=NF;i++){
+        if(length($i) < 8)
+            {print $i}}}' nowcoder.txt
+awk -F " " '{
+    for(i=1;i<=NF;i++){
+        if(length($i) < 8) 
+            print $i}}' nowcoder.txt
 
 
-awk 'BEGIN{FS="";RS=" ";ORS="\n"}{if(NF<8)print$0}' nowcoder.txt
-awk '{for(i=1;i<=NF;i++)if(length($i)<8)print $i;}' nowcoder.txt
-awk 'BEGIN{RS="[[:space:]]+"}length($0)<8{print $0}' nowcoder.txt
+awk '
+BEGIN{FS="";RS=" ";ORS="\n"}
+{if(NF<8)
+    print$0}' nowcoder.txt
+awk '
+{for(i=1;i<=NF;i++)
+    if(length($i)<8)
+        print $i;}' nowcoder.txt
+awk '
+BEGIN{RS="[[:space:]]+"}
+length($0)<8{print $0}' nowcoder.txt
 
-awk '{for(i=1;i<=NF;i++) if(length($i)<8) print $i}' nowcoder.txt
-cat nowcoder.txt | awk '{for(i=1;i<=NF;i++) if(length($i)<8) print $i}'
+awk '
+{for(i=1;i<=NF;i++) 
+    if(length($i)<8) 
+        print $i}' nowcoder.txt
+cat nowcoder.txt | awk '{
+    for(i=1;i<=NF;i++) 
+        if(length($i)<8) 
+            print $i}'
 ```
 
 ```sh
@@ -1144,6 +1178,8 @@ done
 
 ##  9. <a name='SHELL8'></a>SHELL8 统计所有进程占用内存大小的和
 
+https://www.nowcoder.com/practice/fb24140bac154e5b99e44e0cee45dcaf?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
 ###  9.1. <a name='awk-1'></a>awk的强大功能
 
 ```sh
@@ -1154,12 +1190,12 @@ awk -F 指定空格做分割符，对第6列内存求和
 ```sh
 都是利用awk的强大功能，由第一行开始读写，读到最后一行结束
 
-awk '{a+=$6}END{print a}'
+awk '{a+=$6} END {print a}'
 awk '{sum += $1} END {print sum}'< <(ps -u <account> -o pmem)
 awk '{sum+=$6} END {print sum}' nowcoder.txt
 awk '{sum+=$6} END {print sum}' nowcoder.txt
-awk 'BEGIN{sum=0}{sum+=$6}END{print sum}' nowcoder.txt
-awk 'BEGIN{sum=0}{sum+=$6}END{print sum}' nowcoder.txt
+awk 'BEGIN{sum=0} {sum+=$6} END {print sum}' nowcoder.txt
+awk 'BEGIN{sum=0} {sum+=$6} END {print sum}' nowcoder.txt
 awk 'BEGIN { printf "%0.2f\n" ,1/2}' / awk 'BEGIN { printf("%0.2f\n", 1/2) }'
 说明：
     awk 'BEGIN {print 1 / 3}' 
@@ -1346,6 +1382,8 @@ echo $sum
 
 ##  10. <a name='SHELL9'></a>SHELL9 统计每个单词出现的个数
 
+https://www.nowcoder.com/practice/ad921ccc0ba041ea93e9fb40bb0f2786?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
 ###  10.1. <a name='awk-1'></a>awk 命令
 
 ```sh
@@ -1371,7 +1409,13 @@ echo $sum
 
 解答：
 
-    awk '{for(i=1;i<=NF;i++) a[$i]+=1}END{for(x in a) print x,a[x]}' nowcoder.txt
+    awk '{
+        for(i=1;i<=NF;i++) 
+            a[$i]+=1
+        }END{
+        for(x in a) 
+            print x,a[x]
+        }' nowcoder.txt
 ```
 
 
@@ -1401,8 +1445,7 @@ cat nowcoder.txt | awk '{for(i=1;i<=NF;i++){print $i}}'|sort|uniq -c| sort -n | 
 awk '{
  for (i = 1; i <= NF; ++i)
      mp[$i]++;
-}
-END {
+} END {
  for (k in mp)
      printf("%s %d", k, mp[k]);
 }' | sort -n -k1
@@ -1552,6 +1595,8 @@ done
 
 ##  11. <a name='SHELL10'></a>SHELL10 第二列是否有重复
 
+https://www.nowcoder.com/practice/61b79ffe88964c7ab7b98ae16dd76492?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
 ###  11.1. <a name='awk-1'></a>awk 命令
 
 ```sh
@@ -1559,7 +1604,15 @@ cat  $1 |awk '{print $2}'  |sort  |uniq -c|sort |grep -v 1
 cat nowcoder.txt | awk '{print $2}' | sort |uniq -c | sort -n | awk -v OFS=" " '{if($1>1) print $1,$2}'
 cat nowcoder.txt | awk '{print $2}' | sort |uniq -cd | sort -n
 awk '{print $2}' nowcoder.txt | sort | uniq -cd | sort -n
-awk '{a[$2]++} END{for(i in a) {if(a[i]>=2){print a[i]" "i}}}' nowcoder.txt 
+awk '{a[$2]++
+} END {
+    for(i in a) 
+        {
+        if(a[i]>=2)
+            {print a[i]" "i}
+        }
+        
+    }' nowcoder.txt 
 ```
 
 ```sh
@@ -1695,24 +1748,2047 @@ do
 done
 ```
 
-## 
+## SHELL11 转置文件的内容
+
+https://www.nowcoder.com/practice/2240cd809c8f4d80b3479d7c95bb1e2e?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
 
 ```sh
+awk '{
+    for(i=1;i<=NF;i++){
+      if(NR==1){
+        row[i] = $i;
+      }else{
+        row[i] = row[i]" "$i;
+      }
+    }
+}END{
+  for(i=1;i<=NF;i++){
+    print row[i]
+  }
+}
+' ./nowcoder.txt
+```
+
+```sh
+function solution1() {
+    awk '{printf $1 }' nowcoder.txt
+    awk '{printf $2 }' nowcoder.txt
+}
+
+function solution2() {
+    cut -d" " -f1 nowcoder.txt | tr -d "\n"
+    cut -d" " -f2 nowcoder.txt | tr -d "\n"
+}
+
+function solution3() {
+    .
+}
+
+solution1
+```
+
+```sh
+awk '{for (i=1; i<=NF; i++) arr[i]=arr[i]" "$i}END{for (i=1; i<=NF; i++) print arr[i]"\n"}' nowcoder.txt 利用一个数组，分别获取每一行的每一列 ...
+```
+
+```sh
+#!/bin/bash
+awk '{printf  $1" "}' nowcoder.txt
+awk '{printf $2" "}' nowcoder.txt
+```
+
+```sh
+awk '{
+    for(i=1;i<=NF;i++){
+        rows[i]=rows[i]" "$i
+        }
+} END{
+    for(line in rows){
+        print rows[line]
+        }
+}' $1
+```
+
+```sh
+awk '{
+    for (i = 1; i <= NF; i++){
+        if (NR == 1) {
+            array[i] = $i
+        } else {
+            array[i] = array[i] $i
+        }
+    }
+} END {
+    for(j = 1; j <= NF; j++){
+        print array[j]
+    }
+}' nowcoder.txt
+```
+
+```sh
+awk '{print $1}' nowcoder.txt | tr "\n" " "
+awk '{print $2}' nowcoder.txt | tr "\n" " " 
+```
+
+```sh
+ cut -d " " -f 1 nowcoder.txt |tr -s '\n' ' '
+ cut -d " " -f 2 nowcoder.txt |tr -s '\n' ' '
+```
+
+```sh
+
+declare -A map
+while read -a arr
+do
+
+    for i in ${!arr[@]}
+    do
+        map[$i]="${map[$i]} ${arr[$i]}"
+    done
+done < nowcoder.txt
+
+for i in ${!map[@]}
+do
+    echo ${map[$i]}
+done
+
+```
+
+```sh
+declare -a arr1
+declare -a arr2
+ 
+while read line
+do
+    arr=($line)
+    arr1[${#arr1[@]}]=${arr[0]}
+    arr2[${#arr2[@]}]=${arr[1]}
+done < nowcoder.txt
+ 
+echo ${arr1[@]}
+echo ${arr2[@]}
+```
+
+## SHELL12 打印每一行出现的数字个数
+
+https://www.nowcoder.com/practice/2d2a124f98054292aef71b453e705ca9?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk -F "[1,2,3,4,5]" '
+BEGIN{sum=0}
+{print "line"NR" number:"(NF-1);
+sum+=(NF-1)}
+END{print "sum is "sum}' nowcoder.txt
+```
+
+```sh
+cnt=1
+sum=0
+while read line
+do
+    r=`echo $line | grep -oE "[12345]" | wc -l`
+    echo "line${cnt} number: ${r}"
+    let "cnt++"
+    let "sum+=$r"
+done 
+echo "sum is ${sum}" < nowcoder.txt 
+```
+
+```sh
+awk '{
+    gsub(/[^1-5]/,"",$0);
+    print "line"NR" number: "length($0);
+    sum += length($0);
+} END{ print "sum is "sum }'
+```
+
+```sh
+#!/bin/bash
+
+idx=1
+sum=0
+
+for line in $(cat nowcoder.txt)
+do
+        num=$(echo $line | grep -o [1-5] | wc -l)
+        echo line$idx number:$num
+        let "sum+=num"
+        let "idx++"
+done
+echo sum is $sum
+```
+
+```sh
+# 利用 awk 的 gsub 返回替换的数量
+awk '{
+    num = gsub(/[1-5]/, "");
+    sum += num;
+    printf("line%d number: %d\n", NR, num);
+}
+END {
+    printf("sum is %d\n", sum);
+}'
+```
+
+```sh
+
+awk -F "[1,2,3,4,5]" '
+BEGIN{sum=0}
+{print "line"NR" number:"(NF-1);
+sum+=(NF-1)}
+END{print "sum is "sum}' nowcoder.txt
+```
+
+```sh
+#!/bin/bash
+j=0
+i=0
+sum=0
+while read line
+do
+    for((a=0;a<${#line};a++));do
+        if [[ ${line:$a:1} =~ [1-5] ]];then
+            i=$(($i+1))
+        fi
+    done
+    j=$(($j+1))
+    echo "line$j number:$i"
+    sum=$(($sum+$i))
+    i=0
+done < nowcoder.txt
+echo "sum is ${sum}"
+```
+
+```sh
+#!/bin/bash
+j=0
+i=0
+sum=0
+while read line
+do
+    for((a=0;a<${#line};a++));do
+        if [[ ${line:$a:1} =~ [1-5] ]];then
+            i=$(($i+1))
+        fi
+    done
+    j=$(($j+1))
+    echo "line$j number:$i"
+    sum=$(($sum+$i))
+    i=0
+done < nowcoder.txt
+echo "sum is ${sum}"
+```
+
+```sh
+linecount=0
+sum=0
+count=0
+
+while read line
+do
+    for (( i=0; i<${#line};i++ ))
+    do
+        if [[  ${line:$i:1} =~ [1-5] ]]
+        then
+            count=$(($count+1))
+        fi
+    done
+    linecount=$(($linecount+1))
+    echo "line$linecount number:$count"
+    sum=$(($sum+$count))
+    count=0
+    
+done<nowcoder.txt
+echo "sum is $sum"
+```
+
+```sh
+#/bin/bash
+linecount=0
+sum=0
+count=0
+
+while read line
+do
+    for (( i=0; i<${#line};i++ ))
+    do
+        if [[  ${line:$i:1} =~ [1-5] ]]
+        then
+            count=$(($count+1))
+        fi
+    done
+    linecount=$(($linecount+1))
+    echo "line$linecount number:$count"
+    sum=$(($sum+$count))
+    count=0
+    
+done<nowcoder.txt
+echo "sum is $sum"
+```
+
+## SHELL13 去掉所有包含this的句子
+
+https://www.nowcoder.com/practice/2c5a46ef755a4f099368f7588361a8af?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+方法1
+grep 命令 -v 显示不包含匹配文本的所有行
+
+grep -v 'this'
+grep -v 'this'
+
+方法2
+sed 命令 -> d 删除 -> // 包含要搜索的字符串
+
+sed '/this/d'
+sed '/this/d'
+
+方法3
+awk 命令,检查当前 $0 不包含 this 随机输出
+
+awk '$0!~/this/ {print $0}'
+awk '$0!~/this/ {print $0}'
+awk '!/this/' nowcoder.txt
+```
+
+```sh
+#!/bin/bash
+while read line
+do
+    flag=0
+    for i in $line
+    do
+        if [[ $i = "this" ]];then
+            flag=1
+            break
+        fi
+    done
+    if [[ $flag -eq 0 ]];then
+        echo $line
+    fi
+done < nowcoder.txt
+```
+
+```sh
+#/bin/bash
+
+
+while read line
+do
+    flag=0
+    for  i in $line 
+    do
+        if [[ $i = "this" ]]
+        then flag=1
+         break
+        fi
+    done 
+    
+    if [[ $flag -eq 0 ]]
+    then
+        echo $line
+    fi
+done< nowcoder.txt
+```
+
+```sh
+while read row
+do
+  flag=1
+  for i in $row
+  do
+    if test $i = "this"
+    then flag=0
+    fi
+  done
+  if test $flag -eq 1
+  then echo $row
+  fi
+done
+
+```
+
+## SHELL14 求平均值
+
+https://www.nowcoder.com/practice/c44b98aeaf9942d3a61548bff306a7de?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+
+```sh
+#!/usr/bin/env bash
+
+function solution_1() {
+    read count
+    local sum=0
+    local loop=${count}
+    while (( ${loop} > 0)); do
+        read m
+        sum=$((${sum}+${m}))
+        loop=$((${loop}-1))
+    done
+    echo "scale=3; ${sum}/${count}" | bc 
+}
+
+function solution_2() {
+    read count
+    local sum=0
+    local loop=1
+    while (( ${loop} <= ${count})); do
+        read m
+        ((sum+=m))
+        ((loop++))
+    done
+    echo "scale=3; ${sum}/${count}" | bc 
+}
+
+function solution_3()  {
+    awk 'NR==1 {all=$0} NR>1 {total+=$0} 
+    END{printf "%.3f" ,total/all}'
+}
+
+function solution_4()  {
+    read -p '请输入数组长度：' len
+    i=1
+    while [ $i -le $len ]
+    do
+        read -p '请输入数组数字：' num[$i]
+        let i++
+    done
+    for i in ${num[*]}
+    do
+        sum=$((sum+i))
+    done
+    echo "scale=3; ${sum}/${len}" | bc 
+    #awk -va=$sum -vb=$len 'BEGIN{printf "%.3f\n",a / b }'
+}
+
+function solution_999() {
+    read n
+    sum=0
+    read m
+    arr=($m)
+    for ele in ${arr{@}}; do 
+        sum=$((${sum}+${ele}))
+    done
+    echo "scale=3; ${sum}/${n}" | bc 
+}
+
+solution_1
+```
+
+```sh
+很简单的一个东西折腾了半天，
+“第1行为输入的数组长度N”，
+一直以为是第一行为，第2~N行为，我这阅读理解简直满分，通过率才26.39%
+，我感觉理解错的不止我一个，而且还有很多是直接输出结果6.333通过的，服了
+awk '
+{if(NR==1) {
+    N=$1
+} else{
+    sum+=$1}
+    } 
+END{printf ("%.3f",sum/N) }'
+awk '
+NR==1 {all=$0} 
+NR>1 {total+=$0} 
+END {printf "%.3f" ,total/all}'
+awk '
+{NR==1?len=$1:sum+=$1} 
+END {printf "%.3f",sum/len}' nowcoder.txt
+```
+
+```sh
+len=''
+i=0
+sum=0
+while read num; do
+    if [ -z "${len}" ]; then
+       len=$num
+       continue
+    fi
+    (( sum += num ))
+
+    (( i++ ))
+   if [ ${i} -eq $len ]; then
+       break
+   fi
+done
+printf "%.3f" $( echo "scale=3; ${sum} / ${len}" | bc )
+```
+
+```sh
+read cnt
+sum=0
+cnt_cp=0
+while [ $cnt -gt 0 ]
+do
+    read num
+    let "sum+=num"
+    let "cnt--"
+    let "cnt_cp++"
+done
+echo "scale=3;$sum/$cnt_cp" | bc
+```
+
+```sh
+awk '{
+    if (NR != 1){
+        sum += $1
+    }
+} END {
+    printf("%0.3f\n", sum/(NR-1))
+}'
+```
+
+```sh
+#!/bin/bash
+avg=0
+sum=0
+a[]=(4 1 2 9 8)
+for i in ${#a[*]}
+do
+    let sum+=${a[i]}
+done
+avg='expr $sum / $a[0]'
+echo 6.333
+```
+
+```sh
+read n 
+while (( $n < 1 ))
+do 
+read m 
+s+=m
+let "n--"
+done
+printf '%.3f' 6.333
+```
+
+```sh
+#!/bin/bash
+avg=0
+sum=0
+num=0
+while read line
+do
+    if [[ avg -eq 0 ]];then
+        num=${line}
+    else
+        ((sum+=line))
+    fi
+        ((avg++))
+done < nowcoder.txt
+printf "%.3f" 6.333
+
+```
+
+```sh
+read n 
+while (( $n > 1 ))
+do 
+read m 
+s+=m
+let "n--"
+done
+printf '%.3f' 6.333
+```
+
+```sh
+
+read n 
+while (($n >1))
+do
+read m 
+s+=m
+let 'n--'
+done
+printf '%.3f' 6.333
+```
+
+## SHELL15 去掉不需要的单词
+
+https://www.nowcoder.com/practice/838a3acde92c4805a22ac73ca04e503b?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+#!/usr/bin/env bash
+
+function solution_1() {
+    local arr=""
+    while read line; do
+        arr=(${line})
+        for ele in ${arr[@]}; do
+            if [[ "${ele}" =~ B || "${ele}" =~ b ]]; then
+                continue
+            fi
+            echo "${ele} "
+        done
+    done < nowcoder.txt
+}
+
+function solution_2() {
+    local arr=""
+    while read line; do
+        arr=(${line})
+        for ele in ${arr[@]}; do
+            if [[ "${ele}" =~ B|b ]]; then
+                continue
+            fi
+            echo "${ele} "
+        done
+    done < nowcoder.txt
+}
+
+function solution_4() {
+    sed '/B\|b/d' nowcoder.txt
+}
+
+function solution_5() {
+    #awk '{ for(i=0; i<NF; i++) if($i ~! /b/) print $i }' nowcoder.txt
+    #awk '/\+[^b\+]\+/{print $1}' nowcoder.txt
+    :
+}
+
+function solution_999() {
+    while read line; do
+        my_array=("${my_array[@]}" $line)
+    done
+    declare -a pattern=(${my_array[@]/*[B|b]*/})
+    echo ${pattern[@]}
+}
+
+solution_1
+
+
+```
+
+```s
+全套
+
+grep -v -E 'b|B' nowcoder.txt
+grep -iv "b"
+grep -iv "b"
+grep -v '[bB]' 
+grep -v [Bb]
+
+cat  $1 |grep -v -i b
+cat nowcoder.txt|grep -vi "b"
+cat nowcoder.txt | grep -v -E 'b|B' 
+cat nowcoder.txt|grep -vi "b"
+
+awk '$0!~/b|B/ {print $0}' nowcoder.txt
+awk '!/[bB]/'
+
+
+sed '/[Bb]/d'
+sed '/b\|B/d'
+```
+
+```sh
+while read line
+do
+    my_array=("${my_array[@]}" $line)
+done
+  
+declare -a pattern=(${my_array[@]/*[Bb]*/})
+echo ${pattern[@]}
+```
+
+```sh
+while read line
+do
+    my_array=("${my_array[@]}" $line)
+done
+ 
+declare -a pattern=(${my_array[@]/*[Bb]*/})
+echo ${pattern[@]}
+```
+
+
+## SHELL16 判断输入的是否为IP地址
+
+https://www.nowcoder.com/practice/ad7b6dbfab2a4267a9991110c57aa64f?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+# 使用正则表达式
+ awk '{
+     if ($0 ~ /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[09][0-9]|[1-9][0-9]|[0-9])$/) {
+         print("yes");
+     } else if ($0 ~ /[[:digit:]].[[:digit:]].[[:digit:]].[[:digit:]]/){
+         print("no");
+     } else {
+         print("error")
+     }
+ }' nowcoder.txt
+
+# 使用 . 作为分隔符
+ awk -F '.' '{
+     if (NF == 4) {
+         for (i = 1; i < 5; i++) {
+             if ($i > 255 || $i < 0) {
+                 print("no")
+                 break
+             }
+         }
+         if (i == 5) {
+             print("yes")
+         } else {
+             print("error")
+         }
+     }    
+ }'
+
+# bash 脚本，使用 . 作为分割符号
+IFS='.'
+while read line; do
+    arr=(${line})
+    if [ ${#arr[*]} -ne 4 ]; then
+        printf "error\n"
+    else
+        for ((i = 0; i < ${#arr[*]}; i++)); do
+            if [ ${arr[${i}]} -gt 255 ]; then
+                printf "no\n"
+                break
+            fi
+            done
+        [ $i == 4 ] && printf "yes\n"
+    fi
+done
+
+
+
+```
+
+```sh
+while read line
+    do
+        arr=(${line//./ })
+        if [ ${#arr[*]} -ne 4 ];then
+                printf "error\n"
+            else
+                for ((i=0; i<${#arr[*]}; i++))
+                    do
+                        [ ${arr[${i}]} -gt 255 ] && printf "no\n" && break
+                    done
+                    [ $i == 4 ] && printf "yes\n"
+        fi
+    done
+```
+
+```sh
+awk -F "." '{
+    if (NF == 4) {
+        for (i=1; i<5; i++) {
+            if ($i > 255 || $i < 0) {
+                print("no");break
+            }
+        }
+        if (i==5){print("yes")}
+    } else {
+        print("error")
+    }
+}'
+```
+
+```sh
+awk -F "." '{
+    if (NF == 4) {
+        if ($0 ~ /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[09][0-9]|[1-9][0-9]|[0-9])$/) {
+                print("yes")
+        } else {
+                print("no")
+        }
+    } else {
+        print("error")
+    }
+}'
+
+```
+
+```sh
+awk -F'.' '{
+    if(NF!=4){
+        print "error";next
+    }else{
+        for(i=1;i<=4;i++){
+            if(i==4){
+                print "yes";next
+            }else{
+                if($i<0||$i>255){
+                    print "no";next
+                }
+            }
+        }
+    }
+}' nowcoder.txt
+
+完全依靠awk的next功能实现，
+如果中途有一个字段不符合要求，都输出no，
+并且处理下一行；如果进入到最后一个字段，依然没有退出，
+只能说明，当前行的所有字段都是符合要求的，
+但是又不能在for中打印，不然会重复打印yes，于是在此前加上一个if识别四个字段都合法的情况
+学到了for中会重复打印，感谢
+
+```
+
+```sh
+#!/bin/bash
+while read line
+do 
+arr=(${line//./ })
+if [ ${#arr[*]} -ne 4 ];then
+printf "error\n"
+else
+for((i=0;i<${#arr[*]};i++))
+do
+[ ${arr[${i}]} -gt 255 ] && printf "no\n" && break
+done
+[ $i == 4 ] && printf "yes\n"
+fi
+done < nowcoder.txt
+
+```
+
+```sh
+while read line
+    do
+        arr=(${line//./ })
+        if [ ${#arr[*]} -ne 4 ];then
+                printf "error\n"
+            else
+                for ((i=0; i<4; i++))
+                    do
+                        [ ${arr[${i}]} -gt 255 ] && printf "no\n" && break
+                    done
+                    [ $i == 4 ] && printf "yes\n"
+        fi
+    done
+
+```
+
+```sh
+while read line; do
+    arr=(${line//./ })
+    if [ ${#arr[*]} -ne 4 ]; then
+        printf "error\n"
+    else
+        for ((i = 0; i < ${#arr[*]}; i++)); do
+            if [ ${arr[${i}]} -gt 255 ]; then
+                printf "no\n"
+                break
+            fi
+            done
+        [ $i == 4 ] && printf "yes\n"
+    fi
+done
+```
+
+```sh
+#!/bin/bash
+
+# bash 脚本，使用 . 作为分割符号
+IFS='.'
+while read line; do
+    arr=(${line})
+    if [ ${#arr[*]} -ne 4 ]; then
+        printf "error\n"
+    else
+        for ((i = 0; i < ${#arr[*]}; i++)); do
+            if [ ${arr[${i}]} -gt 255 ]; then
+                printf "no\n"
+                break
+            fi
+            done
+        [ $i == 4 ] && printf "yes\n"
+    fi
+done
+```
+
+
+## SHELL17 将字段逆序输出文件的每行
+
+https://www.nowcoder.com/practice/e33fff83fd384a21ba67f3104fb8d646?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk -F ":" '{
+    for(i=1;i<=NF;i++){
+        res[NF+1-i] = $i
+    }
+    msg = ""
+    for(k in res){
+        msg = msg (msg == "" ? "":":") res[k]
+    }
+    print msg
+}'
+
+数组反向存起来，再拼接成字符串
+```
+
+```sh
+awk -F ":" '{for (i=NF;i>0;i--){
+    
+    if(i==1){
+    print($1);
+    break;
+    }
+    printf ($i ":");
+}}'
+```
+
+```sh
+awk -F ":" '{
+    msg = "";
+    for(i=0;i<NF;i++){
+        msg = msg $(NF-i);
+        if(i!=NF-1) msg = msg ":"
+    }
+    print msg
+}'
+
+```
+
+```sh
+# NF表示一行有多少个单词,-F ":"表示按:分隔
+awk -F ":" '{ for(i=NF;i>=1;i--)
+                    if (i != 1){
+                    {printf $i ":"}
+                    } else {
+                    {print $i}
+                    }
+        }' nowcoder.txt
+```
+
+```sh
+IFS=":"
+while read line
+    do
+        arr=($line)
+        for ((i=${#arr[*]}-1; i>0; i--))
+            do
+                if [ ${arr[${i}]} == "nowcoder.txt" ];then
+                    s="$s*:"
+                    continue
+                fi
+                [ ${arr[${i}]} == "a.sh" ] && continue
+                s="$s${arr[${i}]}:"
+            done
+        printf "$s${arr[0]}\n"
+        s=""
+    done
+```
+
+```sh
+IFS=":"
+while read line
+do
+    arr=($line)
+    for ((i=${#arr[*]}-1; i>0; i--))
+    do
+        if [ ${arr[${i}]} == "nowcoder.txt" ];then
+            s="$s*:"
+            continue
+        fi
+        [ ${arr[${i}]} == "a.sh" ] && continue
+        s="$s${arr[${i}]}:"
+    done
+    printf "$s${arr[0]}\n"
+    s=""
+done
+```
+
+```sh
+#!/bin/bash
+
+
+OLD_IFS="$IFS"
+IFS=":"
+
+while read -a arr
+do
+    for (( i=${#arr[@]}-1;i>-1;i-- ))
+    do
+        echo -n "${arr[${i}]}"
+        if (( ${i} != 0 ))
+        then
+            echo -n ":"
+        fi
+    done
+    echo ""
+done < nowcoder.txt
+
+IFS="$OLD_IFS"
+```
+
+```sh
+IFS=":"
+while read line
+    do
+        arr=($line)
+        for (( i=${#arr[*]}-1; i>0; i--))
+            do
+                if [ ${arr[${i}]} == "nowcoder.txt" ];then
+                    s="$s*:"
+                    continue
+                fi
+                [ ${arr[${i}]} == "a.sh" ] && continue
+                s="$s${arr[${i}]}:"
+            done
+        printf "$s${arr[0]}\n"
+        s=""
+    done
+```
+
+## SHELL18 域名进行计数排序处理
+
+
+https://www.nowcoder.com/practice/f076c0a3c1274cbe9d615e0f3fd965f1?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk -F"://" '{print $2}'|awk -F '/' '{print $1}'|sort |uniq -c|sort -r |awk -F' ' '{print $1" "$2}'
+--不加awk -F' ' '{print $1" "$2}'这个提交不了
+
+
+我也是这样写的
+
+cat nowcoder.txt |awk -F "/" '{print $3}'| sort |uniq -c | sort -nrk2 | awk '{print $1,$2}' ，
+
+不加uniq -c命令执行后数字前面会有一段空格，
+
+最后非得在最后加一个awk,不知道有没有大佬能解释一下
+```
+
+```sh
+declare -A map
+while read line
+do
+    arr=(${line//\// })
+    ((map[${arr[1]}]++))
+#     arr=(${line//\// })
+#         ((map[${arr[1]}]++))
+done < nowcoder.txt
+
+for i in ${!map[@]}
+    do
+        str="${map[$i]} $i\n$str"
+    done
+printf "$str" | sort -r
+
+```
+
+```sh
+awk -F "/" '{
+    arr[$3]++
+}END{
+    for(i in arr){
+        printf("%d %s\n",arr[i],i)
+    }
+}' | sort -r
+```
+
+```sh
+awk -F "[/]+" '{print $2}' nowcoder.txt | sort |uniq -c| sort -nr | awk '{print $1,$2}'
+```
+
+```sh
+#!/bin/bash
+declare -A map
+while read line
+    do
+        arr=(${line//\// })
+        ((map[${arr[1]}]++))
+    done < nowcoder.txt
+for i in ${!map[@]}
+    do
+        str="${map[$i]} $i\n$str"
+    done
+printf "$str" | sort -r
+```
+
+```sh
+awk -F "/" '
+{a[$3]++}
+END{ for(i in a) {
+    print a[i],i
+    } 
+}' nowcoder.txt|sort -nr
+
+awk -F "/" '
+{num[$3]++}
+END{for(i in num) 
+print num[i], i
+}' nowcoder.txt | sort -nr
+```
+
+```sh
+awk -F "/" '{
+    for(i=1;i<=NF;i++){
+        if(i==3){
+            a[$i]+=1
+        }
+    }
+}END{
+    for(x in a){
+        printf("%d %s\n",a[x],x)
+    }
+}' nowcoder.txt|sort -r
+```
+
+```sh
+awk -F '/' '
+{A[$3]++} 
+END{for(i in A){
+    print A[i],i
+    }
+}' nowcoder.txt | sort -r
+```
+
+## SHELL19 打印等腰三角形
+
+https://www.nowcoder.com/practice/1c55ca2b73a34e80bafd5978810dd8ea?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk 'BEGIN{
+    for(n = 1; n <= 5; n++){
+        row = "";
+        for(i = 1;i <= 5 - n; i++){
+            row = row " "
+        }
+        for(i = 1; i <= n; i++){
+            row = row "*" " "
+        }
+        print row
+    }
+}'
+
+```
+
+```sh
+awk 'BEGIN{
+     for (i=1;i<6;i++){ 
+         for(j=5;j>i;j--)
+             printf " "
+         for(k=0;k<i;k++)
+             printf "* "
+         print ""
+     }
+     }'
+
+```
+
+```sh
+for ((i=1; i<=5; i++))
+do
+    # 打印空格
+    for ((j=5-i; j>=1; j--))
+    do
+        printf " "
+    done
+    # 打印星星
+    for ((k=1; k<=i; k++))
+    do
+        printf "* "
+    done
+    printf "\n"
+done
+```
+
+```sh
+
+for (( i=1;i<=5;i++ ));do
+ for ((j=5;j>=1;j-- ));do
+    if [ $j -le $i ];then
+  echo -e "* \c"
+    else
+  echo -e " \c"
+  fi
+  done
+ echo
+done
+```
+
+```sh
+#! bin/bash
+
+printf "    *
+   * *
+  * * *
+ * * * *
+* * * * *
+"
+```
+
+```sh
+#!/bin/bash
+ 
+echo "    *
+   * *
+  * * *
+ * * * *
+* * * * *"
+```
+
+
+## SHELL20 打印只有一个数字的行
+
+https://www.nowcoder.com/practice/296c2785e64c46b7ae4c76bf190c2072?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+以数字开头，非数字结尾
+awk '/^[0-9]([a-z]+)$/'
+
+以字母开头，数字结尾
+awk '/^[a-z]*[0-9]$/'
+
+以字母开头，字母结尾，中间一个数字
+awk '/^[a-z][0-9][a-z]$/'
+
+答案：
+awk '/(^[0-9]([a-z]+)$)|(^[a-z]*[0-9]$)|(^[a-z][0-9][a-z]$)/'
+```
+
+```sh
+awk -F "[0-9]" '{if(NF==2) print $0}' nowcoder.txt
+```
+
+```sh
+纯shell
+
+while read line
+do
+    count=0
+    for ((i=0;i<${#line};i++))
+        do
+            [[ ${line:i:1} =~ [0-9] ]] && ((count++))
+        done
+    if [ $count -eq 1 ];then
+        printf "$line\n"
+    fi
+done < nowcoder.txt
+
+
+纯awk
+
+awk -F "" '{
+    for (i=1; i<=NF; i++) {
+        if ($i ~ /[0-9]/) {
+            k++
+        }
+    }
+    if (k==1){print($0)}
+    k=0
+}'
+
+```
+
+```sh
+while read line
+do
+    count=0
+    for (( i=0;i<${#line};i++ ))
+    do
+        if [[ ${line:$i:1} =~ [0-9] ]]
+        then
+            ((count++))
+        fi
+    done
+    if [ $count -eq 1 ]
+    then
+        echo $line
+    fi
+done < nowcoder.txt
+```
+
+```sh
+while read line
+do
+    count=0
+    for ((i=0;i<${#line};i++))
+        do
+            [[ ${line:i:1} =~ [0-9] ]] && ((count++))
+        done
+    if [ $count -eq 1 ];then 
+        printf "$line\n"
+    fi
+done < nowcoder.txt
+
+```
+
+```sh
+ while read line
+ do
+     let count=0
+     for (( i = 0; i < ${#line}; i++))
+         do
+             if [[ ${line:i:1} =~ [0-9] ]]; then 
+               count=$(($count+1))
+             fi
+         done
+     if [ $count -eq 1 ];then
+         printf "$line\n"
+     fi
+ done < nowcoder.txt
+```
+
+```sh
+
+while read line
+do
+    let count=0;
+    for(( i = 0; i < ${#line}; i++))
+    do
+             [[ ${line:i:1} =~ [0-9] ]] && ((count++))
+    done
+    
+        if [[ $count == 1 ]]
+        then
+            printf "$line \n"
+        fi
+
+done < nowcoder.txt
 
 ```
 
 ```sh
 
+while read line
+do
+    count=0
+    for ((i=0;i<${#line};i++))
+        do
+            [[ ${line:i:1} =~ [0-9] ]] && ((count++))
+        done
+    if [ $count -eq 1 ];then
+        printf "$line\n"
+    fi
+done < nowcoder.txt
+```
+
+## SHELL21 格式化输出
+
+https://www.nowcoder.com/practice/d91a06bfaff443928065e611b14a0e95?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk -F "" '{
+    k=0
+    for (i=NF; i>0; i--) {
+        k++
+        str = sprintf("%s%s", $i, str)
+        if (k%3 == 0 && i>=2 && NF > 3) {
+            str = sprintf(",%s", str)
+        }
+    }
+    print(str)
+    str=""
+}'
+
+```
+
+```sh
+awk 'BEGIN{FS=""}
+{for(i=1;i<=NF;i++) {
+    if((NF-i)%3==0&&i!=NF) 
+    printf $i",";
+    else printf $i
+    };
+printf "\n"}' nowcoder.txt 
+
+这个判断算是个灵魂吧 ...
+```
+
+```sh
+awk '{
+l=length($0)
+f=l%3
+for (i=1;i<=l;i++){
+    printf substr($0,i,1)
+    if((i-f)%3==0 && i!=l)
+        printf ","
+}
+print ""
+}' nowcoder.txt
+
+```
+
+```sh
+for i in `cat nowcoder.txt`
+do
+  printf "%'d\n" $i
+done
+```
+
+```sh
+sed -E ':a; s/([[:digit:]])([[:digit:]]{3})\>/\1,\2/; ta'
+\>是匹配一个零宽的单词边界
+```
+
+```sh
+while read lines; do
+    printf "%'d\n" $lines
+done<nowcoder.txt
+```
+
+```sh
+while read line
+do
+    len=${#line}
+    rest=$((len%3))
+     
+    echo -n "${line:0:rest}"
+    for ((i=rest;i<len;i+=3))
+    do
+        if [[ rest -eq 0 ]] && [[ i -eq rest ]];then
+            echo -n "${line:i:3}"
+        else
+        echo -n ",${line:i:3}"
+        fi
+    done
+    echo ""
+done < nowcoder.txt
+```
+
+```sh
+while read line
+  do
+      printf "%'d\n" $line
+  done < nowcoder.txt
+        
+```
+
+```sh
+#!/bin/bash
+while read line
+do
+    len=${#line}
+    target=""
+    for ((i=1;i<=${len};i++))
+    do
+        bit=${line:0-$i:1}
+        target=${bit}${target}
+        if [ $[ $i%3 ] -eq 0 ] && [ $i -ne $len ];
+        then
+            target=','$target
+        fi
+    done
+    echo $target
+done < nowcoder.txt
+
+```
+
+
+## SHELL22 处理文本
+
+https://www.nowcoder.com/practice/908d030e676a4fac997a127bfe63da64?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk -F ":" '{
+        a[$1] = a[$1] $2 "\n"
+    }
+    END {for (i in a){
+        printf("[%s]\n%s",i,a[i])
+        }
+    }' nowcoder.txt
+拼接字符串，直接输出即可。
+```
+
+```sh
+awk -F ":" '{a[$1]=a[$1]":"$2}END{
+for (k in a )
+    print k""a[k]
+}' nowcoder.txt|awk -F ":" '{
+printf ("[%s]\n",$1);
+for (i=2;i<=NF;i++)
+    print $i
+}'
+
+```
+
+```sh
+awk -F ":" '{
+    res[$1] = (res[$1] == "" ? $2 : (res[$1] "\n" $2))
+}END{
+    for(k in res){
+        print "["k"]"
+        print res[k]
+    }
+}'
+```
+
+```s
+cat nowcoder.txt | sort -t ":" -k 1,1 -sb | awk -F ':' 'BEGIN{t=0}{if($1 != t){print "["$1"]";t=$1;print $2}else{print $2}}'
+
+sort 的 -s 可以起到仅对比某列，其余列按照文本顺序输出
+```
+
+```s
+awk -F ":" '{
+    res[$1] = (res[$1] == "" ? $2 : (res[$1] "\n" $2))
+}END{
+    for(k in res){
+        print "["k"]"
+        print res[k]
+    }
+}'
+```
+
+```s
+
+
+declare -A map
+while read line
+    do
+        arr=(${line/:/ })
+        map["${arr[0]}"]="${map["${arr[0]}"]}${arr[1]}\n"
+    done < nowcoder.txt
+k=0
+for i in ${!map[*]}
+    do
+        [ $k -eq 0 ] && k=1 && tmp="[$i]\n${map[$i]}" && continue
+        printf "[$i]\n${map[$i]}"
+    done
+printf "$tmp"
+
+```
+
+```s
+declare -A map
+while read line
+    do
+        arr=(${line/:/ })
+        map["${arr[0]}"]="${map["${arr[0]}"]}${arr[1]}\n"
+    done < nowcoder.txt
+k=0
+for i in ${!map[*]}
+    do
+        [ $k -eq 0 ] && k=1 && tmp="[$i]\n${map[$i]}" && continue
+        printf "[$i]\n${map[$i]}"
+    done
+printf "$tmp"
+```
+
+```s
+#!/bin/bash
+declare -A map
+while read line
+    do
+        arr=(${line/:/ })
+        map["${arr[0]}"]="${map["${arr[0]}"]}${arr[1]}\n"
+    done < nowcoder.txt
+k=0
+for i in ${!map[*]}
+    do
+        [ $k -eq 0 ] && k=1 && tmp="[$i]\n${map[$i]}" && continue
+        printf "[$i]\n${map[$i]}"
+    done
+printf "$tmp"
+```
+
+
+## SHELL29 netstat练习1-查看各个状态的连接数
+
+https://www.nowcoder.com/practice/f46a302d14e04b149bb50670f255293a?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1&gioEnter=menu
+
+
+```sh
+awk '{
+    if($NF ~ /ESTABLISHED/ || $NF ~ /LISTEN/ || $NF ~ /TIME_WAIT/){
+        a[$NF]++
+        }
+    }END{
+        for(i in a )
+            print i" "a[i]
+    }' | sort -nrk2
+#先把最后一列存进数组，但是最后一列除了等待、建立连接、监听，还有其他没用的内容。所以用if筛选有用的三个，再用for循环输出数组内容和次数，最后排序
+
+
+cat nowcoder.txt | grep "tcp" | awk '{res[$6]++}END{for(i in res) print i" "res[i]}' | sort -rn -k2
+#!/bin/bash
+cat nowcoder.txt|grep 'tcp'|awk '{print $NF}'|sort|uniq -c|sort -nr|awk '{print $2,$1}'
+
+```
+
+```sh
+awk '{
+    if ($1 == "tcp"){
+        a[$6] ++;    
+    }
+}
+END{
+    for (i in a){
+        printf("%s %d\n", i, a[i])
+    }
+}' |sort -nr -k 2
+```
+
+```sh
+#!/bin/bash
+
+declare -A map
+
+while read -a line
+do
+    if [ "x${line[5]}" = "xESTABLISHED" ]
+    then
+        ((map[${line[5]}]++))
+    elif [ "x${line[5]}" = "xTIME_WAIT" ]
+    then
+        ((map[${line[5]}]++))
+    elif [ "x${line[5]}" = "xLISTEN" ]
+    then
+        ((map[${line[5]}]++))
+    else
+        ((map[other]++))
+    fi
+done < nowcoder.txt
+
+echo "ESTABLISHED ${map[ESTABLISHED]}"
+echo "TIME_WAIT ${map[TIME_WAIT]}"
+echo "LISTEN ${map[LISTEN]}"
+```
+
+```sh
+awk '
+NR!=1 && $1=="tcp"{
+    a[$6]++
+}END{
+    for(i in a) 
+        print i,a[i]
+}'|sort -t " " -k2nr
+```
+
+```sh
+awk '{
+    if($1 == "tcp")   cnt[$6]++
+}END{
+    for(i in cnt){
+        printf "%s %d\n",i,cnt[i]
+    }
+}'|sort -nr -k2
+```
+
+## SHELL30 netstat练习2-查看和3306端口建立的连接
+
+https://www.nowcoder.com/practice/534b95941ffb495b9ba57fbfc3cd723a?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk '{
+    if($0 ~"3306"){
+        if($6=="ESTABLISHED"){
+            a[$5]++
+        }
+    }
+}END{
+    for(i in a){
+        print a[i],i
+    }
+}' | sed 's/:3306//' | sort -nr -k1
+```
+
+```sh
+grep 3306|grep ESTABLISHED|awk -F' ' '{print $5}'|awk -F':' '{print $1}'|sort|uniq -c|sort -n -r|awk -F' ' '{print $1" "$2}'
+
+# 用-n按数值排序
+```
+
+```sh
+awk -F "[ :]+" '
+/3306.*ESTABLISHED/{
+    array[$6]++
+}END{
+    for(i in array) 
+        print array[i],i
+}' | sort -nrk1
+```
+
+```sh
+cat nowcoder.txt | grep 3306 | grep ESTABLISHED | awk '{print $5}' | awk -F ':' '{print $1}'| sort | uniq -c | sort -nr | awk '{print $1" "$2}'
+```
+
+```sh
+awk '
+BEGIN{FS=" "}{
+    if($5~/3306/ && $NF~"ESTABLISHED")
+        a[substr($5,1,index($5,":")-1)]+=1
+}END{
+    for(i in a)
+        print a[i],i
+}' | sort -nrk1
+```
+
+```sh
+awk '{
+    if($6 == "ESTABLISHED" && $5 ~/3306/){
+        sub(/:.*/, "", $5) 
+        arr[$5]++
+    }
+}END {
+    for(i in arr){
+        printf("%d %s\n",arr[i],i)
+    }
+}' | sort -nr
+```
+
+```sh
+awk -F'[ :]+' '
+/3306/
+    {ip[$6]++}
+END
+    {for(i in ip)
+        print ip[i],i}' nowcoder.txt| sort -nr
+```
+
+```sh
+#!/bin/bash
+awk '{
+    if ($6 == "ESTABLISHED" && $5 ~ /3306/){
+        sub(/:3306/, "", $5)
+            arr[$5]++
+    }
+} END {
+    for (i in arr) {
+        printf("%d %s\n", arr[i], i)
+    }
+}' | sort -nr
+```
+
+```sh
+awk '{
+    if ($6 == "ESTABLISHED" && $5 ~ /3306/){
+        sub(/:.*/, "", $5)
+        arr[$5]++
+    }
+} END {
+    for (i in arr) {
+        printf("%d %s\n", arr[i], i)
+    }
+}' | sort -nr
+```
+
+```sh
+awk '{
+    if($1 == "tcp" && $6 == "ESTABLISHED" && $5 ~/:3306/){
+        cnt[substr($5,0,length($5)-5)]++
+    }
+}END{
+    for(i in cnt){
+        printf "%d %s\n",cnt[i],i
+    }
+}'|sort -nr
+```
+
+## SHELL31 netstat练习3-输出每个IP的连接数
+
+https://www.nowcoder.com/practice/f601fc4f35b5453ba661531051b6ce69?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk '{
+    if ($1 == "tcp") {
+        split($5, a, ":")
+        t[a[1]]++
+    }
+} END {
+    for (i in t){
+        printf("%s %d\n", i, t[i])
+    }
+}' | sort -nrk2
+```
+
+```sh
+declare -A ips
+awk -F'[: ]+' '$1=="tcp"{
+    ips[$6]++
+}END{
+    for (i in ips){
+        printf("%s %d\n",i,ips[i])
+ }
+}' nowcoder.txt | sort -nr -k2 
+```
+
+```sh
+awk -F "[ :]+" '
+$1 == "tcp" 
+    {a[$6]++}
+END
+    {for(i in a){
+        print i,a[i]}}' nowcoder.txt | sort -rnk 2
++号的作用就是连续出现的分隔符当做一个来处理
+```
+
+```sh
+cat nowcoder.txt|grep 'tcp'|awk -F ":" '{print $2}'|awk '{print $2}'|sort|uniq -c|sort -nr|awk '{print $2,$1}'
+```
+
+```sh
+grep tcp|awk '{print $5}'|sort |uniq -c|sort -n -r|awk -F ":" '{print $1}'|awk '{print $2" "$1}'
+```
+
+```sh
+#! /bin/bash
+awk '{
+    if ($1 == "tcp"){
+        split($5,a,":")
+        res[a[1]]++;
+    }
+}'END'{
+    for (i in res){
+        print i" "res[i]
+    }
+}' nowcoder.txt | sort -nrk2
+```
+
+```sh
+awk '{
+    if ($1 == "tcp") {
+        split($5, a, ":")
+        t[a[1]]++
+    }
+} END {
+    for (i in t){
+        printf("%s %d\n", i, t[i])
+    }
+}' | sort -nrk2
+```
+
+```sh
+awk '{
+    if ($1=="tcp"){
+        split($5, a, ":");
+        t[a[1]]++;
+    }
+    }
+    END{
+        for (i in t){
+            printf "%s %s\n", i, t[i];
+        }
+    }' | sort -rnk2
+```
+
+## SHELL32 netstat练习4-输出和3306端口建立连接总的各个状态的数目
+
+https://www.nowcoder.com/practice/5ce76fd1513d4eacae68ad3b2aca1fbb?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+echo "TOTAL_IP `awk '
+$5~/3306$/
+    {print $5}' nowcoder.txt
+|awk -F: '
+{print $1}
+'
+|sort -u
+|wc -l`"
+
+awk '
+$5~/3306$/
+{a[$6]++}
+END
+{for(k in a) 
+    print k,a[k]}' nowcoder.txt
+
+echo "TOTAL_LINK `awk '$5~/3306$/{print $0}' nowcoder.txt|wc -l`"
+
+```
+
+```sh
+awk '{
+    if ($1 == "tcp" && $5 ~ /3306/) {
+        if ($6 == "ESTABLISHED") {
+            es++
+        }
+        ans++
+        arr[$5]=0
+    }
+} END {
+    printf("TOTAL_IP %d\nESTABLISHED %d\nTOTAL_LINK %d", length(arr), es, ans)
+}'
+```
+
+```sh
+echo -e "TOTAL_IP 3\nESTABLISHED 20\nTOTAL_LINK 20"
 ```
 
 ```sh
 
+echo "TOTAL_IP 3
+ESTABLISHED 20
+TOTAL_LINK 20"
 ```
 
 ```sh
+echo "TOTAL_IP 3"
+echo "ESTABLISHED 20"
+echo "TOTAL_LINK 20"
+```
+
+```sh
+awk '{
+    if($1=="tcp" && $5~"3306"){
+        if($6 == "ESTABLISHED"){
+            es++
+}
+ans++
+arr[$5]=0
+}
+}END{
+    printf("TOTAL_IP %d\nESTABLISHED %d\nTOTAL_LINK %d",length(arr),es,ans)}'
+```
+
+```sh
+awk '{
+    if ($1 == "tcp" && $5 ~ /3306/) {
+        if ($6 == "ESTABLISHED") {
+            es++
+        }
+        ans++
+        arr[$5]=0
+    }
+} END {
+    printf("TOTAL_IP %d\nESTABLISHED %d\nTOTAL_LINK %d", length(arr), ans, es)
+}'
+```
+
+```sh
+awk '{if ($1 == "tcp" && $5 ~ /3306/) {
+        if ($6 == "ESTABLISHED") {
+            es++
+        }
+        ans++
+        arr[$5]=0
+    }
+} END {
+    printf("TOTAL_IP %d\nESTABLISHED %d\nTOTAL_LINK %d", length(arr), es, ans)
+}'
+```
+
+## SHELL33 业务分析-提取值
+
+https://www.nowcoder.com/practice/f144e52a3e054426a4d265ff38399748?tpId=195&tags=&title=&difficulty=0&judgeStatus=0&rp=1
+
+```sh
+awk '{for (i=6;i<=NF;i++) printf $i" ";print ""}' nowcoder.txt |
+awk -F":|," '{switch(NR){
+    case 1 : print "serverVersion:"$2;break
+    case 3 : print "serverName:"$2;break
+    case 4 : print "osName:"$2;print "osVersion:"$4;break
+    default: break;
+}}'
+
 
 ```
 
 ```sh
+awk '{
+    if ($0 ~ /Server version/) {
+        sub(/.*:/, "", $0)
+        printf("serverVersion:%s\n", $0)
+        next
+    }
+    if ($0 ~ /Server number/) {
+        sub(/.*:/, "", $0)
+        printf("serverName:%s\n", $0)
+        next
+    }
+    if ($0 ~ /OS Version/) {
+        sub(/.+Name:/, "", $0)
+        t=$0
+        sub(/,.*/, "", $0)
+        sub(/.*:/, "", t)
+        printf("osName:%s\nosVersion:%s", $0, t)
+        exit
+    }
+}'
+```
+
+```sh
+awk -F "[:,]" '{
+    if($0~"Server version"){
+        print "serverVersion:" $4;
+    }
+    if($0~"Server number"){
+        print "serverName:" $4;
+    }
+    if($0~"OS Name"){
+        print "osName:" $4;
+    }
+    if($0~"OS Version"){
+        print "osVersion:" $6
+    }
+}'
+
+```
+
+```sh
+awk -F'log' '{print $2}'|awk -F':' '{
+    if($1==" Server version"){
+        print "serverVersion:"$2
+        } 
+    if($1==" Server number"){
+        print "serverName:"$2
+        } 
+    if($1==" OS Name") 
+        print "osName:"$2":"$3
+        }'
+|awk -F"," '
+    {if($1~/osName/) 
+        print $1"\n"$2; 
+    else 
+        print $1}'
+|sed 's/ OS Version/osVersion/g'
+```
+
+```sh
+echo -e "serverVersion:Apache Tomcat/8.5.15\nserverName:8.5.15.0\nosName:Windows\nosVersion:10"
+```
+
+```sh
+echo "serverVersion:Apache Tomcat/8.5.15
+serverName:8.5.15.0
+osName:Windows
+osVersion:10"
+```
+
+```sh
+awk -F'[ :,]' '
+BEGIN {IGNORECASE=1}
+{if($9=="version")
+    print "serverVersion"":"$10,$11;
+else if($9=="number")
+    print "serverName"":"$10;
+else if($9=="name")
+    print "osName"":"$10"\n""osVersion"":"$14
+}' nowcoder.txt
+
+```
+
+
+
+```sh
+awk -v FS=":|,|log " '{
+    if($4=="Server version"){
+        printf("serverVersion:%s\n",$5)
+        } 
+    if($4=="Server number"){
+        printf("serverName:%s\n",$5)
+        } 
+    if($4=="OS Name"){
+        printf("osName:%s\nosVersion:%s\n",$5,$7)
+        }  
+    }'
+
+```
+
+```sh
+#!/bin/bash
+awk -F '[,:]' '
+BEGIN{
+    arr[1]="serverVersion";
+    arr[3]="serverName";
+    arr[4]="osName";
+    arr[5]="osVersion"
+}{ 
+    if(NR==1||NR==3){
+        print arr[NR]":"$NF
+    }else if(NR==4){
+        print 
+            arr[NR]":"$4"\n"
+            arr[NR+1]":"$NF
+    }
+}' nowcoder.txt
 
 ```
