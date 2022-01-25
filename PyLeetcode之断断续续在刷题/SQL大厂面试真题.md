@@ -2645,7 +2645,7 @@ HOUR(event_time) IN (7, 8)
 hour(event_time) >= 7 and hour(event_time) < 9
 ```
 
-工作日的表示方法
+工作日的表示方法：
 
 ```sql
 DATE_FORMAT(event_time, '%w') BETWEEN 1 AND 5
