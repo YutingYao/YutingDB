@@ -578,137 +578,7 @@ val table = tEnv.fromDataStream(stream, $"UserActionTimestamp", $"user_name", $"
 val windowedTable = table.window(Tumble over 10.minutes on $"user_action_time" as "userActionWindow")
 ```
 
-###  1.7. <a name='Joins'></a>Joins
 
-Regular Joins
-
-```sql
-SELECT * FROM Orders
-INNER JOIN Product
-ON Orders.productId = Product.id
-```
-
-INNER Equi-JOIN
-
-```sql
-SELECT *
-FROM Orders
-INNER JOIN Product
-ON Orders.product_id = Product.id
-```
-
-OUTER Equi-JOIN
-
-```sql
-SELECT *
-FROM Orders
-LEFT JOIN Product
-ON Orders.product_id = Product.id
-
-SELECT *
-FROM Orders
-RIGHT JOIN Product
-ON Orders.product_id = Product.id
-
-SELECT *
-FROM Orders
-FULL OUTER JOIN Product
-ON Orders.product_id = Product.id
-```
-
-Interval Joins
-
-```sql
-SELECT *
-FROM Orders o, Shipments s
-WHERE o.id = s.order_id
-AND o.order_time BETWEEN s.ship_time - INTERVAL '4' HOUR AND s.ship_time
-```
-
-Event Time Temporal Join
-
-```sql
--- Create a table of orders. This is a standard
--- append-only dynamic table.
-CREATE TABLE orders (
-    order_id    STRING,
-    price       DECIMAL(32,2),
-    currency    STRING,
-    order_time  TIMESTAMP(3),
-    WATERMARK FOR order_time AS order_time
-) WITH (/* ... */);
-
--- Define a versioned table of currency rates. 
--- This could be from a change-data-capture
--- such as Debezium, a compacted Kafka topic, or any other
--- way of defining a versioned table. 
-CREATE TABLE currency_rates (
-    currency STRING,
-    conversion_rate DECIMAL(32, 2),
-    update_time TIMESTAMP(3) METADATA FROM `values.source.timestamp` VIRTUAL,
-    WATERMARK FOR update_time AS update_time,
-    PRIMARY KEY(currency) NOT ENFORCED
-) WITH (
-    'connector' = 'kafka',
-    'value.format' = 'debezium-json',
-   /* ... */
-);
-
-SELECT 
-     order_id,
-     price,
-     currency,
-     conversion_rate,
-     order_time,
-FROM orders
-LEFT JOIN currency_rates FOR SYSTEM_TIME AS OF orders.order_time
-ON orders.currency = currency_rates.currency;
-```
-
-返回
-
-```s
-order_id  price  currency  conversion_rate  order_time
-========  =====  ========  ===============  =========
-o_001     11.11  EUR       1.14             12:00:00
-o_002     12.51  EUR       1.10             12:06:00
-```
-
-Temporal Table Function Join
-
-```sql
-SELECT
-  o_amount, r_rate
-FROM
-  Orders,
-  LATERAL TABLE (Rates(o_proctime))
-WHERE
-  r_currency = o_currency
-```
-
-Lookup Join
-
-```sql
--- 客户端由JDBC连接器支持，可以用于查找连接
--- Customers is backed by the JDBC connector and can be used for lookup joins
-CREATE TEMPORARY TABLE Customers (
-  id INT,
-  name STRING,
-  country STRING,
-  zip STRING
-) WITH (
-  'connector' = 'jdbc',
-  'url' = 'jdbc:mysql://mysqlhost:3306/customerdb',
-  'table-name' = 'customers'
-);
-
--- 用客户信息丰富每个订单
--- enrich each order with customer information
-SELECT o.order_id, o.total, c.country, c.zip
-FROM Orders AS o
-  JOIN Customers FOR SYSTEM_TIME AS OF o.proc_time AS c
-    ON o.customer_id = c.id;
-```
 
 ###  1.8. <a name='WindowFunctions'></a>Window Functions
 
@@ -759,6 +629,43 @@ SELECT window_start, window_end, SUM(price)
 ```
 
 HOP需要4个必需参数，1个可选参数:
+
+其中 HOP windows 对应 Table API 中的 Sliding Window, 同时每种窗口分别有相应的使用场景和方法.
+
+```scala
+//这里需要注意的是 如果采用了EventTime, 那么 对应字段后面加 .rowtime, 否则加 .proctime
+Table logT = tEnv.fromDataStream(logWithTime, "t.rowtime, name, v");
+
+// HOP(time_attr, interval1, interval2)
+// interval1 滑动长度
+// interval2 窗口长度
+// HOP_START(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) 表示窗口开始时间
+// HOP_END(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) 表示窗口结束时间
+Table result = tEnv.sqlQuery("SELECT HOP_START(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) AS window_start," 
+                             + "HOP_END(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) AS window_end, SUM(v) FROM "
+                             + logT + " GROUP BY HOP(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND)");
+```
+
+Session Windows
+
+```scala
+// SESSION(time_attr, interval)
+// interval 表示两条数据触发session的最大间隔
+Table result = tEnv.sqlQuery("SELECT SESSION_START(t, INTERVAL '5' SECOND) AS window_start," 
+                             +"SESSION_END(t, INTERVAL '5' SECOND) AS window_end, SUM(v) FROM "
+                             + logT + " GROUP BY SESSION(t, INTERVAL '5' SECOND)");
+```
+
+Tumble Windows
+
+```scala
+// GROUP BY TUMBLE(t, INTERVAL '10' SECOND) 相当于根据10s的时间来划分窗口
+// TUMBLE_START(t, INTERVAL '10' SECOND) 获取窗口的开始时间
+// TUMBLE_END(t, INTERVAL '10' SECOND) 获取窗口的结束时间
+tEnv.sqlQuery("SELECT TUMBLE_START(t, INTERVAL '10' SECOND) AS window_start," +
+                "TUMBLE_END(t, INTERVAL '10' SECOND) AS window_end, SUM(v) FROM "
+                + logT + " GROUP BY TUMBLE(t, INTERVAL '10' SECOND)");
+```
 
 ```sql
 HOP(TABLE data, DESCRIPTOR(timecol), slide, size [, offset ])
