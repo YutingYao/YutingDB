@@ -4,15 +4,11 @@
 	* 1.2. [USE 语句](#USE)
 	* 1.3. [初始化会话使用SQL文件](#SQL)
 	* 1.4. [文件系统 SQL 连接器](#SQL-1)
-	* 1.5. [流式 Sink](#Sink)
-		* 1.5.1. [分区文件](#)
-		* 1.5.2. [分区提交策略 & 触发器](#-1)
-	* 1.6. [执行SQL文件](#SQL-1)
-	* 1.7. [Joins](#Joins)
-	* 1.8. [Window Functions](#WindowFunctions)
-	* 1.9. [OVER聚合](#OVER)
-	* 1.10. [Window Top-N在Window Aggregation之后window_start, window_end](#WindowTop-NWindowAggregationwindow_startwindow_end)
-	* 1.11. [执行一组SQL语句](#SQL-1)
+		* 1.4.1. [分区文件](#)
+		* 1.4.2. [分区提交策略 & 触发器](#-1)
+	* 1.5. [执行SQL文件](#SQL-1)
+	* 1.6. [OVER聚合](#OVER)
+	* 1.7. [执行一组SQL语句](#SQL-1)
 * 2. [Flink 内置函数的完整列表](#Flink)
 	* 2.1. [sql 函数](#sql)
 		* 2.1.1. [比较函数](#-1)
@@ -36,50 +32,45 @@
 		* 2.2.2. [时间戳](#-1)
 		* 2.2.3. [间隔年到月](#-1)
 		* 2.2.4. [隔 DAY TO SECOND](#DAYTOSECOND)
-		* 2.2.5. [当前系统时间-CURRENT_TIMESTAMP](#-CURRENT_TIMESTAMP)
 * 3. [source 表 - 使用 CREATE TABLE 语句](#source-CREATETABLE)
 	* 3.1. [举个栗子](#-1)
 	* 3.2. [CREATE 语句](#CREATE)
 		* 3.2.1. [UNION and UNION ALL](#UNIONandUNIONALL)
 		* 3.2.2. [Table API 和 SQL 程序的结构](#TableAPISQL)
-		* 3.2.3. [CREATE TABLE](#CREATETABLE)
-		* 3.2.4. [SQL hints](#SQLhints)
-		* 3.2.5. [模式映射](#-1)
-* 4. [watermark 策略](#watermark)
-	* 4.1. [几种常用的 watermark 策略](#watermark-1)
-	* 4.2. [一些栗子](#-1)
-* 5. [LIKE 子句](#LIKE)
-* 6. [连续查询](#-1)
-* 7. [Sink 表 - 使用 INSERT INTO 语句](#Sink-INSERTINTO)
-* 8. [scala & SQL CLI](#scalaSQLCLI)
-	* 8.1. [示例-OVERWRITE-PARTITION](#-OVERWRITE-PARTITION)
-* 9. [Apache Kafka SQL 连接器](#ApacheKafkaSQL)
-	* 9.1. [依赖](#-1)
-	* 9.2. [如何创建 Kafka 表](#Kafka)
-	* 9.3. [连接器 必选 参数](#-1)
-	* 9.4. [连接器 可选 参数](#-1)
-* 10. [Debezium Format](#DebeziumFormat)
-	* 10.1. [CSV Format](#CSVFormat)
-		* 10.1.1. [依赖](#-1)
-		* 10.1.2. [如何创建使用 CSV 格式的表](#CSV)
-	* 10.2. [Avro](#Avro)
-	* 10.3. [依赖](#-1)
-	* 10.4. [如何使用 Debezium Format](#DebeziumFormat-1)
-	* 10.5. [消息体中包含 schema 信息](#schema)
-	* 10.6. [可用 METADATA 元数据](#METADATA)
-* 11. [动态表 & 连续查询(Continuous Query)](#ContinuousQuery)
-* 12. [调整 Flink Table 和 SQL API 程序的配置项](#FlinkTableSQLAPI)
-* 13. [数据类型](#-1)
-* 14. [executeSql 和 sqlQuery](#executeSqlsqlQuery)
-	* 14.1. [时间属性介绍](#-1)
-* 15. [MATCH_RECOGNIZE 模式检测](#MATCH_RECOGNIZE)
-	* 15.1. [安装指南](#-1)
-	* 15.2. [SQL 语义](#SQL-1)
-	* 15.3. [示例](#-1)
-* 16. [CDC](#CDC)
-	* 16.1. [mongoDB](#mongoDB)
-	* 16.2. [Oracle](#Oracle)
-	* 16.3. [Postgres 数据库作为 Catalog](#PostgresCatalog)
+		* 3.2.3. [SQL hints](#SQLhints)
+		* 3.2.4. [模式映射](#-1)
+* 4. [LIKE 子句](#LIKE)
+* 5. [连续查询](#-1)
+* 6. [Sink 表 - 使用 INSERT INTO 语句](#Sink-INSERTINTO)
+* 7. [scala & SQL CLI](#scalaSQLCLI)
+	* 7.1. [示例-OVERWRITE-PARTITION](#-OVERWRITE-PARTITION)
+* 8. [Apache Kafka SQL 连接器](#ApacheKafkaSQL)
+	* 8.1. [依赖](#-1)
+	* 8.2. [如何创建 Kafka 表](#Kafka)
+	* 8.3. [连接器 必选 参数](#-1)
+	* 8.4. [连接器 可选 参数](#-1)
+* 9. [Debezium Format](#DebeziumFormat)
+	* 9.1. [CSV Format](#CSVFormat)
+		* 9.1.1. [依赖](#-1)
+		* 9.1.2. [如何创建使用 CSV 格式的表](#CSV)
+	* 9.2. [Avro](#Avro)
+	* 9.3. [依赖](#-1)
+	* 9.4. [如何使用 Debezium Format](#DebeziumFormat-1)
+	* 9.5. [消息体中包含 schema 信息](#schema)
+	* 9.6. [可用 METADATA 元数据](#METADATA)
+* 10. [动态表 & 连续查询(Continuous Query)](#ContinuousQuery)
+* 11. [调整 Flink Table 和 SQL API 程序的配置项](#FlinkTableSQLAPI)
+* 12. [数据类型](#-1)
+* 13. [executeSql 和 sqlQuery](#executeSqlsqlQuery)
+	* 13.1. [时间属性介绍](#-1)
+* 14. [MATCH_RECOGNIZE 模式检测](#MATCH_RECOGNIZE)
+	* 14.1. [安装指南](#-1)
+	* 14.2. [SQL 语义](#SQL-1)
+	* 14.3. [示例](#-1)
+* 15. [CDC](#CDC)
+	* 15.1. [mongoDB](#mongoDB)
+	* 15.2. [Oracle](#Oracle)
+	* 15.3. [Postgres 数据库作为 Catalog](#PostgresCatalog)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -396,99 +387,9 @@ CREATE TABLE MyUserTable (
 )
 ```
 
-###  1.5. <a name='Sink'></a>流式 Sink
 
-如下示例演示了如何使用文件系统连接器编写流查询语句查询 kafka 中的数据并写入到文件系统中，以及通过批查询把结果数据读取出来.
 
-```sql
-CREATE TABLE kafka_table (
-  user_id STRING,
-  order_amount DOUBLE,
-  log_ts TIMESTAMP(3),
-  WATERMARK FOR log_ts AS log_ts - INTERVAL '5' SECOND -- 在 TIMESTAMP 列上定义水印
-) WITH (...);
-
-CREATE TABLE fs_table (
-  user_id STRING,
-  order_amount DOUBLE,
-  dt STRING,
-  `hour` STRING
-) PARTITIONED BY (dt, `hour`) WITH (
-  'connector'='filesystem',
-  'path'='...',
-  'format'='parquet',
-  'sink.partition-commit.delay'='1 h',
-  'sink.partition-commit.policy.kind'='success-file'
-);
-
--- streaming sql, 插入数据到文件系统表中
-INSERT INTO fs_table 
-SELECT 
-    user_id, 
-    order_amount, 
-    DATE_FORMAT(log_ts, 'yyyy-MM-dd'),
-    DATE_FORMAT(log_ts, 'HH') 
-FROM kafka_table;
-
--- batch sql, 分区裁剪查询
-SELECT * FROM fs_table WHERE dt='2020-05-20' and `hour`='12';
-```
-
-SELECT 语句的常见语法格式如下所示：
-
-```sql
-SELECT select_list FROM table_expression [ WHERE boolean_expression ]
-```
-
-```sql
-SELECT * FROM Orders
-SELECT order_id, price + tax FROM Orders
-SELECT order_id, price FROM (VALUES (1, 2.0), (2, 3.1))  AS t (order_id, price)
-SELECT price + tax FROM Orders WHERE id = 10
-SELECT PRETTY_PRINT(order_id) FROM Orders
-```
-
-如果水印是定义在 TIMESTAMP_LTZ 列上，且使用了 partition-time 来提交分区, 则参数 sink.partition-commit.watermark-time-zone 需要被设置为会话的时区，否则分区会在若干小时后才会被提交。
-
-```sql
-CREATE TABLE kafka_table (
-  user_id STRING,
-  order_amount DOUBLE,
-  ts BIGINT, -- epoch 毫秒时间
-  ts_ltz AS TO_TIMESTAMP_LTZ(ts, 3),
-  WATERMARK FOR ts_ltz AS ts_ltz - INTERVAL '5' SECOND -- 在 TIMESTAMP_LTZ 列上定义水印
-) WITH (...);
-
-CREATE TABLE fs_table (
-  user_id STRING,
-  order_amount DOUBLE,
-  dt STRING,
-  `hour` STRING
-) PARTITIONED BY (dt, `hour`) WITH (
-  'connector'='filesystem',
-  'path'='...',
-  'format'='parquet',
-  'partition.time-extractor.timestamp-pattern'='$dt $hour:00:00',
-  'sink.partition-commit.delay'='1 h',
-  'sink.partition-commit.trigger'='partition-time',
-  'sink.partition-commit.watermark-time-zone'='Asia/Shanghai', -- 假定用户配置的时区是 'Asia/Shanghai'
-  'sink.partition-commit.policy.kind'='success-file'
-);
-
--- streaming sql, 插入数据到文件系统表中
-INSERT INTO fs_table 
-SELECT 
-    user_id, 
-    order_amount, 
-    DATE_FORMAT(ts_ltz, 'yyyy-MM-dd'),
-    DATE_FORMAT(ts_ltz, 'HH') 
-FROM kafka_table;
-
--- batch sql, 分区裁剪查询
-SELECT * FROM fs_table WHERE dt='2020-05-20' and `hour`='12';
-```
-
-####  1.5.1. <a name=''></a>分区文件
+####  1.4.1. <a name=''></a>分区文件
 
 Flink 的文件系统连接器在对分区的支持上，使用了标准的 hive 格式。 不过，它不需要预先注册分区，而是基于目录结构自动做了分区发现。比如，以下目录结构的表， 会被自动推导为包含 datetime 和 hour 分区的分区表。
 
@@ -511,7 +412,7 @@ path
         ├── part-0.parquet
 ```
 
-####  1.5.2. <a name='-1'></a>分区提交策略 & 触发器
+####  1.4.2. <a name='-1'></a>分区提交策略 & 触发器
 
 |Key|举例|默认|类型|说明|
 |---|---|---|---|---|
@@ -521,7 +422,7 @@ path
 |sink.partition-commit.policy.kind|'success-file'|(none)|String|说分区提交策略用来通知下游应用系统某个分区已经写完毕可以被读取了。 metastore: 向 metastore 中增加分区，只有 hive 支持 metastore 策略，文件系统通过目录结构管理分区； success-file: 向目录下增加 '_success' 文件； custom: 使用指定的类来创建提交策略； 支持同时指定多个提交策略，如：'metastore,success-file'.|
 |partition.time-extractor.timestamp-pattern|'$dt $hour:00:00'|(none)|String|'default' 时间提取器允许用户从分区字段中提取合法的时间戳模式。默认支持从第一个字段按 'yyyy-mm-dd hh:mm:ss' 时间戳模式提取。 如果需要从一个分区字段比如 ‘dt’ 提取时间戳，可以配置为: '$dt'; 如果需要从多个分区字段，比如 'year', 'month', 'day' 和 'hour'提取时间戳，可以配置为：'$year-$month-$day $hour:00:00'; 如果需要从两字分区字段，比如 'dt' 和 'hour' 提取时间戳，可以配置为：'$dt $hour:00:00'.|
 
-###  1.6. <a name='SQL-1'></a>执行SQL文件
+###  1.5. <a name='SQL-1'></a>执行SQL文件
 
 下面是这样一个文件的示例。
 
@@ -580,207 +481,8 @@ val windowedTable = table.window(Tumble over 10.minutes on $"user_action_time" a
 
 
 
-###  1.8. <a name='WindowFunctions'></a>Window Functions
 
-TUMBLE函数有三个必需参数，一个可选参数:
-
-```sql
-SELECT * FROM TABLE(
-   TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES));
--- or with the named params
--- note: the DATA param must be the first
-```
-
-```sql
-SELECT * FROM TABLE(
-   TUMBLE(
-     DATA => TABLE Bid,
-     TIMECOL => DESCRIPTOR(bidtime),
-     SIZE => INTERVAL '10' MINUTES));
-```
-
-```s
-+------------------+-------+------+------------------+------------------+-------------------------+
-|          bidtime | price | item |     window_start |       window_end |            window_time  |
-+------------------+-------+------+------------------+------------------+-------------------------+
-| 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-+------------------+-------+------+------------------+------------------+-------------------------+
-```
-
-```sql
-SELECT window_start, window_end, SUM(price)
-  FROM TABLE(
-    TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES))
-  GROUP BY window_start, window_end;
-```
-
-```s
-+------------------+------------------+-------+
-|     window_start |       window_end | price |
-+------------------+------------------+-------+
-| 2020-04-15 08:00 | 2020-04-15 08:10 | 11.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:20 | 10.00 |
-+------------------+------------------+-------+
-```
-
-HOP需要4个必需参数，1个可选参数:
-
-其中 HOP windows 对应 Table API 中的 Sliding Window, 同时每种窗口分别有相应的使用场景和方法.
-
-```scala
-//这里需要注意的是 如果采用了EventTime, 那么 对应字段后面加 .rowtime, 否则加 .proctime
-Table logT = tEnv.fromDataStream(logWithTime, "t.rowtime, name, v");
-
-// HOP(time_attr, interval1, interval2)
-// interval1 滑动长度
-// interval2 窗口长度
-// HOP_START(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) 表示窗口开始时间
-// HOP_END(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) 表示窗口结束时间
-Table result = tEnv.sqlQuery("SELECT HOP_START(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) AS window_start," 
-                             + "HOP_END(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND) AS window_end, SUM(v) FROM "
-                             + logT + " GROUP BY HOP(t, INTERVAL '5' SECOND, INTERVAL '10' SECOND)");
-```
-
-Session Windows
-
-```scala
-// SESSION(time_attr, interval)
-// interval 表示两条数据触发session的最大间隔
-Table result = tEnv.sqlQuery("SELECT SESSION_START(t, INTERVAL '5' SECOND) AS window_start," 
-                             +"SESSION_END(t, INTERVAL '5' SECOND) AS window_end, SUM(v) FROM "
-                             + logT + " GROUP BY SESSION(t, INTERVAL '5' SECOND)");
-```
-
-Tumble Windows
-
-```scala
-// GROUP BY TUMBLE(t, INTERVAL '10' SECOND) 相当于根据10s的时间来划分窗口
-// TUMBLE_START(t, INTERVAL '10' SECOND) 获取窗口的开始时间
-// TUMBLE_END(t, INTERVAL '10' SECOND) 获取窗口的结束时间
-tEnv.sqlQuery("SELECT TUMBLE_START(t, INTERVAL '10' SECOND) AS window_start," +
-                "TUMBLE_END(t, INTERVAL '10' SECOND) AS window_end, SUM(v) FROM "
-                + logT + " GROUP BY TUMBLE(t, INTERVAL '10' SECOND)");
-```
-
-```sql
-HOP(TABLE data, DESCRIPTOR(timecol), slide, size [, offset ])
-```
-
-下面是对Bid表的一个示例调用:
-
-```sql
--- NOTE: Currently Flink doesn't support evaluating individual window table-valued function,
---  window table-valued function should be used with aggregate operation,
---  this example is just used for explaining the syntax and the data produced by table-valued function.
-> SELECT * FROM TABLE(
-    HOP(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES, INTERVAL '10' MINUTES));
--- or with the named params
--- note: the DATA param must be the first
-> SELECT * FROM TABLE(
-    HOP(
-      DATA => TABLE Bid,
-      TIMECOL => DESCRIPTOR(bidtime),
-      SLIDE => INTERVAL '5' MINUTES,
-      SIZE => INTERVAL '10' MINUTES));
-+------------------+-------+------+------------------+------------------+-------------------------+
-|          bidtime | price | item |     window_start |       window_end |           window_time   |
-+------------------+-------+------+------------------+------------------+-------------------------+
-| 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
-| 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
-| 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:15 | 2020-04-15 08:25 | 2020-04-15 08:24:59.999 |
-+------------------+-------+------+------------------+------------------+-------------------------+
-
--- apply aggregation on the hopping windowed table
-> SELECT window_start, window_end, SUM(price)
-  FROM TABLE(
-    HOP(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES, INTERVAL '10' MINUTES))
-  GROUP BY window_start, window_end;
-+------------------+------------------+-------+
-|     window_start |       window_end | price |
-+------------------+------------------+-------+
-| 2020-04-15 08:00 | 2020-04-15 08:10 | 11.00 |
-| 2020-04-15 08:05 | 2020-04-15 08:15 | 15.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:20 | 10.00 |
-| 2020-04-15 08:15 | 2020-04-15 08:25 |  6.00 |
-+------------------+------------------+-------+
-```
-
-CUMULATE有四个必需参数，一个可选参数:
-
-```sql
-CUMULATE(TABLE data, DESCRIPTOR(timecol), step, size)
-```
-
-```sql
--- NOTE: Currently Flink doesn't support evaluating individual window table-valued function,
---  window table-valued function should be used with aggregate operation,
---  this example is just used for explaining the syntax and the data produced by table-valued function.
-> SELECT * FROM TABLE(
-    CUMULATE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '2' MINUTES, INTERVAL '10' MINUTES));
--- or with the named params
--- note: the DATA param must be the first
-> SELECT * FROM TABLE(
-    CUMULATE(
-      DATA => TABLE Bid,
-      TIMECOL => DESCRIPTOR(bidtime),
-      STEP => INTERVAL '2' MINUTES,
-      SIZE => INTERVAL '10' MINUTES));
-+------------------+-------+------+------------------+------------------+-------------------------+
-|          bidtime | price | item |     window_start |       window_end |            window_time  |
-+------------------+-------+------+------------------+------------------+-------------------------+
-| 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:06 | 2020-04-15 08:05:59.999 |
-| 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:08 | 2020-04-15 08:07:59.999 |
-| 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:00 | 2020-04-15 08:08 | 2020-04-15 08:07:59.999 |
-| 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:12 | 2020-04-15 08:11:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:16 | 2020-04-15 08:15:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:18 | 2020-04-15 08:17:59.999 |
-| 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:16 | 2020-04-15 08:15:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:18 | 2020-04-15 08:17:59.999 |
-| 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-| 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:10 | 2020-04-15 08:18 | 2020-04-15 08:17:59.999 |
-| 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
-+------------------+-------+------+------------------+------------------+-------------------------+
-
--- apply aggregation on the cumulating windowed table
-> SELECT window_start, window_end, SUM(price)
-  FROM TABLE(
-    CUMULATE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '2' MINUTES, INTERVAL '10' MINUTES))
-  GROUP BY window_start, window_end;
-+------------------+------------------+-------+
-|     window_start |       window_end | price |
-+------------------+------------------+-------+
-| 2020-04-15 08:00 | 2020-04-15 08:06 |  4.00 |
-| 2020-04-15 08:00 | 2020-04-15 08:08 |  6.00 |
-| 2020-04-15 08:00 | 2020-04-15 08:10 | 11.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:12 |  3.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:14 |  4.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:16 |  4.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:18 | 10.00 |
-| 2020-04-15 08:10 | 2020-04-15 08:20 | 10.00 |
-+------------------+------------------+-------+
-```
-
-###  1.9. <a name='OVER'></a>OVER聚合
+###  1.6. <a name='OVER'></a>OVER聚合
 
 OVER聚合计算一段有序行范围内的每个输入行的聚合值。与GROUP BY聚合相比，OVER聚合不会将每个组的结果行数减少到单个行。相反，OVER聚合为每个输入行生成聚合值。
 
@@ -809,79 +511,9 @@ WINDOW w AS (
   RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW)
 ```
 
-###  1.10. <a name='WindowTop-NWindowAggregationwindow_startwindow_end'></a>Window Top-N在Window Aggregation之后window_start, window_end
 
-```sql
--- tables must have time attribute, e.g. `bidtime` in this table
-Flink SQL> desc Bid;
-+-------------+------------------------+------+-----+--------+---------------------------------+
-|        name |                   type | null | key | extras |                       watermark |
-+-------------+------------------------+------+-----+--------+---------------------------------+
-|     bidtime | TIMESTAMP(3) *ROWTIME* | true |     |        | `bidtime` - INTERVAL '1' SECOND |
-|       price |         DECIMAL(10, 2) | true |     |        |                                 |
-|        item |                 STRING | true |     |        |                                 |
-| supplier_id |                 STRING | true |     |        |                                 |
-+-------------+------------------------+------+-----+--------+---------------------------------+
 
-Flink SQL> SELECT * FROM Bid;
-+------------------+-------+------+-------------+
-|          bidtime | price | item | supplier_id |
-+------------------+-------+------+-------------+
-| 2020-04-15 08:05 |  4.00 |    A |   supplier1 |
-| 2020-04-15 08:06 |  4.00 |    C |   supplier2 |
-| 2020-04-15 08:07 |  2.00 |    G |   supplier1 |
-| 2020-04-15 08:08 |  2.00 |    B |   supplier3 |
-| 2020-04-15 08:09 |  5.00 |    D |   supplier4 |
-| 2020-04-15 08:11 |  2.00 |    B |   supplier3 |
-| 2020-04-15 08:13 |  1.00 |    E |   supplier1 |
-| 2020-04-15 08:15 |  3.00 |    H |   supplier2 |
-| 2020-04-15 08:17 |  6.00 |    F |   supplier5 |
-+------------------+-------+------+-------------+
-
-Flink SQL> SELECT *
-  FROM (
-    SELECT *, ROW_NUMBER() OVER (PARTITION BY window_start, window_end ORDER BY price DESC) as rownum
-    FROM (
-      SELECT window_start, window_end, supplier_id, SUM(price) as price, COUNT(*) as cnt
-      FROM TABLE(
-        TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES))
-      GROUP BY window_start, window_end, supplier_id
-    )
-  ) WHERE rownum <= 3;
-+------------------+------------------+-------------+-------+-----+--------+
-|     window_start |       window_end | supplier_id | price | cnt | rownum |
-+------------------+------------------+-------------+-------+-----+--------+
-| 2020-04-15 08:00 | 2020-04-15 08:10 |   supplier1 |  6.00 |   2 |      1 |
-| 2020-04-15 08:00 | 2020-04-15 08:10 |   supplier4 |  5.00 |   1 |      2 |
-| 2020-04-15 08:00 | 2020-04-15 08:10 |   supplier2 |  4.00 |   1 |      3 |
-| 2020-04-15 08:10 | 2020-04-15 08:20 |   supplier5 |  6.00 |   1 |      1 |
-| 2020-04-15 08:10 | 2020-04-15 08:20 |   supplier2 |  3.00 |   1 |      2 |
-| 2020-04-15 08:10 | 2020-04-15 08:20 |   supplier3 |  2.00 |   1 |      3 |
-+------------------+------------------+-------------+-------+-----+--------+
-```
-
-下面的例子展示了如何计算每10分钟滚动窗口价格最高的前3项物品。
-
-```sql
-Flink SQL> SELECT *
-  FROM (
-    SELECT *, ROW_NUMBER() OVER (PARTITION BY window_start, window_end ORDER BY price DESC) as rownum
-    FROM TABLE(
-               TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES))
-  ) WHERE rownum <= 3;
-+------------------+-------+------+-------------+------------------+------------------+--------+
-|          bidtime | price | item | supplier_id |     window_start |       window_end | rownum |
-+------------------+-------+------+-------------+------------------+------------------+--------+
-| 2020-04-15 08:05 |  4.00 |    A |   supplier1 | 2020-04-15 08:00 | 2020-04-15 08:10 |      2 |
-| 2020-04-15 08:06 |  4.00 |    C |   supplier2 | 2020-04-15 08:00 | 2020-04-15 08:10 |      3 |
-| 2020-04-15 08:09 |  5.00 |    D |   supplier4 | 2020-04-15 08:00 | 2020-04-15 08:10 |      1 |
-| 2020-04-15 08:11 |  2.00 |    B |   supplier3 | 2020-04-15 08:10 | 2020-04-15 08:20 |      3 |
-| 2020-04-15 08:15 |  3.00 |    H |   supplier2 | 2020-04-15 08:10 | 2020-04-15 08:20 |      2 |
-| 2020-04-15 08:17 |  6.00 |    F |   supplier5 | 2020-04-15 08:10 | 2020-04-15 08:20 |      1 |
-+------------------+-------+------+-------------+------------------+------------------+--------+
-```
-
-###  1.11. <a name='SQL-1'></a>执行一组SQL语句
+###  1.7. <a name='SQL-1'></a>执行一组SQL语句
 
 ```sql
 CREATE TABLE pageviews (
@@ -1274,46 +906,7 @@ STR_TO_MAP(string1[, string2, string3]])
 SUBSTR(string[, integer1[, integer2]])
 ```
 
-####  2.1.5. <a name='-1'></a>时间函数
 
-```sql
-DATE string
-TIME string
-TIMESTAMP string
-INTERVAL string range
-YEAR(date)
-LOCALTIME
-LOCALTIMESTAMP
-CURRENT_TIME
-CURRENT_DATE
-CURRENT_TIMESTAMP
-NOW()
-CURRENT_ROW_TIMESTAMP()
-EXTRACT(timeinteravlunit FROM temporal)
-YEAR(date)
-QUARTER(date)
-MONTH(date)
-WEEK(date)
-DAYOFYEAR(date)
-DAYOFMONTH
-HOUR(timestamp)
-MINUTE(timestamp)
-SECOND(timestamp)
-FLOOR(timepoint TO timeintervalunit)
-CEIL(timespoint TO timeintervaluntit)
-(timepoint1, temporal1) OVERLAPS (timepoint2, temporal2)
-DATE_FORMAT(timestamp, string)
-TIMESTAMPADD(timeintervalunit, interval, timepoint)
-TIMESTAMPDIFF(timepointunit, timepoint1, timepoint2)
-CONVERT_TZ(string1, string2, string3)
-FROM_UNIXTIME(numeric[, string])
-UNIX_TIMESTAMP()
-UNIX_TIMESTAMP(string1[, string2])
-TO_DATE(string1[, string2])
-TO_TIMESTAMP_LTZ(numeric, precision)
-TO_TIMESTAMP(string1[, string2])
-CURRENT_WATERMARK(rowtime)
-```
 
 ####  2.1.6. <a name='-1'></a>条件函数
 
@@ -1775,122 +1368,7 @@ INTERVAL SECOND(p2)
 
 
 
-####  2.2.5. <a name='-CURRENT_TIMESTAMP'></a>当前系统时间-CURRENT_TIMESTAMP
 
-例如，CURRENT_TIMESTAMP 将在执行时打印出机器的当前系统时间。
-
-```sql
-SELECT CURRENT_TIMESTAMP;
-```
-
-| SQL 函数  | Table 函数  | 描述
-|---|---|---|
-|LOCALTIMESTAMP|localTimestamp()|返回本地时区的当前 SQL 时间，返回类型为 TIMESTAMP(3)。在流模式下为每条记录进行取值。 但在批处理模式下，它在查询开始时计算一次，并对每一行使用相同的结果。|
-|CURRENT_TIMESTAMP|currentTimestamp()|返回本地时区的当前 SQL 时间戳，返回类型为 TIMESTAMP_LTZ(3)。在`流模式`下为每条记录进行取值。 但在`批处理`模式下，它在查询开始时计算一次，并对每一行使用相同的结果。|
-|CURRENT_ROW_TIMESTAMP()|不适用|返回本地时区的当前 SQL 时间戳，返回类型为 TIMESTAMP_LTZ(3)。无论是在批处理模式还是流模式下，都会为每条记录进行取值。|
-|NOW()|不适用|返回本地时区的当前 SQL 时间戳，这是 CURRENT_TIMESTAMP 的同义词。|
-|TIMESTAMP string|STRING.toTimestamp()|以“yyyy-MM-dd HH:mm:ss[.SSS]”的形式返回从字符串解析的 SQL 时间戳。|
-|HOUR(timestamp)|不适用|从 SQL 时间戳 timestamp 返回小时单位部分的小时（0 到 23 之间的整数）数。相当于 EXTRACT(HOUR FROM timestamp)。 例如 MINUTE(TIMESTAMP '1994-09-27 13:14:15') 返回 14。|
-|MINUTE(timestamp)|不适用|从 SQL 时间戳 timestamp 返回分钟单位的分钟数（0 到 59 之间的整数）。相当于 EXTRACT(MINUTE FROM timestamp)。 例如 MINUTE(TIMESTAMP '1994-09-27 13:14:15') 返回 14。|
-|SECOND(timestamp)|不适用|从 SQL 时间戳 timestamp 返回秒单位部分的秒数（0 到 59 之间的整数）。相当于 EXTRACT(SECOND FROM timestamp)。 例如 SECOND(TIMESTAMP '1994-09-27 13:14:15') 返回 15。|
-|DATE_FORMAT(timestamp, string)|不适用|将时间戳 timestamp 转换为日期格式字符串 string 指定格式的字符串值。格式字符串与 Java 的 SimpleDateFormat 兼容。|
-|TIMESTAMPDIFF(timepointunit, timepoint1, timepoint2)| timestampDiff(TIMEPOINTUNIT, TIMEPOINT1, TIMEPOINT2)|返回 timepoint1 和 timepoint2 之间时间间隔。间隔的单位由第一个参数给出，它应该是以下值之一： SECOND，MINUTE，HOUR，DAY，MONTH 或 YEAR。|
-|TO_TIMESTAMP(string1[, string2])|不适用|将 ‘UTC+0’ 时区下格式为 string2（默认为：‘yyyy-MM-dd HH:mm:ss’）的字符串 string1 转换为时间戳。|
-|CURRENT_WATERMARK(rowtime)|不适用|返回给定时间列属性 rowtime 的当前水印，如果管道中的当前操作没有可用的上游操作的公共水印时则为 NULL。 函数的返回类型被推断为与提供的时间列属性匹配，但调整后的精度为 3。例如时间列属性为 TIMESTAMP_LTZ(9)，则函数将返回 TIMESTAMP_LTZ(3)。|
-
-TIMESTAMP_LTZ 的一个例子：
-
-```sql
-CREATE TABLE 我的表 (
-  `user_id` BIGINT,
-  `name` STRING,
-  `record_time` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp'    
-  -- 读取和写入Kafka记录的时间戳
-  -- reads and writes a Kafka record's timestamp
-) WITH (
-  'connector' = 'kafka'
-  ...
-);
-```
-
-源数据中的时间戳数据表示为一个纪元 (epoch) 时间，通常是一个 long 值，例如 1618989564564，建议将事件时间属性定义在 TIMESTAMP_LTZ 列上：
-
-```sql
-CREATE TABLE user_actions (
- user_name STRING,
- data STRING,
- ts BIGINT,
- time_ltz AS TO_TIMESTAMP_LTZ(ts, 3),
- -- 声明time_ltz为事件时间属性，并使用5秒延迟水印策略
- -- declare time_ltz as event time attribute and use 5 seconds delayed watermark strategy
- WATERMARK FOR time_ltz AS time_ltz - INTERVAL '5' SECOND
-) WITH (
- ...
-);
-
-SELECT TUMBLE_START(time_ltz, INTERVAL '10' MINUTE), COUNT(DISTINCT user_name)
-FROM user_actions
-GROUP BY TUMBLE(time_ltz, INTERVAL '10' MINUTE);
-```
-
-在上面的示例中，元数据列record_time成为表架构的一部分，可以像常规列一样进行转换和存储：
-
-```sql
-INSERT INTO 我的表 
-SELECT 
-  user_id, 
-  name, 
-  record_time + INTERVAL '1' SECOND FROM 我的表;
-```
-
-为方便起见，如果列名应用作标识元数据键，则可以省略FROM子句：
-
-```sql
-CREATE TABLE MyTable (
-  `user_id` BIGINT,
-  `name` STRING,
-  `timestamp` BIGINT METADATA    
-  -- 将时间戳转换为BIGINT类型
-  -- cast the timestamp as BIGINT
-) WITH (
-  'connector' = 'kafka'
-  ...
-);
-```
-
-```sql
-CREATE TABLE MyTable (
-  `user_id` BIGINT,
-  `name` STRING,
-  `timestamp` BIGINT METADATA,       
-  -- 查询到接收模式的一部分
-  -- part of the query-to-sink schema
-  `offset` BIGINT METADATA VIRTUAL,  
-  -- not查询到接收模式的一部分
-  -- 可以使用VIRTUAL关键字将元数据列排除在持久化之外。
-) WITH (
-  'connector' = 'kafka'
-  ...
-);
-```
-
-Computed Columns
-
-计算列
-
-```sql
-CREATE TABLE MyTable (
-  `user_id` BIGINT,
-  `price` DOUBLE,
-  `quantity` DOUBLE,
-  `cost` AS price * quanitity,  
-  -- 计算表达式并将结果提供给查询
-  -- evaluate expression and supply the result to queries
-) WITH (
-  'connector' = 'kafka'
-  ...
-);
-```
 
 ##  3. <a name='source-CREATETABLE'></a>source 表 - 使用 CREATE TABLE 语句
 
@@ -2155,95 +1633,9 @@ val explanation = stmtSet.explain()
 println(explanation)
 ```
 
-####  3.2.3. <a name='CREATETABLE'></a>CREATE TABLE
 
-Flink 提供了一套与表连接器（table connector）一起使用的表格式（table format）。表格式是一种存储格式，定义了如何把二进制数据映射到表的列上。
 
-Flink 支持以下格式：
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3jkdkyb4c6w0.png)
-
-下面的语句创建一个仅包含常规列的表：
-
-```sql
-CREATE TABLE MyTable (
-  `user_id` BIGINT,
-  `name` STRING
-) WITH (
-  ...
-);
-```
-
-下面的代码显示了如何连接到Kafka以读取和写入JSON记录的完整示例。
-
-处理时间属性可以在创建表的 DDL 中用计算列的方式定义，用 PROCTIME() 就可以定义处理时间，函数 PROCTIME() 的返回类型是 TIMESTAMP_LTZ 。
-
-```sql
-CREATE TABLE user_actions (
-  user_name STRING,
-  data STRING,
-  user_action_time AS PROCTIME() 
-  -- 声明一个额外的列作为处理时间属性
-) WITH (
-  ...
-);
-
-SELECT 
-TUMBLE_START(user_action_time, INTERVAL '10' MINUTE), 
-COUNT(DISTINCT user_name)
-FROM user_actions
-GROUP BY TUMBLE(user_action_time, INTERVAL '10' MINUTE);
-```
-
-Flink 支持和在 TIMESTAMP 列和 TIMESTAMP_LTZ 列上定义事件时间。如果源数据中的时间戳数据表示为年-月-日-时-分-秒，则通常为不带时区信息的字符串值，例如 2020-04-15 20:13:40.564，建议将事件时间属性定义在 TIMESTAMP 列上:
-
-```sql
-
-CREATE TABLE user_actions (
-  user_name STRING,
-  data STRING,
-  user_action_time TIMESTAMP(3),
-  -- 声明 user_action_time 是事件时间属性，并且用 延迟 5 秒的策略来生成 watermark
-  WATERMARK FOR user_action_time AS user_action_time - INTERVAL '5' SECOND
-) WITH (
-  ...
-);
-
-SELECT TUMBLE_START(user_action_time, INTERVAL '10' MINUTE), COUNT(DISTINCT user_name)
-FROM user_actions
-GROUP BY TUMBLE(user_action_time, INTERVAL '10' MINUTE);
-```
-
-以下是一个利用 Kafka 以及 JSON Format 构建表的例子。
-
-```sql
-CREATE TABLE MyUserTable (
-  -- 声明表的模式 declare the schema of the table
-  `user` BIGINT,
-  `message` STRING,
-  `rowtime` TIMESTAMP(3) METADATA FROM 'timestamp',    
-  -- 使用元数据列访问 Kafka 的记录时间戳
-  -- use a metadata column to access Kafka's record timestamp
-  `proctime` AS PROCTIME(),    
-  -- 使用计算列定义proctime属性
-  -- use a computed column to define a proctime attribute
-  WATERMARK FOR `rowtime` AS `rowtime` - INTERVAL '5' SECOND    
-  -- 使用WATERMARK语句来定义行时间属性
-  -- use a WATERMARK statement to define a rowtime attribute
-) WITH (
-  -- 声明要连接的外部系统
-  -- declare the external system to connect to
-  'connector' = 'kafka',
-  'topic' = 'topic_name',
-  'scan.startup.mode' = 'earliest-offset',
-  'properties.bootstrap.servers' = 'localhost:9092',
-  'format' = 'json'   
-  -- 为这个系统声明一种格式
-  -- declare a format for this system
-)
-```
-
-####  3.2.4. <a name='SQLhints'></a>SQL hints 
+####  3.2.3. <a name='SQLhints'></a>SQL hints 
 
 我们使用 Oracle 风格的 SQL hints 语法：
 
@@ -2272,7 +1664,7 @@ insert into kafka_table1 /*+ OPTIONS('sink.partitioner'='round-robin') */ select
 
 ```
 
-####  3.2.5. <a name='-1'></a>模式映射
+####  3.2.4. <a name='-1'></a>模式映射
 
 ```sql
 CREATE TABLE MyTable (
@@ -2306,113 +1698,9 @@ CREATE TABLE MyTable (
 )
 ```
 
-##  4. <a name='watermark'></a>watermark 策略
 
-###  4.1. <a name='watermark-1'></a>几种常用的 watermark 策略
 
-1. 严格递增时间戳：
-
-```sql
-WATERMARK FOR rowtime_column AS rowtime_column
-```
-
-发出到目前为止已观察到的最大时间戳的 watermark ，时间戳大于最大时间戳的行被认为没有迟到。
-
-2. 递增时间戳：
-
-```sql
-WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL '0.001' SECOND
-```
-
-发出到目前为止已观察到的最大时间戳减 1 的 watermark ，时间戳大于或等于最大时间戳的行被认为没有迟到。
-
-3. 有界乱序时间戳：
-
-```sql
-WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL 'string' timeUnit
-```
-
-发出到目前为止已观察到的最大时间戳减去指定延迟的 watermark
-
-例如，
-
-```sql
-WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL '5' SECOND
-```
-
-是一个 5 秒延迟的 watermark 策略。
-
-```sql
-CREATE TABLE Orders (
-    `user` BIGINT,
-    product STRING,
-    order_time TIMESTAMP(3),
-    WATERMARK FOR order_time AS order_time - INTERVAL '5' SECOND
-) WITH ( . . . );
-```
-
-###  4.2. <a name='-1'></a>一些栗子
-
-```sql
--- 使用模式中现有的TIMESTAMP(3)字段作为行时间属性
--- use the existing TIMESTAMP(3) field in schema as the rowtime attribute
-CREATE TABLE MyTable (
-  ts_field TIMESTAMP(3),
-  WATERMARK FOR ts_field AS ...
-) WITH (
-  ...
-)
-
--- 使用系统函数或udf或表达式提取预期的TIMESTAMP(3)行时间字段
--- use system functions or UDFs or expressions to extract the expected TIMESTAMP(3) rowtime field
-CREATE TABLE MyTable (
-  log_ts STRING,
-  ts_field AS TO_TIMESTAMP(log_ts),
-  WATERMARK FOR ts_field AS ...
-) WITH (
-  ...
-)
-```
-
-支持的 watermark 水印策略如下:
-
-```sql
--- Sets a watermark strategy for strictly ascending rowtime attributes. Emits a watermark of the maximum observed timestamp so far. Rows that have a timestamp bigger to the max timestamp are not late.
--- 为严格升序的行时间属性设置水印策略。
--- 发出到目前为止观察到的最大时间戳的水印。
--- 时间戳大于最大时间戳的行不属于延迟。
-CREATE TABLE MyTable (
-  ts_field TIMESTAMP(3),
-  WATERMARK FOR ts_field AS ts_field
-) WITH (
-  ...
-)
-
--- Sets a watermark strategy for ascending rowtime attributes. Emits a watermark of the maximum observed timestamp so far minus 1. Rows that have a timestamp bigger or equal to the max timestamp are not late.
--- 设置升序行时间属性的水印策略。
--- 发出到目前为止观察到的最大时间戳减去1的水印。
--- 时间戳大于或等于最大时间戳的行不属于延迟。
-CREATE TABLE MyTable (
-  ts_field TIMESTAMP(3),
-  WATERMARK FOR ts_field AS ts_field - INTERVAL '0.001' SECOND
-) WITH (
-  ...
-)
-
--- Sets a watermark strategy for rowtime attributes which are out-of-order by a bounded time interval.
--- 为行时间属性设置水印策略，
--- 这些行时间属性在有限的时间间隔内是无序的。
--- Emits watermarks which are the maximum observed timestamp minus the specified delay, e.g. 2 seconds.
--- 发出的水印是观察到的最大时间戳减去指定的延迟，例如2秒。
-CREATE TABLE MyTable (
-  ts_field TIMESTAMP(3),
-  WATERMARK FOR ts_field AS ts_field - INTERVAL '2' SECOND
-) WITH (
-  ...
-)
-```
-
-##  5. <a name='LIKE'></a>LIKE 子句
+##  4. <a name='LIKE'></a>LIKE 子句
 
 LIKE 子句可以基于现有表的定义去创建新表，并且可以扩展或排除原始表中的某些部分。
 
@@ -2491,7 +1779,7 @@ LIKE Orders_in_file (
 );
 ```
 
-##  6. <a name='-1'></a>连续查询
+##  5. <a name='-1'></a>连续查询
 
 例如，假设你需要从传入的数据流中**计算每个部门的员工人数**。查询需要维护每个部门最新的计算总数，以便在处理新行时及时输出结果。
 
@@ -2503,7 +1791,7 @@ FROM 员工信息
 GROUP BY 部门_id;
 ```
 
-##  7. <a name='Sink-INSERTINTO'></a>Sink 表 - 使用 INSERT INTO 语句
+##  6. <a name='Sink-INSERTINTO'></a>Sink 表 - 使用 INSERT INTO 语句
 
 ```sql
 INSERT INTO 部门_人数
@@ -2513,7 +1801,7 @@ SELECT
 FROM 员工信息;
 ```
 
-##  8. <a name='scalaSQLCLI'></a>scala & SQL CLI
+##  7. <a name='scalaSQLCLI'></a>scala & SQL CLI
 
 ```scala
 val tEnv = TableEnvironment.create(...)
@@ -2552,7 +1840,7 @@ SHOW TABLES
 INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%';
 ```
 
-###  8.1. <a name='-OVERWRITE-PARTITION'></a>示例-OVERWRITE-PARTITION
+###  7.1. <a name='-OVERWRITE-PARTITION'></a>示例-OVERWRITE-PARTITION
 
 通过 INSERT 语句，可以将查询的结果插入到表中，
 
@@ -2596,9 +1884,9 @@ INSERT INTO students
   VALUES ('fred flintstone', 35, 1.28), ('barney rubble', 32, 2.32);
 ```
 
-##  9. <a name='ApacheKafkaSQL'></a>Apache Kafka SQL 连接器
+##  8. <a name='ApacheKafkaSQL'></a>Apache Kafka SQL 连接器
 
-###  9.1. <a name='-1'></a>依赖
+###  8.1. <a name='-1'></a>依赖
 
 ```xml
 <dependency>
@@ -2608,7 +1896,7 @@ INSERT INTO students
 </dependency>
 ```
 
-###  9.2. <a name='Kafka'></a>如何创建 Kafka 表
+###  8.2. <a name='Kafka'></a>如何创建 Kafka 表
 
 ```sql
 CREATE TABLE KafkaTable (
@@ -2747,7 +2035,7 @@ CREATE TABLE KafkaTable (
 )
 ```
 
-###  9.3. <a name='-1'></a>连接器 必选 参数
+###  8.3. <a name='-1'></a>连接器 必选 参数
 
 |参数|数据类型|描述|举例|
 |---|---|---|---|
@@ -2756,7 +2044,7 @@ CREATE TABLE KafkaTable (
 |'format'|String|用来序列化或反序列化 Kafka 消息的格式。 请参阅 格式 页面以获取更多关于格式的细节和相关配置项。 注意：该配置项和 'value.format' 二者必需其一。|'csv'|
 |'value.format'|String|序列化和反序列化 Kafka 消息体时使用的格式。 请参阅 格式 页面以获取更多关于格式的细节和相关配置项。 注意：该配置项和 'format' 二者必需其一。|'debezium-json'|
 
-###  9.4. <a name='-1'></a>连接器 可选 参数
+###  8.4. <a name='-1'></a>连接器 可选 参数
 
 |参数|数据类型|描述|举例|
 |---|---|---|---|
@@ -2772,7 +2060,7 @@ scan.startup.mode 配置项决定了 Kafka consumer 的启动模式。有效值�
 * `timestamp`：从用户为每个 partition 指定的时间戳开始。
 * `specific-offsets`：从用户为每个 partition 指定的偏移量开始。
 
-##  10. <a name='DebeziumFormat'></a>Debezium Format
+##  9. <a name='DebeziumFormat'></a>Debezium Format
 
 [Debezium Documentation](https://debezium.io/documentation/reference/1.3/connectors/mongodb.html)
 
@@ -2780,9 +2068,9 @@ Debezium 是一个 CDC（Changelog Data Capture，变更数据捕获）的工具
 
 Debezium 为变更日志提供了统一的格式结构，并支持使用 JSON 和 Apache Avro 序列化消息。
 
-###  10.1. <a name='CSVFormat'></a>CSV Format
+###  9.1. <a name='CSVFormat'></a>CSV Format
 
-####  10.1.1. <a name='-1'></a>依赖
+####  9.1.1. <a name='-1'></a>依赖
 
 ```xml
 <dependency>
@@ -2792,7 +2080,7 @@ Debezium 为变更日志提供了统一的格式结构，并支持使用 JSON �
 </dependency>
 ```
 
-####  10.1.2. <a name='CSV'></a>如何创建使用 CSV 格式的表
+####  9.1.2. <a name='CSV'></a>如何创建使用 CSV 格式的表
 
 ```sql
 CREATE TABLE user_behavior (
@@ -2821,7 +2109,7 @@ CREATE TABLE user_behavior (
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.dk781s60968.png)
 
-###  10.2. <a name='Avro'></a>Avro
+###  9.2. <a name='Avro'></a>Avro
 
 [官方文档](https://avro.apache.org/docs/current/spec.html)
 
@@ -2963,7 +2251,7 @@ Flink 类型到 Avro 类型的类型映射。
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.zaozjs71zkw.png)
 
-###  10.3. <a name='-1'></a>依赖
+###  9.3. <a name='-1'></a>依赖
 
 ```xml
 <!-- Debezium Avro -->
@@ -2984,7 +2272,7 @@ Flink 类型到 Avro 类型的类型映射。
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ymukce9m6e8.png)
 
-###  10.4. <a name='DebeziumFormat-1'></a>如何使用 Debezium Format
+###  9.4. <a name='DebeziumFormat-1'></a>如何使用 Debezium Format
 
 Debezium 为变更日志提供了统一的格式，这是一个 JSON 格式的从 MySQL product 表捕获的更新操作的简单示例：
 
@@ -3044,7 +2332,7 @@ INSERT INTO elasticsearch_products
 SELECT * FROM topic_products;
 ```
 
-###  10.5. <a name='schema'></a>消息体中包含 schema 信息
+###  9.5. <a name='schema'></a>消息体中包含 schema 信息
 
 可能会开启 Kafka 的配置 'value.converter.schemas.enable'，用来在消息体中包含 schema 信息。
 
@@ -3082,7 +2370,7 @@ SELECT * FROM topic_products;
 |---|---|---|---|
 |debezium-json.schema-include|Boolean|设置 Debezium Kafka Connect 时，用户可以启用 Kafka 配置 'value.converter.schemas.enable' 以在消息中包含 schema。此选项表明 Debezium JSON 消息是否包含 schema。|'true'（默认为 false）|
 
-###  10.6. <a name='METADATA'></a>可用 METADATA 元数据
+###  9.6. <a name='METADATA'></a>可用 METADATA 元数据
 
 |参数|数据类型|描述|举例|
 |---|---|---|---|
@@ -3114,7 +2402,7 @@ CREATE TABLE KafkaTable (
 );
 ```
 
-##  11. <a name='ContinuousQuery'></a>动态表 & 连续查询(Continuous Query)
+##  10. <a name='ContinuousQuery'></a>动态表 & 连续查询(Continuous Query)
 
 使用具有以下模式的单击事件流:
 
@@ -3154,7 +2442,7 @@ Flink的 Table API 和 SQL 支持三种方式来编码一个动态表的变化:
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3vuvhdbgu2q0.png)
 
-##  12. <a name='FlinkTableSQLAPI'></a>调整 Flink Table 和 SQL API 程序的配置项
+##  11. <a name='FlinkTableSQLAPI'></a>调整 Flink Table 和 SQL API 程序的配置项
 
 ```sql
 SET 'table.exec.mini-batch.enabled' = 'true'
@@ -3168,7 +2456,7 @@ SET 'table.exec.mini-batch.size' = '5000';
 |table.exec.mini-batch.enabled|false|'true'|Boolean|指定是否启用MiniBatch优化。MiniBatch是缓冲输入记录以减少状态访问的优化。这在默认情况下是禁用的。要启用此功能，用户应该将此配置设置为true。注意:如果启用了mini-batch， 'table.exec.mini-batch. 'allow-latency’和‘table.exec.mini-batch。尺寸'必须设置。|
 |table.exec.mini-batch.size|-1|'5000'|Long|MiniBatch可以缓冲的最大输入记录数。MiniBatch是一种缓冲输入记录以减少状态访问的优化。MiniBatch在允许的延迟时间间隔内以及达到最大缓冲记录数时触发。注意：MiniBatch目前仅适用于非窗口聚合。如果table.exec.mini-batch.enabled设置为true，则其值必须为正值。|
 
-##  13. <a name='-1'></a>数据类型
+##  12. <a name='-1'></a>数据类型
 
 下表列出了无需进一步信息即可隐式映射到数据类型的类。
 
@@ -3204,9 +2492,9 @@ SET 'table.exec.mini-batch.size' = '5000';
 |java.util.Map<K, V>|MAP<K, V>|
 |structured type T|anonymous structured type T|
 
-##  14. <a name='executeSqlsqlQuery'></a>executeSql 和 sqlQuery 
+##  13. <a name='executeSqlsqlQuery'></a>executeSql 和 sqlQuery 
 
-###  14.1. <a name='-1'></a>时间属性介绍
+###  13.1. <a name='-1'></a>时间属性介绍
 
 Table API 程序需要在 streaming environment 中指定时间属性：
 
@@ -3323,11 +2611,11 @@ tableResult2.print()
 
 ```
 
-##  15. <a name='MATCH_RECOGNIZE'></a>MATCH_RECOGNIZE 模式检测
+##  14. <a name='MATCH_RECOGNIZE'></a>MATCH_RECOGNIZE 模式检测
 
 [完整学习链接](https://nightlies.apache.org/flink/flink-docs-release-1.14/zh/docs/dev/table/sql/queries/match_recognize/)
 
-###  15.1. <a name='-1'></a>安装指南
+###  14.1. <a name='-1'></a>安装指南
 
 ```xml
 <dependency>
@@ -3337,7 +2625,7 @@ tableResult2.print()
 </dependency>
 ```
 
-###  15.2. <a name='SQL-1'></a>SQL 语义
+###  14.2. <a name='SQL-1'></a>SQL 语义
 
 每个 MATCH_RECOGNIZE 查询都包含以下子句：
 
@@ -3371,7 +2659,7 @@ FROM MyTable
     ) AS T
 ```
 
-###  15.3. <a name='-1'></a>示例 
+###  14.3. <a name='-1'></a>示例 
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5lfartqtrx80.png)
 
@@ -3443,9 +2731,9 @@ FROM Ticker
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.69vnz0pg3o80.png)
 
-##  16. <a name='CDC'></a>CDC
+##  15. <a name='CDC'></a>CDC
 
-###  16.1. <a name='mongoDB'></a>mongoDB
+###  15.1. <a name='mongoDB'></a>mongoDB
 
 ```sql
 
@@ -3479,7 +2767,7 @@ MongoDB CDC 也支持两种启动模式：
 - 默认的initial 模式是先同步表中的存量的数据，然后同步表中的增量数据；
 - latest-offset 模式则是从当前时间点开始只同步表中增量数据。
 
-###  16.2. <a name='Oracle'></a>Oracle
+###  15.2. <a name='Oracle'></a>Oracle
 
 ```sql
 -- 在 Flink SQL 中声明一张 Oracle CDC 表:'products'
@@ -3507,7 +2795,7 @@ CREATE TABLE products (
 SELECT * FROM products;
 ```
 
-###  16.3. <a name='PostgresCatalog'></a>Postgres 数据库作为 Catalog
+###  15.3. <a name='PostgresCatalog'></a>Postgres 数据库作为 Catalog
 
 ```sql
 CREATE CATALOG mypg WITH(

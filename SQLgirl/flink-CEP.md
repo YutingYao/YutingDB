@@ -333,6 +333,7 @@ times()与模式组：
    }
   }).times(3).consecutive().followedBy("recovery").where(new IterativeCondition<Result>(){
     // times(3):    表示要匹配三次，也就是要三次大于0.7.
+
     模式属性:
 
     1. 匹配固定次数，times
@@ -340,6 +341,7 @@ times()与模式组：
     2. 匹配1次以上，oneOrMore
 
     3. 匹配发送多次以上，timesOrMore
+    
     // consecutive: 表示上述的三次匹配要是连续的，比如0.75、0.8、0.78，只有类似这样的数据才能被匹配到，中间不能有不符合的数据出现。
     // followedBy:  是宽松匹配，也就是两个模式之间可以有其他的数据
     // followedBy:  表示该alert pattern的下面要跟着一个recovery pattern
