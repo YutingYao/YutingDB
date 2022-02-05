@@ -24,19 +24,12 @@
 
 ##  1. <a name='RegularJoins'></a>Regular Joins
 
-```sql
-SELECT * FROM Orders
-INNER JOIN Product
-ON Orders.productId = Product.id
-```
-
 ###  1.1. <a name='INNEREqui-JOIN'></a>INNER Equi-JOIN
 
 返回受连接条件限制的`简单笛卡尔积`。目前，只支持相等联接，即至少有一个`连接条件`和相等`谓词`的联接。不支持任意`交叉`或`θ连接`。
 
 ```sql
-SELECT *
-FROM Orders
+SELECT * FROM Orders
 INNER JOIN Product
 ON Orders.product_id = Product.id
 ```
@@ -44,18 +37,15 @@ ON Orders.product_id = Product.id
 ###  1.2. <a name='OUTEREqui-JOIN'></a>OUTER Equi-JOIN
 
 ```sql
-SELECT *
-FROM Orders
+SELECT * FROM Orders
 LEFT JOIN Product
 ON Orders.product_id = Product.id
 
-SELECT *
-FROM Orders
+SELECT * FROM Orders
 RIGHT JOIN Product
 ON Orders.product_id = Product.id
 
-SELECT *
-FROM Orders
+SELECT * FROM Orders
 FULL OUTER JOIN Product
 ON Orders.product_id = Product.id
 ```
@@ -65,14 +55,11 @@ ON Orders.product_id = Product.id
 交叉连接，计算笛卡儿积；
 
 ```sql
-为给定的数组每一个元素返回新的一行数据
-
-SELECT order_id, tag
-FROM Orders 
+SELECT order_id, tag FROM Orders 
 CROSS JOIN UNNEST(tags) AS t (tag)
 ```
 
-##  2. <a name='IntervalJoins'></a>Interval Joins
+##  2. <a name='IntervalJoins'></a>Interval Joins - 时间相关
 
 Interval Joins 至少需要一个`等连接谓词`和一个`连接条件`，以限制`两侧`的时间。
 
@@ -84,17 +71,44 @@ ltime >= rtime AND ltime < rtime + INTERVAL '10' MINUTE
 ltime BETWEEN rtime - INTERVAL '10' SECOND AND rtime + INTERVAL '5' SECOND
 ```
 
-
 例如，如果`订单`在收到订单`四小时`后`发货`，此查询将把所有`订单`与其对应的`发货`关联起来。
 
 ```sql
-SELECT *
-FROM Orders o, Shipments s
+SELECT * FROM Orders o, Shipments s
 WHERE o.id = s.order_id
 AND o.order_time BETWEEN s.ship_time - INTERVAL '4' HOUR AND s.ship_time
 ```
 
-##  3. <a name='FORSYSTEM_TIMEASOF'></a>FOR SYSTEM_TIME AS OF
+##  3. <a name='FORSYSTEM_TIMEASOF'></a>FOR SYSTEM_TIME AS OF 
+
+
+**对比 WATERMARK FOR xxx AS xxx** 出现在 CREATE TABLE 语句中
+
+```sql
+WATERMARK FOR order_time AS order_time
+WATERMARK FOR update_time AS update_time
+WATERMARK FOR user_action_time AS user_action_time - INTERVAL '5' SECOND
+-- 声明 user_action_time 是`事件时间属性`，并且用 延迟 5 秒的策略来生成 watermark
+
+WATERMARK FOR time_ltz AS time_ltz - INTERVAL '5' SECOND
+WATERMARK FOR order_time AS order_time - INTERVAL '30' SECOND
+```
+
+**FOR SYSTEM_TIME AS OF 字句** 出现在 CREATE TABLE 语句 后面
+
+```sql
+FROM orders
+LEFT JOIN currency_rates FOR SYSTEM_TIME AS OF orders.order_time
+
+FROM Orders AS o
+JOIN Customers FOR SYSTEM_TIME AS OF o.proc_time AS c
+```
+
+```sql
+FROM 表一
+[LEFT] JOIN 表二 FOR SYSTEM_TIME AS OF 表一.{ proctime | rowtime }
+```
+
 
 ###  3.1. <a name='EventTimeTemporalJoin'></a>Event Time Temporal Join
 
@@ -124,6 +138,7 @@ CREATE TABLE orders (
     currency    STRING,
     order_time  TIMESTAMP(3),
     WATERMARK FOR order_time AS order_time
+    注意:`事件时间`时间`连接`是由左右两侧的`水印`触发的; 请确保联接的两边已正确设置`水印`。
 ) WITH (/* ... */);
 
 -- 定义一个 versioned table版本化的货币汇率表。
@@ -135,7 +150,9 @@ CREATE TABLE currency_rates (
     conversion_rate DECIMAL(32, 2),
     update_time TIMESTAMP(3) METADATA FROM `values.source.timestamp` VIRTUAL,
     WATERMARK FOR update_time AS update_time,
+    注意:`事件时间`时间`连接`是由左右两侧的`水印`触发的; 请确保联接的两边已正确设置`水印`。
     PRIMARY KEY(currency) NOT ENFORCED
+    注意: `事件时间`时态连接要求在时态连接条件的等价条件中包含`主键`。
 ) WITH (
     'connector' = 'kafka',
     'value.format' = 'debezium-json',
@@ -153,23 +170,12 @@ LEFT JOIN currency_rates FOR SYSTEM_TIME AS OF orders.order_time
 ON orders.currency = currency_rates.currency;
 ```
 
-注意:`事件时间`时间`连接`是由左右两侧的`水印`触发的;请确保联接的两边已正确设置`水印`。
-
-注意:`事件时间`时态连接要求在时态连接条件的等价条件中包含`主键`，例如，`主键`currency_rates。表currency_rates的币种在条件顺序中被约束。货币= currency_rates.currency。
-
-与`常规连接`相比，之前的`时态表`结果将不会受到影响，尽管构建端发生了更改。与`间隔连接`相比，`时态表连接`没有定义连接记录的`时间窗口`。探测端记录总是在`time属性指定的时间`与`构建端版本`连接。因此，`构建端`上的行可能是任意旧的。随着时间的推移，不再需要的`记录版本`(对于给定的`主键`)将从状态中删除。
-
-
-返回
-
 ```s
 order_id  price  currency  conversion_rate  order_time
 ========  =====  ========  ===============  =========
 o_001     11.11  EUR       1.14             12:00:00
 o_002     12.51  EUR       1.10             12:06:00
 ```
-
-
 
 ###  3.2. <a name='LookupJoin'></a>Lookup Join
 
@@ -179,7 +185,7 @@ o_002     12.51  EUR       1.10             12:06:00
 
 仅支持带有处理时间的 temporal tables 的 `inner` 和 `left join`。
 
-是我们常说的Flink中与`维表`关联的`Join`，`Lookup Join`与前面的Join原理并不相同，
+是我们常说的Flink中与 `维表` 关联的 `Join`，`Lookup Join` 与前面的Join原理并不相同，
 
 这个的实现更类似于`Map Join`方式，不会涉及到`state相关存储`。
 
@@ -210,17 +216,9 @@ SELECT o.order_id, o.total, c.country, c.zip
 FROM Orders AS o
   JOIN Customers FOR SYSTEM_TIME AS OF o.proc_time AS c
     ON o.customer_id = c.id;
+
+    Orders表使用了来自MySQL数据库中的Customers表的数据。
 ```
-
-在上面的例子中，Orders表使用了来自MySQL数据库中的Customers表的数据。
-
-带有后续处理时间属性的`FOR SYSTEM_TIME AS OF子句`确保在`连接操作符`处理`Orders行`时，`Orders表的每一行`都与那些匹配连接谓词的`customer行`连接。
-
-它还防止在将来更新已连接的`Customer行`时更新连接结果。
-
-在上面的例子中，`lookup join 查找连接`还需要一个强制的 `equality join predicate 相等连接谓词`。o.customer_id = c.id
-
-
 
 ##  4. <a name='TableFuntion'></a>Table Funtion
 
@@ -238,9 +236,9 @@ LATERAL TABLE(table_func(order_id)) t(res)
 
 `处理时间时态表联接`使用`处理时间`属性将行与`外部版本表`中键的最新版本相关联。
 
-根据定义，通过`处理时间`属性，`联接`将始终返回给定键的最新值。可以将`查找表`看作是一个简单的HashMap<K，V>，它存储来自构建端的所有记录。这种`连接`的强大之处在于，当无法在Flink中将表具体化为`动态表`时，它允许Flink直接针对`外部系统`工作。
+根据定义，通过 `处理时间` 属性，`联接` 将始终返回给定键的最新值。可以将 `查找表` 看作是一个简单的 `HashMap<K，V>`，它存储来自构建端的所有记录。这种 `连接` 的强大之处在于，当无法在Flink中将表具体化为 `动态表` 时，它允许Flink直接针对 `外部系统` 工作。
 
-下面的`处理时间时态表联接`示例显示了应与表`LatestRates联接`的仅追加表orders。`LatestRates`是以最新速率具体化的`维度表`（例如`HBase表`）。`10:15、10:30、10:52`时，迟到者的内容如下：
+下面的 `处理时间时态表联接` 示例显示了应与表 `LatestRates联接`的仅追加表orders。`LatestRates`是以最新速率具体化的`维度表`（例如`HBase表`）。`10:15、10:30、10:52`时，迟到者的内容如下：
 
 ```sql
 10:15> SELECT * FROM LatestRates;
