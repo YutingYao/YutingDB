@@ -1,5 +1,7 @@
 ## 206. 反转链表Reverse Linked List
 
+https://leetcode-cn.com/problems/reverse-linked-list/submissions/
+
 [哈哈哈](https://www.bilibili.com/video/BV1Q7411V7zr?spm_id_from=333.999.0.0)
 
 [图灵](https://www.bilibili.com/video/BV1XQ4y1h735?spm_id_from=333.999.0.0)
@@ -7,249 +9,52 @@
 [洛阳](https://www.bilibili.com/video/BV16Q4y1M767?spm_id_from=333.999.0.0)
 
 ```py
-前置条件：迭代指针：p = head、结果指针：res = none
-
-以1->2->3->4->5为例：
-
-过程：
-
-res:None
-
-第一层循环
-
-res:1->2->3->4->5 res = p
-
-res:1->None res.next = res
-
-p:2->3->4->5 p = p.next
-
-第二层循环
-
-res:2->3->4->5 res = p
-
-res:2->1->None res.next = res
-
-p:3->4->5 p = p.next
-
-第三层循环
-
-res:3->4->5 res = p
-
-res:3->2->1->None res.next = res
-
-p:4->5 p = p.next
-
-第四层循环
-
-res:4->5 res = p
-
-res:4->3->2->1->None res.next = res
-
-p:5 p = p.next
-
-第五层循环
-
-res:5 res = p
-
-res:5->4->3->2->1->None res.next = res
-
-p:None p = p.next
-
-end...
-
 class Solution:
     def reverseList(self, head):
         pre, res = head, None
         while pre:
+            res, res.next, pre = pre, res, pre.next
+            # 易错点：必须写成一行
+            # 就是多元赋值的时候，右边的值不会随着赋值而改变~
+        return res
+
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        res = None
+        pre = head
+        while pre:
+            prenxt = pre.next
+            pre.next = res
             res = pre
-            res.next = res
-            pre = pre.next
+            pre = prenxt
         return res
 ```
 
-```py
-class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
-        """ 还有一种方法，不需要使用首元结点 
-            1 -> 2 -> 3 -> 4    可以依次逆序每个指针
-            1 <- 2 <- 3 <- 4    4变为了新的表头
-            和头插法一样， 需要注意改变节点指针的时候，不能影响到 遍历下一个元素
-        """
-        # 1. 首先需要一个指针p顺序遍历节点， 还需要pre 和 cur 指针用于反转
-        pre = None
-        tmp = cur = head
-        while tmp:
-            # 1. 更新cur为当前节点
-            cur = tmp
-            # 2. p指针后移
-            tmp = tmp.next
-            # 3. 做反转
-            cur.next = pre
-            # 4. 更新pre为当前节点
-            pre = cur
-
-        # 5. 重新定义 head指向链表末尾
-        head = cur
-        return head
-```
-
-
-```py
-
-递归解法， 先写出 while循环的迭代解法，再推导到 迭代写法。好像容易理解一些
-# 还可以 以递归的形式解决问题
-class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
-        """ 
-            迭代解法中，每一步都是 重新指向next指针， 可以分治法，使用递归求解。找到最小子问题及终止条件
-            需要调用递归栈， 空间效率要低很多。
-        """
-        # 1. 首先需要一个指针p顺序遍历节点， 还需要pre 和 cur 指针用于反转
-        def reverse(pre, cur):
-            # 当cur为None了， 说明pre指向最后的节点，返回作为新的头结点
-            if not cur: 
-                return pre
-            next = cur.next
-            cur.next = pre
-            return reverse(cur, next)
-        
-
-        head = reverse(None, head)
-        return head
-
-
-class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
-        
-        def reverse(pre,cur):
-            if not cur:
-                return pre
-                
-            tmp = cur.next
-            cur.next = pre
-
-            return reverse(cur,tmp)
-        
-        return reverse(None,head)
-```
-
-
-
-
-```scala
-object Solution {
-    def reverseList(head: ListNode): ListNode = {
-        if(head == null || head.next == null){
-            head
-        } else{
-            var p = reverseList(head.next)
-            head.next.next = head
-            head.next = null
-            p
-        }
-    }
-}
-
-```
 ```scala
 /**
 * time complexity: O(n)
 * space complexity: O(1) 
 */
-object Solution0 {
-    def reverseList(head: ListNode): ListNode = {        
-        var prev: ListNode = null
-        var curr = head
-
-        while (curr != null) {
-            val hold = curr.next
-            curr.next = prev
-            prev = curr
-            curr = hold
-        }
-        prev
-    }
-}
-
- /**
- * time complexity: O(n)
- * space complexity: O(1)
- */
-object Solution1 {
+object Solution {
     def reverseList(head: ListNode): ListNode = {
-        
-        var prev: ListNode = null
-        var curr = head
+        var res: ListNode = null
+        var pre = head
 
-        while (curr != null) {
-            val hold = curr.next
-            curr.next = prev
-            prev = curr
-            curr = hold
+        while (pre != null) {
+            val prenxt = pre.next
+            pre.next = res
+            res = pre
+            pre = prenxt
         }
-        prev
-    }
-    
-    def printNode(node: ListNode) {
-        var n = node
-        while(n != null) {
-            print(s"${n.x} ")
-            n = n.next
-        }
-    }
-}
-
-
-/** recursive version */
-
-object Solution2 {
-    def reverseList(head: ListNode): ListNode = {
-        
-        val curr:ListNode = null
-        
-        _reverseList(curr, head)
-        
-    }
-    
-    @annotation.tailrec
-    def _reverseList(curr: ListNode, next: ListNode): ListNode = {
-        if(next == null) {
-            curr
-        }else{
-            val tmpNode = next.next
-            next.next = curr
-            _reverseList(next, tmpNode)
-        }
-    }
-}
-
-object Solution2-1 {
-    def reverseList(head: ListNode): ListNode = {
-        if(head == null) head
-        else _reverseList(head)
-        
-    }
-    
-    def _reverseList(node: ListNode): ListNode = {
-        if (node == null || node.next == null) {
-            node
-        }else {
-            val newHead = _reverseList(node.next)
-              // reversedHead 是返回原本的尾巴，若一開始輸入是 1 -> 2 -> 3 -> 4 -> 5  -> null , 那 reversedHead 就是 5
-            // 每次 iteration 返回都是同一個 reversedHead 也就是 5
-            node.next.next = node
-            node.next = null
-             // 每次迭代 改變的就是送進每個 function 的 listnode 的 next 與 next.next 指向
-            newHead
-        }
-        
-        
+        res
     }
 }
 
 ```
 
 ## 146. LRU缓存机制【构造🏰】LRU Cache 
+
+https://leetcode-cn.com/problems/lru-cache/submissions/
 
 [花花酱](https://www.bilibili.com/video/BV19b411c7ue?spm_id_from=333.999.0.0)
 
@@ -259,94 +64,28 @@ object Solution2-1 {
 
 [官方](https://www.bilibili.com/video/BV1ZQ4y1A74H?spm_id_from=333.999.0.0)
 
-这个functools.lru_cache(None)的底层是怎么做的呀？ 
-
 ```py
-def lru(f):
-    d={}
-    def wrapper(*args):
-        if args not in d:
-            d[args]=f(*args)
-        return d[args]
-    return wrapper
-```
-
-加个前缀和预处理，时间减少一半：
-
-```py 
-# 利用 super().__init__()
-class LRUCache(collections.OrderedDict):
+class LRUCache:
 
     def __init__(self, capacity: int):
-        # super() 继承 collections.OrderedDict
-        super().__init__()
-        self.capacity = capacity
-
-
-    def get(self, key: int) -> int:
-        # 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 
-        if key not in self:
-            return -1
-        self.move_to_end(key)
-        return self[key]
-
-    def put(self, key: int, value: int) -> None:
-        # 如果关键字 key 已经存在，则变更其数据值 value
-        if key in self:
-            self.move_to_end(key)
-        # 如果不存在，则向缓存中插入该组 key-value
-        self[key] = value
-        # 如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
-        if len(self) > self.capacity:
-            self.popitem(last=False)
-```
-
-
-```py
-# 利用 self.cache = collections.OrderedDict()
-class LRUCache:
-    def __init__(self, capacity):
         self.capacity = capacity
         self.cache = collections.OrderedDict()
 
-    写法 1：无 move_to_end
-    def get(self, key):
-        # 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 
+
+    def get(self, key: int) -> int:
         if key in self.cache:
             value = self.cache.pop(key)
             self.cache[key] = value
             return value
         return -1
 
-    写法 2：有 move_to_end
-    def get(self, key):
-        if key in self.cache:
-            self.cache.move_to_end(key)
-            return self.cache[key]
-        return -1
 
-    写法 1：无 move_to_end
-    def put(self, key, value):
-        # 如果关键字 key 已经存在，则变更其数据值 value
+    def put(self, key: int, value: int) -> None:
         if key in self.cache:
             self.cache.pop(key)
-        # 如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
         if len(self.cache) == self.capacity:
             self.cache.popitem(last=False)
-                
-        # 如果不存在，则向缓存中插入该组 key-value
         self.cache[key] = value
-
-    写法 2：有 move_to_end
-    def put(self, key, value):
-        # 如果关键字 key 已经存在，则变更其数据值 value
-        if key in self.cache:
-            self.cache.move_to_end(key)
-        # 如果不存在，则向缓存中插入该组 key-value
-        self.cache[key] = value
-        # 如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
-        if len(self.cache) > self.capacity:
-            self.cache.popitem(last=False)
 
 ```
 
@@ -357,212 +96,43 @@ class LRUCache:
 * build-in linkedHashMap
 * time complexity: O(1)
 */
-class LRUCache0(_capacity: Int) {
+class LRUCache(_capacity: Int) {
 
-  private val capacity = _capacity
-  val cache = collection.mutable.LinkedHashMap[Int, Int]()
-
-  def get(key: Int): Int = {
-    cache.get(key) match {
-        case Some(v) => 
-            cache.remove(key)
-            cache.put(key, v)
-            v
-        case None => -1
-    }
-  }
-
-  def put(key: Int, value: Int): Unit = {
-    cache.get(key) match {
-      case Some(_) =>
-        cache.remove(key)
-        cache.update(key, value)
-
-      case None =>
-        if(cache.size >= capacity){
-          cache.remove(cache.head._1)
-        }
-        cache.put(key, value)
-    }
-  }
-}
+    private val capacity = _capacity
+    val cache = collection.mutable.LinkedHashMap[Int, Int]()
 
 
-
-/**
-* build-in linkedHashMap
-*/
-class LRUCache3(_capacity: Int) {
-
-  private val capacity = _capacity
-  val cache = collection.mutable.LinkedHashMap[Int, Int]()
-
-  def get(key: Int): Int = {
-  /**
-   *cache.get(key).map{
-   *   value =>
-   *     cache.remove(key)
-   *     cache.update(key, value)
-   *     value
-   * }.getOrElse(-1)
-   */
-   cache.get(key) match {
+    def get(key: Int): Int = {
+        cache.get(key) match {
             case Some(v) => 
                 cache.remove(key)
                 cache.put(key, v)
                 v
             case None => -1
         }
-  }
-
-  def put(key: Int, value: Int): Unit = {
-    cache.get(key) match {
-      case Some(_) =>
-        cache.remove(key)
-        cache.update(key, value)
-
-      case None =>
-        if(cache.size >= capacity){
-          cache.remove(cache.head._1)
-        }
-        cache.put(key, value)
     }
-  }
+
+    def put(key: Int, value: Int): Unit = {
+        cache.get(key) match {
+            case Some(_) =>
+                cache.remove(key)
+                cache.update(key, value)
+
+            case None =>
+                if(cache.size >= capacity){
+                cache.remove(cache.head._1)
+                }
+                cache.put(key, value)
+        }   
+
+    }
 }
 
 ```
 
-```scala
-import scala.collection.mutable._
-
-  class LRUCache(_capacity: Int) {
-
-    val hm = HashMap[Int, Int]()
-    val lb = ListBuffer.empty[Int]
-    val c = _capacity
-
-    def get(key: Int): Int = {
-      if (hm.contains(key)) {
-        val i = lb.indexOf(key)  // could be slow? O(N)?
-        lb.remove(i)
-        lb += key
-        hm(key)
-      } else {
-        -1
-      }
-
-    }
-
-    def put(key: Int, value: Int) {
-      if (hm.contains(key)) {
-        val i = lb.indexOf(key)  // could be slow? O(N)?
-        lb.remove(i)
-        lb += key
-        hm(key) = value
-      } else {
-        if (hm.size == c) {
-          val lk = lb.head
-          hm.remove(lk)
-          lb.remove(0)
-        }
-        hm(key) = value
-        lb += key
-      }
-    }
-  }
-
-
-// test case
-//  ["LRUCache","put","put","put","put","put","get","put","get","get","put","get","put","put","put","get","put","get","get","get","get","put","put","get","get","get","put","put","get","put","get","put","get","get","get","put","put","put","get","put","get","get","put","put","get","put","put","put","put","get","put","put","get","put","put","get","put","put","put","put","put","get","put","put","get","put","get","get","get","put","get","get","put","put","put","put","get","put","put","put","put","get","get","get","put","put","put","get","put","put","put","get","put","put","put","get","get","get","put","put","put","put","get","put","put","put","put","put","put","put"]
-//  [[10],[10,13],[3,17],[6,11],[10,5],[9,10],[13],[2,19],[2],[3],[5,25],[8],[9,22],[5,5],[1,30],[11],[9,12],[7],[5],[8],[9],[4,30],[9,3],[9],[10],[10],[6,14],[3,1],[3],[10,11],[8],[2,14],[1],[5],[4],[11,4],[12,24],[5,18],[13],[7,23],[8],[12],[3,27],[2,12],[5],[2,9],[13,4],[8,18],[1,7],[6],[9,29],[8,21],[5],[6,30],[1,12],[10],[4,15],[7,22],[11,26],[8,17],[9,29],[5],[3,4],[11,30],[12],[4,29],[3],[9],[6],[3,4],[1],[10],[3,29],[10,28],[1,20],[11,13],[3],[3,12],[3,8],[10,9],[3,26],[8],[7],[5],[13,17],[2,27],[11,15],[12],[9,19],[2,15],[3,16],[1],[12,17],[9,1],[6,19],[4],[5],[5],[8,1],[11,7],[5,2],[9,28],[1],[2,2],[7,4],[4,22],[7,24],[9,26],[13,28],[11,26]]
-
-//  [null,null,null,null,null,null,-1,null,19,17,null,-1,null,null,null,-1,null,-1,5,-1,12,null,null,3,5,5,null,null,1,null,-1,null,30,5,30,null,null,null,-1,null,-1,24,null,null,18,null,null,null,null,-1,null,null,18,null,null,-1,null,null,null,null,null,18,null,null,-1,null,4,29,30,null,12,-1,null,null,null,null,29,null,null,null,null,17,22,18,null,null,null,-1,null,null,null,20,null,null,null,-1,18,18,null,null,null,null,20,null,null,null,null,null,null,null]
-  class LRUCache3(_capacity: Int) {
-    val hm = HashMap[Int, Node]()
-    val dl = new DoublyLinkedList()
-    val c = _capacity
-
-    def get(key: Int): Int = {
-      if (hm.contains(key)) {
-        val node = hm(key)
-        dl.erase(node)
-        dl.push_front(node)
-        node.v.v
-      } else { // not found
-        -1
-      }
-    }
-
-    def put(key: Int, value: Int) {
-      if (hm.contains(key)) {
-        val node = hm(key)
-        dl.erase(node)
-        dl.push_front(node)
-        node.v.v = value
-      } else {
-        if (hm.size == c) {
-          val old = dl.tail
-          if (old!=null) {
-            dl.erase(old)
-            hm.remove(old.v.k)
-          }
-        }
-        val node = Node(KV(key,value),null,null)
-        hm(key) = node
-        dl.push_front(node)
-      }
-    }
-  }
-```
-
-```scala
-  class Test extends BaseExtension {
-    def init {
-      val lru = new LRUCache(2)
-      lru.put(1,1)
-      lru.put(2,2)
-      println(lru.get(1) == 1)
-    }
-
-    val name = "146 LRU chache"
-  }
-
-//  ["LRUCache","put","put","get","put","get","put","get","get","get"]
-//  [[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
-  class Test2 extends BaseExtension {
-    def init {
-      val lru = new LRUCache2(2)
-      lru.put(2,1)
-      lru.put(1,1)
-      lru.put(2,3)
-      lru.put(4,1)
-      println(lru.get(1) == -1)
-      println(lru.get(2) == 3)
-    }
-    val name = "146 LRU chache xxxx"
-  }
-
-  //  ["LRUCache","put","put","put","put","put","get","put","get","get","put","get","put","put","put","get","put","get","get","get","get","put","put","get","get","get","put","put","get","put","get","put","get","get","get","put","put","put","get","put","get","get","put","put","get","put","put","put","put","get","put","put","get","put","put","get","put","put","put","put","put","get","put","put","get","put","get","get","get","put","get","get","put","put","put","put","get","put","put","put","put","get","get","get","put","put","put","get","put","put","put","get","put","put","put","get","get","get","put","put","put","put","get","put","put","put","put","put","put","put"]
-  //  [[10],[10,13],[3,17],[6,11],[10,5],[9,10],[13],[2,19],[2],[3],[5,25],[8],[9,22],[5,5],[1,30],[11],[9,12],[7],[5],[8],[9],[4,30],[9,3],[9],[10],[10],[6,14],[3,1],[3],[10,11],[8],[2,14],[1],[5],[4],[11,4],[12,24],[5,18],[13],[7,23],[8],[12],[3,27],[2,12],[5],[2,9],[13,4],[8,18],[1,7],[6],[9,29],[8,21],[5],[6,30],[1,12],[10],[4,15],[7,22],[11,26],[8,17],[9,29],[5],[3,4],[11,30],[12],[4,29],[3],[9],[6],[3,4],[1],[10],[3,29],[10,28],[1,20],[11,13],[3],[3,12],[3,8],[10,9],[3,26],[8],[7],[5],[13,17],[2,27],[11,15],[12],[9,19],[2,15],[3,16],[1],[12,17],[9,1],[6,19],[4],[5],[5],[8,1],[11,7],[5,2],[9,28],[1],[2,2],[7,4],[4,22],[7,24],[9,26],[13,28],[11,26]]
-  //  [null,null,null,null,null,null,-1,null,19,17,null,-1,null,null,null,-1,null,-1,5,-1,12,null,null,3,5,5,null,null,1,null,-1,null,30,5,30,null,null,null,-1,null,-1,24,null,null,18,null,null,null,null,-1,null,null,18,null,null,-1,null,null,null,null,null,18,null,null,-1,null,4,29,30,null,12,-1,null,null,null,null,29,null,null,null,null,17,22,18,null,null,null,-1,null,null,null,20,null,null,null,-1,18,18,null,null,null,null,20,null,null,null,null,null,null,null]
-
-  class Test3 extends BaseExtension {
-    def init {
-      val lru = new LRUCache3(10)
-      lru.put(10,13)
-      lru.put(3,17)
-      lru.put(6,11)
-      lru.put(10,5)
-      lru.put(9,10)
-
-      println(lru.get(1) == -1)
-      println(lru.get(2) == 3)
-    }
-    val name = "146 LRU chache xxxx"
-  }
-```
- 
 ## 3. 无重复字符的最长子串 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters
+
+https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/
 
 [哈哈哈](https://www.bilibili.com/video/BV1h54y1B7No?spm_id_from=333.999.0.0)
 
@@ -576,88 +146,31 @@ import scala.collection.mutable._
 
 [官方](https://www.bilibili.com/video/BV1DK4y1b7xp?spm_id_from=333.999.0.0)
 
-方法一：暴力解法
-
-* 时间复杂度: 2个指针遍历字符串O(n2) + hashset判断是否重复O(n) = O(n3)
-
-* 时间复杂度: O(m), m 为所有可能出现的情况
-
-方法二：涉及 sub 的问题，可以使用 “滑动窗口”
+涉及 sub 的问题，可以使用 “滑动窗口”
 
 特殊情况：
 
-* 字符串为空
+* 时间复杂度: O(n) + hashset判断是否重复O(n)
   
-* 字符串均为重复字符串
-
-* 时间复杂度: O(n) + hashset判断是否重复O(n) = O(n3)
-
-* 时间复杂度: O(m), m 为所有可能出现的情况
-
 ```py
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         dic = {}
-        start = 0
+        leftI = 0
         res = 0
-        for i, char in enumerate(s):
-            if char in dic and start <= dic[char]:
-                # 易错点: and start <= dic[char]: 
-                # 含义为"tmmzuxt",
-                # start在m，当有新的t进来时，上一个t在start的前面，所以，此时的start不需要修改
-                start = dic[char] + 1 # 易错点: 这里的dic[char]还是前一个,且 +1
+        for rightI, char in enumerate(s):
+            # char 重复出现，并且 上一个出现 在窗口内部
+            # 含义为"tmmzuxt", start在m，当有新的t进来时，上一个t在start的前面，所以，此时的start不需要修改
+            if char in dic and leftI <= dic[char]:      # 易错点: and start <= dic[char]: 
+                leftI = dic[char] + 1        # 易错点: 这里的dic[char]还是前一个,且 +1
             else:
-                res = max(res,i-start+1) # 易错点: +1
-            dic[char] = i # 易错点: dic[char]滞后更新
+                res = max(res, rightI-leftI+1) # 易错点: +1
+            dic[char] = rightI         # 易错点: dic[char]滞后更新
         return res
+    
 ```
 
 ```scala
-/**
-* chosen solution
-* two pointer to control sliding window
-*   1. two pointer: left and right to control substring window
-*   2. counter and hashmap to record whether current window is valid or not
-* time  complexity: O(N), worst: O(2N) -> each char was visited twice
-*/
-
-object Solution0 {
-  def lengthOfLongestSubstring(s: String): Int = {
-    val sMap = scala.collection.mutable.Map[Char, Int]() ++ s.distinct.map(c => (c, 0)).toMap
-    var left = 0
-    var right = 0
-    var counter = 0
-    var length = 0
-    while (right < s.length) {
-      val rightChar = s(right)
-      sMap.get(rightChar) match {
-        case Some(v) if v >= 1 =>
-          sMap.update(rightChar, v + 1)
-          counter += 1
-        case Some(v) =>
-          sMap.update(rightChar, v + 1)
-      }
-      right += 1
-      while (counter > 0) {
-        val leftChar = s(left)
-        sMap.get(leftChar) match {
-          case Some(v) if v > 1 =>
-            sMap.update(leftChar, v - 1)
-            counter -= 1
-          case Some(v) =>
-            sMap.update(leftChar, v - 1)
-        }
-
-        left += 1
-
-      }
-      length = length max (right - left)
-    }
-    length
-  }
-}
-
-
 /**
 * my first commit
 * sliding windows
@@ -686,153 +199,11 @@ object Solution1 {
     }
 }
 
-
-/**
-* sliding windows, slower than solution1
-*   memo
-*     1. using hashmap to record whether the current right char is duplicated or not
-*/
-object Solution1-2 {
-    def lengthOfLongestSubstring(s: String): Int = {
-        val map = scala.collection.mutable.Map[Char, Int]() ++ s.distinct.map(c => (c, 0))
-        var left = 0
-        var right = 0
-        var length = 0
-        
-        while(right < s.length){
-            val rightChar = s(right)
-        
-            map.update(rightChar, map(rightChar) + 1)
-            right += 1
-            
-            /* iterate until meet condition */
-            while(map(rightChar) > 1){
-                val leftChar = s(left)
-                
-                map.get(leftChar) match {
-                    case Some(v) if v > 0 =>  map.update(leftChar,  v - 1)
-                    case _ =>
-                }
-                
-                left += 1
-            }
-
-            length = length max (right - left)  // update minimum
-               
-        }
-        length
-    }
-}
-
-/**
-* using substring problem template
-*   1. two pointer: left and right to control substring window
-*   2. counter and hashmap to record whether current window is valid or not
-*/
-object Solution1-3 {
-  def lengthOfLongestSubstring(s: String): Int = {
-    val sMap = scala.collection.mutable.Map[Char, Int]() ++ s.distinct.map(c => (c, 0)).toMap
-    var left = 0
-    var right = 0
-    var counter = 0
-    var length = 0
-    while (right < s.length) {
-      val rightChar = s(right)
-      sMap.get(rightChar) match {
-        case Some(v) if v >= 1 =>
-          sMap.update(rightChar, v + 1)
-          counter += 1
-        case Some(v) =>
-          sMap.update(rightChar, v + 1)
-      }
-      right += 1
-      while (counter > 0) {
-        val leftChar = s(left)
-        sMap.get(leftChar) match {
-          case Some(v) if v > 1 =>
-            sMap.update(leftChar, v - 1)
-            counter -= 1
-          case Some(v) =>
-            sMap.update(leftChar, v - 1)
-        }
-
-        left += 1
-
-      }
-      length = length max (right - left)
-    }
-    length
-  }
-}
-
-object Solution {
-    //s.zipWithIndex.foreach(println) // =>tuple
-    //   def foldLeft[B](z: B)(op: (B, A) => B): B = {
-    // 解释 z: 初始值,
-    // op (B,A) => B前一个结果，A本次输入,返回作为下一个输入
-    def lengthOfLongestSubstring(s: String): Int = {
-      s.zipWithIndex.foldLeft((0, -1, Map[Char, Int]())) {
-        case ((len, start_pos, map), (char, i)) => {
-          // 初始值len=0,start_pos=-1,map为空; case A,B; 前者为累加值，后者为index
-          // 如果char不存在,last_pos=-1,更新map中的idx,len=i-start_pos
-          // 如果last_pos已存在,例如abca,第一个a为0,第二个a为3,则len=3-0,跟新start_pos
-          val last_pos = map.getOrElse(char, -1)
-          if (last_pos >= start_pos) (len.max(i - last_pos), last_pos, map + (char -> i))
-          else (len.max(i - start_pos), start_pos, map + (char -> i))
-        }
-      }._1
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      println(Solution.lengthOfLongestSubstring("abcabcbb")==3)
-    }
-    val name = "003 Longest Non repeat str"
-  }
 ```
 
 ## 215. 数组中的第K个最大元素（add）
 
-```py
-python版-大根堆法，希望可以帮到你
-
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-
-        def adju_max_heap(nums_list, in_node):  # 从当前内部节点处修正大根堆
-            """"in_node是内部节点的索引"""
-            l, r, large_idx= 2*in_node+1, 2*in_node+2, in_node  # 最大值的索引默认为该内部节点
-
-            if l < len(nums_list) and nums_list[large_idx] < nums[l]:  
-                # 如果左孩子值大于该内部节点的值，则最大值索引指向左孩子
-                large_idx = l
-            if r < len(nums_list) and nums_list[large_idx] < nums[r]:
-                # 如果执行了上一个if语句，此时最大值索引指向左孩子，否则还是指向该内部节点
-                # 然后最大值索引指向的值和右孩子的值比较
-                large_idx = r
-
-            # 上述两个if就是得到(内部节点，左孩子，右孩子)中最大值的索引
-            if large_idx != in_node: # 如果最大值在左孩子和右孩子中，则和内部节点交换
-                nums_list[large_idx], nums_list[in_node] = nums_list[in_node], nums_list[large_idx]
-                # 如何内部节点是和左孩子交换，那就递归修正它的左子树，否则递归修正它的右子树
-                adju_max_heap(nums_list, large_idx)
-
-        def build_max_heap(nums_list):  # 由列表建立大根堆
-            """"从后往前遍历所有内部节点，其中最后一个内部节点的公式为len(nums_list)//2 - 1"""
-            for in_node in range(len(nums_list)//2 - 1, -1, -1):
-                adju_max_heap(nums_list, in_node)
-        
-        def find_kth_max(nums_list, k):  # 从列表中找到第k个最大的
-            build_max_heap(nums_list)  # 先建立大根堆
-            for _ in range(k-1):
-                nums_list[0], nums_list[-1] = nums_list[-1], nums_list[0]  # 堆头和堆尾交换
-                nums_list.pop()  # 删除堆尾
-                adju_max_heap(nums_list, 0)  # 从堆头处开始修正大根堆
-            return nums_list[0]
-        return find_kth_max(nums, k)  
-                
-```
+https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
 
 ```py
 class Solution:
@@ -844,147 +215,11 @@ class Solution:
             while len(q) > k:
                 heapq.heappop(q)
         return heapq.heappop(q)
-```
-
-```py
-# 基于快速排序
-import random
-
-
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        return self.quickSelect(nums, 0, len(nums)-1, len(nums)-k)
-
-    def quickSelect(self, nums, start, end, k):
-        nums, idx = self.partition(nums, start, end)
-        if idx == k:
-            return nums[idx]
-        elif idx < k:
-            return self.quickSelect(nums, idx+1, end, k)
-        else:
-            return self.quickSelect(nums, start, idx-1, k)
-
-    def partition(self, nums, start, end):
-        t = random.randint(start, end)
-        nums[start], nums[t] = nums[t], nums[start]
-        pivot = nums[start]
-        left, right = start + 1, end
-        while True:
-            while left <= right and nums[left] <= pivot:
-                left += 1
-            while left <= right and nums[right] >= pivot:
-                right -= 1
-            if left <= right:
-                nums[left], nums[right] = nums[right], nums[left]
-            else:
-                break
-        nums[start], nums[right] = nums[right], nums[start]
-        return nums, right
-"""
-
-"""
-# 基于最大堆（调库）
-import heapq
-
-
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        q = []
-        for i in range(k):
-            heapq.heappush(q, nums[i])
-        for i in range(k, len(nums)):
-            if nums[i] > q[0]:
-                heapq.heapreplace(q, nums[i])
-        return q[0]
-"""
-
-# 基于最大堆（手动）
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        heapList = self.buildHeap(nums)
-        for _ in range(k - 1):
-            heapList = self.delMax(heapList)
-        return heapList[1]
-
-    def buildHeap(self, nums):
-        heapList = [0] + nums
-        size = len(nums)
-        i = size // 2
-        while i >= 1:
-            heapList = self.percDown(i, size, heapList)
-            # print(heapList)
-            i -= 1
-        return heapList
-
-    def percDown(self, i, size, heapList):
-        while i * 2 <= size:
-            mc = self.maxChild(i, size, heapList)
-            if heapList[i] < heapList[mc]:
-                heapList[i], heapList[mc] = heapList[mc], heapList[i]
-                i = mc
-            else:
-                break
-        return heapList
-
-    def maxChild(self, i, size, heapList):
-        if i * 2 + 1 > size:
-            return i * 2
-        else:
-            if heapList[i * 2] >= heapList[i * 2 + 1]:
-                return i * 2
-            else:
-                return i * 2 + 1
-
-    def delMax(self, heapList):
-        heapList[1] = heapList[-1]
-        heapList.pop()
-        size = len(heapList) - 1
-        heapList = self.percDown(1, size, heapList)
-        return heapList
-
-# 基于最小堆
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        heap = [0]
-        for i in range(k):
-            heap.append(nums[i])
-            heap = self.up(heap, len(heap)-1)
-        # print(heap)
-        for i in range(k, len(nums)):
-            if nums[i] > heap[1]:
-                heap[1] = nums[i]
-                heap = self.down(heap, 1)
-            # print(heap)
-        return heap[1]
-
-    def up(self, heap, i):
-        while i > 1:
-            if heap[i] < heap[i // 2]:
-                heap[i], heap[i // 2] = heap[i // 2], heap[i]
-                i = i // 2
-            else:
-                break
-        return heap
-
-    def down(self, heap, i):
-        while i * 2 < len(heap):
-            mc = self.minChild(heap, i)
-            if heap[i] > heap[mc]:
-                heap[i], heap[mc] = heap[mc], heap[i]
-                i = mc
-            else:
-                break
-        return heap
-
-    def minChild(self, heap, i):
-        if i * 2 + 1 > len(heap) - 1:
-            return i * 2
-        else:
-            if heap[i * 2] <= heap[i * 2 + 1]:
-                return i * 2
-            else:
-                return i * 2 + 1
-
+输入: [3,2,1,5,6,4] 和 k = 2
+[1, 3, 2]
+[2, 3, 5]
+[3, 5, 6]
+[4, 6, 5]
 ```
 
 ```py
