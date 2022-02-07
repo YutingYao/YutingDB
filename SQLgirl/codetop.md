@@ -208,13 +208,13 @@ https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
 ```py
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
-        """使用小顶堆"""
         q = []
-        for c in nums:
-            heapq.heappush(q, c)
-            while len(q) > k:
+        for num in nums:
+            heapq.heappush(q,num)
+            if len(q) > k:
                 heapq.heappop(q)
         return heapq.heappop(q)
+
 输入: [3,2,1,5,6,4] 和 k = 2
 [1, 3, 2]
 [2, 3, 5]
@@ -230,116 +230,10 @@ class Solution:
 
 ## 25. K 个一组翻转链表（add）
 
-```py
-class Solution:
-    # 翻转一个子链表，并且返回新的头与尾
-    def reverse(self, head: ListNode, tail: ListNode):
-        prev = tail.next
-        p = head
-        while prev != tail:
-            nex = p.next
-            p.next = prev
-            prev = p
-            p = nex
-        return tail, head
-
-    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
-        hair = ListNode(0)
-        hair.next = head
-        pre = hair
-
-        while head:
-            tail = pre
-            # 查看剩余部分长度是否大于等于 k
-            for i in range(k):
-                tail = tail.next
-                if not tail:
-                    return hair.next
-            nex = tail.next
-            head, tail = self.reverse(head, tail)
-            # 把子链表重新接回原链表
-            pre.next = head
-            tail.next = nex
-            pre = tail
-            head = tail.next
-        
-        return hair.next
-```
-
-```py
-栈
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
-        dummy = ListNode(0)
-        p = dummy
-        while True:
-            count = k 
-            stack = []
-            tmp = head
-            while count and tmp:
-                stack.append(tmp)
-                tmp = tmp.next
-                count -= 1
-            # 注意,目前tmp所在k+1位置
-            # 说明剩下的链表不够k个,跳出循环
-            if count : 
-                p.next = head
-                break
-            # 翻转操作
-            while stack:
-                p.next = stack.pop()
-                p = p.next
-            #与剩下链表连接起来 
-            p.next = tmp
-            head = tmp
-        
-        return dummy.next
-```
-
-```py
-尾插法
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
-        dummy = ListNode(0)
-        dummy.next = head
-        pre = dummy
-        tail = dummy
-        while True:
-            count = k
-            while count and tail:
-                count -= 1
-                tail = tail.next
-            if not tail: break
-            head = pre.next
-            while pre.next != tail:
-                cur = pre.next # 获取下一个元素
-                # pre与cur.next连接起来,此时cur(孤单)掉了出来
-                pre.next = cur.next 
-                cur.next = tail.next # 和剩余的链表连接起来
-                tail.next = cur #插在tail后面
-            # 改变 pre tail 的值
-            pre = head 
-            tail = head
-        return dummy.next
-```
+https://leetcode-cn.com/problems/reverse-nodes-in-k-group/solution/dong-hua-yan-shi-di-gui-25-kge-yi-zu-fan-y6hv/
 
 ```py
 递归
-
-python
-
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -347,131 +241,45 @@ python
 #         self.next = None
 
 class Solution:
-    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         cur = head
-        count = 0
-        while cur and count!= k:
+        cnt = 0
+        while cur and cnt != k:
             cur = cur.next
-            count += 1
-        if count == k:
-            cur = self.reverseKGroup(cur, k)
-            while count:
-                tmp = head.next
+            cnt += 1
+        if cnt == k:
+            cur = self.reverseKGroup(cur,k)
+            while cnt:
+                headnxt = head.next
                 head.next = cur
                 cur = head
-                head = tmp
-                count -= 1
-            head = cur   
+                head = headnxt
+                cnt -= 1
+            head = cur
         return head
-```
 
-```py
-方法一：递归
 
-结合了24题两两交换链表中的节点和206题反转链表
-
-首先判断是否可以反转，如果不行说明链表到头了，返回head
-
-然后得到该段反转后连接到的那个节点temp，和head一起反转链表
-
-class Solution:
-    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        if k == 1:    #处理特殊情况
-            return head
-
-        L, R = head, head   #R判断是否可以翻转，L为实际操作的节点
-
-        #递归终止的条件为节点数量达不到k的时候
-        for _ in range(k - 1):
-            if R == None or R.next == None:
-                return head
-            R = R.next
-            
-        temp = self.reverseKGroup(R.next, k)  #往后遍历，得到该段反转后需要连接到的下一个节点
-
-        #反转链表
-        for _ in range(k):
-            temp2 = L.next
-            L.next = temp
-            temp = L
-            L = temp2
-        return R  #返回该段最后一个节点，作为上一段的连接点
-方法二：迭代
-
-将节点进行分组，在遍历某一组时，先看该组是否可以翻转，如果不行则直接返回ans
-
-如果可以翻转，那就需要确定翻转后连接到下一组的哪个点。再看下一组能否翻转，存在两个情况：
-
-下一组也可以翻转，则连接点为下一组的最后一个
-
-下一组不能翻转，则连接点为下一组的第一个
-
-然后开始翻转链表即可
-
-为了返回答案，需要在遍历第一次的时候让翻转后的头结点等于ans
-
-class Solution:
-    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        if k == 1: 
-            return head
-        
-        cur = head
-        times = 0   #在第一次遍历时确定头节点
-
-        while True:
-            times += 1
-            t = cur
-            goOn = True
-
-            #首先判断当前这一组节点是否可以翻转
-            for _ in range(k - 1):                
-                t = t.next
-                if t == None:
-                    goOn = False 
-            if not goOn:
-                break
-
-            if times == 1:  #确定好返回值开始的节点
-                ans = t 
-            
-            #然后根据下一组节点来判断当前节点翻转后连接到哪个节点
-            #如果没有break，则下一组节点可以翻转，连接点为下一组节点的最后一个节点
-            pre = t.next
-            for _ in range(k - 1):
-                if pre == None or pre.next == None:  #下一组节点无法翻转，连接点为下一组节点的第一个节点
-                    pre = t.next
-                    goOn = False
-                    break
-                pre = pre.next
-            
-            
-            #翻转当前这一组节点
-            for _ in range(k):
-                temp = cur.next
-                cur.next = pre
-                pre = cur
-                cur = temp
-
-            if not goOn:
-                break
-
-        return ans
 ```
 
 ## 912 补充题4. 手撕快速排序（add）
+
+https://leetcode-cn.com/problems/sort-an-array/submissions/
+
+快速排序:
 
 ```py
 class Solution:
     def randomized_partition(self, nums, l, r):
         pivot = random.randint(l, r)
+        # 先把 nums[pivot] 靠边站
         nums[pivot], nums[r] = nums[r], nums[pivot]
         i = l - 1
         for j in range(l, r):
-            if nums[j] < nums[r]:
+            if nums[j] < nums[r]: # nums[r] 就是 pivot
                 i += 1
-                nums[j], nums[i] = nums[i], nums[j]
+                nums[j], nums[i] = nums[i], nums[j] # nums[i] 存的都是较小的数字
         i += 1
-        nums[i], nums[r] = nums[r], nums[i]
+        nums[i], nums[r] = nums[r], nums[i] # pivot 放到中间
         return i
 
     def randomized_quicksort(self, nums, l, r):
@@ -485,47 +293,45 @@ class Solution:
         self.randomized_quicksort(nums, 0, len(nums) - 1)
         return nums
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/sort-an-array/solution/pai-xu-shu-zu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+时间复杂度：O(n log(n))
+空间复杂度：O(log n) ~ O(n)
 ```
+
+堆排序:
 
 ```py
 class Solution:
     def max_heapify(self, heap, root, heap_len):
         p = root
-        while p * 2 + 1 < heap_len:
-            l, r = p * 2 + 1, p * 2 + 2
-            if heap_len <= r or heap[r] < heap[l]:
-                nex = l
+        while p * 2 + 2 <= heap_len:
+            l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
+            if r < heap_len and heap[l] < heap[r]:
+                bigger = r
             else:
-                nex = r
-            if heap[p] < heap[nex]:
-                heap[p], heap[nex] = heap[nex], heap[p]
-                p = nex
+                bigger = l
+            if heap[p] < heap[bigger]:
+                heap[p], heap[bigger] = heap[bigger], heap[p]
+                p = bigger
             else:
                 break
         
-    def build_heap(self, heap):
-        for i in range(len(heap) - 1, -1, -1):
-            self.max_heapify(heap, i, len(heap))
-
-    def heap_sort(self, nums):
-        self.build_heap(nums)
+    def sortArray(self, nums: List[int]) -> List[int]:
+        # 时间复杂度O(N)
         for i in range(len(nums) - 1, -1, -1):
+            self.max_heapify(nums, i, len(nums))
+            
+        # 时间复杂度O(N logN)
+        for i in range(len(nums) - 1, -1, -1):
+            # 把最大的元素放到末尾
             nums[i], nums[0] = nums[0], nums[i]
             self.max_heapify(nums, 0, i)
-            
-    def sortArray(self, nums: List[int]) -> List[int]:
-        self.heap_sort(nums)
         return nums
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/sort-an-array/solution/pai-xu-shu-zu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+时间复杂度：O(n log(n))
+空间复杂度：O(1)
 ```
+
+归并排序:
 
 ```py
 class Solution:
@@ -533,27 +339,28 @@ class Solution:
         if l == r:
             return
         mid = (l + r) // 2
+        # 先把子序列排序完成
         self.merge_sort(nums, l, mid)
         self.merge_sort(nums, mid + 1, r)
         tmp = []
-        i, j = l, mid + 1
+        i, j = l, mid + 1   # i, j 是两个起始点
         while i <= mid or j <= r:
-            if i > mid or (j <= r and nums[j] < nums[i]):
+            # 如果 前半部部分结束了，或者后半部分没有结束
+            if i > mid or (j <= r and nums[j] < nums[i]): # 因为前面是or，所以这里必须是对i进行约束
                 tmp.append(nums[j])
                 j += 1
             else:
                 tmp.append(nums[i])
                 i += 1
+
         nums[l: r + 1] = tmp
 
     def sortArray(self, nums: List[int]) -> List[int]:
         self.merge_sort(nums, 0, len(nums) - 1)
         return nums
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/sort-an-array/solution/pai-xu-shu-zu-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+时间复杂度：O(n log(n))
+空间复杂度：O(n)
 ```
 
 ```py
@@ -573,6 +380,7 @@ class Solution:
 
 ## 15. 三数之和
 
+https://leetcode-cn.com/problems/3sum/
 
 [花花酱](https://www.bilibili.com/video/BV1wp4y1W72o?spm_id_from=333.999.0.0)
 
@@ -607,7 +415,7 @@ class Solution:
             # 这样可能直接跳过了[-1,-1,2,3]的前三个
             # 这个写法是正确的↓：
             if i - 1 >= 0 and nums[i] == nums[i-1]: continue
-            if nums[i] + nums[n-2] + nums[n-1] < 0:continue
+            if nums[i] + nums[n-2] + nums[n-1] < 0: continue
             # 双指针部分：
             left = i + 1
             right = n - 1
@@ -629,43 +437,6 @@ class Solution:
 ```
 
 ```scala
-/**
-* chosen solution
-* 1. two pointer in twoSum
-* 2. result storing in hashSet to avoid duplicate pairs
-* time complexity: O(N^2)
-* space complexity: O(N): due to sorted list 
-*/
-object Solution0 {
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-    val l = nums.sorted
-    l.indices.foldLeft(Set[List[Int]]()) {
-          /* only send value less than zero and those num which was duplicated only once into twoSum */
-      case (ans, idx) if l(idx) <= 0 && (idx == 0 || (idx >= 1 && l(idx) != l(idx - 1))) =>
-        twoSum(-l(idx), l, idx + 1, ans)
-      case (set, _) => set
-
-    }.toList
-
-  }
-
-  def twoSum(target: Int, nums: Array[Int], from: Int, ans: Set[List[Int]]): Set[List[Int]] = {
-
-    @annotation.tailrec
-    def loop(i: Int, j: Int, ans: Set[List[Int]]): Set[List[Int]] = {
-
-      if(i < j) {
-        val sum = nums(i) + nums(j)
-        if(sum > target) loop(i, j - 1, ans)
-        else if(sum < target) loop(i + 1, j, ans)
-        else loop(i + 1, j - 1, ans + List(-target, nums(i), nums(j)))
-      }else {
-        ans
-      }
-    }
-    loop(from, nums.length - 1, ans)
-  }
-}
 /**
 * my first commit
 * hashset in twoSum
@@ -702,171 +473,12 @@ object Solution1 {
 
 }
 
-/**
-* hashset in twoSum
-* sorted nums and not to run duplicate num twice into twoSum
-* O(N^2)
-*/
-object Solution1-2 {
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-   
-    val l = nums.sorted
-    val ret = for((value, index) <- l.zipWithIndex; if index >= 1 && l(index) != l(index - 1)) yield  {
-      val ll = l.toBuffer
-      ll.remove(index)
-      twoSum(ll.toArray, -value).filter(_.nonEmpty).map(_ :+ value)
-    }
 
-    l.slice(0, 3) match {
-      case Array(0, 0, 0 ) =>  ret.flatten.map(l => (l.toSet, l)).toMap.values.toList :+ List(0, 0, 0) // edge case (0, 0, 0)
-      case _ => ret.flatten.map(l => (l.toSet, l)).toMap.values.toList
-    }
-
-  }
-
-  def twoSum(nums: Array[Int], target: Int): List[List[Int]] = {
-    val value2Idx = nums.zipWithIndex.toMap
-    nums.zipWithIndex.collect {
-      case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
-
-        List(value, target - value)
-    }.map(l => (l.toSet, l)).toMap.values.toList
-  }
-
-/**
-* improvement:
-*   1. only call twoSum when  l(idx) under zero,  because the array was sorted, there won't be any chance the next entries sum to 0.
-*   2. only send the remaining nums which were after idx into twoSum
-* O(N^2)
-*/
-
-  object Solution1-3 {
-    def threeSum(nums: Array[Int]): List[List[Int]] = {
-        val l = nums.sorted
-        l.indices.foldLeft(collection.mutable.ListBuffer.empty[List[Int]]){
-        case (r, idx) if l(idx) <=0 && (idx == 0 || (idx > 0 && l(idx) != l(idx-1))) =>
-            r ++= twoSum(l.slice(idx + 1, l.length), -l(idx)).map(_ :+ l(idx))
-        case (r, idx)  => r
-
-        }.toList
-        
-    }
-
-    def twoSum(nums: Array[Int], target: Int): List[List[Int]] = {
-
-        val value2Idx = nums.zipWithIndex.toMap
-        nums.zipWithIndex.collect {
-        case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
-            List(value, target - value)
-        }.map(l => (l.toSet, l)).toMap.values.toList
-    }
-  
-}
-
-
-/**
-*  Using a hashset to erase duplicate in twoSum
-*/
-object Solution1-3-2 {
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-    val l = nums.sorted
-    l.indices.foldLeft(collection.mutable.ListBuffer.empty[List[Int]]){
-      case (r, idx) if l(idx) <=0 && (idx == 0 || (idx > 0 && l(idx) != l(idx-1))) =>
-        r ++= twoSum(l.slice(idx + 1, l.length), -l(idx))
-      case (r, idx)  => r
-
-    }.toList
-
-  }
-
-  def twoSum(nums: Array[Int], target: Int): List[List[Int]] = {
-
-    val value2Idx = nums.zipWithIndex.toMap
-    nums.zipWithIndex.foldLeft(Set[List[Int]]()) {
-      case (s, (value, index)) if value2Idx.get(target - value).exists(_ != index) =>
-        val t_sub_v = target - value
-        if(index < value2Idx(t_sub_v)) {
-          s + List(-target, value, t_sub_v)
-        } else {
-          s + List(-target, t_sub_v, value)
-        }
-      case (s, _) => s
-
-    }.toList
-  }
-}
-/**
-* more readable and simpler
-*/
-object Solution1-3-3 {
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-    val l = nums.sorted
-
-    l.zipWithIndex.foldLeft(Set[List[Int]]()) {
-      /* only send value less than zero and those num which was duplicated only once into twoSum */
-      case (set, (v, idx)) if v <=0 && (idx == 0 || (idx > 0 && l(idx) != l(idx - 1)))  =>
-        set ++ twoSum(-v, l.slice(idx + 1, l.length))
-      case (set, _) => set
-    }.toList
-
-  }
-
-  def twoSum(target: Int, nums: Array[Int]): List[List[Int]] = {
-    val map = nums.zipWithIndex.toMap
-    nums.zipWithIndex.foldLeft(Set[List[Int]]()){
-      case (set, (n, idx)) =>
-        val n2 = target - n
-        map.get(n2) match {
-          case Some(e) if e != idx =>
-            /* using  n n2 order to help hashset to eliminate duplicate */
-            if(n < n2)
-              set + List(-target, n, n2)
-            else
-              set + List(-target, n2, n)
-          case _ => set
-        }
-    }.toList
-  }
-}
-
-/**
-* two pointer in twoSum
-* time complexity: O(N^2)
-* space complexity: O(N): due to sorted list 
-*/
-
-object Solution2 {
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-    val l = nums.sorted
-    l.indices.foldLeft(Set[List[Int]]()) {
-      case (ans, idx) if l(idx) <= 0 && (idx == 0 || (idx >= 1 && l(idx) != l(idx - 1))) =>
-        twoSum(-l(idx), l, idx + 1, ans)
-      case (set, _) => set
-
-    }.toList
-
-  }
-
-  def twoSum(target: Int, nums: Array[Int], from: Int, ans: Set[List[Int]]): Set[List[Int]] = {
-
-    @annotation.tailrec
-    def loop(i: Int, j: Int, ans: Set[List[Int]]): Set[List[Int]] = {
-
-      if(i < j) {
-        val sum = nums(i) + nums(j)
-        if(sum > target) loop(i, j - 1, ans)
-        else if(sum < target) loop(i + 1, j, ans)
-        else loop(i + 1, j - 1, ans + List(-target, nums(i), nums(j)))
-      }else {
-        ans
-      }
-    }
-    loop(from, nums.length - 1, ans)
-  }
-}
 ```
 
 ## 53. 最大子序和53-【贪心🧡】Maximum subarray
+
+https://leetcode-cn.com/problems/maximum-subarray/
 
 [哈哈哈](https://www.bilibili.com/video/BV1QJ411R75H?spm_id_from=333.999.0.0)
 
@@ -896,242 +508,14 @@ class Solution:
 ```scala
 object Solution {
     def maxSubArray(nums: Array[Int]): Int = {
-        
-        // IDEA:
-        // Go through the whole Array,
-        // and change each element into the possible maximum sum of the subarray ENDING at its index 
-        
-        // During each iteration, the element at i-th index will be updated into the possible maximum sum of subarray ENDING at i-th index
-        // then for (i+1)th index, if updated i-th value is positive, it can be used to update (i+1)th value as well.
-        
         for (i <- Range(1, nums.length)) {
             if (nums(i-1) > 0) {
                 nums(i) += nums(i-1)
             }
         }
-        
         nums.max
     }
 }
-```
-
-```scala
-/**
-* chosen solution
-* dynamic programming
-*    dp[i] defined as the sum of subarray that ending with ith element and must contains i-th element number   *
-* actually, we don't need storing all previous status of nums.length
-* we just need two status: one for maximum so far, the other one for the maximum accumulated value which containing with nums[i]
-*
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-object Solution0{
-    def maxSubArray(nums: Array[Int]): Int = {
-        if (nums == null || nums.isEmpty) return 0
-        var maxSoFar = nums(0)
-        var maxEndingHere = nums(0)
-
-        for(i <- 1 until nums.length) {
-           maxEndingHere = (maxEndingHere +  nums(i))  max nums(i)
-           maxSoFar = maxEndingHere max  maxSoFar
-        }
-        maxSoFar
-        
-    }
-}
-
-/**
-* my first commit version
-* time complexity: O(N^2)
-* space complexity: O(N)
-*/
-
-object Solution1 {
-    def maxSubArray(nums: Array[Int]): Int = {
-     
-        (1 to nums.length).map(n => _maxSubArray(nums, nums(n - 1), n)).max
-        
-    }
-    
-    def _maxSubArray(nums: Array[Int], preSum: Int, currentIdx: Int): Int = {
-        if(nums.length == currentIdx) return preSum
-        
-        val currentSum = preSum + nums(currentIdx)
-        val nexLevelSum = _maxSubArray(nums, currentSum, currentIdx + 1)
-        preSum max currentSum max nexLevelSum
-    }
-    
-}
-
-/**
-* dynamic programming
-* memo:
-*    1. dp[i] defined as the sum of subarray that ending with ith element and must contains i-th element number   
-* time complexity: O(N)
-* space complexity: O(N)  due to dp array
-*/
-
-object Solution2 {
-    def maxSubArray(nums: Array[Int]): Int = {
-        if(nums == null || nums.isEmpty) return 0
-        val dp = Array.ofDim[Int](nums.length, 2)  // dp(0) ... dp(i) storing each status corresponding to  nums' index, means max subarray sum ending with nums[i]
-        dp(0)(0) = nums(0)  // dim0: accumulate calculator which reset while new element is larger value inside,
-        dp(0)(1) = nums(0) // dim1: maximum so far
-        
-        for(i <- 1 until nums.length) {
-            
-            dp(i)(0) = (dp(i - 1)(0) + nums(i))  max nums(i)
-            dp(i)(1) = dp(i)(0) max dp(i - 1)(1) 
-        }
-        dp.last.last
-    }
-}
-
-/**
-* dynamic programming
-* memo
-*   1. one dimension array
-* time complexity O(N)
-* space complexity O(N)
-*/
-object Solution2-1 {
-    def maxSubArray(nums: Array[Int]): Int = {
-      val dp  = Array.ofDim[Int](nums.length)
-      dp(0) = nums(0)
-      for (i <- 1 until nums.size) {
-        dp(i) = nums(i) max (nums(i) + dp(i - 1))
-      }
-      
-      dp.max
-    }
-}
-
-/**
-* dynamic programming
-* actually, we don't need storing all previous status of nums.length
-* we just need two status: one for maximum so far, the other one for the maximum accumulated value which containing with nums[i]
-*
-* time complexity: O(N)
-* space complexity: O(1)
-*/
-
-object Solution2-2 {
-    def maxSubArray(nums: Array[Int]): Int = {
-        if (nums == null || nums.isEmpty) return 0
-        var maxSoFar = nums(0)
-        var maxEndingHere = nums(0)
-
-        for(i <- 1 until nums.length) {
-           maxEndingHere = (maxEndingHere +  nums(i))  max nums(i)
-           maxSoFar = maxEndingHere max  maxSoFar
-        }
-        maxSoFar
-        
-    }
-}
-/**
-*  functional programming: foldLeft
-*/
-object Solution2-3 {
-    def maxSubArray(nums: Array[Int]): Int = {
-      if(nums == null || nums.isEmpty) return 0
-      (1 until nums.length).foldLeft((nums(0), nums(0))){
-          case ((maxEndingI, maxSofar), i) => 
-            val maxEndingT = nums(i) max (nums(i) + maxEndingI)
-            (maxEndingT, maxSofar max maxEndingT )
-      }._2
-    }
-}
-```
-
-```scala
-object Solution {
-    def maxSubArray(nums: Array[Int]): Int = {
-        if(nums.length == 1){
-            nums(0)
-        }else{
-            var sum = nums(0)
-            var max = nums(0)
-            var i = 1
-            while (i < nums.length){
-                val elem = nums(i)
-                sum = sum + elem
-                if(sum > max){
-                    max = sum
-                    i += 1
-                }else if(sum < elem){
-                    sum = elem
-                    i += 1
-                }else{
-                    i += 1
-                }
-                
-                if(elem > max){
-                    max = elem
-                    sum = elem
-                }
-            }
-            max
-        }
-    }
-}
-
-```
-
-```scala
-package com.zhourui.leetcode
-
-import scala.math.{abs, max}
-import com.zhourui.codech.BaseExtension
-
-package lc0053_maxsubarr {
-
-
-
-
-  object Solution {
-    def maxSubArray(nums: Array[Int]): Int = {
-      var maxsum:Int=Int.MinValue
-      nums.foldLeft(0) {
-        case (a,b) => { // 第一次进入时,a=0
-          val cursum = max(a+b,b)
-          maxsum = max(maxsum, cursum)
-          cursum
-        }
-      }
-      return maxsum
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      val arr = Array(-2, 1, -3, 4, -1, 2, 1, -5,4)
-      println(Solution.maxSubArray(arr) == 6)
-
-    }
-    val name = "053 max sub array"
-  }
-}
-
-
-
-/*
-[-2,1,-3,4,-1,2,1,-5,4]
-class Solution {
-public:
-    int maxSubArray(vector<int>& nums) {
-        int cursum = nums[0];
-        int maxsum = cursum;
-
-        for (int i=1;i<nums.size();i++) {
-            cursum = max(cursum+nums[i],nums[i]);
-            maxsum = max(maxsum, cursum);
-        }
-        return maxsum;
-    }
-};
- */
 ```
 
 ## 1. 两数之和
@@ -1181,40 +565,6 @@ class Solution:
 ```
 
 ```scala
-object Solution {
-    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-        val nums_map = scala.collection.mutable.HashMap[Int, Int]()
-        var result: Array[Int] = Array(0,0)
-        var i = 0
-        while(result.sum == 0) {
-            val complement = target - nums(i)
-            if (nums_map.contains(complement)) {
-                result(0) = i
-                result(1) = nums_map(complement)
-            } else {
-                nums_map(nums(i)) = i
-            }
-            i += 1
-        }
-        result     
-    }
-}
-
-
-
-// Brute-force method, which takes more than two times of running time than the method above
-object Solution {
-    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-        
-        val result = for {i <- 0 until (nums.length - 1);
-            j <- (i+1) until nums.length
-            if nums(i) + nums(j) == target} yield Array(i, j)
-        
-        result(0)
-        
-    }
-}
-
 /**
 * chosen solution
 * time complexity: O(N)
@@ -1228,28 +578,6 @@ object Solution0 {
       case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
         Array(index, value2Idx(target - value))
     }.get
-  }
-}
-
-/**
-* HashTable
-* time complexity: O(N)
-*/
-
-object Solution1 {
-  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-    val value2Idx = nums.zipWithIndex.toMap
-    val ret = collection.mutable.ArrayBuffer[Int]()
-
-    for ((n, idx) <- nums.zipWithIndex; if ret.length < 2) {
-      val v2 = target - n
-      value2Idx.get(v2) match {
-        case Some(v2Idx) if v2Idx != idx =>
-          ret ++= Array(idx, v2Idx)
-        case _ =>
-      }
-    }
-    ret.toArray
   }
 }
 
@@ -1270,52 +598,9 @@ object Solution1-2 {
 }
 ```
 
-```scala
-object leetcode01_two_sum extends App {
-  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-    val sorted = nums.zipWithIndex.sortWith(_._1 < _._1)
-    var left = 0
-    var right = sorted.length - 1
-    while(left < right) {
-      val cal = sorted(left)._1 + sorted(right)._1
-      if(cal > target) {
-        right = right - 1
-      } else if (cal < target) {
-        left = left + 1
-      } else {
-        return Array(sorted(left)._2, sorted(right)._2)
-      }
-    }
-    return Array.emptyIntArray
-  }
-
-  twoSum(Array(3,2,4), 6)
-}
-
-
-object Solution {
-    def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-        var map = Map.empty[Int, Int]
-        var result = Array.empty[Int]
-        (0 until nums.length) foreach { i =>
-            val v = nums(i)
-            map.get(target - v) match {
-                case Some(x)  =>
-                    if (x != i){
-                    result = Array(x, i)
-                    }
-                case _ => map += v -> i
-            }
-        }
-        result
-    }
-}
-
-```
-
-
 ## 21. 合并两个有序链表
 
+https://leetcode-cn.com/problems/merge-two-sorted-lists/
 
 [哈哈哈](https://www.bilibili.com/video/BV1rJ41127ry?spm_id_from=333.999.0.0)
 
@@ -1378,42 +663,6 @@ class Solution:
 
 ```scala
 /**
-* chosen solution
-* time complexity: O(N + M), N is the length of l1, M is the length of l2
-*/
-
-object Solution0 {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-        val headNode = new ListNode(-1, null)
-        var cur = headNode
-        
-        var no1 = l1;
-        var no2 = l2;
-        
-        while(no1 != null && no2 != null) {
-            if (no1.x >= no2.x){
-                
-                cur.next = no2
-                no2 = no2.next
-            }else {
-                cur.next = no1
-                no1 = no1.next
-            }
-            cur = cur.next
-        }
-        (no1, no2) match {
-            case (_, null) => cur.next = no1
-            case (null, _) => cur.next = no2
-            case _ => throw new RuntimeException()
-        }
-        
-        headNode.next
-    }
-}
-
-
-
-/**
 * iterative version
 * time complexity: O(N + M), N is the length of l1, M is the length of l2
 */
@@ -1468,61 +717,7 @@ object Solution1-2 {
         }
     }
 }
-```
 
-```scala
-/**
- * Definition for singly-linked list.
- * class ListNode(_x: Int = 0, _next: ListNode = null) {
- *   var next: ListNode = _next
- *   var x: Int = _x
- * }
- */
-object Solution {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-        if(l1 == null){
-            l2
-        } else if(l2 == null){
-            l1
-        }else{
-            var (ll1, ll2) = (l1, l2)
-            var firstNext = if(ll1.x < ll2.x) ll1 else ll2
-            var head = ListNode(0, firstNext)
-            var curr = head
-            
-            
-            while(ll1 != null && ll2 != null){
-                if(ll1.x < ll2.x){
-                    curr.next = ll1
-                    curr = ll1
-                    ll1 = ll1.next
-                } else{
-                    curr.next = ll2
-                    curr = ll2
-                    ll2 = ll2.next
-                }
-            }
-            
-            if(ll1 == null){
-                curr.next = ll2
-            }else{
-                curr.next = ll1
-            }
-            
-            head.next
-        }
-    }
-}
-
-
-//Alternate & Simpler solution
-/**
- * Definition for singly-linked list.
- * class ListNode(_x: Int = 0, _next: ListNode = null) {
- *   var next: ListNode = _next
- *   var x: Int = _x
- * }
- */
 object Solution {
     def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
     if(l1 == null) return l2
@@ -1536,6 +731,533 @@ object Solution {
       l2
     }
   }
+}
+
+```
+
+## 141-Linked List Cycle
+
+https://leetcode-cn.com/problems/linked-list-cycle/
+
+[哈哈哈](https://www.bilibili.com/video/BV1g7411a7ta?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411H7XP?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1KX4y157vh?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1PA411b7gq?spm_id_from=333.999.0.0)
+
+```py
+方法一：集合 如果发现节点已在集合内则说明存在环
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        visited = set()
+        while head:
+            visited.add(head)
+            head = head.next
+            if head in visited:
+                return True
+        return False
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        visited = set()
+        while head:
+            if head in visited:
+                return True
+            visited.add(head)
+            head = head.next
+        return False
+
+感觉初始时把快慢指针都指向 head 反而更简洁：
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        fast = slow = head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
+        
+```
+
+
+```scala
+object Solution1 {
+    def hasCycle(head: ListNode): Boolean = {
+        
+        var cur = head
+        val visited = new scala.collection.mutable.HashSet[ListNode]()
+        
+        var res: Boolean = false
+        while (cur != null && res != true) {
+
+            if(visited.contains(cur))  
+                res = true
+            else {
+                visited += cur
+                cur = cur.next
+            }
+        }
+        res
+    }
+}
+
+
+object Solution3 {
+    def hasCycle(head: ListNode): Boolean = {
+        var fast = head
+        var slow = head
+        
+        
+        var result = false
+        while (fast != null && fast.next != null && result != true) {
+            fast = fast.next.next
+            slow = slow.next
+        
+            if(fast == slow) result = true
+        }
+        result
+    }
+}
+
+object Solution {
+    def hasCycle(head: ListNode): Boolean = {
+        
+        if(head == null){
+            false
+        }else{
+        
+        var slow = head
+        var fast = head.next
+        var output = true
+        
+        import scala.util.control.Breaks._
+        breakable{
+            while(slow != fast){
+                if(fast == null || fast.next == null){
+                    output=false
+                    break
+                }
+                slow = slow.next
+                fast = fast.next.next
+            }
+        }
+        output
+    }
+    }
+}
+
+/**
+* two pointer - tail recursive
+*/
+object Solution {
+    def hasCycle(head: ListNode): Boolean = {
+        if(head != null && head.next != null) 
+            _hasCycle(head.next.next, head.next)
+        else false
+    }
+    
+    @annotation.tailrec
+    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
+        if(fast == null || fast.next == null || slow == null) return false
+        else if(fast == slow) return true
+        else _hasCycle(fast.next.next, slow.next)
+    }
+}
+//Alternate solution: Slow & Fast pointer
+```
+
+
+## 102-Binary Tree Level Order Traversal
+
+https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
+
+[哈哈哈](https://www.bilibili.com/video/BV1W54y197Lc?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV14T4y1u7Wk?spm_id_from=333.999.0.0)
+
+> python queue
+
+```py
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        queue = [root]
+        res = []
+        while queue:
+            level = []
+            for _ in range(len(queue)): # 当前层的个数!!!
+                node=queue.pop(0)
+                level.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(level)
+        return res
+
+
+from collections import deque
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        
+        if not root:
+            return []
+
+        queue = deque([root]) 
+        res = []
+        
+        while queue: 
+            level = [] 
+            for _ in range(len(queue)): 
+                node = queue.popleft() 
+                level.append(node.val) 
+                if node.left:
+                    queue.append(node.left) 
+                if node.right:
+                    queue.append(node.right) 
+            res.append(level) 
+        return res
+```
+
+
+> python 递归
+
+
+```py
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        res = []
+
+        def bfs(node, level):
+            if node: 
+                if len(res) < level + 1:
+                    res.append([])
+                res[level].append(node.val)
+                bfs(node.left, level+1)
+                bfs(node.right, level+1)
+
+        bfs(root, 0)
+        return res
+
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        dic = collections.defaultdict(list)
+
+        def bfs(node, level):
+            if node:
+                dic[level].append(node.val)
+                bfs(node.left, level + 1)
+                bfs(node.right, level + 1)
+
+        bfs(root, 0) 
+        return [*dic.values()]
+```
+
+> scala queue
+
+```scala
+object Solution {
+    def levelOrder(root: TreeNode): List[List[Int]] = {
+        val buffer =  scala.collection.mutable.Queue[TreeNode]()
+        val res =  scala.collection.mutable.ListBuffer[List[Int]]()
+
+        if(root == null) return List[List[Int]]()
+        buffer.enqueue(root)
+	
+        while(buffer.nonEmpty) {
+          val cur = scala.collection.mutable.ListBuffer[Int]()
+          for ( _ <- 0 until buffer.size) {
+            val node = buffer.dequeue
+            cur.append(node.value)
+            if(node.left != null) buffer.enqueue(node.left)
+            if(node.right != null) buffer.enqueue(node.right)
+        }
+        res += cur.toList
+        }
+        res.toList
+    }
+}
+```
+
+> scala 递归
+
+```scala
+object Solution {
+    def levelOrder(root: TreeNode): List[List[Int]] = {
+        val oderMap = scala.collection.mutable.Map[Int, List[Int]]()
+        bfs(root, 1, oderMap)
+        oderMap.values.toList
+    }
+    def bfs(node: TreeNode, level: Int, map: scala.collection.mutable.Map[Int, List[Int]]): Unit = {
+        if (node != null) {
+            val l = map.get(level)
+                .map(_ :+ node.value)
+                .getOrElse(List(node.value))
+
+            map(level) = l
+            bfs(node.left, level + 1, map)
+            bfs(node.right, level + 1, map)
+        }
+    }
+}
+```
+
+```scala
+object Solution {
+    def levelOrder(root: TreeNode): List[List[Int]] = {
+        bfs(if(root == null) List() else List(root), List())
+    }
+
+    // @annotation.tailrec
+    // @annotation.tailrec 告诉编译器，下面这个函数是递归的，在栈桢的管理上，希望编译器能所有优化。
+    def bfs(queue: List[TreeNode], ans: List[List[Int]]): List[List[Int]] = {
+        if(queue.isEmpty) ans
+        else{
+        bfs(queue.flatMap(n => List(n.left, n.right)).filter(_ != null), ans :+ queue.map(n => n.value))
+        }
+    }
+}
+```
+
+## 121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
+
+https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
+
+[花花酱](https://www.bilibili.com/video/BV1oW411C7UB?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1cZ4y1K7HP?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1D7411s7A1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7by?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV16z4y1Z7jD?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1hA411t76C?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxprofit = 0
+        minprice = 1e9
+        for price in prices:
+            maxprofit = max(maxprofit,price - minprice)
+            minprice = min(minprice,price)
+        return maxprofit
+```
+
+```scala
+object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+        prices.foldLeft((Int.MaxValue, 0)){
+            case ((minPriceSoFar, maxProfit), price) => (minPriceSoFar min price, maxProfit max (price - minPriceSoFar))
+        }._2
+    }
+}
+```
+
+## 160-Intersection of Two Linked Lists
+
+https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
+
+[哈哈哈](https://www.bilibili.com/video/BV1n741187X6?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1eb411H7uq?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV18K4y1J7wx?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1np4y1y789?spm_id_from=333.999.0.0)
+
+```py
+## 1. 哈希表
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        listA = set()
+        while headA:
+            listA.add(headA)
+            headA = headA.next
+        while headB:
+            if headB in listA:
+                return headB
+            headB = headB.next
+        return None
+
+# > 时间复杂度 $O(M+N)$, 空间复杂度 $O(M)$
+
+## 2. 双指针
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if not headA or not headB:
+            return None
+        pa,pb = headA, headB
+        while pa != pb:
+            pa = pa.next if pa else headB
+            pb = pb.next if pb else headA
+        return pa
+
+# > 时间复杂度 $O(M+N)$, 空间复杂度 $O(1)$
+```
+
+```py
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        lengthA,lengthB = 0,0
+        curA,curB = headA,headB
+        while(curA!=None): #求链表A的长度
+            curA = curA.next
+            lengthA +=1
+        
+        while(curB!=None): #求链表B的长度
+            curB = curB.next
+            lengthB +=1
+        
+        curA, curB = headA, headB
+
+        if lengthB>lengthA: #让curA为最长链表的头，lenA为其长度
+            lengthA, lengthB = lengthB, lengthA
+            curA, curB = curB, curA
+
+        gap = lengthA - lengthB #求长度差
+        while(gap!=0): 
+            curA = curA.next #让curA和curB在同一起点上
+            gap -= 1
+        
+        while(curA!=None):
+            if curA == curB:
+                return curA
+            else:
+                curA = curA.next
+                curB = curB.next
+        return None
+```
+
+
+
+```scala
+/**
+ * Definition for singly-linked list.
+ * class ListNode(var _x: Int = 0) {
+ *   var next: ListNode = null
+ *   var x: Int = _x
+ * }
+ */
+
+object Solution {
+    
+    def getIntersectionNode(headA: ListNode, headB: ListNode): ListNode = {
+        var ha = headA
+        var hb = headB
+        
+        while(ha != hb){
+            if(ha == null){
+                ha = headB
+            }else{
+                ha = ha.next
+            }
+            
+            if(hb == null){
+                hb = headA
+            }else{
+                hb = hb.next
+            }
+        }
+        
+        ha
+    }
+}
+
+```
+
+## 88-Merge sorted array
+
+https://leetcode-cn.com/problems/merge-sorted-array/
+
+[哈哈哈](https://www.bilibili.com/video/BV14J411X7JE?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7bg?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1g54y1s7ZG?spm_id_from=333.999.0.0)
+
+直接合并后排序
+
+```py
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        # 三个指针
+        cur1 = m - 1
+        cur2 = n - 1
+        i = m + n -1
+        while cur1 >= 0 and cur2 >= 0:
+            if nums1[cur1] < nums2[cur2]:
+                nums1[i] = nums2[cur2]
+                cur2 -= 1
+            else:
+                nums1[i] = nums1[cur1]
+                cur1 -= 1
+            i -= 1
+        if cur2 >= 0:
+            nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        nums1[m:] = nums2
+        nums1.sort()
+```
+
+```scala
+object Solution {
+    def merge(nums1: Array[Int], m: Int, nums2: Array[Int], n: Int): Unit = {
+        var trail = m+n-1
+        
+        var t1 = m-1
+        var t2 = n-1
+        
+        while(t1 > -1 && t2 > -1){
+            val e1 = nums1(t1)
+            val e2 = nums2(t2)
+            
+            if(e1 > e2){
+                nums1(trail) = e1
+                t1 -= 1
+                trail -= 1
+            }else{
+                nums1(trail) = e2
+                t2 -= 1
+                trail -= 1
+            }
+        }
+        
+        if(t1 == -1){
+            while(t2 > -1){
+                nums1(trail) = nums2(t2)
+                t2 -= 1
+                trail -= 1
+            }
+        }else{
+            while(t1 > -1){
+                nums1(trail) = nums1(t1)
+                t1 -= 1
+                trail -= 1
+            }
+        }
+        
+    }
 }
 
 ```
