@@ -206,12 +206,15 @@ object Solution1 {
 https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
 
 ```py
+时间复杂度就是nlogn
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
         q = []
         for num in nums:
+            # n*log(k+1)
             heapq.heappush(q,num)
             if len(q) > k:
+                # n*log(k)
                 heapq.heappop(q)
         return heapq.heappop(q)
 
@@ -255,8 +258,8 @@ class Solution:
                 cur = head
                 head = headnxt
                 cnt -= 1
-            head = cur
-        return head
+            head = cur # 易错点: 这一步不能漏
+        return head # head 进来，head 返回
 
 
 ```
@@ -299,16 +302,23 @@ class Solution:
 
 堆排序:
 
+     0
+    / \
+   1   2
+  / \ / \
+ 3  4 5  6
+
 ```py
 class Solution:
     def max_heapify(self, heap, root, heap_len):
         p = root
-        while p * 2 + 2 <= heap_len:
+        while p * 2 + 2 <= heap_len: # 当不是叶子节点
             l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
             if r < heap_len and heap[l] < heap[r]:
                 bigger = r
             else:
                 bigger = l
+            # 把最大的元素往上提
             if heap[p] < heap[bigger]:
                 heap[p], heap[bigger] = heap[bigger], heap[p]
                 p = bigger
@@ -317,6 +327,8 @@ class Solution:
         
     def sortArray(self, nums: List[int]) -> List[int]:
         # 时间复杂度O(N)
+        # 从叶子节点开始遍历
+        # 如果不是从叶子开始，可能白跑一遍
         for i in range(len(nums) - 1, -1, -1):
             self.max_heapify(nums, i, len(nums))
             
@@ -558,10 +570,10 @@ class Solution:
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         dic = {}
-        for i,n in enumerate(nums):
-            if n in dic:
-                return [dic[n],i]
-            dic[target - n] = i
+        for i,num in enumerate(nums):
+            if num in dic:
+                return [dic[num],i]
+            dic[target - num] = i
 ```
 
 ```scala
@@ -760,16 +772,6 @@ class Solution:
                 return True
         return False
 
-class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        visited = set()
-        while head:
-            if head in visited:
-                return True
-            visited.add(head)
-            head = head.next
-        return False
-
 感觉初始时把快慢指针都指向 head 反而更简洁：
 
 class Solution:
@@ -823,52 +825,6 @@ object Solution3 {
         result
     }
 }
-
-object Solution {
-    def hasCycle(head: ListNode): Boolean = {
-        
-        if(head == null){
-            false
-        }else{
-        
-        var slow = head
-        var fast = head.next
-        var output = true
-        
-        import scala.util.control.Breaks._
-        breakable{
-            while(slow != fast){
-                if(fast == null || fast.next == null){
-                    output=false
-                    break
-                }
-                slow = slow.next
-                fast = fast.next.next
-            }
-        }
-        output
-    }
-    }
-}
-
-/**
-* two pointer - tail recursive
-*/
-object Solution {
-    def hasCycle(head: ListNode): Boolean = {
-        if(head != null && head.next != null) 
-            _hasCycle(head.next.next, head.next)
-        else false
-    }
-    
-    @annotation.tailrec
-    def _hasCycle(fast: ListNode, slow: ListNode): Boolean = {
-        if(fast == null || fast.next == null || slow == null) return false
-        else if(fast == slow) return true
-        else _hasCycle(fast.next.next, slow.next)
-    }
-}
-//Alternate solution: Slow & Fast pointer
 ```
 
 
@@ -1107,41 +1063,6 @@ class Solution:
 # > 时间复杂度 $O(M+N)$, 空间复杂度 $O(1)$
 ```
 
-```py
-
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        lengthA,lengthB = 0,0
-        curA,curB = headA,headB
-        while(curA!=None): #求链表A的长度
-            curA = curA.next
-            lengthA +=1
-        
-        while(curB!=None): #求链表B的长度
-            curB = curB.next
-            lengthB +=1
-        
-        curA, curB = headA, headB
-
-        if lengthB>lengthA: #让curA为最长链表的头，lenA为其长度
-            lengthA, lengthB = lengthB, lengthA
-            curA, curB = curB, curA
-
-        gap = lengthA - lengthB #求长度差
-        while(gap!=0): 
-            curA = curA.next #让curA和curB在同一起点上
-            gap -= 1
-        
-        while(curA!=None):
-            if curA == curB:
-                return curA
-            else:
-                curA = curA.next
-                curB = curB.next
-        return None
-```
-
-
 
 ```scala
 /**
@@ -1200,6 +1121,7 @@ class Solution:
         cur1 = m - 1
         cur2 = n - 1
         i = m + n -1
+        # 从后往前遍历
         while cur1 >= 0 and cur2 >= 0:
             if nums1[cur1] < nums2[cur2]:
                 nums1[i] = nums2[cur2]
@@ -1208,6 +1130,7 @@ class Solution:
                 nums1[i] = nums1[cur1]
                 cur1 -= 1
             i -= 1
+        # 如果后面的那个n还有多余
         if cur2 >= 0:
             nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
 
