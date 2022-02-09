@@ -1184,3 +1184,835 @@ object Solution {
 }
 
 ```
+
+## 103. Binary Tree Zigzag Level Order Traversal
+
+[小梦想家](https://www.bilibili.com/video/BV1NE411M7Fm?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV15h411Z7h5?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1GA411W7NY?spm_id_from=333.999.0.0)
+
+> python 队列
+
+```py
+class Solution:
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        if not root: 
+            return []
+
+        queue = [root]
+        res = []
+        indexflag = 1 
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.pop(0)
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            indexflag += 1 
+            if not indexflag % 2: 
+                res.append(level[:])
+            else:
+                res.append(level[::-1])
+        return res
+
+```
+
+递归
+
+```py
+class Solution:
+    def zigzagLevelOrder(self, root):
+        res = []
+        def bfs(node, level):
+            if node:
+                if level >= len(res):
+                    res.append([])
+                res[level].append(node.val)
+                bfs(node.left, level + 1)
+                bfs(node.right, level + 1)
+
+        bfs(root, 0)
+        for i in range(1, len(res), 2): # flag，各两个逆序
+            res[i] = res[i][::-1]
+        return res
+```
+
+## 236-二叉树的最近公共祖先
+
+[哈哈哈](https://www.bilibili.com/video/BV1ov411172r?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV125411p7dr?spm_id_from=333.999.0.0)
+
+```py
+# Python 超越99%执行速度的解法：而且也简短
+
+class Solution:
+    def lowestCommonAncestor(self, root, p, q) -> 'TreeNode':
+
+        if root in (None, p, q):
+            return root 
+
+        L = self.lowestCommonAncestor(root.left, p, q)
+        R = self.lowestCommonAncestor(root.right, p, q)
+
+        return R if None == L else L if None == R else root
+```
+
+```scala
+/**
+*  chosen solution
+*  DFS with recursive
+*  time complexity O(N), N is the number of node in the tree
+*  space complexity O(N)
+*/
+object Solution0 {
+  def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+    _lowestCommonAncestor(root, p, q)
+  }
+
+  private def _lowestCommonAncestor(node: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
+    if (node == null || node == p || node == q) return node
+    /**
+    *  1. if p and q are node 's child, return p q 's LCA 
+    *  2.  if p and q are not node's child return null
+    *  3. if p and q, only one of then ar node's child return that node (p or q)
+    */
+    val left = _lowestCommonAncestor(node.left, p, q)
+    val right = _lowestCommonAncestor(node.right, p, q)
+
+    (left, right) match {
+      case (null, _) => right  // p and q are both not in left
+      case (_, null) => left  // p and q are both not in right
+      case (l, r) =>  node // only lowest common ancestor could return both non null node
+      // p and q, one of then in left and the other one in right
+    }
+  }
+}
+```
+
+## 20-Valid parentheses
+
+[哈哈哈](https://www.bilibili.com/video/BV1DJ41127uA?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7ek?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Hr4y1M7Sc?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1sC4y1H7Hs?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1QA411L7y7?spm_id_from=333.999.0.0)
+
+先进后出，所以用栈
+
+* 时间复杂度:O(n)
+
+* 时间复杂度:O(n)
+
+```py
+# 这道题背一背！
+class Solution:
+    def isValid(self, s: str) -> bool:
+        dic = {'{':'}','[':']','(':')'}
+        stack = [] # stack 要提前定义好
+        for char in s:
+            if char in dic: # 是“key”
+                stack.append(char) # 一个char进来，要么被append
+            elif not stack or dic[stack.pop()] != char: 
+                # 如果上一步不被append就是不对的
+                # 如果这一步不匹配也是不对
+                return False
+        return not stack # 如果append上了，但没有被完全pop也是不对的
+```
+
+```scala
+/**
+* my first commitment
+* using stack
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def isValid(s: String): Boolean = {
+        if(s.isEmpty || s.length % 2 != 0) return false
+        val stack = scala.collection.mutable.Stack[Char]()
+        
+        val mapping = Map('(' -> ')', '{' -> '}', '[' -> ']')
+
+        s.foreach{c => 
+            
+            if (mapping.contains(c)){
+                stack push c
+            }else{
+                if(stack.isEmpty || mapping(stack.pop) != c) return false 
+             
+            }
+        }
+        stack.isEmpty
+        
+    }
+}
+
+
+/**
+* using stack X FP
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1-3 {
+    def isValid(s: String): Boolean = {
+        val mapping = Map('(' -> ')', '{' -> '}', '[' -> ']')
+        
+        s.foldLeft(List.empty[Char]){ (stack, c) => 
+            stack match {
+                case pop :: stackAfterPop if  c.equals(mapping.getOrElse(pop, None)) => stackAfterPop
+                case _ => c +: stack
+            }
+           
+        }.isEmpty
+        
+    }
+}
+
+```
+
+## 5. 【回文🌈】Longest Palindromic Substring -最长回文🌈子串
+
+[花花酱](https://www.bilibili.com/video/BV18J411j7Pb?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1ra4y1Y7Gx?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7P6?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1so4y1o765?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1L54y1D7pa?spm_id_from=333.999.0.0)
+
+暴力解法：
+
+* 时间复杂度:O(n3),在两个for循环里面，还做了一次遍历
+
+* 时间复杂度:O(1)
+
+中心扩散法：
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.4sfvjkqc4qo0.png)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6ur1lzo89kk0.png)
+
+* 时间复杂度:O(n2)
+
+* 时间复杂度:O(1)
+
+```py
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        lenStr = len(s)
+
+        if lenStr == 0:
+            return ''
+
+        if lenStr == 1:
+            return s
+
+
+        def getLen(l,r) -> int:
+            while l>=0 and r<lenStr and s[l] == s[r]: # 注意：边界
+                l -= 1
+                r += 1
+            return r - l - 1 # 注意：是 “-1”
+
+        start = 0  
+        end = 1 # 注意：在第一次的时候，end = 1
+        maxmaxLen = maxLen = 1
+
+        for mid in range(lenStr):
+            maxLen = max(getLen(mid,mid),getLen(mid,mid+1))
+            
+            if maxLen > maxmaxLen:
+                maxmaxLen = maxLen
+                start = mid - (maxLen-1) // 2 #易错点：-1，最好背一背
+                end = start + maxLen
+        return s[start:end]
+```
+
+动态规划法：
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.67y5euem0vo0.png)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.90ngy2t8j3k.png)
+
+* 时间复杂度:O(n2)
+
+* 时间复杂度:O(n2)
+
+```py
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        lenStr = len(s)
+        maxlen = maxmaxlen = 1
+        start = 0
+
+        if lenStr == 0:
+            return ''
+
+        if lenStr == 1:
+            return s
+
+        dp = [[False for _ in range(lenStr)] for _ in range(lenStr)]
+        for i in range(lenStr):
+            dp[1][1] = True 
+            # dp[1][1]是正确写法，dp[1,1]是错误写法
+
+        for j in range(1,lenStr): # 把三角形画出来，先j，再i，
+            for i in range(j): # 先框定结束j，再框定开始i。
+                if s[i] == s[j]:
+                    if j-i < 3:
+                        dp[i][j] = True
+                    else:
+                        dp[i][j] = dp[i+1][j-1]
+                if dp[i][j]:
+                    maxlen = j-i+1
+                    if maxlen > maxmaxlen:
+                        maxmaxlen = maxlen
+                        start = i
+        return s[start:start+maxmaxlen]
+```
+
+
+```scala
+/**
+* chosen solution
+* expand around center
+* time complexity: O(N * 2 * N) = O(N^2)
+*        expandLengths: O(N)
+* space complexity: O(1)
+*/
+
+object Solution0 {
+    def longestPalindrome(s: String): String = {
+        if(s == null || s.isEmpty) return ""
+        
+        // 0 1 2 3 4 5 6 7
+        // r a c e c a r
+        // r a c e e c a r
+        // b b c e c a a
+        val (head, maxlen) = s.indices.foldLeft((0, 1)){
+            case ((h, maxlen), i) => 
+                val oddlen =  expandLengths(s, i, i)
+                val evenlen = expandLengths(s, i, i + 1)
+                val len = oddlen max evenlen
+                if(len > maxlen)  (i -  (len - 1) / 2, len)
+                else (h, maxlen)
+        }
+        s.slice(head, head + maxlen)
+    }
+    // return length
+    @annotation.tailrec
+    def expandLengths(s: String, left: Int, right: Int): Int = {
+        if(0 <= left && right < s.length && s(left) == s(right)) expandLengths(s, left - 1, right + 1)
+        else right - left - 1
+    }
+}
+
+/**
+* dynamic programming
+*/
+object Solution3 {
+    def longestPalindrome(s: String): String = {
+        if(s == null || s.isEmpty ) return ""
+        if(s.length < 2) return s
+ 
+        val dp = Array.ofDim[Boolean](s.length, s.length)
+        var maxLen = 1
+        var head = 0
+ 
+        for(j <- 1 until s.length; i <- 0 until j){
+            val currentLen = j - i + 1
+            if(s(i) != s(j))  dp(i)(j) = false
+            else if(currentLen < 4)  dp(i)(j) = true // currentLen - 2 < 2
+            else dp(i)(j) = dp(i + 1)(j - 1)
+            
+            
+            if(dp(i)(j) && currentLen > maxLen){
+                maxLen = currentLen
+                head = i
+
+            }
+        }
+        
+        s.slice(head, head + maxLen)
+    }
+}
+```
+
+## 33. Search in Rotated Sorted Array
+
+[小梦想家](https://www.bilibili.com/video/BV1gJ411V7Sq?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV14t4y127hK?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV16A41147Fp?spm_id_from=333.999.0.0)
+
+```py
+# 我的模仿！啊😋
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        # 定义第一个元素和最后一个元素
+        l = 0
+        r = len(nums) - 1
+
+        while l <= r:
+            m = (l+r) // 2
+            if nums[m] == target:
+                return m
+            # 只存在一个上升序列
+            if nums[l] <= nums[m]:
+                if nums[l] <= target < nums[m]:
+                    r = m - 1
+                else: 
+                    l = m + 1
+            # 只存在一个上升序列
+            else:
+                if nums[m] < target <= nums[r]:
+                    l = m + 1
+                else: 
+                    r = m - 1
+        
+        return -1
+```
+
+```py
+# 这道题简直是在跟我开玩笑（狗头）
+
+class Solution(object):
+    def search(self, nums, target):
+        return nums.index(target) if target in nums else -1
+```
+
+```scala
+
+/**
+* binary search - iterative version
+*/
+object Solution1-2 {
+    def search(nums: Array[Int], target: Int): Int = {
+      var left = 0
+      var right = nums.length - 1
+      
+      var ans = -1
+      while(ans == -1 && left <= right) {
+        val mid = left + (right - left) / 2
+
+        if (target == nums(mid) ){
+          ans = mid
+
+        } else if (nums(left) <= nums(mid)){ // left part is in order
+          if (nums(mid) > target && target >= nums(left)) { // target is in left part
+            right = mid - 1
+          } else {
+            left = mid + 1
+          }
+        } else { // right part is in order
+          if (nums(mid) < target && target <= nums(right)) { // target is in right part
+            left = mid + 1
+          } else {
+            right = mid - 1
+          }
+        } 
+      }
+      ans
+    }
+}
+```
+
+## 200 【🍒并查集】岛屿数量
+
+[哈哈哈](https://www.bilibili.com/video/BV15K411p72j?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Cg4y1i7dZ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1KK4y1U7Ds?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1E64y1T7Nk?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Np4y1977S?spm_id_from=333.999.0.0)
+
+[一俩三四五](https://www.bilibili.com/video/BV114411q7sP?from=search&seid=1135814820928819139&spm_id_from=333.337.0.0)
+
+```py
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        f = {}
+        def find(x):
+            f.setdefault(x,x)
+            if f[x]!=x:
+                f[x] = find(f[x])
+            return f[x]
+        def union(x,y):
+            f[find(y)] = find(x)
+            
+        if not grid:
+            return 0
+        row,col =len(grid),len(grid[0])
+        # 这里是 union
+        for i in range(row):
+            for j in range(col):
+                if grid[i][j] == "1":
+                    for x, y in [[-1, 0], [0, -1]]:
+                        tmp_i = i + x
+                        tmp_j = j + y
+                        if 0 <= tmp_i < row and 0 <= tmp_j < col and grid[tmp_i][tmp_j] == "1":
+                            # 把 array 翻译成 list
+                            union(tmp_i * col + tmp_j, i * col + j)
+        # 这里是 find
+        res = set()
+        for i in range(row):
+            for j in range(col):
+                if grid[i][j] == "1":
+                    res.add(find(col*i+j))
+        return len(res)
+```
+
+```py
+# dfs
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        m, n = len(grid), len(grid[0]) # 行列
+        ans = 0
+        # 就像是把岛屿一个个蚕食
+        def dfs(i, j): 
+            if 0 <= i < m and 0 <= j < n and grid[i][j] == '1':   # 补充边界条件，防止溢出
+                grid[i][j] = '0' # dfs置为0
+                dfs(i + 1, j)  # 遍历4个领域
+                dfs(i - 1, j)  # 遍历4个领域
+                dfs(i, j - 1)  # 遍历4个领域
+                dfs(i, j + 1)  # 遍历4个领域
+
+        for i in range(m): # 行列
+            for j in range(n): # 行列
+                if grid[i][j] == '1': # 如果grid[i][j]为1，则dfs
+                    ans += 1
+                    dfs(i, j)
+        return ans
+
+```
+
+```py
+# 厉害的解法：Sink and count the islands.
+class Solution(object):
+    def numIslands(self, grid):
+        def sink(i, j):
+            if 0 <= i < len(grid) and 0 <= j < len(grid[0]) and grid[i][j] == '1':
+                grid[i][j] = '0'
+                map(sink, (i+1, i-1, i, i), (j, j, j+1, j-1))
+                return 1
+            return 0
+        return sum(sink(i, j) for i in range(len(grid)) for j in range(len(grid[0])))
+
+```
+
+```scala
+/**
+* chosen solution
+* dfs + floodfill
+* time complexity: O(N * M) N is the grid length, M is the grid width
+*/
+
+object Solution0 {
+    private val endLabel = '0'
+    def numIslands(grid: Array[Array[Char]]): Int = {
+        // val gridReplica = grid.map(_.clone).toArray
+        val coords = for (i <- grid.indices; j <- grid(0).indices) yield (i, j)        
+        coords.foldLeft(0){case (count, coord) => if(_dfs(grid, coord))  count + 1 else count}
+        
+    }
+    
+    def _dfs(grid: Array[Array[Char]], coord: (Int, Int)): Boolean = {
+        val (row, col) = coord
+        if(grid(row)(col) == endLabel) return false
+        
+        grid(row)(col) = endLabel
+        getValidNeighbors(coord, (grid.length, grid(0).length)).foreach {
+            case (nr, nc) if grid(nr)(nc) != endLabel => _dfs(grid, (nr, nc))
+            case _ =>
+        }
+        true
+    }
+    
+    private val getValidNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+        List(
+            (coord._1 + 1, coord._2),
+            (coord._1, coord._2 + 1),
+            (coord._1 - 1, coord._2),
+            (coord._1, coord._2 - 1)
+        ).filter{case (row, col) => 0 <= row  && row < shape._1 && 0 <= col && col < shape._2}
+    }
+}
+
+/**
+* Union & Find 
+* memo
+*    1. without modify original grid's elements
+* time complexity: O(N * M) both N M is the dimension of grid 
+*     both union and find operation's amortized time complexity in UnionFind class are very very close to 1 but not 1
+*/
+
+
+object Solution {
+  private val endLabel = '0'
+  def numIslands(grid: Array[Array[Char]]): Int = {
+    val unionFind = new UnionFind(grid)
+    for(i <- grid.indices; j <- grid(0).indices)
+      union((i, j), unionFind, grid)
+    unionFind.counter
+
+  }
+
+  def union(coord: (Int, Int), unionFind: UnionFind, grid: Array[Array[Char]]): Unit = {
+    val (row, col) = coord
+    if(grid(row)(col) == endLabel) return
+
+    neighbors(coord, (grid.length, grid(0).length)).foreach {
+      case (nr, nc) if grid(nr)(nc) != endLabel  =>
+        unionFind.union(coord, (nr, nc))
+      case _ =>
+    }
+  }
+
+  private val neighbors = (coord: (Int, Int), shape: (Int, Int)) => {
+    val (row, col) = coord
+    Seq(
+      (row + 1, col),
+      (row - 1, col),
+      (row, col + 1),
+      (row, col - 1)
+    ).filter{ case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
+  }
+}
+
+```
+
+## 415-Add Strings
+
+[哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
+
+```py
+python
+
+按照加法运算，从最后一位开始相加。实际实现中，用两个指针分别指向两个字符串的末尾，然后用一个变量来保持进位。
+
+class Solution:
+    def addStrings(self, num1: str, num2: str) -> str:
+        i, j, carry, res = len(num1)-1, len(num2)-1, 0, 0
+        ans = ''
+
+        while i >= 0 or j >= 0 or carry != 0:
+            val = carry
+
+            if i >= 0:
+                val += ord(num1[i]) - ord('0')
+                i -= 1
+            if j >= 0:
+                val += ord(num2[j]) - ord('0')
+                j -= 1
+
+            carry, res = divmod(val, 10)
+            ans = str(res) + ans
+
+        return ans  
+
+时间复杂度： n
+
+空间复杂度： 1
+
+
+警察叔叔，我没有用 int
+class Solution:
+    def addStrings(self, num1: str, num2: str) -> str:
+        equation = num1+'+'+num2
+        return str(eval(equation))
+
+class Solution(object):
+    def addStrings(self, num1, num2):
+        return str((eval(num1)+eval(num2)))
+```
+
+## 46- ★ 全排列
+
+类似题目：
+
+https://leetcode-cn.com/problems/permutation-i-lcci/
+
+```py
+class Solution:
+    def permutation(self, S: str) -> List[str]:
+        res = []
+        path = ''
+        def backtrack(S, path):
+            if S == '':
+                res.append(path) # 这里不需要：path[:]
+                return 
+
+            for i in range(len(S)):
+                cur = S[i]
+                backtrack(S[:i] + S[i+1:], path + cur)
+                
+        backtrack(S, path)
+
+        return res
+```
+
+[哈哈哈](https://www.bilibili.com/video/BV1YA411v7zF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7fm?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1oa4y1v7Kz?spm_id_from=333.999.0.0)
+
+```py
+# class Solution:
+#     def permute(self, nums: List[int]) -> List[List[int]]:
+#         res = []
+#         path = []
+#         def backtrack(nums):
+#             if not nums: 
+#                 res.append(path[:]) 
+#                 return
+#             else:
+#                 for i in range(len(nums)):
+#                     path.append(nums[i])
+#                     backtrack(nums[:i]+nums[i+1:]) 
+#                     path.pop()
+#         backtrack(nums)
+#         return res
+
+# 另一种写法😋
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        # n = len(nums)
+        def backtrack(nums,path):
+            # 易错点：if len(path) == n:
+            if not nums: # 判断条件应该是这个
+                res.append(path[:]) # 易错点：path[:]
+                return
+            else:
+                for i in range(len(nums)):
+                    backtrack(nums[:i]+nums[i+1:],path + [nums[i]]) # 易错点：n是不断变小的
+        backtrack(nums,[])
+        return res
+```
+
+```scala
+object Solution {
+    var output = List.empty[List[Int]]
+    
+    def backtrack(nums: Array[Int], l: Int, r: Int): Unit = {
+        def swap(a: Int, b: Int) = {
+            val temp = nums(a)
+            nums(a) = nums(b)
+            nums(b) = temp
+        }
+        
+        if(l == r){
+            output = output :+ nums.toList
+        }else{
+            (l to r).map(i => {
+                swap(l, i)
+                backtrack(nums, l+1, r)
+                swap(l, i) //backtrack step
+            })
+        }
+    }
+    
+    def permute(nums: Array[Int]): List[List[Int]] = {
+        output = List.empty[List[Int]]
+        var input = nums
+        backtrack(input, 0, input.length - 1)
+        output
+    }
+}
+
+```
+
+## 92-Reverse Linked List II
+
+[哈哈哈](https://www.bilibili.com/video/BV1n7411G7N4?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV19c411h7UE?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        dummy = ListNode(0,head)
+        pre = dummy
+        for _ in range(left-1):
+            pre = pre.next
+
+        cur = pre.next
+        for _ in range(right-left):
+            # 易错点：顺序不能错，中，后，前
+            aft = cur.next
+            cur.next = aft.next
+            aft.next = pre.next
+            pre.next = aft
+        
+        return dummy.next
+```
+
+## 142 Linked List Cycle II
+
+[小明](https://www.bilibili.com/video/BV1W5411L7AF?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV15e41147EY?spm_id_from=333.999.0.0)
+
+![](https://s3.bmp.ovh/imgs/2022/02/5ca7ad17ae2ceeed.png)
+
+```py
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            # 如果相遇
+            if slow == fast:
+                p = head
+                q = slow
+                while p!=q:
+                    p = p.next
+                    q = q.next
+                #你也可以return q
+                return p
+
+        return None
+```
+
+```scala
+object Solution {
+    def detectCycle(head: ListNode): ListNode = {
+        val visited = new scala.collection.mutable.HashSet[ListNode]()
+        var cur = head
+        
+        var result: ListNode = null
+
+        while (cur != null && result == null) {
+            // println(result)
+            if(visited.contains(cur))  
+                result = cur
+            else {
+                visited += cur
+                cur = cur.next
+            }
+        }
+        result
+        
+    }
+}
+
+```
