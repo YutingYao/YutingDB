@@ -2016,3 +2016,2015 @@ object Solution {
 }
 
 ```
+
+## 23. 【最小堆🌵】Merge k Sorted Lists
+
+[花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Ty4y1178e?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1GK41157mu?spm_id_from=333.999.0.0)
+
+暴力求解法：
+
+* 时间复杂度: O(N) + O(N logN) + O(N)
+
+* 空间复杂度: O(N) + O(N)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.65tcjjz2oy80.png" width="50%">
+
+```py
+# so easy，一遍过
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        arr = []
+        for listhead in lists:
+            while listhead:
+                arr.append(listhead.val)
+                listhead = listhead.next
+        arr.sort()
+        dummy = ListNode(0)
+        cur = dummy
+        for value in arr:
+            cur.next = ListNode(value)
+            cur = cur.next
+        return dummy.next
+```
+
+优先队列：
+
+* 时间复杂度: O(N logk) 
+
+* 空间复杂度: O(N) + O(1)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
+
+```py
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        q = []  # 易错点：先要定义一个空
+        dummy = ListNode(0)
+        cur = dummy
+        for i in range(len(lists)):
+            if lists[i]:
+                heapq.heappush(q,(lists[i].val,i))  # 易错点：要可以排序的
+                lists[i] = lists[i].next # 易错点：注意，向后一位
+        while q: # 易错点：注意这个循环条件
+            val, idx = heapq.heappop(q)
+            cur.next = ListNode(val)
+            cur = cur.next
+            if lists[idx]:
+                heapq.heappush(q,(lists[idx].val,idx))
+                lists[idx] = lists[idx].next # 易错点：注意，向后一位
+        return dummy.next
+```
+
+两两合并：
+
+* 时间复杂度: O(N logk) 
+
+* 空间复杂度: O(1)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
+
+```py
+class Solution:
+    def merge2Lists(self, list1, list2):
+        dummy = ListNode(0)
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 这里是and
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
+        return dummy.next
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
+        amount = len(lists)
+        interval = 1
+        while amount > interval:
+            for i in range(0,amount-interval,2*interval):
+                lists[i] = self.merge2Lists(lists[i], lists[i+interval]) # 易错点：方括号和小括号不要用错
+            interval *= 2
+        return lists[0] if amount>0 else None
+```
+
+## 54. Spiral Matrix
+
+[小梦想家](https://www.bilibili.com/video/BV1N7411h7i1?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        # print(list(matrix.pop(0)))
+        print(list(zip(*matrix)))
+        print(list(zip(*matrix))[::-1])
+        return matrix and list(matrix.pop(0)) + self.spiralOrder(list(zip(*matrix))[::-1])
+        # 含义是，如果matrix为空，则返回matrix
+```
+
+```py
+return a and b
+ 
+等价于
+ 
+return b if a else a
+```
+
+```py
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        res = []
+        while matrix:
+            res += matrix.pop(0) # 易错点：注意是+=
+            matrix = list(zip(*matrix))[::-1] # 易错点：注意[::-1]的摆放
+        return res
+```
+
+```scala
+/**
+* my first commitment: using extra seen matrix
+* memo:
+*  1. check next coordination, if have seen it, increase the direction index
+* time complexity : O(N)
+* space complexity: O(2N): seen matrix + output list
+*/
+object Solution1 {
+    import collection.mutable
+    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = {
+      val n = matrix.length
+      val m = matrix(0).length
+      val seen = Array.ofDim[Boolean](n, m)
+      val ans = mutable.ListBuffer.empty[Int]
+      
+      @annotation.tailrec
+      def run(directionIdx: Int, coord: (Int, Int), ans: mutable.ListBuffer[Int], targetSize: Int): Unit = {
+        if (ans.size == targetSize) return
+
+        val (row, col) = coord
+        ans += matrix(row)(col)  
+        seen(row)(col) = true
+
+
+        if (checkNextCoordAvailable(coord, directionIdx, seen)) {
+          val direction = getDirection(directionIdx)
+          val nextCoord = (row + direction._1, col + direction._2)
+          run(directionIdx, nextCoord, ans, targetSize)
+        }else {
+          val newD = (d + 1) % 4
+          val direction = getDirection(newD)
+          val nextCoord = (row + direction._1, col + direction._2)
+          run(newD, nextCoord, ans, targetSize)
+        }
+
+      }
+
+      run(0, (0, 0), ans, n * m)
+      ans.toList
+    }
+  
+    
+    def checkNextCoordAvailable(coord: (Int, Int), directionIdx: Int, seen: Array[Array[Boolean]]): Boolean = {
+      val (row, col) = coord
+      val direction = getDirection(directionIdx)
+      val nextCoord = (row + direction._1, col + direction._2)
+
+      
+      0 <= nextCoord._1 && nextCoord._1 < seen.length && 0 <= nextCoord._2 && nextCoord._2 < seen(0).length && !seen(nextCoord._1)(nextCoord._2)
+    }
+   
+    def getDirection(idx: Int): (Int, Int) = {
+      val direction = List (
+        (0, 1), // right
+        (1, 0), // go down
+        (0, -1), // go left
+        (-1, 0) // go up
+      )
+      direction(idx)
+    }
+}
+
+
+/**
+* counterclockwise rotate matrix
+* step:
+*  1. add first line to list
+*  2. counter-clockwise rotate remaining matrix: transpose + entire reverse
+*  
+*  remaining:
+*  4 5 6
+*  7 8 9
+* 
+* transpose:
+*   4 7
+*   5 8
+*   6 9
+* 
+* reverse:
+*   6 9
+*   5 8
+*   4 7
+*/
+
+object Solution2-1 {
+    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = { 
+        def dfs(mx: Array[Array[Int]]): List[Int] = mx match {
+            case mx if mx.isEmpty => List()
+            case mx if mx.length == 1 => mx.head.toList
+            case _ => mx.head.toList ::: spiralOrder(mx.tail.transpose.reverse)  // counter-clockwise
+        }
+        dfs(matrix)
+
+    }    
+}
+
+
+
+/**
+* bounded range: 
+*  memo:
+*    1. direction pattern: right -> down -> left -> up
+* time complexity O(N)
+* space complexity O(N) : output list
+*/
+object Solution3-1 {
+    import collection.mutable
+  
+    sealed trait Direction
+    case object Right extends Direction
+    case object Down extends Direction
+    case object Left extends Direction
+    case object Up extends Direction
+  
+    def getNextDirection(direction: Direction): Direction = 
+      direction match {
+        case Right => Down
+        case Down => Left
+        case Left => Up
+        case Up => Right
+      }
+
+  
+    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = {
+      if (matrix.isEmpty) List.empty
+      val n = matrix.length
+      val m = matrix(0).length
+      val ans = mutable.ListBuffer.empty[Int]
+      run(matrix, ans, Right, 0, m - 1, 0, n - 1, n * m)
+      ans.toList
+    }
+  
+    def run(matrix: Array[Array[Int]], ans: mutable.ListBuffer[Int], direction: Direction, colLo: Int, colHi: Int, rowLo: Int, rowHi: Int, targetSize: Int): Unit = {
+      if (ans.size < targetSize) {
+        
+        direction match {
+          
+          case Right => 
+          /** 
+          * fix rowLo and increase rowLo after traversing right
+          */
+            (colLo to colHi).foreach(colIdx => ans += matrix(rowLo)(colIdx))
+            run(matrix, ans, getNextDirection(direction), colLo, colHi, rowLo + 1, rowHi, targetSize)
+          case Down =>
+           /** 
+          * fix colHi and decrease colHi after traversing down
+          */
+            (rowLo to rowHi).foreach(rowIdx => ans += matrix(rowIdx)(colHi))
+            run(matrix, ans, getNextDirection(direction), colLo, colHi - 1, rowLo, rowHi, targetSize)
+          case Left =>
+          /** 
+          * fix rowHi and decrease rowHi after traversing left
+          */
+          
+            (colHi to colLo by -1).foreach(colIdx => ans += matrix(rowHi)(colIdx))
+            run(matrix, ans, getNextDirection(direction), colLo, colHi, rowLo, rowHi - 1, targetSize)
+          case Up => 
+
+            /** 
+          * fix colLo and increase colLo after traversing up
+          */
+            (rowHi to rowLo by -1).foreach(rowIdx => ans += matrix(rowIdx)(colLo))
+            run(matrix, ans, getNextDirection(direction), colLo + 1, colHi, rowLo, rowHi, targetSize)
+          
+        }
+      }
+    }
+}
+```
+
+## 300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列
+
+[花花酱](https://www.bilibili.com/video/BV1Wf4y1y7ou?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1rT4y1ujV?spm_id_from=333.999.0.0)
+
+动态规划： 时间复杂度为 O(n2)
+
+```py
+
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        if not nums:
+            return 0
+        dp = [1 for i in range(len(nums))]
+        for i in range(1, len(nums)):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[j]+1, dp[i])
+        return max(dp)
+
+```
+
+贪心 + 二分查找
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6wjfuj0uqvo0.webp)
+
+```py
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        res = []
+        for num in nums:
+            # bisect_left会把新的元素放在相等元素前面, 即原来值5的索引位置2
+            i = bisect_left(res, num)
+            if i == len(res):
+                res.append(num)
+            else:
+                res[i] = num
+        return len(res)
+```
+
+```scala
+/**
+* chosen answer
+* dynamic programming 
+* memo
+*   1. dp[i] represent the max length including index i ending at index i
+*   2. if nums[j] < nums[i] where j < i, we could increase 1 from dp[j]
+*  time complexity: O(N^2)
+*  space  complexity: O(N)
+*/
+
+object Solution0 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+        if(nums == null || nums.isEmpty) return 0
+        val dp = Array.fill[Int](nums.length)(1) // record the LIS of 0 to i sub-array in nums while select i
+        for(i <- nums.indices; j <- 0 until i) {
+            if(nums(i) > nums(j)) {
+                dp(i) = (dp(j) + 1) max dp(i)
+            }
+        }
+        dp.max
+        
+    }
+}
+
+/**
+* brute force : not Ac
+* memo:
+* 1. each position have two choice :
+*    1. take current value if currentIdx value > previousIdx value 
+*    2. do not take current value
+* time complexity: O(2^n)
+*/
+object Solution1 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+        lengthOfLIS(nums, 0, -1)
+    }
+  
+    def lengthOfLIS(nums: Array[Int], currentIdx: Int, previousIdx: Int): Int = {
+      if (currentIdx >= nums.length) return 0
+      
+      val taken = if (previousIdx == -1  ||  (nums(currentIdx) > nums(previousIdx))) {
+        lengthOfLIS(nums, currentIdx + 1, currentIdx) + 1
+      } else {
+        0
+      } 
+      val nonTaken = lengthOfLIS(nums, currentIdx + 1, previousIdx)
+      taken max nonTaken
+    }
+}
+
+/**
+* with memorized: we just fill the nxn dimension memory array
+* time complexity: O(n^2)
+* space complexity: O(n^2)
+*/
+object Solution1-2 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+      val memory = Array.fill[Int](nums.length, nums.length)(-1)
+      lengthOfLIS(nums, 0, -1, memory)
+    }
+  
+    def lengthOfLIS(nums: Array[Int], currentIdx: Int, previousIdx: Int, memory: Array[Array[Int]]): Int  = {
+      // println(currentIdx, previousIdx)
+      if (nums.length == currentIdx) return 0
+      if (memory(currentIdx)(previousIdx + 1) != -1) return memory(currentIdx)(previousIdx + 1)
+      
+      val taken = if (previousIdx == -1 || nums(currentIdx) > nums(previousIdx)) {
+        1 + lengthOfLIS(nums, currentIdx + 1, currentIdx, memory)
+      } else {
+        0
+      }
+      
+      val nonTaken = lengthOfLIS(nums, currentIdx + 1, previousIdx, memory)
+      
+      memory(currentIdx)(previousIdx + 1) = taken max nonTaken
+      
+      memory(currentIdx)(previousIdx + 1) 
+    }
+  
+  
+}
+
+
+
+
+
+/**
+* dynamic programming 
+* memo
+*   1. dp[i] represent the max length including index i ending at index i
+*   2. if nums[j] < nums[i] where j < i, we could increase 1 from dp[j]
+*  time complexity: O(N^2)
+*  space  complexity: O(N)
+*/
+
+object Solution3 {
+    def lengthOfLIS(nums: Array[Int]): Int = {
+        if(nums == null || nums.isEmpty) return 0
+        val dp = Array.fill[Int](nums.length)(1) // record the LIS of 0 to i sub-array in nums while select i
+        
+
+        for(i <- nums.indices; j <- 0 until i) {
+            if(nums(i) > nums(j)) {
+                dp(i) = (dp(j) + 1) max dp(i)
+            }
+        }
+        dp.max
+        
+    }
+}
+```
+
+## 704.Binary Search二分查找
+
+[图灵](https://www.bilibili.com/video/BV1Dh411v7yT?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1qa4y157E4?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        low, high = 0, len(nums) - 1
+        while low <= high:
+            mid = (high - low) // 2 + low
+            num = nums[mid]
+            if num == target:
+                return mid
+            elif num > target:
+                high = mid - 1
+            else:
+                low = mid + 1
+        return -1
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-search/solution/er-fen-cha-zhao-by-leetcode-solution-f0xw/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+对不起没忍住
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if target in nums :
+            return nums.index(target)
+        else:
+            return -1
+（版本一）左闭右闭区间
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1
+        
+        while left <= right:
+            middle = (left + right) // 2
+
+            if nums[middle] < target:
+                left = middle + 1
+            elif nums[middle] > target:
+                right = middle - 1
+            else:
+                return middle
+        return -1
+（版本二）左闭右开区间
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left,right  =0, len(nums)
+        while left < right:
+            mid = (left + right) // 2
+            if nums[mid] < target:
+                left = mid+1
+            elif nums[mid] > target:
+                right = mid
+            else:
+                return mid
+        return -1
+```
+
+```scala
+object Solution {
+    def search(nums: Array[Int], target: Int): Int = {
+        nums.lastIndexOf(target)
+    }
+}
+
+/**
+* my first commitment:
+* time complexity: O(logn)
+*/
+
+object Solution1 {
+    def search(nums: Array[Int], target: Int): Int = {
+      var left = 0
+      var right = nums.length - 1
+      var ans = -1
+      while(ans == -1 && left <= right) {
+        println(left, right)
+        val mid: Int = left  + (right - left) / 2
+        if(nums(mid) == target){
+          ans = mid
+        } else if(target > nums(mid)) {
+          left = mid + 1
+        } else {
+          right = mid - 1
+        }
+ 
+      }
+      ans
+    }
+}
+
+/**
+* recursive version
+*/
+object Solution1-2 {
+    def search(nums: Array[Int], target: Int): Int = {
+        search(nums, target, 0, nums.length - 1)
+    }
+  
+    @annotation.tailrec
+    def search(nums: Array[Int], target: Int, left: Int, right: Int): Int = {
+      if(left > right) return -1
+      
+      val mid = left + (right - left) / 2
+      if (nums(mid) == target) 
+        mid
+      else if (target > nums(mid))
+        search(nums, target, mid + 1, right)
+      else 
+        search(nums, target, left, right - 1)
+      
+    }
+}
+```
+
+## 42. Trapping Rain Water
+
+[花花酱](https://www.bilibili.com/video/BV1hJ41177gG?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1fi4y1t7BP?spm_id_from=333.999.0.0)
+
+动态规划：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(n)
+
+```py
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+        
+        n = len(height)
+        leftMax = [height[0]] + [0] * (n - 1)
+        for i in range(1, n):
+            leftMax[i] = max(leftMax[i - 1], height[i])
+
+        rightMax = [0] * (n - 1) + [height[n - 1]]
+        for i in range(n - 2, -1, -1):
+            rightMax[i] = max(rightMax[i + 1], height[i])
+
+        ans = sum(min(leftMax[i], rightMax[i]) - height[i] for i in range(n))
+        return ans
+```
+
+栈：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(n)
+
+```py
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        ans = 0
+        stack = list()
+        n = len(height)
+        
+        for i, h in enumerate(height):
+            while stack and h > height[stack[-1]]:
+                top = stack.pop()
+                if not stack:
+                    break
+                left = stack[-1]
+                currWidth = i - left - 1
+                currHeight = min(height[left], height[i]) - height[top]
+                ans += currWidth * currHeight
+            stack.append(i)
+        
+        return ans
+```
+
+双指针：
+
+* 时间复杂度: O(n)
+
+* 空间复杂度: O(1)
+
+```py
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        ans = 0
+        left, right = 0, len(height) - 1
+        leftMax = rightMax = 0
+
+        while left < right:
+            leftMax = max(leftMax, height[left])
+            rightMax = max(rightMax, height[right])
+            if height[left] < height[right]:
+                ans += leftMax - height[left]
+                left += 1
+            else:
+                ans += rightMax - height[right]
+                right -= 1
+        
+        return ans
+
+#   😋我的模仿
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        left = 0
+        right = len(height)-1
+        leftmax = 0
+        rightmax = 0
+        res = 0
+        while left < right:
+            if height[left] < height[right]:
+                leftmax = max(leftmax,height[left])
+                # 易错点：注意res和left的次序：先res，后left
+                res += leftmax-height[left] 
+                left += 1
+            else:
+                rightmax = max(rightmax,height[right])
+                # 易错点：注意res和right的次序：先res，后right
+                res += rightmax-height[right]
+                right -= 1
+        return res
+```
+
+## 232-【构造🏰】Implement Queue using Stacks
+
+[哈哈哈](https://www.bilibili.com/video/BV1p741177pp?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV1Gf4y147Vj?spm_id_from=333.999.0.0)
+
+
+```py
+class MyQueue:
+
+    def __init__(self):
+        self.s1 = []
+        self.s2 = []
+
+    def push(self, x):
+        # 要把新来的元素压入
+        while self.s1:
+            self.s2.append(self.s1.pop())
+        self.s2.append(x)
+        while self.s2:
+            self.s1.append(self.s2.pop())
+
+    def pop(self):
+        # 假装最后一个元素是开头
+        return self.s1.pop() if self.s1 else None
+        
+
+    def peek(self):
+        # 假装最后一个元素是开头
+        return self.s1[-1] if self.s1 else None
+
+    def empty(self):
+        return False if self.s1 else True
+```
+
+```scala
+/**
+* using two stack to implement
+* one for push, the other for pop
+* time complexity amortized O(1) per operation
+* space complexity
+*/
+
+class MyQueue() {
+
+  /** Initialize your data structure here. */
+  private val inputStack = scala.collection.mutable.ArrayStack[Int]()
+  private val outputStack = scala.collection.mutable.ArrayStack[Int]()
+
+
+  /** Push element x to the back of queue. */
+  def push(x: Int) {
+    inputStack.push(x)
+
+  }
+
+  /** Removes the element from in front of queue and returns that element. */
+  def pop(): Int = {
+    if(outputStack.isEmpty) {
+      while (inputStack.nonEmpty) {
+        outputStack.push(inputStack.pop())
+      }
+    }
+    if(outputStack.isEmpty) -1 else outputStack.pop()
+
+  }
+
+  /** Get the front element. */
+  def peek(): Int = {
+    if(outputStack.isEmpty) {
+      while (inputStack.nonEmpty) {
+        outputStack.push(inputStack.pop())
+      }
+    }
+    if(outputStack.isEmpty) -1 else outputStack.head
+  }
+
+  /** Returns whether the queue is empty. */
+  def empty(): Boolean = {
+    outputStack.isEmpty && inputStack.isEmpty
+  }
+
+}
+
+```
+
+## 94-Inorder wih stack
+
+[哈哈哈](https://www.bilibili.com/video/BV1uV411o78x?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1o54y1B7Z8?spm_id_from=333.999.0.0)
+
+```py
+最少代码递归：
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []            
+        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
+
+Python：
+
+# 前序遍历-递归-LC144_二叉树的前序遍历
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        # 保存结果
+        result = []
+        
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            result.append(root.val) # 前序
+            traversal(root.left)    # 左
+            traversal(root.right)   # 右
+
+        traversal(root)
+        return result
+
+# 中序遍历-递归-LC94_二叉树的中序遍历
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        result = []
+
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            traversal(root.left)    # 左
+            result.append(root.val) # 中序
+            traversal(root.right)   # 右
+
+        traversal(root)
+        return result
+
+# 后序遍历-递归-LC145_二叉树的后序遍历
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        result = []
+
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            traversal(root.left)    # 左
+            traversal(root.right)   # 右
+            result.append(root.val) # 后序
+
+        traversal(root)
+        return result
+
+# 中序遍历 先遍历左子树->根节点->右子树
+# 如果是递归做法则递归遍历左子树，访问根节点，递归遍历右子树
+# 非递归过程即:先访问..最左子树..结点，再访问其父节点，再访问其兄弟
+# while循环条件 中序遍历需先判断当前结点是否存在，若存在则将该节点放入栈中，再将当前结点设置为结点的左孩子，
+# 若不存在则取栈顶元素为cur，当且仅当栈空cur也为空，循环结束。
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]: 
+        stack, ret = [], []
+        cur = root
+        while stack or cur:
+            if cur:
+                stack.append(cur)
+                cur = cur.left
+            else:
+                cur = stack.pop()
+                ret.append(cur.val)
+                cur = cur.right
+        return ret
+
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right) if root else []
+
+
+递归还能更简练
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        ret = []
+        if root:
+            ret += self.inorderTraversal(root.left)
+            ret.append(root.val)
+            ret += self.inorderTraversal(root.right)
+        return ret
+
+python的三种方法
+
+递归
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        res = []
+        res.extend(self.inorderTraversal(root.left))
+        res.append(root.val)
+        res.extend(self.inorderTraversal(root.right))
+        return res
+2.迭代
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        def add_all_left(node):
+            while node:
+                stack.append(node)
+                node = node.left
+
+        stack, res = [], []
+        add_all_left(root)
+        while stack:
+            cur = stack.pop()
+            res.append(cur.val)
+            add_all_left(cur.right)
+        return res
+morris （将二叉树转化为链表，即每一个node都只可能有右孩子）
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        res = []
+        while root:
+            if root.left:
+                # find out predecessor
+                predecessor = root.left
+                while predecessor.right:
+                    predecessor = predecessor.right
+                # link predecessor to root
+                predecessor.right = root
+                # set left child of root to None
+                temp = root
+                root = root.left
+                temp.left = None
+            else:
+                res.append(root.val)
+                root = root.right
+        return res
+
+
+```
+
+## 199 Binary Tree Right Side View
+
+[小明](https://www.bilibili.com/video/BV1854y1W7CB?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1xK4y1b7Wh?spm_id_from=333.999.0.0)
+
+```py
+
+class Solution:
+    def rightSideView(self, root: TreeNode):
+        dic, dfs = {}, lambda node, startI: node and (dic.__setitem__(startI, node.val) or dfs(node.left, startI + 1) or dfs(node.right, startI + 1))
+        return dfs(root, 0) or [*dic.values()]
+# __setitem__:每当属性被赋值的时候都会调用该方法，因此不能再该方法内赋值 self.name = value 会死循环
+#  bfs 层序遍历，每次保留最后一个值stack
+
+class Solution:
+    def rightSideView(self, root: TreeNode):
+        if not root: return []
+        ans = []
+        stack = deque([root])
+        while stack:
+            for _ in range(len(stack)):
+                node = stack.popleft()
+                if node.left: stack.append(node.left)
+                if node.right: stack.append(node.right)
+            ans.append(node.val)
+        return ans
+
+# 基础方法，层次遍历：
+
+class Solution:
+    def rightSideView(self, root: TreeNode):
+        res, level = [], root and [root]
+        while level:
+            res.append(level[-1].val)
+            level = [right for tree in level for right in (tree.left, tree.right) if right]
+        return res
+
+# 老层序遍历了
+
+class Solution:
+    def rightSideView(self, root: TreeNode):
+        if not root:
+            return []
+        res = []
+        node = [root]
+        while node:
+            tmpNode = []
+            for n in node:
+                if n.left:
+                    tmpNode.append(n.left)
+                if n.right:
+                    tmpNode.append(n.right)
+            res.append(node[-1].val)
+            node = tmpNode
+        return res
+
+# 递归
+
+class Solution:
+    def rightSideView(self, root: TreeNode):
+        res = []
+        def dfs(node, startIndex):
+            if node:
+                startIndex == len(res) and res.append(node.val)
+                dfs(node.right, startIndex + 1)
+                dfs(node.left, startIndex + 1)
+        dfs(root, 0)
+        return res
+```
+
+## 143 Reorder List
+
+[小明](https://www.bilibili.com/video/BV1Jf4y1Q7y7?spm_id_from=333.999.0.0)
+
+```py
+Python：
+
+# 方法二 双向队列
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        d = collections.deque()
+        tmp = head
+        while tmp.next: # 链表除了首元素全部加入双向队列
+            d.append(tmp.next)
+            tmp = tmp.next
+        tmp = head
+        while len(d): # 一后一前加入链表
+            tmp.next = d.pop()
+            tmp = tmp.next
+            if len(d):
+                tmp.next = d.popleft()
+                tmp = tmp.next
+        tmp.next = None # 尾部置空
+ 
+# 方法三 反转链表
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        if head == None or head.next == None:
+            return True
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        right = slow.next # 分割右半边
+        slow.next = None # 切断
+        right = self.reverseList(right) #反转右半边
+        left = head
+        # 左半边一定比右半边长, 因此判断右半边即可
+        while right:
+            curLeft = left.next
+            left.next = right
+            left = curLeft
+
+            curRight = right.next
+            right.next = left
+            right = curRight
+
+
+    def reverseList(self, head: ListNode) -> ListNode:
+        cur = head   
+        pre = None
+        while(cur!=None):
+            temp = cur.next # 保存一下cur的下一个节点
+            cur.next = pre # 反转
+            pre = cur
+            cur = temp
+        return pre
+
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        if not head:
+            return
+        
+        vec = list()
+        node = head
+        while node:
+            vec.append(node)
+            node = node.next
+        
+        i, j = 0, len(vec) - 1
+        while i < j:
+            vec[i].next = vec[j]
+            i += 1
+            if i == j:
+                break
+            vec[j].next = vec[i]
+            j -= 1
+        
+        vec[i].next = None
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/reorder-list/solution/zhong-pai-lian-biao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        if not head:
+            return
+        
+        mid = self.middleNode(head)
+        l1 = head
+        l2 = mid.next
+        mid.next = None
+        l2 = self.reverseList(l2)
+        self.mergeList(l1, l2)
+    
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow = fast = head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+    
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head
+        while curr:
+            nextTemp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nextTemp
+        return prev
+
+    def mergeList(self, l1: ListNode, l2: ListNode):
+        while l1 and l2:
+            l1_tmp = l1.next
+            l2_tmp = l2.next
+
+            l1.next = l2
+            l1 = l1_tmp
+
+            l2.next = l1
+            l2 = l2_tmp
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/reorder-list/solution/zhong-pai-lian-biao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+首先遍历链表得到其长度length，然后就可以算出需要放到前面来的节点个数left = length // 2
+
+然后把这些节点放到列表nodeLst中
+
+从前往后遍历链表，从后往前遍历列表nodeLst，把列表中的节点插入到链表中
+
+最后，把最后遍历到的节点的next引用指向node，存在两种情况：
+
+链表的长度为偶数，此时节点后面的一个节点也属于原来的链表，则把该节点指向None，即node.next.next = None
+
+链表的长度为奇数，此时节点就是最后一个节点了，直接node.next = None
+
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        #首先得到长度
+        length, start = 0, head
+        while start:
+            length += 1
+            start = start.next
+        left = length // 2   #需要放到前面的节点数量
+
+        #然后把末尾几个需要放到前面来的节点加入列表
+        nodeLst, node, cnt = [], head, 0
+        while cnt < length:
+            if cnt > left:
+                nodeLst.append(node)
+            node = node.next
+            cnt += 1
+
+        #从前往后遍历链表，从后往前遍历列表，把列表中的节点插入到链表中
+        ans = node = head
+        for i in range(len(nodeLst) - 1, -1, -1):
+            new = nodeLst[i]
+            temp = node.next
+            node.next = new
+            new.next = temp
+            node = node.next.next
+
+        #把链表最后的节点指向None，根据链表长度的奇偶性需要按情况分析
+        if length % 2 == 0:
+            node.next.next = None
+        else:
+            node.next = None
+            
+
+
+两遍遍历+栈
+
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        if not head:
+            return None
+        p = head
+        stack = []
+        p1 = head
+        while p1.next:
+            stack.append((p1, p1.next))
+            p1 = p1.next
+        while p.next and p.next.next:
+            pre, p1 = stack.pop()
+            p1.next = p.next
+            p.next = p1
+            pre.next = None
+            p = p.next.next
+```
+
+## 70. Climbing Stairs
+
+[5:32 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1gJ411R7X1?spm_id_from=333.999.0.0)
+
+[哈哈哈 70(重制版)](https://www.bilibili.com/video/BV1G54y197eZ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7s9?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1DZ4y1H7k9?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1ki4y1u7tn?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        b1, b2 = 1, 1
+        for i in range(n-1):
+            b1, b2 = b2, b1 + b2
+        return b2
+
+# 我的模仿
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        dp0 = 1
+        dp1 = 1
+        for _ in range(n-1):
+            dp1, dp0 = dp0 + dp1, dp1
+            # 用2个数字分别存储
+        return dp1
+```
+
+```scala
+/**
+* chosen solution
+* dynamic programming
+* memo
+*   1. dp(i) represent climb to i floor's distinct ways
+*   2. dp(i) could be calculate from dp(i - 1) + dp(i - 2)
+*           (1) taking a single step from dp(i - 1)
+*           (2) taking a step of two from dp(i - 2)
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution0 {
+    def climbStairs(n: Int): Int = {
+        val dp = Array.ofDim[Int](n + 1)
+        dp(0) = 1
+        dp(1) = 1
+        (2 to n).foreach(i => dp(i) = dp(i - 1) + dp(i - 2))
+        dp(n)
+    }
+}
+
+/**
+* my first commitment
+* dynamic programming
+* memo:
+*   1. dp(i) represent climb to i floor's distinct ways
+*   2. dp(i) could be calculate from dp(i - 1) + dp(i - 2)
+*           (1) taking a single step from dp(i - 1)
+*           (2) taking a step of two from dp(i - 2)
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+object Solution1 {
+    def climbStairs(n: Int): Int = {
+        if(n <= 2) n
+        else {
+            val cache = Array.ofDim[Int](n + 1)
+            cache(0) = 1
+            cache(1) = 1
+            (2 to n).foreach{ nn =>
+                cache(nn) = cache(nn - 1) + cache(nn - 2)
+            }
+            cache(n)
+        }
+    }
+}
+
+/**
+*  simplify from 1
+*/
+object Solution1-2 {
+    def climbStairs(n: Int): Int = {
+        val dp = Array.ofDim[Int](n + 1)
+        dp(0) = 1
+        dp(1) = 1
+        (2 to n).foreach(i => dp(i) = dp(i - 1) + dp(i - 2))
+        dp(n)
+    }
+}
+
+
+
+/**
+* DP: only use two extra space to keep previous two value
+* time complexity: O(N)
+* space complexity: O(1)
+*/
+
+object Solution1-3 {
+    def climbStairs(n: Int): Int = {
+        if(n <= 2) n
+        else {
+            var a = 1
+            var b = 2
+            (3 to n).foreach{ nn =>
+                val c = a + b
+                a = b
+                b = c    
+            }
+            b
+        }
+    }
+}
+
+/**
+* dp: index from 0 until n
+*   it would be confusing with index i original meaning which is the ways of climbing to stair i
+* memo:
+*  1. keep two previous status
+*/
+object Solution1-4 {
+    def climbStairs(n: Int): Int = {
+        var a = 0
+        var b = 1
+        for (_ <- 0 until n) {
+            val c = a + b
+            a = b
+            b = c
+        }
+        b
+    }
+}
+```
+
+```scala
+object Solution {
+    
+    def climbStairs(n: Int): Int = {
+        if(n==1){
+            1
+        }else if(n == 2){
+            2
+        }else{
+            climbStairs(n-1) + climbStairs(n-2)
+        }
+    }
+}
+
+/**
+n = 3
+1 1 1
+1 2
+-------
+2 1
+==================> 2 + 1
+n = 4
+ 1 1 1 1
+ 1 1 2
+ 1 2 1
+ --------
+ 2 1 1
+ 2 2
+ =================> 3 + 2
+*/
+
+/**Alternate approach:
+In the above approach we are doing repeated call for some numbers
+example: 
+climbStairs(5) -> 4 & 3
+climbStairs(4) -> 3 & 2 | climbStairs(3) -> 2 & 1
+climbStairs(3) -> 2 & 1 | climbStairs(2) | climbStairs(2) | climbStairs(1)
+climbStairs(2) | climbStairs(1) | climbStairs(1)
+
+To avoid recalculation again & again we can just store the results for the previous numbers at their indexes
+*/
+object Solution {
+    
+    def climbStairs(n: Int): Int = {
+        if(n == 1){
+            1
+        }else{
+            var dpArray = Array.fill(n+1)(0)
+            dpArray(1) = 1
+            dpArray(2) = 2
+            (3 to n).map(i => {
+                dpArray(i) = dpArray(i-1) + dpArray(i-2)
+            })
+            dpArray(n)
+        }
+    }
+}
+
+```
+
+## 124. Binary Tree Maximum Path Sum
+
+[花花酱](https://www.bilibili.com/video/BV1ct411r7qw?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1CT4y1g7bR?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1qT4y1J71C?spm_id_from=333.999.0.0)
+
+```py
+我的思考：
+        # 有两种情况：
+        # node.val 往上回收, 构成递归
+        return max(left,right) + node.val
+        # node.val 不往上回收, 左中右
+        res = max(left+right + node.val, res)
+
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        res = -1e9
+        # left = right = 0
+        def dfs(node) -> int:
+            nonlocal res # 也可以写成 self.res
+            if not node:
+                return 0
+            # if node.left:
+            left = max(dfs(node.left), 0)     # 正负性：left 为负，就不回收
+            # if node.right:
+            right = max(dfs(node.right), 0)   # 正负性：right 为负，就不回收
+            # 有两种情况：node.val 不往上回收, 左中右
+            res = max(left + right + node.val, res)
+            # 有两种情况：node.val 往上回收, 构成递归
+            return max(left,right) + node.val # 正负性：node.val必须回收
+        dfs(root)
+        return res
+```
+
+```scala
+object Solution1 {
+    def maxPathSum(root: TreeNode): Int = {
+        dfs(root)._1
+    }
+
+    def dfs(node: TreeNode): (Int, Int) = {
+      if (node == null) return (Int.MinValue, 0)
+      
+      val (leftSoFar, leftEndingHere) = dfs(node.left)
+      val (rightSoFar, rightEndingHere) = dfs(node.right)
+
+      val maxSoFar = leftSoFar max rightSoFar max (node.value + leftEndingHere + rightEndingHere)
+
+      val maxEndingHere = 0 max (node.value + (leftEndingHere max rightEndingHere))
+      (maxSoFar, maxEndingHere)
+    }
+}
+```
+
+## 56. Merge Intervals
+
+[花花酱](https://www.bilibili.com/video/BV11t411J7zV?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1w7411a7Wo?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1pV411a7t4?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        # 等价于：intervals.sort(key = lambda x: x[0])
+        res = []
+        for interval in intervals:
+            if not res or res[-1][1] < interval[0]:
+                res.append(interval[:])
+            else:
+                res[-1][1] = max(res[-1][1],interval[1])
+                # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
+                # 比如，[[1,4],[2,3]]
+        return res
+```
+
+```py
+# 不使用额外的储存空间，直接在原矩阵上面修改的原地算法（反正排序的时候已经修改了原矩阵）：
+# pop(i)操作和append()操作耗时一样吗。
+# 如果你直接intervals.pop()而不是intervals.pop(i) ，那耗时一样，都是o(1)，
+# 但是你指定位置pop，那就是o(n)了。
+
+class Solution:
+    def merge(self, intervals):
+        intervals.sort()
+        i = 1
+        while(i < len(intervals)):
+            if intervals[i][0] > intervals[i-1][1]:
+                i += 1
+            else:
+                intervals[i-1][1] = max(intervals[i-1][1], intervals[i][1])
+                intervals.pop(i)       
+        return intervals
+```
+
+```scala
+
+/**
+*  my first commitment: sort array
+*  time complexity: O(nlogn) + O(n) = O(nlogn) 
+*  space complexity: O(n): sorted array
+*/
+
+object Solution1-1 {
+    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
+      val sortedL = intervals.sortBy(_(0))
+      val ans = collection.mutable.Set.empty[Array[Int]]
+      
+      var begin = sortedL(0)(0)
+      var end = sortedL(0)(1)
+      (1 to sortedL.length - 1).foreach { idx =>
+        val l = sortedL(idx)
+        if (end < l(0)){
+          ans += Array(begin, end)
+          begin = l(0)
+          end = l(1) 
+        }else {
+          end = l(1) max end
+        }
+      }
+      ans += Array(begin, end)
+      ans.toArray
+    }
+}
+
+/**
+* simplify 1-1
+* 1.not using Set
+* 2. record uncertain (begin, end) pair in answer list
+*/
+
+object Solution1-2 {
+    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
+      intervals.sortBy(_(0)).foldLeft(List.empty[Array[Int]]){
+        case (last::ans, arr) =>
+          if (last.last < arr.head) {
+            arr::last::ans
+          } else {
+            Array(last.head, last.last max arr.last)::ans
+          }
+        case (ans, arr) => arr::ans // for empty ans list
+      }.toArray
+    }
+}
+```
+
+## 剑指 Offer 22. 链表中倒数第k个节点
+
+```py
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        res = []
+        while head:
+            res.append(head)
+            head = head.next
+        return res[-k]
+
+python
+
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        '''双指针
+        slow,fast = head,head
+        for i in range(k):
+            fast = fast.next
+        while fast != None:
+            slow = slow.next
+            fast = fast.next
+        return slow
+        '''
+
+        '''遍历
+        Node,n = head,0
+        while head != None:
+            head = head.next
+            n += 1
+        for i in range(n-k):
+            Node = Node.next
+        return Node
+        '''
+        
+        '''先正序遍历存储，再倒序遍历
+        temp = []
+        while head != None:
+            temp.append(head)
+            head = head.next
+        return temp[-k]
+        '''
+
+重拳出击
+
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        res=[]
+        p=head
+        while p:
+            res.append(p)
+            p=p.next
+        return res[-k]
+
+华为机试遭受痛击，每日一题重拳出击
+
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        temp = head
+        for i in range(k):
+            head = head.next
+        while head:
+            temp = temp.next
+            head = head.next
+        return temp
+
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        fast, slow = head, head
+
+        while fast and k > 0:
+            fast, k = fast.next, k - 1
+        while fast:
+            fast,slow = fast.next,slow.next
+        
+        return slow
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/solution/lian-biao-zhong-dao-shu-di-kge-jie-dian-1pz9l/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        node, n = head, 0  
+        while node:
+            node = node.next
+            n += 1
+
+        node = head
+        for _ in range(n-k):
+            node = node.next
+        
+        return node  
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/solution/lian-biao-zhong-dao-shu-di-kge-jie-dian-1pz9l/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+## 82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List
+
+[洛阳](https://www.bilibili.com/video/BV1Fi4y187pj?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        dummy = ListNode(0,head)
+        cur = dummy
+        while cur.next and cur.next.next:
+            if cur.next.val == cur.next.next.val:
+                while cur.next.next and cur.next.val == cur.next.next.val:
+                    cur.next = cur.next.next # 删去重复节点的前一个
+                cur.next = cur.next.next # 删去重复节点的剩余一个
+            else:
+                cur =  cur.next
+        return dummy.next
+
+# 另一种写法
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        dummy = ListNode(0,head)
+        cur = dummy
+        while cur.next and cur.next.next:
+            if cur.next.val == cur.next.next.val:
+                x = cur.next.val
+                while cur.next and cur.next.val == x:
+                    cur.next = cur.next.next
+            else:
+                cur =  cur.next
+        return dummy.next
+```
+
+## 69 Sqrt(x) 见 HJ107 求解立方根
+
+[花花酱](https://www.bilibili.com/video/BV1WW411C7YN?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1gJ411R7XR?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411i7TN?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1PK411s72g?spm_id_from=333.999.0.0)
+
+袖珍计算器:
+
+时间复杂度：O(1)
+
+空间复杂度：O(1)
+
+```py
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        if x == 0:
+            return 0
+        ans = int(math.exp(0.5 * math.log(x)))
+        return ans + 1 if (ans + 1) ** 2 <= x else ans
+```
+
+二分查找:
+
+时间复杂度：O(logN)
+
+空间复杂度：O(1)
+
+```py
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        l, r, ans = 0, x, -1
+        while l <= r:
+            mid = (l + r) // 2
+            if mid * mid <= x:
+                ans = mid
+                l = mid + 1
+            else:
+                r = mid - 1
+        return ans
+
+# 二分法不需要ans
+# 但是不好理解
+
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        l = 0
+        r = x
+        while l <= r:
+            m = (l + r) // 2 # l和1，不要打错，哈哈哈
+            if m**2 > x:
+                r = m - 1
+            else:
+                l = m + 1
+        return r
+```
+
+牛顿迭代法:
+
+时间复杂度：O(logN)
+
+空间复杂度：O(1)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3g2xmodb40u0.png)
+
+```py
+class Solution:
+    def mySqrt(self, num: int) -> int:
+        x = 1 # 背一背这个套路
+        while abs(x**2 - num) > 0.001:
+            x -= (x**2 - num) / (2 * x) # 注意这里是减号
+        return floor(x)
+```
+
+```py
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        if x <= 1:
+            return x
+        
+        C, res = float(x), float(x)
+        while True:
+            xi = 0.5 * (res + C / res)
+            if abs(res - xi) < 1e-7:
+                break
+            res = xi
+        
+        return int(res)
+
+class Solution:
+    def mySqrt(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        if x <= 1:
+            return x
+        res = x # 初始值
+        c = x # 牛顿迭代法中的常数
+        while res > c / res:
+            res = (res + c / res) // 2
+        return int(res)
+```
+
+```scala
+/**
+* chosen solution
+* binary search - recursive
+* memo:
+*   1. maintain max and min
+* time complexity: O(logN)
+*/
+object Solution0 {
+    def mySqrt(x: Int): Int = {
+        if(x == 0 || x == 1) return x
+        _mySqrt(0, x, x, math.pow(10, -5)).toInt
+    }
+    
+    @annotation.tailrec
+    def _mySqrt(min:Double, max: Double, target:Int, precision: Double): Double = {
+        val guess = min + (max - min) / 2
+        val estimate = guess * guess
+        if(math.abs(estimate - target) < precision) guess
+        else{ 
+            if(estimate > target) _mySqrt(min, guess, target, precision)
+            else _mySqrt(guess, max, target, precision)
+        } 
+    }
+}
+
+
+/**
+* my first commitment
+* binary search- iterative
+* time complexity: O(LogN)
+*/
+object Solution1 {
+  def mySqrt(x: Int): Int = {
+    if(x == 0 || x== 1) return x
+
+    val precision = math.pow(10, -5)
+    var high: Double = if (x > 1) x else 1
+    var low: Double = 0
+
+    while(true) {
+      val mid: Double = low + ((high - low) / 2)
+      val estimate = mid * mid
+
+      if(math.abs(estimate - x) < precision){
+        return mid.toInt
+
+      }else if(estimate > x) {
+        high = mid
+      }else {
+        low = mid
+      }
+    }
+    x
+  }
+}
+/**
+* binary search - iterative
+* not return while in while block
+*/
+object Solution1-2 {
+    def mySqrt(x: Int): Int = {
+        if(x == 0 || x == 1) return x
+        val precision = math.pow(10, -5)
+        var max: Double = if(x > 1) x.toDouble else 1.0
+        var min = 0.0
+        var mid = min + (max - min) / 2 
+        var condition = true
+        
+        while(condition){
+            mid = min + (max - min) / 2 
+            val estimate = mid * mid
+            
+            if(math.abs(estimate - x) < precision){
+                condition = false
+            }else if(estimate > x){
+              max = mid  
+            } else {
+              min = mid
+            }
+        }
+        mid.toInt
+    }
+}
+
+
+/**
+* binary search - recursive - top-down
+* memo:
+*   1. maintain max and min
+*/
+object Solution1-3 {
+    def mySqrt(x: Int): Int = {
+        if(x == 0 || x == 1) return x
+        _mySqrt(0, x, x, math.pow(10, -5)).toInt
+    }
+    
+    @annotation.tailrec
+    def _mySqrt(min:Double, max: Double, target:Int, precision: Double): Double = {
+        val guess = min + (max - min) / 2
+        val estimate = guess * guess
+        if(math.abs(estimate - target) < precision) guess
+        else{
+            if(estimate > target) _mySqrt(min, guess, target, precision)
+            else _mySqrt(guess, max, target, precision)
+        } 
+    }
+}
+
+/**
+* Newton's method - iterative
+* y = x^2 => f(x) = x^2 - y
+* x_{k+1} = x_k - f(x_k) / f'(x_k)
+* x_{k+1} = x_k - (x_k^2 - y) / (2x_k) = (x_k + y / x_k) / 2
+* time complexity: O(logN)
+*/
+
+object Solution2 {
+     def mySqrt(x: Int): Int = {
+        val precision = math.pow(10, -5)
+        
+        var ans: Double = x
+        while(math.abs(ans * ans - x) > precision){
+            ans = (ans + x / ans) / 2
+            // println(ans)
+        }
+        ans.toInt
+    }
+}
+
+/**
+*  newton-method - recursive - top-down
+*/
+
+object Solution2-1 {
+    def mySqrt(x: Int): Int = {
+        _mySqrt(x, x, math.pow(10, -5)).toInt
+    }
+
+    @annotation.tailrec
+    def _mySqrt(guess: Double, target: Int, precision: Double): Double = {
+        /* see? (guess * guess - target) is just our f(x) =  x^2 - y */
+        if(math.abs(guess * guess - target) < precision) guess
+        else _mySqrt((guess + (target / guess)) / 2, target, precision)
+    }
+}
+
+
+```
+
+```scala
+object Solution {
+    def mySqrt(x: Int): Int = {
+        if(x == 0){
+            0
+        }else if(x == 1){
+            1
+        }else{
+            var num: Int = x/2
+            var flag = true
+            
+            while(flag){
+                // val sqr = num*num
+                // if(sqr == x)
+                
+                //If we do num*num it may exceed Int range
+                //Since we want to check: num*num < x
+                //we can instead do num < x/num
+                
+                if(num > x/num){
+                    num = num/2
+                }else{
+                    val temp = num + 1
+                    if(temp > x/temp){
+                        flag = false
+                    }else{
+                        num += 1
+                    }
+                }
+            }
+            num
+        }
+    }
+}
+
+//Better solution: in the above solution we are only decreasing the range on 1 side by half, but other side by only 1 number
+//This solution decreases by half for both side (binary search pattern)
+
+object Solution {
+    def mySqrt(x: Int): Int = {
+        if(x == 0){
+            0
+        }else if(x == 1){
+            1
+        }else{
+            var start = 1
+            var end = x
+            var result = 0
+            
+            while(start <= end){
+                var mid = start + (end - start)/2
+                if(mid <= x/mid){
+                    result = mid
+                    start = mid+1
+                }else{
+                    end = mid-1
+                }
+            }
+            result
+        }
+    }
+}
+
+```
