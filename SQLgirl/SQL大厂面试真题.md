@@ -3,64 +3,33 @@
 
 https://www.nowcoder.com/practice/96263162f69a48df9d84a93c71045753?tpId=268&tqId=2285032&ru=/exam/oj&qru=/ta/sql-factory-interview/question-ranking&sourceUrl=%2Fexam%2Foj%3Ftab%3DSQL%25E7%25AF%2587%26topicId%3D268
 
+完播率计算：
+
 ```sql
-select a.video_id,
-round(sum(case when timestampdiff(second,b.start_time,b.end_time)>=a.duration then 1 else 0 end)/count(b.uid),3)
-as avg_com_play_rate
-from tb_video_info a join tb_user_video_log b on a.video_id=b.video_id
-where YEAR(b.start_time) = 2021
-group by a.video_id
-order by avg_com_play_rate desc
+case when timestampdiff(second,log.start_time,log.end_time) >= info.duration then 1 else 0 end
+if(timestampdiff(second,log.start_time,log.end_time) >= info.duration, 1, 0)
 ```
 
 ```sql
-select log.video_id,
-round(sum(if(TIMESTAMPDIFF(second,log.start_time,log.end_time)
-             >=info.duration,1,0))/count(log.video_id) ,3)
+avg(xxx) 等效于 
+sum(xxx)/count(log.uid) 等效于 
+sum(xxx)/count(log.video_id) 等效于 
+sum(xxx)/count(*)
+
+where substr(start_time, 1, 4) = 2021 等效于 
+where year(log.start_time) = 2021
+```
+
+```sql
+select 
+    log.video_id,
+    round(sum(if(TIMESTAMPDIFF(second,log.start_time,log.end_time)
+                >=info.duration,1,0))/count(log.video_id) ,3)
 as avg_comp_play_rate
-from tb_user_video_log  as log inner join tb_video_info as info
-on log.video_id=info.video_id
+from tb_user_video_log as log inner join tb_video_info as info
+on log.video_id = info.video_id
 where year(log.start_time)=2021
 group by video_id 
-order by avg_comp_play_rate desc
-
-```
-
-```sql
-select t1.video_id,
-    round(avg(if(TIMESTAMPDIFF(second, start_time, end_time) >= t2.duration, 1, 0)),3) avg_comp_play_rate
-from tb_user_video_log t1
-join tb_video_info t2 on t1.video_id = t2.video_id
-where YEAR(start_time) = 2021
-group by t1.video_id
-order by avg_comp_play_rate desc
-
-```
-
-```sql
-SELECT a.video_id, 
-round(sum(if((end_time-start_time-b.duration) >=0,1,0))/count(a.video_id),3) avg_comp_play_rate
-FROM tb_user_video_log a
-left join tb_video_info b
-on a.video_id = b.video_id
-where year(start_time) = 2021
-GROUP BY a.video_id
-order by avg_comp_play_rate desc
-```
-
-```sql
-select m1.video_id
-  ,round(sum(case when m1.bftime>=m1.duration then 1 else 0 end)/ count(*),3) as avg_comp_play_rate
-from(
-select t2.video_id
-      ,(t1.end_time-t1.start_time) as bftime
-      ,t2.duration
-from tb_user_video_log t1
-left join tb_video_info t2
-on t2.video_id=t1.video_id
-where substr(start_time,1,4)=2021
-) as m1
-group by 1
 order by avg_comp_play_rate desc
 ```
 
@@ -69,44 +38,28 @@ order by avg_comp_play_rate desc
 https://www.nowcoder.com/practice/c60242566ad94bc29959de0cdc6d95ef?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select
-tag,
-concat(
-    ROUND(
-        avg(
-            if(
-                timestampdiff(second,start_time,end_time)>=duration,
-                1,timestampdiff(second,start_time,end_time)/duration
-               )
-            )*100
-            ,2)
-    ,'%') avg_play_progress
-from 
-tb_user_video_log a join tb_video_info b
-on a.video_id=b.video_id
-group by b.tag
-having avg(
-            if(
-                timestampdiff(second,start_time,end_time)>=duration,
-                1,timestampdiff(second,start_time,end_time)/duration
-               )
-    )>0.6
-order by avg_play_progress desc
+播放进度：
+case
+    when TIMESTAMPDIFF(SECOND, start_time, end_time) >= a.duration then 1 
+    else TIMESTAMPDIFF(SECOND, start_time, end_time) / a.duration 
+end 
+等效于
+if(TIMESTAMPDIFF(second, start_time,end_time) >= duration, 1, TIMESTAMPDIFF(second, start_time, end_time) / duration)
 ```
 
 ```sql
-select tag,
-concat(round(avg(if(TIMESTAMPDIFF(second,start_time,end_time)>=duration,1,TIMESTAMPDIFF(second,start_time,end_time)/duration))*100,2)
-,'%') as avg_play_progress
+select 
+    tag,
+    concat(round(avg(if(TIMESTAMPDIFF(second,start_time,end_time)>=duration,1,
+    TIMESTAMPDIFF(second,start_time,end_time)/duration))*100,2),'%') as avg_play_progress
 from tb_user_video_log join tb_video_info t1 using(video_id)
 group by tag
 having avg(if(TIMESTAMPDIFF(second,start_time,end_time)>=duration,1,TIMESTAMPDIFF(second,start_time,end_time)/duration))>0.6
+-- avg_played_progress 可以再算一遍
 order by avg_play_progress desc
-
 ```
 
 ```sql
-    
 SELECT tag,
 	concat(round(SUM(play)/COUNT(*)*100,2),'%') AS avg_played_progress
 FROM(
@@ -120,9 +73,12 @@ FROM(
 	on a.video_id = b.video_id
 ) AS c
 GROUP BY tag
-HAVING avg_played_progress> 60
+HAVING avg_played_progress > 60
+-- avg_played_progress 可以直接饮用
 ORDER BY avg_played_progress desc
 ```
+
+如下 CAST(xxx AS CHAR) 是可有可无的
 
 ```sql
 SELECT tag,
@@ -135,85 +91,36 @@ HAVING AVG(IF(TIMESTAMPDIFF(second, start_time, end_time)<=duration,TIMESTAMPDIF
 ORDER BY avg_play_progress DESC
 ```
 
-```sql
-with t as(
-    select tag,
-        sum(duration) sum_duration,
-        sum(if(TIMESTAMPDIFF(second,start_time,end_time)>=duration,duration,TIMESTAMPDIFF(second,start_time,end_time))) sum_sec
-    from tb_user_video_log vl
-    left join tb_video_info vi
-    on vl.video_id=vi.video_id
-    group by tag
-)
-select tag,concat(round(sum_sec/sum_duration*100,2),'%') avg_progress
-from t
-where sum_sec/sum_duration>0.6
-order by avg_progress desc;
-
-
-```
-
 ## SQL3 每类视频近一个月的转发量/率
 
 https://www.nowcoder.com/practice/a78cf92c11e0421abf93762d25c3bfad?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select b.tag, sum(if_retweet) retweet_cnt,  round(sum(if_retweet)/count(1),3) retweet_rate from
-tb_user_video_log a
-left join  tb_video_info b
-on a.video_id = b.video_id
-where DATEDIFF(DATE((select max(start_time) from tb_user_video_log)) ,DATE(start_time)) <= 29
-group by b.tag
-order by 2 desc
-```
+近一个月
 
-```sql
-select tag,
-sum(if_retweet) as retweet_count,
-round(sum(if_retweet) / count(*), 3) as retweet_rate
-from tb_user_video_log t1
-join tb_video_info t2
-on t1.video_id = t2.video_id
-where datediff(date((select max(start_time) from tb_user_video_log)), date(start_time)) <= 29
-group by tag
-order by retweet_rate desc
+DATEDIFF(
+    DATE((select max(start_time) from tb_user_video_log)) ,
+    DATE(start_time)
+    ) <= 29
+
+等效于
+
+timestampdiff(
+    day,
+    start_time,
+    (select max(start_time) from tb_user_video_log)
+    )<=29
 ```
 
 
 ```sql
 select 
-tag,
-sum(case when a.if_retweet ="1" then 1 else 0 end )as retweet_cnt,
-round(sum(case when a.if_retweet ="1" then 1 else 0 end )/count(a.video_id)
-,3)
-from tb_user_video_log a 
-left join 
-tb_video_info b 
-on a.video_id=b.video_id
-where DATEDIFF(DATE((select max(start_time) FROM tb_user_video_log)),
-             DATE(a.start_time)) <= 29
-group by tag
-order by  retweet_cnt desc
-```
-
-```sql
-SELECT b.tag, SUM(if_retweet) retweet_cnt, ROUND(SUM(if_retweet)/COUNT(*), 3) retweet_rate
-FROM tb_user_video_log a
-LEFT JOIN tb_video_info b
-ON a.video_id = b.video_id
-WHERE DATEDIFF(DATE((select max(start_time) FROM tb_user_video_log)), DATE(a.start_time)) <= 29
-GROUP BY b.tag
-ORDER BY retweet_rate desc
-```
-
-```sql
-select tag,
-sum(if_retweet) retweet_count,
-round(sum(if_retweet) / count(1), 3) retweet_rate
-from tb_user_video_log a
-join tb_video_info b
-on a.video_id = b.video_id
-where timestampdiff(day,start_time,(select max(start_time) from tb_user_video_log))<=29
+    tag,
+    sum(if_retweet) as retweet_count,
+    round(sum(if_retweet) / count(*), 3) as retweet_rate
+from tb_user_video_log t1
+join tb_video_info t2 on t1.video_id = t2.video_id
+where datediff(date((select max(start_time) from tb_user_video_log)), date(start_time)) <= 29
 group by tag
 order by retweet_rate desc
 ```
@@ -221,80 +128,36 @@ order by retweet_rate desc
 ## SQL4 每个创作者每月的涨粉率及截止当前的总粉丝量
 
 ```sql
-SELECT 
-  author, 
-  DATE_FORMAT(start_time, '%Y-%m') month, 
-  ROUND(SUM(IF(if_follow = 2, -1, if_follow)) / COUNT(*), 3) fans_growth_rate, 
-  SUM(SUM(IF(if_follow = 2, -1, if_follow))) OVER (PARTITION BY author ORDER BY DATE_FORMAT(start_time, '%Y-%m')) total_fans 
-FROM tb_video_info 
-LEFT JOIN tb_user_video_log USING(video_id) 
-WHERE YEAR(start_time) = 2021
-GROUP BY 1,2
-ORDER BY 1,4
-```
+每月的涨粉率
+DATE_FORMAT(start_time, '%Y-%m') month
+DATE_FORMAT(end_time, "%Y-%m") AS month
 
-```sql
-SELECT author, month,
-       ROUND((increase-decrease)/watch, 3) AS fans_growth_rate,
-       SUM(increase-decrease) OVER(PARTITION BY author ORDER BY month) AS total_fans
-FROM (
-    SELECT i.author, DATE_FORMAT(end_time, "%Y-%m") AS month,
-           SUM(IF(l.if_follow=1, 1, 0)) AS increase,
-           SUM(IF(l.if_follow=2, 1, 0)) AS decrease,
-           COUNT(uid) AS watch
-    FROM tb_user_video_log l
-    JOIN tb_video_info i
-    ON l.video_id = i.video_id
-    WHERE YEAR(end_time) = 2021
-    GROUP BY i.author, month
-) AS a
-ORDER BY author, total_fans
-```
-
-```sql
-select author,date_format(start_time,'%Y-%m')ym,
-round((sum(case if_follow when 1 then 1 when 2 then -1 else 0 end)/count(a.id)),3)fans_growth_rate,
-sum(sum(case if_follow when 1 then 1 when 2 then -1 else 0 end))over(partition by author order by
-date_format(start_time,'%Y-%m'))total_fans from tb_user_video_log a
-join tb_video_info b
-on a.video_id=b.video_id
-where year(end_time)=2021
-group by author,ym
-order by author,total_fans 
-
+sum(case when if_follow = 2 then -1 else if_follow end) 新增粉丝
+sum(新增粉丝) over (partition by author order by month) 总粉丝
+等效于
+SUM(SUM(IF(if_follow = 2, -1, if_follow))) OVER (PARTITION BY author ORDER BY DATE_FORMAT(start_time, '%Y-%m'))
 ```
 
 ```sql
 select 
     author
-    ,mon
+    ,month
     ,round(add_fans/counts,3) fans_growth_rate
-    ,sum(add_fans) over(partition by author order by mon) total_fans
+    ,sum(add_fans) over(partition by author order by month) total_fans
 from (
     select 
         author
-        ,DATE_FORMAT(start_time,'%Y-%m') mon
+        ,DATE_FORMAT(start_time,'%Y-%m') month
         ,sum(case when if_follow = 2 then -1 else if_follow end) add_fans
         ,count(*) counts
     from tb_user_video_log t1
     join tb_video_info t2 on t1.video_id = t2.video_id
     where year(start_time) = 2021
-    group by author, mon
+    group by author, month
 ) t
 ORDER BY author,total_fans
 ```
 
-```sql
-SELECT author ,DATE_FORMAT(A.start_time,'%Y-%m') month,
-       ROUND(SUM(IF(if_follow=2,-1,if_follow))/ COUNT(*),3) fans_growth_rate ,
-       SUM(SUM(IF(if_follow = 2, -1, if_follow))) OVER (PARTITION BY author ORDER BY DATE_FORMAT(start_time, '%Y-%m')) total_fans
-       FROM tb_user_video_log A 
-LEFT JOIN tb_video_info B
-ON A.video_id = B.video_id
-WHERE YEAR(start_time) = 2021
-GROUP BY author,month
-ORDER BY author,total_fans
-```
 
 ## SQL5 国庆期间每类视频点赞量和转发量
 
@@ -302,93 +165,24 @@ ORDER BY author,total_fans
 
 https://www.nowcoder.com/practice/f90ce4ee521f400db741486209914a11?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
-ORDER BY dt DESC rows BETWEEN CURRENT ROW AND 6 FOLLOWING：
-
 ```sql
-SELECT * FROM
-(SELECT tag, dt, 
-       SUM(lick_cnt) OVER w,
-       MAX(retweet_cnt) OVER w
-FROM
-(SELECT tag, DATE_FORMAT(start_time, '%Y-%m-%d') AS dt,
-SUM(if_like) lick_cnt, SUM(if_retweet) retweet_cnt
-FROM tb_user_video_log JOIN tb_video_info USING(video_id)
-WHERE start_time BETWEEN '20210925' AND '20211004' GROUP BY tag, dt) t
-WINDOW w AS (PARTITION BY tag ORDER BY dt DESC rows BETWEEN CURRENT ROW AND 6 FOLLOWING)
-) t1
-WHERE dt BETWEEN '2021-10-01' AND '2021-10-04'
-ORDER BY tag DESC, dt ASC
-```
-
+order by dt desc 
+rows between current row and 6 following
+等效于
+order by dt 
 rows 6 preceding
 
-```sql
-select * from (
-
-select tag,dt,
-     sum(like_cnt) over(partition by tag order by t3.dt rows 6 preceding) total_like,
-     max(retweet_cnt) over(partition by tag order by t3.dt rows 6 preceding) max_retweet
-from (
-    select tag,date(start_time) dt, sum(if_like) like_cnt,
-                                        sum(if_retweet) retweet_cnt
-    from tb_user_video_log t1 inner join tb_video_info t2 on t1.video_id=t2.video_id
-    where date(start_time) between '2021-09-25' and '2021-10-03' 
-    group by tag,date(start_time)
-    ) t3 )t4 where t4.dt between '2021-10-01' and '2021-10-03'
-    order by tag desc,dt
-    
+SUM(likes) OVER (PARTITION BY tag ORDER BY dt ROWS 6 PRECEDING) AS sum_like_cnt_7d,
+            -- 每类视频每天的近一周
 ```
-
-order by dt desc rows between current row and 6 following
-
-```sql
-select *
-from (
-    select tag,dt,sum(like_cnt) over(partition by tag order by dt desc rows between current row and 6 following )
-    as sum_like_cnt_7d,max(retwwet_cnt) over(partition by tag order by dt desc rows between current row and 6 following)
-    as max_retweet_cnt_7d
-    from (
-        select tag,date(start_time) as dt,sum(if_like) as like_cnt,sum(if_retweet) as retwwet_cnt
-        from tb_user_video_log as uvl
-        left join tb_video_info as vi
-        on uvl.video_id = vi.video_id
-        where date(start_time) between date_sub('2021-10-01',interval 6 day) and '2021-10-03'
-        group by tag,dt
-        order by tag,dt DESC
-        ) as temp
-    ) as t
-where dt between '2021-10-01' and '2021-10-03'
-order by tag desc,dt 
-
-```
-
-rows 6 preceding
-
-```sql
-select t2.*
-from (select t1.tag,t1.d
-      ,sum(t1.if_like_sum)over(partition by t1.tag order by t1.d rows 6 preceding)
-      ,max(t1.if_retweet_sum)over(partition by t1.tag order by t1.d rows 6 preceding)
-      from (select tag,date(start_time) d
-            ,sum(if_like) if_like_sum
-            ,sum(if_retweet) if_retweet_sum
-            from tb_user_video_log tvl,tb_video_info tvi
-            where tvl.video_id=tvi.video_id
-            group by tag,d) as t1
-     ) as t2
-where t2.d between '2021-10-01' and '2021-10-03'
-order by t2.tag desc,t2.d
-
-```
-
-ROWS 6 PRECEDIN 
 
 ```sql
 SELECT tag, dt, sum_like_cnt_7d, max_retweet_cnt_7d
 FROM (
     SELECT tag, dt,
-           SUM(likes) OVER(PARTITION BY tag ORDER BY dt ROWS 6 PRECEDING) AS sum_like_cnt_7d,
-           MAX(retweets) OVER(PARTITION BY tag ORDER BY dt ROWS 6 PRECEDING) AS max_retweet_cnt_7d
+           SUM(likes) OVER (PARTITION BY tag ORDER BY dt ROWS 6 PRECEDING) AS sum_like_cnt_7d,
+            -- 每类视频每天的近一周
+           MAX(retweets) OVER (PARTITION BY tag ORDER BY dt ROWS 6 PRECEDING) AS max_retweet_cnt_7d
     FROM (
         SELECT i.tag, DATE(l.end_time) AS dt,
                SUM(if_like) AS likes,
@@ -401,6 +195,7 @@ FROM (
     ) AS a
 ) AS b
 WHERE dt BETWEEN "2021-10-01" AND "2021-10-03"
+-- 最后才过滤，国庆头3天
 ORDER BY tag DESC, dt ASC
 ```
 
@@ -408,6 +203,17 @@ ORDER BY tag DESC, dt ASC
 
 https://www.nowcoder.com/practice/0226c7b2541c41e59c3b8aec588b09ff?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
+
+
+```sql
+timestampdiff(day,xxx,xxx) <= 29
+
+等效于
+
+datediff(xxx,xxx)<=29
+```
+
+```sql
 注意：
 
 date((select max(end_time) from tb_user_video_log))
@@ -420,14 +226,20 @@ group by video_id
 
 的区别
 
+
+近一个月发布的视频：
+datediff(date((select max(end_time) from tb_user_video_log)), date(release_time)) <= 29
+datediff(date((select max(end_time) from tb_user_video_log)), max(date(end_time))) group by video_id 最近无播放天数
+```
+
 ```sql
-select video_id,
-round((100*fin_rate + 5*like_sum + 3*comment_sum + 2*retweet_sum)
-      /(unfin_day_cnt+1),0) hot_index
+select 
+    video_id,
+    round((100*fin_rate + 5*like_sum + 3*comment_sum + 2*retweet_sum)/(unfin_day_cnt+1),0) hot_index
 from(
   select 
     video_id,duration,
-    avg(if(timestampdiff(second,start_time,end_time)>=duration,1,0)) fin_rate,
+    avg(if(timestampdiff(second,start_time,end_time) >= duration, 1, 0)) fin_rate,
     sum(if_like) like_sum,
     count(comment_id) comment_sum,
     sum(if_retweet) retweet_sum,
@@ -441,152 +253,24 @@ order by hot_index DESC
 limit 3
 ```
 
-```sql
-select video_id,round((100*sc+5*like1+3*comment1+retweet1*2)/(dt+1),0) a1
-from(select video_id,duration,sum(if_like) like1,
-        sum(if_retweet) retweet1,count(comment_id) comment1
-        ,sum(TIMESTAMPDIFF(second,start_time,end_time)>=duration)/count(*) sc,
-        datediff(date((select max(end_time) from tb_user_video_log)),max(date(end_time))) dt
-        from tb_user_video_log t1
-        left join tb_video_info t2
-        using(video_id)
-        where datediff(date((select max(end_time) from tb_user_video_log))
-        ,date(release_time))<=29
-        group by video_id
-)t
-order by a1 desc
-limit 3
-```
-
-timestampdiff(day,xxx,xxx) <= 29
-
-等效于
-
-datediff(xxx,xxx)<=29
-
-```sql
-select vid,round((a_c+s_l+s_c+s_r)/
-                 (datediff(
-                     date((select max(end_time) from tb_user_video_log)),
-                     date(p_t))
-                  +1),0) h
-from(
-    SELECT AVG(IF(TIMESTAMPDIFF(
-                SECOND,start_time,end_time
-                )>=duration,1,0)
-              )*100 a_c,
-     SUM(if_like)*5 s_l,
-     SUM((comment_id IS NOT NULL))*3 s_c,
-     SUM(if_retweet)*2 s_r,
-     MAX(end_time) p_t,
-     tuvl.video_id vid,
-     max(tvi.release_time) r_t
-
-    FROM tb_user_video_log tuvl
-    JOIN tb_video_info tvi
-    ON tuvl.video_id=tvi.video_id
-    
-    GROUP BY tuvl.video_id
-    having timestampdiff(day,
-                         DATE(r_t),
-                         date((select max(end_time) from tb_user_video_log))
-                        ) < 30
-) t1
-ORDER BY h DESC
-LIMIT 3;
-
-```
-
-```sql
-select video_id,
-       round((100*completion_rate+5*sum_if_like+3*count_comment_id+2*sum_if_retweet)*(1/(day_new+1)),0) of_heat
-from
-(select t1.video_id,
-       datediff((select max(end_time)from tb_user_video_log),max(tuvl.end_time)) day_new,  -- 最近无播放天数
-       avg(case
-                when timestampdiff(second, start_time, end_time) >= duration  then  1
-                else 0
-            end) completion_rate,
-       sum(if_like) sum_if_like,
-       count(comment_id) count_comment_id,
-       sum(if_retweet) sum_if_retweet
-from tb_video_info t1
-join tb_user_video_log tuvl on t1.video_id = tuvl.video_id
-where datediff(date((select max(end_time)from tb_user_video_log)), date(t1.release_time))<=29
-group by t1.video_id) a
-order by of_heat desc limit 3;
-```
-
-```sql
-SELECT
-  video_id,
-  ROUND((100 * finished_rate 
-   + 5 * like_cnt 
-   + 3 * comment_count 
-   + 2 * retweet_cnt) / (unfinished_day_cnt + 1)) hot_index
-FROM (
-  SELECT
-    i.video_id,
-    SUM(TIMESTAMPDIFF(second, start_time, end_time) >= duration) / COUNT(*) finished_rate,
-    SUM(if_like = 1) like_cnt,
-    SUM(IF(comment_id IS NOT NULL, 1, 0)) comment_count,
-    SUM(if_retweet = 1) retweet_cnt,
-    DATEDIFF(DATE((SELECT MAX(end_time) FROM tb_user_video_log)), MAX(DATE(end_time))) unfinished_day_cnt
-  FROM tb_video_info i
-  JOIN tb_user_video_log USING(video_id)
-  WHERE DATEDIFF(DATE((SELECT MAX(end_time) FROM tb_user_video_log)), DATE(release_time)) <= 29 
-  GROUP BY 1
-) t
-ORDER BY 2 DESC LIMIT 3
-
-```
 
 ## SQL7 2021年11月每天的人均浏览文章时长
 
 https://www.nowcoder.com/practice/8e33da493a704d3da15432e4a0b61bb3?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select DATE_FORMAT(in_time,'%Y-%m-%d') as a,
-round(sum(TIMESTAMPDIFF(second,in_time,out_time))/count(distinct uid),1) as b
-from tb_user_log
-where year(in_time)=2021 and month(in_time)=11 and artical_id!=0
-group by a
-order by b ;
-```
+人均
 
-```sql
-select dt,round(sum(sc)/count(distinct uid),1) avg_view_len_sec
-from 
-(select uid,date(out_time) dt,TIMESTAMPDIFF(SECOND,in_time,out_time) sc,artical_id from tb_user_log) t 
-where year(dt) = "2021" and month(dt) = "11" and artical_id != 0
-group by dt
-order by avg_view_len_sec ;
-```
-
-```sql
-select date(in_time) dt
-,round(sum(timestampdiff(second,in_time,out_time))/count(distinct uid),1) sec
-from tb_user_log
-where year(in_time)=2021 and month(in_time)=11 and artical_id != 0
-group by dt
-order by sec
-```
-
-```sql
-SELECT date_format(in_time, '%Y-%m-%d') dt, 
-      round(sum(TIMESTAMPDIFF(SECOND,tl.in_time,tl.out_time))/count(DISTINCT tl.uid),1)avg_view_len_sec
-FROM tb_user_log AS tl
-where tl.artical_id != 0
-and DATE_FORMAT(tl.in_time,'%Y-%m')='2021-11'
-group by date_format(tl.in_time, '%Y-%m-%d')
-order by avg_view_len_sec
-```
+sum(TIMESTAMPDIFF(second,in_time,out_time))/count(distinct uid)
 
 date_format(in_time, '%Y-%m-%d')
-
 等效于
-
 date(in_time)
+
+DATE_FORMAT(tl.in_time,'%Y-%m')='2021-11'
+等效于
+year(in_time) = 2021 and month(in_time) = 11
+```
 
 ```sql
 SELECT
@@ -598,61 +282,18 @@ group by dt
 order by avg_view_len_sec
 ```
 
-```sql
-select DATE_FORMAT(in_time,'%Y-%m-%d') as a,
-round(sum(TIMESTAMPDIFF(second,in_time,out_time))/count(distinct uid),1) as b
-from tb_user_log
-where year(in_time)=2021 and month(in_time)=11 and artical_id!=0
-group by a
-order by b ;
-```
 
 ## SQL8 每篇文章同一时刻最大在看人数
 
 https://www.nowcoder.com/practice/fe24c93008b84e9592b35faa15755e48?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
+```sql
 注意一定要按照 in_time 和 out_time 的升序排序
 
-```sql
-with t as
-(SELECT artical_id, in_time dt, 1 diff #开始等待，人数+1
-FROM tb_user_log
-where artical_id !=0
-union all
-SELECT artical_id, out_time dt, -1 diff #开始等待，人数+1
-FROM tb_user_log
-where artical_id !=0
-)
+利用 +1 和 -1 计数，即 uv
 
-select artical_id,max(cnt)ca
-from
-(SELECT artical_id,dt,SUM(diff) OVER(PARTITION BY artical_id ORDER BY dt,diff desc) cnt
-from t)t1
-group by artical_id
-order by ca desc
+SUM(uv) OVER (PARTITION BY artical_id ORDER BY dt, uv desc)
 ```
-
-```sql
-SELECT artical_id, max(t1) as t2
-FROM(
-    SELECT artical_id,t,
-    sum(m)over(partition by artical_id order by t,m desc) as t1
-    from(
-        select artical_id,in_time as t,1 as m
-        from tb_user_log
-        where artical_id<>0
-        UNION ALL
-        select artical_id,out_time as t,-1 as m
-        from tb_user_log
-        where artical_id<>0
-    )a
-)b
-group by artical_id
-order by t2 desc
-
-
-```
-
 ```sql
 with t as ((select
                 artical_id,
@@ -688,167 +329,68 @@ order by
 
 ```
 
-```sql
-with t2 as
-(
-    select artical_id,sum(x) over(partition by artical_id order by time,x desc) sum_x
-    from
-    (
-        select artical_id,in_time time,1 x from tb_user_log
-        where artical_id like '9%'
-        union all 
-        select artical_id,out_time time,-1 x from tb_user_log
-        where artical_id like '9%'
-        order by time,x desc
-    ) t1
-)
-select distinct artical_id,sum_x
-from t2 t
-where sum_x >= all(select sum_x from t2 where t2.artical_id=t.artical_id)
-order by sum_x desc
-```
-
-```sql
-SELECT artical_id, MAX(current_max) as max_uv
-FROM (
-    SELECT artical_id, at_time,
-        SUM(uv) over(PARTITION BY artical_id ORDER BY at_time, uv DESC) as current_max
-    FROM (
-        SELECT artical_id, in_time as at_time, 1 as uv FROM tb_user_log
-        UNION ALL
-        SELECT artical_id, out_time as at_time, -1 as uv FROM tb_user_log
-        ORDER BY at_time
-    ) as t_uv_at_time
-    WHERE artical_id != 0
-) as t_artical_cur_max
-GROUP BY artical_id
-ORDER BY max_uv DESC;
-
-```
-
 ## SQL9 2021年11月每天新用户的次日留存率
 
 https://www.nowcoder.com/practice/1fc0e75f07434ef5ba4f1fb2aa83a450?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select a.dt, 
+min(date(in_time)) group by uid, -- 用户的第一次登陆
+count(uid) over (partition by min(date(in_time))) as cnt --每天的新用户数目
+count(distinct b.uid)/count(distinct a.uid) 第二天的留存率
+
+次日留存
+left join -- 这里一定要用left join
+on DATE_ADD(a.dt,INTERVAL 1 DAY) = b.dt and a.uid = b.uid
+等效于
+left join tb_user_log t2 
+on t1.uid = t2.uid and date_add(t1.dt,interval 1 day) between date(t2.in_time) and date(t2.out_time)
+
+WHERE a.dt like "2021-11%"
+等效于
+where date_format(t1.dt,'%Y-%m') = '2021-11'
+```
+
+```sql
+select 
+    a.dt, 
     round(count(distinct b.uid)/count(distinct a.uid),2) uv_left_rate
 from (
     select uid , min(date(in_time)) dt
     from tb_user_log 
     group by uid ) a
-left join 
-     (select uid,date(in_time) dt
-    from tb_user_log
-    union 
-    select uid,date(out_time) dt
-    from tb_user_log) b
-on DATE_ADD(a.dt,INTERVAL 1 DAY) = b.dt and a.uid=b.uid
+    -- a 表示第一天
+    left join -- 这里一定要用left join
+        (select uid,date(in_time) dt
+        from tb_user_log
+        union 
+        select uid,date(out_time) dt
+        from tb_user_log) b
+        -- b 表示第二天，用了union大法
+    on DATE_ADD(a.dt,INTERVAL 1 DAY) = b.dt and a.uid = b.uid
 where a.dt like '2021-11%'
 group by a.dt 
 order by a.dt
 ```
 
 
-```sql
-select 
-    a.dt,
-    ifnull(round(count(distinct b.uid)/count(a.uid),2),0)uv_left_rate
-from
-    (SELECT uid,date(min(in_time)) dt
-    FROM tb_user_log
-    GROUP BY uid) a 
-left join
-    (SELECT uid,DATE(in_time) dt
-    FROM tb_user_log
-    union
-    SELECT uid,DATE(out_time) dt
-    FROM tb_user_log) b 
-ON a.uid = b.uid
-and b.dt = DATE_ADD(a.dt,INTERVAL 1 DAY)
-WHERE a.dt like "2021-11%"
-GROUP BY a.dt
-ORDER BY a.dt;
-```
 
 ```sql
-select t1.dt,round(count(distinct t2.uid)/avg(t1.cnt),2) as uv_left_rate
+select 
+    t1.dt,
+    round(count(distinct t2.uid)/avg(t1.cnt),2) as uv_left_rate
 from
-(select uid,min(date(in_time)) as dt,
- count(uid) over(partition by min(date(in_time))) as cnt 
- from tb_user_log
-group by uid)t1
-left join tb_user_log t2 on t1.uid = t2.uid
+    (select 
+        uid,
+        min(date(in_time)) as dt, -- 用户的第一次登陆
+        count(uid) over (partition by min(date(in_time))) as cnt --每天的新用户数目
+    from tb_user_log
+    group by uid)t1
+left join tb_user_log t2 
+on t1.uid = t2.uid
 and date_add(t1.dt,interval 1 day) between date(t2.in_time) and date(t2.out_time)
 where date_format(t1.dt,'%Y-%m') = '2021-11'
 group by t1.dt
 order by t1.dt
-```
-
-```sql
-select 
-    a.dt,
-    ifnull(round(count(distinct b.uid)/count(a.uid),2),0) uv_left_rate
-from
-(SELECT uid,date(min(in_time)) dt
-    FROM tb_user_log
-    GROUP BY uid)a
-left join
-    (SELECT uid,DATE(in_time) dt
-    FROM tb_user_log
-    union
-    SELECT uid,DATE(out_time) dt
-    FROM tb_user_log) b 
-ON a.uid = b.uid
-and b.dt = DATE_ADD(a.dt,INTERVAL 1 DAY)
-WHERE a.dt like "2021-11%"
-GROUP BY a.dt
-ORDER BY a.dt
-```
-
-```sql
-select 
-    a.dt,
-    ifnull(round(count(distinct b.uid)/count(a.uid),2),0)uv_left_rate
-from
-    # 每个用户最初注册的日期
-    (SELECT uid,date(min(in_time)) dt
-    FROM tb_user_log
-    GROUP BY uid) a 
-# 把日期拆分成登陆和退出日期，再通过uid联立表
-# 查找每个用户注册日期增加1天后的日期是否在登陆和退出日期当中
-left join
-    (
-    SELECT uid,DATE(in_time) dt
-    FROM tb_user_log
-    union
-    SELECT uid,DATE(out_time) dt
-    FROM tb_user_log
-    ) b 
-ON a.uid = b.uid
-# 每个uid在初次登陆日期的第二天
-and b.dt = DATE_ADD(a.dt,INTERVAL 1 DAY)
-# WHERE的时机，在全部表联合完之后进行筛选
-WHERE a.dt like "2021-11%"
-GROUP BY a.dt
-ORDER BY a.dt;
-```
-
-```sql
-select dt,ifnull(round(next_num/new_cnt,2),0)
-from 
-(select dt,count(distinct case when rk = 1 then uid end) new_cnt,
-           count(distinct case when rk = 1 and ( datediff(next_date,dt)=1 or datediff(dt1,dt)=1 ) then uid end) next_num
-from (SELECT uid,DATE(in_time) dt,lead(DATE(in_time),1)over(partition by uid order by in_time) next_date,
-        DENSE_RANK()over(partition by uid order by DATE(in_time) ) as rk,
-        date(out_time) dt1
-      FROM tb_user_log
-     ) t
- where year(dt)=2021 and month(dt)=11 
-group by dt) t1
-where new_cnt > 0
-order by dt
-
 ```
 
 ## SQL10 统计活跃间隔对用户分级结果
@@ -856,57 +398,56 @@ order by dt
 https://www.nowcoder.com/practice/6765b4a4f260455bae513a60b6eed0af?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select user_grade,round(count(uid)/(select count(distinct uid) from tb_user_log),2) q
-from  
-(
-select uid,(case when datediff((select max(in_time) from tb_user_log),max(in_time)) <=6 
-            and  datediff((select max(in_time) from tb_user_log),min(in_time)) >6 then '忠实用户'
-            when datediff((select max(in_time) from tb_user_log),max(in_time)) <=6 
-            and  datediff((select max(in_time) from tb_user_log),min(in_time)) <=6 then '新晋用户'
-             when datediff((select max(in_time) from tb_user_log),max(in_time)) >6 
-             and  datediff((select max(in_time) from tb_user_log),min(in_time)) <=29 then '沉睡用户'
-             else '流失用户' end ) user_grade
-from tb_user_log
-group by uid
-) f1
-group by user_grade
-order by q desc
+全部用户：
+select count(distinct uid) from tb_user_log
+各个等级用户占比：
+count(uid)/(全部用户) group by user_grade
 
+最近日期：
+select max(in_time) from tb_user_log
+max(max(date(in_time))) over() group by uid
+
+
+每个用户最近一次，最远一次登陆：
+datediff((最近日期),max(in_time)) group by uid
+datediff((最近日期),min(in_time)) group by uid
 ```
 
 ```sql
-select user_grade,
-       round(count(uid)/(select count(distinct uid) from tb_user_log),2) ratio
-from ( SELECT uid,
-              case
-              when (max(date(in_time)) BETWEEN '2021-10-29' and '2021-11-04')
-                   and (min(date(in_time)) <'2021-10-29' ) then '忠实用户'
-              when min(date(in_time)) BETWEEN '2021-10-29'
-                   and '2021-11-04' then '新晋用户'
-              when (max(date(in_time)) <= '2021-10-28')
-                    and (max(date(in_time)) >= '2021-10-06') then '沉睡用户'
-              else '流失用户' end as user_grade
-              FROM tb_user_log
-              GROUP BY uid ) a
-GROUP BY user_grade
-ORDER BY ratio desc
-```
-
 count(uid) over()
-
 group by uid
 
 和
 
 count(uid)
-
 group by uid
 
 的区别
+```
 
 ```sql
--- 2021年12月13日
+select user_grade,round(count(uid)/(select count(distinct uid) from tb_user_log),2) q
+from  
+    (
+    select 
+        uid,
+        (case when datediff((select max(in_time) from tb_user_log),max(in_time)) <=6 
+                and  datediff((select max(in_time) from tb_user_log),min(in_time)) >6 then '忠实用户'
+                when datediff((select max(in_time) from tb_user_log),max(in_time)) <=6 
+                and  datediff((select max(in_time) from tb_user_log),min(in_time)) <=6 then '新晋用户'
+                when datediff((select max(in_time) from tb_user_log),max(in_time)) >6 
+                and  datediff((select max(in_time) from tb_user_log),min(in_time)) <=29 then '沉睡用户'
+                else '流失用户' end ) user_grade
+    from tb_user_log
+    group by uid
+    ) f1
+group by user_grade
+order by q desc
+``` 
 
+
+
+```sql
 select 
   (case
       when datediff(today, first_active_dt)<=6 then '新晋用户'  -- 按逻辑，不会出现负值
@@ -922,6 +463,7 @@ from (
     , min(date(in_time)) as first_active_dt
     , max(date(in_time)) as last_active_dt
     , max(max(date(in_time))) over() as today
+    -- 注意这里today的写法
     , count(uid) over() as all_user_cnt
     from tb_user_log
     group by uid
@@ -932,69 +474,34 @@ order by ratio desc
 ```
 
 ```sql
-select grade,round(count(uid)/(select count(distinct uid) from tb_user_log),2) as ratio
-from (
-      select uid,
-                (case when datediff((select date(max(out_time)) from tb_user_log),max(date(in_time)))<=6 and datediff((select date(max(out_time))  from tb_user_log),date(min(in_time)))>=7 then '忠实用户'
-                      when datediff((select date(max(out_time))  from tb_user_log),date(min(in_time)))<=6 then '新晋用户'
-                      when datediff((select date(max(out_time))  from tb_user_log),date(max(in_time))) between 7 and 29 then '沉睡用户'
-                      when datediff((select date(max(out_time))  from tb_user_log),date(max(in_time))) >=30 then '流失用户'
-                end) as grade
-      from tb_user_log
-      group by uid
-      ) a
-group by grade
-order by ratio desc
-```
-
-```sql
-select user_grade,
-round(count(uid)/(select count(distinct uid) from tb_user_log),2) as ratio
-#计算总人数的方法
+select 
+    user_grade,
+    round(count(uid)/(select count(distinct uid) from tb_user_log),2) as ratio
 from
-(select uid,
-case when datediff(date(today),date(first_time))<7 then '新晋用户'
-     when datediff(date(today),date(first_time))>=7 
-     and datediff(date(today),date(recent_time))<7
-     then '忠实用户'
-     when datediff(date(today),date(first_time))>=7 
-     and datediff(date(today),date(recent_time)) between 7 and 29
-     then '沉睡用户'
-     else '流失用户' end
-     as user_grade
-from
-(select uid,
-min(in_time) as first_time,
-max(in_time) as recent_time
-from tb_user_log 
-group by uid)t1
- join 
-(select max(in_time) as today
-from tb_user_log
-)t2
- )T
+    (select 
+        uid,
+        case when datediff(date(today),date(first_time))<7 then '新晋用户'
+            when datediff(date(today),date(first_time))>=7 
+            and datediff(date(today),date(recent_time))<7 then '忠实用户'
+            when datediff(date(today),date(first_time))>=7 
+            and datediff(date(today),date(recent_time)) between 7 and 29 then '沉睡用户'
+            else '流失用户' 
+        end as user_grade
+    from
+        (select 
+            uid,
+            min(in_time) as first_time,
+            max(in_time) as recent_time
+        from tb_user_log 
+        group by uid) t1
+        join 
+        (select 
+            max(in_time) as today
+        from tb_user_log
+        )t2
+    )T
 group by user_grade
 order by ratio desc
-```
-
-```sql
-with t1 as
-(select t.uid, datediff('2021-11-04',min_it) date_min,datediff('2021-11-04',max_it) date_max
-from tb_user_log t join (select uid,min(in_time) min_it ,max(in_time) max_it 
-                         from tb_user_log group by uid )  last_date 
-                   using(uid)
-group by t.uid)
- 
-select user_grade,round(count(*)/ ( select count(*) from t1),2) ratio
-from (select t1.uid,case when date_min <7 and date_max <7 then '新晋用户' 
-              when date_min >=7 and date_max >=7 and date_max < 30 then '沉睡用户' 
-              when  date_min >=7 and date_max >=30 then '流失用户'
-              else '忠实用户' end as user_grade
-        from t1) t2
-group by user_grade 
-order by ratio desc
-
-
 ```
 
 ## SQL11 每天的日活数及新用户占比
