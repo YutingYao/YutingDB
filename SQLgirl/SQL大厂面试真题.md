@@ -509,45 +509,67 @@ order by ratio desc
 https://www.nowcoder.com/practice/dbbc9b03794a48f6b34f1131b1a903eb?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
+新用户 
+
+count(*) over (partition by uid order by dt)as times
+sum(if(times=1,1,0)
+
+新用户
+
+min(date(in_time)) min_date group by uid
+count(min_date) 或 count(DISTINCT n.uid)
+```
+
+```sql
 select
 	dt,
 	count(uid)as dau,
 	round(sum(if(times=1,1,0))/count(uid),2)as nv_new_ratio
 from
-(
-select 
-	*,
-	count(*) over (partition by uid order by dt)as times
-from
-(
-select 
-	uid,
-	date(in_time) as dt
-from tb_user_log
-union
-select
-	uid,
-	date(out_time) as dt
-from tb_user_log
-) t1
-) t2
+    (
+    select 
+        *,
+        count(*) over (partition by uid order by dt)as times -- 对于排序为1的进行计数
+    from
+        (--所有登入和登出
+        select 
+            uid,
+            date(in_time) as dt
+        from tb_user_log
+        union
+        select
+            uid,
+            date(out_time) as dt
+        from tb_user_log
+        ) t1
+    ) t2
 group by dt
 order by dt
 ```
 
 ```sql
-with t1 as (
-    select uid,min(date(in_time)) min_date
+with 
+t1 as ( -- 用户第一次登陆时间
+    select 
+        uid,
+        min(date(in_time)) min_date
     from tb_user_log
     group by uid),
-t2 as(
-    select uid,date(in_time) dt
+t2 as ( -- 用户所有登陆时间
+    select 
+        uid,
+        date(in_time) dt
     from tb_user_log
     union
-    select uid,date(out_time) dt
+    select 
+        uid,
+        date(out_time) dt
     from tb_user_log)
 
-select dt,count(*),round(count(min_date)/count(*),2)
+select 
+    dt,
+    count(*),
+    round(count(min_date)/count(*),2)
 from(
     SELECT t2.uid,dt,min_date
     from t2
@@ -558,83 +580,34 @@ order by dt
 ```
 
 ```sql
-SELECT m.dt,count(DISTINCT m.uid) dau,
-				round(count(DISTINCT n.uid)/count(DISTINCT m.uid),2) uv_new_ratio
+SELECT 
+    m.dt,
+    count(DISTINCT m.uid) dau,
+    round(count(DISTINCT n.uid)/count(DISTINCT m.uid),2) uv_new_ratio
 FROM(
-SELECT uid,date(in_time) dt
-FROM tb_user_log 
-union ALL
-SELECT uid,date(out_time) dt
-FROM tb_user_log 
-where date(in_time)!=date(out_time)) m
-left join 
-(SELECT uid,min(date(in_time)) dt
-FROM tb_user_log
-GROUP BY uid) n 
-on m.uid=n.uid and m.dt=n.dt
+    SELECT 
+        uid,
+        date(in_time) dt
+    FROM tb_user_log 
+    union ALL
+    SELECT 
+        uid,
+        date(out_time) dt
+    FROM tb_user_log 
+    where date(in_time) != date(out_time)
+    ) m -- 全部登陆
+    left join 
+        (SELECT 
+            uid,
+            min(date(in_time)) dt
+        FROM tb_user_log
+        GROUP BY uid
+        ) n -- 最近一次登陆
+    on m.uid=n.uid and m.dt=n.dt
 GROUP BY m.dt
 order by m.dt
 ```
 
-```sql
-select a.time dt,count(distinct a.uid) dau,
-round(sum(case when a.time=b.min_time then 1 else 0 end)/count(distinct a.uid),2) uv_new_ratio from
-(select uid,date(in_time) time from tb_user_log
-union
-select uid,date(out_time) time from tb_user_log) a
-left join
-(select uid,min(date(in_time)) min_time from tb_user_log group by uid) b
-on a.uid = b.uid
-group by dt order by dt asc;
-```
-
-```sql
-/*建立临时表，存储uid,以及活跃的日期dt*/
-with r as 
-(select uid,date(in_time) dt
-from tb_user_log
-union        /*union 和 union all的区别：union会自动去重*/
-select uid,date(out_time) dt
-from tb_user_log
-)
-
-
-select t1.dt,dau,ifnull(round(cnt/dau,2),0) as uv_new_ratio
-from 
-(select dt, count( uid) dau
-from r
-group by dt) t1    /* t1:日期及每天活跃的人数*/
-left join     /*t1中所有日期，t2中只是有新用户登陆的日期，有可能某天没有新用户，但仍然有活跃用户*/
-(select min_dt as dt,count( uid) cnt
-from 
-(select uid,min(date(in_time)) as min_dt
-from tb_user_log
-group by uid) a     /*a:每个用户第一次登陆的日期，即他成为新用户的日期*/
-group by dt) t2    /*t2:日期及每天的新用户人数*/
-on t1.dt=t2.dt
-
-/*
-每天新用户的个数：每个人及其成为新用户的日期，然后按日期分组计数
-*/
-
-```
-
-```sql
-select a.dt,count(distinct a.uid) dau,
-      round(count(distinct b.uid)/count(distinct a.uid),2) uv_new_ratio
-from(select uid,date_format(in_time,"%Y-%m-%d") dt
-     from tb_user_log
-     union
-     select uid,date_format(out_time,"%Y-%m-%d") dt
-     from tb_user_log) a 
-left JOIN (select uid,date_format(min(in_time),"%Y-%m-%d") ct 
-                from tb_user_log
-                group by uid) b 
-       on a.uid = b.uid 
-       and a.dt = b.ct
-group by a.dt
-order by a.dt asc
-```
 
 ## SQL12 连续签到领金币
 
@@ -649,21 +622,40 @@ rank：12345678
 partition排序：12345123  
 
 ```sql
+ranK() 和 row_number() 和 dense_rank() 都可以
+# 第一步：先过滤掉不签到的，重复的
+# 第二步： ranK() over (partition by uid order by dt) --按照签名排序 
+# 第三步： date_sub (dt, interval ranK() over (partition by uid order by dt) 
+#          按照签到日期减去签到排名的差值 排序，（如果是连续签到，则得到的日期相同）-- 即得到连续签到的天数，rank_day
+# 第四步： rank() over (partition by uid, rank_day order by dt)，按照连续签的天数到排序，
+在mod与7，即可以判断连续签到的天数是否可以达到额外加金币的条件
+```
+
+```sql
 #给确定每个人每个签到阶段的起始日期
-select uid,date_format(dt,'%Y%m') as month
-,sum(case when stage_index=2 then 3
-   when stage_index=6 then 7
-   else 1 end) as coin
+select 
+    uid,
+    date_format(dt,'%Y%m') as month,
+    sum(case when stage_index = 2 then 3
+        when stage_index = 6 then 7
+        else 1 end) as coin -- 第四部
 from(
-    select uid,dt
-    ,(row_number()over(partition by uid,init_date order by dt)-1)%7 as stage_index
+    select 
+        uid,
+        dt,
+        (row_number() over (partition by uid, init_date order by dt) -1 ) % 7 as stage_index -- 第三步
     from
     (
-        select uid,dt,rn,subdate(dt,rn) as init_date
+        select 
+            uid,
+            dt,
+            rn,
+            subdate(dt,rn) as init_date -- 第二步
         from (
-            #给符合条件的每个人的日期编号
-            select uid,date(in_time) as dt
-            ,row_number()over(partition by uid order by date(in_time)) as rn
+            select 
+                uid,
+                date(in_time) as dt,
+                row_number() over (partition by uid order by date(in_time)) as rn -- 第一步
             from tb_user_log
             where date(in_time) >='2021-07-07'
             and date(in_time)<'2021-11-01'
@@ -683,13 +675,13 @@ FROM (
                WHEN ranking % 7 = 3 THEN 3
                WHEN ranking % 7 = 0 THEN 7
                ELSE 1
-           END AS score
+           END AS score -- 第三步
     FROM (
         SELECT uid, dt, DATE_SUB(dt, INTERVAL rn DAY) AS first_day,
-               ROW_NUMBER() OVER(PARTITION BY uid, DATE_SUB(dt, INTERVAL rn DAY) ORDER BY dt) AS ranking
+               ROW_NUMBER() OVER (PARTITION BY uid, DATE_SUB(dt, INTERVAL rn DAY) ORDER BY dt) AS ranking -- 第二步
         FROM (
             SELECT DISTINCT uid, DATE_FORMAT(in_time, "%Y%m%d") AS dt,
-                   DENSE_RANK() OVER(PARTITION BY uid ORDER BY DATE_FORMAT(in_time, "%Y%m%d")) AS rn
+                   DENSE_RANK() OVER (PARTITION BY uid ORDER BY DATE_FORMAT(in_time, "%Y%m%d")) AS rn -- 第一步
             FROM tb_user_log
             WHERE in_time >= "2021-07-07" AND 
                   in_time < "2021-11-01" AND 
@@ -703,41 +695,6 @@ ORDER BY month, uid
 ```
 
 ```sql
-with t as(
-SELECT uid,date(in_time) date_t,sign_in,ROW_NUMBER() over(partition by uid order by date(in_time)) as rank_t
-from tb_user_log
-where date(in_time) between '2021-07-07' and '2021-10-31' and artical_id = 0 and sign_in =1)
-
-select uid,date_format(date_t1,"%Y%m") month,
-    sum(if(cnt/7>=1,floor(cnt/7)*6+(floor(cnt/7)+if(cnt%7>=3,1,0))*2+cnt,cnt+if(cnt/3>=1,1,0)*2))
-from(
-    select uid,(date_t-rank_t) date_t1,count(date_t-rank_t) cnt
-    from t
-    group by uid,date_t1) t2
-group by uid,month
-```
-
-```sql
-SELECT uid,date_format(in_time,'%Y%m') month,sum(case when rk_2 % 7 = 3 then 3 when rk_2 % 7 = 0 then 7 else 1 end) coins
-FROM (SELECT uid,in_time,rk,DATE_SUB(in_time,INTERVAL rk day) in_time_0,
-      row_number()over(partition by uid,DATE_SUB(in_time,INTERVAL rk day) order by in_time) rk_2
-      FROM (SELECT DISTINCT uid,DATE_FORMAT(in_time,'%Y-%m-%d') in_time,
-            DENSE_RANK()over(partition by uid order by DATE_FORMAT(in_time,'%Y-%m-%d')) rk
-            FROM tb_user_log
-            WHERE (artical_id = 0 and sign_in = 1) and 
-            (DATE_FORMAT(in_time,'%Y-%m-%d') >= '2021-07-07' and DATE_FORMAT(in_time,'%Y-%m-%d') <= '2021-10-31')) t1)t2
-GROUP BY month,uid
-ORDER BY month,uid
-```
-
-```sql
-# 第一步：先过滤掉不签到的，重复的
-# 第二步： ranK()over(partition by uid order by dt) --按照签名排序 
-# 第三步：date_sub(dt,interval ranK()over(partition by uid order by dt) 
-#          按照签到日期减去签到排名的差值 排序，（如果是连续签到，则得到的日期相同）-- 即得到连续签到的天数，rank_day
-# 第四步：rank()over(partition by uid,rank_day order by dt)，按照连续签的天数到排序，在mod与7，即可以判断连续签到的天数是否可以达到额外加金币的条件
-
-
 select
              
     uid,
@@ -747,7 +704,7 @@ from (
     select
         uid,
         dt,
-        case when mod(rank()over(partition by uid,rank_day order by dt), 7)=0 then 7
+        case when mod(rank()over(partition by uid,rank_day order by dt), 7)=0 then 7 -- 第二步
              when mod(rank()over(partition by uid,rank_day order by dt), 7)=3 then 3
              else 1
              end  coin 
@@ -756,11 +713,11 @@ from (
         select
             uid,
             dt,
-             date_sub(dt,interval ranK()over(partition by uid order by dt) day ) rank_day--  签到日期减去签到排名，（如果是连续签到，则得到的日期相同），
+             date_sub(dt,interval ranK()over(partition by uid order by dt) day ) rank_day --  第一步
         from (
             select
                 distinct uid,  -- 去重 过滤掉重复签到的情况
-                date(in_time) dt-- 登入日期 
+                date(in_time) dt -- 登入日期 
             from tb_user_log
             where artical_id=0 and sign_in=1
                 and date(in_time)  between '2021-07-07' and '2021-10-31'
@@ -771,108 +728,24 @@ group by uid,month
 order by  month,uid
 ```
 
-```sql
-with s1 as
-(select uid,month,
-case when mod_num<=2 then mod_num+15*rou_num
-when mod_num >=3 then mod_num+15*rou_num+2 end coin
-from (
-    select uid,date_format(min_dt,'%Y%m') month,
-    mod(cnt,7) mod_num,round(cnt/7,0) rou_num
-    from(
-    select uid,min(dt) min_dt,max(dt) max_dt,count(*) cnt
-        from(
-            select uid, dt, 
-            datediff(dt,'1970-01-01')-rank()over(partition by uid order by dt) infor
-            from(
-                select uid,date(in_time) dt
-                from tb_user_log
-                where artical_id=0 and sign_in=1 
-                and date(in_time)>='2021-07-07' and date(in_time)<='2021-10-31'
-                order by dt
-                )t1
-            )t2
-        group by uid,infor
-        )t3
-    )t4
-)
-select uid,month,sum(coin) coin
-from s1
-group by uid,month;
-```
-
-```sql
-with act_log as (
-      select uid, date(in_time) dt FROM tb_user_log 
-      where artical_id=0 and sign_in=1 and date(in_time) between '2021-07-07' and '2021-10-31' 
-      group by uid, date(in_time)
-      ),
-      tb_if_con as (
-      select * , ROW_NUMBER() over w, datediff(dt,lag(dt,1,dt) over w) if_con from act_log 
-      window w as (partition by uid order by dt)
-      ),
-      con_num as (
-      SELECT * , 
-      case if_con when 1 then @n:=@n+1 else @n:=1 end 
-      mod 7 as con_num, 
-      case case if_con when 1 then @m:=@m+1 else @m:=1 end 
-      mod 7 
-      when 3 then 3 
-      when 0 then 7 
-      else 1 end 
-      as bin_num  
-      FROM tb_if_con
-      )
-SELECT uid, DATE_FORMAT(dt,'%Y%m')as month ,sum(bin_num)coin FROM con_num GROUP BY uid,DATE_FORMAT(dt,'%Y%m') ORDER BY month, uid
-```
 
 ## SQL13 计算商城中2021年每月的GMV
 
 https://www.nowcoder.com/practice/5005cbf5308249eda1fbf666311753bf?tpId=268&tqId=2285515&ru=/practice/dbbc9b03794a48f6b34f1131b1a903eb&qru=/ta/sql-factory-interview/question-ranking
 
-```sql
-select date_format(event_time,'%Y-%m') as month,round(sum(total_amount),0) as GMV
-from tb_order_overall
-where event_time like '2021%'
-and status <> 2
-group by date_format(event_time,'%Y-%m')
-having round(sum(total_amount),0)>100000
-order by GMV asc;
-
-
-```
 
 ```sql
--- 2021年12月11日
-
--- GMV为已付款订单和未付款订单两者之和。结果按GMV升序排序。
-
-select 
-  date_format(event_time,'%Y-%m') as month
-, sum(total_amount) as GMV
-from tb_order_overall 
+where event_time like '2021%' and status <> 2
+等效于
 where `status` in (0,1) and year(event_time)=2021
-group by date_format(event_time,'%Y-%m')
-having sum(total_amount) > 100000
-order by GMV 
-;
+等效于
+WHERE status != 2 AND year(event_time)=2021
 ```
 
 ```sql
-SELECT
-    DATE_FORMAT(event_time,'%Y-%m') as month,
-    round(sum(total_amount),0) as GMV
-FROM (SELECT *
-    from tb_order_overall
-     where total_amount > 0) as result
-where YEAR(event_time)=2021
-group by month
-HAVING GMV >100000
-order by GMV
-```
-
-```sql
-SELECT DATE_FORMAT(event_time,'%Y-%m') month,sum(total_amount) GMV
+SELECT 
+    DATE_FORMAT(event_time,'%Y-%m') month,
+    sum(total_amount) GMV
 FROM tb_order_overall
 WHERE status != 2 AND year(event_time)=2021
 GROUP BY month 
@@ -880,156 +753,42 @@ HAVING GMV >= 100000
 ORDER BY GMV;
 ```
 
-```sql
-SELECT
-    LEFT(event_time,7) AS month,
-    ROUND(SUM(total_amount),0) AS GMV
-FROM tb_order_overall
-WHERE status IN (0,1) AND YEAR(event_time)=2021
-GROUP BY MONTH
-HAVING GMV>100000
-ORDER BY GMV
-```
-
-```sql
-with tmp as (
-    select DATE_FORMAT(event_time,"%Y-%m") month,sum(total_amount)gmv
-    from tb_order_overall
-    where status != 2 and DATE_FORMAT(event_time,"%Y-%m") >= '2021-01'
-    group by month
-    having sum(total_amount) > 100000
-    order by gmv
-)
-select * from tmp
-```
 
 ## SQL14 统计2021年10月每个退货率不大于0.5的商品各项指标
 
 https://www.nowcoder.com/practice/cbf582d28b794722becfc680847327be?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select product_id, round(click_cnt/show_cnt, 3) as ctr,
-    round(IF(click_cnt>0, cart_cnt/click_cnt, 0), 3) as cart_rate,
-    round(IF(cart_cnt>0, payment_cnt/cart_cnt, 0), 3) as payment_rate,
-    round(IF(payment_cnt>0, refund_cnt/payment_cnt, 0), 3) as refund_rate
-from (
-    select product_id, COUNT(1) as show_cnt,
-        sum(if_click) as click_cnt,
-        sum(if_cart) as cart_cnt,
-        sum(if_payment) as payment_cnt,
-        sum(if_refund) as refund_cnt
-    from tb_user_event
-    where DATE_FORMAT(event_time, '%Y%m') = '202110'
-    group by product_id
-) as t_product_index_cnt
-where payment_cnt = 0 or refund_cnt/payment_cnt <= 0.5
-order by product_id;
+退货率
+
+sum(if_payment) as payment
+sum(if_refund) as refund
+if(payment=0,0,round(refund/payment,3)) as refund_rate
+having refund_rate<=0.5
 ```
 
 ```sql
 
-
-
-
-
-
--- ------------------------------
-select product_id,
-round(sum(if_click)/count(id),3) ctr,
-
-round( case sum(if_click) when
-0 then 0 else sum(if_cart)/sum(if_click) end ,3) cart_rate,
- 
-round( case sum(if_cart) when 
-0 then 0 else sum(if_payment)/sum(if_cart) end ,3) payment_rate,
-
-round( case sum(if_payment) when 
-0 then 0 else sum(if_refund)/sum(if_payment) end ,3) refund_rate
-
-from tb_user_event
-where event_time like'2021-10%'
-group by product_id having refund_rate<=0.5
-order by product_id
-```
-
-```sql
-select
-product_id,
-round(
-sum(if_click)/count(id),3),
-round(
-sum(if_cart)/sum(if_click),3),
-round(
-sum(if_payment)/sum(if_cart),3),
-round(
-sum(if_refund)/sum(if_payment),3)
-from tb_user_event
-WHERE
-left(date(event_time),7)='2021-10'
-group by product_id
-order by product_id
-```
-
-```sql
-###请统计2021年10月每个有展示记录的退货率不大于0.5的商品各项指标
-#窗口函数-product_id,计算各个指标
-#prodct_id---ctr,cart_rate,payment_rate,refund_rate
-SELECT product_id,round(click/showtimes,3) as ctr,
-       if(click=0,0,round(cart/click,3)),
-       if(cart=0,0,round(payment/cart,3)),
-       if(payment=0,0,round(refund/payment,3)) as refund_rate
+SELECT 
+    product_id,
+    round(click/showtimes,3) as ctr,
+    if(click=0,0,round(cart/click,3)),
+    if(cart=0,0,round(payment/cart,3)),
+    if(payment=0,0,round(refund/payment,3)) as refund_rate
 FROM
-(select product_id,
-       count(*) as showtimes,
-       sum(if_click) as click,
-       sum(if_cart) as cart,sum(if_payment) as payment,
-       sum(if_refund) as refund 
-FROM tb_user_event
-where date_format(EVENT_time,"%Y-%m")="2021-10"
-group by product_id) BASE
+    (select product_id,
+        count(*) as showtimes,
+        sum(if_click) as click,
+        sum(if_cart) as cart,
+        sum(if_payment) as payment,
+        sum(if_refund) as refund 
+    FROM tb_user_event
+    where date_format(EVENT_time,"%Y-%m")="2021-10"
+    group by product_id
+) BASE
 group by product_id
 having refund_rate<=0.5
 order by product_id
-
-```
-
-```sql
-select product_id,
-    round(sum(if_click) / count(1),3) as ctr,
-    round(sum(if_cart) / sum(if_click),3) as cart_rate,
-    round(sum(if_payment) / sum(if_cart),3) as payment_rate,
-    round(sum(if_refund) / sum(if_payment),3) as refund_rate
-from tb_user_event
-where DATE_FORMAT(event_time,'%Y-%m')='2021-10'
-GROUP BY product_id
-HAVING refund_rate <= 0.5
-ORDER BY product_id
-```
-
-```sql
-SELECT product_id,
-ROUND(SUM(IF(if_click=1,1,0))/COUNT(uid),3) AS ctr,
-ROUND(SUM(IF(if_cart=1,1,0))/SUM(IF(if_click=1,1,0)),3) AS cart_rate,
-ROUND(SUM(IF(if_payment=1,1,0))/SUM(IF(if_cart=1,1,0)),3) AS payment_rate,
-ROUND(SUM(IF(if_refund=1,1,0))/SUM(IF(if_payment=1,1,0)),3) AS refund_rate
-FROM tb_user_event
-WHERE DATE_FORMAT(event_time,'%Y-%m')='2021-10'
-GROUP BY product_id
-HAVING refund_rate<=0.5
-ORDER BY   product_id
-```
-
-```sql
-select product_id,if(count(product_id)=0,0,round(sum(if_click)/count(product_id),3)) as ctr,
-if(sum(if_click)=0,0,round(sum(if_cart)/sum(if_click),3)) as cart_rate,
-if(sum(if_cart)=0,0,round(sum(if_payment)/sum(if_cart),3)) as payment_rate,
-if(sum(if_payment)=0,0,round(sum(if_refund)/sum(if_payment),3)) as refund_rate
-from 
-tb_user_event
-where year(event_time)=2021 and month(event_time)=10
-group by product_id
-having if(sum(if_payment)=0,0,round(sum(if_refund)/sum(if_payment),3)) <=0.5
-order by product_id asc
 ```
 
 ## SQL15 某店铺的各商品毛利率及店铺整体毛利率
@@ -1037,244 +796,71 @@ order by product_id asc
 https://www.nowcoder.com/practice/65de67f666414c0e8f9a34c08d4a8ba6?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
+商品毛利率大于 24.9 % 的商品信息
+字符串 操作：
 replace(profit_rate,'%','') > 24.9
 TRIM   (TRAILING '%' FROM profit_rate)>24.9
-(1-in_sum/sale_sum) > 0.249
+(1 - in_sum / sale_sum) > 0.249
 ```
 
 ```sql
-TRIM(BOTH 'O' FROM 'OOHELLO') 
-TRIM(LEADING 'O' FROM 'OOHELLO')
-TRIM(TRAILING 'O' FROM 'OOHELLO') 
+TRIM (BOTH 'O' FROM 'OOHELLO') 
+TRIM (LEADING 'O' FROM 'OOHELLO')
+TRIM (TRAILING 'O' FROM 'OOHELLO') 
 ```
 
+```sql
 难点在于要求'店铺汇总'
 
 可以用 
 
 group by a.product_id with rollup + ifnull(product_id,'店铺汇总')
+```
 
 ```sql
-select ifnull(product_id,'店铺汇总') product_id,concat(profit_rate,'%') profit_rate from
+select 
+    ifnull(product_id,'店铺汇总') product_id,
+    concat(profit_rate,'%') profit_rate 
+from
 (
-    select a.product_id,round((1-sum(in_price*cnt)/sum(price*cnt))*100,1) profit_rate
-    from tb_order_detail as a left join tb_order_overall as b on a.order_id=b.order_id
-    left join tb_product_info as c on c.product_id=a.product_id
-    where c.shop_id=901 and status=1
-    and date_format(event_time,'%Y%m')>='202110'
+    select 
+        a.product_id,
+        round((1-sum(in_price*cnt)/sum(price*cnt))*100, 1) profit_rate
+    from tb_order_detail as a 
+    left join tb_order_overall as b on a.order_id=b.order_id
+    left join tb_product_info as c on c.product_id = a.product_id
+    where c.shop_id = 901 and status=1 and date_format(event_time,'%Y%m')>='202110'
     group by a.product_id with rollup
-    having profit_rate>24.9 or a.product_id is null) as d
+    having profit_rate > 24.9 or a.product_id is null
+    ) as d
 order by profit_rate
 ```
 
 或者
 
-union all
-
-```sql
-(select "店铺汇总" as "product_id",concat(round((1-sum(in_price*cnt)/sum(price*cnt))*100,1),"%") as "profit_rate"
-from 
-tb_order_detail c left join tb_order_overall d on c.order_id=d.order_id
-                  LEFT JOIN tb_product_info e on c.product_id=e.product_id
-where event_time>"2021-10-01" and status=1 and shop_id=901)
-union all
-(select a.product_id as "product_id",concat(round((1-avg(in_price)/avg(price))*100,1),"%") as "profit_rate"
-from 
-tb_order_detail a left join tb_product_info b on a.product_id=b.product_id
-where  shop_id="901" 
-and order_id in (select order_id from tb_order_overall where status=1 and
-                 event_time>"2021-10-01")
-group by a.product_id having 1-avg(in_price)/avg(price)>0.249
-order by a.product_id)
-```
-
-UNION ALL
-
-```sql
-with one as(
-SELECT
-a.product_id,
-1-avg(in_price) / avg(price) as rate
-from tb_product_info  as a , tb_order_detail  as c,tb_order_overall as b
-where  a.product_id=c.product_id and c.order_id=b.order_id  
-and DATE_FORMAT(event_time,"%Y-%m")>="2021-10"
-and a.shop_id = 901 and b.status=1
-group by a.product_id
-having rate>0.249
-order by product_id),
-
-two as(
-select
-'店铺汇总' product_id,
-1-sum(a.in_price*c.cnt)/ sum(c.price*c.cnt) as rate
-from tb_product_info as a,tb_order_detail as c ,tb_order_overall as b
-where a.product_id=c.product_id and c.order_id=b.order_id
-and a.shop_id = 901 and b.status=1
-and DATE_FORMAT(event_time,"%Y-%m")>="2021-10"),
-
-result as(
-SELECT * from two
-UNION ALL
-SELECT * from one)
-SELECT
-product_id,
-CONCAT(round(rate*100,1),'%')
-from result
-
-
-# select '店铺汇总' product_id, concat(round((1-sum(in_price*cnt)/sum(price*cnt))*100,1),'%') profit_rate
-# from tb_order_overall right join tb_order_detail using(order_id) left join tb_product_info using(product_id)
-# where shop_id = '901' and year(event_time)=2021 and month(event_time)>=10
- 
-# union all
-# select product_id, concat(round((1-avg(in_price)*sum(cnt)/sum(price*cnt))*100,1),'%') profit_rate
-# from tb_order_overall right join tb_order_detail using(order_id) left join tb_product_info using(product_id)
-# where shop_id = '901' and year(event_time)=2021 and month(event_time)>=10
-# group by product_id
-# having (1-avg(in_price)/avg(price))*100>24.9
-
-```
-
-GROUP by t1.product_id  with rollup + ifnull(t1.product_id,'店铺汇总')
-
-```sql
-select * from (select ifnull(t1.product_id,'店铺汇总') product_id,
-concat(ROUND((1-sum(t2.in_price*t1.cnt)/sum(t1.price*t1.cnt))*100,1),'%') profit_rate 
- FROM tb_order_detail t1
-left join (SELECT * FROM tb_product_info WHERE shop_id=901) t2 USING (product_id)
-where t1.order_id in (SELECT order_id FROM tb_order_overall 
-                  where date_format(event_time,'%y-%m')>='21-10' and status=1) and t2.in_price is not null 
-GROUP by t1.product_id  with rollup 
-ORDER BY field(product_id,'店铺汇总'),product_id)t where product_id='店铺汇总' or replace(profit_rate,'%','') >24.9
-```
-
 union
 
 ```sql
-select '店铺汇总' as product_id,
-        concat(round((1-sum(cnt*in_price)/ sum(cnt*price))*100,1),'%') profit_rate
+select 
+    '店铺汇总' as product_id,
+    concat(round((1-sum(cnt*in_price)/ sum(cnt*price))*100,1),'%') profit_rate
 from tb_order_detail t3
 left join tb_product_info t1 on t3.product_id=t1.product_id
 left join tb_order_overall t2 on t3.order_id=t2.order_id
 where date_format(event_time,'%Y-%m')>='2021-10' and shop_id='901'
 group by shop_id
+
 union
-SELECT t3.product_id,
+
+SELECT 
+    t3.product_id,
     CONCAT(round((1-avg(in_price)/avg(price))*100,1),'%') profit_rate
 FROM tb_order_detail t3
 LEFT JOIN tb_product_info t1 ON  t3.product_id=t1.product_id
 LEFT JOIN tb_order_overall t2 ON t3.order_id=t2.order_id
 WHERE DATE_FORMAT(event_time,'%Y-%m')>='2021-10' AND shop_id='901'
 GROUP BY product_id
-HAVING TRIM(TRAILING '%' FROM profit_rate)>24.9;
-```
-
-union
-
-```sql
-#select '店铺汇总' product_id,
-#concat(round((1-sum(pi.in_price*od.cnt)/sum(od.price*od.cnt))*100,1),'%') pro_rate
-#from tb_order_overall oo
-#left join tb_order_detail od
-#on oo.order_id=od.order_id
-#left join tb_product_info pi
-#on od.product_id=pi.product_id
-#where date_format(oo.event_time,'%Y-%m')='2021-10' and pi.shop_id='901'
-#union all
-#select pi.product_id,
-#concat(round((1-pi.in_price/avg(od.price))*100,1),'%') pro_rate
-#from tb_order_overall oo
-#left join tb_order_detail od
-#on oo.order_id=od.order_id
-#left join tb_product_info pi
-#on od.product_id=pi.product_id
-#where date_format(oo.event_time,'%Y-%m')='2021-10' and pi.shop_id='901' and oo.status=1
-#group by pi.product_id
-#having pro_rate>24.9;
-with t as(
-select 
-od.product_id,sum(price*cnt) sale_sum,sum(in_price*cnt) in_sum,
-sum(cnt) sum_cnt
-from tb_order_detail od
-left join tb_order_overall oo
-on od.order_id=oo.order_id
-left join tb_product_info pi
-on od.product_id=pi.product_id
-where shop_id='901' and date_format(event_time,'%Y%m')>='202110' and status!=0
-group by od.product_id
-)
-select '店铺汇总',
-concat(round((1-sum(in_sum)/sum(sale_sum))*100,1),'%') profit_rate
-from t
-union
-(
-select product_id,
-concat(round((1-in_sum/sale_sum)*100,1),'%') profit_rate
-from t
-where (1-in_sum/sale_sum)>0.249
-order by product_id);
-```
-
-
-
-UNION
-
-```sql
-select '店铺汇总' as product_id,
-concat(round((1-sum(in_price*cnt)/sum(price*cnt))*100,1),'%') profit_rate 
-from tb_order_detail detail 
-left join tb_order_overall overall on  overall.order_id=detail.order_id
-left join tb_product_info info on info.product_id=detail.product_id
-where info.shop_id='901' 
-and date(overall.event_time)>=('2021,10,1') 
-and overall.status=1
-group by shop_id
-UNION
-select detail.product_id,
-# concat(round((1-in_price/((sum(price*cnt))/cnt))*100,1),'%') profit_rate
-    CONCAT(round((1-avg(in_price)/avg(price))*100,1),'%') profit_rate
-from tb_order_detail detail 
-left join tb_order_overall overall on  overall.order_id=detail.order_id
-left join tb_product_info info on info.product_id=detail.product_id
-where info.shop_id='901' 
-and date(overall.event_time)>=('2021,10,1') 
-and overall.status=1
-GROUP by detail.product_id 
-having TRIM(TRAILING '%' FROM profit_rate)>24.9
-```
-
-union all
-
-```sql
-(
-select '店铺汇总' as product_id,
-concat(round((1 - (sum(in_price * cnt) / sum(price * cnt)))*100 , 1) ,'%') as profit_rate
-from tb_order_detail as od
-left join tb_order_overall as oo using(order_id)
-left join tb_product_info as pi on pi.product_id = od.product_id
-where year(event_time) = 2021 and month(event_time) >= 10
-and shop_id = 901
-and oo.status in (0,1)
-)
-
-# union all前后两段代码需加括号
-union all
-
-(
-select od.product_id,
-# wrong: concat((1-(pi.in_price/avg(od.price)))*100,'%') as profit_rate
-concat((round((1-(pi.in_price / (sum(od.price*od.cnt) / sum(od.cnt))))*100 , 1)) , '%') as profit_rate
-from tb_order_detail as od
-left join tb_order_overall as oo using(order_id)
-left join tb_product_info as pi on pi.product_id = od.product_id
-where year(event_time) = 2021 and month(event_time) >= 10
-and shop_id = 901
-and oo.status in (0,1)
-group by product_id
-# replace函数
-having replace(profit_rate,'%','') > 24.9
-order by product_id
-);
+HAVING TRIM(TRAILING '%' FROM profit_rate) > 24.9;
 ```
 
 ## SQL16 零食类商品中复购率top3高的商品
@@ -1282,116 +868,70 @@ order by product_id
 https://www.nowcoder.com/practice/9c175775e7ad4d9da41602d588c5caf3?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-select product_id,round(sum(if(cnt>=2,1,0))/count(*),3) repurchase_rate from
-(
-    select a.product_id,b.uid,count(uid) cnt 
-    from tb_order_detail as a left join tb_order_overall as b on a.order_id=b.order_id
-    left join tb_product_info as c on c.product_id=a.product_id
-    where datediff((select max(event_time) from tb_order_overall),event_time)<90 and tag='零食'
-    group by a.product_id,b.uid
-    ) as d
-group by product_id
-order by repurchase_rate desc,product_id limit 3
+复购率
+count(uid) cnt group by a.product_id, b.uid -- 统计同一个商品，同一个用户
+sum(if (cnt>=2, 1, 0)) / count(*)
 
+等效于
+COUNT(1) pay_cnt group by product_id, uid
+sum(case when n>=2 then 1 else 0 end)/count(distinct uid)
 ```
 
 ```sql
-SELECT product_id,
-       ROUND(SUM(case when pay_cnt>=2 then 1 else 0 end)/COUNT(uid), 3) rate
-FROM (SELECT product_id,
-             uid,
-             COUNT(1) pay_cnt
-      FROM tb_product_info pi
-      JOIN tb_order_detail od USING(product_id)
-      JOIN tb_order_overall oo USING(order_id)
-      WHERE oo.event_time >= DATE_SUB((SELECT max(event_time) FROM tb_order_overall), interval 89 DAY)
-            AND tag='零食' AND status=1
-      group by product_id, uid) tmp
-group by product_id
-order by rate desc, product_id
-LIMIT 3
+最近90天
+event_time >= DATE_SUB((SELECT max(event_time) FROM tb_order_overall), interval 89 DAY)
+DATEDIFF((select max(event_time) from tb_order_overall), event_time) <= 89
 ```
 
 ```sql
-# select t1.product_id,
-# # count(if(count(uid)>=2,uid,NULL)) / count(distinct uid) as repurchase_rate
-# sum(if(t1.a>=2,1,0)) / t1.b as repurchase_rate
-# from
-# (
-# select uid, od.product_id, count(uid) as a, count(distinct uid) as b
-# from tb_order_detail as od
-# left join tb_order_overall as oo using(order_id)
-# left join tb_product_info as pi on pi.product_id = od.product_id
-# where oo.status in (0,1)
-# and pi.tag = '零食'
-# # and date(date_format(oo.event_time,'%Y%m%d')) >= DATE_ADD(dd,-90,max(date_format(oo.event_time,'%Y%m%d')))
-# and DATEDIFF((select max(event_time) from tb_order_overall),event_time)<=89
-# ) as t1
-
-# group by t1.product_id
-# order by repurchase_rate desc
-# limit 3;
-
-select product_id,
-round(sum(case when n>=2 then 1 else 0 end)/count(distinct uid),3) as repurchase_rate
+select 
+    product_id,
+    round(sum(if(cnt>=2,1,0))/count(*),3) repurchase_rate 
 from
 (
-    # 表格aa：近90天内，每个用户购买每个零食类商品的次数
-    select b.product_id,uid,count(*) n
-    from tb_product_info a
-    left join tb_order_detail b on a.product_id=b.product_id
-    left join tb_order_overall c on b.order_id=c.order_id
-    where status in (0,1)
-    and DATEDIFF((select max(event_time) from tb_order_overall),event_time)<=89
-    and tag='零食'
-    group by b.product_id,uid
-) as aa
+    select 
+        a.product_id,
+        b.uid,
+        count(uid) cnt 
+    from tb_order_detail as a 
+    left join tb_order_overall as b on a.order_id=b.order_id
+    left join tb_product_info as c on c.product_id=a.product_id
+    where datediff((select max(event_time) from tb_order_overall), event_time) < 90 and tag = '零食'
+    group by a.product_id, b.uid
+    ) as d
 group by product_id
-order by repurchase_rate desc,product_id
-limit 3;
+order by repurchase_rate desc, product_id limit 3
 
-```
-
-```sql
-select product_id,round(count(*)/count(distinct uid)-1,3) as repurchase_rate
-from tb_product_info p
-join tb_order_detail d using(product_id)
-join tb_order_overall o using(order_id)
-where tag='零食' and 
-date(event_time)>=date_sub(date((select max(event_time) from tb_order_overall)),interval 89 day)
-group by product_id
-order by repurchase_rate desc,product_id
-limit 3;
-```
-
-```sql
-
-select product_id,round(sum(repurchase_cnt)/count(product_id),3) as repurchase_rate
-from(
-select tpi.product_id,uid,if(count(uid)>1,1,0) as repurchase_cnt-- count(distinct uid) as cus_cnt
-from tb_product_info tpi
-join tb_order_detail tod
-using(product_id)
-join tb_order_overall too
-using(order_id)
-where datediff(date((select max(event_time)from tb_order_overall)),date(event_time))<90
-    and tag='零食'
-group by product_id,uid
-    )t1
-group by product_id
-order by repurchase_rate desc,product_id asc
-limit 3
 ```
 
 ## SQL17 10月的新户客单价和获客成本
 
 https://www.nowcoder.com/practice/d15ee0798e884f829ae8bd27e10f0d64?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
+```sql
 用户首单的表示方法：
 
-RANK() OVER(PARTITION BY uid ORDER BY event_time) AS order_rank
-
+RANK() OVER (PARTITION BY uid ORDER BY event_time) AS order_rank
 WHERE order_rank = 1
+
+row_number() over (partition by uid order by event_time) rk
+where rk = 1
+
+等效于
+where (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
+
+where DATE(event_time) in (select min(date(event_time)) from tb_order_overall group by uid)
+```
+
+```sql
+获客成本表示方法：
+SUM(price * cnt) AS firstly_amount
+SUM(firstly_amount - total_amount) / COUNT(uid)
+
+SUM(price * cnt) AS firstly_amount
+sum(firstly_amount - total_amount) / count(distinct  too.order_id)
+
+```
 
 ```sql
 SELECT
@@ -1421,377 +961,102 @@ ON t2.order_id = t3.order_id;
 
 ```
 
-where (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
-
-```sql
-# select round(avg(avg_a),1) avg_amount,round(avg(avg_in-avg_a),1) as avg_cost from
-# (select uid,avg(total_amount) avg_a,sum(cnt*price) avg_in from
-# (select uid,event_time,tod.order_id,total_amount,cnt,price,
-# dense_rank() over(partition by uid order by event_time) timerank
-# from tb_order_detail tod,tb_product_info tpi,tb_order_overall too
-# where tod.product_id=tpi.product_id and tod.order_id=too.order_id
-# and left(event_time,7) like '2021-10')a
-# where timerank=1
-# group by uid
-# order by uid)b
-
-select round(sum(total_amount)/count(distinct too.order_id),1) avg_amount
-,round(sum(price-total_amount)/count(distinct  too.order_id),1) avg_cost
-from tb_order_overall too
-inner join (
-  select order_id,sum(price*cnt) price
-  from tb_order_detail
-  group by order_id
-  ) as t
-on too.order_id=t.order_id
-where date_format(event_time,'%Y-%m')='2021-10'
-and (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
-```
-
-row_number() over(partition by uid order by event_time) rk
-
-where rk = 1
-
-```sql
-
-select round(avg(total_amount),1) avg_amount,round(avg(sum_price-total_amount),1) avg_cost
-from
-(
-        select 
-        uid,event_time
-        ,total_amount
-        ,row_number() over(partition by uid order by event_time) rk
-        ,sum(price*cnt) over(partition by order_id) sum_price
-        ,status
-        from tb_order_detail tod
-        join tb_order_overall too
-        using(order_id)
-        where status = 1 
-) t
-where rk = 1
-and date_format(event_time,'%Y-%m')='2021-10'
-
-```
-
-where DATE(event_time) in (select min(date(event_time)) from tb_order_overall group by uid)
-
-```sql
-#将订单总表中符合10月新用户的信息挑出
-#select ov.order_id,ov.uid,date(ov.event_time) as dt ,ov.total_amount
-#from tb_order_overall as ov
-#where date(event_time) like '2021-10%'
-#and DATE(event_time) in (select min(date(event_time)) from tb_order_overall group by uid)
-
-#将订单明细表里每个订单的消费金额汇总
-#select de.order_id,sum(de.price*de.cnt) as sum_p
-#from tb_order_detail as de
-#group by de.order_id
-
-select round(sum(total_amount)/count(*),1) as avg_amount
-,round(sum((b.sum_p-a.total_amount) )/count(*),1) as avg_cost
-from (
-select ov.order_id,ov.uid,date(ov.event_time) as dt ,ov.total_amount
-from tb_order_overall as ov
-where date(event_time) like '2021-10%'
-and DATE(event_time) in (select min(date(event_time)) from tb_order_overall group by uid) ) as a
-inner join (
-select de.order_id,sum(de.price*de.cnt) as sum_p
-from tb_order_detail as de
-group by de.order_id )as b
-on a.order_id=b.order_id;
-```
-
-(uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
-
-```sql
-# SELECT ROUND(SUM(total_amount) / COUNT(distinct order_id), 1) AS avg_amount,
-#        ROUND(SUM(t1.cost- total_amount) / COUNT(distinct order_id)， 1） AS avg_cost
-# FROM tb_order_overall too
-# INNER JOIN (
-#     SELECT order_id, price * cnt cost
-#     FROM tb_order_detail
-#     GROUP BY order_id) t1 USING (order_id)
-# where DATE_FORMAT(too.event_time,'%y-%m') = '21-10' 
-#     AND (uid, event_time) IN (SELECT uid, min(event_time) FROM tb_order_oveR
-
-select round(sum(total_amount)/count(distinct too.order_id),1) avg_amount
-,round(sum(price-total_amount)/count(distinct  too.order_id),1) avg_cost
-from tb_order_overall too
-inner join (
-  select order_id,sum(price*cnt) price
-  from tb_order_detail
-  group by order_id
-  ) as t
-on too.order_id=t.order_id
-where date_format(event_time,'%Y-%m')='2021-10'
-and (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
-```
-
 ## SQL18 店铺901国庆期间的7日动销率和滞销率（区别于22题）
 
 https://www.nowcoder.com/practice/e7837f66e8fb4b45b694d24ea61f0dc9?tpId=268&tqId=2286659&ru=/practice/5005cbf5308249eda1fbf666311753bf&qru=/ta/sql-factory-interview/question-ranking
 
 ```sql
-select dt1,
-round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),
-tb3.product_id,null)),3) sale_rate,
-1-round(count(distinct if(timestampdiff(day,dt,dt1) between 0 and 6, tb1.product_id,null))/count(distinct if(dt1>=date(release_time),
-tb3.product_id,null)),3) unsale_rate
-from (
-    select date(event_time) dt1 
-    from tb_order_overall 
-    having dt1 between '2021-10-01' and '2021-10-03'
-    ) tb2,
-    (
-    select b.product_id,date(event_time) dt 
-    from tb_order_overall a 
-    left join tb_order_detail b on a.order_id=b.order_id 
-    left join tb_product_info c on b.product_id=c.product_id
-    where shop_id=901
-    ) tb1 
-left join tb_product_info tb3 on tb1.product_id=tb3.product_id 
-where shop_id=901
-group by dt1 
+7日动销率：
+
+if(timestampdiff(day,lt,event_time) between 0 and 6, product_id, null)
+等效于
+if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0, product_id, null))
 
 ```
 
 ```sql
-SELECT dt, sale_rate, 1 - sale_rate as unsale_rate
-FROM (
-    SELECT dt, ROUND(MIN(sale_pid_cnt) / COUNT(all_pid), 3) as sale_rate
-    FROM (
-        SELECT dt, COUNT(DISTINCT IF(shop_id!=901, NULL, product_id)) as sale_pid_cnt
-        FROM (
-            SELECT DISTINCT DATE(event_time) as dt
-            FROM tb_order_overall
-            WHERE DATE(event_time) BETWEEN '2021-10-01' AND '2021-10-03'
-            ) as t_dates
-            LEFT JOIN (
-                    SELECT DISTINCT DATE(event_time) as event_dt, product_id
-                    FROM tb_order_overall
-                    JOIN tb_order_detail USING(order_id)
-                    ) as t_dt_pid 
-                ON DATEDIFF(dt,event_dt) BETWEEN 0 AND 6
-                LEFT JOIN tb_product_info USING(product_id)
-                group by dt
-        ) as t_dt_901_pid_cnt
-        LEFT JOIN (
-            -- 店铺901每个商品上架日期
-                SELECT DATE(release_time) as release_dt, product_id as all_pid
-                FROM tb_product_info
-                WHERE shop_id=901
-                ) as t_release_dt 
-            ON dt >= release_dt # 当天店铺901已上架在售的商品
-            GROUP BY dt
-    ) as t_dt_sr
-```
-
-```sql
-select dt,
-round(count(distinct product_id)/(select count(product_id) from tb_product_info where shop_id = 901),3),
-round(1-count(distinct product_id)/(select count(product_id) from tb_product_info where shop_id = 901),3)
+select 
+    dt,
+    round(count(distinct product_id)/(select count(product_id) from tb_product_info where shop_id = 901),3),
+    round(1-count(distinct product_id)/(select count(product_id) from tb_product_info where shop_id = 901),3)
 from
-    (select date(event_time) dt from tb_order_overall
-    where date(event_time) between '2021-10-01' and '2021-10-03') a
+    (select 
+        date(event_time) dt 
+    from tb_order_overall
+    where date(event_time) between '2021-10-01' and '2021-10-03'
+    ) a -- 最近3天
 left join
-    (select date(c.event_time) fdt,b.product_id product_id
-    from tb_order_detail b left join tb_order_overall c using(order_id)
-left join tb_product_info d using(product_id)
-where d.shop_id = 901) f 
+    (select 
+        date(c.event_time) fdt,
+        b.product_id product_id
+    from tb_order_detail b 
+    left join tb_order_overall c using(order_id)
+    left join tb_product_info d using (product_id)
+    where d.shop_id = 901) f 
 on datediff(a.dt,f.fdt) between 0 and 6
 group by dt
 order by dt asc;
 ```
 
 ```sql
-SELECT dt, sale_rate, (1 - sale_rate) unsale_rate
-FROM (SELECT dt, ROUND(MIN(sale_pid_cnt)/COUNT(all_pid), 3) sale_rate
-      FROM (SELECT dt, COUNT(DISTINCT IF(shop_id!=901, NULL, product_id)) sale_pid_cnt
-            FROM (SELECT DISTINCT DATE(event_time) dt
-                  FROM tb_order_overall
-                  WHERE DATE(event_time) BETWEEN '2021-10-01' AND '2021-10-03') t_dates
-            LEFT JOIN (SELECT DISTINCT DATE(event_time) event_dt, product_id
-                       FROM tb_order_overall
-                       JOIN tb_order_detail USING(order_id)) t_dt_pid 
-            ON DATEDIFF(dt,event_dt) BETWEEN 0 AND 6
-        LEFT JOIN tb_product_info USING(product_id)
-        GROUP BY dt) t_dt_901_pid_cnt
-    LEFT JOIN (
-        -- 店铺901每个商品上架日期
-        SELECT DATE(release_time) release_dt, product_id all_pid
-        FROM tb_product_info
-        WHERE shop_id=901) t_release_dt ON dt >= release_dt # 当天店铺901已上架在售的商品
-    GROUP BY dt
-) as t_dt_sr;
-
-```
-
-```sql
 select lt dt,round(sr,3) sr,round((1-sr),3) nsr
 from
-    (select lt,count(distinct if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0,t2.product_id,null))/
-    count(distinct t2.product_id) sr
-from
-    (SELECT date_format(event_time,'%Y-%m-%d') lt 
-    from tb_product_info a,tb_order_overall b,tb_order_detail c 
-    where a.product_id=c.product_id and b.order_id=c.order_id and status=1 and event_time>20211001 and event_time<20211004
-    group by date_format(event_time,'%Y-%m-%d')
-    having count(date_format(event_time,'%Y-%m-%d'))>=1
-    ) a,
-    tb_order_overall t1
-left join tb_order_detail t2 on t1.order_id=t2.order_id
-left join tb_product_info t3 on t2.product_id=t3.product_id
-where DATEDIFF(lt,release_time)>=0 and shop_id=901
-group by lt) aa
+    (select 
+        lt,
+        count(distinct if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0, t2.product_id, null))/ -- lt 是最近3天
+        count(distinct t2.product_id) sr
+    from
+        (SELECT 
+            date_format(event_time,'%Y-%m-%d') lt 
+        from 
+            tb_product_info a,
+            tb_order_overall b,
+            tb_order_detail c 
+        where 
+            a.product_id=c.product_id 
+            and b.order_id=c.order_id 
+            and status=1 and event_time>20211001 
+            and event_time<20211004
+        group by date_format(event_time,'%Y-%m-%d')
+        ) a, -- 最近3天
+        tb_order_overall t1
+    left join tb_order_detail t2 on t1.order_id=t2.order_id
+    left join tb_product_info t3 on t2.product_id=t3.product_id
+    where DATEDIFF(lt,release_time)>=0 and shop_id=901
+    group by lt) aa
 order by dt
 ```
 
-```sql
-select
-    lt dt,round(sr,3) sr,round((1-sr),3) nsr
-from(
-    select 
-        lt,
-        count(distinct if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0,t2.product_id,null))
-        /count(distinct t2.product_id) sr
-    from(
-        SELECT date_format(event_time,'%Y-%m-%d') lt
-        from tb_product_info a,tb_order_overall b,tb_order_detail c
-        where a.product_id=c.product_id
-        and b.order_id=c.order_id
-        and status=1 and event_time>20211001
-        and event_time<20211004
-        group by date_format(event_time,'%Y-%m-%d')
-        having count(date_format(event_time,'%Y-%m-%d'))>=1
-        ) a,
-        tb_order_overall t1
-    left join tb_order_detail t2
-        on t1.order_id=t2.order_id
-    left join tb_product_info t3
-        on t2.product_id=t3.product_id
-    where DATEDIFF(lt,release_time)>=0
-        and shop_id=901
-    group by lt
-    ) aa
-order by dt asc;
-```
 
 ## SQL19 2021年国庆在北京接单3次及以上的司机统计信息
 
 https://www.nowcoder.com/practice/992783fd80f746d49e790d33ee537c19?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
-
 ```sql
-select max(city), 
-       round(avg(order_num), 3) as avg_order_num,
-       round(avg(total_fare), 3) as avg_income
-from (select city, driver_id, count(tb_get_car_order.order_id) as order_num, sum(fare) as total_fare
-      from tb_get_car_record inner join tb_get_car_order
-      on tb_get_car_record.order_id = tb_get_car_order.order_id
-      where city = "北京" and date(event_time) between date("2021-10-01") and date("2021-10-07")
-      group by city, driver_id
-      having count(tb_get_car_order.order_id) >= 3
-      ) as t1
-
+接单3次及以上
+group by driver_id having count(*) >= 3
+group by driver_id having count(order_id)>=3
 ```
 
-```sql
-select 
-    "北京" as city,
-    round(avg(b.cnt),3) as avg_order_num,
-    round(avg(b.income),3) as asavg_income
-from(
-    select b.driver_id, count(b.order_id) as cnt, sum(b.fare) as income
-    from tb_get_car_record a
-    inner join 
-        tb_get_car_order b
-    on a.order_id=b.order_id
-    where a.city="北京" and date(b.order_time) between '2021-10-01' and '2021-10-07'
-    group by b.driver_id
-    having count(b.order_id)>=3
-    ) b
-```
-
-```sql
-select city,
-    round(avg(order_num),3) avg_order_num,
-    round(avg(income),3) avg_income
-FROM
-    (SELECT city,driver_id,
-        COUNT(driver_id) order_num,
-        SUM(fare) income
-    FROM tb_get_car_order o JOIN tb_get_car_record r 
-    on o.order_id = r.order_id
-    where order_time BETWEEN "2021-10-01" and "2021-10-07" and city = "北京"
-    group by driver_id
-    HAVING order_num >= 3
-    ) b 
-GROUP BY city
-```
-
-```sql
-
-# select
-#     city,
-#     ROUND(avg(cnt),3) avg_order_num,
-#     ROUND(avg(total),3) avg_income
-# from
-# (
-#     SELECT
-#         b.city,
-#         a.driver_id,
-#         count(a.order_id) cnt,
-#         sum(fare) total
-#     FROM
-#         tb_get_car_record b
-#     left join
-#         tb_get_car_order a
-#     on
-#         a.order_id = b.order_id
-#     where
-#         city = '北京'
-#     and
-#         date_format(order_time,'%y-%m-%d') BETWEEN '2021-10-01' and '2021-10-07'
-#     group by 
-#         driver_id
-#     HAVING
-#         cnt > 2
-# ) a
-
-
+ ```sql
 select  t.city,
         round(avg(avg_order_num),3),
         round(avg(avg_income),3)
 from 
 (
-    select driver_id,city,count(o.order_id) as avg_order_num, sum(fare) as avg_income
+    select 
+        driver_id,
+        city,
+        count(o.order_id) as avg_order_num, 
+        sum(fare) as avg_income
     from tb_get_car_record as r
-    join tb_get_car_order as o
-    on r.order_id = o.order_id
+    join tb_get_car_order as o on r.order_id = o.order_id
     where city = '北京' and order_time between '2021-10-01' and '2021-10-07'
-    group by driver_id
-    having count(*) > 2
+    group by driver_id having count(*) > 2
 ) as t
 group by city
-
-
 ```
 
-```sql
-select t.city,round(avg(avg_order_num),3),round(avg(avg_income),3)
-from (
-    select driver_id,city,count(o.order_id) as avg_order_num, sum(fare) as avg_income
-    from tb_get_car_record as r
-    join tb_get_car_order as o
-    on r.order_id = o.order_id
-    where city = '北京' and event_time between '2021-10-01' and '2021-10-07'
-    group by driver_id
-    having count(*) > 2
-    ) as t
-group by city
-
-
-```
 
 ## SQL20 有取消订单记录的司机平均评分
 
@@ -1799,9 +1064,9 @@ https://www.nowcoder.com/practice/f022c9ec81044d4bb7e0711ab794531a?tpId=268&tqId
 
 
 ```sql
-coalesce(o.driver_id,'总体')
- =
-IFNULL(driver_id, "总体")
+coalesce(driver_id,'总体')
+等效于
+IFNULL(driver_id, '总体')
 
 
 group by tb.driver_id with rollup
@@ -1813,101 +1078,34 @@ select
     round(avg(o.grade),1) as avg_grade
 from tb_get_car_order o
 where driver_id in(
-             select distinct driver_id 
-             from tb_get_car_order 
-             where date_format(order_time,'%Y%m')=202110 and start_time is null)
+    select distinct driver_id 
+    from tb_get_car_order 
+    where 
+        date_format(order_time,'%Y%m')=202110 and 
+        start_time is null)
 group by o.driver_id with rollup
-
-
-```
-
-```sql
-SELECT IFNULL(driver_id, "总体") as driver_id,
-    ROUND(AVG(grade), 1) as avg_grade
-FROM tb_get_car_order
-WHERE driver_id in (
-    SELECT driver_id
-    FROM tb_get_car_order
-    WHERE DATE_FORMAT(order_time, "%Y-%m")='2021-10' AND ISNULL(fare)
-    ) 
-    AND NOT ISNULL(grade)
-GROUP BY driver_id
-WITH ROLLUP;
+ 
 ```
 
 ```sql
 select driver_id,round(avg(grade),1)
 from tb_get_car_order
-where 
-driver_id in(
+where driver_id in(
     select distinct(o.driver_id)
     from tb_get_car_order o 
-    where start_time is NULL and finish_time is not null
-    and DATE_FORMAT(finish_time,'%Y%m')='202110')
+    where start_time is NULL and DATE_FORMAT(finish_time,'%Y%m')='202110')
 group by driver_id
 
-union ALL
+union
 
 select '总体',round(sum(grade)/count(grade),1)
 from tb_get_car_order
-where  driver_id in(
+where driver_id in(
     select distinct(o.driver_id)
     from tb_get_car_order o 
-    where 
-        start_time is NULL and 
-        finish_time is not null and 
-        DATE_FORMAT(finish_time,'%Y%m')='202110'
-    )
-
-
+    where start_time is NULL and DATE_FORMAT(finish_time,'%Y%m')='202110')
 ```
 
-```sql
-select ifnull(driver_id,'总体') driver_id,
-       round(avg(grade),1) avg_grade
-from tb_get_car_order 
-where 
-    start_time is not null and 
-    driver_id in (select driver_id
-                  from tb_get_car_order b
-                  where start_time is null )
-group by driver_id with ROLLUP
-```
-
-```sql
-with driverid as(
-        select driver_id
-        from tb_get_car_order
-        where month(finish_time)=10 and start_time is null
-        )
-
-select 
-    coalesce(tb.driver_id, '总体') as driver_id, 
-    round(avg(grade),1) as avg_grade
-from tb_get_car_order tb 
-inner join 
-    driverid
-    on tb.driver_id=driverid.driver_id
-where grade is not null
-group by tb.driver_id with rollup
- 
-```
-
-```sql
-(SELECT driver_id,round(avg(grade),1) as avg_grade FROM tb_get_car_order
-where driver_id in
-    (SELECT driver_id FROM tb_get_car_order
-    where start_time is null and grade is NULL)
-group by driver_id 
-order by driver_id)
-
-union 
-
-(SELECT '总体' as driver_id,round(avg(grade),1) as avg_grade FROM tb_get_car_order
-where driver_id in
-    (SELECT driver_id FROM tb_get_car_order
-    where start_time is null and grade is NULL));
-```
 
 ## SQL21 每个城市中评分最高的司机信息
 
