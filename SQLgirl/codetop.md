@@ -2549,7 +2549,7 @@ class Solution:
         traversal(root)
         return result
 
-# 中序遍历-递归-LC94_二叉树的中序遍历
+中序遍历-递归-LC94_二叉树的中序遍历
 
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
@@ -2580,49 +2580,65 @@ class Solution:
         traversal(root)
         return result
 
-# 中序遍历需先判断当前结点是否存在，若存在则将该节点放入栈中，再将当前结点设置为结点的左孩子，
-# 若不存在则取栈顶元素为cur，当且仅当栈空cur也为空，循环结束。
+# # 中序遍历需先判断当前结点是否存在，若存在则将该节点放入栈中，再将当前结点设置为结点的左孩子，
+# # 若不存在则取栈顶元素为cur，当且仅当栈空cur也为空，循环结束。
 
-class Solution:
-    def inorderTraversal(self, root: TreeNode) -> List[int]: 
-        stack, res = [], []
-        node = root
-        while stack or node:
-            if node:
-                stack.append(node)
-                node = node.left
-            else:
-                node = stack.pop()
-                res.append(node.val)
-                node = node.right
-        return res
+# class Solution:
+#     def inorderTraversal(self, root: TreeNode) -> List[int]: 
+#         stack, res = [], []
+#         node = root
+#         while stack or node:
+#             if node:
+#                 stack.append(node)
+#                 node = node.left
+#             else:
+#                 node = stack.pop()
+#                 res.append(node.val)
+#                 node = node.right
+#         return res
 
-class Solution:
-    def preorderTraversal(self, root: TreeNode) -> List[int]:
-        stack, res = [], []
-        node = root
-        while stack or node:
-            while node:
-                res.append(node.val)
-                stack.append(node)
-                node = node.left
-            node = stack.pop()
-            node = node.right
-        return res
+# class Solution:
+#     def preorderTraversal(self, root: TreeNode) -> List[int]:
+#         stack, res = [], []
+#         node = root
+#         while stack or node:
+#             while node:
+#                 res.append(node.val)
+#                 stack.append(node)
+#                 node = node.left
+#             node = stack.pop()
+#             node = node.right
+#         return res
+
+# class Solution:
+#     def preorderTraversal(self, root: TreeNode) -> List[int]:
+#         def addAllLeft(node):
+#             while node:
+#                 res.append(node.val) # append 优先
+#                 stack.append(node)
+#                 node = node.left
+
+#         stack, res = [], []
+#         node = root
+#         while stack or node:
+#             addAllLeft(node)
+#             node = stack.pop()
+#             node = node.right
+#         return res
 
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
-        def addAllLeft(node):
+        def appendAllLeft(node):
             while node:
                 stack.append(node)
                 node = node.left
 
         stack, res = [], []
-        addAllLeft(root)
+        appendAllLeft(root)
         while stack:
-            tmp = stack.pop()
-            res.append(tmp.val)
-            addAllLeft(tmp.right)
+            node = stack.pop()
+            res.append(node.val) # res.append 在中间
+            appendAllLeft(node.right)
         return res
 
 class Solution:
@@ -2634,10 +2650,8 @@ class Solution:
         while stack:
             tmp = stack.pop()
             res.append(tmp.val)
-            if tmp.left:
-                stack.append(tmp.left)
-            if tmp.right:
-                stack.append(tmp.right)
+            if tmp.left: stack.append(tmp.left)
+            if tmp.right: stack.append(tmp.right)
         return res[::-1]
 
 class Solution:
@@ -2649,10 +2663,8 @@ class Solution:
         while stack:
             tmp = stack.pop()
             res.append(tmp.val)
-            if tmp.right:
-                stack.append(tmp.right)
-            if tmp.left:
-                stack.append(tmp.left)
+            if tmp.right: stack.append(tmp.right)
+            if tmp.left: stack.append(tmp.left)
         return res
 ```
 
@@ -2696,22 +2708,20 @@ class Solution:
         while level:
             tmp = []
             for n in level:
-                if n.left:
-                    tmp.append(n.left)
-                if n.right:
-                    tmp.append(n.right)
+                if n.left: tmp.append(n.left)
+                if n.right: tmp.append(n.right)
             res.append(level[-1].val)
             level = tmp
         return res
 
 # 递归
-
 class Solution:
     def rightSideView(self, root: TreeNode):
         res = []
         def traversal(node, level):
             if node:
-                level == len(res) and res.append(node.val)
+                if level == len(res):
+                    res.append(node.val)
                 traversal(node.right, level + 1)
                 traversal(node.left, level + 1)
         traversal(root, 0)
@@ -2727,41 +2737,41 @@ https://leetcode-cn.com/problems/reorder-list/
 ```py
 class Solution:
     def reorderList(self, head: ListNode) -> None:
-        nums = []
-        tmp = head
-
-        while tmp.next: # 链表除了首元素全部加入双向队列
-            nums.append(tmp.next)
-            tmp = tmp.next
-        tmp = head
+        que = []
+        
+        cur1 = head
+        while cur1.next: # 链表除了首元素全部加入双向队列
+            que.append(cur1.next)
+            cur1 = cur1.next
         # 双指针
-        i, j = 0, len(nums) - 1
+        cur2 = head
+        i, j = 0, len(que) - 1
         while i <= j: # 一后一前加入链表
-            tmp.next = nums[j]
-            tmp = tmp.next
+            cur2.next = que[j] # 头部连接到尾部
+            cur2 = cur2.next
             j -= 1
-            tmp.next = nums[i]
-            tmp = tmp.next
+            cur2.next = que[i] # 当i = j还是指向本身
+            cur2 = cur2.next
             i += 1
-        tmp.next = None # 尾部置空
+        cur2.next = None # 尾部置空
 
 # 双向队列
 class Solution:
     def reorderList(self, head: ListNode) -> None:
-        d = collections.deque()
-        tmp = head
-        while tmp.next: # 链表除了首元素全部加入双向队列
-            d.append(tmp.next)
-            tmp = tmp.next
-        tmp = head
+        que = collections.deque()
+        cur = head
+        while cur.next: # 链表除了首元素全部加入双向队列
+            que.append(cur.next)
+            cur = cur.next
+        cur = head
         # 一后一前加入链表
-        while len(d): # 一后一前加入链表
-            tmp.next = d.pop()
-            tmp = tmp.next
-            if len(d):
-                tmp.next = d.popleft()
-                tmp = tmp.next
-        tmp.next = None # 尾部置空
+        while len(que): # 一后一前加入链表
+            cur.next = que.pop()
+            cur = cur.next
+            if len(que):
+                cur.next = que.popleft()
+                cur = cur.next
+        cur.next = None # 尾部置空
  
 
 ```
@@ -2851,19 +2861,19 @@ class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         res = -1e9
         # left = right = 0
-        def helper(node) -> int:
+        def subsum(node) -> int:
             nonlocal res # 也可以写成 self.res
             if not node:
                 return 0
             # if node.left:
-            left = max(helper(node.left), 0)     # 正负性：left 为负，就不回收
+            left = max(subsum(node.left), 0)     # 正负性：left 为负，就不回收
             # if node.right:
-            right = max(helper(node.right), 0)   # 正负性：right 为负，就不回收
+            right = max(subsum(node.right), 0)   # 正负性：right 为负，就不回收
             # 有两种情况：node.val 不往上回收, 左中右
             res = max(left + right + node.val, res)
             # 有两种情况：node.val 往上回收, 构成递归
             return max(left,right) + node.val # 正负性：node.val必须回收
-        helper(root)
+        subsum(root)
         return res
 ```
 
@@ -3042,7 +3052,7 @@ class Solution:
         res = x # 初始值
         c = x # 牛顿迭代法中的常数
         while res > c / res:
-            res = (res + c / res) // 2
+            res = (res + c / res) // 2 # 这里必须用整除
         return int(res)
         
 class Solution:
@@ -3105,4 +3115,4 @@ object Solution {
     }
 }
 
-```
+```    
