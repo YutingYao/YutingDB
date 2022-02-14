@@ -1112,6 +1112,13 @@ where driver_id in(
 https://www.nowcoder.com/practice/dcc4adafd0fe41b5b2fc03ad6a4ac686?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
+每个城市中评分最高
+用 rank() 效果一样
+dense_rank() over(partition by city order by round(avg(grade),1) desc
+round(avg(grade) GROUP BY driver_id, city
+```
+
+```sql
 select city,driver_id,avg_grade,avg_order_num,avg_mileage
 from
     (select 
@@ -1132,142 +1139,18 @@ where rank_grade=1
 order by avg_order_num;
 ```
 
-```sql
-select city,driver_id,avg_grade,avg_order_num,avg_mileage from
-    (select r.city,o.driver_id,
-    round(avg(o.grade),1) avg_grade,
-    round(count(o.order_id)/(count(distinct date(order_time))),1) avg_order_num,
-    round(sum(o.mileage)/(count(distinct date(order_time))),3) avg_mileage,
-    dense_rank() over (partition by r.city order by round(avg(o.grade),1) desc) t_rank
-    from tb_get_car_order o 
-    inner join tb_get_car_record r on r.order_id=o.order_id
-    group by r.city,o.driver_id
-    ) as a
-where t_rank = 1
-order by avg_order_num
-```
-
-```sql
-SELECT city, driver_id, avg_grade, avg_order_num, avg_mileage
-FROM (
-    SELECT city, driver_id, ROUND(avg_grade, 1) as avg_grade,
-        ROUND(order_num / work_days, 1) as avg_order_num,
-        ROUND(toal_mileage / work_days, 3) as avg_mileage,
-        RANK() over(PARTITION BY city ORDER BY avg_grade DESC) as rk
-    FROM (
-        SELECT driver_id, city, AVG(grade) as avg_grade,
-            COUNT(DISTINCT DATE(order_time)) as work_days,
-            COUNT(order_time) as order_num,
-            SUM(mileage) as toal_mileage
-        FROM tb_get_car_record
-        JOIN tb_get_car_order USING(order_id)
-        GROUP BY driver_id, city
-    ) as t_driver_info
-) as t_driver_rk
-WHERE rk = 1
-ORDER BY avg_order_num;
-
-
-```
-
-```sql
-select 
-    t.city,
-    t.driver_id,
-    t.avg_grade,
-    t.avg_order_num,
-    t.avg_mileage
-from
-    (select 
-    r.city as city,
-    o.driver_id as driver_id,
-    round(avg(o.grade) ,1) as avg_grade,
-    round(count(*)/count(distinct date(finish_time)),1)as avg_order_num,
-    round(sum(o.mileage)/count(distinct date(finish_time)),3)as avg_mileage,
-    rank() over (partition by r.city order by round(avg(o.grade) ,1) desc) as ranking
-    from tb_get_car_order o
-    join tb_get_car_record r using(order_id)
-    group by r.city, o.driver_id
-    ) as t
-where t.ranking=1
-order by t.avg_order_num
-```
-
-```sql
-select 
-    city,
-    driver_id,
-    avg_grade,
-    avg_order_num,
-    avg_mileage
- from
-    (select 
-        *,
-        dense_rank()over(partition by city order by avg_grade desc) rank_no
-    from 
-        (select 
-            city,
-            driver_id,
-            round(avg(grade),1) avg_grade,
-            round(count(*)/count(distinct date(order_time)),1) avg_order_num,
-            round(sum(mileage)/count(distinct date(order_time)),3) avg_mileage
-        from 
-            tb_get_car_order a 
-        left join 
-            tb_get_car_record b 
-        on 
-            a.order_id = b.order_id 
-        group by 
-            city,
-            driver_id) a ) b
-where 
-    rank_no = 1
-order by 
-    avg_order_num
-```
-
 ## SQL22 国庆期间近7日日均取消订单量
 
 https://www.nowcoder.com/practice/2b330aa6cc994ec2a988704a078a0703?tpId=268&tqId=2299819&ru=/practice/f022c9ec81044d4bb7e0711ab794531a&qru=/ta/sql-factory-interview/question-ranking
+
+```sql
+group by date(order_time) 日均
 
 - order by date_format(order_time, '%Y-%m-%d') rows 6 preceding
 
 - order by dt rows 6 preceding
 
 - order by dates rows between 6 preceding and current row
-
-```sql
-select dt, finish_num_7d, cancel_num_7d
-from (
-    select 
-        DATE_FORMAT(order_time,'%Y-%m-%d') dt,
-        round(avg(count(start_time)) over (order by DATE_FORMAT(order_time, '%Y-%m-%d') rows 6 preceding), 2) finish_num_7d,
-        round(avg(sum(case when start_time is null then 1 else 0 end)) over (order by date_format(order_time, '%Y-%m-%d') rows 6 preceding), 2) cancel_num_7d
-    from tb_get_car_order
-    group by dt
-    ) as a
-where dt between '2021-10-01' and '2021-10-03'
-order by dt
-```
-
-
-```sql
-select *
-from(select 
-        dt,
-        round(sum(finish_num)over(order by dt rows 6 preceding)/7,2) as finish_num_7d,
-        round(sum(cancel_num)over(order by dt rows 6 preceding)/7,2) as cancel_num_7d
-    from(
-        select 
-            date(order_time) dt,
-            sum(case when start_time is not null then 1 else 0 end) as finish_num,
-            sum(case when start_time is null then 1 else 0 end) as cancel_num
-        from tb_get_car_order
-        group by date(order_time)
-        order by dt) t 
-    ) a 
-where dt between '2021-10-01' and '2021-10-03'
-
 ```
 
 ```sql
@@ -1288,48 +1171,6 @@ FROM(
         ) t 
     ) tt
 WHERE dt BETWEEN '2021-10-01' and '2021-10-03'
-```
-
-```sql
-#select dt,
-#finish_num_7d,
-#cancel_num_7d
-#from (select dt,
-#             round(sum(finish_num)over (order by dt rows 6 proceding)/7,2) as finish_num_7d,
-#             round(sum(cancel_num)over (order by dt rows 6 proceding)/7,2) as cancel_num_7d
-#      from   
-#     )
-#order by dt asc
-
-select * from 
-    (select 
-        date_format(order_time,'%Y-%m-%d') dt,
-        round(avg(count(start_time)) over (order by date_format(order_time,'%Y-%m-%d')  rows 6 preceding),2) finish_num_7d,
-        round(avg(sum(case when start_time is null then 1 else 0 end)) over (order by date_format(order_time,'%Y-%m-%d') rows 6 preceding),2) cancel_num_7d
-    from tb_get_car_order
-    group by dt
-    ) as a 
-where dt between '2021-10-01' and '2021-10-03'
-order by dt
-```
-
-```sql
-select * from (
-    select
-        dates,
-        round(avg(finish_cnt) over (order by dates rows between 6 preceding and current row),2),
-        round(avg(cancel_cnt) over (order by dates rows between 6 preceding and current row),2)
-    from(
-        select
-            date(order_time) dates,
-            count(start_time) finish_cnt,
-            sum(if(start_time is null,1,0)) cancel_cnt
-        from tb_get_car_order
-        group by date(order_time)
-        )a
-    )b
-where dates in ('2021-10-01','2021-10-02','2021-10-03')
-
 ```
 
 ## SQL23 工作日各时段叫车量、等待接单时间和调度时间
@@ -1362,6 +1203,16 @@ WEEKDAY(order_time) between 0 and 4
 DAYOFWEEK(event_time) BETWEEN 2 AND 6
 ```
 
+```sql
+CASE
+WHEN RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00' THEN '早高峰'
+WHEN RIGHT(event_time, 8) >='09:00:00' AND RIGHT(event_time, 8) < '17:00:00' THEN '工作时间'
+WHEN RIGHT(event_time, 8) >='17:00:00' AND RIGHT(event_time, 8) < '20:00:00' THEN '晚高峰'
+ELSE '休息时间'
+END period,
+GROUP BY period
+```
+
 
 ```sql
 SELECT period, COUNT(event_time) order_num, ROUND(AVG(wait_time), 1), ROUND(SUM(dispatch_time)/COUNT(dispatch_time), 1)
@@ -1384,110 +1235,23 @@ GROUP BY period
 ORDER BY order_num 
 ```
 
-```sql
-
-
-select
-    case
-        when subString_index(event_time, ' ', -1) between '07:00:00'
-        and '08:59:59' then '早高峰'
-        when subString_index(event_time, ' ', -1) between '09:00:00'
-        and '16:59:59' then '工作时间'
-        when subString_index(event_time, ' ', -1) between '17:00:00'
-        and '19:59:59' then '晚高峰'
-        else '休息时间'
-    end period,
-    count(1) AS get_car_num,
-    round(
-        avg(TIMESTAMPdiff(second, event_time, order_time))/60,
-        1
-        ) AS avg_wait_time,
-    round(
-        avg(Timestampdiff(second, order_time, start_time))/60,
-        1
-        ) AS avg_dispatch_time
-from
-    tb_get_car_record a
-    JOIN tb_get_car_order b ON a.order_id = b.order_id
-WHERE
-     WEEKDAY(order_time) NOT IN(5, 6)
-GROUP BY period
-ORDER BY get_car_num
-```
-
-```sql
-select
-    period, count(period)as get_car_num,
-    round(avg(wait_time),1)as avg_wait_time,
-    round(avg(dispatch_time),1)as avg_dispatch_time
-from
-    (SELECT 
-        (case when date_format(event_time,'%T')>='07:00:00'and date_format(event_time,'%T')<'09:00:00' then'早高峰'
-            when date_format(event_time,'%T')>='09:00:00'and date_format(event_time,'%T')<'17:00:00' then'工作时间'
-            when date_format(event_time,'%T')>='17:00:00'and date_format(event_time,'%T')<'20:00:00' then'晚高峰'
-            else '休息时间' end)as period,
-        round(TIMESTAMPDIFF(second,event_time,order_time)/60,1)as wait_time,
-        round(TIMESTAMPDIFF(second,order_time,start_time)/60,1)as dispatch_time
-    FROM tb_get_car_order o left join tb_get_car_record r on o.order_id=r.order_id
-    where (WEEKDAY(order_time) between 0 and 4) and event_time is not null
-    )t
-GROUP by period
-order by get_car_num
-```
-
-```sql
-
-
-SELECT period, COUNT(1) as get_car_num,
-    ROUND(AVG(wait_time/60), 1) as avg_wait_time,
-    ROUND(AVG(dispatch_time/60), 1) as avg_dispatch_time
-FROM (
-    SELECT event_time,
-        CASE
-            WHEN HOUR(event_time) IN (7, 8) THEN '早高峰'
-            WHEN HOUR(event_time) BETWEEN 9 AND 16 THEN '工作时间'
-            WHEN HOUR(event_time) IN (17, 18, 19) THEN '晚高峰'
-            ELSE '休息时间'
-        END as period,
-        TIMESTAMPDIFF(SECOND, event_time, end_time) as wait_time,
-        TIMESTAMPDIFF(SECOND, order_time, start_time) as dispatch_time
-    FROM tb_get_car_record
-    JOIN tb_get_car_order USING(order_id)
-    WHERE DAYOFWEEK(event_time) BETWEEN 2 AND 6
-    ) as t_wait_dispatch_time
-GROUP BY period
-ORDER BY get_car_num;
-
-
-```
-
-```sql
-select 
-    (case when hour(event_time) >= 7 and hour(event_time) < 9  then '早高峰'
-         when hour(event_time) >= 9 and hour(event_time) < 17  then '工作时间'
-         when hour(event_time) >= 17 and hour(event_time) < 20  then '晚高峰'
-         else '休息时间' end) period,
-    count(b.event_time) get_car_num,
-    round(avg(timestampdiff(second,event_time,order_time))/60,1) avg_wait_time, 
-    round(avg(timestampdiff(second,order_time,start_time))/60,1) avg_dispatch_time
-from 
-    tb_get_car_order a
-left join 
-    tb_get_car_record b 
-on 
-    a.order_id = b.order_id
-where 
-    WEEKDAY(event_time) not in (5,6)
-group by 
-    period
-order by 
-    get_car_num
-```
-
 ## SQL24 各城市最大同时等车人数
 
 
 https://www.nowcoder.com/practice/f301eccab83c42ab8dab80f28a1eef98?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
+
+```sql
+IFNULL(start_time, finish_time)
+等效于
+COALESCE(start_time, finish_time)
+```
+
+```sql
+表示是否等待：
+
+-1 if_wait
+ 1 if_wait
+```
 
 ```sql
 SELECT city, MAX(sum_wait_num)
@@ -1508,119 +1272,4 @@ FROM(
 WHERE LEFT(time, 7) = '2021-10'
 GROUP BY city
 ORDER BY MAX(sum_wait_num), city
-```
-
-```sql
-select city,left(max(sumd),1) mdd
-from (
-    select city,date(a.dt) dtt,
-    sum(diff) over (partition by city,date(a.dt) order by a.dt,diff desc) sumd
-    from (
-        (select city,event_time dt,'1' as diff
-        from tb_get_car_record
-        where date_format(event_time,'%Y-%m') = '2021-10')
-
-        union all
-
-        (select city,start_time dt,'-1' as diff
-        from tb_get_car_record t1 left join tb_get_car_order t2 on t1.order_id = t2.order_id
-        where date_format(start_time,'%Y-%m') = '2021-10')
-        ) a
-    ) b
-group by city,b.dtt
-order by mdd,city
-```
-
-```sql
-select 
-    city, 
-    max(wait_uv)
-from(
-    select 
-        city, t, sum(num) over(partition by city, date(t) order by t asc, num desc) wait_uv
-    from
-        (
-        select city, event_time as t, 1 num
-        from tb_get_car_record
-        UNION all
-        select city, COALESCE(start_time, finish_time) t, -1 num
-        from tb_get_car_order
-        left join tb_get_car_record using(order_id)
-        ) a
-    where LEFT(t, 7) = '2021-10'
-    order by 2
-    ) b
-group by 1
-order by 2, 1
-```
-
-```sql
-with tmp as 
-    (select city, event_time,
-            case 
-            when r.order_id is null then end_time
-            when start_time is null then finish_time
-            when start_time is not null then start_time 
-            end out_time
-     from tb_get_car_record r left join tb_get_car_order o using(order_id)
-     where date_format(event_time,'%Y%m')='202110')
-
-select city, max(uv_num) max_wait_uv
-from 
-    (select city, 
-            sum(num) over(partition by city,date(dt) order by dt, num desc) uv_num
-     from 
-        (select city, event_time dt, 1 num from tmp
-        union all 
-        select city, out_time dt, -1 num from tmp
-        )tmp2
-    ) tmp3
-group by city
-order by max_wait_uv, city
-
-
-```
-
-```sql
-/*select city,max(wait_uv) max_wait_uv
-from
-(select city,
-sum(if_wait) over (partition by city order by time1,if_wait desc) wait_uv
-from 
-(select city,uid,event_time time1,1 if_wait from tb_get_car_record
-where date_format(event_time,'%Y-%m')='2021-10'
-union all 
-select r.city,r.uid,
-(case when o.start_time is null then o.finish_time else o.start_time end) time1,-1 if_wait
-from tb_get_car_order o left join tb_get_car_record r on r.order_id=o.order_id
-where date_format(o.start_time,'%Y-%m')='2021-10'
-and date_format(o.finish_time,'%Y-%m')='2021-10') as a) as b
-group by city
-order by max_wait_uv,city*/
-
-
-select city,max(wait_uv) max_wait_uv from
-    (select 
-        city,
-        date_format(dt,'%Y-%m-%d') dt1,
-        sum(if_wait) over (partition by city,date_format(dt,'%Y-%m-%d') order by dt asc,if_wait desc) wait_uv
-    from
-        (select city,event_time dt,1 if_wait from tb_get_car_record
-        where date_format(event_time,'%Y-%m')='2021-10'
-
-        union all
-
-        select 
-            r.city,
-            (
-            case when o.start_time is null then o.finish_time 
-            else o.start_time end
-            ) dt,
-            -1 if_wait
-        from tb_get_car_record r left join tb_get_car_order o on o.order_id=r.order_id
-        where date_format(o.finish_time,'%Y-%m')='2021-10'
-        ) as a
-    ) as b
-group by city
-order by max_wait_uv,city
 ```
