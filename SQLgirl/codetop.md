@@ -3235,29 +3235,6 @@ class Solution:
         slow.next = slow.next.next
 
         return dummy.next
-
-class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        fast = ListNode(0)
-        slow = ListNode(0)
-        fast.next = head
-        slow.next = head
-        for _ in range(n):
-            fast = fast.next
-
-        # 易错点：
-        # 要考虑特殊情况，比如说，链表长度和n一样时
-        # 需要找到前驱
-        if fast.next == None: # 易错点：== 千万不要写错
-            return head.next
-
-        while fast.next != None:
-            fast = fast.next
-            slow = slow.next
-
-        slow.next = slow.next.next
-
-        return head
 ```
 
 ```scala
@@ -3321,7 +3298,7 @@ object Solution1-2 {
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        dummy = pointer = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
+        dummy = cur = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
         carry = 0 # 易错点：carry需要先赋值
         while l1 or l2 or carry: # 易错点：carry要存在
             # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
@@ -3329,8 +3306,8 @@ class Solution:
             sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
             tail = sumNode % 10
             carry = sumNode // 10
-            pointer.next = ListNode(tail)
-            pointer = pointer.next
+            cur.next = ListNode(tail)
+            cur = cur.next
             # # l1,l2不一定存在，所以不能写成：l1 = l1.next
             l1 = l1.next if l1 else None
             l2 = l2.next if l2 else None
@@ -3560,7 +3537,8 @@ class Solution:
         slow, fast = -1, -1
         i, j = 0, 0
         for _ in range(n//2 + 1) :
-            slow = fast  # 每次循环前将 fast 的值赋给 slow
+            slow = fast  
+            # 每次循环前将 fast 的值赋给 slow
             # A移动的条件: B遍历到最后 或 当前A<B,满足一个即可
             if j >= lenB or (i < lenA and A[i] < B[j]):
                 fast = A[i]
@@ -3645,7 +3623,7 @@ class Solution:
 ```py
 class Solution:
     def maxDepth(self, root: TreeNode) -> int:
-        if root is None:
+        if not root:
             return 0
         return max(self.maxDepth(root.left),self.maxDepth(root.right))+1
 ```
@@ -3859,7 +3837,7 @@ class Solution:
         winQ = deque()
         res = []
         for r, v in enumerate(nums):
-            # 如果新来的数字更大
+            # 如果新来的数字更大, 所以最右边的数字是最大的
             while winQ and nums[winQ[-1]] < v:
                 winQ.pop()
             winQ.append(r)
@@ -3882,14 +3860,14 @@ class Solution:
         q = [(-nums[i], i) for i in range(k)]
         heapq.heapify(q)
 
-        ans = [-q[0][0]]
+        res = [-q[0][0]]
         for i in range(k, n):
             heapq.heappush(q, (-nums[i], i))
-            while q[0][1] <= i - k:
+            while q[0][1] <= i - k: # 最大值永远在 q[0]
                 heapq.heappop(q) # 把所有出界的最大值弹出
-            ans.append(-q[0][0])
+            res.append(-q[0][0])
         
-        return ans
+        return res
 
 ```
 
@@ -3995,7 +3973,7 @@ class Solution:
                     dp[j] = pre[j-1] + 1
                 else:
                     dp[j] = max(pre[j], dp[j-1])
-                pre[j-1] = dp[j-1]
+                pre[j-1] = dp[j-1] # 注意这里的缩进关系
             pre[j] = dp[j]
         return dp[-1]
 ```
@@ -4036,19 +4014,19 @@ class Solution:
 ```py
 class Solution:
     def sumNumbers(self, root: TreeNode) -> int:
-        ans = 0
+        res = 0
         
         def dfs(root, acc):
-            nonlocal ans
+            nonlocal res
             if not root.left and not root.right: # 易错点：不要忽视了这种情况
-                ans += acc * 10 + root.val
+                res += acc * 10 + root.val
                 return
             if root.left:
                 dfs(root.left, acc * 10 + root.val)
             if root.right:
                 dfs(root.right, acc * 10 + root.val)
         dfs(root, 0)
-        return ans # 在根节点处cur为0，而不是sums
+        return res # 在根节点处cur为0，而不是sums
 
 ```
 
@@ -4113,7 +4091,7 @@ class Solution:
             if node.val == tsum and not node.left and not node.right: # 结束条件
                 res.append(path[:] + [node.val])  # 需要深拷贝
 
-            dfs(node.left, path + [node.val], tsum - node.val)
+            dfs(node.left, path + [node.val], tsum - node.val) # 三个部分都需要状态转移
             dfs(node.right, path + [node.val], tsum - node.val)
             
         dfs(root, [], targetSum)
@@ -4143,7 +4121,7 @@ class Solution:
                 res.append(itm)
                 return  # 这里return写不写居然都ac了，可能是因为没有循环吧
             if left > 0:
-                helper(left-1,right,itm + '(')
+                helper(left-1,right,itm + '(') #   状态转移
             if right > left:
                 helper(left,right-1,itm + ')')
         
@@ -4181,14 +4159,14 @@ class Solution:
 
 class Solution:
     def generateParenthesis(self, n):
-        result = {''}
+        res = {''}
         for i in range(n):
-            temp = set()
-            for s in result:  # 在上一次的结果的所有字符串的各个位置上插入'()'
+            tmp = set()
+            for s in res:  # 在上一次的结果的所有字符串的各个位置上插入'()'
                 for j in range(len(s) + 1):
-                    temp.add(s[:j] + '()' + s[j:])
-            result = temp
-        return list(result)
+                    tmp.add(s[:j] + '()' + s[j:])
+            res = tmp
+        return list(res)
 
 
 
@@ -4219,32 +4197,6 @@ object Solution {
 ## 41 First Missing Positive
 
 [小明](https://www.bilibili.com/video/BV1fy4y1k7pV?spm_id_from=333.999.0.0)
-
-```py
-[1,1] -> [1,1,0] -> [3,6,0] -> 2
-class Solution:
-    def firstMissingPositive(self, nums: List[int]) -> int:
-        nums.append(0)
-        # 用index保存应该存在的数
-        n = len(nums)
-        for i in range(n):
-            if nums[i] <= 0 or nums[i] >= n:
-                nums[i] = 0
-        # 不在 1-n 的数字删除 之后放在 0 的位置
-        # [3,4,-1,1] -> [3, 4, 0, 1, 0]
-        
-        for num in nums:
-            nums[num % n] += n  
-            # 易错点：% n,一定要取余数，不然会index out of range
-        # [0, 1, xx, 3, 4]
-        # [13, 9, 0, 6, 5]
-
-        for i,num in enumerate(nums):
-            if num < n:
-                return i
-
-        return n
-```
 
 ```py
 置换法
