@@ -173,7 +173,7 @@ user_id	语文	数学	英语
 
 ```sql
 
-/*第一种方式：使用case when函数*/
+/*第1种方式：使用case when函数*/
 SELECT user_id,
   CASE subject WHEN '语文' THEN score ELSE 0 END AS '语文',
   CASE subject WHEN '数学' THEN score ELSE 0 END AS '数学',
