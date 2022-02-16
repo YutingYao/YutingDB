@@ -1,18 +1,16 @@
 class Solution:
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        winQ = deque()
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         res = []
-        for r, v in enumerate(nums):
-            # 如果新来的数字更大
-            while winQ and nums[winQ[-1]] < v:
-                winQ.pop()
-            winQ.append(r)
-            # 如果出界
-            l = winQ[0]
-            if r - k == l:
-                winQ.popleft()
-            # 开始写入答案
-            if r >= k - 1:
-                res.append(nums[winQ[0]])
 
+        def backtrack(firstIdx,path):
+            if sum(path) == target:
+                res.append(path[:]) 
+                # 易错点，这里是res.append(path[:])，而不是res.append(path)
+                return
+            if sum(path) > target:
+                return
+            if sum(path) < target:
+                for i in range(firstIdx,len(candidates)):
+                    backtrack(i,path + [candidates[i]])
+        backtrack(0,[])
         return res

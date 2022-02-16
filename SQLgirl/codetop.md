@@ -4212,3 +4212,1334 @@ class Solution:
         return n + 1
 
 ```
+
+## 543 Diameter of Binary Tree
+
+[小明](https://www.bilibili.com/video/BV12K4y1r78T?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1qA411t7LR?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        res = 0
+        def depth(node):
+            nonlocal res
+            if not node:
+                return 0
+            L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
+            R = depth(node.right) + 1 if node.right else 0
+            res = max(res, L + R)
+            return max(L, R)
+
+        depth(root)
+        return res
+```
+
+## 155-【构造🏰】Min Stack
+
+[哈哈哈](https://www.bilibili.com/video/BV1H74118748?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1YK4y1r77W?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1ja4y1Y7vY?spm_id_from=333.999.0.0)
+
+   
+关键在于  def getMi
+
+```py
+class MinStack:
+
+    def __init__(self):
+        # 另外用一个stack，栈顶表示原栈里所有值的最小值
+        self.minStack = []
+        self.stack = []
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if self.minStack == [] or self.minStack[-1] >= val:
+            self.minStack.append(val)
+
+    def pop(self) -> None:
+        if self.stack[-1] == self.minStack[-1]:
+            self.minStack.pop()
+        return self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+
+    def getMin(self) -> int:
+        return self.minStack[-1]        
+```
+
+```py
+面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
+
+class MinStack:
+    def __init__(self):
+
+        self.diffstack = []
+        self.mins = -1
+
+    def push(self, x: int) -> None:
+        if not self.diffstack:
+            self.diffstack.append(0)
+            self.mins = x
+        else:
+            diff = x-self.mins
+            self.diffstack.append(diff)
+            self.mins = self.mins if diff > 0 else x
+            # mins 是会变化的
+
+    def pop(self) -> None:
+        if self.diffstack:
+            diff = self.diffstack.pop()
+            if diff < 0: 
+                # [3,2,1,4] [0,-1,-1, 3]
+                # mins = 3, 2, 1, 1
+                top = self.mins # 第一步：顺序不能错
+                self.mins = self.mins - diff # 第二步：如果 diff < 0, 那就需要还原 self.mins
+            else:     # 如果 diff 一直都 > 0, 那就非常好
+                top = self.mins + diff
+            return top
+
+    def top(self) -> int:
+        return self.mins if self.diffstack[-1] < 0 else self.diffstack[-1] + self.mins
+
+    def getMin(self) -> int:
+        return self.mins if self.diffstack else -1
+```
+
+
+```scala
+class MinStack() {
+
+    /** initialize your data structure here. */
+    var stack = List.empty[Int]
+    var min = Int.MaxValue
+
+    def push(x: Int) {
+        stack = stack :+ x
+        if(x < min){
+            min = x
+        }
+    }
+
+    def pop() {
+        stack = stack.init
+        min = Int.MaxValue
+        stack.map(x => {
+            if(x < min) min = x
+        })
+    }
+
+    def top(): Int = {
+        stack.last
+    }
+
+    def getMin(): Int = {
+        min
+    }
+
+}
+
+//替代解决方案：更快
+//这里我们将元素添加到列表中而不是附加
+//请注意，由于List实际上是一个LinkedList，因此处理列表的“头部”要容易得多
+//还有另一个列表来维护列表的最小元素
+class MinStack() {
+
+    /** initialize your data structure here. */
+    var stack = List.empty[Int]
+    var mins = List.empty[Int]
+
+    def push(x: Int) {
+        //如果我们将第二个条件设为 x < mins.head，则此行失败
+        //with NoSuchElementException: 空列表的头部
+        //为什么？？？
+        if(mins.isEmpty || mins.head >= x) mins = x +: mins
+        stack = x +: stack
+    }
+
+    def pop() {
+        if(mins.head == stack.head) mins = mins.tail
+        stack = stack.tail
+    }
+
+    def top(): Int = {
+        stack.head
+    }
+
+    def getMin(): Int = {
+        mins.head
+    }
+
+}
+
+```
+
+## 98. Validate Binary Search Tree 98-验证二叉搜索树
+
+[花花酱](https://www.bilibili.com/video/BV12t411Y7TP?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Wz4y1R7dF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7FV?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Hv411478d?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Fi4y147Ng?spm_id_from=333.999.0.0)
+
+```py
+有效 二叉搜索树定义如下：
+
+节点的左子树只包含 小于 当前节点的数。
+节点的右子树只包含 大于 当前节点的数。
+所有左子树和右子树自身必须也是二叉搜索树。
+```
+
+中序遍历一下就行了
+
+```py
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        result = [float('-inf')]
+        valid = True # 必须用valid这个变量，不能用return False
+
+        def traversal(root: TreeNode):
+            nonlocal valid # 这一行必不可少，不然虽然不报错，但不能ac
+            if root == None:
+                return
+            traversal(root.left)    # 左
+            if result[-1] >= root.val: valid = False
+            result.append(root.val) # 中序
+            traversal(root.right)   # 右
+
+        traversal(root)
+        return valid
+
+
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        def appendAllLeft(node):
+            while node:
+                stack.append(node)
+                node = node.left
+
+        stack, res = [], float('-inf')
+        appendAllLeft(root)
+        while stack:
+            node = stack.pop()
+            if res >= node.val: return False
+            res = node.val # res.append 在中间
+            appendAllLeft(node.right)
+        return True
+
+```
+
+定义上下界：
+
+```py
+class Solution:
+    def isValidBST(self, root):
+        def BFS(node, lower, upper):
+            if not node:
+                return True
+            return lower < node.val < upper and BFS(node.left, lower, node.val) and BFS(node.right, node.val, upper)
+
+        return fun(root, float('-inf'), float('inf'))
+```
+
+```scala
+/**
+* chosen solution
+* inorder iterative version only keep pre node
+* this is also the inorder-iterative-template
+* 
+* time complexity: O(N)
+*/
+
+object Solution0 {
+   def isValidBST(root: TreeNode): Boolean = {
+    val stack = new collection.mutable.Stack[TreeNode]()
+    var node = root
+    var pre: TreeNode = null
+    var result = true
+    while ((node != null || stack.nonEmpty) && result) {
+      while (node != null) {
+        stack push node
+        node = node.left
+      }
+
+      node = stack.pop
+      if (pre != null && node.value <= pre.value) result = false
+      pre = node
+      node = node.right
+
+    }
+    result
+  }
+}
+
+/**
+* inorder recursive traversal
+* memo:
+*    1. recursive version with all element storing
+* Time complexity O(NlogN)  there are a distinct and sorted operation
+* space complexity O(N)
+*/
+object Solution1 {
+  def isValidBST(root: TreeNode): Boolean = {
+    val inorder = traversal(root)
+    inorder equals inorder.distinct.sorted // why distinct here? [1, 1] is not a BST because left tree should be smaller than root. 
+  }
+  def traversal(node: TreeNode): List[Int] = {
+    if(node == null){
+      List.empty[Int]
+    }else {
+      // (traversal(node.left) :+ node.value) ::: traversal(node.right) 
+      traversal(node.left) ::: List(node.value) ::: traversal(node.right)
+    }
+  }
+}
+
+
+
+/**
+* giving min max range when recursive
+* time complexity: O(N)
+*/
+
+object Solution4 {
+  def isValidBST(root: TreeNode): Boolean = {
+
+    def _isValidBST(node: TreeNode, min: TreeNode, max: TreeNode): Boolean = {
+
+      if(node == null) true
+      else {
+        if((min != null && node.value <= min.value) || (max != null  && node.value >= max.value)) false
+        else {
+          _isValidBST(node.lefmt, min, node) && _isValidBST(node.right, node, max)
+        }
+      }
+    }
+    _isValidBST(root, null, null)
+  }
+
+}
+```
+
+## 470. Implement Rand10() Using Rand7()
+
+[花花酱](https://www.bilibili.com/video/BV1Ut411Z7KX?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1AD4y1m7Qb?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def rand10(self) -> int:
+        while True:
+            row = rand7()
+            col = rand7()
+            idx = (row - 1) * 7 + col #（0-42） + （1-7）
+            if idx <= 40: # 1-40
+                return 1 + (idx - 1) % 10
+
+这样写也是对的，因为 0-9 等概率出现
+class Solution:
+    def rand10(self):
+        while True:
+            row = rand7()
+            col = rand7()
+            idx = (row - 1) * 7 + col #（0-42） + （1-7）
+            if idx <= 30: # 1-40
+                return 1 + (idx + 1) % 10
+
+class Solution:
+    def rand10(self):
+        while True:
+            res = (rand7()-1)*7 + rand7()#构造1~49的均匀分布
+            if res <= 40: #剔除大于40的值，1-40等概率出现。
+                break
+        return res%10+1 #构造1-10的均匀分布
+```
+
+## 101-Symmetric tree
+
+[哈哈哈](https://www.bilibili.com/video/BV1VJ41197KD?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7eb?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1xv41167z8?spm_id_from=333.999.0.0)
+
+> Python 迭代：其实就是层序遍历，然后检查每一层是不是回文🌈数组
+
+```py
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        dic = collections.defaultdict(list)
+
+        def bfs(node, level):
+            if node:
+                dic[level].append(node.val)
+                bfs(node.left, level + 1)
+                bfs(node.right, level + 1)
+            else:
+                dic[level].append(None)
+        
+        bfs(root, 0) 
+        for key in dic:
+            if dic[key] != dic[key][::-1]:
+                return False
+
+        return True
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        # if not root:
+        #     return [] 删除
+        level = [root]
+        while level:
+            tmp = []
+            vals = [] # 补充
+            for n in level:
+                if n: # 修改，因为none节点也需要append
+                    tmp.append(n.left) # if n.left 被删除
+                    tmp.append(n.right) #  if n.right 被删除
+                    vals.append(n.val)  # 补充
+                else:
+                    vals.append(None) # 修改，因为none节点也需要append
+            if vals != vals[::-1]:  # 补充
+                return False  # 补充
+            level = tmp
+        return True
+```
+
+> Python 递归：
+
+```py
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        def twoSym(node1, node2):
+            if node1 and node2 and node1.val == node2.val: 
+                return twoSym(node1.left, node2.right) and twoSym(node1.right, node2.left)
+            elif not node1 and not node2:
+                return True
+            else:
+                return False
+        return twoSym(root.left, root.right)
+```
+
+> scala:
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+object Solution {
+    
+    def symmetric(nodeA: TreeNode, nodeB: TreeNode): Boolean = {
+        if(nodeA == null && nodeB == null){
+            true
+        }else if(nodeA !=null && nodeB != null){
+            if(nodeA.value != nodeB.value){
+                false
+            }else{
+                symmetric(nodeA.left, nodeB.right) && symmetric(nodeA.right, nodeB.left)
+            }
+        }else{
+            false
+        }
+    }
+    
+    def isSymmetric(root: TreeNode): Boolean = {
+        if(root == null){
+            true
+        } else{
+            symmetric(root.left, root.right)
+        }
+    }
+}
+
+```
+
+## 32 Longest Valid Parentheses
+
+[小明](https://www.bilibili.com/video/BV1RZ4y1F7nJ?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1yi4y1G74d?spm_id_from=333.999.0.0)
+
+动态规划：
+
+* 时间复杂度: O(n) 
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6dkova4yjvk0.png)
+
+```py
+# 背一背吧，好难。
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        n = len(s)
+        dp = [0]*n
+        if n == 0: return 0
+        for i in range(n):
+            if s[i] == ')' and s[i-dp[i-1]-1] == '(' and i - dp[i-1] - 1 >= 0:
+                dp[i] = 2 + dp[i-1] + dp[i-dp[i-1]-2]
+        return max(dp)
+```
+
+栈：
+
+* 时间复杂度: O(n) 
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1dgqk0ervhb4.png)
+
+```py
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        stack = [-1]
+        length = maxlength = 0
+        for i,c in enumerate(s):
+            if c == '(':
+                stack.append(i)
+            if c == ')':
+                stack.pop()
+                if not stack:
+                    stack.append(i)
+                else:
+                    length = i - stack[-1] # stack[-1]为')'，断开区间
+                    maxlength = max(maxlength,length)
+        return maxlength
+
+```
+
+```scala
+
+
+
+/**
+* using stack to record the char index in oder to calculate the valid length
+* memo:
+* 1. always only have one invalid symbol at stack and its position index is 0
+* time complexity O(n)
+* space complexity O(n)
+*/
+object Solution1 {
+
+  import collection.mutable
+
+  def longestValidParentheses(s: String): Int = {
+    val mapping = Map('(' -> ')')
+    val stack = mutable.Stack[Int]()
+    stack.push(-1)
+    s.indices.foldLeft(0) {
+      case (maxLength, idx) =>
+        val char = s(idx)
+        if (mapping.contains(char)) {
+          stack push idx
+          maxLength
+        } else {
+          stack.pop()
+          if (stack.isEmpty) {
+            stack push idx
+            maxLength
+          } else {
+            (idx - stack.head) max maxLength
+          }
+        }
+    }
+  }
+}
+```
+
+## 43. 字符串相乘
+
+```py
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        m, n = len(num1), len(num2)
+        ansArr = [0] * (m + n)
+        for i in range(m - 1, -1, -1):
+            x = int(num1[i])
+            for j in range(n - 1, -1, -1):
+                ansArr[i + j + 1] += x * int(num2[j])
+        
+        for i in range(m + n - 1, 0, -1):
+            ansArr[i - 1] += ansArr[i] // 10
+            ansArr[i] %= 10
+        
+        res = ''.join(str(x) for x in ansArr)
+        return str(int(res))
+```
+
+```py
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        if num1 == "0" or num2 == "0":
+            return "0"
+        
+        m, n = len(num1), len(num2)
+        ansArr = [0] * (m + n)
+        for i in range(m - 1, -1, -1):
+            x = int(num1[i])
+            for j in range(n - 1, -1, -1):
+                ansArr[i + j + 1] += x * int(num2[j])
+        
+        for i in range(m + n - 1, 0, -1):
+            ansArr[i - 1] += ansArr[i] // 10
+            ansArr[i] %= 10
+        
+        index = 1 if ansArr[0] == 0 else 0
+        ans = "".join(str(x) for x in ansArr[index:])
+        return ans
+
+```
+
+## 64. Minimum Path Sum 64-最小路径和
+
+[花花酱](https://www.bilibili.com/video/BV12W411679S?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ka4y1i7Vu?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1JC4y1x7j1?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1vi4y1u7a6?spm_id_from=333.999.0.0)
+
+```py
+# 可以直接在原数组上进行记忆，不需要额外的空间
+# so easy,直接AC
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if i == j == 0:
+                    continue
+                if i == 0:
+                    grid[i][j] += grid[i][j-1]
+                if j == 0:
+                    grid[i][j] += grid[i-1][j]
+                if i > 0 and j > 0:
+                    grid[i][j] += min(grid[i-1][j],grid[i][j-1])
+        return grid[-1][-1]
+```
+
+## 718. 最长重复子数组
+
+```py
+# 竟然用时击败100%，惊了
+
+class Solution:
+    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+        lenth = left = 0
+        if nums1 and nums2:
+            a, b, n = ''.join(map(chr, nums1)), ''.join(map(chr, nums2)), len(nums1)
+            while lenth + left < n:
+                # 这里使用lenth保存结果，用left跳出循环
+                if a[left : left + lenth + 1] in b:
+                    lenth += 1
+                else:
+                    left += 1
+        return lenth 
+
+
+
+class Solution:
+    def findLength(self, A: List[int], B: List[int]) -> int:
+        dp = [[0] * (len(B)+1) for _ in range(len(A)+1)]
+        result = 0
+        for i in range(1, len(A)+1):
+            for j in range(1, len(B)+1):
+                if A[i-1] == B[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + 1
+                result = max(result, dp[i][j])
+        return result
+
+
+  3 2 1 4 7
+1 0 0 1 0 0
+2 0 1 0 0 0
+3 1 0 0 0 0
+2 0 2 0 0 0
+1 0 0 3 0 0
+
+```
+
+## 78. Subsets 子集
+
+[花花酱](https://www.bilibili.com/video/BV1jt411k7py?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1HD4y1Q7Te?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1YK4y1s7pq?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1154y1R72Q?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.xmmpwe7mlzk.webp)
+
+时间复杂度：O(n·2^n)
+
+```py
+# 【位运算😜】
+# class Solution:
+#     def subsets(self, nums: List[int]) -> List[List[int]]:
+#         size = len(nums)
+#         n = 1 << size
+#         res = []
+#         # i = 0,1,2,3,4,5,6,7
+#         for i in range(n):
+#             cur = []
+#             # j = 0,1,2
+#             for j in range(size):
+#                 if i >> j & 1:
+#                     cur.append(nums[j])
+#             res.append(cur)
+#         return res
+
+```
+
+```py
+class Solution(object):
+    def subsets(self, nums):
+        res = [[]]
+        for num in nums:
+            res.extend([subres+[num] for subres in res])
+        return res  
+
+# bfs
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = [[]]
+        n = len(nums)
+        for num in nums:
+            for subres in res[:]:
+                res.append(subres+[num])
+        return res
+
+# 注意代码中res[:]是必须的，因为切片是引用新的对象，
+# 此时在循环中res[:]是不更新的，而res是不断有元素push进去的，很trick
+```
+
+```py
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []  
+        def backtrack(startIndex,path):
+            res.append(path[:])  # unconditional, 收集子集
+            for i in range(startIndex, len(nums)):  #当startIndex已经大于数组的长度了，就终止了，for循环本来也结束了，所以不需要终止条件
+                backtrack(i + 1, pat + [nums[i]])  # nums[i] 一定要用中括号括起来
+        backtrack(0,[])
+        return res
+```
+
+```scala
+object Solution {
+    //We either use or don't use the current item at the given index and continue until we are at the end of the array.
+    
+    def subsets(nums: Array[Int]): List[List[Int]] = {
+        def backtrack(nums: List[Int], returnValue: List[Int]): List[List[Int]] = {
+            nums
+            .headOption
+            .map(currentElem => 
+                 backtrack(nums.tail, returnValue) ++ backtrack(nums.tail, currentElem +: returnValue))
+            .getOrElse(List(returnValue))
+        }
+        
+        backtrack(nums.toList, List.empty[Int])
+    }
+}
+
+```
+
+## 112-Path Sum
+
+[哈哈哈](https://www.bilibili.com/video/BV1T7411r7Yr?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1pb411e7r7?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1uK411T7kX?spm_id_from=333.999.0.0)
+
+递归
+
+```py
+# 正确写法
+class Solution:
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+        if not root:
+            return False
+        if root.val == targetSum and not root.left and not root.right:
+            return True
+        return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
+
+# 错误写法
+# class Solution:
+#     def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+#         if not root:
+#             return False
+#         if root.val == targetSum:
+#             return not root.left and not root.right
+#         return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
+
+# class Solution:
+#     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+#         if not root:
+#             return False
+#         if root.val == targetSum:
+#             return True
+#         return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
+```
+
+```py
+队列
+class Solution:
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if not root:
+            return False
+        que = collections.deque([(root, root.val)])
+        while que:
+            node, tmp = que.popleft()
+            if not node.left and not node.right and tmp == sum:
+                return True
+            if node.left:
+                que.append((node.left, node.left.val + tmp))
+            if node.right:
+                que.append((node.right, node.right.val + tmp))
+        return False
+```
+
+## 48. 旋转图像 Rotate Image
+
+[官方](https://www.bilibili.com/video/BV1mf4y1e7ox?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Wy4y1s7fs?spm_id_from=333.999.0.0)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3kl7avrsvhi0.png" width="30%">
+
+```py
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        for i in range(n//2): # n 和 下面的(n+1) 可以调换位置
+            for j in range((n+1)//2):
+                matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j],matrix[n-1-j][i] = \
+                matrix[n-1-j][i],matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j]
+        return matrix
+```
+
+```scala
+/**
+* my first commitment
+* rotate 4 cell in each iteration
+*
+*   pattern:  (row, col) -> (col, n - 1- row)
+*       1. (i, j) - > (j, n - 1 -i)
+*       2. (j, n - 1 -i) -> (n - 1 - i, n - 1 - j)
+*       3. (n - 1 - i, n - 1 - j) -> (n -1 -j, n - 1 - (n -1 - i) ) =  (n - 1 -j, i)
+*       4. (n - 1 -j, i) -> (i, n - 1 - (n - 1 - j)) = (i, j)
+*
+* ((0,0) -> (0,3) -> (3,3) -> (3,0))
+* ((0,1) -> (1,3) -> (3,2) -> (2,0))
+* ((1,0) -> (0,2) -> (2,3) -> (3,1))
+* ((1,1) -> (1,2) -> (2,2) -> (2,1))
+* 
+*/
+object Solution1 {
+    def rotate(matrix: Array[Array[Int]]): Unit = {
+      val n = matrix.size
+      printMatrix(n)
+      
+      for (i <- 0 until (n / 2).toInt + n % 2; j <- 0 until (n / 2).toInt){      
+        val tmp = matrix(n - 1 -j)(i)
+        matrix(n - 1 - j)(i) = matrix(n - 1 - i)(n - j - 1)
+        matrix(n - 1 - i)(n - j - 1) = matrix(j)(n - 1 - i)
+        matrix(j)(n - 1 - i) = matrix(i)(j)
+        matrix(i)(j) = tmp
+      }
+    }
+
+    /**
+        (0, 0) (0, 1) (0, 2) (0, 3)  
+        (1, 0) (1, 1) (1, 2) (1, 3)  
+        (2, 0) (2, 1) (2, 2) (2, 3)  
+        (3, 0) (3, 1) (3, 2) (3, 3)  
+    */
+}
+
+```
+
+## 234. 【回文🌈】Palindrome Linked List
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7ML?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        vals = []
+        cur = head
+        while cur:
+            vals.append(cur.val)
+            cur = cur.next
+        return vals == vals[::-1]
+
+
+
+看不懂
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+
+        self.pre = head
+        # 递归处理节点的顺序是相反的
+        def recur(cur):
+            if cur:
+                if not recur(cur.next):
+                    return False
+                if self.pre.val != cur.val:
+                    return False
+                self.pre = self.pre.next
+            return True
+
+        return recur(head)
+
+```
+
+```scala
+/**
+* very brilliant solution
+*/
+object Solution2 {
+    def isPalindrome(head: ListNode): Boolean = {
+        if (head == null) {
+            return true
+        }
+        var p = head
+        var result = true
+        def go(node: ListNode): Unit = {
+            if (node.next != null) {
+                go(node.next)
+            }
+            if (p.x != node.x) {
+                result = false
+            }
+            p = p.next
+        }
+        go(head)
+        result
+    }
+}
+```
+
+
+## 322. 【动态🚀规划 + 背包 + dfs】Coin Change
+
+[花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1tz4y1d7XM?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1ty4y187dh?spm_id_from=333.999.0.0)
+
+```py
+动态🚀规划
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # 这道题的难点在于：dp数组的初始化
+        dp = [10e9] * (amount + 1)
+        dp[0] = 0
+
+        for coin in coins:
+            for i in range(coin, amount + 1):
+                if i >= coin:
+                    dp[i] = min(dp[i], dp[i-coin] + 1)
+         # 这道题的难点在于：最后结果的输出
+        return dp[-1] if dp[-1] != 10e9 else -1
+
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [10e9] * (amount + 1)
+        dp[0] = 0
+
+        # 这道题 i 和 coin 倒是无所谓
+        for i in range(1, amount + 1):
+            for coin in coins:
+                if i >= coin:
+                    dp[i] = min(dp[i], dp[i-coin] + 1)
+        return dp[-1] if dp[-1] != 10e9 else -1
+
+
+class Solution:
+    def coinChange(self, coins, amount):
+        @functools.lru_cache(amount)
+        def dp(remain) -> int:
+            if remain < 0: return -1
+            if remain == 0: return 0
+            res = int(1e9)
+            for coin in coins:
+                tmp = dp(remain - coin) + 1
+                if tmp > 0 and tmp < res:
+                    res = tmp 
+            return res if res < int(1e9) else -1
+
+        if amount < 1: return 0
+        return dp(amount)
+
+
+
+class Solution:
+    def coinChange(self, coins, amount):
+        import functools
+        @functools.lru_cache(None)
+        def helper(amount):
+            if amount == 0:
+                return 0
+            return min(helper(amount - c) if amount - c >= 0 else float("inf") for c in coins) + 1
+        res = helper(amount)
+        return res if res != float("inf") else -1
+
+
+```
+
+```scala
+/**
+* dynamic programming: bottom up
+* time complexity: O(S * N), S is the amount, N is the coin denomination count
+* space complexity: O(S)
+*/
+
+object Solution {
+    def coinChange(coins: Array[Int], amount: Int): Int = {
+         
+        val dp = Array.fill[Int](amount + 1)(amount + 1) // record the minimum needed coins of each denominations
+
+        dp(0) = 0
+        for (i <- 1 to amount; denominations <- coins) {
+
+            if(denominations <= i) {
+                dp(i) = dp(i) min (dp(i - denominations) + 1)
+            }        
+        }
+    
+        if (dp.last > amount) -1 else dp.last
+    }
+}
+
+```
+
+## 39. Combination Sum 39-组合总和
+
+[花花酱](https://www.bilibili.com/video/BV1gb411u7dy?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Wz411e79d?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV12Z4y157nE?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+
+        def backtrack(firstIdx,path):
+            if sum(path) == target:
+                res.append(path[:]) 
+                # 易错点，这里是res.append(path[:])，而不是res.append(path)
+                return
+            if sum(path) > target:
+                return
+            if sum(path) < target:
+                for i in range(firstIdx,len(candidates)):
+                    backtrack(i,path + [candidates[i]])
+        backtrack(0,[])
+        return res
+```
+
+```scala
+
+/**
+* my first commitment: dfs - backtracking
+*/
+
+object Solution1-1 {
+    import collection.mutable
+    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
+      
+      def dfs(combination: List[Int], ans: mutable.Set[List[Int]]): Unit = {
+        val currentSum = combination.sum
+        
+        if (currentSum == target) {
+          ans += combination.toList
+          
+        } else if (currentSum < target){
+          val diff = target - currentSum
+          candidates.filter(n => n <= diff).foreach{ case n => dfs(n :: combination, ans)}
+        }
+      }
+      val ans = mutable.Set.empty[List[Int]]
+      dfs(List.empty[Int], ans)
+      ans.map(l => l.groupBy(identity).mapValues(_.length).toMap -> l).toMap.values.toList // distinct 
+    }
+}
+```
+
+## 169. 【位运算😜】Majority Element
+
+[花花酱](https://www.bilibili.com/video/BV1hb411c7bF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7pW?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Ff4y1U7Vn?spm_id_from=333.999.0.0)
+
+
+```py
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        return sorted(nums)[len(nums) // 2]
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        nums.sort()
+        return nums[len(nums) // 2]
+
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        counts = collections.Counter(nums)
+        return max(counts.keys(), key=counts.get)
+
+# 投票策略，半数以上获胜
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        count = 0
+        candidate = None
+
+        for vot in nums:
+            if count == 0:
+                candidate = vot
+            count += (1 if vot == candidate else -1)
+
+        return candidate
+```
+
+```scala
+/**
+* HashMap
+* time complexity: O(N)
+* space complexity: O(N)
+*/
+
+object Solution2 {
+    def majorityElement(nums: Array[Int]): Int = {
+        nums.groupBy(identity).mapValues(_.length).maxBy(_._2)._1  
+    }
+}
+
+
+/**
+* sorting array and pick middle element
+* time complexity O(NlogN)
+*/
+
+object Solution3 {
+    def majorityElement(nums: Array[Int]): Int = {
+        nums.sorted(Ordering.Int)(nums.length / 2)
+    }
+}
+
+//Alternate solution O(n) but NO EXTRA SPACE
+object Solution {
+    def majorityElement(nums: Array[Int]): Int = {     
+        var candidate = nums.head
+        var count = 0
+        nums.foreach(vot => {
+            if(count == 0) { 
+                candidate = vot
+                count = 0
+            }
+            if(vot == candidate) count+=1;
+            else count-=1;
+        })
+        
+        candidate
+    }
+}
+
+```
+
+## 83-Remove duplicates from sorted array
+
+[哈哈哈](https://www.bilibili.com/video/BV1yJ411R7FZ?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7s7?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1zK411L7Gg?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        cur = head
+        while cur.next:
+            if cur.val == cur.next.val:
+                cur.next = cur.next.next
+            else:
+                cur =  cur.next
+        return head
+```
+
+## 226-翻转二叉树
+
+[哈哈哈](https://www.bilibili.com/video/BV1Sh411R7B2?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H73E?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1FK411p7Co?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def invertTree(self, root: TreeNode) -> TreeNode:
+        if not root:
+            return root
+        
+        left = self.invertTree(root.left)
+        right = self.invertTree(root.right)
+        root.left, root.right = right, left
+        return root
+```
+
+```py
+class Solution:
+    def invertTree(self, root: TreeNode) -> TreeNode:
+        if not root:
+            return root
+        Q = deque([root])
+        while Q:
+            r = Q.pop()
+            if r.left or r.right:
+                r.left, r.right = r.right, r.left
+                if r.left: Q.append(r.left)
+                if r.right: Q.append(r.right)
+        return root
+```
+
+## 165. Compare Version Numbers
+
+[小梦想家](https://www.bilibili.com/video/BV19K4y1C7L3?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Pk4y117dF?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def compareVersion(self, version1: str, version2: str) -> int:
+        v1 = version1.split(".")
+        v2 = version2.split(".")
+
+        while v1 or v2:
+            x = int(v1.pop(0)) if v1 else 0
+            y = int(v2.pop(0)) if v2 else 0
+
+            if x > y:
+                return 1
+            elif x < y:
+                return -1
+        return 0
+```
+
+## 34-在排序数组中查找元素的第一个
+
+[哈哈哈](https://www.bilibili.com/video/BV1Zv411y71t?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV1GU4y1j7dq?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1ef4y1v7Vz?spm_id_from=333.999.0.0)
+
+```py
+# Python 二分法
+
+class Solution:
+    def searchRange(self, nums, target):
+        left = 0
+        right = len(nums)-1
+        res = [0,0]
+        
+        if target not in nums:
+            return [-1,-1]
+
+        # 寻找左侧边界
+        while left <= right:
+            mid = (right + left) // 2
+            if nums[mid] == target:
+                right = mid - 1 # 结束条件, 因为保留 left，所以移动 right
+            elif nums[mid] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        res[0] = left
+
+        # 寻找右侧边界
+        right = len(nums)-1
+        while left <= right:
+            mid = (right + left) // 2
+            if nums[mid] == target:
+                left = mid + 1 # 结束条件, 因为保留 right，所以移动 left
+            elif nums[mid] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        res[1] = right
+
+        return res
+```
+
+
+```scala
+/**
+* modify binary search template
+* memo
+*  1. search first and last the the same function
+*  2. if nums(mid) == target we could move left to check if left part exists target number
+*  3. finding last by target + 1,  then we could get last position of target by first position of (target + 1) - 1
+* tricky:
+*  1. ans = nums.length
+*  2. first > last  means that target doesn't exists
+*
+* time complexity: O(2logN)
+*/
+ 
+ object Solution2 {
+    def searchRange(nums: Array[Int], target: Int): Array[Int] = {
+        val first = search(nums, target)
+        val last = search(nums, target + 1) - 1
+        if (first > last) Array(-1, -1) else Array(first, last)
+    }
+
+    def search(nums: Array[Int], target: Int): Int = {
+      var ans = nums.length
+      var left = 0
+      var right = nums.length - 1
+      while (left <= right) {
+        val mid = left + (right - left) / 2
+        if (nums(mid) >= target) {
+          ans = mid
+          right = mid - 1
+        }else {
+          left = mid + 1
+        } 
+      }
+      ans
+    }
+}
+
+```
