@@ -4109,7 +4109,7 @@ object Solution1 {
       leftAns min rightAns
     }
 }
-```
+``` 
 
 ###  1.56. <a name='FindMinimuminRotatedSortedArr'></a>154 Find Minimum in Rotated Sorted Arr
 

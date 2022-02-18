@@ -1289,7 +1289,7 @@ class UnionFind(M: Int) {
     }
     counter -= 1
   }
-}
+} 
 
 /**
 * union & find: without counter in union&find to record current cluster
