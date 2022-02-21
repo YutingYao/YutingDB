@@ -1,16 +1,18 @@
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        res = []
-
-        def backtrack(firstIdx,path):
-            if sum(path) == target:
-                res.append(path[:]) 
-                # 易错点，这里是res.append(path[:])，而不是res.append(path)
-                return
-            if sum(path) > target:
-                return
-            if sum(path) < target:
-                for i in range(firstIdx,len(candidates)):
-                    backtrack(i,path + [candidates[i]])
-        backtrack(0,[])
-        return res
+    def calculate(self, s: str) -> int:
+        stack = []
+        num, op = 0, "+"
+        for i, char in enumerate(s):
+            if char.isdigit():
+                num = 10 * num + int(char)
+            if char in "+-*/" or i == len(s)-1:
+                if op == "+":
+                    stack.append(num)
+                elif op == "-":
+                    stack.append(-num)
+                elif op == "*":
+                    stack.append(stack.pop()*num)
+                elif op == "/":
+                    stack.append(int(stack.pop()/float(num)))
+                num, op = 0, char
+        return sum(stack)

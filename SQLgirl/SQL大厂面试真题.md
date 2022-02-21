@@ -109,7 +109,7 @@ timestampdiff(
     day,
     start_time,
     (select max(start_time) from tb_user_video_log)
-    )<=29
+    ) <= 29
 ```
 
 
@@ -210,13 +210,13 @@ timestampdiff(day,xxx,xxx) <= 29
 
 等效于
 
-datediff(xxx,xxx)<=29
+datediff(xxx,xxx) <= 29
 ```
 
 ```sql
 注意：
 
-date((select max(end_time) from tb_user_video_log))
+date ((select max(end_time) from tb_user_video_log))
 
 和
 
@@ -267,7 +267,7 @@ date_format(in_time, '%Y-%m-%d')
 等效于
 date(in_time)
 
-DATE_FORMAT(tl.in_time,'%Y-%m')='2021-11'
+DATE_FORMAT(tl.in_time, '%Y-%m') = '2021-11'
 等效于
 year(in_time) = 2021 and month(in_time) = 11
 ```
@@ -511,7 +511,7 @@ https://www.nowcoder.com/practice/dbbc9b03794a48f6b34f1131b1a903eb?tpId=268&tags
 ```sql
 新用户 
 
-count(*) over (partition by uid order by dt)as times
+count(*) over (partition by uid order by dt) as times
 sum(if(times=1,1,0)
 
 新用户
@@ -925,11 +925,12 @@ where DATE(event_time) in (select min(date(event_time)) from tb_order_overall gr
 
 ```sql
 获客成本表示方法：
+
 SUM(price * cnt) AS firstly_amount
 SUM(firstly_amount - total_amount) / COUNT(uid)
 
 SUM(price * cnt) AS firstly_amount
-sum(firstly_amount - total_amount) / count(distinct  too.order_id)
+sum(firstly_amount - total_amount) / count(distinct too.order_id)
 
 ```
 
@@ -1033,9 +1034,10 @@ order by dt
 https://www.nowcoder.com/practice/992783fd80f746d49e790d33ee537c19?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
 
 ```sql
-接单3次及以上
+接单3次及以上：
+
 group by driver_id having count(*) >= 3
-group by driver_id having count(order_id)>=3
+group by driver_id having count(order_id) >= 3
 ```
 
  ```sql
@@ -1114,7 +1116,7 @@ https://www.nowcoder.com/practice/dcc4adafd0fe41b5b2fc03ad6a4ac686?tpId=268&tags
 ```sql
 每个城市中评分最高
 用 rank() 效果一样
-dense_rank() over(partition by city order by round(avg(grade),1) desc
+dense_rank() over (partition by city order by round(avg(grade), 1) desc
 round(avg(grade) GROUP BY driver_id, city
 ```
 
@@ -1205,9 +1207,9 @@ DAYOFWEEK(event_time) BETWEEN 2 AND 6
 
 ```sql
 CASE
-WHEN RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00' THEN '早高峰'
-WHEN RIGHT(event_time, 8) >='09:00:00' AND RIGHT(event_time, 8) < '17:00:00' THEN '工作时间'
-WHEN RIGHT(event_time, 8) >='17:00:00' AND RIGHT(event_time, 8) < '20:00:00' THEN '晚高峰'
+WHEN RIGHT(event_time, 8) >= '07:00:00' AND RIGHT(event_time, 8) < '09:00:00' THEN '早高峰'
+WHEN RIGHT(event_time, 8) >= '09:00:00' AND RIGHT(event_time, 8) < '17:00:00' THEN '工作时间'
+WHEN RIGHT(event_time, 8) >= '17:00:00' AND RIGHT(event_time, 8) < '20:00:00' THEN '晚高峰'
 ELSE '休息时间'
 END period,
 GROUP BY period
