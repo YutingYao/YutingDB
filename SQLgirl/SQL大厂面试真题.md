@@ -6,8 +6,14 @@ https://www.nowcoder.com/practice/96263162f69a48df9d84a93c71045753?tpId=268&tqId
 完播率计算：
 
 ```sql
-case when timestampdiff(second,log.start_time,log.end_time) >= info.duration then 1 else 0 end
-if(timestampdiff(second,log.start_time,log.end_time) >= info.duration, 1, 0)
+SELECT DATEDIFF('2018-07-01','2018-07-04');
+运行结果:-3
+select TIMESTAMPDIFF(DAY,'2018-07-01 09:00:00','2018-07-04 12:00:00');
+运行结果:3
+
+
+case when timestampdiff(second, log.start_time, log.end_time) >= info.duration then 1 else 0 end
+if(timestampdiff(second, log.start_time, log.end_time) >= info.duration, 1, 0)
 ```
 
 ```sql
@@ -23,8 +29,8 @@ where year(log.start_time) = 2021
 ```sql
 select 
     log.video_id,
-    round(sum(if(TIMESTAMPDIFF(second,log.start_time,log.end_time)
-                >=info.duration,1,0))/count(log.video_id) ,3)
+    round(sum(if(TIMESTAMPDIFF(second, log.start_time, log.end_time)
+                >= info.duration, 1, 0))/count(log.video_id) ,3)
 as avg_comp_play_rate
 from tb_user_video_log as log inner join tb_video_info as info
 on log.video_id = info.video_id
@@ -155,7 +161,7 @@ from (
     where year(start_time) = 2021
     group by author, month
 ) t
-ORDER BY author,total_fans
+ORDER BY author, total_fans
 ```
 
 
@@ -202,8 +208,6 @@ ORDER BY tag DESC, dt ASC
 ## SQL6 近一个月发布的视频中热度最高的top3视频
 
 https://www.nowcoder.com/practice/0226c7b2541c41e59c3b8aec588b09ff?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
-
-
 
 ```sql
 timestampdiff(day,xxx,xxx) <= 29
@@ -294,6 +298,7 @@ https://www.nowcoder.com/practice/fe24c93008b84e9592b35faa15755e48?tpId=268&tags
 
 SUM(uv) OVER (PARTITION BY artical_id ORDER BY dt, uv desc)
 ```
+
 ```sql
 with t as ((select
                 artical_id,
@@ -409,8 +414,8 @@ max(max(date(in_time))) over() group by uid
 
 
 每个用户最近一次，最远一次登陆：
-datediff((最近日期),max(in_time)) group by uid
-datediff((最近日期),min(in_time)) group by uid
+datediff((最近日期), max(in_time)) group by uid
+datediff((最近日期), min(in_time)) group by uid
 ```
 
 ```sql
@@ -623,7 +628,7 @@ partition排序：12345123
 
 ```sql
 ranK() 和 row_number() 和 dense_rank() 都可以
-# 第一步：先过滤掉不签到的，重复的
+# 第一步： 先过滤掉不签到的，重复的
 # 第二步： ranK() over (partition by uid order by dt) --按照签名排序 
 # 第三步： date_sub (dt, interval ranK() over (partition by uid order by dt) 
 #          按照签到日期减去签到排名的差值 排序，（如果是连续签到，则得到的日期相同）-- 即得到连续签到的天数，rank_day
@@ -763,8 +768,8 @@ https://www.nowcoder.com/practice/cbf582d28b794722becfc680847327be?tpId=268&tags
 
 sum(if_payment) as payment
 sum(if_refund) as refund
-if(payment=0,0,round(refund/payment,3)) as refund_rate
-having refund_rate<=0.5
+if(payment = 0, 0, round(refund/payment, 3)) as refund_rate
+having refund_rate <= 0.5
 ```
 
 ```sql
@@ -798,8 +803,8 @@ https://www.nowcoder.com/practice/65de67f666414c0e8f9a34c08d4a8ba6?tpId=268&tags
 ```sql
 商品毛利率大于 24.9 % 的商品信息
 字符串 操作：
-replace(profit_rate,'%','') > 24.9
-TRIM   (TRAILING '%' FROM profit_rate)>24.9
+replace(profit_rate, '%', '') > 24.9
+TRIM   (TRAILING '%' FROM profit_rate) > 24.9
 (1 - in_sum / sale_sum) > 0.249
 ```
 
@@ -918,7 +923,7 @@ row_number() over (partition by uid order by event_time) rk
 where rk = 1
 
 等效于
-where (uid,date(event_time)) in (select uid,min(date(event_time)) from tb_order_overall group by uid)
+where (uid, date(event_time)) in (select uid, min(date(event_time)) from tb_order_overall group by uid)
 
 where DATE(event_time) in (select min(date(event_time)) from tb_order_overall group by uid)
 ```
@@ -926,10 +931,10 @@ where DATE(event_time) in (select min(date(event_time)) from tb_order_overall gr
 ```sql
 获客成本表示方法：
 
-SUM(price * cnt) AS firstly_amount
-SUM(firstly_amount - total_amount) / COUNT(uid)
+sum(price * cnt) AS firstly_amount
+sum(firstly_amount - total_amount) / count(uid)
 
-SUM(price * cnt) AS firstly_amount
+sum(price * cnt) AS firstly_amount
 sum(firstly_amount - total_amount) / count(distinct too.order_id)
 
 ```
@@ -1186,7 +1191,7 @@ RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00'
 
 subString_index(event_time, ' ', -1) between '07:00:00' and '08:59:59'
 
-date_format(event_time,'%T')>='07:00:00'and date_format(event_time,'%T')<'09:00:00'
+date_format(event_time,'%T') >= '07:00:00'and date_format(event_time,'%T') < '09:00:00'
 
 HOUR(event_time) IN (7, 8)
 
