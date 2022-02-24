@@ -1136,7 +1136,7 @@ class Solution:
 
 [郭郭](https://www.bilibili.com/video/BV1eX4y157jr?from=search&seid=13286624680279107242&spm_id_from=333.337.0.0)
 
-🍒并查集
+🍒并查集 
 
 ```py
 class Solution:
