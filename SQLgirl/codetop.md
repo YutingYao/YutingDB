@@ -6915,7 +6915,7 @@ object Solution {
 ```
 
 
-##  103. <a name='Offer54.k'></a>剑指 Offer 54. 二叉搜索树的第k大节点
+##  103. <a name='Offer54.k'></a>剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B
 
 ```py
 class Solution:
@@ -7489,22 +7489,6 @@ class Solution:
         # 抹去前导零
         return "".join(finalStack).lstrip('0') or "0"
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/remove-k-digits/solution/yi-diao-kwei-shu-zi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def removeKdigits(self, num: str, k: int) -> str:
-        stack = []
-        for d in num:
-            while stack and k and stack[-1] > d:
-                stack.pop()
-                k -= 1
-            stack.append(d)
-        if k > 0:
-            stack = stack[:-k]
-        return ''.join(stack).lstrip('0') or "0"
 ```
 
 ##  122. <a name='23.'></a>补充题23. 检测循环依赖
@@ -7551,18 +7535,31 @@ class Solution:
 
 [小梦想家](https://www.bilibili.com/video/BV1Jb411i7bM?spm_id_from=333.999.0.0)
 
-* 时间复杂度:O(log10(n)), 每次迭代都会除以10
+* 时间复杂度: O(log10(n)), 每次迭代都会除以 10
 
-* 时间复杂度:O(1)
+* 时间复杂度: O(1)
 
 ```py
+字符串法：
+class Solution:
+    def reverse(self, x: int) -> int:
+        s = str(x)
+        if '-' in s:
+            sn = '-'
+            s = s[1:len(s)]
+        else:
+            sn = ''
+        for i in range(len(s)):
+            sn = sn + s[len(s)-1-i]
+        if int(sn)<-2**31 or int(sn)>2**31-1:
+            return 0
+        return int(sn)
+
+计算法：
 class Solution:
     def reverse(self, x: int) -> int:
         res = 0 
         a = abs(x)
-
-        if a < 10:
-            return x
 
         while a != 0:
             tmp = a % 10
@@ -7573,70 +7570,12 @@ class Solution:
 
         if x > 0 and res < 1<<31:
             return res 
-        elif x<0 and res <= 1<<31:
+        elif x < 0 and res <= 1<<31:
             return -res
         else:
             return 0
 ```
 
-```scala
-object Solution {
-    def reverse(x: Int): Int = {
-        
-        // METHOD-1
-        if (x == 0) {
-            0
-        } else { 
-            val xx = math.abs(x).toString.reverse
-            var start_to_record = false
-            val temp = collection.mutable.ArrayBuffer[Char]()
-
-            for (x <- xx) {
-
-                if (start_to_record == false && x != '0') {
-                    start_to_record = true
-                }
-
-                if (start_to_record) {
-                    temp += x
-                }
-
-            }
-
-            try {
-                ({if (x >= 0) "" else "-"} + temp.mkString).toInt    
-            } catch {
-                case e: java.lang.NumberFormatException => 0
-            } 
-        }
-        
-        
-        // METHOD-2
-        if (x == 0) {
-            0
-        } else {
-            
-            val xx = math.abs(x).toString.reverse
-            
-            // find the first element not equaling to 0
-            // Here I used method `.find`. It finds and returns the first element of the list satisfying a predicate, if any.
-            // `.find` returns Some(*), so need to use `.get`
-            val intermediate_result = xx.slice(xx.zipWithIndex.find(_._1 != '0').get._2, xx.length)
-            
-            // 1. Use if-else to handle possible negative integers.
-            // 2. use try-catch to handle cases like "1534236469"
-            //      which will cause exception java.lang.NumberFormatException: For input string: "9646324351"
-            //      due to Int.MaxValue is 2147483647
-            try {
-                ({if (x >= 0) "" else "-"} + intermediate_result).toInt    
-            } catch {
-                case e: java.lang.NumberFormatException => 0
-            }
-
-        }  
-    }
-}
-```
 
 ```scala
 object Solution {
@@ -7683,108 +7622,17 @@ object Solution {
 ```py
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        n = len(temperatures)
-        ans, nxt, big = [0] * n, dict(), 10**9
-        for i in range(n - 1, -1, -1):
-            warmer_index = min(nxt.get(t, big) for t in range(temperatures[i] + 1, 102))
-            if warmer_index != big:
-                ans[i] = warmer_index - i
-            nxt[temperatures[i]] = i
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/daily-temperatures/solution/mei-ri-wen-du-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         length = len(temperatures)
-        ans = [0] * length
+        res = [0] * length
         stack = []
+        # 用 i 来触发计算
         for i in range(length):
             temperature = temperatures[i]
-            while stack and temperature > temperatures[stack[-1]]:
-                prev_index = stack.pop()
-                ans[prev_index] = i - prev_index
-            stack.append(i)
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/daily-temperatures/solution/mei-ri-wen-du-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-这种题我始终更喜欢KMP，空间复杂度更低哟
-
-时间复杂度O(n)
-
-空间复杂度O(1)
-
-该思路由KMP中失配数组的构造演变而来。假设ans[i]记录了i位置上的答案（向右找多少个比自己大），则求ans[i]时，我先看一眼i+1位置，如果T[i+1]比我大，那得了，答案就是它了。
-
-否则我要找的位置至少是比T[i+1]大，那么当然我就看一看ans[i+1]
-
-class Solution:
-    def dailyTemperatures(self, T: List[int]) -> List[int]:
-        n=len(T)
-        ans=[0]*n
-        for i in range(n-2,-1,-1):
-            now=i+1
-            while T[now]<=T[i]:
-                if ans[now]:
-                    now+=ans[now]
-                else:
-                    break
-            else:
-                ans[i]=now-i
-        return ans
-```
-
-```py
-维护递减栈，后入栈的元素总比栈顶元素小。
-
-比对当前元素与栈顶元素的大小
-若当前元素 < 栈顶元素：入栈
-若当前元素 > 栈顶元素：弹出栈顶元素，记录两者下标差值即为所求天数
-这里用栈记录的是 T 的下标。
-
-class Solution(object):
-    def dailyTemperatures(self, T):
-        """
-        :type T: List[int]
-        :rtype: List[int]
-        """
-        stack = list()
-        t_length = len(T)
-        res_list = [0 for _ in range(t_length)]
-        
-        for key, value in enumerate(T):     
-            if stack:
-                while stack and T[stack[-1]] < value:
-                    res_list[stack[-1]] = key - stack[-1]
-                    stack.pop()
-            stack.append(key)
-        return res_list
-
-Python：
-
-class Solution:
-    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        answer = [0]*len(temperatures)
-        stack = [0]
-        for i in range(1,len(temperatures)):
-            # 情况一和情况二
-            if temperatures[i]<=temperatures[stack[-1]]:
-                stack.append(i)
-            # 情况三
-            else:
-                while len(stack) != 0 and temperatures[i]>temperatures[stack[-1]]:
-                    answer[stack[-1]]=i-stack[-1]
-                    stack.pop()
-                stack.append(i)
-            
-        return answer
+            while stack and temperatures[stack[-1]] < temperature:
+                preIdx = stack.pop() # 弹出栈顶元素，记录两者下标差值即为所求天数
+                res[preIdx] = i - preIdx
+            stack.append(i) # 维护递减栈, 后入栈的元素总比栈顶元素小
+        return res
 ```
 
 ##  126. <a name='-1'></a>61. Rotate List
@@ -7830,46 +7678,17 @@ class Solution:
 ##  127. <a name='Offer62.'></a>剑指 Offer 62. 圆圈中最后剩下的数字
 
 ```py
-# Python 默认的递归深度不够，需要手动设置
-sys.setrecursionlimit(100000)
+https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/huan-ge-jiao-du-ju-li-jie-jue-yue-se-fu-huan-by-as/
 
-def f(n, m):
-    if n == 0:
-        return 0
-    x = f(n - 1, m)
-    return (m + x) % n
-
-class Solution:
-    def lastRemaining(self, n: int, m: int) -> int:
-        return f(n, m)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-by-lee/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def lastRemaining(self, n: int, m: int) -> int:
-        f = 0
-        for i in range(2, n + 1):
-            f = (m + f) % i
-        return f
-
-
-别人面向对象，面向过程编程。 而我是面向答案编程：
-
- 0个人时候游戏就不存在了， 1个人时候直接获胜， 
+0个人时候游戏就不存在了， 1个人时候直接获胜， 
  
- 所以从2个人开始， 反推公式：f(n,m) = (f(n,m) + m) % i #i为当前人数
- 各种花里胡哨的技巧在数学实力面前都是弟弟
+反推公式：
 
+f(n,m) = (f(n,m) + m) % i #i为当前人数
 
-class Solution:
-    def lastRemaining(self, n: int, m: int) -> int:
-        p = 0
-        for i in range(2,n+1):
-            p = (p + m) % i
-        return p
+f(8,3) = [f(7,3) + 3] % 8
+
+约瑟夫环
 
 class Solution:
     def lastRemaining(self, n: int, m: int) -> int:
@@ -7883,146 +7702,26 @@ class Solution:
 
 ```py
 class Solution:
-    def mergeSort(self, nums, tmp, l, r):
-        if l >= r:
-            return 0
-
-        mid = (l + r) // 2
-        inv_count = self.mergeSort(nums, tmp, l, mid) + self.mergeSort(nums, tmp, mid + 1, r)
-        i, j, pos = l, mid + 1, l
-        while i <= mid and j <= r:
-            if nums[i] <= nums[j]:
-                tmp[pos] = nums[i]
-                i += 1
-                inv_count += (j - (mid + 1))
-            else:
-                tmp[pos] = nums[j]
-                j += 1
-            pos += 1
-        for k in range(i, mid + 1):
-            tmp[pos] = nums[k]
-            inv_count += (j - (mid + 1))
-            pos += 1
-        for k in range(j, r + 1):
-            tmp[pos] = nums[k]
-            pos += 1
-        nums[l:r+1] = tmp[l:r+1]
-        return inv_count
-
-    def reversePairs(self, nums: List[int]) -> int:
-        n = len(nums)
-        tmp = [0] * n
-        return self.mergeSort(nums, tmp, 0, n - 1)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/shu-zu-zhong-de-ni-xu-dui-lcof/solution/shu-zu-zhong-de-ni-xu-dui-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class BIT:
-    def __init__(self, n):
-        self.n = n
-        self.tree = [0] * (n + 1)
-
-    @staticmethod
-    def lowbit(x):
-        return x & (-x)
-    
-    def query(self, x):
-        ret = 0
-        while x > 0:
-            ret += self.tree[x]
-            x -= BIT.lowbit(x)
-        return ret
-
-    def update(self, x):
-        while x <= self.n:
-            self.tree[x] += 1
-            x += BIT.lowbit(x)
-
-class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
-        n = len(nums)
-        # 离散化
-        tmp = sorted(nums)
-        for i in range(n):
-            nums[i] = bisect.bisect_left(tmp, nums[i]) + 1
-        # 树状数组统计逆序对
-        bit = BIT(n)
-        ans = 0
-        for i in range(n - 1, -1, -1):
-            ans += bit.query(nums[i] - 1)
-            bit.update(nums[i])
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/shu-zu-zhong-de-ni-xu-dui-lcof/solution/shu-zu-zhong-de-ni-xu-dui-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-py 二分
-
-class Solution:
     def reversePairs(self, nums: List[int]) -> int:
         q = []
         res = 0
         for v in nums:
-            i = bisect.bisect_left(q,-v)
-            res += i
+            # 变负数插入，绝了-v
+            i = bisect.bisect_left(q,-v) # bisect_left 返回的待插入位置分别是 0，1，1，3，
+            res += i # 前面有多少个比它大的，当前数就有多少个逆序对,加起来就是逆序对总数 5
             q[i:i] = [-v]
+            # 这里也可以写：q.insert(i, -v)
         return res
+# q[i:i] = [-v] 的效果如下，是一个排好序的数组：
+# [-7]
+# [-7, -5]
+# [-7, -6, -5]
+# [-7, -6, -5, -4]
 
-这一手变负数插入，绝了
-
-二分插入排序，前面有多少个比它大的，当前数就有多少个逆序对，
-
-所有的加起来就是总的逆序对。用题目样例走一遍就好理解了。
-
-向大佬学习！按照 -7，-5，-6，-4 的顺序插入，
-
-bisect_left 返回的待插入位置分别是 0，1，1，3，
-
-加起来就是逆序对总数 5。如果不用负数，
-
-就要用 res += len(q) - i 了，
+如果不用负数，就要用 res += len(q) - i 了，
 
 并且要改用 i = bisect.bisect(q, v)。
 
-另外请教下 q[i:i] = [-v] 与 q.insert(i, -v) 在时间复杂度上有没有优劣之分呢？
-
-击败94% 从这道题学到了：还是python内置函数快😅
-
-from sortedcontainers import SortedList
-
-class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
-        s = SortedList([])
-
-        ans = 0
-        for i in range(len(nums)-1, -1, -1):
-            s.add(nums[i])
-            ans += s.bisect_left(nums[i]) 
-        return ans
-
-为什么下面代码会超时。。。 （输出结果是对的，只是超时）
-
-class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
-        result = 0
-        path = []
-        n=len(nums)
-        def backtracking(ind):
-            nonlocal result
-            if len(path)==2:
-                result+=1
-                return 
-            for i in range(ind,n):
-                if not path or path[0]>nums[i]:
-                    path.append(nums[i])
-                    backtracking(i+1)
-                    path.pop()                
-        backtracking(0)
-        return result
 ```
 
 ##  129. <a name='K-1'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
@@ -8036,49 +7735,21 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV13t4y1y7ya?spm_id_from=333.999.0.0)
 
 ```py
-方法2 的 hashmap 初始化一开始没想通为啥是 {0: 1}，写成下面的形式感觉就好理解了
-
-其实就是考虑 pre[i] == k 的这种情况
-
 class Solution:
-    def subarraySum(self, nums: List[int], k: int) -> int:
-        counter = dict()
-        pre, ans = 0, 0
-        for num in nums:
-            pre += num
-            if pre == k:
-                ans += 1
-            ans += counter.get(pre - k, 0)
-            counter[pre] = counter.get(pre, 0) + 1
-        return ans
-```
-
-```py
-前序和也超时了
-
-class Solution:
-    def subarraySum(self, nums: List[int], k: int) -> int:
-        prefixsum=[0]*(len(nums)+1)
+    def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
+        sums, res, dic = 0, 0, {}
+        dic[0] = 1
         for i in range(len(nums)):
-            prefixsum[i+1] = prefixsum[i] + nums[i]
-        count = 0
-        for i in range(len(nums)):
-            for j in range(i,len(nums)):
-                if prefixsum[j+1] - prefixsum[i] == k:
-                    count +=1
-        return count 
-
-class Solution:
-    def subarraySum(self, nums: 'List[int]', k: 'int') -> 'int':
-        sum, res, cul = 0, 0, {}
-        cul[0] = 1
-        for i in range(len(nums)):
-            sum += nums[i]
-            if sum - k in cul:
-                res += cul[sum - k]
-            if sum not in cul:
-                cul[sum] = 0
-            cul[sum] += 1
+            sums += nums[i]
+            if sums - target in dic:
+                res += dic[sums - target]
+            if sums not in dic:
+                dic[sums] = 0
+            dic[sums] += 1
+        # -1000 <= nums[i] <= 1000 注意: nums 有正负
+        # {0: 1, 1: 1}
+        # {0: 1, 1: 1, 3: 1}
+        # {0: 1, 1: 1, 3: 1, 6: 1}
         return res
 ```
 
@@ -8095,13 +7766,13 @@ class Solution:
         res = 1
 
         if n < 0:
-            x = 1/x
-            n = -n
+            x = 1 / x
+            n = - n
 
         if n == 0:
             return res
-
-        while n>0:
+        # 类似2分，速度更快
+        while n > 0:
             if n % 2 == 1:
                 res *= x
             n >>= 1
@@ -8111,30 +7782,6 @@ class Solution:
 ```
 
 ```scala
-/**
-* chosen solution
-* recursive - bottom-up
-* memo
-*   1. n may be negative or positive
-*   2. n may be odd or even
-*   3. do not care n during recursive
-* time complexity: O(logN)
-*/
-
-object Solution0 {
-    def myPow(x: Double, n: Int): Double = {
-      if (n == 0) return 1
-      val ans = _myPow(x, math.abs(n))
-      if (n < 0) 1 / ans else ans 
-    }
-    
-    def _myPow(x: Double, n: Int): Double = {
-      if (n == 1 || n == 0) x
-      else if ((n & 1) == 1) _myPow(x * x, n / 2) * x
-      else _myPow(x * x, n / 2)
-    }
-}
-
 
 /**
 * recursive version : bottom-up
@@ -8161,42 +7808,6 @@ object Solution1 {
 
   }
 }
-/**
-* recursive version : bottom-up
-*/
-object Solution1-2 {
-    def myPow(x: Double, n: Int): Double = {
-        if(n == 0) return 1
-        
-        val t = myPow(x, n / 2)
-        
-        if(n % 2  == 0){
-            t * t
-        }else{
-            if(n < 0) t * t * (1 / x)
-            else t * t * x
-        }
-    }
-}
-
-/**
-*  bottom-up -recursive,
-*   do not care n during recursive
-*/
-object Solution1-3 {
-    def myPow(x: Double, n: Int): Double = {
-      if (n == 0) return 1
-      val ans = _myPow(x, math.abs(n))
-      if (n < 0) 1 / ans else ans 
-    }
-    
-    def _myPow(x: Double, n: Int): Double = {
-      if (n == 1 || n == 0) x
-      else if ((n & 1) == 1) _myPow(x * x, n / 2) * x
-      else _myPow(x * x, n / 2)
-    }
-}
-
 
 /**
 * top-down - iterative version 
@@ -8231,24 +7842,6 @@ object Solution2 {
   }
 }
 
-/**
-*  top-down - recursive with tail recursive
-*/
-object Solution2-1 {
-    def myPow(x: Double, n: Int): Double = {
-      val ans = _myPow(1, x, n)
-      if(n < 0) 1 / ans else ans
-    }
-    
-    @annotation.tailrec
-    def _myPow(current: Double, base: Double, pow: Int): Double = {
-        if(pow == 0) current
-        else{
-            if((pow & 1) == 1) _myPow(current * base, base * base, pow / 2)
-            else _myPow(current, base * base, pow / 2)
-        }
-    }
-}
 ```
 
 ##  131. <a name='2.'></a>补充题2. 圆环回原点问题
@@ -8274,6 +7867,7 @@ class Solution:
         for i in range(1, n + 1):
             for j in range(length):
                 # dp[i][j]表示从0出发，走i步到j的方案数
+                # ps:公式之所以`取余`是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
                 dp[i][j] = dp[i-1][(j-1+length)%length] + dp[i-1][(j+1)%length]
         return dp[n][0]
 ```
@@ -8293,16 +7887,10 @@ class Solution:
 class MyStack:
 
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
         self.queue = collections.deque()
 
 
     def push(self, x: int) -> None:
-        """
-        Push element x onto stack.
-        """
         n = len(self.queue)
         self.queue.append(x)
         for _ in range(n):
@@ -8310,23 +7898,14 @@ class MyStack:
 
 
     def pop(self) -> int:
-        """
-        Removes the element on top of the stack and returns that element.
-        """
         return self.queue.popleft()
 
 
     def top(self) -> int:
-        """
-        Get the top element.
-        """
         return self.queue[0]
 
 
     def empty(self) -> bool:
-        """
-        Returns whether the stack is empty.
-        """
         return not self.queue
 ```
 
@@ -8471,177 +8050,29 @@ class MyStack1() {
 
 }
 
-/**
-* two queue version
-* time complexity
-*   push: O(2n+1) n is the element in queue1
-*   pop: O(1)
-*   top: O(1)
-*/
-class MyStack2() {
-
-   import scala.collection.mutable.Queue
-    /** Initialize your data structure here. */
-    var queue1 = Queue.empty[Int] 
-
-
-    /** Push element x onto stack. */
-    def push(x: Int) {
-        val queue2 = Queue(x)
-        queue2.enqueueAll(queue1.dequeueAll(_ => true))
-        queue1 = queue2
-    }
-
-    /** Removes the element on top of the stack and returns that element. */
-    def pop(): Int = {
-        if(queue1.isEmpty) -1 else queue1.dequeue
-    }
-
-    /** Get the top element. */
-    def top(): Int = {
-       queue1.headOption.getOrElse(-1)
-    }
-
-    /** Returns whether the stack is empty. */
-    def empty(): Boolean = {
-        queue1.isEmpty
-    }
-}
-
-/**
-* one queue version
-* time complexity
-*   push: O(2n+1) n is the element in queue1
-*   pop: O(1)
-*   top: O(1)
-*/
-class MyStack3() {
-
-    /** Initialize your data structure here. */
-    val queue1 = scala.collection.mutable.Queue[Int]()
-
-
-    /** Push element x onto stack. */
-    def push(x: Int) {
-        val iter = queue1.indices
-        queue1.enqueue(x)
-        (iter).foreach(e => queue1.enqueue(queue1.dequeue))
-        
-        
-    }
-
-    /** Removes the element on top of the stack and returns that element. */
-    def pop(): Int = {
-       if(queue1.nonEmpty) queue1.dequeue else -1
-        
-    }
-
-    /** Get the top element. */
-    def top(): Int = {
-       queue1.headOption.getOrElse(-1)
-    }
-
-    /** Returns whether the stack is empty. */
-    def empty(): Boolean = {
-        queue1.isEmpty
-    }
-
-}
-
-/**
-* memo:
-*   1. push entire old queue into a new queue without expanding all elements 
-* time complexity:  
-*     all operation are O(1) after being amortized
-*   
-* start  Queue()
-* push1  Queue(1, Queue())
-* push2  Queue(2, Queue(1, Queue()))
-* push3  Queue(3, Queue(2, Queue(1, Queue())))
-* push4  Queue(4, Queue(3, Queue(2, Queue(1, Queue()))))
-* pop    Queue(3, Queue(2, Queue(1, Queue())))
-* pop    Queue(2, Queue(1, Queue()))
-*/
-
-class MyStack4() {
-  import scala.collection.mutable
-  /** Initialize your data structure here. */
-  var queue: mutable.Queue[Any] = mutable.Queue.empty[Any]
-
-  /** Push element x onto stack. */
-  def push(x: Int) {
-    val queue2: mutable.Queue[Any] = mutable.Queue(x)
-    queue2.enqueue(queue)
-    queue = queue2
-
-  }
-  /** Removes the element on top of the stack and returns that element. */
-  def pop(): Int = {
-
-    if(queue.isEmpty) -1 else {
-      val ret = queue.dequeue.asInstanceOf[Int]
-      queue = queue.dequeue.asInstanceOf[mutable.Queue[Any]]
-      ret
-    }
-  }
-  /** Get the top element. */
-  def top(): Int = {
-    if(queue.isEmpty) -1 else queue.head.asInstanceOf[Int]
-  }
-
-  /** Returns whether the stack is empty. */
-  def empty(): Boolean = {
-    queue.size != 2
-  }
-}
 ```
 
-##  133. <a name='K-1'></a>230 Kth Smallest Element in a B
+##  133. <a name='K-1'></a>230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点
 
 [小明](https://www.bilibili.com/video/BV1ha4y1i7dZ?spm_id_from=333.999.0.0)
 
 ```py
-# 用yield来波骚操作
-
 class Solution:
-    def kthSmallest(self, root, k):
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        def appendAllLeft(node):
+            while node:
+                stack.append(node)
+                node = node.left
 
-        def gen(r):
-            if r is not None:
-                yield from gen(r.left)
-                yield r.val
-                yield from gen(r.right)
-        
-        it = gen(root)
-        for _ in range(k):
-            ans = next(it)
-        return ans
-
-# 收藏一波，博主大大威武
-# yield真是迭代优化利器
-
-# 6得飞起！~ 来化简下助涨楼主骚气
-class Solution:
-    def kthSmallest(self, root, k):
-        from itertools import chain, islice
-        def gen(x): yield from chain(gen(x.left), [x.val], gen(x.right)) if x else ()
-        return next(islice(gen(root), k - 1, k))
-```
-
-```py
-# InOrder排序，输出
-class Solution:
-    def kthSmallest(self, root: TreeNode, k: int) -> int:
-        stack = []
-        while root or stack: # stack一般都有
-            while root: # 找到最深的节点，root在最深处的时候就为none
-                stack.append(root)
-                root = root.left
-            root = stack.pop() # stack弹出最深处的节点
+        stack, res = [], []
+        appendAllLeft(root)
+        while stack:
+            node = stack.pop()
             k -= 1
             if k == 0:
-                return root.val
-            root = root.right #去右孩子看看
+                return node.val
+            appendAllLeft(node.right)
+
 
 class Solution:
     def kthSmallest(self, root, k: int) -> int:
@@ -8650,9 +8081,9 @@ class Solution:
         def inOrder(root):
             
             if not root: return
-            helper(root.left)
+            inOrder(root.left)
             queue.append(root.val)
-            helper(root.right)
+            inOrder(root.right)
             return
 
         inOrder(root)
@@ -8661,40 +8092,6 @@ class Solution:
 
 
 ```scala
-/**
- * Definition for a binary tree node.
- * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
- *   var value: Int = _value
- *   var left: TreeNode = _left
- *   var right: TreeNode = _right
- * }
- */
-
-object Solution {
-    def kthSmallest(root: TreeNode, k: Int): Int = {
-
-      val stack = collection.mutable.Stack[TreeNode]()
-      var node = root
-      var counter = 0
-      var ans = 0
-      while ((counter <= k) && (node != null || stack.nonEmpty)) {
-        while(node != null) {
-          stack push node
-          node = node.left
-        }
-        node = stack.pop
-        
-        counter += 1
-        if (counter == 1 || counter <= k) {
-          ans = node.value
-        }
-        
-        node = node.right
-        
-      }
-      ans
-    }
-}
 /**
 * my first commit
 * inorder iterative template
@@ -8749,31 +8146,6 @@ object Solution2-1 {
 }
 
 
-/**
-* a brilliant solution - inorder recursive traversal 
-* memo:
-*   1. using Either, right records numbers of visited node, left record the value when the condition is meet
-* time complexity:
-*      O(H + K) H is the height of the tree calculated by log(N) approximately
-*/
-object Solution2-2 {
-  def go (node: TreeNode, k: Int) : Either[Int, Int] = {
-     val r =for {
-      numElementsLeft <- if (node.left == null) Right (0) else go(node.left, k)
-      numElementsRight <- if (numElementsLeft + 1 == k) Left(node.value)
-      else
-        if (node.right == null) Right(0) else go(node.right, k - (numElementsLeft + 1))
-
-    } yield numElementsLeft + numElementsRight + 1
-      println(r)
-      r
-
-  }
-
-  def kthSmallest(root: TreeNode, k: Int): Int = {
-    go(root, k).left.get
-  }
-}
 
 ```
 
@@ -8790,9 +8162,6 @@ object Solution2-2 {
 ```py
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
         idx, left, right = 0, 0, len(nums) - 1
         while idx <= right:
             if nums[idx] == 2 and idx < right:
@@ -8816,16 +8185,40 @@ class Solution:
     def permutation(self, S: str) -> List[str]:
         res = []
         S = sorted(S)
-        def dfs(S,path):
+        def backtrack(S,path):
             if not S:
                 res.append(path)
             else:
                 for i in range(len(S)):
-                    if i > 0 and S[i] == S[i-1]:
+                    if i > 0 and S[i] == S[i-1]:  # 剪枝
                         continue
-                    dfs(S[:i]+S[i+1:],path + S[i])
+                    backtrack(S[:i] + S[i+1:],path + S[i])
 
-        dfs(S,'')
+        backtrack(S,'')
+        return res
+```
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ev411672A?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1qK4y1x7Qs?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1z54y1a7rQ?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+        def backtrack(nums,path):
+            if not nums:
+                res.append(path[:])
+            else:
+                for i in range(len(nums)):
+                    if i > 0 and nums[i] == nums[i-1]: # 剪枝
+                        continue
+                    backtrack(nums[:i] + nums[i+1:],path + [nums[i]])
+
+        backtrack(nums,[])
         return res
 ```
 
@@ -8853,8 +8246,6 @@ class Solution:
 
 * 时间复杂度:O(1)
 
-
-
 ```py
 # 这个写起来超级简单！
 # NO BUG
@@ -8864,7 +8255,7 @@ class Solution:
         right = len(height)-1
         maxRes = res = 0
         while left < right:
-            res = (right - left)*min(height[left],height[right])
+            res = (right - left) * min(height[left], height[right])
             if height[left] < height[right]:
                 left += 1
             else:
@@ -8874,27 +8265,6 @@ class Solution:
 ```
 
 ```scala
-/**
-* brute force not AC
-* time complexity: O(n^2)
-*/
-
-object Solution1 {
-    def maxArea(height: Array[Int]): Int = {
-      
-      var currentMax = 0
-
-      for(left <- height.indices; right <- (left + 1) until height.length) {
-        val limit = height(right) min height(left)
-        val width =  (right - left)
-        val volume = limit * width
-
-        currentMax = currentMax max volume
-      }
-      currentMax
-    }  
-}
-
 
 /**
 * two pointer version
@@ -8924,29 +8294,6 @@ object Solution2 {
          
 }
 
-/**
-* two - pointer version recursive version
-*/
-object Solution2-1 {
-    def maxArea(height: Array[Int]): Int = {
-  
-     maxArea(height, 0, height.length - 1, 0)
-    }
-  
-    @annotation.tailrec
-    def maxArea(height: Array[Int], left: Int, right: Int, maxVolume: Int): Int = {
-      if (left >= right)  maxVolume
-      else {
-        val currentVolume = (right - left) * (height(right) min height(left))
-        var newMaxVolume = currentVolume max maxVolume
-        
-        if (height(right) > height(left)) 
-          maxArea(height, left + 1, right, newMaxVolume)
-        else
-          maxArea(height, left, right - 1, newMaxVolume)
-      }
-    }
-}
 ```
 
 ##  137. <a name='-1'></a>139 【动态🚀规划 + 背包】Word Break
@@ -9023,20 +8370,10 @@ class Solution:
     def isPalindrome(self, s):
         s = ''.join(filter(str.isalnum,s)).lower()
         return s==s[::-1]
-
-练习一下正则
-
-import re
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        s=re.sub('[^a-zA-Z0-9]','',s)
-        s=s.lower()
-        return s==s[::-1]
 ```
 
 
 ```scala
-
 /**
 * two pointer comparison
 * memo
@@ -9075,94 +8412,7 @@ class Solution:
             nums[:] = nums[::-1]
             nums[:r] = nums[:r][::-1]
             nums[r:] = nums[r:][::-1]
-
-class Solution:
-    def rotate( nums, k):
-        n = len(nums)
-        k = k % n
-        for _ in range(k):
-            nums.insert(0,nums.pop())
-
-class Solution:
-    def rotate(self, A: List[int], k: int) -> None:
-        def reverse(i, j):
-            while i < j:
-                A[i], A[j] = A[j], A[i]
-                i += 1
-                j -= 1
-        n = len(A)
-        k %= n
-        reverse(0, n - 1)
-        reverse(0, k - 1)
-        reverse(k, n - 1)
 ```
-
-
-```py
-class Solution:
-    def rotate(self, nums: List[int], k: int) -> None:
-        nums[: ] = nums[-k % len(nums): ] + nums[: -k % len(nums)]
-
-class Solution:
-    def rotate(self, nums: List[int], k: int) -> None:
-        nums[: ] = (nums[i] for i in range(-(k % len(nums)), len(nums) - k % len(nums)))
-```
-
-
-##  140. <a name='Offer27.'></a>剑指 Offer 27. 二叉树的镜像 226-翻转二叉树
-
-[哈哈哈](https://www.bilibili.com/video/BV1Sh411R7B2?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H73E?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1FK411p7Co?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def invertTree(self, root: TreeNode) -> TreeNode:
-        if not root:
-            return root
-        
-        left = self.invertTree(root.left)
-        right = self.invertTree(root.right)
-        root.left, root.right = right, left
-        return root
-```
-
-```py
-用队列做，每次都弹出第一个节点，然后判断
-
-如果节点为叶子节点，那就什么都不做
-
-如果不是叶子节点，那就有三种情况：
-
-1.左节点和右节点都存在，此时把两个节点交换，然后把左右节点都重新加入队列
-
-2.只有左节点，此时交换两个节点，然后把右节点重新加入队列
-
-3.只有右节点，此时交换两个节点，然后把左节点重新加入队列
-
-### 代码
-
-class Solution:
-    def invertTree(self, root: TreeNode) -> TreeNode:
-        if root == None:
-            return root
-        Q = deque([root])
-        while Q:
-            r = Q.popleft()
-            if r.left or r.right:
-                r.left, r.right = r.right, r.left
-                if r.left and r.right:
-                    Q.append(r.left)
-                    Q.append(r.right)
-                elif r.right and not r.left:
-                    Q.append(r.right)
-                else:
-                    Q.append(r.left)
-        return root
-```
-
 
 # 8 day (得分 = 3分) 81
 
