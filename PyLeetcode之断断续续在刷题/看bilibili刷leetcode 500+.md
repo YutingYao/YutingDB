@@ -1409,7 +1409,7 @@ class Solution:
                 res += cul[sum - k]
             if sum not in cul:
                 cul[sum] = 0
-            cul[sum] += 1
+            cul[sum] += 1 
         return res
 ```
 

@@ -5899,7 +5899,7 @@ class Solution:
                     dfs(S[:i]+S[i+1:],path + S[i])
 
         dfs(S,'')
-        return res
+        return res 
 ```
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ev411672A?spm_id_from=333.999.0.0)

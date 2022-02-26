@@ -1112,8 +1112,8 @@ input
   .reduce(
     (r1: SensorReading, r2: SensorReading) => { if (r1.value > r2.value) r2 else r1 },
     ( key: String,
-      context: ProcessWindowFunction[_, _, _, TimeWindow]#Context,
-      minReadings: Iterable[SensorReading],
+      context: ProcessWindowFunction[_, _, _, TimeWindow] # Context,
+      minReadings: Iterable[SensorReading], 
       out: Collector[(Long, SensorReading)] ) =>
       {
         val min = minReadings.iterator.next()
@@ -1664,7 +1664,7 @@ ProcessingTimeoutTrigger：可以将任意 Trigger 作为参数转为为 Process
 
 比如如下输入流：
 
-```
+```sql
 contentId(文章Id)、uid(用户Id)、clickCnt(点击次数)
 
 c10,ua,1

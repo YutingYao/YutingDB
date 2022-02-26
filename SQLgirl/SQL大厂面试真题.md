@@ -49,8 +49,9 @@ case
     when TIMESTAMPDIFF(SECOND, start_time, end_time) >= a.duration then 1 
     else TIMESTAMPDIFF(SECOND, start_time, end_time) / a.duration 
 end 
+
 等效于
-if(TIMESTAMPDIFF(second, start_time,end_time) >= duration, 1, TIMESTAMPDIFF(second, start_time, end_time) / duration)
+if(TIMESTAMPDIFF(second, start_time, end_time) >= duration, 1, TIMESTAMPDIFF(second, start_time, end_time) / duration)
 ```
 
 ```sql
@@ -67,16 +68,16 @@ order by avg_play_progress desc
 
 ```sql
 SELECT tag,
-	concat(round(SUM(play)/COUNT(*)*100,2),'%') AS avg_played_progress
+    concat(round(SUM(play)/COUNT(*)*100,2),'%') AS avg_played_progress
 FROM(
-	SELECT a.video_id,a.tag,
-	  case
-	      when TIMESTAMPDIFF(SECOND,start_time,end_time) >= a.duration then 1 
-	      else TIMESTAMPDIFF(SECOND,start_time,end_time)/a.duration 
-	  end as play
-	from tb_video_info a
-	left join tb_user_video_log b
-	on a.video_id = b.video_id
+    SELECT a.video_id,a.tag,
+      case
+          when TIMESTAMPDIFF(SECOND,start_time,end_time) >= a.duration then 1 
+          else TIMESTAMPDIFF(SECOND,start_time,end_time)/a.duration 
+      end as play
+    from tb_video_info a
+    left join tb_user_video_log b
+    on a.video_id = b.video_id
 ) AS c
 GROUP BY tag
 HAVING avg_played_progress > 60
@@ -174,6 +175,7 @@ https://www.nowcoder.com/practice/f90ce4ee521f400db741486209914a11?tpId=268&tags
 ```sql
 order by dt desc 
 rows between current row and 6 following
+
 等效于
 order by dt 
 rows 6 preceding
@@ -340,12 +342,12 @@ https://www.nowcoder.com/practice/1fc0e75f07434ef5ba4f1fb2aa83a450?tpId=268&tags
 
 ```sql
 min(date(in_time)) group by uid, -- 用户的第一次登陆
-count(uid) over (partition by min(date(in_time))) as cnt --每天的新用户数目
+count(uid) over (partition by min(date(in_time))) as cnt -- 每天的新用户数目
 count(distinct b.uid)/count(distinct a.uid) 第二天的留存率
 
 次日留存
 left join -- 这里一定要用left join
-on DATE_ADD(a.dt,INTERVAL 1 DAY) = b.dt and a.uid = b.uid
+on DATE_ADD(a.dt, INTERVAL 1 DAY) = b.dt and a.uid = b.uid
 等效于
 left join tb_user_log t2 
 on t1.uid = t2.uid and date_add(t1.dt,interval 1 day) between date(t2.in_time) and date(t2.out_time)
@@ -517,9 +519,7 @@ https://www.nowcoder.com/practice/dbbc9b03794a48f6b34f1131b1a903eb?tpId=268&tags
 新用户 
 
 count(*) over (partition by uid order by dt) as times
-sum(if(times=1,1,0)
-
-新用户
+sum(if(times = 1, 1, 0)
 
 min(date(in_time)) min_date group by uid
 count(min_date) 或 count(DISTINCT n.uid)
@@ -527,9 +527,9 @@ count(min_date) 或 count(DISTINCT n.uid)
 
 ```sql
 select
-	dt,
-	count(uid)as dau,
-	round(sum(if(times=1,1,0))/count(uid),2)as nv_new_ratio
+    dt,
+    count(uid)as dau,
+    round(sum(if(times=1,1,0))/count(uid),2)as nv_new_ratio
 from
     (
     select 
@@ -773,7 +773,6 @@ having refund_rate <= 0.5
 ```
 
 ```sql
-
 SELECT 
     product_id,
     round(click/showtimes,3) as ctr,
@@ -875,11 +874,11 @@ https://www.nowcoder.com/practice/9c175775e7ad4d9da41602d588c5caf3?tpId=268&tags
 ```sql
 复购率
 count(uid) cnt group by a.product_id, b.uid -- 统计同一个商品，同一个用户
-sum(if (cnt>=2, 1, 0)) / count(*)
+sum(if (cnt >= 2, 1, 0)) / count(*)
 
 等效于
 COUNT(1) pay_cnt group by product_id, uid
-sum(case when n>=2 then 1 else 0 end)/count(distinct uid)
+sum(case when  n>= 2 then 1 else 0 end)/count(distinct uid)
 ```
 
 ```sql
@@ -936,7 +935,6 @@ sum(firstly_amount - total_amount) / count(uid)
 
 sum(price * cnt) AS firstly_amount
 sum(firstly_amount - total_amount) / count(distinct too.order_id)
-
 ```
 
 ```sql
@@ -973,11 +971,10 @@ https://www.nowcoder.com/practice/e7837f66e8fb4b45b694d24ea61f0dc9?tpId=268&tqId
 
 ```sql
 7日动销率：
+if(timestampdiff(day, lt, event_time) between 0 and 6, product_id, null)
 
-if(timestampdiff(day,lt,event_time) between 0 and 6, product_id, null)
-等效于
-if(DATEDIFF(lt,event_time)<=6 and DATEDIFF(lt,event_time)>=0, product_id, null))
-
+等效于:
+if(DATEDIFF(lt, event_time) <= 6 and DATEDIFF(lt, event_time) >= 0, product_id, null))
 ```
 
 ```sql
@@ -1071,7 +1068,7 @@ https://www.nowcoder.com/practice/f022c9ec81044d4bb7e0711ab794531a?tpId=268&tqId
 
 
 ```sql
-coalesce(driver_id,'总体')
+coalesce(driver_id, '总体')
 等效于
 IFNULL(driver_id, '总体')
 
@@ -1100,7 +1097,7 @@ from tb_get_car_order
 where driver_id in(
     select distinct(o.driver_id)
     from tb_get_car_order o 
-    where start_time is NULL and DATE_FORMAT(finish_time,'%Y%m')='202110')
+    where start_time is NULL and DATE_FORMAT(finish_time,'%Y%m') = '202110')
 group by driver_id
 
 union
@@ -1110,7 +1107,7 @@ from tb_get_car_order
 where driver_id in(
     select distinct(o.driver_id)
     from tb_get_car_order o 
-    where start_time is NULL and DATE_FORMAT(finish_time,'%Y%m')='202110')
+    where start_time is NULL and DATE_FORMAT(finish_time,'%Y%m') = '202110')
 ```
 
 
@@ -1191,7 +1188,7 @@ RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00'
 
 subString_index(event_time, ' ', -1) between '07:00:00' and '08:59:59'
 
-date_format(event_time,'%T') >= '07:00:00'and date_format(event_time,'%T') < '09:00:00'
+date_format(event_time,'%T') >= '07:00:00' and date_format(event_time,'%T') < '09:00:00'
 
 HOUR(event_time) IN (7, 8)
 
@@ -1224,20 +1221,20 @@ GROUP BY period
 ```sql
 SELECT period, COUNT(event_time) order_num, ROUND(AVG(wait_time), 1), ROUND(SUM(dispatch_time)/COUNT(dispatch_time), 1)
 FROM(
-	SELECT event_time,  
+    SELECT event_time,  
             CASE
-			WHEN RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00' THEN '早高峰'
-			WHEN RIGHT(event_time, 8) >='09:00:00' AND RIGHT(event_time, 8) < '17:00:00' THEN '工作时间'
-			WHEN RIGHT(event_time, 8) >='17:00:00' AND RIGHT(event_time, 8) < '20:00:00' THEN '晚高峰'
-			ELSE '休息时间'
-		    END period,
-		 TIMESTAMPDIFF(SECOND, event_time, end_time)/60 wait_time,
-		 TIMESTAMPDIFF(SECOND, order_time, start_time)/60 dispatch_time
-	FROM tb_get_car_record tgcr
-	LEFT JOIN tb_get_car_order
-	USING(order_id)
+            WHEN RIGHT(event_time, 8) >='07:00:00' AND RIGHT(event_time, 8) < '09:00:00' THEN '早高峰'
+            WHEN RIGHT(event_time, 8) >='09:00:00' AND RIGHT(event_time, 8) < '17:00:00' THEN '工作时间'
+            WHEN RIGHT(event_time, 8) >='17:00:00' AND RIGHT(event_time, 8) < '20:00:00' THEN '晚高峰'
+            ELSE '休息时间'
+            END period,
+         TIMESTAMPDIFF(SECOND, event_time, end_time)/60 wait_time,
+         TIMESTAMPDIFF(SECOND, order_time, start_time)/60 dispatch_time
+    FROM tb_get_car_record tgcr
+    LEFT JOIN tb_get_car_order
+    USING(order_id)
     WHERE DATE_FORMAT(event_time, '%w') BETWEEN 1 AND 5
-	) a 
+    ) a 
 GROUP BY period
 ORDER BY order_num 
 ```
@@ -1256,15 +1253,15 @@ COALESCE(start_time, finish_time)
 ```sql
 表示是否等待：
 
--1 if_wait
- 1 if_wait
+-1 as if_wait
+ 1 as if_wait
 ```
 
 ```sql
 SELECT city, MAX(sum_wait_num)
 FROM(
-	SELECT city, time, SUM(if_wait) OVER(PARTITION BY city, left(time, 10) ORDER BY time, if_wait DESC) sum_wait_num
-	FROM(
+    SELECT city, time, SUM(if_wait) OVER(PARTITION BY city, left(time, 10) ORDER BY time, if_wait DESC) sum_wait_num
+    FROM(
         SELECT city, event_time time, 1 if_wait
         FROM tb_get_car_record
 
@@ -1274,7 +1271,7 @@ FROM(
         FROM tb_get_car_order
         JOIN tb_get_car_record
         USING(order_id)
-		)a
+        )a
     )b
 WHERE LEFT(time, 7) = '2021-10'
 GROUP BY city

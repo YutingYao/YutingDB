@@ -639,8 +639,10 @@ value1 > value2
 value1 >= value2
 value1 < value2
 value1 <= value2
+
 value IS NULL
 value IS NOT NULL
+
 value1 IS DISTINCT FROM value2
 value1 IS NOT DISTINCT FROM value2
 value1 BETWEEN [ ASYMMETRIC | SYMMETRIC ] value2 AND value3
@@ -1234,11 +1236,11 @@ SQL_TSI_SECOND （仅适用SQL）
 
 ####  2.2.1. <a name='DateandTime'></a>Date and Time
 
-Date的数据类型，由年-月-日组成，取值范围为
+Date的数据类型，由`年-月-日`组成，取值范围为
 
 0000-01-01 ~ 9999 -12-31。
 
-与SQL标准相比，范围从0000年开始。
+与 SQL 标准相比，范围从 0000 年开始。
 
 --------------------------------------------------
 
@@ -1398,15 +1400,15 @@ SELECT * from 员工信息 WHERE 部门_id = 1;
 
 目前 Flink SQL 支持下列 CREATE 语句：
 
-* 根据指定的表名创建一个表，如果同名表已经在 catalog 中存在了，则无法注册。
+* 根据指定的`表名`创建一个`表`，如果同名表已经在 catalog 中存在了，则无法注册。
 
   * CREATE TABLE
 
-* 根据给定的表属性创建数据库。若数据库中已存在同名表会抛出异常。
+* 根据给定的表属性创建`数据库`。若数据库中已存在同名表会抛出异常。
 
   * CREATE DATABASE
 
-* 根据给定的 query 语句创建一个视图。若数据库中已经存在同名视图会抛出异常.
+* 根据给定的 query 语句创建一个`视图`。若数据库中已经存在同名视图会抛出异常.
 
   * CREATE VIEW
 
@@ -1493,6 +1495,7 @@ WHERE product LIKE '%Rubber%';
 ####  3.2.1. <a name='UNIONandUNIONALL'></a>UNION and UNION ALL
 
 Flink SQL> create view t1(s) as values ('c'), ('a'), ('b'), ('b'), ('c');
+
 Flink SQL> create view t2(s) as values ('d'), ('e'), ('a'), ('b'), ('b');
 
 Flink SQL> (SELECT s FROM t1) UNION (SELECT s FROM t2);

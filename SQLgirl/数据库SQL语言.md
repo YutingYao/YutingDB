@@ -3,14 +3,10 @@
 	* 1.1. [sql执行顺序](#sql-1)
 	* 1.2. [执行效率](#)
 	* 1.3. [ 行列转换](#-1)
-* 2. [窗口函数应用](#-1)
-	* 2.1. [lag和lead 分析函数](#laglead)
+* 2. [窗口函数](#-1)
+	* 2.1. [窗口函数主要有以下几类:](#:)
+	* 2.2. [lag和lead 分析函数](#laglead)
 * 3. [面试题](#-1)
-	* 3.1. [数据在数据库中如何存储?](#-1)
-	* 3.2. [orical和SQL server之间如何联系](#oricalSQLserver)
-	* 3.3. [如何确定数据库大小以及需要的服务器个数](#-1)
-	* 3.4. [『多表间查询，分组』](#-1)
-	* 3.5. [对排序的认识：说明快速派序的思路，还知道哪些排序方法?](#-1)
 * 4. [笔试题](#-1)
 	* 4.1. [175. 组合两个表](#-1)
 	* 4.2. [176. 第二高的薪水](#-1)
@@ -46,30 +42,38 @@
 ###  1.1. <a name='sql-1'></a>sql执行顺序
 
 ```sql
-(8) SELECT (9)DISTINCT<select_list> 
-(1) FROM <left_table> 
+(8)+ SELECT (9)DISTINCT<select_list> 
+(1)+ FROM <left_table> 
 (3) <join_type> JOIN <right_table> 
 (2) ON <join_condition> 
-(4) WHERE <where_condition> 
+(4)+ WHERE <where_condition> 
 (5) GROUP BY <group_by_list> 
 (6) WITH {CUBE|ROLLUP} 
-(7) HAVING <having_condition> 
+(7)+ HAVING <having_condition> 
 (10) ORDER BY <order_by_list> 
 (11) LIMIT <limit_number>
 ```
+
+可以使用子查询的位置：
+
+- select 和 from
+- where 和 having
+
+不可以使用子查询的位置：group by
+
 
 ###  1.2. <a name=''></a>执行效率
 
 ```s
 num id  str
-1	1	A
-2	3	A
-3	5	A
-4	8	A
-1	2	B
-2	7	B
-1	4	C
-2	6	C
+1   1   A
+2   3   A
+3   5   A
+4   8   A
+1   2   B
+2   7   B
+1   4   C
+2   6   C
 ```
 
 1. 最快的方法：MySQL变量，一次全扫描搞定。文件排序是因为没有索引。
@@ -155,19 +159,19 @@ ORDER BY
 ```s
 例子 ：有学生成绩表`user_score`如下所示：
 
-user_id	subject	score
-1		语文	89
-1		数学	97
-2		数学	90
-3		英语	70
-……		……		……
+user_id   subject   score
+1      语文   89
+1      数学   97
+2      数学   90
+3      英语   70
+……      ……      ……
 
 
 想要把每个科目单独作为一列展示，如下：
 
-user_id	语文	数学	英语
-1		89		97		78
-……		……		……		……
+user_id   语文   数学   英语
+1      89      97      78
+……      ……      ……      ……
 
 ```
 
@@ -206,7 +210,7 @@ UNPIVOT(score FOR subject IN('语文','数学','英语')) as pvt
 
 ##  2. <a name='-1'></a>窗口函数
 
-### 窗口函数主要有以下几类:
+###  2.1. <a name=':'></a>窗口函数主要有以下几类:
 
 专有窗口函数
 
@@ -234,7 +238,7 @@ lag() over()：向上偏移
 lead() over() ：向下偏移
 ```
 
-###  2.1. <a name='laglead'></a>lag和lead 分析函数
+###  2.2. <a name='laglead'></a>lag和lead 分析函数
 
 ```sql
 select * from kkk; 
@@ -306,9 +310,9 @@ app为了摸清用户在平台的活跃情况，常常需要统计用户的连�
 
 例子：假设某公司的APP活跃表为表login_detail，字段如下：
 
-字段	     类型
-user_id	    string
-login_date	date
+字段        类型
+user_id       string
+login_date   date
 ```
 
 step1: 出每个用户的最大登陆间隔:
@@ -397,82 +401,6 @@ from (
 
 ##  3. <a name='-1'></a>面试题
 
-###  3.1. <a name='-1'></a>数据在数据库中如何存储?
-
-https://mp.weixin.qq.com/s/U5WtjbgXFGoij9rIDQKaRQ
-
-https://mp.weixin.qq.com/s/h5qysXyiOpXNvJT8pbTN3g
-
-https://mp.weixin.qq.com/s/_3SzbOKz8bxZH7PuRZ5xHw
-
-https://mp.weixin.qq.com/s/0ejRJq78ikQjxcB8t1EQbg
-
-https://mp.weixin.qq.com/s/DSHIVtd4CLKqiem6_3K-rw
-
-https://mp.weixin.qq.com/s/WIgU8ExhLkqazLOSNTTY2g
-
-https://mp.weixin.qq.com/s/PhaB7GAQW81di4Q0lqSc0w
-
-https://mp.weixin.qq.com/s/V1sn4I2cb8GjBFfsGtpz8Q
-
-https://mp.weixin.qq.com/s/_yBk5zai1yhX3LmOjODcIA
-
-https://mp.weixin.qq.com/s/kYugnod1dxE9Gjjjd7ZiCg
-
-https://mp.weixin.qq.com/s/k9VPSPPMxDA42kfGvHTdGg
-
-###  3.2. <a name='oricalSQLserver'></a>orical和SQL server之间如何联系
-
-全球市场中最主流的数据库分别是 `Oracle`、`SQL Server`、`Db2` 三大`商业数据库`
-
-和 `MySQL`、`PostgreSQL` 两种`开源数据库`。
-
-`SQL Server` 马上要超过 `Oracle` 了，主要是因为其拥抱`云的转型`。
-
-###  3.3. <a name='-1'></a>如何确定数据库大小以及需要的服务器个数
-
-https://mp.weixin.qq.com/s/FdhEryE1rkcAFMTw8nswkA
-
-https://mp.weixin.qq.com/s/VKC_ORn6Pc35I2vKrcVaUA
-
-https://mp.weixin.qq.com/s/u3RLE6knpzkp5YStCrqttA
-
-###  3.4. <a name='-1'></a>『多表间查询，分组』
-
-https://mp.weixin.qq.com/s/j32qmk6pLK3rM8OhBWDaxg
-
-https://mp.weixin.qq.com/s/At70WcOIq0HXAZSh_cvMTg
-
-https://mp.weixin.qq.com/s/A39Th9WKodHGzUQ85fqXQg
-
-https://mp.weixin.qq.com/s/JZevS43wDTUXU11jeWb-qw
-
-https://mp.weixin.qq.com/s/2GUHHen9T6UqqBn0oajauQ
-
-https://mp.weixin.qq.com/s/fwm5BUeASC9479pMklv37w
-
-https://mp.weixin.qq.com/s/KtC49EImMb1jY88_wHeJRw
-
-https://mp.weixin.qq.com/s/oNCea6vcSsz-GsBfKz23PQ
-
-https://mp.weixin.qq.com/s/aeUg7hkQy00WfirXU-d-Sg
-
-https://mp.weixin.qq.com/s/LNoy5YemEW1l73wAvop0Hw
-
-###  3.5. <a name='-1'></a>对排序的认识：说明快速派序的思路，还知道哪些排序方法?
-
-https://mp.weixin.qq.com/s/ufViNQMGwx8KIX23x4rmOw
-
-https://mp.weixin.qq.com/s/l-LIb_WVhNr1m4nJKpM8Tg
-
-https://mp.weixin.qq.com/s/ACeSNB4b8CnNQ1RgLYLuSQ
-
-https://mp.weixin.qq.com/s/GaDtsn4DDnOqP5R3ovo23Q
-
-https://mp.weixin.qq.com/s/FfhFrHcM2uW5D8R8c9YWsw
-
-https://mp.weixin.qq.com/s/AFTC2AL2xvn75G_gDi3g9w
-
 ##  4. <a name='-1'></a>笔试题
 
 ###  4.1. <a name='-1'></a>175. 组合两个表
@@ -494,8 +422,8 @@ from Person  left join Address on Person.PersonId = Address.PersonId;
 select 
     FirstName, 
     LastName, 
-    (select City from Address a where a.PersonId=p.PersonId) as City, 
-    (select State from Address a where a.PersonId=p.PersonId) as State  
+    (select City from Address a where a.PersonId = p.PersonId) as City, 
+    (select State from Address a where a.PersonId = p.PersonId) as State  
 from Person p
 ```
 
@@ -542,7 +470,6 @@ where
 注：这里不能直接用limit N-1是因为limit和offset字段后面只接受正整数（意味着0、负数、小数都不行）或者单一变量（意味着不能用表达式），也就是说想取一条，limit 2-1、limit 1.1这类的写法都是报错的。
 注：这种解法形式最为简洁直观，但仅适用于查询全局排名问题，如果要求各分组的每个第N名，则该方法不适用；而且也不能处理存在重复值的情况。
 
-代码1
 
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
 BEGIN
@@ -560,11 +487,6 @@ BEGIN
       LIMIT N, 1
   );
 END
-
-作者：luanhz
-链接：https://leetcode-cn.com/problems/nth-highest-salary/solution/mysql-zi-ding-yi-bian-liang-by-luanz/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ```sql
@@ -1521,7 +1443,7 @@ WHERE
         FROM
             Employee
         GROUP BY DepartmentId
-	)
+   )
 ;
 
 | Department | Employee | Salary |
@@ -1960,50 +1882,50 @@ having count(distinct e2.salary) <= 3
 ```sql
 #解法1：窗口函数
 SELECT
-	d. NAME AS Department,
-	e. NAME AS Employee,
-	Salary
+   d. NAME AS Department,
+   e. NAME AS Employee,
+   Salary
 FROM
-	Employee e,
-	Department d,
-	(
-		SELECT
-			Id,
-			dense_rank()over(PARTITION BY DepartmentId ORDER BY Salary DESC) AS r
-		FROM
-			Employee
-	) AS n
+   Employee e,
+   Department d,
+   (
+      SELECT
+         Id,
+         dense_rank()over(PARTITION BY DepartmentId ORDER BY Salary DESC) AS r
+      FROM
+         Employee
+   ) AS n
 WHERE
-	n.Id = e.Id
+   n.Id = e.Id
 AND e.DepartmentId = d.Id
 AND r < 4
 ORDER BY
-	d. NAME,
-	Salary DESC
+   d. NAME,
+   Salary DESC
 
 
 #解法2：自连接
 SELECT
-	d. NAME AS Department,
-	e2. NAME AS Employee,
-	e2.Salary
+   d. NAME AS Department,
+   e2. NAME AS Employee,
+   e2.Salary
 FROM
-	Employee e1,
-	Employee e2,
-	Department d
+   Employee e1,
+   Employee e2,
+   Department d
 WHERE
-	e1.DepartmentId = e2.DepartmentId
+   e1.DepartmentId = e2.DepartmentId
 AND e1.Salary >= e2.Salary
 AND e2.DepartmentId = d.id
 GROUP BY
-	e2.Salary,
-	e2. NAME,
-	Department
+   e2.Salary,
+   e2. NAME,
+   Department
 HAVING
-	count(DISTINCT e1.Salary) <= 3
+   count(DISTINCT e1.Salary) <= 3
 ORDER BY
-	Department,
-	e2.Salary DESC
+   Department,
+   e2.Salary DESC
 
 
 #解法3：变量
@@ -2015,7 +1937,7 @@ FROM Department d
 JOIN
 (
 SELECT 
-	DepartmentId,
+   DepartmentId,
     name as Employee,
     Salary,
     @rk:=(@pre_id<>DepartmentId)+
@@ -2044,13 +1966,13 @@ where 3>(
 ```sql
 select department,employee,salary
 from(
-	select 
-		d.name as department,
-		e.name as employee,
-		e.salary as salary,
-		rank() over(partition by d.name order by e.salary desc) as rank1
-	from employee as e
-	left join department as d on e.departmentid=d.id
+   select 
+      d.name as department,
+      e.name as employee,
+      e.salary as salary,
+      rank() over(partition by d.name order by e.salary desc) as rank1
+   from employee as e
+   left join department as d on e.departmentid=d.id
 ) as t
 where rank1 in (1,2,3)
 order by salary desc,employee desc;
@@ -2365,13 +2287,13 @@ AND w1.Temperature < w2.Temperature
 select Id
 from 
 (
-	select 
-		temperature,
-		recordDate,
-		lead(id,1) over (order by recordDate) as 'Id',
-		lead(recordDate,1) over (order by recordDate) as 'nextDate',
-		lead(temperature,1) over (order by recordDate) as 'nextTemp'
-	from weather 
+   select 
+      temperature,
+      recordDate,
+      lead(id,1) over (order by recordDate) as 'Id',
+      lead(recordDate,1) over (order by recordDate) as 'nextDate',
+      lead(temperature,1) over (order by recordDate) as 'nextTemp'
+   from weather 
 )t 
 where nextTemp > temperature and DATEDIFF(nextDate, recordDate) = 1
 ```
@@ -2515,14 +2437,14 @@ and a.temperature>b.temperature;
 
 ```sql
 SELECT T.request_at AS `Day`, 
-	ROUND(
-			SUM(
-				IF(T.STATUS = 'completed',0,1)
-			)
-			/ 
-			COUNT(T.STATUS),
-			2
-	) AS `Cancellation Rate`
+   ROUND(
+         SUM(
+            IF(T.STATUS = 'completed',0,1)
+         )
+         / 
+         COUNT(T.STATUS),
+         2
+   ) AS `Cancellation Rate`
 FROM Trips AS T
 JOIN Users AS U1 ON (T.client_id = U1.users_id AND U1.banned ='No')
 JOIN Users AS U2 ON (T.driver_id = U2.users_id AND U2.banned ='No')
@@ -2537,19 +2459,19 @@ GROUP BY T.request_at
 
 ```sql
 SELECT T.request_at AS `Day`, 
-	ROUND(
-			SUM(
-				IF(T.STATUS = 'completed',0,1)
-			)
-			/ 
-			COUNT(T.STATUS),
-			2
-	) AS `Cancellation Rate`
+   ROUND(
+         SUM(
+            IF(T.STATUS = 'completed',0,1)
+         )
+         / 
+         COUNT(T.STATUS),
+         2
+   ) AS `Cancellation Rate`
 FROM trips AS T,
 (
-	SELECT users_id
-	FROM users
-	WHERE banned = 'Yes'
+   SELECT users_id
+   FROM users
+   WHERE banned = 'Yes'
 ) AS A
 WHERE (T.Client_Id != A.users_id AND T.Driver_Id != A.users_id) AND T.request_at BETWEEN '2013-10-01' AND '2013-10-03'
 GROUP BY T.request_at
@@ -2562,24 +2484,24 @@ GROUP BY T.request_at
 
 ```sql
 SELECT T.request_at AS `Day`, 
-	ROUND(
-			SUM(
-				IF(T.STATUS = 'completed',0,1)
-			)
-			/ 
-			COUNT(T.STATUS),
-			2
-	) AS `Cancellation Rate`
+   ROUND(
+         SUM(
+            IF(T.STATUS = 'completed',0,1)
+         )
+         / 
+         COUNT(T.STATUS),
+         2
+   ) AS `Cancellation Rate`
 FROM trips AS T LEFT JOIN 
 (
-	SELECT users_id
-	FROM users
-	WHERE banned = 'Yes'
+   SELECT users_id
+   FROM users
+   WHERE banned = 'Yes'
 ) AS A ON (T.Client_Id = A.users_id)
 LEFT JOIN (
-	SELECT users_id
-	FROM users
-	WHERE banned = 'Yes'
+   SELECT users_id
+   FROM users
+   WHERE banned = 'Yes'
 ) AS A1
 ON (T.Driver_Id = A1.users_id)
 WHERE A.users_id IS NULL AND A1.users_id IS NULL AND T.request_at BETWEEN '2013-10-01' AND '2013-10-03'
@@ -2593,26 +2515,26 @@ GROUP BY T.request_at
 
 ```sql
 SELECT T.request_at AS `Day`, 
-	ROUND(
-			SUM(
-				IF(T.STATUS = 'completed',0,1)
-			)
-			/ 
-			COUNT(T.STATUS),
-			2
-	) AS `Cancellation Rate`
+   ROUND(
+         SUM(
+            IF(T.STATUS = 'completed',0,1)
+         )
+         / 
+         COUNT(T.STATUS),
+         2
+   ) AS `Cancellation Rate`
 FROM trips AS T
 WHERE 
 T.Client_Id NOT IN (
-	SELECT users_id
-	FROM users
-	WHERE banned = 'Yes'
+   SELECT users_id
+   FROM users
+   WHERE banned = 'Yes'
 )
 AND
 T.Driver_Id NOT IN (
-	SELECT users_id
-	FROM users
-	WHERE banned = 'Yes'
+   SELECT users_id
+   FROM users
+   WHERE banned = 'Yes'
 )
 AND T.request_at BETWEEN '2013-10-01' AND '2013-10-03'
 GROUP BY T.request_at
@@ -2637,7 +2559,7 @@ SELECT
 FROM Trips t 
     JOIN Users u1 ON (t.Client_id = u1.Users_id AND u1.Banned = 'No')
     JOIN Users u2 ON (t.Driver_id = u2.Users_id AND u2.Banned = 'No')
-WHERE	
+WHERE   
     Request_at BETWEEN '2013-10-01' AND '2013-10-03'
 GROUP BY 
     Request_at;
@@ -2908,26 +2830,26 @@ HAVING COUNT(DISTINCT student) >= 5
 #共三种写法
 #最朴实的写法，共三层查询，先利用 DISTINCT 去掉重复记录得到表 A，再利用 GROUP BY 为 CLASS 分组，然
 #后用 COUNT() 统计每组个数得到表 B，最后在最外层限定数量 >=5 查到结果
-SELECT B.CLASS								#最外层
-	FROM (SELECT A.CLASS,COUNT(A.CLASS) C          #第二层查询，得到具有 CLASS、COUNT(CLASS) 的表 B
-		FROM (SELECT DISTINCT *				#第三层查询，去重得到表 A
-			FROM COURSES) A
-	GROUP BY A.CLASS) B						#分组
-	WHERE B.C >= 5;							#条件
+SELECT B.CLASS                        #最外层
+   FROM (SELECT A.CLASS,COUNT(A.CLASS) C          #第二层查询，得到具有 CLASS、COUNT(CLASS) 的表 B
+      FROM (SELECT DISTINCT *            #第三层查询，去重得到表 A
+         FROM COURSES) A
+   GROUP BY A.CLASS) B                  #分组
+   WHERE B.C >= 5;                     #条件
 
 #稍微优化，两层查询，主要是因为用了 HAVING 省了一层查询
-SELECT A.CLASS					#最外层
-	FROM (SELECT DISTINCT *		#第二层查询，去重得到表 a
-		FROM COURSES) A
-	GROUP BY A.CLASS			        #分组
-	HAVING COUNT(A.CLASS) >= 5;	#利用 COUNT() 计算每组个数并筛选
+SELECT A.CLASS               #最外层
+   FROM (SELECT DISTINCT *      #第二层查询，去重得到表 a
+      FROM COURSES) A
+   GROUP BY A.CLASS                 #分组
+   HAVING COUNT(A.CLASS) >= 5;   #利用 COUNT() 计算每组个数并筛选
 
 #极致优化，一层查询，利用 GROUP BY 为 CLASS 分组后，直接用 COUNT() 统计每组学生个数，在统计前先用
 #DISTINCT 去掉重复学生
 SELECT CLASS
-	FROM COURSES
-	GROUP BY CLASS							#分组
-	HAVING COUNT(DISTINCT STUDENT) >= 5;          #利用 COUNT() 统计每门课 STUDENT 的个数，同时利
+   FROM COURSES
+   GROUP BY CLASS                     #分组
+   HAVING COUNT(DISTINCT STUDENT) >= 5;          #利用 COUNT() 统计每门课 STUDENT 的个数，同时利
                                                                                         #用 DISTINCT 去掉重复
 ```
 
@@ -3022,7 +2944,7 @@ from stadium t1, stadium t2, stadium t3
 where t1.people >= 100 and t2.people >= 100 and t3.people >= 100
 and
 (
-	  (t1.id - t2.id = 1 and t1.id - t3.id = 2 and t2.id - t3.id =1)  -- t1, t2, t3
+     (t1.id - t2.id = 1 and t1.id - t3.id = 2 and t2.id - t3.id =1)  -- t1, t2, t3
     or
     (t2.id - t1.id = 1 and t2.id - t3.id = 2 and t1.id - t3.id =1) -- t2, t1, t3
     or
@@ -3049,7 +2971,7 @@ from stadium t1, stadium t2, stadium t3
 where t1.people >= 100 and t2.people >= 100 and t3.people >= 100
 and
 (
-	  (t1.id - t2.id = 1 and t1.id - t3.id = 2 and t2.id - t3.id =1)  -- t1, t2, t3
+     (t1.id - t2.id = 1 and t1.id - t3.id = 2 and t2.id - t3.id =1)  -- t1, t2, t3
     or
     (t2.id - t1.id = 1 and t2.id - t3.id = 2 and t1.id - t3.id =1) -- t2, t1, t3
     or
@@ -3090,8 +3012,8 @@ where
 select id, visit_date, people from 
 (select *, count(*) over(partition by oder) as oder2 from 
 (
-	select *, id - rank() over(order by id asc) as oder from
-	(select * from stadium where people >= 100 ) as tempable
+   select *, id - rank() over(order by id asc) as oder from
+   (select * from stadium where people >= 100 ) as tempable
 ) as temptable2) as temptable3 where oder2 >=3;
 ```
 
@@ -3211,15 +3133,15 @@ or
 ```
 
 ```sql
-id	visit_date	people	row_number 	id-row_number 
-1	2017/1/1	10		
-2	2017/1/2	109	1	1
-3	2017/1/3	150	2	1
-4	2017/1/4	99		
-5	2017/1/5	145	3	2
-6	2017/1/6	1455	4	2
-7	2017/1/7	199	5	2
-8	2017/1/9	188	6	2
+id   visit_date   people   row_number    id-row_number 
+1   2017/1/1   10      
+2   2017/1/2   109   1   1
+3   2017/1/3   150   2   1
+4   2017/1/4   99      
+5   2017/1/5   145   3   2
+6   2017/1/6   1455   4   2
+7   2017/1/7   199   5   2
+8   2017/1/9   188   6   2
 with temp as(
    select *, id - row_number() over (order by id asc) as ranking
     from Stadium
@@ -3420,17 +3342,17 @@ select * from cinema where id&1 and description <> 'boring' order by rating desc
 执行用时 : 204 ms, 在Not Boring Movies的MySQL提交中击败了98.24% 的用户
 
 SELECT
-	id,
-	movie,
-	description,
-	rating
+   id,
+   movie,
+   description,
+   rating
 FROM
-	cinema
+   cinema
 WHERE
-	id & 1
+   id & 1
 AND description <> 'boring'
 ORDER BY
-	rating DESC
+   rating DESC
 
 @Max. select * from cinema where not description = 'boring' and id % 2 = 1 order by rating desc 执行用时99ms,击败了99.57%的用户。 使用not的效率比<>要快5ms,select * 的查找效率同样比逐字段查找快.
 
@@ -3989,18 +3911,18 @@ update salary set sex = char ( ASCII(sex) ^ ASCII('m') ^ ASCII('f'))
 SQL
 
 select id,
-	sum(case month when 'Jan' then revenue end) as 'Jan_Revenue',
-	sum(case month when 'Feb' then revenue end) as 'Feb_Revenue',
-	sum(case month when 'Mar' then revenue end) as 'Mar_Revenue',
-	sum(case month when 'Apr' then revenue end) as 'Apr_Revenue',
-	sum(case month when 'May' then revenue end) as 'May_Revenue',
-	sum(case month when 'Jun' then revenue end) as 'Jun_Revenue',
-	sum(case month when 'Jul' then revenue end) as 'Jul_Revenue',
-	sum(case month when 'Aug' then revenue end) as 'Aug_Revenue',
-	sum(case month when 'Sep' then revenue end) as 'Sep_Revenue',
-	sum(case month when 'Oct' then revenue end) as 'Oct_Revenue',
-	sum(case month when 'Nov' then revenue end) as 'Nov_Revenue',
-	sum(case month when 'Dec' then revenue end) as 'Dec_Revenue'
+   sum(case month when 'Jan' then revenue end) as 'Jan_Revenue',
+   sum(case month when 'Feb' then revenue end) as 'Feb_Revenue',
+   sum(case month when 'Mar' then revenue end) as 'Mar_Revenue',
+   sum(case month when 'Apr' then revenue end) as 'Apr_Revenue',
+   sum(case month when 'May' then revenue end) as 'May_Revenue',
+   sum(case month when 'Jun' then revenue end) as 'Jun_Revenue',
+   sum(case month when 'Jul' then revenue end) as 'Jul_Revenue',
+   sum(case month when 'Aug' then revenue end) as 'Aug_Revenue',
+   sum(case month when 'Sep' then revenue end) as 'Sep_Revenue',
+   sum(case month when 'Oct' then revenue end) as 'Oct_Revenue',
+   sum(case month when 'Nov' then revenue end) as 'Nov_Revenue',
+   sum(case month when 'Dec' then revenue end) as 'Dec_Revenue'
 from department group by id
 解析
 department 表中存储这所有人所有月的收入，这里的需求是将 department 的 month 列拆成具体的月份。具体实现：
@@ -4126,8 +4048,11 @@ sum(case `month` when 'Dec' then revenue else null  end) as 'Dec_Revenue'
 
 ```sql
   本篇文章介绍平时自己使用次数非常多的SQL查询语句，总结起来方便以后复习查看
+
 1. DDL(Data Definition Language)数据定义语言
+
 （1）操作数据库
+
 -- 创建库
 
 create database db1;
@@ -4153,6 +4078,7 @@ alter database db1 character set utf8;
 drop database db1;
 
 （2）操作表
+
 --创建表
 
 create table student(
@@ -4161,7 +4087,7 @@ create table student(
 
     name varchar(32),
 
-    age int ,
+    age int,
 
     score double(4,1),
 
@@ -4197,10 +4123,12 @@ alter table 表名 drop 列名;
 
 drop table 表名;
 
-drop table  if exists 表名 ;
+drop table if exists 表名 ;
 
 2. DML(Data Manipulation Language)数据操作语言
+
 （1）插入insert into
+
 -- 写全所有列名
 
 insert into 表名(列名1,列名2,...列名n) values(值1,值2,...值n);
@@ -4214,9 +4142,10 @@ insert into 表名 values(值1,值2,...值n);
 insert into 表名(列名1,列名2) values(值1,值2);
 
 （2）删除delete
+
 -- 删除表中数据
 
-delete from 表名 where 列名  = 值;
+delete from 表名 where 列名 = 值;
 
 -- 删除表中所有数据
 
@@ -4226,23 +4155,26 @@ delete from 表名;
 
 truncate table 表名;
 
- 
-
 （3）修改update
+
 -- 不带条件的修改(会修改所有行)
 
 update 表名 set 列名 = 值;
 
 -- 带条件的修改
 
-updata 表名 set 列名 = 值 where 列名=值;
+update 表名 set 列名 = 值 where 列名 = 值;
 
 （4）选择select
+
 select * from table1 where 范围
 
 1.  DQL(Data Query Language)数据查询语言
+
 （1）基础关键字
+
 ① BETWEEN...AND （在什么之间）和  IN( 集合)
+
 -- 查询年龄大于等于20 小于等于30
 
 SELECT * FROM student WHERE age >= 20 &&  age <=30;
@@ -4257,16 +4189,17 @@ SELECT * FROM student WHERE age = 22 OR age = 18 OR age = 25
 
 SELECT * FROM student WHERE age IN (22,18,25);
 
- 
 
-② is null(不为null值) 与 like（模糊查询）、distinct（去除重复值）
+
+② is null (不为null值) 与 like (模糊查询)、distinct (去除重复值)
+
 -- 查询英语成绩不为null
 
-SELECT * FROM student WHERE english  IS NOT NULL;
+SELECT * FROM student WHERE english IS NOT NULL;
 
 
 
- _:单个任意字符
+ _: 单个任意字符
 
  %：多个任意字符
 
@@ -4297,6 +4230,7 @@ SELECT DISTINCT NAME FROM  student ;
  
 
 （2）排序查询 order by
+
 -- 例子
 
 SELECT * FROM person ORDER BY math; --默认升序
@@ -4304,84 +4238,73 @@ SELECT * FROM person ORDER BY math; --默认升序
 SELECT * FROM person ORDER BY math desc; --降序
 
 （3）聚合函数
+
 将一列数据作为一个整体，进行纵向的计算。
 
 --总数：
 
-  select count as totalcount from table1
-
- 
+select count as totalcount from table1
 
 --求和：
 
 select sum(field1) as sumvalue from table1
 
- 
-
 --平均：      
 
- select avg(field1) as avgvalue from table1
+select avg(field1) as avgvalue from table1
 
- 
-
- --最大：       
+--最大：       
 
 select max(field1) as maxvalue from table1
-
- 
 
 --最小：
 
 select min(field1) as minvalue from table1        
 
+
+
 （4）分组查询 group by
+
 -- 按照性别分组。分别查询男、女同学的平均分
 
 SELECT sex , AVG(math) FROM student GROUP BY sex;
 
- 
-
 -- 按照性别分组。分别查询男、女同学的平均分,人数
 
- SELECT sex , AVG(math),COUNT(id) FROM student GROUP BY sex;
-
- 
+SELECT sex , AVG(math), COUNT(id) FROM student GROUP BY sex;
 
 --  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组
 
-SELECT sex , AVG(math),COUNT(id) FROM student WHERE math > 70 GROUP BY sex;
+SELECT sex , AVG(math), COUNT(id) FROM student WHERE math > 70 GROUP BY sex;
 
- 
+--  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组,分组之后。人数要大于2个人
 
- --  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组,分组之后。人数要大于2个人
+SELECT sex , AVG(math), COUNT(id) FROM student WHERE math > 70 GROUP BY sex HAVING COUNT(id) > 2;
 
-SELECT sex , AVG(math),COUNT(id) FROM student WHERE math > 70 GROUP BY sex HAVING COUNT(id) > 2;
+SELECT sex , AVG(math), COUNT(id) 人数 FROM student WHERE math > 70 GROUP BY sex HAVING 人数 > 2;
 
-SELECT sex , AVG(math),COUNT(id) 人数 FROM student WHERE math > 70 GROUP BY sex HAVING 人数 > 2;
+
 
 （5）分页查询limit
+
 语法：limit 开始的索引,每页查询的条数; 
 
 公式：开始的索引 = （当前的页码 - 1） * 每页显示的条数
 
 -- 每页显示3条记录
 
- 
-
 SELECT * FROM student LIMIT 0,3; -- 第1页
 
- 
-
 SELECT * FROM student LIMIT 3,3; -- 第2页
-
- 
 
 SELECT * FROM student LIMIT 6,3; -- 第3页
 
  
 
 （6）外连接查询
+
 ① 左外连接 -- 查询的是左表所有数据以及其交集部分
+
 -- 语法：select 字段列表 from 表1 left [outer] join 表2 on 条件；
 
 -- 例子：
@@ -4391,6 +4314,7 @@ SELECT * FROM student LIMIT 6,3; -- 第3页
 SELECT  t1.*,t2.`name` FROM emp t1 LEFT JOIN dept t2 ON t1.`dept_id` = t2.`id`;
 
 ② 右外连接 -- 查询的是右表所有数据以及其交集部分
+
 -- 语法：
 
 select 字段列表 from 表1 right [outer] join 表2 on 条件；
@@ -4417,348 +4341,6 @@ SELECT * FROM emp WHERE emp.`salary` = 9000;
  -- 一条sql就完成这个操作。这就是子查询
 
 SELECT * FROM emp WHERE emp.`salary` = (SELECT MAX(salary) FROM emp);
-
-
-```
-
-###  4.22. <a name='2'></a>总结2
-
-```sql
-MYSQL:
-
-select 字段1,字段2,  if(条件,条件满足返回值，条件不满足返回值)  as  字段3  from 表  where  ……group  by ……
-
-字段3的AS，可省略
-
-
-
-若涉及子查询，需要自定义名
-
-select   字段1,字段2,字段3 from
-
-       (select   字段1,字段2, if(条件,条件满足返回值，条件不满足返回值)  as  字段3  
-
-from 表            
-where  ……
-group  by …… )  as  b
-group by  ……
-
-子查询的as不可省略
-
-
-
-
-
-oracle:
-
-  select  字段1,字段2，decode(条件,条件满足返回值，条件不满足返回值) 字段3  from 表 where ……group by ……
-
-字段3的AS，可省略
-
-
-
-子查询可不用自定义名，子查询可以多表直接交叉，示例
-
-select sl.loc 位置, sku.prod_code 货号, sku.descr 说明, sl.qty 现有量,
-
-      sl.qtyallocated 分配量,ceil(sysdate-sl.editdate+1/3) 未动销天数,sku.category1 品类
-
-from skuxloc sl
-
-join sku on sku.storerkey = sl.storerkey and sl.sku = sku.sku
-
-where qty > 0 and sl.locationtype='PICK' and  sku.category1 in ('皮具','童装') and 
-
-      exists (select 1 from
-
-                      ( select storerkey,sku from skuxloc t where qty > 0 and  t.locationtype='PICK' group by storerkey,sku having count(1) > 1 ) a
-
-                        where a.sku = sku.sku and a.storerkey = sku.storerkey and sl.qtyallocated<>sl.qty)
-
-order by sku.sku
-
-
-
-
-
-
-
-
-
-VBA_SQL:
-
-
-
-select   字段1,字段2,iif(条件,条件满足返回值，条件不满足返回值)  as 字段3   from [表$]  group by ……
-
-字段3的AS，不可省略
-
-
-
-子查询可不用自定义名，但每次次只能套一个子查询，交叉表一次仅一个，示例：
-
-
-
-      asql = "select a.分公司,a.物料编号,a.单位,b.体积*sum(a.开单量) as 体积,sum(a.开单量) as 数量 from [SAP元数据$] as a    " _
-
-         & "left join (select DISTINCT 货号,单位,max(体积) as 体积 from [货号体积$] WHERE 体积>=1  GROUP BY 货号,单位 ) as b on b.货号=a.物料编号 and b.单位=a.单位    " _
-
-         & "where  a.开单量>=1  " _
-
-         & "group by a.分公司,a.物料编号,a.单位,b.体积  "
-
-         
-
-      asql = "select 分公司,sum(数量) as 总数量,round(sum(体积)/1000000,2) as 总体积M3 from (" & asql & ")   where 数量>=1 group by 分公司  "
-
-        bsql = "select a.分公司,left(right(a.物料描述,2),1) & '鞋' as 类别,b.参照季节 as 季节,a.单位 as 型号,sum(a.开单量) as 数量,a.开单日期 from [SAP元数据$]   as a  " _
-
-                    & "left join  [季节$] as b on b.季节代码=a.季节       " _
-
-                    & "group by a.分公司,left(right(a.物料描述,2),1),b.参照季节,a.单位,a.开单日期  " _
-
-                    & "order by  a.分公司,left(right(a.物料描述,2),1),b.参照季节,a.单位         "
-
-        
-
-        csql = "select aa.分公司,count(aa.分公司) as 订单数量,bb.总数量,bb.总体积M3 from (" & bsql & ")  as aa    " _
-
-            & "left join (" & asql & ") as bb on bb.分公司=aa.分公司 " _
-
-            & " group by aa.分公司,bb.总数量,bb.总体积M3 "
-
-        
-
-        
-
-        bsql = "select a.分公司,b.分公司代码,b.品牌,b.承运商,b.承运商代码,iif(b.计划单时间='原数据里的开单日期','原数据里的开单日期',format(b.计划单时间,'yyyy.mm.dd')) as 计划单时间, " _
-
-                & "      b.提货点,b.提货时间,a.类别,a.季节,a.型号,a.数量,format(a.开单日期,'yyyy.mm.dd') as 开单日期 from (" & bsql & " ) as a  " _
-
-               & "left join [承运对照$] as b on b.备注=a.分公司  "
-
-        ssql = "select a.分公司,a.分公司代码,a.品牌,a.承运商,a.承运商代码,iif(a.计划单时间='原数据里的开单日期',a.开单日期,a.计划单时间) as  计划单时间,   " _
-
-               & "     a.提货点,format(a.提货时间,'hh:mm') as 提货时间,b.订单数量,b.总数量,b.总体积M3,a.类别,a.季节,a.型号,a.数量 from (" & bsql & " ) as a  " _
-
-               & "left join (" & csql & " ) as b on b.分公司=a.分公司 "
-
-
-
-注，在VBA开发工具中，跨行需要拼接符&进行拼接，而MYSQL与ORACLE语句直接回车跨行即可；
-
-但如若MYSQL与ORACLE在VBA编辑开发工具中，引用，则需要用同样的方法进行&字符拼接；
-
-
-
-以上为，三种SQL语句应用区别的简述，更多的需要实践中，不断去应用才能发现各自的区别，以及各自互相切换着应用时，如果左右手互换着来。
-```
-
-```sql
-7) mysql的group by 语句可以select 没有被分组的字段，如 
-select id,name,age from A group by age 这样 
-但是在orcale和sqlserver中是会报错的。这个取出的id,name所在的行是每个分组中的第一行数据。 
-
-8)orcale用decode()来转换数据，mysql,sqlserver用case when: 
-case t.DETECT_RESULT when '2402' then t.SAMPLEID end (必须有end) 
-
-9)mysql: 两个select 出的数据相减： 
-(COUNT(distinct(t.SAMPLEID))- 
-CONVERT((COUNT(distinct(case t.DETECT_RESULT when '2402' then t.SAMPLEID end))), SIGNED)) AS NEGATIVE 
-FROM `view_sims_for_report` t 
-10）convert,cast用法 
-mysql将varchar转为int 
-convert(字段名, SIGNED) 
-字符集转换 : CONVERT(xxx USING gb2312) 
-类型转换和SQL Server一样,就是类型参数有点不同 : CAST(xxx AS 类型) , CONVERT(xxx,类型) 
-可用的类型　 
-二进制,同带binary前缀的效果 : BINARY 
-字符型,可带参数 : CHAR() 
-日期 : DATE 
-时间: TIME 
-日期时间型 : DATETIME 
-浮点数 : DECIMAL 
-整数 : SIGNED 
-无符号整数 : UNSIGNED 
-```
-
-```sql
-数据库，顾名思义就是存储数据的仓库。目前常用的数据库如Oracle、Sybase等各有其千秋，但是如果挑出一款最为流行的数据库软件，非MySql莫属。SQL，Structured Query Language结构化查询语言，是MySql的使用语言，也是我们在MySql数据库中对数据进行数据操作、查询、修改等操作的工具。
-
-创建数据库
-一列数据是一个字段，多个字段构成数据表，而数据库就是大量带有相关数据的表的集合。所以，在使用MySql的时候，我们首先要做的就是创建数据库。
-
-create database test；
-
-在此段语句中，create database是关键词，test是创建的数据库的名称。对于数据库的操作，常用的还有以下语句：
-
-查看创建好的数据库test：show create database test；
-
-查看所有数据库：show databases；
-
-使用数据库test：use test
-
-删除数据库test：drop database test；
-
-注意，在每一次新打开数据库的时候，必须先运行use test语句，才能对数据库test进行后续操作，否则就会报错。
-
-创建数据表
-创建好数据库以后，我们需要把数据表导入数据库。下面语句是一个表的导入的实例：
-
-use test；
-
-create table student（
-
-ID char（3） primary key，
-
-Name varchar（20）not null，
-
-Credit int not null）；
-
-上面是导入一个学生学分的表格。一共有三个字段：学生ID、名字以及学分。在穿件表格的时候，我们需要对每一个字段作两个限定。第一个是字段类型限定，字段类型有字符串（即文本类型）、数字、日期等，我们需要对此做说明。在此例中，char（3）代表固定长度为3的字符串型数据，varchar（20）代表可变长度的最大长度为20的字符串型数据，int代表整数型数据。第二是约束条件限定，我们对数据的约束有：非空约束（not null）、唯一约束（unique）、主键约束（primary key）等。其中主键约束最为重要，因为不同数据表进行联系的时候都是通过主键来进行，主键必须同时满足非空和唯一。
-
-导入数据
-创建好表格的框架以后，我们需要将数据导入进去。按照数据来源区分一般有两种：手工输入或者导入本地文件，手工输入费时耗力，在这里只说明本地文件的导入。
-
-load data local infil ‘文件路径.txt’
-
-into table student
-
-fields terminated by ‘\t’
-
-ignore 1 lines；
-
-这一段语句里面我们需要注意的是后两行，txt文件格式对应‘\t’，excel的文件对应‘，’。另外当本地文件第一行不是每一列数据的字段名而是数据的时候，第一行数据不能忽视，所以代码的最后一行可以不写。
-
-修改语句
-alter table student rename st;将数据表student改名为st
-
-alter table student modify name varchar(30);将字段name的数据类型改为varchar（30）
-
-alter table student change name nm varchar(30);字段name改名为nm
-
-alter table student add sex varchar(20) not null; 增加字段sex数据类型varchar（20）且非空
-```
-
-```sql
-1， 对查询进行优化，应尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引。
-2，应尽量避免在 where 子句中对字段进行 null 值判断，创建表时NULL是默认值，但大多数时候应该使用NOT NULL，或者使用一个特殊的值，如0，-1作为默 认值。
-3，应尽量避免在 where 子句中使用!=或<>操作符， MySQL只有对以下操作符才使用索引：<，<=，=，>，>=，BETWEEN，IN，以及某些时候的LIKE。
-4，应尽量避免在 where 子句中使用 or 来连接条件， 否则将导致引擎放弃使用索引而进行全表扫描， 可以 使用UNION合并查询：select id from t where num=10 union all select id from t where num=20
-5，in 和 not in 也要慎用，否则会导致全表扫描，对于连续的数值，能用 between 就不要用 in 了：Select id from t where num between 1 and 3
-6，下面的查询也将导致全表扫描：select id from t where name like ‘%abc%’ 或者select id from t where name like ‘%abc’若要提高效率，可以考虑全文检索。而select id from t where name like ‘abc%’ 才用到索引
-7， 如果在 where 子句中使用参数，也会导致全表扫描。
-8，应尽量避免在 where 子句中对字段进行表达式操作，应尽量避免在where子句中对字段进行函数操作
-9,很多时候用 exists 代替 in 是一个好的选择：select num from a where num in(select num from b).用下面的语句替换：select num from a where exists(select 1 from b where num=a.num)
-10,索引固然可以提高相应的 select 的效率，但同时也降低了 insert 及 update 的效率，因为 insert 或 update 时有可能会重建索引，所以怎样建索引需要慎重考虑，视具体情况而定。一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有必要。
-11,应尽可能的避免更新 clustered 索引数据列， 因为 clustered 索引数据列的顺序就是表记录的物理存储顺序，一旦该列值改变将导致整个表记录的顺序的调整，会耗费相当大的资源。若应用系统需要频繁更新 clustered 索引数据列，那么需要考虑是否应将该索引建为 clustered 索引。
-12，尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。
-13，尽可能的使用 varchar/nvarchar 代替 char/nchar ， 因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些。
-14，最好不要使用”“返回所有：select from t ，用具体的字段列表代替“*”，不要返回用不到的任何字段。
-15，尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理。
-16，使用表的别名(Alias)：当在SQL语句中连接多个表时,请使用表的别名并把别名前缀于每个Column上.这样一来,就可以减少解析的时间并减少那些由Column歧义引起的语法错误。
-17，使用“临时表”暂存中间结果 
-简化SQL语句的重要方法就是采用临时表暂存中间结果，但是，临时表的好处远远不止这些，将临时结果暂存在临时表，后面的查询就在tempdb中了，这可以避免程序中多次扫描主表，也大大减少了程序执行中“共享锁”阻塞“更新锁”，减少了阻塞，提高了并发性能。
-18，一些SQL查询语句应加上nolock，读、写是会相互阻塞的，为了提高并发性能，对于一些查询，可以加上nolock，这样读的时候可以允许写，但缺点是可能读到未提交的脏数据。使用 nolock有3条原则。查询的结果用于“插、删、改”的不能加nolock ！查询的表属于频繁发生页分裂的，慎用nolock ！使用临时表一样可以保存“数据前影”，起到类似Oracle的undo表空间的功能，能采用临时表提高并发性能的，不要用nolock 。
-19，常见的简化规则如下：不要有超过5个以上的表连接（JOIN），考虑使用临时表或表变量存放中间结果。少用子查询，视图嵌套不要过深,一般视图嵌套不要超过2个为宜。
-20，将需要查询的结果预先计算好放在表中，查询的时候再Select。这在SQL7.0以前是最重要的手段。例如医院的住院费计算。
-21，用OR的字句可以分解成多个查询，并且通过UNION 连接多个查询。他们的速度只同是否使用索引有关,如果查询需要用到联合索引，用UNION all执行的效率更高.多个OR的字句没有用到索引，改写成UNION的形式再试图与索引匹配。一个关键的问题是否用到索引。
-22，在IN后面值的列表中，将出现最频繁的值放在最前面，出现得最少的放在最后面，减少判断的次数。
-23，尽量将数据的处理工作放在服务器上，减少网络的开销，如使用存储过程。存储过程是编译好、优化过、并且被组织到一个执行规划里、且存储在数据库中的SQL语句，是控制流语言的集合，速度当然快。反复执行的动态SQL,可以使用临时存储过程，该过程（临时表）被放在Tempdb中。
-24，当服务器的内存够多时，配制线程数量 = 最大连接数+5，这样能发挥最大的效率；否则使用 配制线程数量<最大连接数启用SQL SERVER的线程池来解决,如果还是数量 = 最大连接数+5，严重的损害服务器的性能。
-25，查询的关联同写的顺序 
-select a.personMemberID, * from chineseresume a,personmember b where personMemberID = b.referenceid and a.personMemberID = 'JCNPRH39681' (A = B ,B = '号码') 
-select a.personMemberID, * from chineseresume a,personmember b where a.personMemberID = b.referenceid and a.personMemberID = 'JCNPRH39681' and b.referenceid = 'JCNPRH39681' (A = B ,B = '号码'， A = '号码') 
-select a.personMemberID, * from chineseresume a,personmember b where b.referenceid = 'JCNPRH39681' and a.personMemberID = 'JCNPRH39681' (B = '号码'， A = '号码')
-26，尽量使用exists代替select count(1)来判断是否存在记录，count函数只有在统计表中所有行数时使用，而且count(1)比count(*)更有效率。
-27，尽量使用“>=”，不要使用“>”。
-28，索引的使用规范：索引的创建要与应用结合考虑，建议大的OLTP表不要超过6个索引；尽可能的使用索引字段作为查询条件，尤其是聚簇索引，必要时可以通过index index_name来强制指定索引；避免对大表查询时进行table scan，必要时考虑新建索引；在使用索引字段作为条件时，如果该索引是联合索引，那么必须使用到该索引中的第一个字段作为条件时才能保证系统使用该索引，否则该索引将不会被使用；要注意索引的维护，周期性重建索引，重新编译存储过程。　　
-29，下列SQL条件语句中的列都建有恰当的索引，但执行速度却非常慢： 
-SELECT * FROM record WHERE substrINg(card_no,1,4)='5378' (13秒) 
-SELECT * FROM record WHERE amount/30< 1000 （11秒） 
-SELECT * FROM record WHERE convert(char(10),date,112)='19991201' （10秒）
-分析： 
-WHERE子句中对列的任何操作结果都是在SQL运行时逐列计算得到的，因此它不得不进行表搜索，而没有使用该列上面的索引；如果这些结果在查询编译时就能得到，那么就可以被SQL优化器优化，使用索引，避免表搜索，因此将SQL重写成下面这样： 
-SELECT * FROM record WHERE card_no like '5378%' （< 1秒） 
-SELECT * FROM record WHERE amount< 1000*30 （< 1秒） 
-SELECT * FROM record WHERE date= '1999/12/01' （< 1秒）
-30，当有一批处理的插入或更新时，用批量插入或批量更新，绝不会一条条记录的去更新!
-31，在所有的存储过程中，能够用SQL语句的，我绝不会用循环去实现! 
-(例如：列出上个月的每一天，我会用connect by去递归查询一下，绝不会去用循环从上个月第一天到最后一天)
-32，选择最有效率的表名顺序(只在基于规则的优化器中有效)： 
-oracle 的解析器按照从右到左的顺序处理FROM子句中的表名，FROM子句中写在最后的表(基础表 driving table)将被最先处理，在FROM子句中包含多个表的情况下,你必须选择记录条数最少的表作为基础表。如果有3个以上的表连接查询, 那就需要选择交叉表(intersection table)作为基础表, 交叉表是指那个被其他表所引用的表.
-33，提高GROUP BY语句的效率, 可以通过将不需要的记录在GROUP BY 之前过滤掉.下面两个查询返回相同结果，但第二个明显就快了许多. 
-低效: 
-SELECT JOB , AVG(SAL) 
-FROM EMP 
-GROUP BY JOB 
-HAVING JOB ='PRESIDENT'
-OR JOB ='MANAGER'
-高效: 
-SELECT JOB , AVG(SAL) 
-FROM EMP 
-WHERE JOB ='PRESIDENT'
-OR JOB ='MANAGER'
-GROUP BY JOB
-34，sql语句用大写，因为oracle 总是先解析sql语句，把小写的字母转换成大写的再执行。
-35，别名的使用，别名是大型数据库的应用技巧，就是表名、列名在查询中以一个字母为别名，查询速度要比建连接表快1.5倍。
-36，避免死锁，在你的存储过程和触发器中访问同一个表时总是以相同的顺序;事务应经可能地缩短，在一个事务中应尽可能减少涉及到的数据量;永远不要在事务中等待用户输入。
-37，避免使用临时表，除非却有需要，否则应尽量避免使用临时表，相反，可以使用表变量代替;大多数时候(99%)，表变量驻扎在内存中，因此速度比临时表更快，临时表驻扎在TempDb数据库中，因此临时表上的操作需要跨数据库通信，速度自然慢。
-38，最好不要使用触发器，触发一个触发器，执行一个触发器事件本身就是一个耗费资源的过程;如果能够使用约束实现的，尽量不要使用触发器;不要为不同的触发事件(Insert，Update和Delete)使用相同的触发器;不要在触发器中使用事务型代码。
-39，索引创建规则： 
-表的主键、外键必须有索引； 
-数据量超过300的表应该有索引； 
-经常与其他表进行连接的表，在连接字段上应该建立索引； 
-经常出现在Where子句中的字段，特别是大表的字段，应该建立索引； 
-索引应该建在选择性高的字段上； 
-索引应该建在小字段上，对于大的文本字段甚至超长字段，不要建索引； 
-复合索引的建立需要进行仔细分析，尽量考虑用单字段索引代替； 
-正确选择复合索引中的主列字段，一般是选择性较好的字段； 
-复合索引的几个字段是否经常同时以AND方式出现在Where子句中？单字段查询是否极少甚至没有？如果是，则可以建立复合索引；否则考虑单字段索引； 
-如果复合索引中包含的字段经常单独出现在Where子句中，则分解为多个单字段索引； 
-如果复合索引所包含的字段超过3个，那么仔细考虑其必要性，考虑减少复合的字段； 
-如果既有单字段索引，又有这几个字段上的复合索引，一般可以删除复合索引； 
-频繁进行数据操作的表，不要建立太多的索引； 
-删除无用的索引，避免对执行计划造成负面影响； 
-表上建立的每个索引都会增加存储开销，索引对于插入、删除、更新操作也会增加处理上的开销。另外，过多的复合索引，在有单字段索引的情况下，一般都是没有存在价值的；相反，还会降低数据增加删除时的性能，特别是对频繁更新的表来说，负面影响更大。 
-尽量不要对数据库中某个含有大量重复的值的字段建立索引。
-40，mysql查询优化总结：使用慢查询日志去发现慢查询，使用执行计划去判断查询是否正常运行，总是去测试你的查询看看是否他们运行在最佳状态下。久而久之性能总会变化，避免在整个表上使用count(*),它可能锁住整张表，使查询保持一致以便后续相似的查询可以使用查询缓存 
-，在适当的情形下使用GROUP BY而不是DISTINCT，在WHERE, GROUP BY和ORDER BY子句中使用有索引的列，保持索引简单,不在多个索引中包含同一个列，有时候MySQL会使用错误的索引,对于这种情况使用USE INDEX，检查使用SQL_MODE=STRICT的问题，对于记录数小于5的索引字段，在UNION的时候使用LIMIT不是是用OR。 
-为了 避免在更新前SELECT，使用INSERT ON DUPLICATE KEY或者INSERT IGNORE ,不要用UPDATE去实现，不要使用 MAX,使用索引字段和ORDER BY子句，LIMIT M，N实际上可以减缓查询在某些情况下，有节制地使用，在WHERE子句中使用UNION代替子查询，在重新启动的MySQL，记得来温暖你的数据库，以确保您的数据在内存和查询速度快，考虑持久连接，而不是多个连接，以减少开销，基准查询，包括使用服务器上的负载，有时一个简单的查询可以影响其他查询，当负载增加您的服务器上，使用SHOW PROCESSLIST查看慢的和有问题的查询，在开发环境中产生的镜像数据中 测试的所有可疑的查询。
-41，MySQL 备份过程: 
-从二级复制服务器上进行备份。在进行备份期间停止复制，以避免在数据依赖和外键约束上出现不一致。彻底停止MySQL，从数据库文件进行备份。 
-如果使用 MySQL dump进行备份，请同时备份二进制日志文件 – 确保复制没有中断。不要信任LVM 快照，这很可能产生数据不一致，将来会给你带来麻烦。为了更容易进行单表恢复，以表为单位导出数据 – 如果数据是与其他表隔离的。 
-当使用mysqldump时请使用 –opt。在备份之前检查和优化表。为了更快的进行导入，在导入时临时禁用外键约束。 
-为了更快的进行导入，在导入时临时禁用唯一性检测。在每一次备份后计算数据库，表以及索引的尺寸，以便更够监控数据尺寸的增长。 
-通过自动调度脚本监控复制实例的错误和延迟。定期执行备份。
-42，查询缓冲并不自动处理空格，因此，在写SQL语句时，应尽量减少空格的使用，尤其是在SQL首和尾的空格(因为，查询缓冲并不自动截取首尾空格)。
-43，member用mid做標準進行分表方便查询么？一般的业务需求中基本上都是以username为查询依据，正常应当是username做hash取模来分表吧。分表的话 mysql 的partition功能就是干这个的，对代码是透明的； 
-在代码层面去实现貌似是不合理的。
-44，我们应该为数据库里的每张表都设置一个ID做为其主键，而且最好的是一个INT型的（推荐使用UNSIGNED），并设置上自动增加的AUTO_INCREMENT标志。
-45，在所有的存储过程和触发器的开始处设置 SET NOCOUNT ON ，在结束时设置 SET NOCOUNT OFF 。 
-无需在执行存储过程和触发器的每个语句后向客户端发送 DONE_IN_PROC 消息。
-46，MySQL查询可以启用高速查询缓存。这是提高数据库性能的有效Mysql优化方法之一。当同一个查询被执行多次时，从缓存中提取数据和直接从数据库中返回数据快很多。
-47，EXPLAIN SELECT 查询用来跟踪查看效果 
-使用 EXPLAIN 关键字可以让你知道MySQL是如何处理你的SQL语句的。这可以帮你分析你的查询语句或是表结构的性能瓶颈。EXPLAIN 的查询结果还会告诉你你的索引主键被如何利用的，你的数据表是如何被搜索和排序的……等等，等等。
-48，当只要一行数据时使用 LIMIT 1 
-当你查询表的有些时候，你已经知道结果只会有一条结果，但因为你可能需要去fetch游标，或是你也许会去检查返回的记录数。在这种情况下，加上 LIMIT 1 可以增加性能。这样一样，MySQL数据库引擎会在找到一条数据后停止搜索，而不是继续往后查少下一条符合记录的数据。
-49,选择表合适存储引擎： 
-myisam: 应用时以读和插入操作为主，只有少量的更新和删除，并且对事务的完整性，并发性要求不是很高的。 
-Innodb：事务处理，以及并发条件下要求数据的一致性。除了插入和查询外，包括很多的更新和删除。（Innodb有效地降低删除和更新导致的锁定）。对于支持事务的InnoDB类型的表来说，影响速度的主要原因是AUTOCOMMIT默认设置是打开的，而且程序没有显式调用BEGIN 开始事务，导致每插入一条都自动提交，严重影响了速度。可以在执行sql前调用begin，多条sql形成一个事物（即使autocommit打开也可以），将大大提高性能。
-50,优化表的数据类型,选择合适的数据类型： 
-原则：更小通常更好，简单就好，所有字段都得有默认值,尽量避免null。 
-例如：数据库表设计时候更小的占磁盘空间尽可能使用更小的整数类型.(mediumint就比int更合适) 
-比如时间字段：datetime和timestamp, datetime占用8个字节，而timestamp占用4个字节，只用了一半，而timestamp表示的范围是1970—2037适合做更新时间 
-MySQL可以很好的支持大数据量的存取，但是一般说来，数据库中的表越小，在它上面执行的查询也就会越快。 
-因此，在创建表的时候，为了获得更好的性能，我们可以将表中字段的宽度设得尽可能小。例如， 
-在定义邮政编码这个字段时，如果将其设置为CHAR(255),显然给数据库增加了不必要的空间， 
-甚至使用VARCHAR这种类型也是多余的，因为CHAR(6)就可以很好的完成任务了。同样的，如果可以的话， 
-我们应该使用MEDIUMINT而不是BIGIN来定义整型字段。 
-应该尽量把字段设置为NOT NULL，这样在将来执行查询的时候，数据库不用去比较NULL值。 
-对于某些文本字段，例如“省份”或者“性别”，我们可以将它们定义为ENUM类型。因为在MySQL中，ENUM类型被当作数值型数据来处理， 
-而数值型数据被处理起来的速度要比文本类型快得多。这样，我们又可以提高数据库的性能。
-51， 字符串数据类型：char，varchar，text选择区别
-52，任何对列的操作都将导致表扫描，它包括数据库函数、计算表达式等等，查询时要尽可能将操作移至等号右边。
 ```
 
 ```sql

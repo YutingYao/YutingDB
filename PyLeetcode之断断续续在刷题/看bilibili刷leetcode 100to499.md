@@ -9246,7 +9246,7 @@ class Solution:
             if r.left or r.right:
                 r.left, r.right = r.right, r.left
                 if r.left and r.right:
-                    Q.append(r.left)
+                    Q.append(r.left) 
                     Q.append(r.right)
                 elif r.right and not r.left:
                     Q.append(r.right)
@@ -16748,6 +16748,8 @@ object Solution2-1 {
 ```
 
 ###  1.214. <a name='ArrangingCoins'></a>441 Arranging Coins
+
+
 
 [小明](https://www.bilibili.com/video/BV1eV411k7rg?spm_id_from=333.999.0.0)
 

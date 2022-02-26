@@ -1,15 +1,12 @@
-class Solution:
-    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
-        res = []
-        nums.sort()
-        def backtrack(nums,path):
-            if not nums:
-                res.append(path[:])
-            else:
-                for i in range(len(nums)):
-                    if i > 0 and nums[i] == nums[i-1]:
-                        continue
-                    backtrack(nums[:i] + nums[i+1:],path + [nums[i]])
+class Solution(object):
+    def isCompleteTree(self, root):
+        stack = [(root, 1)]
+        i = 0
+        while i < len(stack):
+            node, v = stack[i]
+            i += 1
+            if node:
+                stack.append((node.left, 2 * v))
+                stack.append((node.right, 2 * v + 1))
 
-        backtrack(nums,[])
-        return res
+        return  stack[-1][1] == len(stack)

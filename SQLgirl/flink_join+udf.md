@@ -88,6 +88,7 @@ AND o.order_time BETWEEN s.ship_time - INTERVAL '4' HOUR AND s.ship_time
 WATERMARK FOR order_time AS order_time
 WATERMARK FOR update_time AS update_time
 WATERMARK FOR user_action_time AS user_action_time - INTERVAL '5' SECOND
+
 -- 声明 user_action_time 是`事件时间属性`，并且用 延迟 5 秒的策略来生成 watermark
 
 WATERMARK FOR time_ltz AS time_ltz - INTERVAL '5' SECOND
