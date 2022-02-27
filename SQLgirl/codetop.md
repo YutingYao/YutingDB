@@ -6894,19 +6894,10 @@ object Solution {
 ##  105. <a name='-1'></a>498. 对角线遍历
 
 ```py
-class Solution:
-    def findDiagonalOrder(self, matrix: List[List[int]]) -> List[int]:
-        m, n, res = len(matrix), len(matrix) and len(matrix[0]), []
-        for idx in range(m + n - 1):
-            tmp = [matrix[i][idx - i] for i in range(max(0, idx + 1 - n), min(idx + 1, m))] # 范围其实是: min(idx, m-1)
-            res += tmp if idx % 2 else tmp[::-1]
-        return res
+
 
 '''
-每层的索引和相等：
-1. 假设矩阵无限大；
-2. 索引和为{偶}数，向上遍历，{横}索引值递减，遍历值依次是(x,0),(x-1,1),(x-2,2),...,(0,x)
-3. 索引和为{奇}数，向下遍历，{纵}索引值递减，遍历值依次是(0,y),(1,y-1),(2,y-2),...,(y,0)
+
 
     m, n = 7
    每层的索引和:
@@ -6928,28 +6919,13 @@ class Solution:
 '''
 
 
-class Solution:
-    def findDiagonalOrder(self, matrix: List[List[int]]) -> List[int]:
-        m, n = len(matrix), len(matrix) and len(matrix[0])
-        tmp = collections.defaultdict(list)
-        for i in range(m):
-            for j in range(n):
-                tmp[i + j].append(matrix[i][j])
-                # 00 逆序  i % 2 = 0  diag[::-1]
-                # 01 正序  i % 2 = 1  diag
-                # 02 逆序  i % 2 = 0  diag[::-1]
-                # 03 正序  i % 2 = 1  diag
-        res = []
-        sign = -1
-        for k in tmp: # 必须排序，建议记忆下面的
-            res.extend(tmp[k][::sign])
-            sign *= -1
-        return res
+
 
 
 class Solution:
     def findDiagonalOrder(self, matrix: List[List[int]]) -> List[int]:
         m, n = len(matrix), len(matrix) and len(matrix[0])
+        # tmp = collections.defaultdict(list), 这个方法相对没那么好
         tmp = [[] for _ in range(m + n - 1)]
         for i in range(m):
             for j in range(n):
@@ -7162,7 +7138,7 @@ class Solution:
         if n < 2:
             return n
         dp0, dp1 = 0, 1
-        for _ in range(2, n + 1):
+        for _ in range(2, n + 1): # 注意：这里的边界
             dp1, dp0 = (dp1 + dp0) % MOD, dp1
             # index: 1 2 3 4 5
             # fib:   1 1 2 3 5
@@ -7193,14 +7169,16 @@ class Solution:
 ```py
 class Solution:
     def generateMatrix(self, n: int) -> List[List[int]]:
-        res = [[0 for _ in range(n)] for _ in range(n)]
-        x, y, dx, dy = 0, 0, 0, 1 
+        res    = [[0 for _ in range(n)] for _ in range(n)]
+        x,  y  = 0, 0 
+        dx, dy = 0, 1
         # 0,1 -> 1,0 -> 0,-1 -> -1,0
         for num in range(1, n * n + 1):
             res[x][y] = num
+            nx, ny = x + dx, y + dy
 
-            if not 0 <= x + dx < n or not 0 <= y + dy < n or res[x+dx][y+dy] != 0:
-            # 易错点：or res[x+dx][y+dy] != 0 顺序很重要，一定要在最后，就像贪吃蛇
+            if not 0 <= nx < n or not 0 <= ny < n or res[nx][ny] != 0:
+            # 易错点：or res[nx][ny] != 0 顺序很重要，一定要在最后，就像贪吃蛇
                 dx, dy = dy, -dx # 调头
 
             x += dx
@@ -7219,13 +7197,20 @@ class Solution(object):
     def oddEvenList(self, head):
         if head == None:
             return head
-
-        odd = oddHead = head
+        # odd 和 even 都是移动指针
+        # evenHead 是固定的
+    
+        odd  = head
         even = evenHead = head.next
+        # 当 2 和 3 存在
         while even and even.next:
+            # 1 -> 2的后面
             odd.next = even.next
+            # 1 变成 3
             odd = odd.next
+            # 2 -> 3的后面
             even.next = odd.next 
+            # 2 变成 4
             even = even.next
         odd.next = evenHead # 先奇数，后偶数
         return head 
@@ -7267,29 +7252,28 @@ class Solution:
         odd.next = None # 节点需要断开
         return [head,evenHead]    
 
-    def reverse(self,head):        
-        dummy = ListNode(-1)        
-        p = head        
-        while p:            
-            tmp = p.next            
-            p.next = dummy.next            
-            dummy.next = p            
-            p = tmp        
-        return dummy.next    
+    def reverse(self,head):    
+        res = None
+        while head:
+            headnxt = head.next
+            head.next = res
+            res = head
+            head = headnxt
+        return res    
 
     def merge(self,p,q):        
-        head = ListNode(-1)        
-        r = head        
+        dummy = ListNode(0)        
+        cur = dummy        
         while p and q:            
             if p.val <= q.val:               
-                r.next = p                
+                cur.next = p                
                 p = p.next            
             else:                
-                r.next = q                
+                cur.next = q                
                 q = q.next            
-            r = r.next        
-        r.next = p or q        
-        return head.next
+            cur = cur.next        
+        cur.next = p or q        
+        return dummy.next
 ```
 
 ##  118. <a name='Offer40.k'></a>剑指 Offer 40. 最小的k个数
@@ -7313,10 +7297,16 @@ class Solution:
         hp = [-x for x in arr[:k]]
         heapq.heapify(hp)
         for i in range(k, len(arr)):
-            if -hp[0] > arr[i]:
+            if -hp[0] > arr[i]: # arr[i] 更小，则更符合条件，所以放进hp去
                 heapq.heappushpop(hp, -arr[i])
         ans = [-x for x in hp]
         return ans
+
+输入：arr = [3,2,1], k = 2
+输出：[1,2] 或者 [2,1]
+hp：
+[-3, -2]
+[-2, -1]
 
 ```
 
@@ -7355,11 +7345,11 @@ class Solution:
         res = 0
         while i < len(s):
             if s[i].isdigit():
-                n = 0
+                num = 0
                 while i < len(s) and s[i].isdigit():
-                    n = 10 * n + int(s[i])
+                    num = 10 * num + int(s[i])
                     i += 1
-                res += sign * n
+                res += sign * num
             else:
                 if s[i] == '+':   sign = stack[-1]
                 elif s[i] == '-': sign = -stack[-1]
@@ -7380,13 +7370,17 @@ class Solution:
 形成一个新的最小的数字：
 
 ```py
+输入：num = "1432219", k = 3
+输出："1219"
+解释：移除掉三个数字 4, 3, 和 2 形成一个新的最小的数字 1219 。
+
 class Solution:
     def removeKdigits(self, num: str, k: int) -> str:
         numStack = []
         
         # 构建单调递增的数字串
         for digit in num:
-            while k and numStack and numStack[-1] > digit:
+            while k and numStack and numStack[-1] > digit: # 3个条件
                 numStack.pop()
                 k -= 1
         
@@ -7411,6 +7405,7 @@ class Solution:
 ```
 
 ```py
+目标：是让 graph 里面，全部进入 que，最后进入 res
 class Solution:
     def haveCircularDependency(self, n: int, prerequisites):
         graph = [[] for _ in range(n)] # 邻接表存储图结构
@@ -7421,12 +7416,13 @@ class Solution:
             graph[a].append(b)
             indegree[b] += 1
             
-        res = [] # 存储结果序列
-        que = deque()
         # 一次性将入度为0的点全部入队
+        que = deque()
         for i in range(n):
             if indegree[i] == 0:
                 que.append(i)
+
+        res = []
         while que:
             start = que.popleft()
             res.append(start)
@@ -7435,6 +7431,7 @@ class Solution:
                 indegree[end] -= 1
                 if indegree[end] == 0:
                     que.append(end)
+        # 若存在循环依赖则返回空；不存在依赖则返回可行的编译顺序。
         return res if len(res) == n else []
 ```
 
@@ -7550,7 +7547,6 @@ class Solution:
             # [2, 5]
             # [6]
             # 如果比前一项大，则直接pop，成功
-            # 如果比前一项小，则不需要pop
             while stack and temperatures[stack[-1]] < tmpt:
                 preIdx = stack.pop()
                 res[preIdx] = i - preIdx
@@ -7613,7 +7609,7 @@ f(n,m) = (f(n,m) + m) % i #i为当前人数
 
 f(8,3) = [f(7,3) + 3] % 8
 
-约瑟夫环
+约瑟夫环：
 
 class Solution:
     def lastRemaining(self, n: int, m: int) -> int:
@@ -7667,9 +7663,9 @@ class Solution:
 class Solution:
     def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
         sums, res, dic = 0, 0, {}
-        dic[0] = 1
-        for i in range(len(nums)):
-            sums += nums[i]
+        dic[0] = 1 # 刚好前 n 个的和为 target
+        for num in nums:
+            sums += num
             if sums - target in dic:
                 res += dic[sums - target]
                 # sums - target 就是前缀和
@@ -7704,9 +7700,9 @@ class Solution:
         # 类似2分，速度更快
         while n > 0:
             if n % 2 == 1:
-                res *= x # 注意: res 这里, 发生变化
+                res *= x # 注意: res 这里, 同步发生变化
             n >>= 1 # 等价于 n //= 2
-            x *= x       # 注意: x 这里, 发生变化
+            x *= x       # 注意: x 这里, 同步发生变化
         return res
 ```
 
@@ -7785,18 +7781,19 @@ object Solution2 {
 ```
 
 ```py
-# 走n步到0的方案数 = 走n-1步到1的方案数 + 走n-1步到9的方案数。
+# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
 # 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
 class Solution:
     def backToOrigin(self,n):
-        # 点的个数为10
+        # 点的个数为 10
         circle = 10
+        # step 在外面，site 在里面
         dp = [[0 for site in range(circle)] for step in range(n + 1)]
         dp[0][0] = 1
-        for step in range(1, n + 1):
+        for step in range(1, n + 1): # 走 1 ~ n 步
             for site in range(circle):
-                # dp[i][j]表示从0出发，走i步到j的方案数
-                # ps:公式之所以`取余`是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
+                # dp[i][j] 表示从 0 出发，走 step 步到 site 的方案数
+                # ps:公式之所以`取余`是因为 site-1 或 site+1 可能会超过圆环 0~9 的范围
                 dp[step][site] = dp[step-1][(site-1+circle)%circle] + dp[step-1][(site+1)%circle]
         return dp[n][0]
 ```
@@ -7810,34 +7807,6 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1ep4y1Y77j?spm_id_from=333.999.0.0)
 
 ```py
-class MyStack:
-
-    def __init__(self):
-        self.queue = collections.deque()
-
-
-    def push(self, x: int) -> None:
-        n = len(self.queue)
-        self.queue.append(x)
-        for _ in range(n):
-            self.queue.append(self.queue.popleft())
-
-
-    def pop(self) -> int:
-        return self.queue.popleft()
-
-
-    def top(self) -> int:
-        return self.queue[0]
-
-
-    def empty(self) -> bool:
-        return not self.queue
-```
-
-以下两种写法，速度更快一点点，但是写法复杂
-
-```py
 q2当作缓存队列
 
 class MyStack:
@@ -7847,17 +7816,17 @@ class MyStack:
         ## 保证q1当中永远有元素
         ## 保证q2当中永远没有元素
         self.q1 = deque([])
-        self.q2 = deque([])
+        self.tmp = deque([])
 
     def push(self, x: int) -> None:
         self.q1.append(x)
         
     def pop(self) -> int:
+        # 把 [-1] 用 popleft 搞定 
         while len(self.q1) > 1:
-            self.q2.append(self.q1.popleft())
-        self.q1,self.q2 = self.q2, self.q1
-        return self.q2.popleft()
-        
+            self.tmp.append(self.q1.popleft())
+        self.q1, self.tmp = self.tmp, self.q1
+        return self.tmp.popleft()
         
     def top(self) -> int:
         return self.q1[-1]
@@ -8000,7 +7969,7 @@ class Solution:
                 return node.val
             appendAllLeft(node.right)
 
-kthLargest:
+kthLargest: 先右后左
 class Solution:
     def kthLargest(self, root: TreeNode, k: int) -> int:
         def inorder(root):
@@ -8016,7 +7985,7 @@ class Solution:
         inorder(root)
         return self.res
 
-kthSmallest:
+kthSmallest: 先左后右
 class Solution:
     def kthSmallest(self, root, k: int) -> int:
         def dfs(root):
@@ -8116,6 +8085,7 @@ class Solution:
                 nums[idx], nums[left] = nums[left], 0
                 left += 1
             else:
+                # idx 为 1, 或者 idx 与 [right/left] 相交
                 idx += 1
 ```
 
@@ -8137,7 +8107,7 @@ class Solution:
                 for i in range(len(S)):
                     if i > 0 and S[i] == S[i-1]:  # 剪枝
                         continue
-                    backtrack(S[:i] + S[i+1:],path + S[i])
+                    backtrack(S[:i] + S[i+1:], path + S[i])
 
         backtrack(S,'')
         return res
@@ -8264,9 +8234,10 @@ class Solution:
 
         for end in range(1, n + 1):
             for start in range(end):
+                # 前提是 start 为 true, end 才为 true
                 if dp[start] and s[start: end] in wordDict:
-                    dp[end] = True # 说明s[: i] 在wordDict中
-                    break # 优化部分：剩下的切分点j不用再寻找了，也可以不写，像下方一样
+                    dp[end] = True # 说明 s[: i] 在 wordDict 中
+                    break # 优化部分：剩下的切分点 j 不用再寻找了，也可以不写，像下方一样
         return dp[-1]
 
 ```
@@ -8281,9 +8252,9 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
 
-isalnum() 方法检测字符串是否由字母和数字组成。
+isalnum() 方法检测字符串是否由`字母`和`数字`组成。
 
-isalpha() 方法检测字符串是否只由字母组成。
+isalpha() 方法检测字符串是否只由`字母`组成。
 
 ```py
 class Solution:
@@ -8291,7 +8262,8 @@ class Solution:
         left = 0
         right = len(s) - 1
         while left < right:
-            # 易错点：if not s[left].isalnum(): 是不对的，因为存在连续多个“非数字的情况”
+            # 易错点：if not s[left].isalnum() 是不对的，因为存在连续多个“非数字的情况”
+            # 易错点：while left < right 不能省略
             while left < right and not s[left].isalnum(): 
                 left += 1
             while left < right and not s[right].isalnum(): 
@@ -8353,11 +8325,11 @@ object Solution1 {
 ```py
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
-        r = k % len(nums)
-        if r:
+        rotate = k % len(nums)
+        if rotate:
             nums[:] = nums[::-1]
-            nums[:r] = nums[:r][::-1]
-            nums[r:] = nums[r:][::-1]
+            nums[:rotate] = nums[:rotate][::-1]
+            nums[rotate:] = nums[rotate:][::-1]
 ```
 
 # 8 day (得分 = 3分) 81
