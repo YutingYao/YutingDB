@@ -6836,7 +6836,7 @@ object Solution2-1 {
 
 [官方](https://www.bilibili.com/video/BV1Xp4y1Y7FJ?spm_id_from=333.999.0.0)
 
-```py
+```py 
 class Solution(object):
 
     # 这里使用逆邻接表

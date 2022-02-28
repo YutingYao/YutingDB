@@ -7365,7 +7365,7 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV17K4y1G7et?spm_id_from=333.999.0.0)
 
 
-
+ 
 ###  1.229. <a name='ShortestWaytoFormString'></a>1055.Shortest Way to Form String 形成字符串的最短路径
 
 [图灵](https://www.bilibili.com/video/BV1SZ4y1G7WX?spm_id_from=333.999.0.0)

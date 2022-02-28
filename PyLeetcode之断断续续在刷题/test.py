@@ -1,22 +1,17 @@
+from collections import defaultdict 
 class Solution:
-    def calculate(self, s: str) -> int:
-        stack = [1]
-        sign = 1
-        i = 0
-        res = 0
-        while i < len(s):
-            if s[i].isdigit():
-                num = 0
-                while i < len(s) and s[i].isdigit():
-                    num = 10 * num + int(s[i])
-                    i += 1
-                res += sign * num
-            else:
-                if s[i] == '+':   sign = stack[-1]
-                elif s[i] == '-': sign = -stack[-1]
-                # -(1-(4+5+2)-3)+(6+8)
-                # stack[-1] 是因为负负得正
-                elif s[i] == '(': stack.append(sign)
-                elif s[i] == ')': stack.pop()
-                i += 1
-        return res
+    def canFinish(self, numCourses, prerequisites):
+        indegree = defaultdict(lambda:0)  
+        graph = defaultdict(list)         
+        for end,stt in prerequisites:
+            graph[stt].append(end)
+            indegree[end] += 1
+        res = []                  
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                res.append(i)    
+        for i in res:
+            for j in graph[i]:
+                indegree[j] -= 1
+                if indegree[j] == 0: res.append(j)
+        return len(res) == numCourses
