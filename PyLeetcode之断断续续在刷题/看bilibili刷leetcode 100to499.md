@@ -5533,7 +5533,7 @@ class Solution:
         return bin(n).count('1')
 #  python 输入的是10进制的 直接转str不行 可以试试 bin(n) 将10进制 转成 二进制然后 count
 ```
-
+ 
 ```py
 # 从1开始，每次<<一位，与n做与运算，如果不为0，则该位为1
 class Solution:

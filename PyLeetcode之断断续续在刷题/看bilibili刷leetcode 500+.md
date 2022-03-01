@@ -2408,7 +2408,7 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV17W411C7ai?spm_id_from=333.999.0.0)
 
 ###  1.53. <a name='TrimaBinarySearchTree'></a>669 Trim a Binary Search Tree
-
+ 
 [小明](https://www.bilibili.com/video/BV19y4y1J7fu?spm_id_from=333.999.0.0)
 
 ###  1.54. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse

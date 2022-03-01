@@ -2323,7 +2323,7 @@ object Solution1 {
     @annotation.tailrec
     def _twoSum(left: Int, right: Int, previousSum: Int): Int = {
       if(left >= right) return previousSum
-
+ 
 
       val currentSum = fromValue + nums(left) + nums(right)
 
