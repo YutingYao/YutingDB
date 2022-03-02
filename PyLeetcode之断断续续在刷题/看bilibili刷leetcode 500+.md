@@ -1346,7 +1346,7 @@ class UnionFind(M: Int) {
 }
 
 
-```
+``` 
 
 ###  1.21. <a name='BrickWall'></a>554 Brick Wall
 

@@ -4742,7 +4742,7 @@ class Solution(object):
             columnNumber -= 1
             res = chr(columnNumber % 26 + 65) + res
             columnNumber = columnNumber // 26 
-        return res
+        return res 
 ```
 
 ###  1.64. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element

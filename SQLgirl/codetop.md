@@ -11622,73 +11622,619 @@ class Solution(object):
 
 # 13 day (得分 = 1分) 90
 
-##  241. <a name='-1'></a>166. 分数到小数
+##  241. <a name='-1'></a>166. Fraction to Recurring Decimal
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+        # ----------情况一：没有余数----------
+        if numerator % denominator == 0:
+            return str(numerator // denominator)
+        # ----------情况一：没有余数----------
+
+
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+        s = []
+
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+        if (numerator < 0) != (denominator < 0):
+            s.append('-')
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+
+
+        # 整数部分
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+        integerPart = numerator // denominator
+        s.append(str(integerPart))
+        s.append('.')
+
+        # 小数部分
+        indexMap = {}
+        remainder = numerator % denominator
+        while remainder and remainder not in indexMap:
+            indexMap[remainder] = len(s) 
+
+            # 这里需要一个计数器，s的长度递增，所以用len(s)
+            # 解法二中：
+            # i = 0
+            # i += 1
+            # 也是可以的。
+            # len(s) 可以直接指向 insertIndex-插入位置
+
+            print("余数remainder: ",indexMap.keys())
+            remainder *= 10
+            s.append(str(remainder // denominator))
+            remainder %= denominator
+        if remainder:  # 有循环节
+            insertIndex = indexMap[remainder]
+            s.insert(insertIndex, '(') #左侧插入
+            s.append(')')
+
+        return ''.join(s)
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+```
+
+```py
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+        dic = {}
+        res = []
+
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+        if numerator*denominator<0:
+            sign = "-"
+        else:
+            sign = ""
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+        intPart,res = divmod(numerator, denominator)
+
+
+        # ----------情况一：没有余数----------
+        if res==0:
+            return sign + str(intPart)
+        # ----------情况一：没有余数----------
+        
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+        res.append(str(intPart))
+        res.append(".")
+
+        dic[res]= len(res) # 是 2
+        while res!=0:
+            intPart,res = divmod(10*res,denominator)
+            res.append(str(intPart))
+            # 如果余数出现在字典中，加上（）并返回
+            if res in dic:
+                res.insert(dic[res],"(") #左侧插入
+                res.append(")")     #右侧插入
+                return sign + "".join(res)
+            # 继续记录余数和(索引位置
+            
+            dic[res] = len(res) # i+=1
+        # 如果余数为0
+        return sign + "".join(res) 
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+        # 处理整数部分
+        ans = ""
+
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+        if numerator * denominator < 0:
+            ans += "-"
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+
+        numerator, denominator = abs(numerator), abs(denominator)
+        intPart, res = divmod(numerator, denominator)
+        # ans += f"{q}"
+        ans += str(intPart)
+
+
+        # ----------情况一：没有余数----------
+        if 0 == res:
+            return ans
+        # ----------情况一：没有余数----------
+
+        
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+        ans += '.'
+        # 小数部分：除法发现循环节
+        index = len(ans)  # 小数点后一个位置
+        numerator = res * 10  # 被除数增加十倍
+        dic = {numerator: index}
+        while True:
+            intPart, res = divmod(numerator, denominator)
+            ans += str(intPart)
+            if res == 0:
+                break
+            numerator = res * 10
+            if numerator in dic:  # 发现循环节
+                return ans[:dic[numerator]] + f"({ans[dic[numerator]:]})" # 直接加括号（）
+            dic[numerator] = index + 1  # 新被除数位置
+            index += 1
+        return ans
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+        sign = "" if numerator * denominator >= 0 else "-"
+        # ----------------得到负数----------------
+        # ----------------得到负数----------------
+
+        numerator, denominator = abs(numerator), abs(denominator)
+        intPart = numerator // denominator
+
+        # ----------情况一：没有余数----------
+        if numerator % denominator == 0: return sign + str(intPart)
+        # ----------情况一：没有余数----------
+
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+        res, dic, index = numerator % denominator, {}, 3
+        ans = [sign, str(intPart), "."]
+        while res:
+            if res not in dic:
+                dic[res] = index
+            else:
+                ans.insert(dic[res], "(")
+                ans.append(")")
+                break
+            res *= 10
+            ans.append(str(res // denominator))
+            res %= denominator
+            index += 1
+        return "".join(ans)
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+```
+
 ##  242. <a name='08.12.'></a>面试题 08.12. 八皇后
-##  243. <a name='-1'></a>73. 矩阵置零
+
+##  243. <a name='-1'></a>73. Set Matrix Zeroes
+
+[小梦想家](https://www.bilibili.com/video/BV1W7411T7rX?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1X64y1Y7kG?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        tmp = []
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                if matrix[i][j] == 0:
+                    tmp.append([i,j])
+        for r,c in tmp:
+            for j in range(len(matrix[0])):
+                matrix[r][j] = 0
+            for i in range(len(matrix)):
+                matrix[i][c] = 0
+        return matrix
+```
+
+```scala
+
+/**
+* my first commitment
+* time complexity: O(N * M)
+* space complexity: O(N + M)
+*/
+object Solution1 {
+    import collection.mutable
+    def setZeroes(matrix: Array[Array[Int]]): Unit = {
+      val cols = mutable.Set.empty[Int]
+      val rows = mutable.Set.empty[Int]
+      
+      for (i <- matrix.indices; j <- matrix(i).indices; if matrix(i)(j) == 0) {
+        rows += i
+        cols += j
+      }
+      
+      rows.foreach(row => matrix(row).indices.foreach(matrix(row)(_) = 0))
+      cols.foreach(col => matrix.indices.foreach(matrix(_)(col) = 0))
+    }
+}
+
+
+
+/**
+* using first column and row to record cell to be set to zero
+* memo:
+*  1. we should set first columns and first row in the last, otherwise we cannot distinguish the zero between set by us and originally is
+* time complexity: O(NM)
+* space complexity: O(1)
+*/
+object Solution2 {
+    import collection.mutable
+    def setZeroes(matrix: Array[Array[Int]]): Unit = {
+      var rowZero = false
+      var colZero = false
+      
+      /**
+      * using first row and first column as flag 
+      */
+      for (i <- matrix.indices; j <- matrix(i).indices; if matrix(i)(j) == 0) {
+        if (i == 0) rowZero = true
+        if (j == 0) colZero = true
+        matrix(i)(0) = 0
+        matrix(0)(j) = 0
+      }
+    
+      /**
+      * set one row to zero except first cell
+      */
+      (1 until matrix.length).foreach {
+        case rowIdx if matrix(rowIdx)(0) == 0 => matrix(rowIdx).indices.foreach(matrix(rowIdx)(_) = 0)
+        case _ =>
+      }
+      
+      /**
+      * set one column to zero except first cell
+      */
+      (1 until matrix(0).length).foreach {
+        case colIdx if matrix(0)(colIdx) == 0 => matrix.indices.foreach(matrix(_)(colIdx) = 0)
+        case _ => 
+      }
+      
+      /**
+      * set first column and first row to zero if true
+      */
+      if(rowZero) matrix(0).indices.foreach(matrix(0)(_) = 0)
+      if(colZero) matrix.indices.foreach(matrix(_)(0) = 0)
+      
+    }
+}
+```
+
 ##  244. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
-##  245. <a name='II-1'></a>503. 下一个更大元素 II
-##  246. <a name='-1'></a>763. 划分字母区间
+
+##  245. <a name='II-1'></a>503 【栈】Next Greater Element II
+
+[哈哈哈](https://www.bilibili.com/video/BV197411L77N?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1k5411t7Pa?spm_id_from=333.999.0.0)
+
+
+```py
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        res = nums[:]
+        stack = []
+        for idx, cur in sorted(enumerate(nums),key = lambda x: x[1]):
+            while stack and nums[stack[-1]] < cur:
+                res[stack[-1]] = cur
+                stack.pop()
+            stack.append(idx)
+        
+        while stack:
+            res[stack[-1]] = -1
+            stack.pop()
+        
+        return res
+        
+# 哭，我又理解错题目了
+# 输入：
+# [5,4,3,2,1]
+# 输出：
+# [-1,5,4,3,2]
+# 预期结果：
+# [-1,5,5,5,5]
+```
+
+```py
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        res = nums[:]
+        stack = []
+        # 双倍nums大法好
+        for idx, cur in enumerate(nums + nums):
+            while stack and nums[stack[-1]] < cur:
+                res[stack[-1]] = cur
+                stack.pop()
+            if idx < len(nums): # 易错点：append(idx)是有条件的
+                stack.append(idx)
+        
+        while stack:
+            res[stack[-1]] = -1
+            stack.pop()
+        
+        return res
+
+更简单的写法:
+
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        res = [-1] * len(nums)
+        stack = []
+        # 双倍nums大法好
+        for idx, cur in enumerate(nums + nums):
+            while stack and nums[stack[-1]] < cur:
+                res[stack[-1]] = cur
+                stack.pop()
+            if idx < len(nums): # 易错点：append(idx)是有条件的
+                stack.append(idx)
+        return res
+
+
+```
+
+##  246. <a name='-1'></a>763 Partition Labels
+
+[小明](https://www.bilibili.com/video/BV1Ca4y177LW?spm_id_from=333.999.0.0)
+
 ##  247. <a name='K-1'></a>340. 至多包含 K 个不同字符的最长子串
-##  248. <a name='-1'></a>130. 被围绕的区域
+
+##  248. <a name='-1'></a>130. 【🍒并查集】Surrounded Regions 130-被围绕的区域
+
+[花花酱](https://www.bilibili.com/video/BV1dE411f7U4?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV18y4y1j7JH?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1pV411k7TH?spm_id_from=333.999.0.0)
+
+
+```py
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        f = {}
+        def find(x):
+            f.setdefault(x,x)
+            if f[x]!=x:
+                f[x] = find(f[x])
+            return f[x]
+        def union(x,y):
+            f[find(y)] = find(x)
+        if not board or not board[0]:
+            return
+        row,col = len(board),len(board[0])
+        dummy = row*col
+        for i in range(row):
+            for j in range(col):
+                if board[i][j] == "O":
+                    if i == 0 or i == row - 1 or j == 0 or j == col - 1:
+                        union(i * col + j, dummy)
+                    else:
+                        for x, y in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                            if board[i + x][j + y] == "O":
+                                union(i * col + j, (i + x) * col + (j + y))
+                                
+        for i in range(row):
+            for j in range(col):
+                if find(dummy) == find(i * col + j):
+                    board[i][j] = "O"
+                else:
+                    board[i][j] = "X"
+```
+
+
+```py
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        m = len(board)
+        n = len(board[0])
+        que = collections.deque()
+
+        for i in range(m):
+            for j in range(n):
+                if i==0 or i==m-1 or j==0 or j==n-1: # 易错点：m 和 n 不要写反了
+                    if board[i][j] == 'O':
+                        que.append((i,j))
+
+        while que:
+            x,y = que.popleft()
+            board[x][y] = 'A'
+            for dx,dy in [(1,0),(-1,0),(0,1),(0,-1)]:
+                # 易错点：x+dx 和 x 不要写反了
+                if 0 <= x+dx < m-1 and 0 <= y+dy < n-1 and board[x+dx][y+dy] == 'O': # 易错点：'O'不要写成0
+                    board[x+dx][y+dy] = 'A'
+                    que.append((x+dx,y+dy))
+
+        for i in range(m):
+            for j in range(n):
+                # 易错点：== 和 = 不要写反了
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                elif board[i][j] == 'A':
+                    board[i][j] = 'O'
+
+        return board
+```
+
+另一种写法
+
+```py
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        if not board:
+            return
+        
+        n, m = len(board), len(board[0])
+
+        def dfs(x, y):
+            if not 0 <= x < n or not 0 <= y < m or board[x][y] != 'O':
+                return
+            
+            board[x][y] = "A"
+            dfs(x + 1, y)
+            dfs(x - 1, y)
+            dfs(x, y + 1)
+            dfs(x, y - 1)
+         
+        for i in range(n):
+            dfs(i, 0)
+            dfs(i, m - 1)
+        
+        for i in range(m - 1):
+            dfs(0, i)
+            dfs(n - 1, i)
+        
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] == "A":
+                    board[i][j] = "O"
+                elif board[i][j] == "O":
+                    board[i][j] = "X"
+```
+
+
 ##  249. <a name='II-1'></a>117. 填充每个节点的下一个右侧节点指针 II
+
 ##  250. <a name='Offer07.'></a>剑指 Offer 07. 重建二叉树
+
 ##  251. <a name='K-1'></a>378. 有序矩阵中第K小的元素
+
 ##  252. <a name='Offer32-III.III'></a>剑指 Offer 32 - III. 从上到下打印二叉树 III
+
 ##  253. <a name='-1'></a>77. 组合
+
 ##  254. <a name='-1'></a>528. 按权重随机选择
+
 ##  255. <a name='-1'></a>279. 完全平方数
+
 ##  256. <a name='-1'></a>257. 二叉树的所有路径
+
 ##  257. <a name='K-1'></a>692. 前K个高频单词
+
 ##  258. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
+
 ##  259. <a name='II-1'></a>137. 只出现一次的数字 II
+
 ##  260. <a name='21.'></a>补充题21. 字符串相减
 
 
 # 14 day (得分 = 1分) 91
 
 ##  261. <a name='-1'></a>354. 俄罗斯套娃信封问题
+
 ##  262. <a name='II-1'></a>253. 会议室 II
+
 ##  263. <a name='-1'></a>628. 三个数的最大乘积
+
 ##  264. <a name='-1'></a>674. 最长连续递增序列
+
 ##  265. <a name='Offer57-II.s'></a>剑指 Offer 57 - II. 和为s的连续正数序列
+
 ##  266. <a name='-1'></a>315. 计算右侧小于当前元素的个数
+
 ##  267. <a name='II-1'></a>107. 二叉树的层次遍历 II
+
 ##  268. <a name='-1'></a>172. 阶乘后的零
+
 ##  269. <a name='-1'></a>647. 回文子串
+
 ##  270. <a name='III-1'></a>260. 只出现一次的数字 III
+
 ##  271. <a name='IV'></a>188. 买卖股票的最佳时机 IV
+
 ##  272. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
+
 ##  273. <a name='-1'></a>12. 整数转罗马数字
+
 ##  274. <a name='-1'></a>386. 字典序排数
+
 ##  275. <a name='-1'></a>752. 打开转盘锁
+
 ##  276. <a name='K-1'></a>395. 至少有K个重复字符的最长子串
+
 ##  277. <a name='-1'></a>231. 2的幂
+
 ##  278. <a name='-1'></a>977. 有序数组的平方
+
 ##  279. <a name='III-1'></a>437. 路径总和 III
+
 ##  280. <a name='-1'></a>617. 合并二叉树
 
 
 # 15 day (得分 = 1分) 92
 
 ##  281. <a name='k'></a>60. 第k个排列
+
 ##  282. <a name='strStr'></a>28. 实现 strStr()
+
 ##  283. <a name='-1'></a>204. 计数质数
+
 ##  284. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
+
 ##  285. <a name='-1'></a>416. 分割等和子集
+
 ##  286. <a name='N-1'></a>51. N皇后
+
 ##  287. <a name='24.'></a>补充题24. 双栈排序
+
 ##  288. <a name='-1'></a>680. 验证回文字符串 Ⅱ
+
 ##  289. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
+
 ##  290. <a name='-1'></a>701. 二叉搜索树中的插入操作
+
 ##  291. <a name='-1'></a>530. 二叉搜索树的最小绝对差
+
 ##  292. <a name='k-1'></a>698. 划分为k个相等的子集
+
 ##  293. <a name='-1'></a>173. 二叉搜索树迭代器
+
 ##  294. <a name='-1'></a>426. 将二叉搜索树转化为排序的双向链表
+
 ##  295. <a name='-1'></a>836. 矩形重叠
+
 ##  296. <a name='-1'></a>99. 恢复二叉搜索树
+
 ##  297. <a name='-1'></a>316. 去除重复字母
+
 ##  298. <a name='-1'></a>109. 有序链表转换二叉搜索树
+
 ##  299. <a name='-1'></a>115. 不同的子序列
+
 ##  300. <a name='-1'></a>1312. 让字符串成为回文串的最少插入次数
 
 
