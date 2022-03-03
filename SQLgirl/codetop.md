@@ -7478,7 +7478,7 @@ class Solution:
 
         for i in range(len(s)):
             sn = sn + s[len(s)-1-i]
-        if int(sn)<-2**31 or int(sn)>2**31-1:
+        if int(sn) < -2**31 or int(sn) > 2**31-1:
             return 0
         return int(sn)
 
@@ -7550,7 +7550,7 @@ object Solution {
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         n = len(temperatures)
-        res = [0] * n
+        res = [0] * n # 如果温度递减，那么答案都是 0
         stack = []
         # 用 i 来触发计算
         for i in range(n):
@@ -7584,7 +7584,8 @@ class Solution:
 [洛阳](https://www.bilibili.com/video/BV1Xk4y1d7gF?spm_id_from=333.999.0.0)
 
 ```py
-# python 解法 思路：先把链表首尾相连，再找到位置断开循环
+注意：这里很喜欢用 cur.next
+# 思路：先把链表首尾相连，再找到位置断开循环
 class Solution:
     def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         # 易错点：要排除一些特殊情况
@@ -7681,16 +7682,16 @@ class Solution:
 查表法：
 class Solution:
     def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
-        sums, res, dic = 0, 0, {}
+        presum, res, dic = 0, 0, {}
         dic[0] = 1 # 刚好前 n 个的和为 target
         for num in nums:
-            sums += num
-            if sums - target in dic:
-                res += dic[sums - target]
+            presum += num
+            if presum - target in dic:
+                res += dic[presum - target]
                 # sums - target 就是前缀和
-            if sums not in dic:
-                dic[sums] = 0
-            dic[sums] += 1
+            if presum not in dic:
+                dic[presum] = 0
+            dic[presum] += 1
         # 输入：nums = [1,2,3], k = 3
         # 输出：2
         # -1000 <= nums[i] <= 1000 注意: nums 有正负
@@ -8097,14 +8098,16 @@ class Solution:
     def sortColors(self, nums: List[int]) -> None:
         idx, left, right = 0, 0, len(nums) - 1
         while idx <= right:
+            # 交换完位置后 idx 依旧在原位
             if nums[idx] == 2 and idx < right:
                 nums[idx], nums[right] = nums[right], 2
                 right -= 1
+            # 交换完位置后 idx 依旧在原位
             elif nums[idx] == 0 and idx > left:
                 nums[idx], nums[left] = nums[left], 0
                 left += 1
             else:
-                # idx 为 1, 或者 idx 与 [right/left] 相交
+            # idx 为 1, 或者 idx 与 [right/left] 相交
                 idx += 1
 ```
 
@@ -8496,10 +8499,8 @@ class Solution:
 动态🚀规划
 
 ```py
-
-
-class Solution(object):
-    def longestIncreasingPath(self, matrix):
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         if not matrix or not matrix[0]:
             return 0
         m, n = len(matrix), len(matrix[0])
@@ -8509,15 +8510,14 @@ class Solution(object):
                 lst.append((matrix[i][j], i, j))
         lst.sort()
 # 先预处理，对矩阵的值按从小到大排序，按大小顺序才能保证依赖的子问题都求解过了
-        dp = [[0 for _ in range(n)] for _ in range(m)] # 注意：😁这里存的是结束位置
+        dp = [[1 for _ in range(n)] for _ in range(m)] # 注意：😁这里存的是结束位置，初始dp[i][j]都等于1
+# 🌵 这里循环了 m*n 次
         for num, i, j in lst:
-# 初始dp[i][j]都等于1
-            dp[i][j] = 1
             for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                nx, ny = i + di, j + dj
+                prex, prey = i + di, j + dj
 # 若matrix[i][j]四个方向有任意小于它，则可以更新dp[i][j] = max(dp[i][j], 1 + dp[r][c])
-                if 0 <= nx < m and 0 <= ny < n and matrix[i][j] > matrix[nx][ny]:
-                    dp[i][j] = max(dp[i][j], 1 + dp[nx][ny])
+                if 0 <= prex < m and 0 <= prey < n and matrix[i][j] > matrix[prex][prey]:
+                    dp[i][j] = max(dp[i][j], 1 + dp[prex][prey])
 # dp[i][j] 表示以 matrix[i][j] 结尾的最长递增长度
         return max([dp[i][j] for i in range(m) for j in range(n)])
 ```
@@ -8540,6 +8540,7 @@ class Solution:
 
         res = 0
         m, n = len(matrix), len(matrix[0])
+# 🌵 这里循环了 m*n 次
         for i in range(m):
             for j in range(n):
                 res = max(res, dfs(i, j)) # 注意：😁这里存的是从开始位置能到达多远
@@ -8559,38 +8560,7 @@ class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
         set1 = set(nums1)
         set2 = set(nums2)
-        return self.set_intersection(set1, set2)
-
-    def set_intersection(self, set1, set2):
-        if len(set1) > len(set2):
-            return self.set_intersection(set2, set1)
         return [x for x in set1 if x in set2]
-
-
-
-class Solution:
-    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        nums1.sort()
-        nums2.sort()
-        length1, length2 = len(nums1), len(nums2)
-        intersection = list()
-        index1 = index2 = 0
-        while index1 < length1 and index2 < length2:
-            num1 = nums1[index1]
-            num2 = nums2[index2]
-            if num1 == num2:
-                # 保证加入元素的唯一性
-                if not intersection or num1 != intersection[-1]:
-                    intersection.append(num1)
-                index1 += 1
-                index2 += 1
-            elif num1 < num2:
-                index1 += 1
-            else:
-                index2 += 1
-        return intersection
-
-
 
 class Solution:
     def intersection(self, nums1, nums2):
@@ -8713,42 +8683,37 @@ package lc009 {
 [小明](https://www.bilibili.com/video/BV1Zz4y1R7j8?spm_id_from=333.999.0.0)
 
 ```py
-# 简单版：直接用字典
-
-# 写法一：
 
 class Trie:
     def __init__(self):
         self.root = {}
 
-    # def insert(self, word: str) -> None:
-    #     r = self.root
-    #     for c in word:
-    #         if c not in r:
-    #             r[c] = {}
-    #         r = r[c]
-    #     r['#'] = True
-
     def insert(self, word: str) -> None:
         r = self.root
         for c in word:
-            r = r.setdefault(c, {})
+            if c not in r: r[c] = {}
+            r = r[c]
         r['#'] = True
 
-    # def search(self, word: str) -> bool:
+    # def insert(self, word: str) -> None:
     #     r = self.root
     #     for c in word:
-    #         if c not in r:
-    #             return False
-    #         r = r[c]
-    #     return '#' in r
+    #         r = r.setdefault(c, {})
+    #     r['#'] = True
 
     def search(self, word: str) -> bool:
         r = self.root
         for c in word:
             if c not in r: return False
             r = r[c]
-        return r.get("#", False)
+        return '#' in r
+
+    # def search(self, word: str) -> bool:
+    #     r = self.root
+    #     for c in word:
+    #         if c not in r: return False
+    #         r = r[c]
+    #     return r.get("#", False)
 
     def startsWith(self, prefix: str) -> bool:
         r = self.root
@@ -8756,6 +8721,7 @@ class Trie:
             if c not in r: return False
             r = r[c]
         return True
+
 
 ```
 
@@ -8817,6 +8783,8 @@ class Trie2() {
 https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/
 
 ```py
+我们求字典序第k个就是上图`前序遍历`访问的第k节点！
+
 class Solution:
     def findKthNumber(self, n: int, k: int) -> int:
         def getCnt(prefix, n):
@@ -8829,11 +8797,11 @@ class Solution:
         poi, prefix = 1, 1 # 扣除掉第一个0节点
         while poi < k:
             cnt = getCnt(prefix, n)
-            if poi + cnt > k: # 在子树中
-                prefix *= 10 # prefix 在字典序数组中从上往下移动
+            if poi + cnt > k:
+                prefix *= 10 
                 poi += 1 # 刨除根节点
-            else: # 第k个数不在以cur为根节点的树上
-                prefix += 1 # prefix在字典序数组中从左往右移动
+            else: 
+                prefix += 1
                 poi += cnt
         return prefix
 
@@ -8841,7 +8809,6 @@ class Solution:
 
 https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/solution/yi-tu-sheng-qian-yan-by-pianpianboy/
 
-我们求字典序第k个就是上图`前序遍历`访问的第k节点！
 
 但是不需要用`前序遍历`，如果我们能通过`数学方法`求出`节点1`和`节点2`之间需要走几步，减少很多没必要的移动。
 
@@ -8877,14 +8844,29 @@ class Solution:
         
         while k > 0:
             steps = cal_steps(n, cur, cur + 1)
-            if steps <= k:
-                k -= steps
-                cur += 1
-            else:
+            if steps <= k: # 第k个数不在以cur为根节点的树上
+                k -= steps 
+                cur += 1  # prefix在字典序数组中从左往右移动
+            else:  # 在子树中
                 k -= 1
-                cur *= 10
+                cur *= 10 # prefix 在字典序数组中从上往下移动
         
         return cur
+
+# 当前值： 1 2
+# 当前值： 10 20
+# steps: 11 cur: 2 k: 3
+# 当前值： 2 3
+# 当前值： 20 30
+# steps: 5 cur: 20 k: 2
+# 当前值： 20 21
+# steps: 1 cur: 21 k: 1
+# 当前值： 21 22
+# steps: 1 cur: 22 k: 0
+
+
+ss = Solution()
+print(ss.findKthNumber(23,15))
 
 ```
 
@@ -8962,30 +8944,6 @@ class Solution:
 
 [官方](https://www.bilibili.com/video/BV1Xp4y1Y7FJ?spm_id_from=333.999.0.0)
 
-```py
-class Solution(object):
-    def canFinish(self, numCourses, prerequisites):
-        def dfs(i, colors, prerequisites):
-            colors[i] = 'G'
-            #print i, colors
-            for front, tail in prerequisites:
-                if tail == i:
-                    if colors[front] == 'G':
-                        return False
-                    elif colors[front] == 'B':
-                        continue
-                    elif dfs(front, colors, prerequisites) == False:
-                        return False
-            colors[i] = 'B'
-            return True
-
-        colors = ['W' for i in range(numCourses)]
-        for i in range(numCourses):
-            if colors[i] == 'W':
-                if dfs(i, colors, prerequisites) == False:
-                    return False
-        return True
-```
 
 ```py
 # python
@@ -8997,15 +8955,15 @@ class Solution:
         for end,stt in prerequisites:
             graph[stt].append(end)
             indegree[end] += 1
-        res = []                  
+        que = []                  
         for i in range(numCourses):
             if indegree[i] == 0:
-                res.append(i)    
-        for i in res:
+                que.append(i)    
+        for i in que:
             for j in graph[i]:
                 indegree[j] -= 1
-                if indegree[j] == 0: res.append(j)
-        return len(res) == numCourses
+                if indegree[j] == 0: que.append(j)
+        return len(que) == numCourses
 ```
 
 ```scala
@@ -9108,21 +9066,18 @@ class Solution:
         # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
         # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
         s = " " + s
-        dp = [[False] * (len(p) + 1) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
+        p = " " + p
+        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
         dp[0][0] = True  # 假定s和p都从空字符开始
         
         for i in range(len(s)):  # s的空字符需要额外初始化
-            for j in range(1, len(p)+1):
-                if p[j-1] == '*':   # *可以出现0次或者多次
-                    if dp[i][j-2]:
-                        dp[i][j] = dp[i][j-2]
-                    elif p[j-2] in ('.', s[i]):
-                        dp[i][j] = dp[i-1][j]
-
-                else: # '.'和普通字母的情况可合为一种
-                    if p[j-1] in ('.', s[i]):
-                        dp[i][j] = dp[i-1][j-1]
-
+            for j in range(1, len(p)):
+                if p[j] == '*' and dp[i][j-2]:   # *可以出现0次或者多次
+                    dp[i][j] = dp[i][j-2]
+                elif p[j] == '*' and p[j-1] in ('.', s[i]):
+                    dp[i][j] = dp[i-1][j]
+                elif p[j] in ('.', s[i]):
+                    dp[i][j] = dp[i-1][j-1]
         return dp[-1][-1]
 ```
 
@@ -9133,6 +9088,9 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1be411s7XX?spm_id_from=333.999.0.0)
 
 ```py
+输入：nums = [2,3,1,1,4]
+输出：true
+解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
 
 # 精简一下的for循环😁
 class Solution:
@@ -9142,12 +9100,11 @@ class Solution:
         n = len(nums)
 
         for i in range(n):
-            if i <= cover: # 易错点：在判断下一个cover前，先要判断i是否能够到达
+            if cover >= i: # 易错点：在判断下一个cover前，先要判断i是否能够到达
                 cover = max(cover, i + nums[i])
                 # if cover == i:
                     # return False # 易错点：应该考虑特殊情况[0,1,2]
-
-                if cover >= n -  1:
+                if cover >= n - 1:
                     return True
         return False
 ```
@@ -9177,6 +9134,7 @@ object Solution3-1 {
 
 ##  159. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
 
+类似消消看
 
 ```py
 class Solution(object):
@@ -9212,9 +9170,9 @@ class Solution:
         dp1 = 1
         for i in range(n):
             res = 0
-            if '1' <= s[i] <= '9':
+            if '1' <= s[i] <= '9': # 当前项
                 res = dp1
-            if i > 0 and '10' <= s[i-1:i+1] <= '26':
+            if i > 0 and '10' <= s[i-1:i+1] <= '26': # 当前项 + 前一项
                 res += dp0
             dp1, dp0 = res, dp1
         return dp1
@@ -9282,18 +9240,20 @@ class Solution:
         while l2:
             s2.append(l2.val)
             l2 = l2.next
-        ans = None
+        res = None
         carry = 0
-        while s1 or s2 or carry != 0:
-            a = 0 if not s1 else s1.pop()
-            b = 0 if not s2 else s2.pop()
+        while s1 or s2 or carry:
+            a = s1.pop() if s1 else 0 
+            b = s2.pop() if s2 else 0 
+
             cur = a + b + carry
             carry = cur // 10
-            cur %= 10
-            curnode = ListNode(cur)
-            curnode.next = ans
-            ans = curnode
-        return ans
+            tail = cur % 10
+
+            curnode = ListNode(tail)
+            curnode.next = res
+            res = curnode
+        return res
 
 ```
 
@@ -9330,14 +9290,8 @@ class Solution:
 
         return max(dp1[-1],dp2[-1])
 
-# 核心原则就是：第一个和最后一个不能同时抢。 
-# 所以：要么不抢第一个，要么不抢最后一个。 
-# 注意，不抢第一个的时候，最后一个可抢可不抢；
-# 另一种情况同理 取两种情况中的最大值
-
 降维以后：
 
-# dp[i] = max(dp[i-2] + nums[i], dp[i-1])
 class Solution:
     def rob(self, nums: List[int]) -> int:
         n = len(nums)
@@ -9345,10 +9299,10 @@ class Solution:
         if n <= 2:
             return max(nums)
 
-        def robrange(start,end):
+        def robrange(start, end):
             dp0 = 0
-            dp1 = nums[start]
-            for i in range(start + 1,end):
+            dp1 = 0
+            for i in range(start, end):
                 dp1, dp0 = max(dp0 + nums[i], dp1), dp1
             return dp1
         # 也可以这么写：
@@ -9358,7 +9312,7 @@ class Solution:
         #     for num in nums[start:end]:
         #         dp1, dp0 = max(dp0 + num, dp1), dp1
         #     return dp1
-        return max(robrange(0,n-1),robrange(1,n))
+        return max(robrange(0, n - 1), robrange(1, n))
 ```
 
 
@@ -9409,12 +9363,9 @@ class Solution:
 class Solution:
     def fib(self, n: int) -> int:
         dic = {}
-        dic[0] = 0
-        dic[1] = 1
-
         def helper(n):
             # 这个写法是错误的：if n == 0 or 1:
-            if n <= 1:
+            if n < 2:
                 return n
             elif n in dic:
                 return dic[n]
@@ -9425,60 +9376,6 @@ class Solution:
 ```
 
 ```scala
-/**
-* chosen solution
-* iterative - bottom up with memorization
-* only record n -1 and n -2 status
-* time complexity O(N)
-* space complexity O(1)
-*/ 
-object Solution0 {
-    def fib(N: Int): Int = {
-        if (N <= 1) N
-        else {
-            var a = 0
-            var b = 1
-            (1 until N).foreach{ n =>
-                val c = a + b
-                a = b
-                b = c
-            }
-            b
-        }
-    }
-}
-
-
-
-/**
-* recursive - top-down with memorization
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-object Solution2 {
-    def fib(N: Int): Int = {
-        if(N <= 1) return N
-        
-        val cache = Array.ofDim[Int](N + 1)
-        cache(0) = 0
-        cache(1) = 1
-
-        def _fib(n: Int):Int = {
-            if(n <= 1) return n
-            
-            if(cache(n) != 0) cache(n)
-            else {
-                cache(n) = _fib(n-1) + _fib(n-2)
-                cache(n)
-            }
-        }
-        _fib(N)
-        
-    }
-}
-
-
-
 /**
 * recursive version - top-down
 * time complexity: O(2^N）
@@ -9501,18 +9398,6 @@ object Solution3 {
 ##  167. <a name='-1'></a>295. 数据流的中位数
 
 ```py
-双堆法，一个大堆，一个小堆
-
-
-满足两个特性：
-1.`大顶堆`中最大的数值 <= 小顶堆中的最小数，也就是小于小顶堆的堆顶
-2.两个堆中元素相差为0，或者为1,不能>1
-
-对于如何实现大顶堆?
-1.添加元素进去时，取反，
-2.取出元素时，也取反
-
-
 from heapq import *
 class MedianFinder:
     def __init__(self):
@@ -9522,19 +9407,25 @@ class MedianFinder:
         heapify(self.min_h)
         
     def addNum(self, num):
-       # 每次都插入到最小堆，然后，将最小堆里面的栈顶元素，
-       # 取出来，放到最大堆中去，这样就能保证最小堆的堆，都比最大堆的堆顶大
-       #（因为最大堆是最小堆，一泡屎一趴尿，拉扯大的。）
-       # 下面的调整，使得最小最大堆元素相差最多为1，而且永远是 最小堆元素个数大于  等于最大堆元素个数
+       # 每次都插入到最小
         heappush(self.min_h, num)
+       # 然后，将最小堆里面的栈顶元素，取出来，放到最大堆中去，这样就能保证最小堆的堆，都比最大堆的堆顶大
         heappush(self.max_h, - heappop(self.min_h))
-        if len(self.min_h) < len(self.max_h):
+        if len(self.min_h) < len(self.max_h): # 如果最大堆太大了
             heappush(self.min_h, - heappop(self.max_h))
-            
+
+        # 对于如何实现大顶堆?
+        # 1. 添加元素进去时，取反
+        # 2. 取出元素时，也取反
+
+        # 满足两个特性：
+        # 1. `大顶堆`中最大的数值 <= `小顶堆`中的最小数, 也就是小于小顶堆的堆顶
+        # 2. 两个堆中元素相差为 0, 或者为 1, 不能 > 1
+
     def findMedian(self):
         max_len = len(self.max_h)
         min_len = len(self.min_h)
-        return self.min_h[0] * 1. if max_len != min_len else (- self.max_h[0] + self.min_h[0])/2.
+        return self.min_h[0] if max_len != min_len else (- self.max_h[0] + self.min_h[0]) / 2
 ```
 
 ##  168. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
@@ -9569,7 +9460,7 @@ class Solution:
             left  += -1 if c == ')' else 1 
             # 从右向左看右括号能否有效
             right += -1 if s[-i-1] == '(' else 1
-            
+            # 注意：在循环过程中，只要出现一次负数，就直接返回 false
             if left < 0 or right < 0: return False
        
         return True
@@ -9581,11 +9472,14 @@ class Solution:
 [洛阳](https://www.bilibili.com/video/BV1t64y1u7Ei?spm_id_from=333.999.0.0)
 
 ```py
+快慢指针 slow -> fast -> None
+
+
 class Solution:
     def partition(self, head: ListNode, x: int) -> ListNode:
         dummy1 = ListNode(0)
         dummy2 = ListNode(0)
-        slow,fast,cur = dummy1, dummy2, head
+        slow, fast, cur = dummy1, dummy2, head
         while cur:
             if cur.val < x:
                 slow.next = cur # dummy1 指向第一个小于x的node
@@ -9619,8 +9513,7 @@ https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=1573126616091366883
 ```py
 class Solution:
     def flatten(self, root: TreeNode) -> None:
-        if not root:
-            return
+        if not root: return
         stack = [root]
         pre = None # 穿针引线
         while stack:
@@ -9638,8 +9531,7 @@ class Solution:
         preorderList = []
         
         def traversal(root: TreeNode):
-            if root == None:
-                return
+            if not root: return
             preorderList.append(root) # 前序
             traversal(root.left)    # 左
             traversal(root.right)   # 右
@@ -9666,17 +9558,15 @@ class Solution:
         minAim = sum(nums[0:3]) - target
         n = len(nums)
         for i in range(n - 2):
+            # 三指针：i + left + right
             left = i + 1
             right = n - 1
             while left < right:
                 aim = nums[i] + nums[left] + nums[right] - target
                 if abs(aim) < abs(minAim): minAim = aim
-                if aim == 0: 
-                    return target
-                elif aim > 0:
-                    right -= 1
-                else:
-                    left += 1
+                if aim == 0:  return target
+                elif aim > 0:  right -= 1
+                else:          left  += 1
         return minAim + target
 ```
 
@@ -9737,22 +9627,22 @@ class Solution:
     def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
         if not root:
             return None
-    # 假如要删除的不是根节点，转为递归子问题。
+    # 假如要删除的不是根节点
         if root.val > key:
             root.left = self.deleteNode(root.left, key)
         elif root.val < key:
             root.right = self.deleteNode(root.right, key)
-    # 假如删除的是根节点且左子树为空，返回右子树即可。
+
+    # 假如删除的是根节点
         elif not root.left:
-            root = root.right # 右子树非空
-    # 假如删除的是根节点且左子树非空，
+            root = root.right # 删除根节点
         else:
             p = root.left
             while p.right:
                 p = p.right
-    # 找到左子树中最大的节点（其必然是没有右子树的）
-            p.right = root.right
-            root = root.left # 左子树非空
+    
+            p.right = root.right # 找到左子树中最大的节点，链接到 root.right
+            root = root.left # 删除根节点
         return root
 ```
 
@@ -9769,32 +9659,15 @@ class Solution:
 import heapq
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        dic = {} 
+        dic = collections.defaultdict(int)
         for i in range(len(nums)):
-            dic[nums[i]] = dic.get(nums[i], 0) + 1
+            dic[nums[i]] += 1
         hp = [] #小顶堆
         for key, freq in dic.items():
             heapq.heappush(hp, (freq, key))
             if len(hp) > k: 
                 heapq.heappop(hp)
-        
-        res = [0] * k
-        for i in range(k-1, -1, -1):
-            res[i] = heapq.heappop(hp)[1]
-        return res
-```
-
-```py
-class Solution:
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        dic = {}
-        for n in nums:
-            if n in dic:
-                dic[n] += 1
-            else:
-                dic[n] = 1
-        return [key for key, val in sorted(dic.items(), key=lambda item:item[1],reverse=True)][0:k]
-
+        return [x[1] for x in hp]
 ```
 
 ```scala
@@ -9844,11 +9717,11 @@ class Solution:
     """
     Do not return anything, modify s in-place instead.
     """
-    i, j = 0, len(s) - 1
-    while i < j:
-        s[i],s[j]=s[j],s[i]
-        i+=1
-        j-=1
+    l, r = 0, len(s) - 1
+    while l < r:
+        s[l], s[r] = s[r], s[l]
+        l += 1
+        r -= 1
     return s
 ```
 
@@ -9877,17 +9750,6 @@ object Solution {
 ```py
 class Solution:
     def hammingWeight(self, n: int) -> int:
-        return ('{:0b}'.format(n).count('1'))
-
-class Solution:
-    def hammingWeight(self, n: int) -> int:
-        return bin(n).count('1')
-#  python 输入的是10进制的 直接转str不行 可以试试 bin(n) 将10进制 转成 二进制然后 count
-```
-
-```py
-class Solution:
-    def hammingWeight(self, n: int) -> int:
         res = sum(1 for i in range(32) if n & (1 << i)) 
         return res
 
@@ -9910,23 +9772,6 @@ class Solution:
 
 ```scala
 object Solution0 {
-    // you need treat n as an unsigned value
-    def hammingWeight(n: Int): Int = {
-
-        var mask = 1
-        var counter = 0
-        for (_ <- 0 to 32) {
-
-            if ((n & mask) != 0) {
-                counter += 1
-            }
-            mask  = mask << 1
-        }
-        counter
-    }
-}
-
-object Solution0 {
     def hammingWeight(n: Int): Int = {
         var counter = 0
         var num = n         
@@ -9937,13 +9782,7 @@ object Solution0 {
         counter
     }
 }
- 
-object Solution {
-    // you need treat n as an unsigned value
-    def hammingWeight(n: Int): Int = {
-        n.toBinaryString.toCharArray.filter(_ == '1').length
-    }
-}
+
 ```
 
 
@@ -12127,27 +11966,385 @@ class Solution:
 ```
 
 
-##  249. <a name='II-1'></a>117. 填充每个节点的下一个右侧节点指针 II
+##  249. <a name='II-1'></a>117 Populating Next Right Pointers in Ea (可跳过)
+
+[小明](https://www.bilibili.com/video/BV1np4y1r7fQ?spm_id_from=333.999.0.0)
+
+看不懂，懵逼了
+
+```py
+# 看不懂，懵逼了
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        dummy = Node()
+        dummy.next = root
+        while dummy.next:
+            curp = dummy.next
+            dummy.next = None
+            pre = dummy
+            while curp:
+                for cur in [curp.left, curp.right]:
+                    if cur:
+                        pre.next = cur
+                        pre = cur
+                curp = curp.next
+        return root
+
+# python 非递归方法，常数空间，从顶到下，逐层连接
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        first = root # left_most表示当前层的最左边节点
+        while first: # 每次循环连接当前层的下一层
+            dummy = pre = Node(0) # head表示下一层的虚拟头部
+            cur = first
+            while cur : # 遍历当前层，将下一层连接 
+                if cur.left :
+                    pre.next = cur.left
+                    pre = pre.next
+                if cur.right :
+                    pre.next = cur.right
+                    pre = pre.next
+                cur = cur.next
+            first = dummy.next
+        return root
+```
+
 
 ##  250. <a name='Offer07.'></a>剑指 Offer 07. 重建二叉树
 
-##  251. <a name='K-1'></a>378. 有序矩阵中第K小的元素
+##  251. <a name='K-1'></a>378-【最小堆🌵】有序矩阵中第K小的元素
+
+[哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV1Zy4y127qr?spm_id_from=333.999.0.0)
+
+```py
+# 无脑暴力法一行版
+
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k) -> int:
+        return sorted(sum(matrix,[]))[k-1]
+# 暴力pq一行
+import heapq
+class Solution(object):
+    def kthSmallest(self, matrix, k):
+        return heapq.nsmallest(k,sum(matrix,[]))[-1]
+#  heapq一行
+class Solution(object):
+    def kthSmallest(self, matrix, k):
+        return list(heapq.merge(*matrix))[k-1]
+
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k) -> int:
+        rec = sorted(sum(matrix, []))
+        return rec[k - 1]
+
+# 无脑暴力法优化版
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k) -> int:
+        lis=[]
+        for l in matrix:
+            lis+=l
+        l=heapq.nlargest(len(lis)-k+1,lis)
+        return l[-1]
+# 无脑暴力法
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k) -> int:
+        lis=[]
+        for l in matrix:
+            lis+=l
+        lis.sort()
+        return lis[k-1]
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k) -> int:
+        n = len(matrix)
+        pq = [(matrix[i][0], i, 0) for i in range(n)]
+        heapq.heapify(pq)
+
+        ret = 0
+        for i in range(k - 1):
+            num, x, y = heapq.heappop(pq)
+            if y != n - 1:
+                heapq.heappush(pq, (matrix[x][y + 1], x, y + 1))
+        
+        return heapq.heappop(pq)[0]
+# binary search
+# ```python
+import bisect
+class Solution(object):
+    def kthSmallest(self, matrix, k):
+        """
+        :type matrix: List[List[int]]
+        :type k
+        :rtype
+        """
+        l, r = matrix[0][0], matrix[-1][-1]
+        while l <= r:
+            mid = l + ((r - l) >> 2)
+            if sum(bisect.bisect_right(row, mid) for row in matrix) < k:
+                l = mid + 1
+            else:
+                r = mid - 1
+        return l
+```
+
+
 
 ##  252. <a name='Offer32-III.III'></a>剑指 Offer 32 - III. 从上到下打印二叉树 III
 
 ##  253. <a name='-1'></a>77. 组合
 
-##  254. <a name='-1'></a>528. 按权重随机选择
+```py
+class Solution:
+    def combine(self, n, k):
+            res = []
+            path = []
+            def backtrack(StartIndex):
+                if len(path) == k:
+                    res.append(path[:])
+                    return
+                for i in range(StartIndex, n+1):
+                    path.append(i)
+                    backtrack(i+1)
+                    path.pop()
+            backtrack(1)
+            return res
+```
 
-##  255. <a name='-1'></a>279. 完全平方数
+##  254. <a name='-1'></a>528 Random Pick with Weight
 
-##  256. <a name='-1'></a>257. 二叉树的所有路径
+[小明](https://www.bilibili.com/video/BV1UV411r7MK?spm_id_from=333.999.0.0)
 
-##  257. <a name='K-1'></a>692. 前K个高频单词
+##  255. <a name='-1'></a>279 【动态🚀规划 + 背包】Perfect Squares
+
+[小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
+
+```py
+# 动态🚀规划
+        '''版本一，先遍历背包, 再遍历物品'''
+        '''版本二， 先遍历物品, 再遍历背包'''
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [10e5] * (n + 1)
+        dp[0] = 0
+        # 也可以 sqrt = floor(n**0.5) 
+        sqrt = ceil(n**0.5) 
+        for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
+            num = i**2
+            for j in range(num, n + 1):
+                if j >= num:
+                    dp[j] = min(dp[j], dp[j-num] + 1) 
+        return dp[-1]
+```
+
+##  256. <a name='-1'></a>257-二叉树的所有路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+        def construct_paths(root, path):
+            if root:
+                path += str(root.val)
+                if not root.left and not root.right:  # 当前节点是叶子节点
+                    paths.append(path)  # 把路径加入到答案中
+                else:
+                    path += '->'  # 当前节点不是叶子节点，继续递归遍历
+                    construct_paths(root.left, path)
+                    construct_paths(root.right, path)
+
+        paths = []
+        construct_paths(root, '')
+        return paths
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-paths/solution/er-cha-shu-de-suo-you-lu-jing-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        paths = list()
+        if not root:
+            return paths
+
+        node_queue = collections.deque([root])
+        path_queue = collections.deque([str(root.val)])
+
+        while node_queue:
+            node = node_queue.popleft()
+            path = path_queue.popleft()
+
+            if not node.left and not node.right:
+                paths.append(path)
+            else:
+                if node.left:
+                    node_queue.append(node.left)
+                    path_queue.append(path + '->' + str(node.left.val))
+                
+                if node.right:
+                    node_queue.append(node.right)
+                    path_queue.append(path + '->' + str(node.right.val))
+        return paths
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/binary-tree-paths/solution/er-cha-shu-de-suo-you-lu-jing-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+```py
+python3 最好理解的递归实现
+
+class Solution:
+            
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        if not root:
+            return []
+        if not root.left and not root.right:
+            return [str(root.val)]
+        paths = []
+        if root.left:
+            for i in self.binaryTreePaths(root.left):
+                paths.append(str(root.val) + '->' + i)
+        if root.right:
+            for i in self.binaryTreePaths(root.right):
+                paths.append(str(root.val) + '->' + i)
+        return paths  
+paths 递归每调用一次要创建一个以便给上一层遍历（叠加）
+调用self.binaryTreePaths(root.left)得到的是左子树的全部路径，加入左子树为[1,2,3],那么得到的结果是[1,2],[1,3]两组，然后还要和根节点进行拼接，所以要用循环。
+```
+
+```scala
+package com.zhourui.leetcode
+import com.zhourui.codech._
+
+//Given a binary tree, return all root-to-leaf paths.
+//
+//Note: A leaf is a node with no children.
+//
+//Example:
+//
+//Input:
+//
+//1
+///   \
+//2     3
+//\
+//5
+//
+//Output: ["1->2->5", "1->3"]
+//
+//Explanation: All root-to-leaf paths are: 1->2->5, 1->3
+
+package lc0257 {
+
+  import scala.collection.mutable.ArrayBuffer
+
+  object Solution {
+    def binaryTreePaths(root: TreeNode): List[String] = {
+      val tmp = ArrayBuffer[Int]()
+      val ret =ArrayBuffer[ArrayBuffer[Int]]()
+      helper(root, tmp, ret)
+      ret.toList.map({
+        x=>x.mkString("->")
+      })
+    }
+
+    def helper(node:TreeNode,tmp:ArrayBuffer[Int],ret:ArrayBuffer[ArrayBuffer[Int]]): Unit = {
+      if (node==null) {
+        return
+      }
+
+      tmp += node.value
+
+      if (node.left == null && node.right==null) {
+          ret += tmp.clone()
+      } else {
+        helper(node.left, tmp, ret)
+        helper(node.right, tmp, ret)
+      }
+      tmp.remove(tmp.length-1)
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val t1 = Tree.build(IndexedSeq("1","2 3","5 N N N"))
+      println(Solution.binaryTreePaths(t1))
+    }
+    val name = "257 binary tree path"
+  }
+}
+
+```
+
+##  257. <a name='K-1'></a>692. Top K Frequent Words
+
+[花花酱](https://www.bilibili.com/video/BV1Mt41137eL?spm_id_from=333.999.0.0)
 
 ##  258. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
 
-##  259. <a name='II-1'></a>137. 只出现一次的数字 II
+##  259. <a name='II-1'></a>137 【位运算😜】Single Number II
+
+[小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
+
+方法二：依次确定每一个二进制位
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ro27dupbn40.webp)
+
+```py
+细节：
+
+需要注意的是，如果使用的语言对「有符号整数类型」和「无符号整数类型」没有区分，
+
+那么可能会得到错误的答案。
+
+这是因为「有符号整数类型」（即 int 类型）的第 31 个二进制位（即最高位）是补码意义下的符号位，对应着 -2^{31}
+
+而「无符号整数类型」由于没有符号，第 31 个二进制位对应着 2^{31}
+
+因此在某些语言（例如 Python ）中需要对最高位进行特殊判断。
+
+时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
+
+空间复杂度：O(1)
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ans = 0
+        for i in range(32):
+            total = sum((num >> i) & 1 for num in nums)
+            if total % 3:
+                # Python 这里对于最高位需要特殊判断
+                if i == 31:
+                    ans -= (1 << i)
+                else:
+                    ans |= (1 << i)
+        return ans
+
+这个解法看不懂，放弃：
+
+
+时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
+
+空间复杂度：O(1)
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ones, twos = 0, 0
+        for num in nums:
+            ones = ones ^ num & ~ twos
+            twos = twos ^ num & ~ ones
+        return ones
+```
+
 
 ##  260. <a name='21.'></a>补充题21. 字符串相减
 
@@ -12164,33 +12361,794 @@ class Solution:
 
 ##  265. <a name='Offer57-II.s'></a>剑指 Offer 57 - II. 和为s的连续正数序列
 
-##  266. <a name='-1'></a>315. 计算右侧小于当前元素的个数
+##  266. <a name='-1'></a>315. Count of Smaller Numbers After Self
 
-##  267. <a name='II-1'></a>107. 二叉树的层次遍历 II
+[花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
 
-##  268. <a name='-1'></a>172. 阶乘后的零
+##  267. <a name='II-1'></a>107-Binary Tree Level Order Traversal II
 
-##  269. <a name='-1'></a>647. 回文子串
+[哈哈哈](https://www.bilibili.com/video/BV1eJ411z7d6?spm_id_from=333.999.0.0)
 
-##  270. <a name='III-1'></a>260. 只出现一次的数字 III
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7aP?spm_id_from=333.999.0.0)
 
-##  271. <a name='IV'></a>188. 买卖股票的最佳时机 IV
+[小明](https://www.bilibili.com/video/BV1yK411n76R?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1qA411i7P4?spm_id_from=333.999.0.0)
+
+
+```py
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        queue = [root]
+        res = []
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.pop(0)
+                level.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(level)
+        return res[::-1]
+```
+
+##  268. <a name='-1'></a>172-Factorial Trailing Zeroes
+
+[哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7tS?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        # Calculate n!
+        factorial = 1
+        for i in range(2, n + 1):
+            factorial *= i
+        # Count how many 0's are on the end.
+        res = 0
+        while factorial % 10 == 0:
+            res += 1
+            factorial //= 10
+            
+        return res
+
+
+
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        ans = 0
+        while n > 0:
+            n //= 5
+            ans += n
+        return ans
+
+
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        ans = 0
+        while n >= 5:
+            ans += n//5
+            n = n//5
+        return ans
+```
+
+```scala
+object Solution {
+    def trailingZeroes(n: Int): Int = {
+        var count5 = 0
+        var count2 = 0
+        
+        var temp = n
+        while(temp>=5){
+            count5 += temp/5
+            temp = temp/5
+        }
+        
+        temp = n
+        while(temp>=2){
+            count2 += temp/2
+            temp = temp/2
+        }
+        
+        if(count5 < count2) count5 else count2
+    }
+}
+
+```
+
+##  269. <a name='-1'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
+
+[小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        n = len(s)
+        dp = [[0] * n for _ in range(n)]
+        res = 0
+        # 这个部分其实可以不写：
+        # for i in range(n):
+        #     dp[i][i]=1
+        for i in range(n):
+            for j in range(i, -1, -1):
+                if s[i] == s[j] and (i - j <= 1 or dp[i - 1][j + 1]):
+                    dp[i][j] = 1
+                    res += 1
+        return res
+
+
+
+class Solution(object):
+    def countSubstrings(self, s):
+        '''
+        双指针太暴力了吧
+        '''
+        cnt = 0
+        for i in range(0,len(s)):
+            for j in range(i+1,len(s)+1):
+                if s[i:j] == s[i:j][::-1]:
+                    cnt += 1
+        return cnt
+```
+
+```py
+# Python3中心扩展法非常简洁代码
+# 直接利用中心扩展法, 依次计数找到的所有的回文🌈子串即可；
+# 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
+# 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
+### 代码
+from math import floor,ceil
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        center = ans = 0
+        while center < len(s):
+            low, high = floor(center), ceil(center)
+            while low >=0 and high < len(s) and s[low] == s[high]:
+                low, high, ans = low-1, high+1, ans+1
+            center += 0.5
+        return ans
+```
+
+##  270. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
+
+[哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1QK411J7dN?spm_id_from=333.999.0.0)
+
+难点在于只出现一次的数字不止一个，
+
+但是刚好有且只有两个
+
+```py
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        freq = Counter(nums)
+        return [num for num, occ in freq.items() if occ == 1]
+
+```
+
+```py
+复杂度分析
+
+时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+
+空间复杂度：O(1)。
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        xorsum = 0
+        for num in nums:
+            xorsum ^= num # 找到这两个数的差异
+        
+        lsb = xorsum & (-xorsum) # 找到这两个数的差异的最后一位1
+        type1 = type2 = 0
+        for num in nums:
+            if num & lsb: # 这里只能用 &，来决num & lsb == 100 or 0
+                type1 ^= num
+            else:
+                type2 ^= num
+        
+        return [type1, type2]
+
+
+思路, 先全部异或一次, 得到的结果, 考察其的某个非0位(比如最高非0位), 那么只出现一次的两个数中, 在这个位上一个为0, 一个为1, 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
+```
+
+##  271. <a name='IV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
+
+[小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
+
+```py
+# 背一背
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        if not prices:
+            return 0
+
+        buy = [prices[0]] * (k+1)
+        sell = [0] * (k+1)
+        for price in prices:
+            for time in range(1,k+1): 
+                # 对于每一个新来的价格，依 time 比较 and 更新
+                buy[time-1] = min(buy[time-1],  price - sell[time-1])
+                sell[time]  = max(sell[time], price - buy[time-1])
+                # print('价格:',price,'次数:',time,'buy:',buy)
+                # print('价格:',price,'次数:',time,'sell:',sell)
+                
+        return sell[k]
+
+
+if __name__ == "__main__":   
+	s = Solution()
+	print(s.maxProfit(k = 2, prices = [3,2,6,5,0,3,-1,3]))
+
+价格: 3 次数: 1 buy: [3, 3, '*']
+价格: 3 次数: 1 sell: [0, 0, 0]
+价格: 3 次数: 2 buy: [3, 3, '*']
+价格: 3 次数: 2 sell: [0, 0, 0]
+--------------------
+价格: 2 次数: 1 buy: [2, 3, '*']
+价格: 2 次数: 1 sell: [0, 0, 0]
+价格: 2 次数: 2 buy: [2, 2, '*']
+价格: 2 次数: 2 sell: [0, 0, 0]
+--------------------
+价格: 6 次数: 1 buy: [2, 2, '*']
+价格: 6 次数: 1 sell: [0, 4, 0]
+价格: 6 次数: 2 buy: [2, 2, '*']
+价格: 6 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 5 次数: 1 buy: [2, 2, '*']
+价格: 5 次数: 1 sell: [0, 4, 4]
+价格: 5 次数: 2 buy: [2, 1, '*']
+价格: 5 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 0 次数: 1 buy: [0, 1, '*']
+价格: 0 次数: 1 sell: [0, 4, 4]
+价格: 0 次数: 2 buy: [0, -4, '*']
+价格: 0 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 3 次数: 1 buy: [0, -4, '*']
+价格: 3 次数: 1 sell: [0, 4, 4]
+价格: 3 次数: 2 buy: [0, -4, '*']
+价格: 3 次数: 2 sell: [0, 4, 7]
+--------------------
+价格: -1 次数: 1 buy: [-1, -4, '*']
+价格: -1 次数: 1 sell: [0, 4, 7]
+价格: -1 次数: 2 buy: [-1, -5, '*']
+价格: -1 次数: 2 sell: [0, 4, 7]
+--------------------
+价格: 3 次数: 1 buy: [-1, -5, '*']
+价格: 3 次数: 1 sell: [0, 4, 7]
+价格: 3 次数: 2 buy: [-1, -5, '*']
+价格: 3 次数: 2 sell: [0, 4, 8]
+--------------------
+8
+
+
+```
+
+
+
+
+```scala
+/**
+* chosen solution
+* dynamic programming
+* memo 
+*    1: using an 3-dim array to record previous state
+*     dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+*  time complexity: O(NK), N: the length of prices; k: transaction's restrictions
+*  space complexity: O(K),  worst case: O(N)N
+*/ 
+object Solution0 {
+    def maxProfit(k: Int, prices: Array[Int]): Int = {
+        if(prices == null || prices.length < 2 || k < 1 ) return 0
+        val kk = if(2 * k > prices.length) prices.length / 2 else k
+        
+        val dp = Array.tabulate(2, kk, 2) {
+            case (_, _, 0) => Int.MinValue
+            case (_, _, 1) => 0
+            case _ => 0
+        }
+        
+        for(i <- prices.indices; j <- 0 until kk){
+            val current = i & 1
+            val previous = current ^1
+            // 0 for buy, 1 for sell
+            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
+            dp(current)(j)(0) = dp(previous)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(previous)(j - 1)(1) - prices(i)
+            }
+            
+        }
+        
+        dp((prices.length - 1) & 1).map(_(1)).max
+        
+    }
+}
+/**
+* my first commitment
+* dynamic programming
+* memo 
+*    1: using an 3-dim array to record all previous state
+*         dp[state index][k times transaction][buy or sell]
+*     dp definition: dp[i][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+*  time complexity: O(NK), N: the length of prices; k: transaction's constraint
+*/
+object Solution1 {
+  def maxProfit(k: Int, prices: Array[Int]): Int = {
+    if(prices == null || prices.length < 2 || k < 1 ) return 0
+    if(k * 2 >=  prices.length) return prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum
+    val profits = Array.ofDim[Int](prices.length, k, 2)
+
+    for{
+      i <- profits.indices
+      j <- 0 until k
+    }{
+      profits(i)(j)(0) = Int.MinValue  // hold
+      profits(i)(j)(1) = 0 // sell
+    }
+
+    for {
+      i <- prices.indices
+      j <- 0 until k
+    } {
+      val ii = (i + prices.length - 1) % prices.length
+      profits(i)(j)(1) = profits(ii)(j)(1)  max ( profits(ii)(j)(0) + prices(i)) // sell
+      if (j > 0)
+        profits(i)(j)(0) = profits(ii)(j)(0)  max ( profits(ii)(j - 1)(1) - prices(i)) // buy
+      else
+        profits(i)(j)(0) = profits(ii)(j)(0)  max  - prices(i) // buy
+    }
+
+    profits(prices.length - 1).map(_.max).max
+  }
+}
+
+/**
+* dp: decrease status array which only keep current and precious status
+* memo
+*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+* time complexity: O(NK), N: the length of prices; k: transaction's constraint
+* space complexity: O(K),  worst case: O(N)
+*/
+
+object Solution1-2 {
+  def maxProfit(k: Int, prices: Array[Int]): Int = {
+    if(prices == null || prices.length < 2 || k < 1 ) return 0
+    if(k * 2 >=  prices.length) return prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum
+
+
+    val profits = Array.ofDim[Int](2, k, 2)
+
+    for{
+      i <- profits.indices
+      j <- 0 until k
+    }{
+      profits(i)(j)(0) = Int.MinValue  // hold
+      profits(i)(j)(1) = 0 // sell
+    }
+
+    for {
+      i <- prices.indices
+      j <- 0 until k
+    } {
+      val currentI = (i + 1) % 2
+      val preciousI = i % 2
+      profits(currentI)(j)(1) = profits(preciousI)(j)(1)  max ( profits(preciousI)(j)(0) + prices(i)) // sell
+      if (j > 0)
+        profits(currentI)(j)(0) = profits(preciousI)(j)(0)  max ( profits(preciousI)(j - 1)(1) - prices(i)) // buy
+      else
+        profits(currentI)(j)(0) = profits(preciousI)(j)(0)  max  - prices(i) // buy
+    }
+    profits(prices.length % 2).map(_.max).max // prices.length % 2: decide the newest status index
+  }
+
+  private def debugProfits(profits: Array[Array[Array[Int]]]): Unit = {
+        profits.zipWithIndex.foreach{
+          case (p, i) =>
+            println(s"status: $i")
+            p.zipWithIndex.foreach{
+            case (pp, j) =>
+                println(s"transaction $j: hold: ${pp(0)}, sell: ${pp(1)}")
+          }
+            println(" ")
+        }
+  }
+}
+/**
+* dp: decrease status array which only keep current and precious status
+* memo
+*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+* time complexity: O(NK), N: the length of prices; k: transaction's constraint
+* space complexity: O(K),  worst case: O(N)
+*/
+object Solution1-3 {
+    def maxProfit(k: Int, prices: Array[Int]): Int = {
+        if(prices == null || prices.length < 2 || k < 1 ) return 0
+        val kk = if(2 * k > prices.length) prices.length / 2 else k
+        
+        val dp = Array.tabulate(2, kk, 2) {
+            case (_, _, 0) => Int.MinValue
+            case (_, _, 1) => 0
+            case _ => 0
+        }
+        
+        for(i <- prices.indices; j <- 0 until kk){
+            val current = i & 1
+            val previous = current ^1
+            // 0 for buy, 1 for sell
+            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
+            dp(current)(j)(0) = dp(previous)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(previous)(j - 1)(1) - prices(i)
+            }
+            
+        }
+        
+        dp((prices.length - 1) & 1).map(_(1)).max
+        
+    }
+}
+```
 
 ##  272. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
 
-##  273. <a name='-1'></a>12. 整数转罗马数字
+##  273. <a name='-1'></a>12. Integer to Roman
 
-##  274. <a name='-1'></a>386. 字典序排数
+[小梦想家](https://www.bilibili.com/video/BV1Lb411x7Wf?spm_id_from=333.999.0.0)
 
-##  275. <a name='-1'></a>752. 打开转盘锁
+[小明](https://www.bilibili.com/video/BV1hN411Q7ka?spm_id_from=333.999.0.0)
 
-##  276. <a name='K-1'></a>395. 至少有K个重复字符的最长子串
+```py
+# 这个写起来超级简单！
+# NO BUG
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        strlist = ["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"]
+        numlist = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
+        res = ''
+        for i in range(len(numlist)):
+            while num >= numlist[i]:
+                num -= numlist[i]
+                res = res + strlist[i]
+        return res
+```
 
-##  277. <a name='-1'></a>231. 2的幂
+```py
+# 其他方法
+class Solution:
 
-##  278. <a name='-1'></a>977. 有序数组的平方
+    VALUE_SYMBOLS = [
+        (1000, "M"),
+        (900, "CM"),
+        (500, "D"),
+        (400, "CD"),
+        (100, "C"),
+        (90, "XC"),
+        (50, "L"),
+        (40, "XL"),
+        (10, "X"),
+        (9, "IX"),
+        (5, "V"),
+        (4, "IV"),
+        (1, "I"),
+    ]
+    print(type(VALUE_SYMBOLS))
+    def intToRoman(self, num: int) -> str:
+        roman = list()
+        for value, symbol in Solution.VALUE_SYMBOLS:
+            while num >= value:
+                print("-"*20)
+                print(num)
+                num -= value
+                roman.append(symbol)
+                print(roman)
+            if num == 0:
+                break
+        return "".join(roman)
+```
 
-##  279. <a name='III-1'></a>437. 路径总和 III
+```scala
+package com.zhourui.leetcode
+
+//class Solution {
+//  public:
+//    string intToRoman(int num) {
+//      vector<int> t1{1000,900,500,400,100,90,50,40,10,9,5,4,1};
+//      vector<string> t2{"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+//      string ret="";
+//      for (int i=0;i<t1.size();i++) {
+//      if (num>=t1[i]) {
+//      int c = num/t1[i];
+//      for (int j=0;j<c;j++) {
+//      ret+=t2[i];
+//    }
+//      num=num%t1[i];
+//    } else if (num==0) {
+//      break;
+//    }
+//    }
+//      return ret;
+//    }
+//};
+
+
+//object Solution {
+//  case class RomanNumber(decValue: Int, romanStr: String)
+//  val numbers = Seq(
+//    RomanNumber(1000, "M"),
+//    RomanNumber(900, "CM"),
+//    RomanNumber(500, "D"),
+//    RomanNumber(400, "CD"),
+//    RomanNumber(100, "C"),
+//    RomanNumber(90, "XC"),
+//    RomanNumber(50, "L"),
+//    RomanNumber(40, "XL"),
+//    RomanNumber(10, "X"),
+//    RomanNumber(9, "IX"),
+//    RomanNumber(5, "V"),
+//    RomanNumber(4, "IV"),
+//    RomanNumber(1, "I")
+//  )
+//  def intToRoman(num: Int): String = {
+//    def loop(num:Int, romans: Seq[RomanNumber]): String = {
+//      romans match {
+//        case RomanNumber(x, romanStr) :: _ if x < num => romanStr + loop(num-x, romans)
+//        case RomanNumber(x, romanStr) :: _ if x == num => romanStr
+//        case RomanNumber(x, _) :: tail if x > num => loop(num, tail)
+//      }
+//    }
+//    loop(num, numbers)
+//  }
+//}
+package lc0012_integertoroman {
+  object Solution {
+    case class RomanNumber(s:String, i: Int)
+    def intToRoman(num: Int): String = {
+      val numbers:Seq[RomanNumber] = Seq(
+        RomanNumber("M",1000),
+        RomanNumber("CM",900),
+        RomanNumber("D",500),
+        RomanNumber("CD",400),
+        RomanNumber("C",100),
+        RomanNumber("XC",90),
+        RomanNumber("L",50),
+        RomanNumber("XL",40),
+        RomanNumber("X",10),
+        RomanNumber("IX",9),
+        RomanNumber("V",5),
+        RomanNumber("IV",4),
+        RomanNumber("I",1)
+      )
+      // 很巧妙 利用seq的head 和tail 递归调用
+      // :: 相当于拼接
+
+      def loop(num:Int, romans:Seq[RomanNumber]): String = {
+        romans match {
+          case RomanNumber(romanStr, v) :: lst if v == num => romanStr
+          case RomanNumber(romanStr, v) :: lst if v < num => romanStr+loop(num-v,romans)
+          case RomanNumber(romanStr, v) :: tail => loop(num,tail)
+        }
+      }
+      loop(num, numbers)
+    }
+  }
+}
+
+```
+
+
+##  274. <a name='-1'></a>386
+
+```py
+class Solution:
+    def lexicalOrder(self, n):
+        def dfs(num):
+            if num > n:
+                return
+            ans.append(num)
+            for nxt in range(num * 10, num * 10 + 10):
+                dfs(nxt)
+
+        ans = []
+        for num in range(1, 10):
+            dfs(num)
+        return ans
+
+class Solution:
+    def lexicalOrder(self, n):
+        def dfs(i: int = 1) -> None:
+            if i > n:
+                return
+            for j in range(i, min(n + 1, (10 if i < 10 else i + 10))):
+                ans.append(j)
+                dfs(j * 10)
+        ans = []
+        dfs()
+        return ans
+
+class Solution:
+    def lexicalOrder(self, n):
+        def dfs(rec, i, n):
+            if i > n: return -1
+            rec.append(i);
+            child = i * 10
+            for j in range(10):
+                if dfs(rec, child+j, n) == -1:break
+            return
+        rec = []
+        for i in range(1, 10):
+            dfs(rec, i, n)
+        return rec
+```
+
+```py
+class Solution:
+    def lexicalOrder(self, n):
+        return sorted(list(range(1,n+1)),key=lambda x:str(x))
+
+class Solution:
+    def lexicalOrder(self, n):
+        return [int(j) for j in sorted([str(i) for i in range(1, n + 1)])]
+
+# 字符串排序
+
+class Solution:
+    def lexicalOrder(self, n):
+        l = sorted([str(i) for i in range(1, n + 1)])
+        return [int(i) for i in l]
+```
+
+```py
+class Solution:
+    def lexicalOrder(self, n):
+        orders = []
+        stack = [(1, 8)]
+        while len(stack) > 0:
+            orders.append(stack[-1][0])
+            (last, step) = stack.pop()
+            if last+1 <= n and step > 0:
+                stack.append((last+1, step-1))
+            if last*10 <= n:
+                stack.append((last*10, 9))
+        return orders
+
+class Solution:
+    def lexicalOrder(self, n):
+        ans = []
+        num = 1
+        while len(ans) < n:
+            while num <= n:  # 不断进入下一层
+                ans.append(num)
+                num *= 10
+            while num % 10 == 9 or num > n:  # 不断返回上一层
+                num //= 10
+            num += 1  # 遍历该层下一个数
+        return ans
+
+class Solution(object):
+    def lexicalOrder(self, n):
+        """
+        :type n: int
+        :rtype: List[int]
+        """
+        res = []
+        cur = 1
+        for i in range(n):
+            res.append(cur)
+            if (cur * 10 <= n):
+                cur *= 10
+            elif cur + 1 <= n and (cur + 1) % 10 != 0:
+                cur += 1
+            else:
+                while (cur/10) % 10 == 9:
+                    cur /= 10
+                cur = cur / 10 + 1
+        return res
+```
+
+##  275. <a name='-1'></a>752. Open the Lock
+
+[花花酱](https://www.bilibili.com/video/BV1NW411y74z?spm_id_from=333.999.0.0)
+
+##  276. <a name='K-1'></a>395 Longest Substring with At Least K
+
+[小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
+
+##  277. <a name='-1'></a>231. 【位运算😜】Power of Two
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1rV411r7AL?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        return n > 0 and (n & (n - 1)) == 0
+
+
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        return bin(n).count('1') == 1 and n > 0
+
+
+
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        return n > 0 and (n & -n) == n
+```
+
+```py
+2147483648是整数范围内最大的2次幂，若n是2的幂，那么2147483648一定能整除它
+
+class Solution(object):
+    def isPowerOfTwo(self, n):
+        return n > 0 and 2147483648 % n == 0
+
+        
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        BIG = 1<<30 # 我试了一下，30,31,32都对
+        return n > 0 and BIG % n == 0
+```
+
+```scala
+/**
+* time complexity  O(1)
+*/
+object Solution {
+    def isPowerOfTwo(n: Int): Boolean = {
+        n > 0 && (n & (n - 1) ) == 0
+    }
+}
+```
+
+##  278. <a name='-1'></a>977 Squares of a Sorted Array
+
+[小明](https://www.bilibili.com/video/BV1EX4y1u7Mb?spm_id_from=333.999.0.0)
+
+##  279. <a name='III-1'></a>437 【前缀和🎨】Path Sum III
+
+[小明](https://www.bilibili.com/video/BV1tZ4y1M7JR?spm_id_from=333.999.0.0)
+
+时间复杂度 O(n), 空间复杂度 O(n)
+
+```py
+def pathSum(self, root, sum):
+    
+    self.dicts = {0: 1}
+    self.res = 0
+    def helper(root, prefix_sum, sum):
+        if not root:
+            return 0
+            
+        prefix_sum += root.val
+        
+        if prefix_sum - sum in self.dicts:
+            self.res += self.dicts[prefix_sum - sum]
+            
+        
+        self.dicts[prefix_sum] = self.dicts.get(prefix_sum, 0) + 1
+        
+        helper(root.left, prefix_sum, sum)
+        
+        helper(root.right, prefix_sum, sum)
+        
+        # Note: 回到上一层时, 需要将当前的前缀和对应的路径数目减1      
+        self.dicts[prefix_sum] -= 1
+    
+    helper(root, 0, sum)
+    return res    
+```
 
 ##  280. <a name='-1'></a>617. 合并二叉树
 
@@ -12199,43 +13157,1041 @@ class Solution:
 
 ##  281. <a name='k'></a>60. 第k个排列
 
-##  282. <a name='strStr'></a>28. 实现 strStr()
+##  282. <a name='strStr'></a>28-Implement str
 
-##  283. <a name='-1'></a>204. 计数质数
+[哈哈哈](https://www.bilibili.com/video/BV1eL411n7YS?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1BJ41117d6?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1UK411K7zB?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7cG?spm_id_from=333.999.0.0)
+
+解法一：直接用.index()
+
+```py
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        if needle == "":
+            return 0
+        if needle in haystack:
+            return haystack.index(needle)
+        else:
+            return -1
+```
+
+解法二：在对整个needle字符串比较
+
+```py
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        for i in range(len(haystack)-len(needle)+1):
+            if haystack[i:i+len(needle)] == needle:
+                return i 
+        return -1
+```
+
+```scala
+object Solution {
+    def strStr(haystack: String, needle: String): Int = {
+        if(needle.isEmpty){
+            0
+        }else if(haystack.isEmpty){
+            -1
+        }else{
+            var needleLength = needle.length
+            var head = 0
+            var end = head + needleLength
+            var flag = true
+            
+            while(flag && (end <= haystack.length)){
+                if(needle.equals(haystack.substring(head, end))){
+                    flag = false
+                }else{
+                    head += 1
+                    end += 1
+                }
+            }
+            
+            if(flag) -1 else head
+        }
+    }
+}
+
+```
+
+##  283. <a name='-1'></a>204-Count Primes
+
+[哈哈哈](https://www.bilibili.com/video/BV167411w7Sf?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7cV?spm_id_from=333.999.0.0)
+
+```py
+# 埃氏筛代码重点理解一下j从i*i开始吧，
+
+# 因为计算i*i之前就计算了i*2，i*3...,i*(i-1)。 
+
+# 这题搜到一个非常牛逼的算法,叫做厄拉多塞筛法. 
+
+# 比如说求20以内质数的个数,首先0,1不是质数.2是第一个质数,
+
+# 然后把20以内所有2的倍数划去.2后面紧跟的数即为下一个质数3,
+
+# 然后把3所有的倍数划去.3后面紧跟的数即为下一个质数5,
+
+# 再把5所有的倍数划去.以此类推.
+
+# 代码的实现上用了非常好的技巧:
+
+# 即i是从(2,int(n**0.5)+1)而非(2,n).这个技巧是可以验证的,
+
+# 比如说求9以内的质数个数,那么只要划掉sqrt(9)以内的质数倍数,
+
+# 剩下的即全为质数. 所以在划去倍数的时候也是从i*i开始划掉,而不是i+i.
+
+class Solution:
+    def countPrimes(self, n) -> int:
+        if n < 3:
+            return 0     
+        else:
+            # 首先生成了一个全部为1的列表
+            isPrime = [1] * n
+            # 因为0和1不是质数,所以列表的前两个位置赋值为0
+            isPrime[0],isPrime[1] = 0,0
+             # 此时从index = 2开始遍历,output[2]==1,即表明第一个质数为2,然后将2的倍数对应的索引
+             # 全部赋值为0. 此时output[3] == 1,即表明下一个质数为3,同样划去3的倍数.以此类推.
+            for i in range(2,int(n**0.5)+1): 
+                if isPrime[i] == 1:
+                    isPrime[i*i:n:i] = [0] * len(isPrime[i*i:n:i])
+         # 最后output中的数字1表明该位置上的索引数为质数,然后求和即可.
+        return sum(isPrime)
+
+import math
+from math import sqrt
+class Solution(object):
+    def countPrimes(self, n):
+        isprime = [1]*n
+        for i in range(2,int(sqrt(n))+1):
+            if isprime[i]:
+                for j in range(i*i,n,i):
+                    isprime[j] = 0
+        count = 0
+        for i in range(2,n):
+            if isprime[i]:count += 1
+        return count
+
+# 这个解法真是太赞了!又学到了很多~~~ 和大家分享一下
+class Solution(object):
+    def countPrimes(self, n):
+
+        isPrime = [1 for i in range(n)]
+
+        i = 2
+        while i * i < n:
+        	if isPrime[i]:
+        		j = i * i 
+        		while j < n :
+        			isPrime[j] = 0
+        			j += i
+        	i += 1
+
+        return sum(isPrime[2:])
+```
+
+```scala
+object Solution {
+    def countPrimes(n: Int): Int = {
+        
+        //Sieve of Eratosthenes
+        
+        var primeArray = Array.fill(n)(false)
+        (2 until n).map(i => primeArray(i) = true)
+        
+        //We need to check for all numbers i, where i < sqrt(n)
+        //To avoid doing sqrt operation again & again (since its expensive)
+        //We can do i*i < n
+        
+        var i =2
+        while(i*i < n){
+            if(primeArray(i)){
+                var j = i*i
+                while(j < n){
+                    primeArray(j) = false
+                    j += i //because we are only checking multiple of i for each i in iteration
+                }
+            }
+            i+=1
+        }
+        
+        primeArray.filter(x => x).length
+    }
+}
+
+```
+
 
 ##  284. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
 
-##  285. <a name='-1'></a>416. 分割等和子集
+##  285. <a name='-1'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
+
+####  1.201.1. <a name='494'></a>相似题目：494题
+
+[花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1DD4y1X7Cp?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1oZ4y1G7QY?spm_id_from=333.999.0.0)
+
+“动态🚀规划” 的解法
+
+```py
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        if n < 2:
+            return False
+        
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+        
+        target = total // 2
+        dp = [True] + [False] * target
+        for i, num in enumerate(nums):
+            for j in range(target, num - 1, -1):
+                dp[j] |= dp[j - num]
+                # dp[j] = dp[j] or dp[j-num]
+        
+        return dp[target]
+
+根据494题修改的动态规划：
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        if sums % 2 == 1: return False
+        bagSize = sums // 2
+        # 构建dp，numLen在外围
+        dp = [0] * (bagSize+1)
+        # 赋值，dp的第一个元素
+        dp[0] = 1
+        for num in nums:
+            for j in range(bagSize,num-1,-1):
+                dp[j] += dp[j-num] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对弈2个num，bagsize的填满情况
+        return dp[-1] != 0
+```
+
+```py
+# python递归...
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        # @lru_cache(None)
+        def dp(i,N):                                #dp(i,N)返回nums[0...i]中且当前和为N的状态下，能否凑成和为target的结果
+            if N>target or i<0:return False
+            if N==target: return True
+            # 这个很巧妙每次可以选择将nums[i]加进N，或者不将nums[i]加进N
+            return dp(i-1, N+nums[i]) or dp(i-1,N)   
+
+        if sum(nums)%2 != 0: return False              #目标和为奇数时不能分割成两个元素相等的子集
+        target = sum(nums) // 2                         #原问题等价于将nums划分为元素和为nums一半的两个子集的划分方式是否存在
+        return dp(len(nums)-1, 0)
+```
+
 
 ##  286. <a name='N-1'></a>51. N皇后
 
 ##  287. <a name='24.'></a>补充题24. 双栈排序
 
-##  288. <a name='-1'></a>680. 验证回文字符串 Ⅱ
+##  288. <a name='-1'></a>680 【回文🌈】Valid Palindrome II
+
+[哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV17i4y147xn?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        def checkPalindrome(low, high):
+            i, j = low, high
+            while i < j:
+                if s[i] != s[j]:
+                    return False
+                i += 1
+                j -= 1
+            return True
+
+        low, high = 0, len(s) - 1
+        while low < high:
+            if s[low] == s[high]: 
+                low += 1
+                high -= 1
+            else:
+                return checkPalindrome(low + 1, high) or checkPalindrome(low, high - 1)
+        return True
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/valid-palindrome-ii/solution/yan-zheng-hui-wen-zi-fu-chuan-ii-by-leetcode-solut/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def validPalindrome(self, s: str, flag=False) -> bool:
+        if s == s[::-1]:
+            return True 
+        start, end = 0, len(s) - 1
+        while start < end:
+            if s[start] == s[end]:
+                start, end = start+1, end-1
+            elif not flag:
+                return self.validPalindrome(s[start+1:end+1], True) or self.validPalindrome(s[start:end], True)
+            else:
+                return False
+        return True
+
+class Solution:
+    def validPalindrome(self, s):
+        if s == s[::-1]:
+            return True
+        l, r = 0, len(s) - 1
+        while l < r:
+            if s[l] == s[r]:
+                l, r = l + 1, r - 1
+            else:
+                a = s[l + 1 : r + 1]
+                b = s[l:r]
+                return a == a[::-1] or b==b[::-1]
+```
+
+```py
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        n = len(s)
+        i = next((i for i in range(n>>1) if s[i] != s[~i]), -1)
+        return i == -1 or s[i+1:n-i] == s[i+1:n-i][::-1] or s[i:n-i-1] == s[i:n-i-1][::-1]
+```
 
 ##  289. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
 
-##  290. <a name='-1'></a>701. 二叉搜索树中的插入操作
+##  290. <a name='-1'></a>701 Insert into a Binary Search Tree
 
-##  291. <a name='-1'></a>530. 二叉搜索树的最小绝对差
+[小明](https://www.bilibili.com/video/BV1q54y1k76s?spm_id_from=333.999.0.0)
+
+##  291. <a name='-1'></a>530. Minimum Absolute Difference in BST
+
+[花花酱](https://www.bilibili.com/video/BV1fW411k7eT?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1FJ41147BB?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        inorder = []
+        def dfs(root):
+            nonlocal inorder
+            if not root:
+                return 
+            dfs(root.left)
+            inorder.append(root.val)
+            dfs(root.right) 
+        dfs(root)
+        return min([inorder[i]-inorder[i-1] for i in range(1,len(inorder))])
+
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        
+        def inorder(node):
+            if node:
+                yield from inorder(node.left)
+                yield node.val
+                yield from inorder(node.right)
+
+        pre, cur = tee(inorder(root))
+        next(cur, None)
+        return min(b-a for a, b in zip(pre, cur))
+```
+
+```py
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        self.res = float('inf')
+        self.tmp = -1
+        def dfs(root):
+            if not root:
+                return
+            dfs(root.left)
+            if self.tmp == -1:
+                self.tmp = root.val
+            else:
+                self.res = min(self.res, abs(root.val - self.tmp))
+                self.tmp = root.val
+            dfs(root.right)
+        dfs(root)
+        return self.res
+
+递归
+
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        ret = inf
+        pre = None
+        def dfs(node):
+            nonlocal ret, pre
+            if not node: return   
+            dfs(node.left)
+            if pre != None: ret = min(node.val - pre, ret)             
+            pre = node.val
+            dfs(node.right)                
+        dfs(root)       
+        return ret
+
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        """解题思路：二叉搜索树的中序遍历是一个递增且无重复元素的序列"""
+        path = []
+        min_ = float('INF')  
+
+        def traval(root):  # 中序遍历
+            nonlocal path
+            if not root: return
+
+            traval(root.left)
+            path.append(root.val)
+            traval(root.right)
+
+        
+        traval(root)
+        result = list(zip(path, path[1:]))   # 窗口大小为2，步长为1
+        for i, j in result:
+            if abs(j - i) < min_:
+                min_ = abs(j - i)
+        
+        return min_
+```
 
 ##  292. <a name='k-1'></a>698. 划分为k个相等的子集
 
-##  293. <a name='-1'></a>173. 二叉搜索树迭代器
+##  293. <a name='-1'></a>173 【构造🏰】Binary Search Tree Iterator
 
-##  294. <a name='-1'></a>426. 将二叉搜索树转化为排序的双向链表
+[小明](https://www.bilibili.com/video/BV1qK41137h1?spm_id_from=333.999.0.0)
+
+```py
+# next() 和 hasNext() 操作均摊时间复杂度为 O(1) ，并使用 O(h) 内存。其中 h 是树的高度。
+
+class BSTIterator(object):
+
+    def __init__(self, root):
+        self.stack = []
+        while root:
+            self.stack.append(root)
+            root = root.left
+
+    def next(self):
+        tmp = self.stack.pop()
+        res = tmp.val
+
+        tmp = tmp.right
+        while tmp:
+            self.stack.append(tmp)
+            tmp = tmp.left
+        return res
+
+    def hasNext(self):
+        # 直接写也可以：return self.stack 
+        return self.stack != []
+
+
+
+class BSTIterator(object):
+    def __init__(self, root):
+        self.stack = []
+        self.pushAllLeft(root)
+        
+
+    def hasNext(self):
+        return self.stack != []
+        
+
+    def next(self):
+        tmp = self.stack.pop()
+        self.pushAllLeft(tmp.right)
+        return tmp.val
+            
+    def pushAllLeft(self, node):
+        while node:
+            self.stack.append(node)
+            node = node.left
+```
+
+递归解法不符合题目：不能用递归 应该用迭代
+
+##  294. <a name='-1'></a>426【剑指36】. 将二叉搜索树转化为排序的双向链表【字节跳动】-
+将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表 。
+
+对于双向循环列表，你可以将左右孩子指针作为双向循环链表的前驱和后继指针，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+
+特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
+
+![](https://s3.bmp.ovh/imgs/2022/01/11d8ac60b4c3deb6.png)
+
+```py
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root: return
+        path = []
+        def inorder(root):
+            if not root: return 
+            inorder(root.left)
+            path.append(root)
+            inorder(root.right)    
+        inorder(root)
+        for i in range(len(path)):
+            path[i].left = path[i-1]
+            path[i].right = path[(i+1)%len(path)]
+        return path[0]
+        
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        a, f = [], lambda r: r and (f(r.left) or a.append(r) or f(r.right))
+        f(root)
+        n = len(a)
+        for i, r in enumerate(a):
+            r.left, r.right = a[i - 1], a[i + 1 - n]
+        return n and a[0] or None
+
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        def dfs(cur):
+            if not cur: return
+            dfs(cur.left) # 递归左子树
+            if self.pre: # 修改节点引用
+                self.pre.right, cur.left = cur, self.pre
+            else: # 记录头节点
+                self.head = cur
+            self.pre = cur # 保存 cur
+            dfs(cur.right) # 递归右子树
+        
+        if not root: return
+        self.pre = None
+        dfs(root)
+        self.head.left, self.pre.right = self.pre, self.head
+        return self.head
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/solution/mian-shi-ti-36-er-cha-sou-suo-shu-yu-shuang-xian-5/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+## 思路:
+
+其实就是左右节点指向改变，右节点指向下一个比它大的数，左节点指向比它小的数。又是二叉搜索树，自然想到中序遍历。
+
+思路一：中序遍历（非递归和递归）
+
+写法一：用栈(非递归)
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:return 
+        # 当一个中间节点
+        head = Node(-1, None, None)
+        # 记录为先前节点,找到下一个节点才能串起来
+        prev = head
+        # 中序遍历的非递归
+        stack = []
+        p = root
+        while p or stack:
+            while p:
+                stack.append(p)
+                p = p.left
+            p = stack.pop()
+            # 改变左右方向
+            prev.right = p
+            p.left = prev
+            # 改变先前节点
+            prev = p
+            p = p.right
+        # 将head 删掉   
+        head.right.left = prev
+        prev.right = head.right
+        return head.right
+写法二：递归
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:return 
+        # 当一个中间节点
+        head = Node(-1, None, None)
+        # 记录为先前节点,找到下一个节点才能串起来
+        prev = head
+
+        # 中序遍历的递归
+        def inorder(root):
+            nonlocal prev
+            if not root:
+                return 
+            inorder(root.left)
+            prev.right = root
+            root.left = prev
+            prev = prev.right
+            inorder(root.right)
+        
+        inorder(root)
+        # 将head 删掉   
+        head.right.left = prev
+        prev.right = head.right
+        return head.right
+思路二：分治
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root: return
+        left = self.treeToDoublyList(root.left)
+        right = self.treeToDoublyList(root.right)
+        root.left = root
+        root.right = root
+        return self.connect(self.connect(left, root), right)
+
+    def connect(self, node1, node2):
+        if not (node1 and node2):
+            return node1 or node2
+        tail1, tail2 = node1.left, node2.left
+        tail1.right = node2
+        node2.left = tail1
+        tail2.right = node1
+        node1.left = tail2
+        return node1
+```
+
+```py
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+"""
+class Solution:
+    def myinorderTraversal(self, root: 'Node') -> 'Node':
+        ''' traversal order:  right subtree -> root -> left subtree '''
+
+        # conrer case
+        if not root: return None
+
+        sentinel = Node()    # 虚拟哨兵尾节点
+        successor = sentinel # 后驱指针
+
+        def inorder(r = root):
+            nonlocal successor
+            if not r: return
+        
+            inorder(r.right)
+            # 不建议初学这么写
+            r.right, successor.left, successor = successor, r, r
+            inorder(r.left)
+
+        inorder()
+        successor.left = sentinel.left
+        sentinel.left.right = successor
+        return successor
+
+    def inorderTraversal(self, root: 'Node') -> 'Node':
+        ''' traversal order:  left subtree -> root -> right subtree '''
+
+        # conrer case
+        if not root: return None
+
+        sentinel = Node()      # 虚拟哨兵头节点
+        predecessor = sentinel # 前驱指针
+
+        def inorder(r = root):
+            nonlocal predecessor
+            if not r: return
+        
+            inorder(r.left)
+            # 不建议初学这么写
+            predecessor.right, r.left, predecessor = r, predecessor, r
+            inorder(r.right)
+
+        inorder()
+        sentinel.right.left = predecessor
+        predecessor.right = sentinel.right
+        return sentinel.right
+
+
+    treeToDoublyList = myinorderTraversal
+    # treeToDoublyList = inorderTraversal
+```
+
+```py
+辅助栈
+
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        # 辅助栈        
+        helper, start = [], None
+        current, pre = root, None
+        while len(helper) != 0 or current != None:
+            if current != None:
+                helper.append(current)
+                current = current.left
+            else:
+                current = helper.pop()
+                if pre != None:
+                    current.left = pre
+                    pre.right = current
+                else:
+                    start = current
+                pre = current
+                current = current.right
+        start.left = pre
+        pre.right = start
+        return start
+
+迭代
+
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        # left : pre right: nex
+        dummy = Node(None)
+        p = dummy
+        if not root:
+            return root
+        stack = [[root, False]]
+        while stack:
+            node, visited = stack.pop()
+            if not visited:
+                if node.right:
+                    stack.append([node.right, False])
+                stack.append([node, True])
+                if node.left:
+                    stack.append([node.left, False])
+            else:
+                node.left = p
+                node.right = None
+                p.right = node
+                p = p.right
+        head = dummy.right
+        head.left = p
+        p.right = head
+        return head
+
+def treeToDoublyList(self, root: 'Node') -> 'Node':
+        pre = None
+        head = None
+        def inorder(root):
+            nonlocal pre
+            nonlocal head
+            if not root:
+                return 
+
+            inorder(root.left)
+            if pre:
+                pre.right, root.left = root, pre
+            else:
+                head = root #第一个节点,bst最小的节点
+            pre = root
+            inorder(root.right)
+
+        if not root:
+            return
+        inorder(root)
+        pre.right, head.left = head, pre
+        return head
+```
 
 ##  295. <a name='-1'></a>836. 矩形重叠
 
 ##  296. <a name='-1'></a>99. 恢复二叉搜索树
 
-##  297. <a name='-1'></a>316. 去除重复字母
+##  297. <a name='-1'></a>316 【贪心🧡】Remove Duplicate Letters
 
-##  298. <a name='-1'></a>109. 有序链表转换二叉搜索树
+[小明](https://www.bilibili.com/video/BV1x54y1R7y7?spm_id_from=333.999.0.0)
 
-##  299. <a name='-1'></a>115. 不同的子序列
+[官方](https://www.bilibili.com/video/BV1Tz4y167pC?spm_id_from=333.999.0.0)
 
-##  300. <a name='-1'></a>1312. 让字符串成为回文串的最少插入次数
+```py
+# 思路是参考别人的，
+# 如果数比栈顶小，而且栈顶在后面还有的话，
+# 就弹出栈顶。
+# python自带列表弹出和加入最后一个数都是很快的。
+# 然后在前面加一个0，因为0比一切字母小，可以不用判空，方便很多
+
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        result = ["0"] # 初值不要为空，不然index为-1会报错
+        for idx, char in enumerate(s):
+            print("idx, char:",idx, char,"result: ",result)
+            print("s[idx:]",s[idx:],"数量: ",s[idx:].count(result[-1]),"需要大于0,表示要把c删掉，必须后面还有c")
+            if char not in result:
+                while char < result[-1] and s[idx:].count(result[-1]) > 0:
+                    result.pop(-1) # result 删除最后一位
+                result.append(char)
+        return "".join(result[1:])
+
+# 递归贪心版本
+class Solution(object):
+    def removeDuplicateLetters(self, str):
+        """
+        :type s: str
+        :rtype: str
+        """
+        print("-"*50)
+        # 先按字典排序
+        for char in sorted(set(str)):
+            print("-"*20,char)
+            suffix = str[str.index(char):]
+            print(suffix)
+
+
+            # 看余下的是否能组成所需的字母
+            # if len(set(suffix)) == len(set(str)): 也可以
+            if set(suffix) == set(str):
+                return char + self.removeDuplicateLetters(suffix.replace(char, ''))
+                # 逐步把char后面的char替换掉
+        return ''
+
+class Solution(object):
+    def removeDuplicateLetters(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        result = ''
+        while s:
+            print(list(map(s.rindex, set(s))))
+            i = min(map(s.rindex, set(s)))
+            c = min(s[:i+1])
+            print(s[:i+1])
+            result += c
+            s = s[s.index(c):].replace(c, '')
+            print(s)
+        return result
+
+class Solution(object):
+    def removeDuplicateLetters(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        rindex = {char: idx for idx, char in enumerate(s)}
+        print("rindex",rindex)
+        result = '' 
+        for idx, char in enumerate(s):
+            print("idx, char:",idx, char,"result: ",result)
+            if char not in result:
+                while char < result[-1:] and idx < rindex[result[-1:]]:
+                    # 如果 char 比 最后一位result[-1:] 小
+                    # result 删除最后一位
+                    print("rindex[result[-1:]",rindex[result[-1:]])
+                    result = result[:-1] 
+                result += char
+        return result
+
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        n = len(s)
+        stack = [s[0]]
+        for i in range(1,n):
+            if s[i] not in stack and s[i]>stack[-1]:
+                stack.append(s[i])
+            elif s[i] not in stack:
+                while stack and s[i]<stack[-1] and stack[-1] in s[i+1:]:
+                    stack.pop()
+                stack.append(s[i])
+        return "".join(stack)
+
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        stack = []
+        n = len(s)
+        for i in range(n):
+            if s[i] in stack:
+                continue
+            else:
+                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]:
+                    stack.pop()
+                stack.append(s[i])
+            
+        return "".join(stack)
+
+# 思路三：栈
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        from collections import Counter
+        c = Counter(s)
+        stack = []
+        existed = set()
+        for a in s:
+            # print(stack)
+            if a not in existed:
+            	# 判断后面还有没有该字母
+                while stack and stack[-1] > a and c[stack[-1]] > 0:
+                    existed.remove(stack.pop())
+                stack.append(a)
+                existed.add(a)
+            c[a] -= 1
+        return "".join(stack)
+
+# 思路二：迭代
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        res = ""
+        while s:
+            # 从右往左找，找到最小位置的索引号
+            loc = min(map(s.rindex, s))
+            # 找该索引前面最小的字母
+            a = min(s[:loc + 1])
+            res += a
+            s = s[s.index(a):].replace(a, "")
+        return res
+```
+
+##  298. <a name='-1'></a>109题. 有序链表转换二叉搜索树
+
+https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
+
+https://www.bilibili.com/video/BV1ff4y197dS?spm_id_from=333.999.0.0
+
+当递归的是一个链表`头`时，需要切断
+
+```py
+class Solution:
+    def sortedListToBST(self, head) -> TreeNode:
+        if not head:
+            return None
+        if not head.next:
+            return TreeNode(head.val)
+
+        fast = head
+        slow = head
+        pre =  head
+
+        while fast and fast.next:
+            pre = slow # pre切断
+            slow = slow.next
+            fast = fast.next.next
+        mid = TreeNode(slow.val)
+        # print(head.val,node.val,last.val)
+        mid.right = self.sortedListToBST(slow.next) # 从mid+1到tail
+        pre.next = None # pre切断
+        mid.left = self.sortedListToBST(head) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
+        return mid
+```
+
+https://www.bilibili.com/video/BV19K411T73P?p=2&spm_id_from=pageDriver
+
+当递归的是一个链表`头尾`时，不需要切断
+
+```py
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        def getMedian(head: ListNode, tail: ListNode) -> ListNode:
+            fast = slow = head
+            while fast != tail and fast.next != tail:
+                fast = fast.next.next
+                slow = slow.next
+            return slow
+        
+        def buildTree(left: ListNode, right: ListNode) -> TreeNode:
+            if left == right:
+                return None
+            mid = getMedian(left, right)
+            root = TreeNode(mid.val)
+            root.left = buildTree(left, mid) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
+            root.right = buildTree(mid.next, right) # 从mid+1到tail
+            return root
+        
+        return buildTree(head, None)
+```
+
+##  299. <a name='-1'></a>115. 【动态🚀规划】Distinct Subsequences
+
+[花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV185411G7F6?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        sN = len(s)
+        tN = len(t)
+        dp = [[0] * (tN+1) for _ in range(sN+1)]
+
+        sN = len(s)
+        tN = len(t)
+        dp = [[0] * (tN+1) for _ in range(sN+1)]
+
+        for i in range(sN+1):
+            for j in range(tN+1):
+                if j == 0:  
+                    dp[i][j] = 1
+                elif i == 0:  
+                    dp[i][j] = 0
+                elif s[i-1] == t[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+                else:
+                    dp[i][j] = dp[i-1][j]
+        return dp[-1][-1]
+Python3:
+
+class SolutionDP2:
+    def numDistinct(self, s: str, t: str) -> int:
+        n1, n2 = len(s), len(t)
+        if n1 < n2:
+            return 0
+
+        dp = [0 for _ in range(n2 + 1)]
+        dp[0] = 1
+
+        for i in range(1, n1 + 1):
+            prev = dp[:] # 深拷贝一下
+            end = i if i < n2 else n2 # 剪枝，保证s的长度大于等于t, 因为对于任意i，i > n1, dp[i] = 0, 没必要跟新状态。 
+            for j in range(1, end + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[j] = prev[j - 1] + prev[j]
+                else:
+                    dp[j] = prev[j]
+        return dp[-1]
+```
+
+
+##  300. <a name='-1'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
+
+[花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
 
 
 

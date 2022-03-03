@@ -3927,7 +3927,7 @@ class Solution:
         return min(dp[len(cost) - 1], dp[len(cost) - 2])
 ```
 
-###  1.96. <a name='ShortestCompletingWord'></a>748. Shortest Completing Word
+###  1.96. <a name='ShortestCompletingWord'></a>748. Shortest Completing Word 
 
 [花花酱](https://www.bilibili.com/video/BV15W411y7sJ?spm_id_from=333.999.0.0)
 

@@ -1450,7 +1450,7 @@ class Solution:
         while first: # 每次循环连接当前层的下一层
             dummy = pre = Node(0) # head表示下一层的虚拟头部
             cur = first
-            while cur : # 遍历当前层，将下一层连接
+            while cur : # 遍历当前层，将下一层连接 
                 if cur.left :
                     pre.next = cur.left
                     pre = pre.next

@@ -1,17 +1,12 @@
-from collections import defaultdict 
-class Solution:
-    def canFinish(self, numCourses, prerequisites):
-        indegree = defaultdict(lambda:0)  
-        graph = defaultdict(list)         
-        for end,stt in prerequisites:
-            graph[stt].append(end)
-            indegree[end] += 1
-        res = []                  
-        for i in range(numCourses):
-            if indegree[i] == 0:
-                res.append(i)    
-        for i in res:
-            for j in graph[i]:
-                indegree[j] -= 1
-                if indegree[j] == 0: res.append(j)
-        return len(res) == numCourses
+class Solution: 
+    def reverseString(self, s: List[str]) -> None:
+
+    """
+    Do not return anything, modify s in-place instead.
+    """
+    l, r = 0, len(s) - 1
+    while l < r:
+        s[l], s[r] = s[r], s[l]
+        l += 1
+        r -= 1
+    return s
