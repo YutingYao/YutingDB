@@ -9907,7 +9907,7 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Hv411478d?spm_id_from=333.999.0.0)
 
 [官方](https://www.bilibili.com/video/BV1Fi4y147Ng?spm_id_from=333.999.0.0)
-
+ 
 ```py
 有效 二叉搜索树定义如下：
 

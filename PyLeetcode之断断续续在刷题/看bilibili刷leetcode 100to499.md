@@ -1101,7 +1101,7 @@ object Solution {
         val que = scala.collection.mutable.Queue[TreeNode]()
         var depth = 0
         var flag = true
-        que.enqueue(root)
+        que.enqueue(root) 
         
         while(que.nonEmpty && flag){
             depth += 1

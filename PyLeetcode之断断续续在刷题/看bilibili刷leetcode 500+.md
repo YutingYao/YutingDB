@@ -8537,7 +8537,7 @@ class Solution:
                 for cur in tmp+arr[tmp], tmp-arr[tmp]:
                     if 0<=cur<l and mark[cur]:
                         queue.insert(0, cur)
-        return False
+        return False 
 ```
 
 ###  1.279. <a name='XORQueriesofaSubarray'></a>1310. XOR Queries of a Subarray
