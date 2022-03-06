@@ -362,7 +362,7 @@ val env = TableEnvironment.create(...)
 
 ```sql
 SELECT order_id, res
-FROM Orders
+FROM Orders 
 LEFT OUTER JOIN LATERAL TABLE(table_func(order_id)) t(res)
   ON TRUE
 ```
