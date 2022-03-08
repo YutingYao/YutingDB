@@ -10951,166 +10951,30 @@ class Solution:
 ```py
 class Solution:
     def findNumberOfLIS(self, nums: List[int]) -> int:
-        n, max_len, ans = len(nums), 0, 0
-        dp = [0] * n
-        cnt = [0] * n
-        for i, x in enumerate(nums):
-            dp[i] = 1
-            cnt[i] = 1
-            for j in range(i):
-                if x > nums[j]:
-                    if dp[j] + 1 > dp[i]:
-                        dp[i] = dp[j] + 1
-                        cnt[i] = cnt[j]  # 重置计数
-                    elif dp[j] + 1 == dp[i]:
-                        cnt[i] += cnt[j]
-            if dp[i] > max_len:
-                max_len = dp[i]
-                ans = cnt[i]  # 重置计数
-            elif dp[i] == max_len:
-                ans += cnt[i]
-        return ans
+        n = len(nums)
+        if n <= 1: return n
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-longest-increasing-subsequence/solution/zui-chang-di-zeng-zi-xu-lie-de-ge-shu-by-w12f/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        d, cnt = [], []
-        for v in nums:
-            i = bisect(len(d), lambda i: d[i][-1] >= v)
-            c = 1
-            if i > 0:
-                k = bisect(len(d[i - 1]), lambda k: d[i - 1][k] < v)
-                c = cnt[i - 1][-1] - cnt[i - 1][k]
-            if i == len(d):
-                d.append([v])
-                cnt.append([0, c])
-            else:
-                d[i].append(v)
-                cnt[i].append(cnt[i][-1] + c)
-        return cnt[-1][-1]
-
-def bisect(n: int, f: Callable[[int], bool]) -> int:
-    l, r = 0, n
-    while l < r:
-        mid = (l + r) // 2
-        if f(mid):
-            r = mid
-        else:
-            l = mid + 1
-    return l
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/number-of-longest-increasing-subsequence/solution/zui-chang-di-zeng-zi-xu-lie-de-ge-shu-by-w12f/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-执行用时：1644 ms, 在所有 Python3 提交中击败了5.02%的用户 内存消耗：15.4 MB, 在所有 Python3 提交中击败了14.14%的用户 直接泪目 pdd挂了投了正式批，我还是喜欢coding
-
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        # 求最长递增子序列的二分方法，过程中统计个数，长度好做，个数呢两个for？
-        if not nums:
-            return 0
-        dp = [1 for i in range(len(nums))]
-        cnt = [0 for i in range(len(nums))]
-        # dp[i]表示以nums[i]结尾的最长的子序列的长度
-        cnt[0] = 1
-        for i in range(1,len(nums)):
-            for j in range(i):
-                if nums[i]>nums[j]:#nums[i] nums[j] 可以组成递增序列
-                    dp[i] = max(dp[i], dp[j]+1)
-            for j in range(i):
-                if nums[i]>nums[j] and dp[i]==dp[j]+1:
-                    cnt[i] += cnt[j] #how does this works?
-
-            if cnt[i] == 0:# 前面没有比它小的
-                cnt[i] = 1
-        max_dp=max(dp)
-        res = 0
-        for i in range(len(nums)):
-            if dp[i] == max_dp:
-                res += cnt[i]
-        return res
-                
-
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        size = len(nums)
-        if size<= 1: return size
-
-        dp = [1 for i in range(size)]
-        count = [1 for i in range(size)]
+        dp = [1 for _ in range(n)] # dp[i] 表示以 nums[i] 结尾的最长的子序列的长度
+        cnt = [1 for _ in range(n)]
 
         maxCount = 0
-        for i in range(1, size):
+        for i in range(1, n):
             for j in range(i):
-                if nums[i] > nums[j]:
-                    if dp[j] + 1 > dp[i] :
+                # 发现 nums[i] > nums[j]，则说明出现了新的递增序列，根据 nums[j] 和 l[j] 对应更新最长序列的个数及长度
+                if nums[i] > nums[j]: # 如果当前数比nums[j]大，说明可以构成递增序列
+                    if dp[j] + 1 > dp[i] : # 更长，则更新最长的长度和个数
                         dp[i] = dp[j] + 1
-                        count[i] = count[j]
-                    elif dp[j] + 1 == dp[i] :
-                        count[i] += count[j]
+                        cnt[i] = cnt[j]
+                    elif dp[j] + 1 == dp[i] : # 相等时，把个数加上去
+                        cnt[i] += cnt[j]
                 if dp[i] > maxCount:
-                    maxCount = dp[i];
-        result = 0
-        for i in range(size):
-            if maxCount == dp[i]:
-                result += count[i]
-        return result;
+                    maxCount = dp[i] # 统计最长的序列的所有次数
+        res = 0
+        for i in range(n):
+            if maxCount == dp[i]: # 长度和个数一一对应
+                res += cnt[i]
+        return res
 
-和300题非常像，增加的东西就是子序列的长度。300题时看了题解，这次完全是自己做出来的，不容易啊
-
-创建两个列表，一个表示个数，一个表示长度，两者是一一对应的
-
-然后开始遍历每个数字nums[i]，在每趟遍历的时候都设置两个参数，最长的长度maxLen以及对应的个数maxCnt
-
-对于每个数字，都遍历其之前的数字nums[j]
-
-发现nums[i]>nums[j]，则说明出现了新的递增序列，根据nums[j]和l[j]对应更新最长序列的个数及长度
-
-遍历过后，如果maxCnt != 0，就说明在这趟遍历中出现了新的序列，就把maxCnt和maxLen更新给dp和l
-
-否则就说明没有新的序列出现，那么此时把1分别更新给dp和l（因为对于当前nums[i]来说，只有[nums[i]]这一个序列）
-
-最后求一下l中最长的长度maxLenofAll，再次遍历dp，把所有长度为maxLenofAll的个数都加起来，就是最后的答案了
-
-执行用时：712 ms, 在所有 Python3 提交中击败了84.38%的用户 内存消耗：15.2 MB, 在所有 Python3 提交中击败了47.68%的用户
-
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        dp = [1]   #表示个数
-        l = [1]    #表示长度
-
-        for i in range(1, len(nums)):
-
-            maxCnt, maxLen = 0, 0   #最长的序列个数，以及长度
-
-            for j in range(i):
-                if nums[i] > nums[j]:   #如果当前数比nums[j]大，说明可以构成递增序列
-                    if l[j] > maxLen:     #更长，则更新最长的长度和个数
-                        maxLen = l[j]     
-                        maxCnt = dp[j]  
-                    elif l[j] == maxLen:  #相等时，把个数加上去
-                        maxCnt += dp[j] 
-
-            if maxCnt != 0:  #如果maxCnt不为0，则说明出现了新的递增序列
-                dp.append(maxCnt)
-                l.append(maxLen + 1)
-            else:    #如果为0则说明没有新的递增序列，该处个数为1（只有当前数字的序列）
-                dp.append(1)
-                l.append(1)
-
-        maxLenofAll = max(l)   #统计最长的序列的所有次数
-        ans = 0
-        for i in range(len(dp)):
-            if l[i] == maxLenofAll:   #长度和个数一一对应
-                ans += dp[i]
-        return ans
 ```
 
 ##  216. <a name='17.24.'></a>面试题 17.24. 最大子矩阵
@@ -11122,80 +10986,165 @@ https://leetcode-cn.com/problems/max-submatrix-lcci/solution/zhe-yao-cong-zui-da
 
 class Solution:
     def getMaxMatrix(self, matrix: List[List[int]]) -> List[int]:
-        N = len(matrix)
-        M = len(matrix[0])
-        a = [0] * M
+        n = len(matrix)
+        m = len(matrix[0])
+        sums = [0] * m
         maxdp = float('-inf')
-        ans = [0] * 4
-        for i in range(N):           
-            for k in range(M):
-                a[k] = 0
-            for j in range(i,N):
+        res = [0] * 4
+        for slowA in range(n):           
+            for fastB in range(m):
+                sums[fastB] = 0
+            for fastA in range(slowA, n):
                 dp = 0
-                for k in range(M):
-                    a[k] += matrix[j][k]
-                    #print('a[k]=',a[k])
+                for fastB in range(m):
+                    sums[fastB] += matrix[fastA][fastB]
+                    # print('sums[rightB] =', sums[fastB])
                     if dp <= 0:
-                        dp = a[k]
-                        c1 = k
+                        dp = sums[fastB]
+                        slowB = fastB
+                        # print('dp <= 0:', slowB)
                     else:
-                        dp += a[k]
+                        dp += sums[fastB]
+                    # 把答案存下来
                     if dp > maxdp:
                         maxdp = dp
-                        ans[0] = i
-                        ans[1] = c1
-                        ans[2] = j
-                        ans[3] = k
-                    #print('i=',i,'j=',j,'k=',k,'dp=',dp,'maxdp=',maxdp,ans,'\n')
-        return ans
+                        res[0] = slowA
+                        res[1] = slowB
+                        res[2] = fastA
+                        res[3] = fastB
+                    # print('4个顶点=', slowA, slowB, fastA, fastB)
+                    # print('dp=', dp, '最大值=', maxdp, res, '\n')
+        return res
+    
+[
+[ 9,-8, 1, 3,-2],
+[-3, 7, 6,-2, 4],
+[ 6,-4,-4, 8,-7]
+]
+
+预期结果: 
+[0,0,2,3]
+
+sums[rightB] = 9
+sums[rightB] = -8
+sums[rightB] = 1
+sums[rightB] = 3
+sums[rightB] = -2
+# 由上往下累加
+sums[rightB] = 6
+sums[rightB] = -1
+sums[rightB] = 7
+sums[rightB] = 1
+sums[rightB] = 2
+# 由上往下累加
+sums[rightB] = 12
+sums[rightB] = -5
+sums[rightB] = 3
+sums[rightB] = 9
+sums[rightB] = -5
+# 由上往下累加
+sums[rightB] = -3
+sums[rightB] = 7
+sums[rightB] = 6
+sums[rightB] = -2
+sums[rightB] = 4
+# 由上往下累加
+sums[rightB] = 3
+sums[rightB] = 3
+sums[rightB] = 2
+sums[rightB] = 6
+sums[rightB] = -3
+# 由上往下累加
+sums[rightB] = 6
+sums[rightB] = -4
+sums[rightB] = -4
+sums[rightB] = 8
+sums[rightB] = -7
+
+
+4个顶点= 0 0 0 0
+4个顶点= 0 0 0 1
+4个顶点= 0 0 0 2
+4个顶点= 0 0 0 3
+4个顶点= 0 0 0 4
+
+4个顶点= 0 0 1 0
+4个顶点= 0 0 1 1
+4个顶点= 0 0 1 2
+4个顶点= 0 0 1 3
+4个顶点= 0 0 1 4
+
+4个顶点= 0 0 2 0
+4个顶点= 0 0 2 1
+4个顶点= 0 0 2 2
+4个顶点= 0 0 2 3
+4个顶点= 0 0 2 4
+
+4个顶点= 1 0 1 0
+# slowB = fastB
+4个顶点= 1 1 1 1
+4个顶点= 1 1 1 2
+4个顶点= 1 1 1 3
+4个顶点= 1 1 1 4 
+
+4个顶点= 1 0 2 0
+4个顶点= 1 0 2 1
+4个顶点= 1 0 2 2
+4个顶点= 1 0 2 3
+4个顶点= 1 0 2 4
+
+4个顶点= 2 0 2 0
+4个顶点= 2 0 2 1
+4个顶点= 2 0 2 2
+# slowB = fastB
+4个顶点= 2 3 2 3
+4个顶点= 2 3 2 4
+
+dp <= 0: 0
+dp <= 0: 0
+dp <= 0: 0
+dp <= 0: 0
+dp <= 0: 1
+dp <= 0: 0
+dp <= 0: 0
+dp <= 0: 3
+
+dp= 9 最大值= 9 [0, 0, 0, 0]
+dp= 1 最大值= 9 [0, 0, 0, 0]
+dp= 2 最大值= 9 [0, 0, 0, 0]
+dp= 5 最大值= 9 [0, 0, 0, 0]
+dp= 3 最大值= 9 [0, 0, 0, 0]
+dp= 6 最大值= 9 [0, 0, 0, 0]
+dp= 5 最大值= 9 [0, 0, 0, 0]
+dp= 12 最大值= 12 [0, 0, 1, 2]
+dp= 13 最大值= 13 [0, 0, 1, 3]
+dp= 15 最大值= 15 [0, 0, 1, 4]
+dp= 12 最大值= 15 [0, 0, 1, 4]
+dp= 7 最大值= 15 [0, 0, 1, 4]
+dp= 10 最大值= 15 [0, 0, 1, 4]
+dp= 19 最大值= 19 [0, 0, 2, 3]
+dp= 14 最大值= 19 [0, 0, 2, 3]
+dp= -3 最大值= 19 [0, 0, 2, 3]
+dp= 7 最大值= 19 [0, 0, 2, 3]
+dp= 13 最大值= 19 [0, 0, 2, 3]
+dp= 11 最大值= 19 [0, 0, 2, 3]
+dp= 15 最大值= 19 [0, 0, 2, 3]
+dp= 3 最大值= 19 [0, 0, 2, 3]
+dp= 6 最大值= 19 [0, 0, 2, 3]
+dp= 8 最大值= 19 [0, 0, 2, 3]
+dp= 14 最大值= 19 [0, 0, 2, 3]
+dp= 11 最大值= 19 [0, 0, 2, 3]
+dp= 6 最大值= 19 [0, 0, 2, 3]
+dp= 2 最大值= 19 [0, 0, 2, 3]
+dp= -2 最大值= 19 [0, 0, 2, 3]
+dp= 8 最大值= 19 [0, 0, 2, 3]
+dp= 1 最大值= 19 [0, 0, 2, 3]
+
 ```
 
 ##  217. <a name='-1'></a>611. 有效三角形的个数
 
 ```py
-class Solution:
-    def triangleNumber(self, nums: List[int]) -> int:
-        n = len(nums)
-        nums.sort()
-        ans = 0
-        for i in range(n):
-            for j in range(i + 1, n):
-                left, right, k = j + 1, n - 1, j
-                while left <= right:
-                    mid = (left + right) // 2
-                    if nums[mid] < nums[i] + nums[j]:
-                        k = mid
-                        left = mid + 1
-                    else:
-                        right = mid - 1
-                ans += k - j
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-triangle-number/solution/you-xiao-san-jiao-xing-de-ge-shu-by-leet-t2td/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def triangleNumber(self, nums: List[int]) -> int:
-        n = len(nums)
-        nums.sort()
-        ans = 0
-        for i in range(n):
-            k = i
-            for j in range(i + 1, n):
-                while k + 1 < n and nums[k + 1] < nums[i] + nums[j]:
-                    k += 1
-                ans += max(k - j, 0)
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-triangle-number/solution/you-xiao-san-jiao-xing-de-ge-shu-by-leet-t2td/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-感觉官方的解答又有点问题（为什么说又），O(n^2)得这样写才行吧
-
 class Solution:
     def triangleNumber(self, nums: List[int]) -> int:
         nums.sort()
@@ -11209,28 +11158,13 @@ class Solution:
                 else:
                     i += 1
         return res
-
-以上解法不用担心数组里的0
-
-0805更新：抱歉！官方解法没问题
-class Solution:
-    def triangleNumber(self, nums: 'List[int]') -> 'int':
-        nums.sort()
-        res = 0
-        # 从大到小遍历
-        for i in range(len(nums) - 1, 1, -1):
-            l, r = 0, i -1
-            while l < r:
-                # 只要较小的两个值之和大于最大的值，则一定可组成三角形
-                if nums[l] + nums[r] > nums[i]:
-                    #i, r 和从l到r-1都可组成三角形，个数为 (r-1) - l + 1 = r - l
-                    res += (r-1) - l + 1
-                    r -= 1
-                else: l += 1
-        return res
-
-一开始是试着固定第一个数i，后两个用指针j和k，结果发现不行，因为可能i,j,k不符合三角形，但是i,j,k-1可能符合，因此找不准j和k，所以行不通；
-如果是固定最后一个数k，如果找到i、j可以组成三角形，i、j之内的数肯定可以，之外的数不行，因此直接计算j-i就行
+        # 2,3,4,4
+        # 2,3,4,-
+        # 2,-,4,4 可以，则代表 -,3,4,4 也可以
+        # 2,3,-,4
+        # 2 + 3 > 4
+        # 2 + 4 > 4
+        # 2 + 3 > 4
 ```
 
 ##  218. <a name='II-1'></a>45 Jump Game II
@@ -11241,27 +11175,12 @@ class Solution:
 class Solution:
     def jump(self, nums: List[int]) -> int:
         n = len(nums)
-        maxPos, end, step = 0, 0, 0
-        for i in range(n - 1):
-            if maxPos >= i:
-                maxPos = max(maxPos, i + nums[i])
-                if i == end:
-                    end = maxPos
-                    step += 1
-        return step
-
-#   😋我的模仿
-
-class Solution:
-    def jump(self, nums: List[int]) -> int:
-        n = len(nums)
         jump = 0
         cover = 0
         stop = 0
         i = 0
-        while cover >= i and i < n-1: 
-            #易错点：是n-1，不是n，只要调到最后一格就算成功
-            cover = max(cover,i + nums[i])
+        while cover >= i and i < n - 1: 
+            cover = max(cover,i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
             if i == stop:
                 jump += 1
                 stop = cover
@@ -11269,10 +11188,14 @@ class Solution:
         return jump
 ```
 
-##  220. <a name='-1'></a>85. 最大矩形
+##  220. <a name='-1'></a>85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram
 
 ```py
-这一题的算法本质上和84题Largest Rectangle in Histogram一样，对每一行都求出每个元素对应的高度，这个高度就是对应的连续1的长度，然后对每一行都更新一次最大矩形面积。那么这个问题就变成了Largest Rectangle in Histogram。本质上是对矩阵中的每行，均依次执行84题算法。
+# 这一题的算法本质上和84题Largest Rectangle in Histogram一样，
+# 对每一行都求出每个元素对应的高度，
+# 这个高度就是对应的连续1的长度，
+# 然后对每一行都更新一次最大矩形面积。
+# 本质上是对矩阵中的每行，均依次执行84题算法。
 
 class Solution:
     def maximalRectangle(self, matrix) -> int:
@@ -11301,77 +11224,32 @@ class Solution:
             stack.append(i)
         return res
 
-python 72ms 99.5% 感觉中文版的评论= =好像确实不如英文版啊= =python这么强的二进制操作，没人说= = 一年后更新，加入注释方便大家理解，思路就是通过二进制的&运算求矩形高度，>>运算来计算矩形宽度，然后每一行都遍历一遍，得出最大值。
-
-class Solution:
-    def maximalRectangle(self, matrix: List[List[str]]) -> int:
-        if not matrix or not matrix[0]:
-            return 0
-        nums = [int(''.join(row), base=2) for row in matrix] #先将每一行变成2进制的数字
-        ans, N = 0, len(nums)
-        for i in range(N):#遍历每一行，求以这一行为第一行的最大矩形
-            j, num = i, nums[i]
-            while j < N: #依次与下面的行进行与运算。
-                num = num & nums[j]  #num中为1的部分，说明上下两行该位置都是1，相当于求矩形的高，高度为j-i+1
-                # print('num=',bin(num))
-                if not num: #没有1说明没有涉及第i到第j行的竖直矩形
-                    break
-                width, curnum = 0, num
-                while curnum: 
-                    #将cursum与自己右移一位进行&操作。如果有两个1在一起，那么cursum才为1，相当于求矩形宽度
-                    width += 1
-                    curnum = curnum & (curnum >> 1)
-                    # print('curnum',bin(curnum))
-                ans = max(ans, width * (j-i+1))
-                # print('i','j','width',i,j,width)
-                # print('ans=',ans)
-                j += 1
-        return ans
 
 借用了上题的单调栈：
+每一行当成柱状图处理 用单调栈 时间复杂度O(mn) 空间复杂度O(n)
 
 class Solution(object):
     def maximalRectangle(self, matrix):
-        """
-        :type matrix: List[List[str]]
-        :rtype: int
-        """
         row = len(matrix)
         col = len(matrix[0])
         res = 0
-        height  = [0]*(col+2)
+        height  = [0]*(col + 2)
         for i in range(row):
-            st = [0]
+            stack = [0]
             for j in range(col):
-                if matrix[i][j]=='1':
-                    height[j+1] +=1
-                if matrix[i][j]=='0':
-                    height[j+1] =0
-            for k in range(1,len(height)):
-                while(height[k]<height[st[-1]]):
-                    h = height[st.pop()]
-                    w = k-st[-1]-1
-                    res = max(res,h*w)
-                st.append(k)
+                if matrix[i][j] == '1':
+                    height[j + 1] += 1
+                if matrix[i][j] == '0':
+                    height[j + 1] = 0
+            for k in range(1, len(height)):
+                while(height[k] < height[stack[-1]]):
+                    h = height[stack.pop()]
+                    w = k - stack[-1] - 1 # 宽度为 k - stack[-1] - 1
+                    res = max(res, h * w)
+                stack.append(k)
         return  res
 
-python 每一行当成柱状图处理 用单调栈 时间复杂度O(mn) 空间复杂度O(n)
 
-class Solution:
-    def maximalRectangle(self, matrix: List[List[str]]) -> int:
-        m,n,ans = len(matrix), len(matrix[0]),0
-        up, q=[0]*n, [-1]
-        for i in range(m):
-            up=[up[k]+1 if matrix[i][k]=="1" else 0 for k in range(n)]
-            for j in range(n):
-                while q[-1]!=-1 and up[q[-1]]>=up[j]:
-                    ans=max(ans, (j-q[-2]-1)*up[q[-1]])
-                    q.pop()
-                q.append(j)
-            while q[-1]!=-1:
-                ans=max(ans, (n-q[-2]-1)*up[q[-1]])
-                q.pop()
-        return ans
 ```
 
 
@@ -11614,7 +11492,7 @@ class Solution(object):
         return ans
 ```
 
-##  224. <a name='-1'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram
+##  224. <a name='-1'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形
 
 [官方](https://www.bilibili.com/video/BV16D4y1D7ed?spm_id_from=333.999.0.0)
 

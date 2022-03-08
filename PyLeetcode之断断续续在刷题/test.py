@@ -1,19 +1,20 @@
 class Solution(object):
-    def shortestSubarray(self, nums, k):
-        n = len(nums)
-        presum = [0]
-        for x in nums:
-            presum.append(presum[-1] + x)
-
-        res = n + 1 
-        queI = collections.deque()  
-        for i, Py in enumerate(presum):
-            while queI and Py - presum[queI[-1]] <= 0:
-                queI.pop()
-
-            while queI and Py - presum[queI[0]] >= k:
-                res = min(res, i - queI.popleft())
-
-            queI.append(i)
-
-        return res if res < n+1 else -1
+    def maximalRectangle(self, matrix):
+        row = len(matrix)
+        col = len(matrix[0])
+        res = 0
+        height  = [0]*(col + 2)
+        for i in range(row):
+            stack = [0]
+            for j in range(col):
+                if matrix[i][j] == '1':
+                    height[j + 1] += 1
+                if matrix[i][j] == '0':
+                    height[j + 1] = 0
+            for k in range(1, len(height)):
+                while(height[k] < height[stack[-1]]):
+                    h = height[stack.pop()]
+                    w = k - stack[-1] - 1
+                    res = max(res, h * w)
+                stack.append(k)
+        return  res
