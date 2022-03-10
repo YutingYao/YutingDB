@@ -1189,6 +1189,28 @@ class Solution:
         return res
 ```
 
+levelOrderBottom
+
+```py
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        queue = [root]
+        res = []
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.pop(0)
+                level.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(level)
+        return res[::-1] 只需要这里变一下
+```
 
 > python 递归
 
@@ -6405,30 +6427,57 @@ class Solution:
 
 
 
-##  94. <a name='Offer36.'></a>剑指 Offer 36. 二叉搜索树与双向链表
+##  94. <a name='Offer36.'></a>剑指 Offer 36. 二叉搜索树与双向链表 - 530. Minimum Absolute Difference in BST
+
+【剑指36】. 将二叉搜索树转化为排序的双向链表【字节跳动】-
+
+将一个 二叉搜索树 就地转化为一个 已排序的`双向循环链表` 。
+
+对于`双向循环列表`，你可以将左右孩子指针作为`双向循环链表`的前驱和后继指针，
+
+第一个节点的`前驱`是最后一个节点，最后一个节点的`后继`是第一个节点。
+
+特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
+
+![](https://s3.bmp.ovh/imgs/2022/01/11d8ac60b4c3deb6.png)
 
 ```py
 class Solution:
     def treeToDoublyList(self, root: 'Node') -> 'Node':
-        if not root: 
-            return
+        if not root: return
+        path = []
+        def inorder(root):
+            if not root: return 
+            inorder(root.left)
+            path.append(root)
+            inorder(root.right)    
+        inorder(root)
+        for i in range(len(path)):
+            path[i].left = path[i-1]
+            path[i].right = path[(i+1)%len(path)] # 也可以写成 path[i + 1 - len(path)]
+        return path[0]
 
-        rootlist = []
-        treefunc = lambda r: r and (treefunc(r.left) or rootlist.append(r) or treefunc(r.right))
-        def dfs(cur):
-            if cur:
-                dfs(cur.left) # 递归左子树, 进入下一层
-                rootlist.append(cur)
-                dfs(cur.right) # 递归右子树, 进入下一层
-        
-        dfs(root)
-        lenth = len(rootlist)
-        for i, cur in enumerate(rootlist):
-            # i + 1 - lenth 的坐标值: -6 -5 -4 -3 -2 -1  0
-            # i 的坐标值:              0  1  2  3  4  5  6
-            # i - 1 的坐标值:         -1  0  1  2  3  4  5
-            cur.left, cur.right = rootlist[i - 1], rootlist[i + 1 - lenth]
-        return rootlist[0]
+class Solution:
+    def treeToDoublyList(self, root: 'Node') -> 'Node':
+        prenode = None
+        head = None
+        def inorder(root):
+            nonlocal prenode, head
+            if root:
+                inorder(root.left)
+                if prenode:
+                    prenode.right, root.left = root, prenode
+                else:
+                    head = root #第一个节点,bst最小的节点
+                prenode = root
+                inorder(root.right)
+
+        if not root:
+            return
+        inorder(root)
+        prenode.right, head.left = head, prenode
+        return head
+
 ```
 
 ##  95. <a name='SwapNodesinPairs'></a>24-Swap Nodes in Pairs
@@ -11264,7 +11313,7 @@ class Solution:
         EPSILON = 1e-6
         ADD, MULTIPLY, SUBTRACT, DIVIDE = 0, 1, 2, 3
 
-        def solve(nums: List[float]) -> bool:
+        def backtrack(nums: List[float]) -> bool:
             if not nums:
                 return False
             if len(nums) == 1:
@@ -11273,33 +11322,32 @@ class Solution:
                 for j, y in enumerate(nums):
                     if i != j:
                         newNums = list()
+                        # 把 x, y 之外的 2个nums 放到 newNums
                         for k, z in enumerate(nums):
                             if k != i and k != j:
                                 newNums.append(z)
-                        for k in range(4):
-                            if k < 2 and i > j:
+                        # 把 x y 进行加减乘除运算 
+                        for op in range(4):
+                            if op < 2 and i > j:
                                 continue
-                            if k == ADD:
+                            if op == ADD:
                                 newNums.append(x + y)
-                            elif k == MULTIPLY:
+                            elif op == MULTIPLY:
                                 newNums.append(x * y)
-                            elif k == SUBTRACT:
+                            elif op == SUBTRACT:
                                 newNums.append(x - y)
-                            elif k == DIVIDE:
+                            elif op == DIVIDE:
                                 if abs(y) < EPSILON:
                                     continue
                                 newNums.append(x / y)
-                            if solve(newNums):
+                            if backtrack(newNums):
                                 return True
                             newNums.pop()
             return False
 
-        return solve(nums)
+        return backtrack(nums)
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/24-game/solution/24-dian-you-xi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 ```
 
 ##  222. <a name='-1'></a>108 Convert Sorted Array to Binary Search Tree 
@@ -11364,132 +11412,12 @@ object Solution {
 
 [小明](https://www.bilibili.com/video/BV1Qz411i7bh?spm_id_from=333.999.0.0)
 
-两种递归
-
 ```py
-class Solution(object):
-    def countNodes(self, root):
-        if root == None:
-        	return 0
-        if root.left == None and root.right == None:
-        	return 1
-        return 1 + self.countNodes(root.left) + self.countNodes(root.right)
-
-class Solution(object):
-    def countNodes(self, root):
-        if not root:
-            return 0
-        lh, rh = self.getHeight(root.left), self.getHeight(root.right)
-        if lh == rh:  # 左右子树高度相同，说明左子树必满 则节点数=左子树节点 + root节点(=1) + 递归找右子树
-            return (pow(2, lh) - 1) + 1 + self.countNodes(root.right)
-        else:  # 左子树比右子树高，说明右子树必满 同理
-            return (pow(2, rh) - 1) + 1 + self.countNodes(root.left)
-
-    def getHeight(self, root):
-        ret = 0
-        while root:
-            ret += 1
-            root = root.left
-        return ret
-# 相对来说，递归法利用公式更容易理解：
-# 既然说了是 complete binary tree，那么必然有特性可用，
-# complete binary tree的特性是除了最后一层，之前的就是perfect tree.
-```
-
-```py
-# 完全二叉树的性质{根节点的左右子树至少有一个是满二叉树}， 
-# 首先从根节点开始计算左右子树的高度，如果相等则为满二叉树，直接返回 
-# 否则递归计算左右子树 
-# Note：乍一看时间复杂度为O(N*logN)，
-# 但是根据完全二叉树的性质,其子树中至少有一个满二叉树，
-# 所以只会有一个递归会正真的执行下去 
-# 查找深度的时间复杂度为logN,递归的深度为O(logN)，
-# 所以总的时间复杂度为O(logN * logN)
-
-class Solution:
-    def countNodes(self, root: TreeNode) -> int:
-        left = right = 0
-        tmp1 = tmp2 =  root
-
-        # 求出树的深度
-        while tmp1:
-            left += 1
-            tmp1 = tmp1.left
-        while tmp2:
-            right += 1
-            tmp2 = tmp2.right
-
-        # 利用树的深度
-        if left == right:
-            return 2 ** left - 1
-        else:
-            return 1 + self.countNodes(root.left) + self.countNodes(root.right)  #根据完全二叉树的性质，这两地递归真正执行的只有一个
-
-
-# 所以寻找左子树的最左边的高度和右子树的最右边的node高度，
-# 如果相同就是perfect tree，高度2^h - 1， 否则递归的来看左子树和右子树
-
-class Solution(object):
-    def countNodes(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        if root == None:
-        	return 0
-        
-        p, q = root,root
-
-        leftHeight = 0
-        rightHeight = 0
-
-        while p:
-        	p = p.left
-        	leftHeight += 1
-
-        while q:
-        	q = q.right
-        	rightHeight += 1
-
-        if leftHeight == rightHeight:
-        	return (int)(math.pow(2,leftHeight) - 1)
-        else:
-        	return 1 + self.countNodes(root.left) + self.countNodes(root.right)
-
-
-
-# 我随便写了写，还准备修改，没想到一提交啪就通过了，很快啊！
-
 class Solution(object):
     def countNodes(self, root):
         if not root: return 0
-        depth=0
-        
-        def getDepth(root):
-            nonlocal depth
-            depth += 1
-            if root.left:
-                getDepth(root.left)
-            else:
-                return
-            
-        getDepth(root)
-        ans=2**(depth-1)-1
-        
-        def dfs(node,path):
-            nonlocal ans
-            path.append(node)
-            if node.left:
-                dfs(node.left,path)
-            if node.right:
-                dfs(node.right,path)
-            if not node.left and not node.right:
-                if len(path)==depth:
-                    ans+=1
-            path.pop()
-            
-        dfs(root,[])
-        return ans
+        if not root.left and not root.right: return 1
+        return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
 ```
 
 ##  224. <a name='-1'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形
@@ -11497,114 +11425,20 @@ class Solution(object):
 [官方](https://www.bilibili.com/video/BV16D4y1D7ed?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        n = len(heights)
-        left, right = [0] * n, [0] * n
-
-        mono_stack = list()
-        for i in range(n):
-            while mono_stack and heights[mono_stack[-1]] >= heights[i]:
-                mono_stack.pop()
-            left[i] = mono_stack[-1] if mono_stack else -1
-            mono_stack.append(i)
-        
-        mono_stack = list()
-        for i in range(n - 1, -1, -1):
-            while mono_stack and heights[mono_stack[-1]] >= heights[i]:
-                mono_stack.pop()
-            right[i] = mono_stack[-1] if mono_stack else n
-            mono_stack.append(i)
-        
-        ans = max((right[i] - left[i] - 1) * heights[i] for i in range(n)) if n > 0 else 0
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/largest-rectangle-in-histogram/solution/zhu-zhuang-tu-zhong-zui-da-de-ju-xing-by-leetcode-/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        n = len(heights)
-        left, right = [0] * n, [n] * n
-
-        mono_stack = list()
-        for i in range(n):
-            while mono_stack and heights[mono_stack[-1]] >= heights[i]:
-                right[mono_stack[-1]] = i
-                mono_stack.pop()
-            left[i] = mono_stack[-1] if mono_stack else -1
-            mono_stack.append(i)
-        
-        ans = max((right[i] - left[i] - 1) * heights[i] for i in range(n)) if n > 0 else 0
-        return ans
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/largest-rectangle-in-histogram/solution/zhu-zhuang-tu-zhong-zui-da-de-ju-xing-by-leetcode-/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-动态规划
-
-class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        result = 0
-        minleftindex, minrightindex = [0]*len(heights), [0]*len(heights)
-        
-        minleftindex[0]=-1
-        for i in range(1,len(heights)):
-            t = i-1
-            while t>=0 and heights[t]>=heights[i]: t=minleftindex[t]
-            minleftindex[i]=t
-            
-        minrightindex[-1]=len(heights)
-        for i in range(len(heights)-2,-1,-1):
-            t=i+1
-            while t<len(heights) and heights[t]>=heights[i]: t=minrightindex[t]
-            minrightindex[i]=t
-        
-        for i in range(0,len(heights)):
-            left = minleftindex[i]
-            right = minrightindex[i]
-            summ = (right-left-1)*heights[i]
-            result = max(result,summ)
-        return result
-单调栈 版本二
-
-class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        heights.insert(0,0) # 数组头部加入元素0
-        heights.append(0) # 数组尾部加入元素0
-        st = [0]
-        result = 0
-        for i in range(1,len(heights)):
-            while st!=[] and heights[i]<heights[st[-1]]:
-                midh = heights[st[-1]]
-                st.pop()
-                if st!=[]:
-                    minrightindex = i
-                    minleftindex = st[-1]
-                    summ = (minrightindex-minleftindex-1)*midh
-                    result = max(summ,result)
-            st.append(i)
-        return result
-
-
-最左边插个0，heights最后补充一个0可以很好的简化代码
+单调栈
 
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
         stack = [-1]
-        heights.append(0)
-        n,ans = len(heights),0
+        heights.append(0) # 最左边插个0，heights最后补充一个0可以很好的简化代码
+        n, res = len(heights), 0
         for i in range(n):
             while len(stack) > 1 and heights[stack[-1]] > heights[i]:
-                p = stack.pop()
-                l,r = stack[-1],i
-                ans = max(ans,heights[p] * (r - l - 1))            
+                h = heights[stack.pop()]
+                w = i - stack[-1] - 1
+                res = max(res, h * w)            
             stack.append(i)
-        return ans
+        return res
 ```
 
 ##  225. <a name='-1'></a>71. Simplify Path
@@ -11625,34 +11459,6 @@ class Solution(object):
         return "/" + "/".join(stack)
 ```
 
-```py
-# cool
-from os.path import abspath
-
-class Solution:
-    def simplifyPath(self, path: str) -> str:
-        return abspath(path)
-
-from functools import reduce
-class Solution:
-    def simplifyPath(self, path: str) -> str:
-        return "/"+"/".join(reduce(lambda x, y: x[:-1] if y == ".." else x + [y] if y and y != "." else x, path.split("/"), []))
-
-# 等效于:
-
-class Solution:
-    def simplifyPath(self, path: str) -> str:
-        stack = []
-        for i in path.split('/'):
-            if i == '..':
-                if stack:
-                    stack.pop()
-                else:
-                    continue
-            elif i and i != '.': # 注意这里是elif,而不是if
-                stack.append(i)
-        return "/" + "/".join(stack)
-```
 
 ##  226. <a name='II-'></a>167-Two Sum II - Input array is sorted
 
@@ -11663,291 +11469,83 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1VZ4y1M7eu?spm_id_from=333.999.0.0)
 
 ```py
-python 3 有点二分法的味道
-
-    # 双指针
+双指针
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        l, r =0, n-1 
+        l, r = 0, len(numbers) - 1 
         while l <= r:
             if numbers[l] + numbers[r] == target:
-                return [l+1, r+1]
+                return [l + 1, r + 1] # 给你一个下标从 1 开始的整数数组 numbers
             elif numbers[l] + numbers[r] < target:
-                l +=1
+                l += 1
             else:
-                r -=1
+                r -= 1
         return [-1, -1]
 
-    # hasn表，利用hash表记录所有的差值
+查表法
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         visited = dict()
-        for index, num in enumerate(numbers):
+        for i, num in enumerate(numbers):
             if num in visited:
-                return [visited[num]+1, index+1]
-            visited[target - num] = index
+                return [visited[num] + 1, i + 1]
+            visited[target - num] = i
 ```
 
 ##  227. <a name='-1'></a>622 Design Circular Queue
 
 [小明](https://www.bilibili.com/video/BV1kV411n7Uk?spm_id_from=333.999.0.0)
 
+`循环队列`是一种`线性数据结构`，其操作表现基于 `FIFO（先进先出）原则`并且队尾被连接在队首之后以形成一个`循环`。它也被称为`环形缓冲器`。
+
+在一个`普通队列`里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。但是使用`循环队列`，我们能使用这些空间去存储新的值。
+
 ```py
 class MyCircularQueue:
 
+
+    # MyCircularQueue(k): 构造器，设置队列长度为 k 。
     def __init__(self, k: int):
-        """
-        Initialize your data structure here. Set the size of the queue to be k.
-        """
-        self.queue = [0]*k
+        self.queue = [0] * k
         self.headIndex = 0
         self.count = 0
         self.capacity = k
 
+    # enQueue(value): 向循环队列插入一个元素。如果成功插入则返回真。
     def enQueue(self, value: int) -> bool:
-        """
-        Insert an element into the circular queue. Return true if the operation is successful.
-        """
         if self.count == self.capacity:
             return False
         self.queue[(self.headIndex + self.count) % self.capacity] = value
         self.count += 1
         return True
 
+    # deQueue(): 从循环队列中删除一个元素。如果成功删除则返回真。
     def deQueue(self) -> bool:
-        """
-        Delete an element from the circular queue. Return true if the operation is successful.
-        """
         if self.count == 0:
             return False
         self.headIndex = (self.headIndex + 1) % self.capacity
         self.count -= 1
         return True
 
+    # Front: 从队首获取元素。如果队列为空，返回 -1 。
     def Front(self) -> int:
-        """
-        Get the front item from the queue.
-        """
         if self.count == 0:
             return -1
         return self.queue[self.headIndex]
 
+    # Rear: 获取队尾元素。如果队列为空，返回 -1 。
     def Rear(self) -> int:
-        """
-        Get the last item from the queue.
-        """
-        # empty queue
         if self.count == 0:
             return -1
         return self.queue[(self.headIndex + self.count - 1) % self.capacity]
 
+    # isEmpty(): 检查循环队列是否为空。
     def isEmpty(self) -> bool:
-        """
-        Checks whether the circular queue is empty or not.
-        """
         return self.count == 0
 
+    # isFull(): 检查循环队列是否已满。
     def isFull(self) -> bool:
-        """
-        Checks whether the circular queue is full or not.
-        """
         return self.count == self.capacity
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/design-circular-queue/solution/she-ji-xun-huan-dui-lie-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-from threading import Lock
-
-class MyCircularQueue:
-
-    def __init__(self, k: int):
-        """
-        Initialize your data structure here. Set the size of the queue to be k.
-        """
-        self.queue = [0]*k
-        self.headIndex = 0
-        self.count = 0
-        self.capacity = k
-        # the additional attribute to protect the access of our queue
-        self.queueLock = Lock()
-
-    def enQueue(self, value: int) -> bool:
-        """
-        Insert an element into the circular queue. Return true if the operation is successful.
-        """
-        # automatically acquire the lock when entering the block
-        with self.queueLock:
-            if self.count == self.capacity:
-                return False
-            self.queue[(self.headIndex + self.count) % self.capacity] = value
-            self.count += 1
-        # automatically release the lock when leaving the block
-        return True
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/design-circular-queue/solution/she-ji-xun-huan-dui-lie-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-class Node:
-    def __init__(self, value, nextNode=None):
-        self.value = value
-        self.next = nextNode
-
-class MyCircularQueue:
-
-    def __init__(self, k: int):
-        """
-        Initialize your data structure here. Set the size of the queue to be k.
-        """
-        self.capacity = k
-        self.head = None
-        self.tail = None
-        self.count = 0
-
-    def enQueue(self, value: int) -> bool:
-        """
-        Insert an element into the circular queue. Return true if the operation is successful.
-        """
-        if self.count == self.capacity:
-            return False
-        
-        if self.count == 0:
-            self.head = Node(value)
-            self.tail = self.head
-        else:
-            newNode = Node(value)
-            self.tail.next = newNode
-            self.tail = newNode
-        self.count += 1
-        return True
-
-
-    def deQueue(self) -> bool:
-        """
-        Delete an element from the circular queue. Return true if the operation is successful.
-        """
-        if self.count == 0:
-            return False
-        self.head = self.head.next
-        self.count -= 1
-        return True
-
-
-    def Front(self) -> int:
-        """
-        Get the front item from the queue.
-        """
-        if self.count == 0:
-            return -1
-        return self.head.value
-
-    def Rear(self) -> int:
-        """
-        Get the last item from the queue.
-        """
-        # empty queue
-        if self.count == 0:
-            return -1
-        return self.tail.value
-    
-    def isEmpty(self) -> bool:
-        """
-        Checks whether the circular queue is empty or not.
-        """
-        return self.count == 0
-
-    def isFull(self) -> bool:
-        """
-        Checks whether the circular queue is full or not.
-        """
-        return self.count == self.capacity
-
-作者：LeetCode
-链接：https://leetcode-cn.com/problems/design-circular-queue/solution/she-ji-xun-huan-dui-lie-by-leetcode/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-class MyCircularQueue:
-
-    def __init__(self, k):
-        """
-        Initialize your data structure here. Set the size of the queue to be k.
-        :type k: int
-        """
-        self.size = k+1
-        self.data = [0]*self.size
-        self.head = self.rear = 0
-
-    def enQueue(self, value):
-        """
-        Insert an element into the circular queue. Return true if the operation is successful.
-        :type value: int
-        :rtype: bool
-        """
-        if self.isFull():
-            return False
-        self.data[self.rear] = value
-        self.rear = (self.rear+1)%self.size
-        return True
-    def deQueue(self):
-        """
-        Delete an element from the circular queue. Return true if the operation is successful.
-        :rtype: bool
-        """
-        if self.isEmpty():
-            return False
-        self.head = (self.head+1)%self.size
-        return True
-        
-    def Front(self):
-        """
-        Get the front item from the queue.
-        :rtype: int
-        """
-        if self.isEmpty():
-            return -1
-        return self.data[self.head]
-        
-
-    def Rear(self):
-        """
-        Get the last item from the queue.
-        :rtype: int
-        """
-        if self.isEmpty():
-            return -1
-        return self.data[(self.rear-1)%self.size]
-
-    def isEmpty(self):
-        """
-        Checks whether the circular queue is empty or not.
-        :rtype: bool
-        """
-        return self.head ==self.rear
-        
-
-    def isFull(self):
-        """
-        Checks whether the circular queue is full or not.
-        :rtype: bool
-        """
-        return (self.head - self.rear)%self.size ==1
-        
-@mbinary 第一个函数。self.size 为什么等于k+1呀？
-
-@mbinary 请教大哥，为什么k要+1
-
-@Ye_prgmr 为了便于实现 isFull, isEmpty. 可以看到 isFull 当 full 的时候 rear 和 head 指针相差1， 
-而 rear 指向的位置是没有元素的， 也就是说 填充了 size-1 = k 个元素， 所以 size = k+1
-
-@搬铁少年ai 为了便于实现 isFull, isEmpty. 可以看到 isFull 当 full 的时候 rear 和 head 指针相差1， 
-而 rear 指向的位置是没有元素的， 也就是说 填充了 size-1 = k 个元素， 所以 size = k+1
 ```
 
 ##  228. <a name='Z'></a>6. ZigZag Conversion
@@ -11955,95 +11553,32 @@ class MyCircularQueue:
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7uH?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def convert(self, s: str, numRows: int) -> str:
-        n, r = len(s), numRows
-        if r == 1 or r >= n:
-            return s
-        t = r * 2 - 2
-        c = (n + t - 1) // t * (r - 1)
-        mat = [[''] * c for _ in range(r)]
-        x, y = 0, 0
-        for i, ch in enumerate(s):
-            mat[x][y] = ch
-            if i % t < r - 1:
-                x += 1  # 向下移动
-            else:
-                x -= 1
-                y += 1  # 向右上移动
-        return ''.join(ch for row in mat for ch in row if ch)
+建立字典， key就是行index， value就是对应行的所有字母。
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/zigzag-conversion/solution/z-zi-xing-bian-huan-by-leetcode-solution-4n3u/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def convert(self, s: str, numRows: int) -> str:
-        r = numRows
-        if r == 1 or r >= len(s):
-            return s
-        mat = [[] for _ in range(r)]
-        t, x = r * 2 - 2, 0
-        for i, ch in enumerate(s):
-            mat[x].append(ch)
-            x += 1 if i % t < r - 1 else -1
-        return ''.join(chain(*mat))
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/zigzag-conversion/solution/z-zi-xing-bian-huan-by-leetcode-solution-4n3u/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def convert(self, s: str, numRows: int) -> str:
-        n, r = len(s), numRows
-        if r == 1 or r >= n:
-            return s
-        t = r * 2 - 2
-        ans = []
-        for i in range(r):  # 枚举矩阵的行
-            for j in range(0, n - i, t):  # 枚举每个周期的起始下标
-                ans.append(s[j + i])  # 当前周期的第一个字符
-                if 0 < i < r - 1 and j + t - i < n:
-                    ans.append(s[j + t - i])  # 当前周期的第二个字符
-        return ''.join(ans)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/zigzag-conversion/solution/z-zi-xing-bian-huan-by-leetcode-solution-4n3u/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-为什么不问问神奇Python3呢
-
-class Solution:
-    def convert(self, s: str, numRows: int) -> str:
-        if numRows == 1: return s
-        res, n = [''] * numRows, 2 * numRows - 2
-
-        for i, c in enumerate(s):
-            res[min(idx := i % n, n - idx)] += c
-        
-        return ''.join(res)
-
-
-思路还是很简单的， 建立字典， key就是行index， value就是对应行的所有字母。遍历字符串， 对于每个字母， 计算在第几行， 加入字典。
+遍历字符串， 对于每个字母， 计算在第几行， 加入字典。
 
 class Solution: 
     def convert(self, s: str, numRows: int) -> str:
         if numRows == 1: return s
-        dct = defaultdict(str)
-        cycle_count = numRows * 2 - 2
+        dic = defaultdict(str)
+        cycleCount = numRows * 2 - 2 # 循环为6
         for index, char in enumerate(s):
-            index_ = index % cycle_count
-            if index_ >= numRows:
-                index_  = cycle_count - index_
-            dct[index_] += char
+            row = index % cycleCount
+            if row >= numRows: # 如果 >= 4, 则需要反过来
+                row  = cycleCount - row
+            dic[row] += char
         ans = ""
         for i in range(numRows):
-            ans += dct[i]
+            ans += dic[i]
         return ans
+# 输入：s = "PAYPALISHIRING", numRows = 4
+# 输出："PINALSIGYAHRPI"
+# 解释：
+# P0      I6       N12
+# A1   L5 S7   I11 G13
+# Y2 A4   H8 R10
+# P3      I9
+
 ```
 
 ##  229. <a name='-1'></a>96. Unique Binary Search Trees
@@ -12066,19 +11601,19 @@ class Solution:
                 for i in range(n):
                     leftTrees = backtrack(i)
                     rightTrees = backtrack(n-i-1)
-                    res += leftTrees*rightTrees # 易错点：一定是加号
+                    res += leftTrees * rightTrees # 易错点：一定是加号
                 return res
                     
         return backtrack(n)
 
 class Solution:
     def numTrees(self, n: int) -> int:
-        dp = [0]*(n+1)
+        dp = [0] * (n + 1)
         dp[0] = 1
         dp[1] = 1
-        for i in range(2,n+1):
+        for i in range(2, n + 1):
             for subi in range(i):
-                dp[i] += dp[subi]*dp[i-subi-1]
+                dp[i] += dp[subi] * dp[i - subi - 1]
         return dp[-1]
 ```
 
@@ -12115,6 +11650,7 @@ class Solution:
 ```
 
 ```py
+以下的这两个方法可以跳过
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         def dfs(i: int):
@@ -12133,9 +11669,7 @@ class Solution:
                 res += 1
         
         return res
-```
 
-```py
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         proN = len(isConnected)
@@ -12154,33 +11688,9 @@ class Solution:
                 res += 1
         
         return res
-
-不用递归，可以实现双100%：
-
-class Solution:
-    def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        candidates = set(range(1, len(isConnected)))
-        # candidates就是not visited
-        if not candidates:
-            return 1
-        res = 0
-        peopleQ = [0]
-        while candidates:
-            while peopleQ:
-                peo = peopleQ.pop()
-                friends = [fri for fri in candidates if isConnected[peo][fri]]
-                for i in friends:
-                    peopleQ.append(i)
-                    candidates.remove(i)
-            res += 1
-            if candidates:
-                peopleQ = [list(candidates)[0]]
-        return res
 ```
 
 ```scala
-
-
 /**
 * union & find: implement both union by rank and path compression
 * time complexity : 
@@ -12242,62 +11752,11 @@ class UnionFind(M: Int) {
     counter -= 1
   }
 } 
-
 /**
 * union & find: without counter in union&find to record current cluster
 *       O(n + M + n), n is node size, M is the times we call Union operation which cause O(1) 
 *       n (construct union & find ) + M (call union times)  + n (n time call findRoot)
 */
-object Solution1-2 {
-  def findCircleNum(M: Array[Array[Int]]): Int = {
-    val unionFind = new UnionFind(M.length)
-
-    for (i <- M.indices; j <- (i + 1) until M.length; if M(i)(j) == 1) {
-      unionFind.union(i, j)
-    }
-    M.indices.map(unionFind.findRoot).distinct.size
-
-  }
-}
-
-class UnionFind(M: Int) {
-  val roots = Array.tabulate(M)(i => i)
-  val rank = Array.tabulate(M)(i => 1)
-
-  def findRoot(i: Int): Int = {
-
-    var root = i
-    while (root != roots(root)) {
-      roots(root) = roots(roots(root))  // path compression
-      root = roots(root)
-    }
-    root
-  }
-
-  def connected(a: Int, b: Int): Boolean = {
-    findRoot(a) == findRoot(b)
-  }
-
-  def union(a: Int, b: Int) {
-    val rootA = findRoot(a)
-    val rootB = findRoot(b)
-
-    if(rootA == rootB) return
-
-    // union by rank
-    if(rank(rootA) > rank(rootB)) {
-      roots(rootB) = rootA
-    }else if(rank(rootB) > rank(rootA)){
-      roots(rootA) = rootB
-    }else { // rank equal case
-      roots(rootB) = rootA
-      rank(rootA) += 1
-
-    }
-  }
-}
-
-
 ``` 
 
 ##  231. <a name='II-1'></a>264. 【动态🚀规划 + 3指针】Ugly Number II
@@ -12316,14 +11775,15 @@ class Solution(object):
         idx3 = 0
         idx5 = 0
         for i in range(n-1):
-            nxt = min(res[idx2]*2, res[idx3]*3, res[idx5]*5)
+            # 根据指针，求得最小值
+            nxt = min(res[idx2] * 2, res[idx3] * 3, res[idx5] * 5)
             res.append(nxt)
-            print(res[idx2]*2, res[idx3]*3, res[idx5]*5, res)
-            if nxt == res[idx2]*2:
+            # 移动指针
+            if nxt == res[idx2] * 2:
                 idx2 += 1
-            if nxt == res[idx3]*3:
+            if nxt == res[idx3] * 3:
                 idx3 += 1
-            if nxt == res[idx5]*5:
+            if nxt == res[idx5] * 5:
                 idx5 += 1
         return res[-1]
 
@@ -12336,70 +11796,26 @@ class Solution(object):
 # 10 9 10 [1, 2, 3, 4, 5, 6, 8, 9]
 # 10 12 10 [1, 2, 3, 4, 5, 6, 8, 9, 10]
 # 12 12 15 [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
-
 ```
 
 ##  233. <a name='-1'></a>97. 交错字符串
 
 ```py
-使用队列进一步简化时间复杂度和空间占用，击败99.78%/92.35%
-
 class Solution:
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        n1, n2, n3 = len(s1), len(s2), len(s3)
-        if n1+n2!=n3:
-            return False
-        q=deque([0])
-        for i in range(n3):
-            n=len(q)
-            if n==0:
-                return False
-            for j in range(n):
-                h=q.popleft()
-                if i-h<n1 and s3[i]==s1[i-h] and (len(q)<=1 or q[-1]!=h):
-                    q.append(h)
-                if h<n2 and s3[i]==s2[h]:
-                    q.append(h+1)
-        return len(q)>0
+        n1, n2, tar = len(s1), len(s2), len(s3)
+        if n1 + n2 != tar: return False
 
-python DFS 本来超时，加上lru cache就过了，居然还是28ms击败100%
-
-class Solution:
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        self.memo = {}
-        res = self.dfs(s1, s2, s3)
-        return res
-    
-    @functools.lru_cache()
-    def dfs(self, s1, s2, s3):
-        l1, l2 = len(s1), len(s2)
-        if l1 == 0 or l2 == 0:
-            return s3 == s1 + s2
-        key = ' '.join([s1, s2, s3])
-        if key not in self.memo:
-            flag = (s1[0] == s3[0] and self.isInterleave(s1[1:], s2, s3[1:]))
-            flag |= (s2[0] == s3[0] and self.isInterleave(s1, s2[1:], s3[1:]))
-            self.memo[key] = flag
-        
-        return self.memo[key]
-也不会啥，就给大家贴一个Python实现版本吧
-
-class Solution:
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        n, m, t = len(s1), len(s2), len(s3)
-        if n + m != t: return False
-
-        f = [False] * (m + 1)
-        f[0] = True
-        for i in range(n + 1):
-            for j in range(m + 1):
-                p = i + j - 1
-                if i > 0:
-                    f[j] = f[j] and s1[i - 1] == s3[p]
-                if j > 0:
-                    f[j] = f[j] or (f[j-1] and s2[j - 1] == s3[p])
-        
-        return f[m]
+        dp = [False] * (n2 + 1)
+        dp[0] = True
+        for i1 in range(n1 + 1):
+            for i2 in range(n2 + 1):
+                p = i1 + i2 - 1
+                if i1: # s1 和 s3 比较
+                    dp[i2] = dp[i2] and s1[i1 - 1] == s3[p]
+                if i2: # s2 和 s3 比较
+                    dp[i2] = dp[i2] or (dp[i2 - 1] and s2[i2 - 1] == s3[p])
+        return dp[n2]
 
 ```
 
@@ -12408,97 +11824,33 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def splitArray(self, nums: List[int], m: int) -> int:
-        n = len(nums)
-        f = [[10**18] * (m + 1) for _ in range(n + 1)]
-        sub = [0]
-        for elem in nums:
-            sub.append(sub[-1] + elem)
-        
-        f[0][0] = 0
-        for i in range(1, n + 1):
-            for j in range(1, min(i, m) + 1):
-                for k in range(i):
-                    f[i][j] = min(f[i][j], max(f[k][j - 1], sub[i] - sub[k]))
-        
-        return f[n][m]
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/split-array-largest-sum/solution/fen-ge-shu-zu-de-zui-da-zhi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+输入：nums = [7,2,5,10,8], m = 2
+输出：18
 
 class Solution:
-    def splitArray(self, nums: List[int], m: int) -> int:
-        def check(x: int) -> bool:
-            total, cnt = 0, 1
+    def splitArray(self, nums: List[int], bagnum: int) -> int:
+        def check(bagsize: int) -> bool:
+            tmpsums, bagcnt = 0, 1
             for num in nums:
-                if total + num > x:
-                    cnt += 1
-                    total = num
+                # 如果超出了背包的尺寸，则 bagcnt += 1
+                if tmpsums + num > bagsize: 
+                    bagcnt += 1
+                    tmpsums = num   # 清空
                 else:
-                    total += num
-            return cnt <= m
+                    tmpsums += num  # 累加
+            return bagcnt <= bagnum
 
 
-        left = max(nums)
-        right = sum(nums)
+        left = max(nums)  # 当 划分个数为 len(nums)
+        right = sum(nums) # 当 划分个数为 1
         while left < right:
-            mid = (left + right) // 2
-            if check(mid):
-                right = mid
+            bagsize = (left + right) // 2
+            if check(bagsize): # 检查划分个数够不够
+                right = bagsize
             else:
-                left = mid + 1
+                left = bagsize + 1
 
         return left
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/split-array-largest-sum/solution/fen-ge-shu-zu-de-zui-da-zhi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-首先分析题意，可以得出结论，结果必定落在【max（nums）， sum（nums）】这个区间内，因为左端点对应每个单独的元素构成一个子数组，右端点对应所有元素构成一个子数组。
-
-然后可以利用二分查找法逐步缩小区间范围，当区间长度为1时，即找到了最终答案。
-
-每次二分查找就是先算一个mid值，这个mid就是代表当前猜测的答案，然后模拟一下划分子数组的过程，可以得到用这个mid值会一共得到的子区间数cnt，然后比较cnt和m的关系，来更新区间范围。
-
-本题跟1014 875 非常类似。
-
-class Solution(object):
-    def splitArray(self, nums, m):
-        """
-        :type nums: List[int]
-        :type m: int
-        :rtype: int
-        """
-        # max(nums), sum(nums)
-        if len(nums) == m:
-            return max(nums)
-        
-        lo, hi = max(nums), sum(nums)
-        while(lo < hi):
-            mid = (lo + hi) // 2 # 最大和
-            
-            #------以下在模拟划分子数组的过程
-            temp, cnt = 0, 1
-            for num in nums:
-                temp += num
-                # cnt += 1
-                if temp > mid:#说明当前这个子数组的和已经超过了允许的最大值mid，需要把当前元素放在下一个子数组里
-                    temp = num
-                    cnt += 1
-            # print temp, cnt, mid
-            #------以上在模拟划分子数组的过程
-            
-            if cnt > m: #说明分出了比要求多的子数组，多切了几刀，说明mid应该加大，这样能使子数组的个数减少
-                lo = mid + 1
-            elif cnt <= m:
-                hi = mid
-
-                
-        return lo
 ```
 
 ##  235. <a name='-1'></a>44. 通配符匹配
@@ -12509,329 +11861,63 @@ class Solution:
         m, n = len(s), len(p)
 
         dp = [[False] * (n + 1) for _ in range(m + 1)]
-        dp[0][0] = True
-        for i in range(1, n + 1):
-            if p[i - 1] == '*':
-                dp[0][i] = True
+
+        dp[0][0] = True # dp[0][0]:什么都没有,所以为true
+        for j in range(1, n + 1):
+            if p[j - 1] == '*': 
+                dp[0][j] = True
             else:
                 break
+        # 也可以这么写
+        # for j in range(1, n + 1):
+        #     if p[j - 1] == "*":
+        #         dp[0][j] = dp[0][j - 1]
         
         for i in range(1, m + 1):
             for j in range(1, n + 1):
-                if p[j - 1] == '*':
-                    dp[i][j] = dp[i][j - 1] | dp[i - 1][j]
-                elif p[j - 1] == '?' or s[i - 1] == p[j - 1]:
+                if p[j - 1] == '*': # 如果p[j] == "*" && (dp[i-1][j] = true || dp[i][j-1] = true) 有dp[i][j] = true
+                    dp[i][j] = dp[i][j - 1] | dp[i - 1][j] 
+                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
+                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
+                elif p[j - 1] == '?' or s[i - 1] == p[j - 1]: # 如果(s[i] == p[j] || p[j] == "?") && dp[i-1][j-1] ,有dp[i][j] = true
                     dp[i][j] = dp[i - 1][j - 1]
                 
         return dp[m][n]
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/wildcard-matching/solution/tong-pei-fu-pi-pei-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        def allStars(st: str, left: int, right: int) -> bool:
-            return all(st[i] == '*' for i in range(left, right))
-        
-        def charMatch(u: str, v: str) -> bool:
-            return u == v or v == '?'
-
-        sRight, pRight = len(s), len(p)
-        while sRight > 0 and pRight > 0 and p[pRight - 1] != '*':
-            if charMatch(s[sRight - 1], p[pRight - 1]):
-                sRight -= 1
-                pRight -= 1
-            else:
-                return False
-        
-        if pRight == 0:
-            return sRight == 0
-        
-        sIndex, pIndex = 0, 0
-        sRecord, pRecord = -1, -1
-        while sIndex < sRight and pIndex < pRight:
-            if p[pIndex] == '*':
-                pIndex += 1
-                sRecord, pRecord = sIndex, pIndex
-            elif charMatch(s[sIndex], p[pIndex]):
-                sIndex += 1
-                pIndex += 1
-            elif sRecord != -1 and sRecord + 1 < sRight:
-                sRecord += 1
-                sIndex, pIndex = sRecord, pRecord
-            else:
-                return False
-
-        return allStars(p, pIndex, pRight)
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/wildcard-matching/solution/tong-pei-fu-pi-pei-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-## 思路:
-
-**思路一:** 利用两个指针进行遍历。
-
-在代码里解释.
-
-时间复杂度为:$O(mn)$
-
-**思路二:** 动态规划
-
-dp[i][j]表示s到i位置,p到j位置是否匹配!
-
-初始化:
-
-dp[0][0]:什么都没有,所以为true
-第一行dp[0][j],换句话说,s为空,与p匹配,所以只要p开始为*才为true
-第一列dp[i][0],当然全部为False
-动态方程:
-
-如果(s[i] == p[j] || p[j] == "?") && dp[i-1][j-1] ,有dp[i][j] = true
-
-如果p[j] == "*" && (dp[i-1][j] = true || dp[i][j-1] = true) 有dp[i][j] = true
-
-​ note:
-
-​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
-
-​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab* # 附上自顶向下方法
-
-关注我的知乎专栏,了解更多解题技巧,一起进步!
-
-​​
-
-## 代码:
-
-思路一
-
-class Solution:
-    def isMatch(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: bool
-        """
-        i = 0
-        j = 0
-        start = -1
-        match = 0
-        while i < len(s):
-            # 一对一匹配,匹配成功一起移
-            if j < len(p) and (s[i] == p[j] or p[j] == "?"):
-                i += 1
-                j += 1
-            # 记录p的"*"的位置,还有s的位置
-            elif j < len(p) and p[j] == "*":
-                start = j
-                match = i
-                j += 1
-            # j 回到 记录的下一个位置
-            # match 更新下一个位置
-            # 这不代表用*匹配一个字符
-            elif start != -1:
-                j = start + 1
-                match += 1
-                i = match
-            else:
-                return False
-         # 将多余的 * 直接匹配空串
-        return all(x == "*" for x in p[j:])
-
-思路2
-
-class Solution:
-    def isMatch(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: bool
-        """
-        sn = len(s)
-        pn = len(p)
-        dp = [[False] * (pn + 1) for _ in range(sn + 1)]
-        dp[0][0] = True
-        for j in range(1, pn + 1):
-            if p[j - 1] == "*":
-                dp[0][j] = dp[0][j - 1]
-
-        for i in range(1, sn + 1):
-            for j in range(1, pn + 1):
-                if (s[i - 1] == p[j - 1] or p[j - 1] == "?"):
-                    dp[i][j] = dp[i - 1][j - 1]
-                elif p[j - 1] == "*":
-                    dp[i][j] = dp[i - 1][j] or dp[i][j - 1]
-        return dp[-1][-1]
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        import functools
-
-        @functools.lru_cache(None)
-        def dfs(i, j):
-            if j == len(p): return i == len(s)
-            if i < len(s) and s[i] == p[j] and dfs(i + 1, j + 1):
-                return True
-            if i < len(s) and p[j] == "?" and dfs(i + 1, j + 1): return True
-            if p[j] == "*":
-                # * 依次表示多个, 一个, 零个字符
-                if (i < len(s) and (dfs(i + 1, j) or dfs(i + 1, j + 1))) or dfs(i, j + 1) : return True
-            return False
-        
-        return dfs(0, 0)
-
-记忆化搜索，就是得错几次才能考虑完全、
-
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        # 怎么处理*的情况
-
-        @lru_cache()
-        def dfs(i, j):
-            if i == len(s) and (j == len(p) or (p[j:].count('*') == len(p) - j)):
-                return True 
-            
-            if j >= len(p) or i >= len(s):
-                return False
-
-            if p[j] == '*':
-                return dfs(i+1, j) or dfs(i+1, j+1) or dfs(i, j+1)
-            
-            if p[j] == '?':
-                return dfs(i+1, j+1)
-            
-            if p[j] == s[i]:
-                return dfs(i+1, j+1)
-            
-            return False
-        
-        return dfs(0, 0)
 ```
 
 
 ##  236. <a name='-1'></a>18. 四数之和
 
 ```py
-class Solution:
-    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
-        quadruplets = list()
-        if not nums or len(nums) < 4:
-            return quadruplets
-        
-        nums.sort()
-        length = len(nums)
-        for i in range(length - 3):
-            if i > 0 and nums[i] == nums[i - 1]:
-                continue
-            if nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target:
-                break
-            if nums[i] + nums[length - 3] + nums[length - 2] + nums[length - 1] < target:
-                continue
-            for j in range(i + 1, length - 2):
-                if j > i + 1 and nums[j] == nums[j - 1]:
-                    continue
-                if nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target:
-                    break
-                if nums[i] + nums[j] + nums[length - 2] + nums[length - 1] < target:
-                    continue
-                left, right = j + 1, length - 1
-                while left < right:
-                    total = nums[i] + nums[j] + nums[left] + nums[right]
-                    if total == target:
-                        quadruplets.append([nums[i], nums[j], nums[left], nums[right]])
-                        while left < right and nums[left] == nums[left + 1]:
-                            left += 1
-                        left += 1
-                        while left < right and nums[right] == nums[right - 1]:
-                            right -= 1
-                        right -= 1
-                    elif total < target:
-                        left += 1
-                    else:
-                        right -= 1
-        
-        return quadruplets
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/4sum/solution/si-shu-zhi-he-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-八个月前，这道题差点把我逼疯
-
-八个月后，我终于战胜了它
-
-class Solution:
-    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
-        d={}
-        for i in range(len(nums)):
-            for j in range(i+1,len(nums)):
-                d.setdefault(nums[i]+nums[j],[]).append((i,j))
-        result=set()
-        for i in range(len(nums)):
-            for j in range(i+1,len(nums)):
-                for a,b in d.get(target-nums[i]-nums[j],[]):
-                    temp={i,j,a,b}
-                    if len(temp)==4:
-                        result.add(tuple(sorted(nums[t] for t in temp)))
-        return result
-
-Python：
-
 # 双指针法
 class Solution:
     def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
-        
         nums.sort()
         n = len(nums)
         res = []
         for i in range(n):
+            # 第一次 剪枝
             if i > 0 and nums[i] == nums[i - 1]: continue
-            for k in range(i+1, n):
-                if k > i + 1 and nums[k] == nums[k-1]: continue
-                p = k + 1
+            for j in range(i + 1, n)
+                # 第二次 剪枝
+                if j > i + 1 and nums[j] == nums[j - 1]: continue
+                # 双指针
+                p = j + 1
                 q = n - 1
 
                 while p < q:
-                    if nums[i] + nums[k] + nums[p] + nums[q] > target: q -= 1
-                    elif nums[i] + nums[k] + nums[p] + nums[q] < target: p += 1
+                    if nums[i] + nums[j] + nums[p] + nums[q] > target: q -= 1
+                    elif nums[i] + nums[j] + nums[p] + nums[q] < target: p += 1
                     else:
-                        res.append([nums[i], nums[k], nums[p], nums[q]])
+                        res.append([nums[i], nums[j], nums[p], nums[q]])
+                        # 第3次 剪枝
                         while p < q and nums[p] == nums[p + 1]: p += 1
+                        # 第4次 剪枝
                         while p < q and nums[q] == nums[q - 1]: q -= 1
                         p += 1
                         q -= 1
         return res
-# 哈希表法
-class Solution(object):
-    def fourSum(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-        # use a dict to store value:showtimes
-        hashmap = dict()
-        for n in nums:
-            if n in hashmap:
-                hashmap[n] += 1
-            else: 
-                hashmap[n] = 1
-        
-        # good thing about using python is you can use set to drop duplicates.
-        ans = set()
-        for i in range(len(nums)):
-            for j in range(i + 1, len(nums)):
-                for k in range(j + 1, len(nums)):
-                    val = target - (nums[i] + nums[j] + nums[k])
-                    if val in hashmap:
-                        # make sure no duplicates.
-                        count = (nums[i] == val) + (nums[j] == val) + (nums[k] == val)
-                        if hashmap[val] > count:
-                            ans.add(tuple(sorted([nums[i], nums[j], nums[k], val])))
-                    else:
-                        continue
-        return ans
 ```
 
 ##  237. <a name='-1'></a>405 【位运算😜】Convert a Number to Hexadecimal
@@ -12839,70 +11925,18 @@ class Solution(object):
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
 
 ```py
-三种方法
+0xffffffff = 1111 1111 1111 1111 1111 1111 1111 1111 # (8个F的二进制形式, 一个F占4个字节 )  # 2 ^ 32 - 1
 
-1.第一种库函数(汉明重量的题目也可以使用库函数)
-2.第二种不用位运算😜，整除求余一顿操作，逆向取余，搞定
-3.第三种使用位运算😜，把第二中的整除换做位移，求余换做与运算
-详细思路看代码
-代码
-
-# 库函数作弊通过
 class Solution:
-    def toHex(self, num: int) -> str:
-        return hex(num & 0xFFFFFFFF)[2:] # 0xFFFFFFFF 2 ^ 32 - 1
-```
-
-```py
-学习大牛的思路，记下来慢慢
-32位整数，每4位1个字节，一个字节转成16进制刚好是0—f之间的一个字符；最多需要转换8次，可能有几个“0”，最后去掉就是了。
-
-直接 ans = []
-class Solution:
-    def toHex(self, num: int) -> str:
-        if num == 0:
-            return "0"
-        template = "0123456789abcdef"
-        ans = []
-        for _ in range(8):
-            ans.append(template[num % 16])
-            num //= 16
-        ans.reverse()
-        return "".join(ans).lstrip("0")
-
-直接 result = ""
-
-class Solution(object):
     def toHex(self, num):
-
-        num = num & 0xffffffff
-        result = ""
+        num = num & 0xffffffff 
+        res = ""
         lib = "0123456789abcdef"
-        if num == 0:
-            return "0"
+        if num == 0: return "0"
         while num:
-            result = lib[num % 16] + result # 一定要加在右边
+            res = lib[num % 16] + res # 一定要加在右边
             num //= 16
-
-        return result
-
-format的用法很多，值得深入学习
-
-print((1 << 32) + (-32))
-print(bin((1 << 32) + (-32)))
-print(format(((1 << 32) + (-32)), '0o'))
-print(format(((1 << 32) + (-32)), '0x'))
-4294967264
-0b11111111111111111111111111100000
-37777777740
-ffffffe0
-
-class Solution:
-    def toHex(self, num):
-
-        if num < 0:
-            num = (1 << 32) + num
-        return format(num, '0x')
+        return res
 ```
 
 ##  238. <a name='8.'></a>补充题8. 计算数组的小和
@@ -12910,68 +11944,77 @@ class Solution:
 
 https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
 
+```py
+在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
+
+例子：
+
+[1,3,4,2,5]
+
+1左边比1小的数，没有；
+
+3左边比3小的数，1；
+
+4左边比4小的数，1、3；
+
+2左边比2小的数，1；
+
+5左边比5小的数，1、3、4、2；
+
+所以小和为1+1+3+1+1+3+4+2=16
+
+要求时间复杂度O(NlogN)，空间复杂度O(N)
+```
+
+
+```py
+def mergesmallSum(arr, left, right):
+    if left == right:
+        return 0
+    mid = (left + right) // 2
+    s1 = mergesmallSum(arr, left, mid)
+    s2 = mergesmallSum(arr, mid + 1, right)
+    s3 = sortSum(arr, left, mid, right)
+    return  s1+s2+s3 
+
+# 这里有2个目的：
+# 1. 排序
+# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
+
+
+def sortSum(arr, left, mid, right):
+    tmparr = []
+    sums = 0
+    i, j = left, mid + 1
+    while i <= mid and j <= right:
+        if arr[i] <= arr[j]:
+            sums += arr[i] * (right-j+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+            tmparr.append(arr[i])
+            i += 1
+        else:
+            tmparr.append(arr[j])   # 把小的值先往res里面填写
+            j += 1
+    tmparr += arr[i:mid + 1] or arr[j:right + 1]   # 全都排完之后，左半部分有剩余
+    arr[left: right + 1] = tmparr   # 修改原 arr 的值
+    return sums
+  
+N = int(input())
+nums = list(map(int, input().split()))
+print(mergesmallSum(nums, 0, N-1))
+```
+
 ##  239. <a name='K-1'></a>863. All Nodes Distance K in Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
 
 ```py
-来个python的翻译代码，我越学越感觉啥都不会。
-
-为什么要判断from节点，避免root搜到root.left再从root.left搜回root的情况。
-
-记录父节点，相当于node多了一个属性，node.father, 但它是单独记录在TreeNode结构外面，功能是一样的。
-
-这里注意root的father是None，避免哈希表的keyerror。
-
-class Solution:
-    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-        nodemap = {root.val: None}
-        def findParent(root):
-            if root.left:
-                nodemap[root.left.val] = root
-                findParent(root.left)
-            if root.right:
-                nodemap[root.right.val] = root
-                findParent(root.right)            
-            
-        def findAns(root, nodefrom, depth, k):
-            if not root: return
-            if depth == k:
-                self.ans.append(root.val)
-                return
-            if root.left != nodefrom:
-                findAns(root.left, root, depth + 1, k)
-            if root.right != nodefrom:
-                findAns(root.right, root, depth + 1, k)
-            if nodemap[root.val] != nodefrom:
-                findAns(nodemap[root.val], root, depth + 1, k)
-            
-        self.ans = []
-        findParent(root)
-        findAns(target, None, 0, k)
-        
-        return self.ans
-
-
 这道题就是先把二叉树转化图,再用图的bfs,求得解
 
 所以,这道题关键就是如何把树转化成图,不难直接看代码就可以理解.
 
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
 
 class Solution:
-    def distanceK(self, root, target, K):
-        """
-        :type root: TreeNode
-        :type target: TreeNode
-        :type K: int
-        :rtype: List[int]
-        """
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
         from collections import defaultdict
         graph = defaultdict(set)
         # 建图
@@ -12985,20 +12028,28 @@ class Solution:
                 graph[root.right.val].add(root.val)
                 dfs(root.right)
         dfs(root)
-        #print(graph)
-        cur = [target.val]
-        visited ={target.val}
-        while K:
-            next_time = []
-            while cur:
-                tmp = cur.pop()
-                for node in graph[tmp]:
-                    if node not in visited:
-                        visited.add(node)
-                        next_time.append(node)
-            K -= 1
-            cur = next_time
-        return cur
+        # 3: {1, 5}, 
+        # 5: {2, 3, 6}, 
+        # 6: {5}, 
+        # 2: {4, 5, 7}, 
+        # 7: {2}, 
+        # 4: {2}, 
+        # 1: {0, 8, 3}, 
+        # 0: {1}, 
+        # 8: {1}
+        que = [target.val]
+        visited = {target.val} # 必须用set
+        while k:
+            nextnode = [] # 每一次都是临近的节点
+            while que:
+                stt = que.pop()
+                for end in graph[stt]:
+                    if end not in visited:
+                        visited.add(end)
+                        nextnode.append(end) # 每一次都是临近的节点
+            k -= 1 
+            que = nextnode # 每一次都是临近的节点
+        return que
 ```
 
 ##  240. <a name='III-1'></a>337 House Robber III
@@ -13010,71 +12061,13 @@ class Solution:
 
 class Solution:
     def rob(self, root: TreeNode) -> int:
-        def _rob(root):
-            if not root: return 0, 0
-            
-            ls, ln = _rob(root.left)  # 前一项表示根节点偷，后一项表示根节点不偷
-            rs, rn = _rob(root.right) # 前一项表示根节点偷，后一项表示根节点不偷
-            
-            return root.val + ln + rn, max(ls, ln) + max(rs, rn) # 前一项表示根节点偷，后一项表示根节点不偷
-
-        return max(_rob(root))
-# ls表示偷左子树能带来的最大收益，ln表示不偷左子树能带来的最大收益，rs、rn同理
-
-# 这个解法好像有点厉害
-
-# 从root开始抢起来，最大能抢到的两个可能： 抢root和不抢root
-
-# - rob_root = max(rob_L + rob_R , no_rob_L + no_nob_R + root.val)
-# - no_rob_root = rob_L + rob_R
-
-
-# 这个递归写起来就很厉害了
-
-
-# ```
-class Solution(object):
-    def rob(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
         def dfs(root):
             if not root: return 0, 0
-            rob_L, no_rob_L = dfs(root.left) # 前一项表示根节点偷，后一项表示根节点不偷
+            rob_L, no_rob_L = dfs(root.left)  # 前一项表示根节点偷，后一项表示根节点不偷
             rob_R, no_rob_R = dfs(root.right) # 前一项表示根节点偷，后一项表示根节点不偷
-            return max(no_rob_R + no_rob_L + root.val , rob_L + rob_R), rob_L + rob_R # 前一项表示根节点偷，后一项表示根节点不偷
-        return dfs(root)[0]
+            return root.val + no_rob_L + no_rob_R, max(rob_L, no_rob_L) + max(rob_R, no_rob_R) # 前一项表示根节点偷，后一项表示根节点不偷
+        return max(dfs(root))
 
-class Solution:
-    def rob(self, root: TreeNode) -> int:
-        result = self.rob_tree(root)
-        return max(result[0], result[1])
-    
-    def rob_tree(self, node):
-        if node is None:
-            return (0, 0) # (偷当前节点金额，不偷当前节点金额)
-        left = self.rob_tree(node.left)
-        right = self.rob_tree(node.right)
-        val1 = node.val + left[1] + right[1] # 偷当前节点，不能偷子节点
-        val2 = max(left[0], left[1]) + max(right[0], right[1]) # 不偷当前节点，可偷可不偷子节点
-        return (val1, val2)
-
-class Solution:
-    def rob(self, root: TreeNode) -> int:
-        if root is None:
-            return 0
-        if root.left is None and root.right  is None:
-            return root.val
-        # 偷父节点
-        val1 = root.val
-        if root.left:
-            val1 += self.rob(root.left.left) + self.rob(root.left.right)
-        if root.right:
-            val1 += self.rob(root.right.left) + self.rob(root.right.right)
-        # 不偷父节点
-        val2 = self.rob(root.left) + self.rob(root.right)
-        return max(val1, val2)
 ```
 
 
@@ -13087,22 +12080,13 @@ class Solution:
 ```py
 class Solution:
     def fractionToDecimal(self, numerator, denominator):
-        """
-        :type numerator: int
-        :type denominator: int
-        :rtype: str
-        """
+
         # ----------情况一：没有余数----------
         if numerator % denominator == 0:
             return str(numerator // denominator)
-        # ----------情况一：没有余数----------
 
-
-        # -----------情况二：有余数-----------
         # -----------情况二：有余数-----------
         s = []
-
-        # ----------------得到负数----------------
         # ----------------得到负数----------------
         if (numerator < 0) != (denominator < 0):
             s.append('-')
@@ -13122,15 +12106,6 @@ class Solution:
         remainder = numerator % denominator
         while remainder and remainder not in indexMap:
             indexMap[remainder] = len(s) 
-
-            # 这里需要一个计数器，s的长度递增，所以用len(s)
-            # 解法二中：
-            # i = 0
-            # i += 1
-            # 也是可以的。
-            # len(s) 可以直接指向 insertIndex-插入位置
-
-            print("余数remainder: ",indexMap.keys())
             remainder *= 10
             s.append(str(remainder // denominator))
             remainder %= denominator
@@ -13144,148 +12119,6 @@ class Solution:
         # -----------情况二：有余数-----------
 ```
 
-```py
-class Solution:
-    def fractionToDecimal(self, numerator, denominator):
-        """
-        :type numerator: int
-        :type denominator: int
-        :rtype: str
-        """
-        dic = {}
-        res = []
-
-        # ----------------得到负数----------------
-        # ----------------得到负数----------------
-        if numerator*denominator<0:
-            sign = "-"
-        else:
-            sign = ""
-        # ----------------得到负数----------------
-        # ----------------得到负数----------------
-
-        numerator = abs(numerator)
-        denominator = abs(denominator)
-        intPart,res = divmod(numerator, denominator)
-
-
-        # ----------情况一：没有余数----------
-        if res==0:
-            return sign + str(intPart)
-        # ----------情况一：没有余数----------
-        
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-        res.append(str(intPart))
-        res.append(".")
-
-        dic[res]= len(res) # 是 2
-        while res!=0:
-            intPart,res = divmod(10*res,denominator)
-            res.append(str(intPart))
-            # 如果余数出现在字典中，加上（）并返回
-            if res in dic:
-                res.insert(dic[res],"(") #左侧插入
-                res.append(")")     #右侧插入
-                return sign + "".join(res)
-            # 继续记录余数和(索引位置
-            
-            dic[res] = len(res) # i+=1
-        # 如果余数为0
-        return sign + "".join(res) 
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-
-class Solution:
-    def fractionToDecimal(self, numerator, denominator):
-        """
-        :type numerator: int
-        :type denominator: int
-        :rtype: str
-        """
-        # 处理整数部分
-        ans = ""
-
-        # ----------------得到负数----------------
-        # ----------------得到负数----------------
-        if numerator * denominator < 0:
-            ans += "-"
-        # ----------------得到负数----------------
-        # ----------------得到负数----------------
-
-        numerator, denominator = abs(numerator), abs(denominator)
-        intPart, res = divmod(numerator, denominator)
-        # ans += f"{q}"
-        ans += str(intPart)
-
-
-        # ----------情况一：没有余数----------
-        if 0 == res:
-            return ans
-        # ----------情况一：没有余数----------
-
-        
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-        ans += '.'
-        # 小数部分：除法发现循环节
-        index = len(ans)  # 小数点后一个位置
-        numerator = res * 10  # 被除数增加十倍
-        dic = {numerator: index}
-        while True:
-            intPart, res = divmod(numerator, denominator)
-            ans += str(intPart)
-            if res == 0:
-                break
-            numerator = res * 10
-            if numerator in dic:  # 发现循环节
-                return ans[:dic[numerator]] + f"({ans[dic[numerator]:]})" # 直接加括号（）
-            dic[numerator] = index + 1  # 新被除数位置
-            index += 1
-        return ans
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-
-class Solution:
-    def fractionToDecimal(self, numerator, denominator):
-        """
-        :type numerator: int
-        :type denominator: int
-        :rtype: str
-        """
-
-        # ----------------得到负数----------------
-        # ----------------得到负数----------------
-        sign = "" if numerator * denominator >= 0 else "-"
-        # ----------------得到负数----------------
-        # ----------------得到负数----------------
-
-        numerator, denominator = abs(numerator), abs(denominator)
-        intPart = numerator // denominator
-
-        # ----------情况一：没有余数----------
-        if numerator % denominator == 0: return sign + str(intPart)
-        # ----------情况一：没有余数----------
-
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-        res, dic, index = numerator % denominator, {}, 3
-        ans = [sign, str(intPart), "."]
-        while res:
-            if res not in dic:
-                dic[res] = index
-            else:
-                ans.insert(dic[res], "(")
-                ans.append(")")
-                break
-            res *= 10
-            ans.append(str(res // denominator))
-            res %= denominator
-            index += 1
-        return "".join(ans)
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-```
 
 ##  242. <a name='08.12.'></a>面试题 08.12. 八皇后
 
@@ -13338,54 +12171,6 @@ object Solution1 {
 }
 
 
-
-/**
-* using first column and row to record cell to be set to zero
-* memo:
-*  1. we should set first columns and first row in the last, otherwise we cannot distinguish the zero between set by us and originally is
-* time complexity: O(NM)
-* space complexity: O(1)
-*/
-object Solution2 {
-    import collection.mutable
-    def setZeroes(matrix: Array[Array[Int]]): Unit = {
-      var rowZero = false
-      var colZero = false
-      
-      /**
-      * using first row and first column as flag 
-      */
-      for (i <- matrix.indices; j <- matrix(i).indices; if matrix(i)(j) == 0) {
-        if (i == 0) rowZero = true
-        if (j == 0) colZero = true
-        matrix(i)(0) = 0
-        matrix(0)(j) = 0
-      }
-    
-      /**
-      * set one row to zero except first cell
-      */
-      (1 until matrix.length).foreach {
-        case rowIdx if matrix(rowIdx)(0) == 0 => matrix(rowIdx).indices.foreach(matrix(rowIdx)(_) = 0)
-        case _ =>
-      }
-      
-      /**
-      * set one column to zero except first cell
-      */
-      (1 until matrix(0).length).foreach {
-        case colIdx if matrix(0)(colIdx) == 0 => matrix.indices.foreach(matrix(_)(colIdx) = 0)
-        case _ => 
-      }
-      
-      /**
-      * set first column and first row to zero if true
-      */
-      if(rowZero) matrix(0).indices.foreach(matrix(0)(_) = 0)
-      if(colZero) matrix.indices.foreach(matrix(_)(0) = 0)
-      
-    }
-}
 ```
 
 ##  244. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
@@ -13400,52 +12185,6 @@ object Solution2 {
 ```py
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        res = nums[:]
-        stack = []
-        for idx, cur in sorted(enumerate(nums),key = lambda x: x[1]):
-            while stack and nums[stack[-1]] < cur:
-                res[stack[-1]] = cur
-                stack.pop()
-            stack.append(idx)
-        
-        while stack:
-            res[stack[-1]] = -1
-            stack.pop()
-        
-        return res
-        
-# 哭，我又理解错题目了
-# 输入：
-# [5,4,3,2,1]
-# 输出：
-# [-1,5,4,3,2]
-# 预期结果：
-# [-1,5,5,5,5]
-```
-
-```py
-class Solution:
-    def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        res = nums[:]
-        stack = []
-        # 双倍nums大法好
-        for idx, cur in enumerate(nums + nums):
-            while stack and nums[stack[-1]] < cur:
-                res[stack[-1]] = cur
-                stack.pop()
-            if idx < len(nums): # 易错点：append(idx)是有条件的
-                stack.append(idx)
-        
-        while stack:
-            res[stack[-1]] = -1
-            stack.pop()
-        
-        return res
-
-更简单的写法:
-
-class Solution:
-    def nextGreaterElements(self, nums: List[int]) -> List[int]:
         res = [-1] * len(nums)
         stack = []
         # 双倍nums大法好
@@ -13456,7 +12195,17 @@ class Solution:
             if idx < len(nums): # 易错点：append(idx)是有条件的
                 stack.append(idx)
         return res
-
+print(stack)
+[0]
+[1]
+[2]
+[3]
+[3, 4]
+[3, 4]
+[3, 4]
+[3, 4]
+[3]
+[3]
 
 ```
 
@@ -13474,13 +12223,12 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1pV411k7TH?spm_id_from=333.999.0.0)
 
+并查集
+
 
 ```py
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
         f = {}
         def find(x):
             f.setdefault(x,x)
@@ -13511,13 +12259,12 @@ class Solution:
                     board[i][j] = "X"
 ```
 
+队列
 
 ```py
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
+
         m = len(board)
         n = len(board[0])
         que = collections.deque()
@@ -13548,7 +12295,7 @@ class Solution:
         return board
 ```
 
-另一种写法
+dfs
 
 ```py
 class Solution:
@@ -13592,38 +12339,31 @@ class Solution:
 看不懂，懵逼了
 
 ```py
-# 看不懂，懵逼了
+常数空间，从顶到下，逐层连接
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
 
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
-        dummy = Node()
-        dummy.next = root
-        while dummy.next:
-            curp = dummy.next
-            dummy.next = None
-            pre = dummy
-            while curp:
-                for cur in [curp.left, curp.right]:
-                    if cur:
-                        pre.next = cur
-                        pre = cur
-                curp = curp.next
-        return root
-
-# python 非递归方法，常数空间，从顶到下，逐层连接
-class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        first = root # left_most表示当前层的最左边节点
+        first = root # first 表示当前层的最左边节点
         while first: # 每次循环连接当前层的下一层
-            dummy = pre = Node(0) # head表示下一层的虚拟头部
+            dummy = nxtcur = Node(0) # head表示下一层的虚拟头部
             cur = first
-            while cur : # 遍历当前层，将下一层连接 
+            while cur: #  cur遍历当前层，nxtcur将下一层连接 
                 if cur.left :
-                    pre.next = cur.left
-                    pre = pre.next
+                    nxtcur.next = cur.left
+                    nxtcur = nxtcur.next
                 if cur.right :
-                    pre.next = cur.right
-                    pre = pre.next
+                    nxtcur.next = cur.right
+                    nxtcur = nxtcur.next
                 cur = cur.next
             first = dummy.next
         return root
@@ -13639,65 +12379,25 @@ class Solution:
 [图灵](https://www.bilibili.com/video/BV1Zy4y127qr?spm_id_from=333.999.0.0)
 
 ```py
-# 无脑暴力法一行版
-
 class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k) -> int:
-        return sorted(sum(matrix,[]))[k-1]
-# 暴力pq一行
-import heapq
-class Solution(object):
-    def kthSmallest(self, matrix, k):
-        return heapq.nsmallest(k,sum(matrix,[]))[-1]
-#  heapq一行
-class Solution(object):
-    def kthSmallest(self, matrix, k):
-        return list(heapq.merge(*matrix))[k-1]
-
-class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k) -> int:
-        rec = sorted(sum(matrix, []))
-        return rec[k - 1]
-
-# 无脑暴力法优化版
-class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k) -> int:
-        lis=[]
-        for l in matrix:
-            lis+=l
-        l=heapq.nlargest(len(lis)-k+1,lis)
-        return l[-1]
-# 无脑暴力法
-class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k) -> int:
-        lis=[]
-        for l in matrix:
-            lis+=l
-        lis.sort()
-        return lis[k-1]
-class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k) -> int:
+    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
         n = len(matrix)
-        pq = [(matrix[i][0], i, 0) for i in range(n)]
+        pq = [(matrix[i][0], i, 0) for i in range(n)] # 每行的第一个元素
         heapq.heapify(pq)
 
-        ret = 0
-        for i in range(k - 1):
+
+        for _ in range(k - 1): # 这里pop k - 1 次
             num, x, y = heapq.heappop(pq)
             if y != n - 1:
                 heapq.heappush(pq, (matrix[x][y + 1], x, y + 1))
         
-        return heapq.heappop(pq)[0]
-# binary search
-# ```python
+        return heapq.heappop(pq)[0] # 这里pop  1次
+
+
+
 import bisect
 class Solution(object):
     def kthSmallest(self, matrix, k):
-        """
-        :type matrix: List[List[int]]
-        :type k
-        :rtype
-        """
         l, r = matrix[0][0], matrix[-1][-1]
         while l <= r:
             mid = l + ((r - l) >> 2)
@@ -13717,18 +12417,15 @@ class Solution(object):
 ```py
 class Solution:
     def combine(self, n, k):
-            res = []
-            path = []
-            def backtrack(StartIndex):
-                if len(path) == k:
-                    res.append(path[:])
-                    return
-                for i in range(StartIndex, n+1):
-                    path.append(i)
-                    backtrack(i+1)
-                    path.pop()
-            backtrack(1)
-            return res
+        res = []
+        def backtrack(StartIndex,path):
+            if len(path) == k:
+                res.append(path[:])
+                return
+            for i in range(StartIndex, n+1):
+                backtrack(i+1,path+[i])
+        backtrack(1,[])
+        return res
 ```
 
 ##  254. <a name='-1'></a>528 Random Pick with Weight
@@ -13748,12 +12445,12 @@ class Solution:
         dp = [10e5] * (n + 1)
         dp[0] = 0
         # 也可以 sqrt = floor(n**0.5) 
-        sqrt = ceil(n**0.5) 
+        sqrt = ceil(n ** 0.5) 
         for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
-            num = i**2
-            for j in range(num, n + 1):
-                if j >= num:
-                    dp[j] = min(dp[j], dp[j-num] + 1) 
+            numSquare = i ** 2
+            for j in range(numSquare, n + 1):
+                if j >= numSquare:
+                    dp[j] = min(dp[j], dp[j - numSquare] + 1) 
         return dp[-1]
 ```
 
@@ -13761,68 +12458,9 @@ class Solution:
 
 [哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
 
-```py
-class Solution:
-    def binaryTreePaths(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[str]
-        """
-        def construct_paths(root, path):
-            if root:
-                path += str(root.val)
-                if not root.left and not root.right:  # 当前节点是叶子节点
-                    paths.append(path)  # 把路径加入到答案中
-                else:
-                    path += '->'  # 当前节点不是叶子节点，继续递归遍历
-                    construct_paths(root.left, path)
-                    construct_paths(root.right, path)
-
-        paths = []
-        construct_paths(root, '')
-        return paths
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-paths/solution/er-cha-shu-de-suo-you-lu-jing-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def binaryTreePaths(self, root: TreeNode) -> List[str]:
-        paths = list()
-        if not root:
-            return paths
-
-        node_queue = collections.deque([root])
-        path_queue = collections.deque([str(root.val)])
-
-        while node_queue:
-            node = node_queue.popleft()
-            path = path_queue.popleft()
-
-            if not node.left and not node.right:
-                paths.append(path)
-            else:
-                if node.left:
-                    node_queue.append(node.left)
-                    path_queue.append(path + '->' + str(node.left.val))
-                
-                if node.right:
-                    node_queue.append(node.right)
-                    path_queue.append(path + '->' + str(node.right.val))
-        return paths
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/binary-tree-paths/solution/er-cha-shu-de-suo-you-lu-jing-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
 
 ```py
-python3 最好理解的递归实现
-
 class Solution:
-            
     def binaryTreePaths(self, root: TreeNode) -> List[str]:
         if not root:
             return []
@@ -13837,30 +12475,13 @@ class Solution:
                 paths.append(str(root.val) + '->' + i)
         return paths  
 paths 递归每调用一次要创建一个以便给上一层遍历（叠加）
-调用self.binaryTreePaths(root.left)得到的是左子树的全部路径，加入左子树为[1,2,3],那么得到的结果是[1,2],[1,3]两组，然后还要和根节点进行拼接，所以要用循环。
+调用self.binaryTreePaths(root.left)得到的是左子树的全部路径，
+加入左子树为[1,2,3],那么得到的结果是[1,2],[1,3]两组，
+然后还要和根节点进行拼接，所以要用循环。
 ```
 
 ```scala
-package com.zhourui.leetcode
-import com.zhourui.codech._
 
-//Given a binary tree, return all root-to-leaf paths.
-//
-//Note: A leaf is a node with no children.
-//
-//Example:
-//
-//Input:
-//
-//1
-///   \
-//2     3
-//\
-//5
-//
-//Output: ["1->2->5", "1->3"]
-//
-//Explanation: All root-to-leaf paths are: 1->2->5, 1->3
 
 package lc0257 {
 
@@ -13948,20 +12569,7 @@ class Solution:
                     ans |= (1 << i)
         return ans
 
-这个解法看不懂，放弃：
 
-
-时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
-
-空间复杂度：O(1)
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        ones, twos = 0, 0
-        for num in nums:
-            ones = ones ^ num & ~ twos
-            twos = twos ^ num & ~ ones
-        return ones
 ```
 
 
@@ -13984,38 +12592,6 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
 
-##  267. <a name='II-1'></a>107-Binary Tree Level Order Traversal II
-
-[哈哈哈](https://www.bilibili.com/video/BV1eJ411z7d6?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7aP?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1yK411n76R?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1qA411i7P4?spm_id_from=333.999.0.0)
-
-
-```py
-class Solution:
-    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
-        if not root:
-            return []
-        queue = [root]
-        res = []
-        while queue:
-            level = []
-            for _ in range(len(queue)):
-                node = queue.pop(0)
-                level.append(node.val)
-
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
-            res.append(level)
-        return res[::-1]
-```
-
 ##  268. <a name='-1'></a>172-Factorial Trailing Zeroes
 
 [哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
@@ -14025,36 +12601,12 @@ class Solution:
 ```py
 class Solution:
     def trailingZeroes(self, n: int) -> int:
-        # Calculate n!
-        factorial = 1
-        for i in range(2, n + 1):
-            factorial *= i
-        # Count how many 0's are on the end.
-        res = 0
-        while factorial % 10 == 0:
-            res += 1
-            factorial //= 10
-            
-        return res
-
-
-
-class Solution:
-    def trailingZeroes(self, n: int) -> int:
         ans = 0
-        while n > 0:
+        while n:
             n //= 5
             ans += n
         return ans
 
-
-class Solution:
-    def trailingZeroes(self, n: int) -> int:
-        ans = 0
-        while n >= 5:
-            ans += n//5
-            n = n//5
-        return ans
 ```
 
 ```scala
@@ -14094,40 +12646,29 @@ class Solution:
         # 这个部分其实可以不写：
         # for i in range(n):
         #     dp[i][i]=1
-        for i in range(n):
-            for j in range(i, -1, -1):
-                if s[i] == s[j] and (i - j <= 1 or dp[i - 1][j + 1]):
-                    dp[i][j] = 1
+        for end in range(n):
+            for stt in range(end, -1, -1): # stt 从 end 的位置开始移动
+                if s[end] == s[stt] and (end - stt <= 1 or dp[end - 1][stt + 1]):
+                    dp[end][stt] = 1
                     res += 1
         return res
 
-
-
-class Solution(object):
-    def countSubstrings(self, s):
-        '''
-        双指针太暴力了吧
-        '''
-        cnt = 0
-        for i in range(0,len(s)):
-            for j in range(i+1,len(s)+1):
-                if s[i:j] == s[i:j][::-1]:
-                    cnt += 1
-        return cnt
 ```
 
 ```py
-# Python3中心扩展法非常简洁代码
+
 # 直接利用中心扩展法, 依次计数找到的所有的回文🌈子串即可；
 # 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
 # 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
-### 代码
+
 from math import floor,ceil
 class Solution:
     def countSubstrings(self, s: str) -> int:
         center = ans = 0
+        # center 用一个 while 循环
         while center < len(s):
             low, high = floor(center), ceil(center)
+            # low, high 用一个 while 循环
             while low >=0 and high < len(s) and s[low] == s[high]:
                 low, high, ans = low-1, high+1, ans+1
             center += 0.5
@@ -14154,7 +12695,6 @@ class Solution:
 ```
 
 ```py
-复杂度分析
 
 时间复杂度：O(n)，其中 n 是数组 nums 的长度。
 
@@ -14163,26 +12703,28 @@ class Solution:
 class Solution:
     def singleNumber(self, nums: List[int]) -> List[int]:
         xorsum = 0
+        # 先全部异或一次, 得到的结果 # 找到这两个数的差异
         for num in nums:
-            xorsum ^= num # 找到这两个数的差异
-        
-        lsb = xorsum & (-xorsum) # 找到这两个数的差异的最后一位1
+            xorsum ^= num 
+        # 找到这两个数的差异的最后一位1, 在这个位上一个为0, 一个为1
+        diff = xorsum & (-xorsum) 
         type1 = type2 = 0
         for num in nums:
-            if num & lsb: # 这里只能用 &，来决num & lsb == 100 or 0
+            # 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
+            if num & diff: 
                 type1 ^= num
             else:
                 type2 ^= num
-        
+
         return [type1, type2]
 
-
-思路, 先全部异或一次, 得到的结果, 考察其的某个非0位(比如最高非0位), 那么只出现一次的两个数中, 在这个位上一个为0, 一个为1, 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
 ```
 
 ##  271. <a name='IV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
 
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
+
+你最多可以完成 k 笔交易。
 
 ```py
 # 背一背
@@ -14257,132 +12799,7 @@ if __name__ == "__main__":
 
 
 ```scala
-/**
-* chosen solution
-* dynamic programming
-* memo 
-*    1: using an 3-dim array to record previous state
-*     dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
-*  time complexity: O(NK), N: the length of prices; k: transaction's restrictions
-*  space complexity: O(K),  worst case: O(N)N
-*/ 
-object Solution0 {
-    def maxProfit(k: Int, prices: Array[Int]): Int = {
-        if(prices == null || prices.length < 2 || k < 1 ) return 0
-        val kk = if(2 * k > prices.length) prices.length / 2 else k
-        
-        val dp = Array.tabulate(2, kk, 2) {
-            case (_, _, 0) => Int.MinValue
-            case (_, _, 1) => 0
-            case _ => 0
-        }
-        
-        for(i <- prices.indices; j <- 0 until kk){
-            val current = i & 1
-            val previous = current ^1
-            // 0 for buy, 1 for sell
-            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
-            dp(current)(j)(0) = dp(previous)(j)(0) max {
-                if(j == 0) -prices(i)
-                else dp(previous)(j - 1)(1) - prices(i)
-            }
-            
-        }
-        
-        dp((prices.length - 1) & 1).map(_(1)).max
-        
-    }
-}
-/**
-* my first commitment
-* dynamic programming
-* memo 
-*    1: using an 3-dim array to record all previous state
-*         dp[state index][k times transaction][buy or sell]
-*     dp definition: dp[i][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
-*  time complexity: O(NK), N: the length of prices; k: transaction's constraint
-*/
-object Solution1 {
-  def maxProfit(k: Int, prices: Array[Int]): Int = {
-    if(prices == null || prices.length < 2 || k < 1 ) return 0
-    if(k * 2 >=  prices.length) return prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum
-    val profits = Array.ofDim[Int](prices.length, k, 2)
 
-    for{
-      i <- profits.indices
-      j <- 0 until k
-    }{
-      profits(i)(j)(0) = Int.MinValue  // hold
-      profits(i)(j)(1) = 0 // sell
-    }
-
-    for {
-      i <- prices.indices
-      j <- 0 until k
-    } {
-      val ii = (i + prices.length - 1) % prices.length
-      profits(i)(j)(1) = profits(ii)(j)(1)  max ( profits(ii)(j)(0) + prices(i)) // sell
-      if (j > 0)
-        profits(i)(j)(0) = profits(ii)(j)(0)  max ( profits(ii)(j - 1)(1) - prices(i)) // buy
-      else
-        profits(i)(j)(0) = profits(ii)(j)(0)  max  - prices(i) // buy
-    }
-
-    profits(prices.length - 1).map(_.max).max
-  }
-}
-
-/**
-* dp: decrease status array which only keep current and precious status
-* memo
-*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
-* time complexity: O(NK), N: the length of prices; k: transaction's constraint
-* space complexity: O(K),  worst case: O(N)
-*/
-
-object Solution1-2 {
-  def maxProfit(k: Int, prices: Array[Int]): Int = {
-    if(prices == null || prices.length < 2 || k < 1 ) return 0
-    if(k * 2 >=  prices.length) return prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum
-
-
-    val profits = Array.ofDim[Int](2, k, 2)
-
-    for{
-      i <- profits.indices
-      j <- 0 until k
-    }{
-      profits(i)(j)(0) = Int.MinValue  // hold
-      profits(i)(j)(1) = 0 // sell
-    }
-
-    for {
-      i <- prices.indices
-      j <- 0 until k
-    } {
-      val currentI = (i + 1) % 2
-      val preciousI = i % 2
-      profits(currentI)(j)(1) = profits(preciousI)(j)(1)  max ( profits(preciousI)(j)(0) + prices(i)) // sell
-      if (j > 0)
-        profits(currentI)(j)(0) = profits(preciousI)(j)(0)  max ( profits(preciousI)(j - 1)(1) - prices(i)) // buy
-      else
-        profits(currentI)(j)(0) = profits(preciousI)(j)(0)  max  - prices(i) // buy
-    }
-    profits(prices.length % 2).map(_.max).max // prices.length % 2: decide the newest status index
-  }
-
-  private def debugProfits(profits: Array[Array[Array[Int]]]): Unit = {
-        profits.zipWithIndex.foreach{
-          case (p, i) =>
-            println(s"status: $i")
-            p.zipWithIndex.foreach{
-            case (pp, j) =>
-                println(s"transaction $j: hold: ${pp(0)}, sell: ${pp(1)}")
-          }
-            println(" ")
-        }
-  }
-}
 /**
 * dp: decrease status array which only keep current and precious status
 * memo
@@ -14442,93 +12859,8 @@ class Solution:
         return res
 ```
 
-```py
-# 其他方法
-class Solution:
-
-    VALUE_SYMBOLS = [
-        (1000, "M"),
-        (900, "CM"),
-        (500, "D"),
-        (400, "CD"),
-        (100, "C"),
-        (90, "XC"),
-        (50, "L"),
-        (40, "XL"),
-        (10, "X"),
-        (9, "IX"),
-        (5, "V"),
-        (4, "IV"),
-        (1, "I"),
-    ]
-    print(type(VALUE_SYMBOLS))
-    def intToRoman(self, num: int) -> str:
-        roman = list()
-        for value, symbol in Solution.VALUE_SYMBOLS:
-            while num >= value:
-                print("-"*20)
-                print(num)
-                num -= value
-                roman.append(symbol)
-                print(roman)
-            if num == 0:
-                break
-        return "".join(roman)
-```
-
 ```scala
-package com.zhourui.leetcode
 
-//class Solution {
-//  public:
-//    string intToRoman(int num) {
-//      vector<int> t1{1000,900,500,400,100,90,50,40,10,9,5,4,1};
-//      vector<string> t2{"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
-//      string ret="";
-//      for (int i=0;i<t1.size();i++) {
-//      if (num>=t1[i]) {
-//      int c = num/t1[i];
-//      for (int j=0;j<c;j++) {
-//      ret+=t2[i];
-//    }
-//      num=num%t1[i];
-//    } else if (num==0) {
-//      break;
-//    }
-//    }
-//      return ret;
-//    }
-//};
-
-
-//object Solution {
-//  case class RomanNumber(decValue: Int, romanStr: String)
-//  val numbers = Seq(
-//    RomanNumber(1000, "M"),
-//    RomanNumber(900, "CM"),
-//    RomanNumber(500, "D"),
-//    RomanNumber(400, "CD"),
-//    RomanNumber(100, "C"),
-//    RomanNumber(90, "XC"),
-//    RomanNumber(50, "L"),
-//    RomanNumber(40, "XL"),
-//    RomanNumber(10, "X"),
-//    RomanNumber(9, "IX"),
-//    RomanNumber(5, "V"),
-//    RomanNumber(4, "IV"),
-//    RomanNumber(1, "I")
-//  )
-//  def intToRoman(num: Int): String = {
-//    def loop(num:Int, romans: Seq[RomanNumber]): String = {
-//      romans match {
-//        case RomanNumber(x, romanStr) :: _ if x < num => romanStr + loop(num-x, romans)
-//        case RomanNumber(x, romanStr) :: _ if x == num => romanStr
-//        case RomanNumber(x, _) :: tail if x > num => loop(num, tail)
-//      }
-//    }
-//    loop(num, numbers)
-//  }
-//}
 package lc0012_integertoroman {
   object Solution {
     case class RomanNumber(s:String, i: Int)
@@ -14566,81 +12898,30 @@ package lc0012_integertoroman {
 ```
 
 
-##  274. <a name='-1'></a>386
+##  274. <a name='-1'></a> 386. 字典序排数
 
 ```py
 class Solution:
     def lexicalOrder(self, n):
         def dfs(num):
-            if num > n:
-                return
-            ans.append(num)
+            if num > n: return
+            res.append(num)
             for nxt in range(num * 10, num * 10 + 10):
                 dfs(nxt)
 
-        ans = []
+        res = []
         for num in range(1, 10):
             dfs(num)
-        return ans
-
-class Solution:
-    def lexicalOrder(self, n):
-        def dfs(i: int = 1) -> None:
-            if i > n:
-                return
-            for j in range(i, min(n + 1, (10 if i < 10 else i + 10))):
-                ans.append(j)
-                dfs(j * 10)
-        ans = []
-        dfs()
-        return ans
-
-class Solution:
-    def lexicalOrder(self, n):
-        def dfs(rec, i, n):
-            if i > n: return -1
-            rec.append(i);
-            child = i * 10
-            for j in range(10):
-                if dfs(rec, child+j, n) == -1:break
-            return
-        rec = []
-        for i in range(1, 10):
-            dfs(rec, i, n)
-        return rec
+        return res
 ```
 
 ```py
 class Solution:
     def lexicalOrder(self, n):
-        return sorted(list(range(1,n+1)),key=lambda x:str(x))
-
-class Solution:
-    def lexicalOrder(self, n):
-        return [int(j) for j in sorted([str(i) for i in range(1, n + 1)])]
-
-# 字符串排序
-
-class Solution:
-    def lexicalOrder(self, n):
-        l = sorted([str(i) for i in range(1, n + 1)])
-        return [int(i) for i in l]
+        return sorted(list(range(1, n+1)), key = lambda x: str(x))
 ```
 
 ```py
-class Solution:
-    def lexicalOrder(self, n):
-        orders = []
-        stack = [(1, 8)]
-        while len(stack) > 0:
-            orders.append(stack[-1][0])
-            (last, step) = stack.pop()
-            if last+1 <= n and step > 0:
-                stack.append((last+1, step-1))
-            if last*10 <= n:
-                stack.append((last*10, 9))
-        return orders
-
 class Solution:
     def lexicalOrder(self, n):
         ans = []
@@ -14654,25 +12935,6 @@ class Solution:
             num += 1  # 遍历该层下一个数
         return ans
 
-class Solution(object):
-    def lexicalOrder(self, n):
-        """
-        :type n: int
-        :rtype: List[int]
-        """
-        res = []
-        cur = 1
-        for i in range(n):
-            res.append(cur)
-            if (cur * 10 <= n):
-                cur *= 10
-            elif cur + 1 <= n and (cur + 1) % 10 != 0:
-                cur += 1
-            else:
-                while (cur/10) % 10 == 9:
-                    cur /= 10
-                cur = cur / 10 + 1
-        return res
 ```
 
 ##  275. <a name='-1'></a>752. Open the Lock
@@ -14693,31 +12955,6 @@ class Solution(object):
 class Solution:
     def isPowerOfTwo(self, n: int) -> bool:
         return n > 0 and (n & (n - 1)) == 0
-
-
-class Solution:
-    def isPowerOfTwo(self, n: int) -> bool:
-        return bin(n).count('1') == 1 and n > 0
-
-
-
-class Solution:
-    def isPowerOfTwo(self, n: int) -> bool:
-        return n > 0 and (n & -n) == n
-```
-
-```py
-2147483648是整数范围内最大的2次幂，若n是2的幂，那么2147483648一定能整除它
-
-class Solution(object):
-    def isPowerOfTwo(self, n):
-        return n > 0 and 2147483648 % n == 0
-
-        
-class Solution:
-    def isPowerOfTwo(self, n: int) -> bool:
-        BIG = 1<<30 # 我试了一下，30,31,32都对
-        return n > 0 and BIG % n == 0
 ```
 
 ```scala
@@ -14742,31 +12979,28 @@ object Solution {
 时间复杂度 O(n), 空间复杂度 O(n)
 
 ```py
-def pathSum(self, root, sum):
     
-    self.dicts = {0: 1}
-    self.res = 0
-    def helper(root, prefix_sum, sum):
-        if not root:
-            return 0
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> int:
+        dic = collections.defaultdict(int)
+        dic[0] = 1
+        res = 0
+        def backtrack(root, preSums):
+            nonlocal res
+            if not root: return 0
+                
+            preSums += root.val
+            if preSums - targetSum in dic:
+                res += dic[preSums - targetSum]
+                
             
-        prefix_sum += root.val
+            dic[preSums] += 1
+            backtrack(root.left, preSums)
+            backtrack(root.right, preSums)
+            dic[preSums] -= 1 # Note: 回到上一层时, 需要将当前的前缀和对应的路径数目减1  
         
-        if prefix_sum - sum in self.dicts:
-            self.res += self.dicts[prefix_sum - sum]
-            
-        
-        self.dicts[prefix_sum] = self.dicts.get(prefix_sum, 0) + 1
-        
-        helper(root.left, prefix_sum, sum)
-        
-        helper(root.right, prefix_sum, sum)
-        
-        # Note: 回到上一层时, 需要将当前的前缀和对应的路径数目减1      
-        self.dicts[prefix_sum] -= 1
-    
-    helper(root, 0, sum)
-    return res    
+        backtrack(root, 0)
+        return res   
 ```
 
 ##  280. <a name='-1'></a>617. 合并二叉树
@@ -14846,72 +13080,19 @@ object Solution {
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7cV?spm_id_from=333.999.0.0)
 
 ```py
-# 埃氏筛代码重点理解一下j从i*i开始吧，
-
-# 因为计算i*i之前就计算了i*2，i*3...,i*(i-1)。 
-
-# 这题搜到一个非常牛逼的算法,叫做厄拉多塞筛法. 
-
-# 比如说求20以内质数的个数,首先0,1不是质数.2是第一个质数,
-
-# 然后把20以内所有2的倍数划去.2后面紧跟的数即为下一个质数3,
-
-# 然后把3所有的倍数划去.3后面紧跟的数即为下一个质数5,
-
-# 再把5所有的倍数划去.以此类推.
-
-# 代码的实现上用了非常好的技巧:
-
-# 即i是从(2,int(n**0.5)+1)而非(2,n).这个技巧是可以验证的,
-
-# 比如说求9以内的质数个数,那么只要划掉sqrt(9)以内的质数倍数,
-
-# 剩下的即全为质数. 所以在划去倍数的时候也是从i*i开始划掉,而不是i+i.
-
-class Solution:
-    def countPrimes(self, n) -> int:
-        if n < 3:
-            return 0     
-        else:
-            # 首先生成了一个全部为1的列表
-            isPrime = [1] * n
-            # 因为0和1不是质数,所以列表的前两个位置赋值为0
-            isPrime[0],isPrime[1] = 0,0
-             # 此时从index = 2开始遍历,output[2]==1,即表明第一个质数为2,然后将2的倍数对应的索引
-             # 全部赋值为0. 此时output[3] == 1,即表明下一个质数为3,同样划去3的倍数.以此类推.
-            for i in range(2,int(n**0.5)+1): 
-                if isPrime[i] == 1:
-                    isPrime[i*i:n:i] = [0] * len(isPrime[i*i:n:i])
-         # 最后output中的数字1表明该位置上的索引数为质数,然后求和即可.
-        return sum(isPrime)
-
-import math
-from math import sqrt
-class Solution(object):
-    def countPrimes(self, n):
-        isprime = [1]*n
-        for i in range(2,int(sqrt(n))+1):
-            if isprime[i]:
-                for j in range(i*i,n,i):
-                    isprime[j] = 0
-        count = 0
-        for i in range(2,n):
-            if isprime[i]:count += 1
-        return count
-
-# 这个解法真是太赞了!又学到了很多~~~ 和大家分享一下
 class Solution(object):
     def countPrimes(self, n):
 
         isPrime = [1 for i in range(n)]
 
         i = 2
+        # 两层 while 循环
         while i * i < n:
         	if isPrime[i]:
-        		j = i * i 
+        		j = i * i    # j 永远是 i 的倍数
         		while j < n :
         			isPrime[j] = 0
-        			j += i
+        			j += i   # j 永远是 i 的倍数
         	i += 1
 
         return sum(isPrime[2:])
@@ -14964,65 +13145,27 @@ object Solution {
 “动态🚀规划” 的解法
 
 ```py
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        n = len(nums)
-        if n < 2:
-            return False
-        
-        total = sum(nums)
-        if total % 2 != 0:
-            return False
-        
-        target = total // 2
-        dp = [True] + [False] * target
-        for i, num in enumerate(nums):
-            for j in range(target, num - 1, -1):
-                dp[j] |= dp[j - num]
-                # dp[j] = dp[j] or dp[j-num]
-        
-        return dp[target]
-
 根据494题修改的动态规划：
 
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
         n = len(nums)
-        # 求得新的目标
-        sums = sum(nums)
-        # 注意，需要排除掉一些特殊状况
-        if sums % 2 == 1: return False
-        bagSize = sums // 2
-        # 构建dp，numLen在外围
-        dp = [0] * (bagSize+1)
-        # 赋值，dp的第一个元素
-        dp[0] = 1
+        
+        sums = sum(nums) 
+        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
+        bagSize = sums // 2 # 求得新的目标
+        
+        dp = [0] * (bagSize+1) # 构建dp，numLen在外围
+        dp[0] = 1 # 赋值，dp的第一个元素
+        
         for num in nums:
-            for j in range(bagSize,num-1,-1):
+            for j in range(bagSize, num-1, -1):
                 dp[j] += dp[j-num] # 对于没有当前num时的case + 有了num时bagSize-num的cas
         # 含义就是：
         # 对于1个num，bagsize的填满情况
-        # 对弈2个num，bagsize的填满情况
+        # 对于2个num，bagsize的填满情况
         return dp[-1] != 0
 ```
-
-```py
-# python递归...
-
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        # @lru_cache(None)
-        def dp(i,N):                                #dp(i,N)返回nums[0...i]中且当前和为N的状态下，能否凑成和为target的结果
-            if N>target or i<0:return False
-            if N==target: return True
-            # 这个很巧妙每次可以选择将nums[i]加进N，或者不将nums[i]加进N
-            return dp(i-1, N+nums[i]) or dp(i-1,N)   
-
-        if sum(nums)%2 != 0: return False              #目标和为奇数时不能分割成两个元素相等的子集
-        target = sum(nums) // 2                         #原问题等价于将nums划分为元素和为nums一半的两个子集的划分方式是否存在
-        return dp(len(nums)-1, 0)
-```
-
 
 ##  286. <a name='N-1'></a>51. N皇后
 
@@ -15041,10 +13184,10 @@ class Solution:
             i, j = low, high
             while i < j:
                 if s[i] != s[j]:
-                    return False
+                    return False # 当 需要 跳过 字符串
                 i += 1
-                j -= 1
-            return True
+                j -= 1 
+            return True # 当 需要 跳过 字符串
 
         low, high = 0, len(s) - 1
         while low < high:
@@ -15053,48 +13196,11 @@ class Solution:
                 high -= 1
             else:
                 return checkPalindrome(low + 1, high) or checkPalindrome(low, high - 1)
-        return True
+        return True # 当不需要 跳过 字符串
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-palindrome-ii/solution/yan-zheng-hui-wen-zi-fu-chuan-ii-by-leetcode-solut/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution:
-    def validPalindrome(self, s: str, flag=False) -> bool:
-        if s == s[::-1]:
-            return True 
-        start, end = 0, len(s) - 1
-        while start < end:
-            if s[start] == s[end]:
-                start, end = start+1, end-1
-            elif not flag:
-                return self.validPalindrome(s[start+1:end+1], True) or self.validPalindrome(s[start:end], True)
-            else:
-                return False
-        return True
-
-class Solution:
-    def validPalindrome(self, s):
-        if s == s[::-1]:
-            return True
-        l, r = 0, len(s) - 1
-        while l < r:
-            if s[l] == s[r]:
-                l, r = l + 1, r - 1
-            else:
-                a = s[l + 1 : r + 1]
-                b = s[l:r]
-                return a == a[::-1] or b==b[::-1]
 ```
 
-```py
-class Solution:
-    def validPalindrome(self, s: str) -> bool:
-        n = len(s)
-        i = next((i for i in range(n>>1) if s[i] != s[~i]), -1)
-        return i == -1 or s[i+1:n-i] == s[i+1:n-i][::-1] or s[i:n-i-1] == s[i:n-i-1][::-1]
-```
+
 
 ##  289. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
 
@@ -15102,96 +13208,45 @@ class Solution:
 
 [小明](https://www.bilibili.com/video/BV1q54y1k76s?spm_id_from=333.999.0.0)
 
-##  291. <a name='-1'></a>530. Minimum Absolute Difference in BST
+##  291. <a name='-1'></a>530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表
 
 [花花酱](https://www.bilibili.com/video/BV1fW411k7eT?spm_id_from=333.999.0.0)
 
 [小梦想家](https://www.bilibili.com/video/BV1FJ41147BB?spm_id_from=333.999.0.0)
 
 ```py
+用 path 的 list
 class Solution:
     def getMinimumDifference(self, root: TreeNode) -> int:
-        inorder = []
-        def dfs(root):
-            nonlocal inorder
-            if not root:
-                return 
-            dfs(root.left)
-            inorder.append(root.val)
-            dfs(root.right) 
-        dfs(root)
-        return min([inorder[i]-inorder[i-1] for i in range(1,len(inorder))])
-
-class Solution:
-    def getMinimumDifference(self, root: TreeNode) -> int:
-        
-        def inorder(node):
-            if node:
-                yield from inorder(node.left)
-                yield node.val
-                yield from inorder(node.right)
-
-        pre, cur = tee(inorder(root))
-        next(cur, None)
-        return min(b-a for a, b in zip(pre, cur))
-```
-
-```py
-class Solution:
-    def getMinimumDifference(self, root: TreeNode) -> int:
-        self.res = float('inf')
-        self.tmp = -1
-        def dfs(root):
-            if not root:
-                return
-            dfs(root.left)
-            if self.tmp == -1:
-                self.tmp = root.val
-            else:
-                self.res = min(self.res, abs(root.val - self.tmp))
-                self.tmp = root.val
-            dfs(root.right)
-        dfs(root)
-        return self.res
-
-递归
-
-class Solution:
-    def getMinimumDifference(self, root: TreeNode) -> int:
-        ret = inf
-        pre = None
-        def dfs(node):
-            nonlocal ret, pre
-            if not node: return   
-            dfs(node.left)
-            if pre != None: ret = min(node.val - pre, ret)             
-            pre = node.val
-            dfs(node.right)                
-        dfs(root)       
-        return ret
-
-class Solution:
-    def getMinimumDifference(self, root: TreeNode) -> int:
-        """解题思路：二叉搜索树的中序遍历是一个递增且无重复元素的序列"""
         path = []
-        min_ = float('INF')  
-
-        def traval(root):  # 中序遍历
+        def inorder(root):
             nonlocal path
-            if not root: return
+            if root:
+                inorder(root.left)
+                path.append(root.val)
+                inorder(root.right) 
+        inorder(root)
+        return min([path[i]-path[i-1] for i in range(1,len(path))])
+ 
+ 
+用 preval 存储上一个值
 
-            traval(root.left)
-            path.append(root.val)
-            traval(root.right)
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        res = inf
+        preval = None
+        def inorder(root):
+            nonlocal res, preval
+            if root: 
+                inorder(root.left)
+                if preval != None:  # 这里篇pre 必须写成 != None，而不能写成 if pre: 因为pre可以是0
+                    res = min(root.val - preval, res)             
+                preval = root.val
+                inorder(root.right)                
+        inorder(root)       
+        return res
 
-        
-        traval(root)
-        result = list(zip(path, path[1:]))   # 窗口大小为2，步长为1
-        for i, j in result:
-            if abs(j - i) < min_:
-                min_ = abs(j - i)
-        
-        return min_
+
 ```
 
 ##  292. <a name='k-1'></a>698. 划分为k个相等的子集
@@ -15202,30 +13257,6 @@ class Solution:
 
 ```py
 # next() 和 hasNext() 操作均摊时间复杂度为 O(1) ，并使用 O(h) 内存。其中 h 是树的高度。
-
-class BSTIterator(object):
-
-    def __init__(self, root):
-        self.stack = []
-        while root:
-            self.stack.append(root)
-            root = root.left
-
-    def next(self):
-        tmp = self.stack.pop()
-        res = tmp.val
-
-        tmp = tmp.right
-        while tmp:
-            self.stack.append(tmp)
-            tmp = tmp.left
-        return res
-
-    def hasNext(self):
-        # 直接写也可以：return self.stack 
-        return self.stack != []
-
-
 
 class BSTIterator(object):
     def __init__(self, root):
@@ -15250,307 +13281,7 @@ class BSTIterator(object):
 
 递归解法不符合题目：不能用递归 应该用迭代
 
-##  294. <a name='-1'></a>426【剑指36】. 将二叉搜索树转化为排序的双向链表【字节跳动】-
-将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表 。
 
-对于双向循环列表，你可以将左右孩子指针作为双向循环链表的前驱和后继指针，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
-
-特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
-
-![](https://s3.bmp.ovh/imgs/2022/01/11d8ac60b4c3deb6.png)
-
-```py
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        if not root: return
-        path = []
-        def inorder(root):
-            if not root: return 
-            inorder(root.left)
-            path.append(root)
-            inorder(root.right)    
-        inorder(root)
-        for i in range(len(path)):
-            path[i].left = path[i-1]
-            path[i].right = path[(i+1)%len(path)]
-        return path[0]
-        
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        a, f = [], lambda r: r and (f(r.left) or a.append(r) or f(r.right))
-        f(root)
-        n = len(a)
-        for i, r in enumerate(a):
-            r.left, r.right = a[i - 1], a[i + 1 - n]
-        return n and a[0] or None
-
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        def dfs(cur):
-            if not cur: return
-            dfs(cur.left) # 递归左子树
-            if self.pre: # 修改节点引用
-                self.pre.right, cur.left = cur, self.pre
-            else: # 记录头节点
-                self.head = cur
-            self.pre = cur # 保存 cur
-            dfs(cur.right) # 递归右子树
-        
-        if not root: return
-        self.pre = None
-        dfs(root)
-        self.head.left, self.pre.right = self.pre, self.head
-        return self.head
-
-作者：jyd
-链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/solution/mian-shi-ti-36-er-cha-sou-suo-shu-yu-shuang-xian-5/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-## 思路:
-
-其实就是左右节点指向改变，右节点指向下一个比它大的数，左节点指向比它小的数。又是二叉搜索树，自然想到中序遍历。
-
-思路一：中序遍历（非递归和递归）
-
-写法一：用栈(非递归)
-
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-"""
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        if not root:return 
-        # 当一个中间节点
-        head = Node(-1, None, None)
-        # 记录为先前节点,找到下一个节点才能串起来
-        prev = head
-        # 中序遍历的非递归
-        stack = []
-        p = root
-        while p or stack:
-            while p:
-                stack.append(p)
-                p = p.left
-            p = stack.pop()
-            # 改变左右方向
-            prev.right = p
-            p.left = prev
-            # 改变先前节点
-            prev = p
-            p = p.right
-        # 将head 删掉   
-        head.right.left = prev
-        prev.right = head.right
-        return head.right
-写法二：递归
-
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-"""
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        if not root:return 
-        # 当一个中间节点
-        head = Node(-1, None, None)
-        # 记录为先前节点,找到下一个节点才能串起来
-        prev = head
-
-        # 中序遍历的递归
-        def inorder(root):
-            nonlocal prev
-            if not root:
-                return 
-            inorder(root.left)
-            prev.right = root
-            root.left = prev
-            prev = prev.right
-            inorder(root.right)
-        
-        inorder(root)
-        # 将head 删掉   
-        head.right.left = prev
-        prev.right = head.right
-        return head.right
-思路二：分治
-
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-"""
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        if not root: return
-        left = self.treeToDoublyList(root.left)
-        right = self.treeToDoublyList(root.right)
-        root.left = root
-        root.right = root
-        return self.connect(self.connect(left, root), right)
-
-    def connect(self, node1, node2):
-        if not (node1 and node2):
-            return node1 or node2
-        tail1, tail2 = node1.left, node2.left
-        tail1.right = node2
-        node2.left = tail1
-        tail2.right = node1
-        node1.left = tail2
-        return node1
-```
-
-```py
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-"""
-class Solution:
-    def myinorderTraversal(self, root: 'Node') -> 'Node':
-        ''' traversal order:  right subtree -> root -> left subtree '''
-
-        # conrer case
-        if not root: return None
-
-        sentinel = Node()    # 虚拟哨兵尾节点
-        successor = sentinel # 后驱指针
-
-        def inorder(r = root):
-            nonlocal successor
-            if not r: return
-        
-            inorder(r.right)
-            # 不建议初学这么写
-            r.right, successor.left, successor = successor, r, r
-            inorder(r.left)
-
-        inorder()
-        successor.left = sentinel.left
-        sentinel.left.right = successor
-        return successor
-
-    def inorderTraversal(self, root: 'Node') -> 'Node':
-        ''' traversal order:  left subtree -> root -> right subtree '''
-
-        # conrer case
-        if not root: return None
-
-        sentinel = Node()      # 虚拟哨兵头节点
-        predecessor = sentinel # 前驱指针
-
-        def inorder(r = root):
-            nonlocal predecessor
-            if not r: return
-        
-            inorder(r.left)
-            # 不建议初学这么写
-            predecessor.right, r.left, predecessor = r, predecessor, r
-            inorder(r.right)
-
-        inorder()
-        sentinel.right.left = predecessor
-        predecessor.right = sentinel.right
-        return sentinel.right
-
-
-    treeToDoublyList = myinorderTraversal
-    # treeToDoublyList = inorderTraversal
-```
-
-```py
-辅助栈
-
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        if not root:
-            return root
-        # 辅助栈        
-        helper, start = [], None
-        current, pre = root, None
-        while len(helper) != 0 or current != None:
-            if current != None:
-                helper.append(current)
-                current = current.left
-            else:
-                current = helper.pop()
-                if pre != None:
-                    current.left = pre
-                    pre.right = current
-                else:
-                    start = current
-                pre = current
-                current = current.right
-        start.left = pre
-        pre.right = start
-        return start
-
-迭代
-
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        # left : pre right: nex
-        dummy = Node(None)
-        p = dummy
-        if not root:
-            return root
-        stack = [[root, False]]
-        while stack:
-            node, visited = stack.pop()
-            if not visited:
-                if node.right:
-                    stack.append([node.right, False])
-                stack.append([node, True])
-                if node.left:
-                    stack.append([node.left, False])
-            else:
-                node.left = p
-                node.right = None
-                p.right = node
-                p = p.right
-        head = dummy.right
-        head.left = p
-        p.right = head
-        return head
-
-def treeToDoublyList(self, root: 'Node') -> 'Node':
-        pre = None
-        head = None
-        def inorder(root):
-            nonlocal pre
-            nonlocal head
-            if not root:
-                return 
-
-            inorder(root.left)
-            if pre:
-                pre.right, root.left = root, pre
-            else:
-                head = root #第一个节点,bst最小的节点
-            pre = root
-            inorder(root.right)
-
-        if not root:
-            return
-        inorder(root)
-        pre.right, head.left = head, pre
-        return head
-```
 
 ##  295. <a name='-1'></a>836. 矩形重叠
 
@@ -15563,96 +13294,6 @@ def treeToDoublyList(self, root: 'Node') -> 'Node':
 [官方](https://www.bilibili.com/video/BV1Tz4y167pC?spm_id_from=333.999.0.0)
 
 ```py
-# 思路是参考别人的，
-# 如果数比栈顶小，而且栈顶在后面还有的话，
-# 就弹出栈顶。
-# python自带列表弹出和加入最后一个数都是很快的。
-# 然后在前面加一个0，因为0比一切字母小，可以不用判空，方便很多
-
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        result = ["0"] # 初值不要为空，不然index为-1会报错
-        for idx, char in enumerate(s):
-            print("idx, char:",idx, char,"result: ",result)
-            print("s[idx:]",s[idx:],"数量: ",s[idx:].count(result[-1]),"需要大于0,表示要把c删掉，必须后面还有c")
-            if char not in result:
-                while char < result[-1] and s[idx:].count(result[-1]) > 0:
-                    result.pop(-1) # result 删除最后一位
-                result.append(char)
-        return "".join(result[1:])
-
-# 递归贪心版本
-class Solution(object):
-    def removeDuplicateLetters(self, str):
-        """
-        :type s: str
-        :rtype: str
-        """
-        print("-"*50)
-        # 先按字典排序
-        for char in sorted(set(str)):
-            print("-"*20,char)
-            suffix = str[str.index(char):]
-            print(suffix)
-
-
-            # 看余下的是否能组成所需的字母
-            # if len(set(suffix)) == len(set(str)): 也可以
-            if set(suffix) == set(str):
-                return char + self.removeDuplicateLetters(suffix.replace(char, ''))
-                # 逐步把char后面的char替换掉
-        return ''
-
-class Solution(object):
-    def removeDuplicateLetters(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        result = ''
-        while s:
-            print(list(map(s.rindex, set(s))))
-            i = min(map(s.rindex, set(s)))
-            c = min(s[:i+1])
-            print(s[:i+1])
-            result += c
-            s = s[s.index(c):].replace(c, '')
-            print(s)
-        return result
-
-class Solution(object):
-    def removeDuplicateLetters(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        rindex = {char: idx for idx, char in enumerate(s)}
-        print("rindex",rindex)
-        result = '' 
-        for idx, char in enumerate(s):
-            print("idx, char:",idx, char,"result: ",result)
-            if char not in result:
-                while char < result[-1:] and idx < rindex[result[-1:]]:
-                    # 如果 char 比 最后一位result[-1:] 小
-                    # result 删除最后一位
-                    print("rindex[result[-1:]",rindex[result[-1:]])
-                    result = result[:-1] 
-                result += char
-        return result
-
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        n = len(s)
-        stack = [s[0]]
-        for i in range(1,n):
-            if s[i] not in stack and s[i]>stack[-1]:
-                stack.append(s[i])
-            elif s[i] not in stack:
-                while stack and s[i]<stack[-1] and stack[-1] in s[i+1:]:
-                    stack.pop()
-                stack.append(s[i])
-        return "".join(stack)
-
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
         stack = []
@@ -15661,42 +13302,11 @@ class Solution:
             if s[i] in stack:
                 continue
             else:
-                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]:
-                    stack.pop()
+                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]: # 如果数比栈顶小，而且栈顶在后面还有的话，
+                    stack.pop() # 就弹出栈顶。
                 stack.append(s[i])
             
         return "".join(stack)
-
-# 思路三：栈
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        from collections import Counter
-        c = Counter(s)
-        stack = []
-        existed = set()
-        for a in s:
-            # print(stack)
-            if a not in existed:
-            	# 判断后面还有没有该字母
-                while stack and stack[-1] > a and c[stack[-1]] > 0:
-                    existed.remove(stack.pop())
-                stack.append(a)
-                existed.add(a)
-            c[a] -= 1
-        return "".join(stack)
-
-# 思路二：迭代
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        res = ""
-        while s:
-            # 从右往左找，找到最小位置的索引号
-            loc = min(map(s.rindex, s))
-            # 找该索引前面最小的字母
-            a = min(s[:loc + 1])
-            res += a
-            s = s[s.index(a):].replace(a, "")
-        return res
 ```
 
 ##  298. <a name='-1'></a>109题. 有序链表转换二叉搜索树
@@ -15706,30 +13316,6 @@ https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
 https://www.bilibili.com/video/BV1ff4y197dS?spm_id_from=333.999.0.0
 
 当递归的是一个链表`头`时，需要切断
-
-```py
-class Solution:
-    def sortedListToBST(self, head) -> TreeNode:
-        if not head:
-            return None
-        if not head.next:
-            return TreeNode(head.val)
-
-        fast = head
-        slow = head
-        pre =  head
-
-        while fast and fast.next:
-            pre = slow # pre切断
-            slow = slow.next
-            fast = fast.next.next
-        mid = TreeNode(slow.val)
-        # print(head.val,node.val,last.val)
-        mid.right = self.sortedListToBST(slow.next) # 从mid+1到tail
-        pre.next = None # pre切断
-        mid.left = self.sortedListToBST(head) # 从head到mid-1，所以我们在findMid方程里面，需要对List进行切分
-        return mid
-```
 
 https://www.bilibili.com/video/BV19K411T73P?p=2&spm_id_from=pageDriver
 
@@ -15770,10 +13356,6 @@ class Solution:
         tN = len(t)
         dp = [[0] * (tN+1) for _ in range(sN+1)]
 
-        sN = len(s)
-        tN = len(t)
-        dp = [[0] * (tN+1) for _ in range(sN+1)]
-
         for i in range(sN+1):
             for j in range(tN+1):
                 if j == 0:  
@@ -15785,26 +13367,6 @@ class Solution:
                 else:
                     dp[i][j] = dp[i-1][j]
         return dp[-1][-1]
-Python3:
-
-class SolutionDP2:
-    def numDistinct(self, s: str, t: str) -> int:
-        n1, n2 = len(s), len(t)
-        if n1 < n2:
-            return 0
-
-        dp = [0 for _ in range(n2 + 1)]
-        dp[0] = 1
-
-        for i in range(1, n1 + 1):
-            prev = dp[:] # 深拷贝一下
-            end = i if i < n2 else n2 # 剪枝，保证s的长度大于等于t, 因为对于任意i，i > n1, dp[i] = 0, 没必要跟新状态。 
-            for j in range(1, end + 1):
-                if s[i - 1] == t[j - 1]:
-                    dp[j] = prev[j - 1] + prev[j]
-                else:
-                    dp[j] = prev[j]
-        return dp[-1]
 ```
 
 
