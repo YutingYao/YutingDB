@@ -35,7 +35,7 @@
 * 34. [145-Binary Tree Postorder Traversal](#BinaryTreePostorderTraversal)
 * 35. [199 Binary Tree Right Side View](#BinaryTreeRightSideView)
 * 36. [143 Reorder List](#ReorderList)
-* 37. [70. Climbing Stairs](#ClimbingStairs)
+* 37. [70. Climbing Stairs （重要）](#ClimbingStairs)
 * 38. [124. Binary Tree Maximum Path Sum](#BinaryTreeMaximumPathSum)
 * 39. [56. Merge Intervals](#MergeIntervals)
 * 40. [剑指 Offer 22. 链表中倒数第k个节点](#Offer22.k)
@@ -53,9 +53,9 @@
 * 52. [76-【滑动窗口🔹】最小覆盖子串](#-1)
 * 53. [31 ★ Next Permutation](#NextPermutation)
 * 54. [239. ★【最小堆🌵 + 滑动窗口🔹单调队列】Sliding Window Maximum](#SlidingWindowMaximum)
-        * 54.1. [不类似567，567类似187](#567567187)
+		* 54.1. [不类似567，567类似187](#567567187)
 * 55. [1143 【二维动态🚀规划】Longest Common Subsequence](#LongestCommonSubsequence)
-        * 55.1. [类似题目：516最长回文🌈子序列](#516)
+		* 55.1. [类似题目：516最长回文🌈子序列](#516)
 * 56. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
 * 57. [93. 复原 IP 地址](#IP)
 * 58. [110-Balanced Binary Tree](#BalancedBinaryTree)
@@ -75,237 +75,217 @@
 * 72. [112-Path Sum](#PathSum)
 * 73. [48. 旋转图像 Rotate Image](#RotateImage)
 * 74. [234. 【回文🌈】Palindrome Linked List](#PalindromeLinkedList)
-* 75. [322. 【动态🚀规划 + 背包 + dfs】Coin Change](#dfsCoinChange)
+* 75. [322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change](#dfsCoinChange-518CoinChange)
 * 76. [39. Combination Sum 39-组合总和](#CombinationSum39-)
 * 77. [169. 【位运算😜】Majority Element](#MajorityElement)
 * 78. [83-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray)
 * 79. [226-翻转二叉树](#-1)
 * 80. [165. Compare Version Numbers](#CompareVersionNumbers)
-* 81. [34-在排序数组中查找元素的第一个](#-1)
+* 81. [34-在排序数组中查找元素的第一个 - 类似剑指offer53](#offer53)
 * 82. [153-寻找旋转排序数组中的最小值](#-1)
 * 83. [62-不同路径](#-1)
 * 84. [128. 【🍒并查集】Longest Consecutive Sequence](#LongestConsecutiveSequence)
 * 85. [468 Validate IP Address](#ValidateIPAddress)
 * 86. [136 【位运算😜】Single Number](#SingleNumber)
 * 87. [162. Find Peak Element](#FindPeakElement)
-* 88. [240. 二维数组的查找](#-1)
+* 88. [240. 二维数组的查找 - 74 Search a 2D Matrix](#Searcha2DMatrix)
 * 89. [221-【动态🚀规划】最大正方形](#-1)
-* 90. [14-Longest common prefix](#Longestcommonprefix)
+* 90. [14 - Longest common prefix](#Longestcommonprefix)
 * 91. [179 Largest Number](#LargestNumber)
 * 92. [138. 复制带随机指针的链表](#-1)
 * 93. [695-岛屿的最大面积](#-1)
-* 94. [剑指 Offer 36. 二叉搜索树与双向链表](#Offer36.)
+* 94. [剑指 Offer 36. 二叉搜索树与双向链表 - 530. Minimum Absolute Difference in BST](#Offer36.-530.MinimumAbsoluteDifferenceinBST)
 * 95. [24-Swap Nodes in Pairs](#SwapNodesinPairs)
 * 96. [394 Decode String](#DecodeString)
 * 97. [198. 【动态🚀规划】House Robber 198-打家劫舍](#HouseRobber198-)
 * 98. [209-长度最小的子数组](#-1)
-* 99. [227 Basic Calculator II](#BasicCalculatorII)
+* 99. [227 Basic Calculator II - 见 224. 基本计算器](#BasicCalculatorII-224.)
 * 100. [958. 二叉树的完全性检验](#-1)
 * 101. [剑指 Offer 09. 用两个栈实现队列](#Offer09.)
-* 102. [122. 买卖股票的最佳时机 II](#II)
-* 103. [剑指 Offer 54. 二叉搜索树的第k大节点](#Offer54.k)
-* 104. [283. 移动零](#-1)
+* 102. [122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II](#II122-BestTimetoBuyandSellStockII)
+* 103. [剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B](#Offer54.k-230KthSmallestElementinaB)
+* 104. [283. Move Zeros](#MoveZeros)
 * 105. [498. 对角线遍历](#-1)
-* 106. [662. 二叉树最大宽度](#-1)
-* 107. [297. 二叉树的序列化与反序列化](#-1)
-* 108. [460. LFU缓存](#LFU)
-* 109. [145. 二叉树的后序遍历](#-1)
-* 110. [152. 乘积最大子数组](#-1)
-* 111. [79. 单词搜索](#-1)
-* 112. [补充题5. 手撕归并排序](#5.)
-* 113. [剑指 Offer 10- I. 斐波那契数列](#Offer10-I.)
-* 114. [剑指 Offer 10- II. 青蛙跳台阶问题](#Offer10-II.)
-* 115. [剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](#Offer21.)
-* 116. [59. 螺旋矩阵 II](#II-1)
-* 117. [补充题1. 排序奇升偶降链表](#1.)
-* 118. [剑指 Offer 40. 最小的k个数](#Offer40.k)
-* 119. [518. 零钱兑换 II](#II-1)
-* 120. [224. 基本计算器](#-1)
-* 121. [402. 移掉K位数字](#K)
-* 122. [补充题23. 检测循环依赖](#23.)
-* 123. [7. 整数反转](#-1)
-* 124. [328. 奇偶链表](#-1)
-* 125. [739. 每日温度](#-1)
-* 126. [61. 旋转链表](#-1)
-* 127. [剑指 Offer 62. 圆圈中最后剩下的数字](#Offer62.)
-* 128. [剑指 Offer 51. 数组中的逆序对](#Offer51.)
-* 129. [560. 和为K的子数组](#K-1)
-* 130. [50. Pow(x, n)](#Powxn)
-* 131. [补充题2. 圆环回原点问题](#2.)
-* 132. [225. 用队列实现栈](#-1)
-* 133. [230. 二叉搜索树中第K小的元素](#K-1)
-* 134. [75. 颜色分类](#-1)
-* 135. [47. 全排列 II](#II-1)
-* 136. [11. 盛最多水的容器](#-1)
-* 137. [139. 单词拆分](#-1)
-* 138. [125. 验证回文串](#-1)
-* 139. [189. 旋转数组](#-1)
-* 140. [剑指 Offer 27. 二叉树的镜像](#Offer27.)
-* 141. [74. 搜索二维矩阵](#-1)
-* 142. [287. 寻找重复数](#-1)
-* 143. [384. 打乱数组](#-1)
-* 144. [329. 矩阵中的最长递增路径](#-1)
-* 145. [349. 两个数组的交集](#-1)
-* 146. [26. 删除排序数组中的重复项](#-1)
-* 147. [40. 组合总和 II](#II-1)
-* 148. [9. 回文数](#-1)
-* 149. [剑指 Offer 52. 两个链表的第一个公共节点](#Offer52.)
-* 150. [208. 实现 Trie (前缀树)](#Trie)
-* 151. [440. 字典序的第K小数字](#K-1)
-* 152. [123. 买卖股票的最佳时机 III](#III)
-* 153. [135. 分发糖果](#-1)
-* 154. [剑指 Offer 04. 二维数组中的查找](#Offer04.)
-* 155. [207. 课程表](#-1)
-* 156. [572. 另一个树的子树](#-1)
-* 157. [10. 正则表达式匹配](#-1)
-* 158. [55. 跳跃游戏](#-1)
-* 159. [1047. 删除字符串中的所有相邻重复项](#-1)
-* 160. [91. 解码方法](#-1)
-* 161. [剑指 Offer 42. 连续子数组的最大和](#Offer42.)
-* 162. [445. 两数相加 II](#II-1)
-* 163. [213. 打家劫舍 II](#II-1)
-* 164. [补充题9. 36进制加法](#9.36)
-* 165. [剑指 Offer 45. 把数组排成最小的数](#Offer45.)
-* 166. [509. 斐波那契数](#-1)
-* 167. [295. 数据流的中位数](#-1)
-* 168. [剑指 Offer 61. 扑克牌中的顺子](#Offer61.)
-* 169. [106. 从中序与后序遍历序列构造二叉树](#-1)
-* 170. [678. 有效的括号字符串](#-1)
-* 171. [剑指 Offer 39. 数组中出现次数超过一半的数字](#Offer39.)
-* 172. [86. 分隔链表](#-1)
-* 173. [114. 二叉树展开为链表](#-1)
-* 174. [剑指 Offer 29. 顺时针打印矩阵](#Offer29.)
-* 175. [16. 最接近的三数之和](#-1)
-* 176. [450. 删除二叉搜索树中的节点](#-1)
-* 177. [347. 前 K 个高频元素](#K-1)
-* 178. [剑指 Offer 53 - I. 在排序数组中查找数字 I](#Offer53-I.I)
-* 179. [344. 反转字符串](#-1)
-* 180. [191. 位1的个数](#-1)
-* 181. [443. 压缩字符串](#-1)
-* 182. [400. 第N个数字](#N)
-* 183. [242. 有效的字母异位词](#-1)
-* 184. [100. 相同的树](#-1)
-* 185. [459. 重复的子字符串](#-1)
-* 186. [442. 数组中重复的数据](#-1)
-* 187. [120. 三角形最小路径和](#-1)
-* 188. [268. 缺失数字](#-1)
-* 189. [887. 鸡蛋掉落](#-1)
-* 190. [剑指 Offer 34. 二叉树中和为某一值的路径](#Offer34.)
-* 191. [557. 反转字符串中的单词 III](#III-1)
-* 192. [补充题14. 阿拉伯数字转中文数字](#14.)
-* 193. [168. Excel表列名称](#Excel)
-* 194. [1095. 山脉数组中查找目标值](#-1)
-* 195. [670. 最大交换](#-1)
-* 196. [剑指 Offer 11. 旋转数组的最小数字](#Offer11.)
-* 197. [210. 课程表 II](#II-1)
-* 198. [525. 连续数组](#-1)
-* 199. [剑指 Offer 48. 最长不含重复字符的子字符串](#Offer48.)
-* 200. [556. 下一个更大元素 III](#III-1)
-* 201. [111. 二叉树的最小深度](#-1)
-* 202. [37. 解数独](#-1)
-* 203. [134. 加油站](#-1)
-* 204. [补充题22. IP地址与整数的转换](#22.IP)
-* 205. [876. 链表的中间结点](#-1)
-* 206. [63. 不同路径 II](#II-1)
-* 207. [171. Excel表列序号](#Excel-1)
-* 208. [17. 电话号码的字母组合](#-1)
-* 209. [494. 目标和](#-1)
-* 210. [剑指 Offer 03. 数组中重复的数字](#Offer03.)
-* 211. [剑指 Offer 24. 反转链表](#Offer24.)
-* 212. [剑指 Offer 33. 二叉搜索树的后序遍历序列](#Offer33.)
-* 213. [862. 和至少为 K 的最短子数组](#K-1)
-* 214. [343. 整数拆分](#-1)
-* 215. [673. 最长递增子序列的个数](#-1)
-* 216. [面试题 17.24. 最大子矩阵](#17.24.)
-* 217. [611. 有效三角形的个数](#-1)
-* 218. [45. 跳跃游戏 II](#II-1)
-* 219. [154. 寻找旋转排序数组中的最小值 II](#II-1)
-* 220. [85. 最大矩形](#-1)
-* 221. [679. 24 点游戏](#-1)
-* 222. [108. 将有序数组转换为二叉搜索树](#-1)
-* 223. [222. 完全二叉树的节点个数](#-1)
-* 224. [84. 柱状图中最大的矩形](#-1)
-* 225. [71. 简化路径](#-1)
-* 226. [167. 两数之和 II - 输入有序数组](#II-)
-* 227. [622. 设计循环队列](#-1)
-* 228. [6. Z 字形变换](#Z)
-* 229. [96. 不同的二叉搜索树](#-1)
-* 230. [547. 省份数量（原朋友圈）](#-1)
-* 231. [264. 丑数 II](#II-1)
-* 232. [706. 设计哈希映射](#-1)
-* 233. [97. 交错字符串](#-1)
-* 234. [410. 分割数组的最大值](#-1)
-* 235. [44. 通配符匹配](#-1)
-* 236. [18. 四数之和](#-1)
-* 237. [405. 数字转换为十六进制数](#-1)
-* 238. [补充题8. 计算数组的小和](#8.)
-* 239. [863. 二叉树中所有距离为 K 的结点](#K-1)
-* 240. [337. 打家劫舍 III](#III-1)
-* 241. [166. 分数到小数](#-1)
-* 242. [面试题 08.12. 八皇后](#08.12.)
-* 243. [73. 矩阵置零](#-1)
-* 244. [剑指 Offer 46. 把数字翻译成字符串](#Offer46.)
-* 245. [503. 下一个更大元素 II](#II-1)
-* 246. [763. 划分字母区间](#-1)
-* 247. [340. 至多包含 K 个不同字符的最长子串](#K-1)
-* 248. [130. 被围绕的区域](#-1)
-* 249. [117. 填充每个节点的下一个右侧节点指针 II](#II-1)
-* 250. [剑指 Offer 07. 重建二叉树](#Offer07.)
-* 251. [378. 有序矩阵中第K小的元素](#K-1)
-* 252. [剑指 Offer 32 - III. 从上到下打印二叉树 III](#Offer32-III.III)
-* 253. [77. 组合](#-1)
-* 254. [528. 按权重随机选择](#-1)
-* 255. [279. 完全平方数](#-1)
-* 256. [257. 二叉树的所有路径](#-1)
-* 257. [692. 前K个高频单词](#K-1)
-* 258. [剑指 Offer 50. 第一个只出现一次的字符](#Offer50.)
-* 259. [137. 只出现一次的数字 II](#II-1)
-* 260. [补充题21. 字符串相减](#21.)
-* 261. [354. 俄罗斯套娃信封问题](#-1)
-* 262. [253. 会议室 II](#II-1)
-* 263. [628. 三个数的最大乘积](#-1)
-* 264. [674. 最长连续递增序列](#-1)
-* 265. [剑指 Offer 57 - II. 和为s的连续正数序列](#Offer57-II.s)
-* 266. [315. 计算右侧小于当前元素的个数](#-1)
-* 267. [107. 二叉树的层次遍历 II](#II-1)
-* 268. [172. 阶乘后的零](#-1)
-* 269. [647. 回文子串](#-1)
-* 270. [260. 只出现一次的数字 III](#III-1)
-* 271. [188. 买卖股票的最佳时机 IV](#IV)
-* 272. [剑指 Offer 35. 复杂链表的复制](#Offer35.)
-* 273. [12. 整数转罗马数字](#-1)
-* 274. [386. 字典序排数](#-1)
-* 275. [752. 打开转盘锁](#-1)
-* 276. [395. 至少有K个重复字符的最长子串](#K-1)
-* 277. [231. 2的幂](#-1)
-* 278. [977. 有序数组的平方](#-1)
-* 279. [437. 路径总和 III](#III-1)
-* 280. [617. 合并二叉树](#-1)
-* 281. [60. 第k个排列](#k)
-* 282. [28. 实现 strStr()](#strStr)
-* 283. [204. 计数质数](#-1)
-* 284. [剑指 Offer 65. 不用加减乘除做加法](#Offer65.)
-* 285. [416. 分割等和子集](#-1)
-* 286. [51. N皇后](#N-1)
-* 287. [补充题24. 双栈排序](#24.)
-* 288. [680. 验证回文字符串 Ⅱ](#-1)
-* 289. [剑指 Offer 38. 字符串的排列](#Offer38.)
-* 290. [701. 二叉搜索树中的插入操作](#-1)
-* 291. [530. 二叉搜索树的最小绝对差](#-1)
-* 292. [698. 划分为k个相等的子集](#k-1)
-* 293. [173. 二叉搜索树迭代器](#-1)
-* 294. [426. 将二叉搜索树转化为排序的双向链表](#-1)
-* 295. [836. 矩形重叠](#-1)
-* 296. [99. 恢复二叉搜索树](#-1)
-* 297. [316. 去除重复字母](#-1)
-* 298. [109. 有序链表转换二叉搜索树](#-1)
-* 299. [115. 不同的子序列](#-1)
-* 300. [1312. 让字符串成为回文串的最少插入次数](#-1)
+* 106. [662. Maximum Width of Binary Tree](#MaximumWidthofBinaryTree)
+* 107. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
+* 108. [152 【动态🚀规划】乘积最大子数组](#-1)
+* 109. [79. Word Search](#WordSearch)
+* 110. [剑指 Offer 10- I. 斐波那契数列](#Offer10-I.)
+* 111. [剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](#Offer21.)
+* 112. [59. Spiral Matrix II](#SpiralMatrixII)
+* 113. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
+* 114. [补充题1. 排序奇升偶降链表](#1.)
+* 115. [剑指 Offer 40. 最小的k个数](#Offer40.k)
+* 116. [518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change](#CoinChange2-322.dfsCoinChange)
+* 117. [224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同](#BasicCalculatorII)
+* 118. [402 Remove K Digits](#RemoveKDigits)
+* 119. [补充题23. 检测循环依赖](#23.)
+* 120. [7 Reverse Integer](#ReverseInteger)
+* 121. [739-Daily Temperatures](#DailyTemperatures)
+* 122. [61. Rotate List](#RotateList)
+* 123. [剑指 Offer 62. 圆圈中最后剩下的数字](#Offer62.)
+* 124. [剑指 Offer 51. 数组中的逆序对](#Offer51.)
+* 125. [560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组](#SubarraySumEqualsKK)
+* 126. [50 Pow(x, n)](#Powxn)
+* 127. [补充题2. 圆环回原点问题](#2.)
+* 128. [225-【构造🏰】Implement Stack using Queues](#ImplementStackusingQueues)
+* 129. [230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点](#KthSmallestElementinaB-Offer54.k)
+* 130. [75. Sort Colors](#SortColors)
+* 131. [47 - ★ 全排列 II-剪枝版](#II-)
+* 132. [11. Container With Most Water](#ContainerWithMostWater)
+* 133. [139 【动态🚀规划 + 背包】Word Break](#WordBreak)
+* 134. [125 【回文🌈】Valid Palindrome](#ValidPalindrome)
+* 135. [189. Rotate Array](#RotateArray)
+* 136. [74 Search a 2D Matrix - 240. 二维数组的查找](#Searcha2DMatrix-240.)
+* 137. [287 Find the Duplicate Number](#FindtheDuplicateNumber)
+* 138. [384. 打乱数组](#-1)
+* 139. [329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix](#dfsLongestIncreasingPathinaMatrix)
+* 140. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
+* 141. [26-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray-1)
+* 142. [40. Combination Sum II 40-组合总和 II](#CombinationSumII40-II)
+* 143. [9-【回文🌈】Palindrome](#Palindrome)
+* 144. [208. 【构造🏰】Implement Trie (Prefix Tree)](#ImplementTriePrefixTree)
+* 145. [440. 字典序的第K小数字](#K)
+* 146. [123-买卖股票的最佳时机 III](#III)
+* 147. [135. 分发糖果](#-1)
+* 148. [207-课程表](#-1)
+* 149. [572-另一个树的子树](#-1)
+* 150. [10. 正则表达式匹配](#-1)
+* 151. [55 Jump Game](#JumpGame)
+* 152. [1047. 删除字符串中的所有相邻重复项](#-1)
+* 153. [91. Decode Ways](#DecodeWays)
+* 154. [445-Add Two Numbers II](#AddTwoNumbersII)
+* 155. [213.【动态🚀规划】 House Robber II 213-打家劫舍II](#HouseRobberII213-II)
+* 156. [补充题9. 36进制加法 - 见 415 - Add Strings](#9.36-415-AddStrings)
+* 157. [509. 【动态🚀规划 + 递归】Fibonacci Number](#FibonacciNumber)
+* 158. [295. 数据流的中位数](#-1)
+* 159. [剑指 Offer 61. 扑克牌中的顺子](#Offer61.)
+* 160. [678 Valid Parenthesis String](#ValidParenthesisString)
+* 161. [86. 分隔链表(Partition List)](#PartitionList)
+* 162. [114题. 二叉树展开为链表](#-1)
+* 163. [16. 3Sum Closest](#SumClosest)
+* 164. [450. Delete Node in a BST](#DeleteNodeinaBST)
+* 165. [347. 【最小堆🌵】Top K Frequent Elements](#TopKFrequentElements)
+* 166. [344. Reverse String](#ReverseString)
+* 167. [191 Number of 1 Bits](#Numberof1Bits)
+* 168. [443. String Compression](#StringCompression)
+* 169. [400. 第N个数字](#N)
+* 170. [242. Valid Anagram](#ValidAnagram)
+* 171. [100-Same Tree](#SameTree)
+* 172. [459 Repeated Substring Pattern](#RepeatedSubstringPattern)
+* 173. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
+* 174. [120 【动态🚀规划】Triangle](#Triangle)
+* 175. [268 【位运算😜】Missing Number](#MissingNumber)
+* 176. [887. Super Egg Drop](#SuperEggDrop)
+* 177. [557. 反转字符串中的单词 III](#III-1)
+* 178. [补充题14. 阿拉伯数字转中文数字](#14.)
+* 179. [168-Excel Sheet Column Title](#ExcelSheetColumnTitle)
+* 180. [1095. Find in Mountain Array](#FindinMountainArray)
+* 181. [670. 最大交换](#-1)
+* 182. [210. Course Schedule II 210-课程表II](#CourseScheduleII210-II)
+* 183. [525. 【前缀和🎨】Contiguous Array](#ContiguousArray)
+* 184. [556 Next Greater Element III - 类似 31 ★ Next Permutation](#NextGreaterElementIII-31NextPermutation)
+* 185. [111-Minimum Depth of Binary Tree](#MinimumDepthofBinaryTree)
+* 186. [37. Sudoku Solver 解数独](#SudokuSolver)
+* 187. [134. Gas Station](#GasStation)
+* 188. [补充题22. IP地址与整数的转换](#22.IP)
+* 189. [876.Middle of the Linked List 链表的中间结点](#MiddleoftheLinkedList)
+* 190. [63 Unique Paths II](#UniquePathsII)
+* 191. [171. Excel Sheet Column Number](#ExcelSheetColumnNumber)
+* 192. [17. Letter Combinations of a Phone Number](#LetterCombinationsofaPhoneNumber)
+* 193. [494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum](#dfsstartIforTargetSum)
+* 194. [剑指 Offer 03. 数组中重复的数字](#Offer03.)
+* 195. [剑指 Offer 33. 二叉搜索树的后序遍历序列](#Offer33.)
+* 196. [862. 和至少为 K 的最短子数组](#K-1)
+* 197. [343-整数拆分](#-1)
+* 198. [673 Number of Longest Increasing Subse](#NumberofLongestIncreasingSubse)
+* 199. [面试题 17.24. 最大子矩阵](#17.24.)
+* 200. [611. 有效三角形的个数](#-1)
+* 201. [45 Jump Game II](#JumpGameII)
+* 202. [85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram](#LargestRectangleinHistogram)
+* 203. [679. 24 点游戏](#-1)
+* 204. [108 Convert Sorted Array to Binary Search Tree](#ConvertSortedArraytoBinarySearchTree)
+* 205. [222. Count Complete Tree Nodes](#CountCompleteTreeNodes)
+* 206. [84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形](#LargestRectangleinHistogram-85.)
+* 207. [71. Simplify Path](#SimplifyPath)
+* 208. [167-Two Sum II - Input array is sorted](#TwoSumII-Inputarrayissorted)
+* 209. [622 Design Circular Queue](#DesignCircularQueue)
+* 210. [6. ZigZag Conversion](#ZigZagConversion)
+* 211. [96. Unique Binary Search Trees](#UniqueBinarySearchTrees)
+* 212. [547 【🍒并查集 + dfs + 队列】朋友圈](#dfs)
+* 213. [264. 【动态🚀规划 + 3指针】Ugly Number II](#UglyNumberII)
+* 214. [97. 交错字符串](#-1)
+* 215. [410. Split Array Largest Sum](#SplitArrayLargestSum)
+* 216. [44. 通配符匹配](#-1)
+* 217. [18. 四数之和](#-1)
+* 218. [405 【位运算😜】Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
+* 219. [补充题8. 计算数组的小和](#8.)
+* 220. [863. All Nodes Distance K in Binary Tree](#AllNodesDistanceKinBinaryTree)
+* 221. [337 House Robber III](#HouseRobberIII)
+* 222. [166. Fraction to Recurring Decimal](#FractiontoRecurringDecimal)
+* 223. [面试题 08.12. 八皇后](#08.12.)
+* 224. [73. Set Matrix Zeroes](#SetMatrixZeroes)
+* 225. [剑指 Offer 46. 把数字翻译成字符串](#Offer46.)
+* 226. [503 【栈】Next Greater Element II](#NextGreaterElementII)
+* 227. [763 Partition Labels](#PartitionLabels)
+* 228. [340. 至多包含 K 个不同字符的最长子串](#K-1)
+* 229. [130. 【🍒并查集】Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
+* 230. [117 Populating Next Right Pointers in Ea (可跳过)](#PopulatingNextRightPointersinEa)
+* 231. [剑指 Offer 07. 重建二叉树](#Offer07.)
+* 232. [378-【最小堆🌵】有序矩阵中第K小的元素](#K-1)
+* 233. [剑指 Offer 32 - III. 从上到下打印二叉树 III](#Offer32-III.III)
+* 234. [77. 组合](#-1)
+* 235. [528 Random Pick with Weight](#RandomPickwithWeight)
+* 236. [279 【动态🚀规划 + 背包】Perfect Squares](#PerfectSquares)
+* 237. [257-二叉树的所有路径](#-1)
+* 238. [692. Top K Frequent Words](#TopKFrequentWords)
+* 239. [剑指 Offer 50. 第一个只出现一次的字符](#Offer50.)
+* 240. [137 【位运算😜】Single Number II](#SingleNumberII)
+* 241. [补充题21. 字符串相减](#21.)
+* 242. [354. 俄罗斯套娃信封问题](#-1)
+* 243. [253. 会议室 II](#II)
+* 244. [628. 三个数的最大乘积](#-1)
+* 245. [674. 最长连续递增序列](#-1)
+* 246. [剑指 Offer 57 - II. 和为s的连续正数序列](#Offer57-II.s)
+* 247. [315. Count of Smaller Numbers After Self](#CountofSmallerNumbersAfterSelf)
+* 248. [172-Factorial Trailing Zeroes](#FactorialTrailingZeroes)
+* 249. [647 【动态🚀规划 + 回文🌈】Palindromic Substrings](#PalindromicSubstrings)
+* 250. [260-【位运算😜】只出现一次的数字 III](#III-1)
+* 251. [188 【动态🚀规划】Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
+* 252. [剑指 Offer 35. 复杂链表的复制](#Offer35.)
+* 253. [12. Integer to Roman](#IntegertoRoman)
+* 254. [ 386. 字典序排数](#386.)
+* 255. [752. Open the Lock](#OpentheLock)
+* 256. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
+* 257. [231. 【位运算😜】Power of Two](#PowerofTwo)
+* 258. [977 Squares of a Sorted Array](#SquaresofaSortedArray)
+* 259. [437 【前缀和🎨】Path Sum III](#PathSumIII)
+* 260. [617. 合并二叉树](#-1)
+* 261. [60. 第k个排列](#k)
+* 262. [28-Implement str](#Implementstr)
+* 263. [204-Count Primes](#CountPrimes)
+* 264. [剑指 Offer 65. 不用加减乘除做加法](#Offer65.)
+* 265. [416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum](#dfsstartIforPartitionEqualSubsetSum)
+		* 265.1. [相似题目：494题](#494)
+* 266. [51. N皇后](#N-1)
+* 267. [补充题24. 双栈排序](#24.)
+* 268. [680 【回文🌈】Valid Palindrome II](#ValidPalindromeII)
+* 269. [剑指 Offer 38. 字符串的排列](#Offer38.)
+* 270. [701 Insert into a Binary Search Tree](#InsertintoaBinarySearchTree)
+* 271. [530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表](#MinimumAbsoluteDifferenceinBST-Offer36.)
+* 272. [698. 划分为k个相等的子集](#k-1)
+* 273. [173 【构造🏰】Binary Search Tree Iterator](#BinarySearchTreeIterator)
+* 274. [836. 矩形重叠](#-1)
+* 275. [99. 恢复二叉搜索树](#-1)
+* 276. [316 【贪心🧡】Remove Duplicate Letters](#RemoveDuplicateLetters)
+* 277. [109题. 有序链表转换二叉搜索树](#-1)
+* 278. [115. 【动态🚀规划】Distinct Subsequences](#DistinctSubsequences)
+* 279. [1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
 
 <!-- vscode-markdown-toc-config
-    numbering=true
-    autoSave=true
-    /vscode-markdown-toc-config -->
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
 [Hive SQL面试题(附答案)](https://mp.weixin.qq.com/s/4C4wQdaLdtLuTADi16dEsA)
@@ -378,6 +358,7 @@ class LRUCache:
 
     def get(self, key: int) -> int:
         if key in self.cache:
+            # 先弹出pop，再赋值，表明是最新的
             value = self.cache.pop(key)
             self.cache[key] = value
             return value
@@ -463,13 +444,12 @@ class Solution:
         leftI = 0
         res = 0
         for rightI, char in enumerate(s):
-            # char 重复出现，并且 上一个出现 在窗口内部
             # 含义为"tmmzuxt", start在m，当有新的t进来时，上一个t在start的前面，所以，此时的start不需要修改
-            if char in dic and leftI <= dic[char]:      # 易错点: and start <= dic[char]: 
-                leftI = dic[char] + 1        # 易错点: 这里的dic[char]还是前一个,且 +1
+            if char in dic and leftI <= dic[char]:      # char 重复出现，并且 上一个出现 在窗口内部
+                leftI = dic[char] + 1                   # 易错点: 这里的dic[char]还是前一个,且 +1
             else:
-                res = max(res, rightI - leftI + 1) # 易错点: +1
-            dic[char] = rightI         # 易错点: dic[char]滞后更新
+                res = max(res, rightI - leftI + 1)      # 易错点: +1
+            dic[char] = rightI                          # 易错点: dic[char]滞后更新
         return res
     
 ```
@@ -505,21 +485,20 @@ object Solution1 {
 
 ```
 
-##  4. <a name='Kadd'></a>215. 数组中的第K个最大元素（add）
+##  4. <a name='Kadd'></a>215. 数组中的第K个最大元素（add）+
 
 https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
 
 ```py
+03-11
 时间复杂度就是nlogn
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
         q = []
         for num in nums:
-            # n*log(k+1)
-            heapq.heappush(q, num)
+            heapq.heappush(q, num) # n * log(k + 1)
             if len(q) > k:
-                # n*log(k)
-                heapq.heappop(q)
+                heapq.heappop(q)   # n * log(k)
         return heapq.heappop(q)
 
 输入: [3,2,1,5,6,4] 和 k = 2
@@ -2393,22 +2372,25 @@ class Solution:
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
 
 ```py
+03-11
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        q = []  # 易错点：先要定义一个空
+        q = []  
         dummy = ListNode(0)
         cur = dummy
         for i in range(len(lists)):
             if lists[i]:
-                heapq.heappush(q, (lists[i].val, i))  # 易错点：要可以排序的
-                lists[i] = lists[i].next # 易错点：注意，向后一位
-        while q: # 易错点：注意这个循环条件
+                # 先把第一项 push 上去
+                heapq.heappush(q, (lists[i].val, i))  
+                lists[i] = lists[i].next 
+        while q: 
             val, idx = heapq.heappop(q)
             cur.next = ListNode(val)
             cur = cur.next
             if lists[idx]:
+                # 再把后面的每一项 push 上去
                 heapq.heappush(q, (lists[idx].val, idx))
-                lists[idx] = lists[idx].next # 易错点：注意，向后一位
+                lists[idx] = lists[idx].next 
         return dummy.next
 ```
 
@@ -4199,6 +4181,7 @@ class Solution:
 ```
 
 ```py
+03-11
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         n = len(nums)
@@ -5470,7 +5453,7 @@ object Solution2 {
 ```
 
 
-##  75. <a name='dfsCoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change
+##  75. <a name='dfsCoinChange-518CoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change
 
 https://leetcode-cn.com/problems/coin-change/
 
@@ -5777,7 +5760,7 @@ class Solution:
         return 0
 ```
 
-##  81. <a name='-1'></a>34-在排序数组中查找元素的第一个 - 类似剑指offer53
+##  81. <a name='offer53'></a>34-在排序数组中查找元素的第一个 - 类似剑指offer53
 
 https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/
 
@@ -6104,7 +6087,7 @@ class Solution:
 # 5 < 6, 向右移动，left 指向 6，right 指向 6 
 ```
 
-##  88. <a name='-1'></a>240. 二维数组的查找 - 74 Search a 2D Matrix
+##  88. <a name='Searcha2DMatrix'></a>240. 二维数组的查找 - 74 Search a 2D Matrix
 
 [哈哈哈](https://www.bilibili.com/video/BV1dz411i7jC?spm_id_from=333.999.0.0)
 
@@ -6427,7 +6410,7 @@ class Solution:
 
 
 
-##  94. <a name='Offer36.'></a>剑指 Offer 36. 二叉搜索树与双向链表 - 530. Minimum Absolute Difference in BST
+##  94. <a name='Offer36.-530.MinimumAbsoluteDifferenceinBST'></a>剑指 Offer 36. 二叉搜索树与双向链表 - 530. Minimum Absolute Difference in BST
 
 【剑指36】. 将二叉搜索树转化为排序的双向链表【字节跳动】-
 
@@ -6741,7 +6724,7 @@ class Solution:
 
 ```
 
-##  99. <a name='BasicCalculatorII'></a>227 Basic Calculator II - 见 224. 基本计算器
+##  99. <a name='BasicCalculatorII-224.'></a>227 Basic Calculator II - 见 224. 基本计算器
 
 [小明](https://www.bilibili.com/video/BV1Qy4y167Ax?spm_id_from=333.999.0.0)
 
@@ -6840,7 +6823,7 @@ class CQueue:
         return self.stack_out.pop()
 ```
 
-##  102. <a name='II'></a>122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
+##  102. <a name='II122-BestTimetoBuyandSellStockII'></a>122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
 
 [哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
 
@@ -6890,7 +6873,7 @@ object Solution {
 ```
 
 
-##  103. <a name='Offer54.k'></a>剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B
+##  103. <a name='Offer54.k-230KthSmallestElementinaB'></a>剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B
 
 ```py
 class Solution:
@@ -6911,7 +6894,7 @@ class Solution:
         return self.res
 ```
 
-##  104. <a name='-1'></a>283. Move Zeros
+##  104. <a name='MoveZeros'></a>283. Move Zeros
 
 [小梦想家](https://www.bilibili.com/video/BV1m441187Kt?spm_id_from=333.999.0.0)
 
@@ -7004,7 +6987,7 @@ class Solution:
         return res
 ```
 
-##  106. <a name='-1'></a>662. Maximum Width of Binary Tree
+##  106. <a name='MaximumWidthofBinaryTree'></a>662. Maximum Width of Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV1cv411q7pb?spm_id_from=333.999.0.0)
 
@@ -7024,7 +7007,7 @@ class Solution:
         return res 
 ```
 
-##  107. <a name='-1'></a>297. Serialize and Deserialize Binary Tree
+##  107. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV1Hb411c7cr?spm_id_from=333.999.0.0)
 
@@ -7046,7 +7029,7 @@ class Codec:
 
 ```
 
-##  110. <a name='-1'></a>152 【动态🚀规划】乘积最大子数组
+##  108. <a name='-1'></a>152 【动态🚀规划】乘积最大子数组
 
 [哈哈哈](https://www.bilibili.com/video/BV12a4y1i76G?spm_id_from=333.999.0.0)
 
@@ -7096,7 +7079,7 @@ object Solution2-1 {
 
 ```
 
-##  111. <a name='-1'></a>79. Word Search
+##  109. <a name='WordSearch'></a>79. Word Search
 
 [小梦想家](https://www.bilibili.com/video/BV1yE411g7Tb?spm_id_from=333.999.0.0)
 
@@ -7185,7 +7168,7 @@ object Solution2 {
 
 ```
 
-##  113. <a name='Offer10-I.'></a>剑指 Offer 10- I. 斐波那契数列
+##  110. <a name='Offer10-I.'></a>剑指 Offer 10- I. 斐波那契数列
 
 ```py
 
@@ -7213,7 +7196,7 @@ class Solution:
         return dp1
 ```
 
-##  115. <a name='Offer21.'></a>剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+##  111. <a name='Offer21.'></a>剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
 
 ```py
 类似前面的移动0
@@ -7228,7 +7211,7 @@ class Solution:
         return nums
 ```
 
-##  116. <a name='II-1'></a>59. Spiral Matrix II 
+##  112. <a name='SpiralMatrixII'></a>59. Spiral Matrix II 
 
 [小梦想家](https://www.bilibili.com/video/BV1J741157Kt?spm_id_from=333.999.0.0)
 
@@ -7254,7 +7237,7 @@ class Solution:
         return res
 ```
 
-## 328. 奇偶链表 (Odd Even Linked List)
+##  113. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
 
 [洛阳](https://www.bilibili.com/video/BV1v64y1u7AH?spm_id_from=333.999.0.0)
 
@@ -7284,7 +7267,7 @@ class Solution(object):
         return head 
 ```
 
-##  117. <a name='1.'></a>补充题1. 排序奇升偶降链表
+##  114. <a name='1.'></a>补充题1. 排序奇升偶降链表
 
 1. 按奇偶位置拆分链表，得 1->3->5->7->NULL 和 8->6->4->2->NULL  328. 奇偶链表
 2. 反转偶链表，得 1->3->5->7->NULL 和 2->4->6->8->NULL         206. 反转链表
@@ -7344,7 +7327,7 @@ class Solution:
         return dummy.next
 ```
 
-##  118. <a name='Offer40.k'></a>剑指 Offer 40. 最小的k个数
+##  115. <a name='Offer40.k'></a>剑指 Offer 40. 最小的k个数
 
 ```py
 import heapq
@@ -7356,6 +7339,9 @@ class Solution:
     def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
         arr.sort()
         return arr[:k]
+
+0311
+
 
 class Solution:
     def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
@@ -7378,7 +7364,7 @@ hp：
 
 ```
 
-##  119. <a name='II-1'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
+##  116. <a name='CoinChange2-322.dfsCoinChange'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
 
 https://leetcode-cn.com/problems/coin-change-2/
 
@@ -7397,7 +7383,7 @@ class Solution:
         return dp[-1]
 ```
 
-##  120. <a name='-1'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
+##  117. <a name='BasicCalculatorII'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
 
 https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357&spm_id_from=333.337.0.0
 
@@ -7431,7 +7417,7 @@ class Solution:
 
 # 7 day (得分 = 4分) 78
 
-##  121. <a name='K'></a>402 Remove K Digits
+##  118. <a name='RemoveKDigits'></a>402 Remove K Digits
 
 [小明](https://www.bilibili.com/video/BV1PV411C79X?spm_id_from=333.999.0.0)
 
@@ -7462,7 +7448,7 @@ class Solution:
 
 ```
 
-##  122. <a name='23.'></a>补充题23. 检测循环依赖
+##  119. <a name='23.'></a>补充题23. 检测循环依赖
 
 ```s
 现有n个编译项，编号为 0 ~ n-1。给定一个二维数组，
@@ -7503,7 +7489,7 @@ class Solution:
         return res if len(res) == n else []
 ```
 
-##  123. <a name='-1'></a>7 Reverse Integer
+##  120. <a name='ReverseInteger'></a>7 Reverse Integer
 
 [哈哈哈](https://www.bilibili.com/video/BV1sE411e73m?spm_id_from=333.999.0.0)
 
@@ -7589,7 +7575,7 @@ object Solution {
 }
 ```
 
-##  125. <a name='-1'></a>739-Daily Temperatures
+##  121. <a name='DailyTemperatures'></a>739-Daily Temperatures
 
 [哈哈哈](https://www.bilibili.com/video/BV1Q7411L7w8?spm_id_from=333.999.0.0)
 
@@ -7622,7 +7608,7 @@ class Solution:
         return res
 ```
 
-##  126. <a name='-1'></a>61. Rotate List
+##  122. <a name='RotateList'></a>61. Rotate List
 
 [花花酱](https://www.bilibili.com/video/BV14y4y1r728?spm_id_from=333.999.0.0)
 
@@ -7665,7 +7651,7 @@ class Solution:
         return res
 ```
 
-##  127. <a name='Offer62.'></a>剑指 Offer 62. 圆圈中最后剩下的数字
+##  123. <a name='Offer62.'></a>剑指 Offer 62. 圆圈中最后剩下的数字
 
 ```py
 https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/huan-ge-jiao-du-ju-li-jie-jue-yue-se-fu-huan-by-as/
@@ -7688,7 +7674,7 @@ class Solution:
         return res
 ```
 
-##  128. <a name='Offer51.'></a>剑指 Offer 51. 数组中的逆序对
+##  124. <a name='Offer51.'></a>剑指 Offer 51. 数组中的逆序对
 
 ```py
 如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对：
@@ -7717,7 +7703,7 @@ class Solution:
 
 ```
 
-##  129. <a name='K-1'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
+##  125. <a name='SubarraySumEqualsKK'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d71i?spm_id_from=333.999.0.0)
 
@@ -7751,7 +7737,7 @@ class Solution:
 ```
 
 
-##  130. <a name='Powxn'></a>50 Pow(x, n)
+##  126. <a name='Powxn'></a>50 Pow(x, n)
 
 [小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
 
@@ -7838,7 +7824,7 @@ object Solution2 {
 
 ```
 
-##  131. <a name='2.'></a>补充题2. 圆环回原点问题
+##  127. <a name='2.'></a>补充题2. 圆环回原点问题
 
 ```s
 圆环上有 10 个点，编号为 0 ~ 9。
@@ -7867,7 +7853,7 @@ class Solution:
         return dp[n][0]
 ```
 
-##  132. <a name='-1'></a>225-【构造🏰】Implement Stack using Queues
+##  128. <a name='ImplementStackusingQueues'></a>225-【构造🏰】Implement Stack using Queues
 
 [哈哈哈](https://www.bilibili.com/video/BV1p741177pK?spm_id_from=333.999.0.0)
 
@@ -8016,7 +8002,7 @@ class MyStack1() {
 
 ```
 
-##  133. <a name='K-1'></a>230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点
+##  129. <a name='KthSmallestElementinaB-Offer54.k'></a>230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点
 
 [小明](https://www.bilibili.com/video/BV1ha4y1i7dZ?spm_id_from=333.999.0.0)
 
@@ -8132,7 +8118,7 @@ object Solution2-1 {
 
 ```
 
-##  134. <a name='-1'></a>75. Sort Colors
+##  130. <a name='SortColors'></a>75. Sort Colors
 
 [小梦想家](https://www.bilibili.com/video/BV1rE411n7mL?spm_id_from=333.999.0.0)
 
@@ -8160,7 +8146,7 @@ class Solution:
                 idx += 1
 ```
 
-##  135. <a name='II-1'></a>47 - ★ 全排列 II-剪枝版
+##  131. <a name='II-'></a>47 - ★ 全排列 II-剪枝版
 
 类似题目：
 
@@ -8208,7 +8194,7 @@ class Solution:
         return res
 ```
 
-##  136. <a name='-1'></a>11. Container With Most Water 
+##  132. <a name='ContainerWithMostWater'></a>11. Container With Most Water 
 
 [花花酱](https://www.bilibili.com/video/BV1CW41167qB?spm_id_from=333.999.0.0)
 
@@ -8283,7 +8269,7 @@ object Solution2 {
 
 ```
 
-##  137. <a name='-1'></a>139 【动态🚀规划 + 背包】Word Break
+##  133. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
 
 [小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
 
@@ -8313,7 +8299,7 @@ class Solution:
 
 ```
 
-##  138. <a name='-1'></a>125 【回文🌈】Valid Palindrome
+##  134. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
 
 [哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
 
@@ -8387,7 +8373,7 @@ object Solution1 {
 
 
 
-##  139. <a name='-1'></a>189. Rotate Array 
+##  135. <a name='RotateArray'></a>189. Rotate Array 
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7Yy?spm_id_from=333.999.0.0)
 
@@ -8405,7 +8391,7 @@ class Solution:
 
 # 8 day (得分 = 3分) 81
 
-##  141. <a name='-1'></a>74 Search a 2D Matrix - 240. 二维数组的查找
+##  136. <a name='Searcha2DMatrix-240.'></a>74 Search a 2D Matrix - 240. 二维数组的查找
 
 [小明](https://www.bilibili.com/video/BV1aK4y1h7Bb?spm_id_from=333.999.0.0)
 
@@ -8429,7 +8415,7 @@ class Solution:
         return False
 ```
 
-##  142. <a name='-1'></a>287 Find the Duplicate Number
+##  137. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
 
 [小明](https://www.bilibili.com/video/BV1Ug4y1v7mF?spm_id_from=333.999.0.0)
 
@@ -8504,7 +8490,7 @@ class Solution:
 
 ```
 
-##  143. <a name='-1'></a>384. 打乱数组
+##  138. <a name='-1'></a>384. 打乱数组
 
 https://leetcode-cn.com/problems/shuffle-an-array/solution/da-luan-shu-zu-by-leetcode-solution-og5u/
 
@@ -8539,7 +8525,7 @@ class Solution:
         return sorted(self.nums, key=lambda k: random())
 ```
 
-##  144. <a name='-1'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
+##  139. <a name='dfsLongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
 
 [花花酱](https://www.bilibili.com/video/BV1mW411d7q8?spm_id_from=333.999.0.0)
 
@@ -8598,7 +8584,7 @@ class Solution:
 
 ```
 
-##  145. <a name='-1'></a>349. Intersection of Two Arrays
+##  140. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
 
 https://leetcode-cn.com/problems/intersection-of-two-arrays/
 
@@ -8622,7 +8608,7 @@ class Solution:
 
 ```
 
-##  146. <a name='-1'></a>26-Remove duplicates from sorted array
+##  141. <a name='Removeduplicatesfromsortedarray-1'></a>26-Remove duplicates from sorted array
 
 [哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
 
@@ -8643,7 +8629,7 @@ class Solution:
         return slow + 1
 ```
 
-##  147. <a name='II-1'></a>40. Combination Sum II 40-组合总和 II
+##  142. <a name='CombinationSumII40-II'></a>40. Combination Sum II 40-组合总和 II
 
 [花花酱](https://www.bilibili.com/video/BV1Pb411u7Yd?spm_id_from=333.999.0.0)
 
@@ -8671,7 +8657,7 @@ class Solution:
         return res
 ```
 
-##  148. <a name='-1'></a>9-【回文🌈】Palindrome
+##  143. <a name='Palindrome'></a>9-【回文🌈】Palindrome
 
 [哈哈哈](https://www.bilibili.com/video/BV1hJ411S7kt?spm_id_from=333.999.0.0)
 
@@ -8725,7 +8711,7 @@ package lc009 {
 }
 ```
 
-##  150. <a name='Trie'></a>208. 【构造🏰】Implement Trie (Prefix Tree)
+##  144. <a name='ImplementTriePrefixTree'></a>208. 【构造🏰】Implement Trie (Prefix Tree)
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411a74P?spm_id_from=333.999.0.0)
 
@@ -8827,7 +8813,7 @@ class Trie2() {
 }
 ```
 
-##  151. <a name='K-1'></a>440. 字典序的第K小数字
+##  145. <a name='K'></a>440. 字典序的第K小数字
 
 https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/
 
@@ -8919,7 +8905,7 @@ print(ss.findKthNumber(23,15))
 
 ```
 
-##  152. <a name='III'></a>123-买卖股票的最佳时机 III
+##  146. <a name='III'></a>123-买卖股票的最佳时机 III
 
 [哈哈哈](https://www.bilibili.com/video/BV1Xp4y1k7aD?spm_id_from=333.999.0.0)
 
@@ -8959,7 +8945,7 @@ object Solution3-1 {
 }
 ```
 
-##  153. <a name='-1'></a>135. 分发糖果
+##  147. <a name='-1'></a>135. 分发糖果
 
 https://leetcode-cn.com/problems/candy/
 
@@ -8983,7 +8969,7 @@ class Solution:
 # 输出: 5
 ```
 
-##  155. <a name='-1'></a>207-课程表
+##  148. <a name='-1'></a>207-课程表
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411a74a?spm_id_from=333.999.0.0)
 
@@ -9065,7 +9051,7 @@ class Solution:
 
 ```
 
-##  156. <a name='-1'></a>572-另一个树的子树
+##  149. <a name='-1'></a>572-另一个树的子树
 
 [哈哈哈](https://www.bilibili.com/video/BV1cA411t7zD?spm_id_from=333.999.0.0)
 
@@ -9095,7 +9081,7 @@ class Solution:
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
 ```
 
-##  157. <a name='-1'></a>10. 正则表达式匹配
+##  150. <a name='-1'></a>10. 正则表达式匹配
 
 https://leetcode-cn.com/problems/regular-expression-matching/solution/
 
@@ -9130,7 +9116,7 @@ class Solution:
         return dp[-1][-1]
 ```
 
-##  158. <a name='-1'></a>55 Jump Game
+##  151. <a name='JumpGame'></a>55 Jump Game
 
 [小明](https://www.bilibili.com/video/BV14K4y1b7Fw?spm_id_from=333.999.0.0)
 
@@ -9181,7 +9167,7 @@ object Solution3-1 {
 
 ```
 
-##  159. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
+##  152. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
 
 类似消消看
 
@@ -9199,7 +9185,7 @@ class Solution(object):
         return "".join(stack)
 ```
 
-##  160. <a name='-1'></a>91. Decode Ways
+##  153. <a name='DecodeWays'></a>91. Decode Ways
 
 [花花酱](https://www.bilibili.com/video/BV1Lb411y7ec?spm_id_from=333.999.0.0)
 
@@ -9271,7 +9257,7 @@ object Solution1 {
 
 # 9 day (得分 = 2分) 83
 
-##  162. <a name='II-1'></a>445-Add Two Numbers II
+##  154. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
 
 [哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
 
@@ -9307,7 +9293,7 @@ class Solution:
 ```
 
 
-##  163. <a name='II-1'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
+##  155. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
 
 [18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -9365,7 +9351,7 @@ class Solution:
 ```
 
 
-##  164. <a name='9.36'></a>补充题9. 36进制加法 - 见 415 - Add Strings
+##  156. <a name='9.36-415-AddStrings'></a>补充题9. 36进制加法 - 见 415 - Add Strings
 
 ```s
 36进制由 0-9，a-z，共 36 个字符表示。
@@ -9384,7 +9370,7 @@ LC415 是十进制的大数相加，而本题是`36进制`的大数相加。
 ```
 
 
-##  166. <a name='-1'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
+##  157. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
 
 [1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
 
@@ -9444,7 +9430,7 @@ object Solution3 {
 ```
 
 
-##  167. <a name='-1'></a>295. 数据流的中位数
+##  158. <a name='-1'></a>295. 数据流的中位数
 
 ```py
 from heapq import *
@@ -9456,9 +9442,9 @@ class MedianFinder:
         heapify(self.min_h)
         
     def addNum(self, num):
-       # 每次都插入到最小
+        # 每次都插入到最小
         heappush(self.min_h, num)
-       # 然后，将最小堆里面的栈顶元素，取出来，放到最大堆中去，这样就能保证最小堆的堆，都比最大堆的堆顶大
+        # 然后，将最小堆里面的栈顶元素，取出来，放到最大堆中去，这样就能保证最小堆的堆，都比最大堆的堆顶大
         heappush(self.max_h, - heappop(self.min_h))
         if len(self.min_h) < len(self.max_h): # 如果最大堆太大了
             heappush(self.min_h, - heappop(self.max_h))
@@ -9477,7 +9463,7 @@ class MedianFinder:
         return self.min_h[0] if max_len != min_len else (- self.max_h[0] + self.min_h[0]) / 2
 ```
 
-##  168. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
+##  159. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
 
 ```py
 class Solution:
@@ -9494,7 +9480,7 @@ class Solution:
 
 ```
 
-##  170. <a name='-1'></a>678 Valid Parenthesis String
+##  160. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
 
 [小明](https://www.bilibili.com/video/BV1ap4y1X7nu?spm_id_from=333.999.0.0)
 
@@ -9516,7 +9502,7 @@ class Solution:
 
 ```
 
-##  172. <a name='-1'></a>86. 分隔链表(Partition List)
+##  161. <a name='PartitionList'></a>86. 分隔链表(Partition List)
 
 [洛阳](https://www.bilibili.com/video/BV1t64y1u7Ei?spm_id_from=333.999.0.0)
 
@@ -9542,7 +9528,7 @@ class Solution:
         return dummy1.next
 ```
 
-##  173. <a name='-1'></a>114题. 二叉树展开为链表
+##  162. <a name='-1'></a>114题. 二叉树展开为链表
 
 https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=15731266160913668837&spm_id_from=333.337.0.0
 
@@ -9595,7 +9581,7 @@ class Solution:
         
 ```
 
-##  175. <a name='-1'></a>16. 3Sum Closest
+##  163. <a name='SumClosest'></a>16. 3Sum Closest
 
 [小梦想家](https://www.bilibili.com/video/BV11441187Rr?spm_id_from=333.999.0.0)
 
@@ -9665,7 +9651,7 @@ object Solution1 {
 }
 ```
 
-##  176. <a name='-1'></a>450. Delete Node in a BST
+##  164. <a name='DeleteNodeinaBST'></a>450. Delete Node in a BST
 
 [花花酱](https://www.bilibili.com/video/BV1XW411d7yU?spm_id_from=333.999.0.0)
 
@@ -9696,15 +9682,15 @@ class Solution:
 ```
 
 
-##  177. <a name='K-1'></a>347. 【最小堆🌵】Top K Frequent Elements 
+##  165. <a name='TopKFrequentElements'></a>347. 【最小堆🌵】Top K Frequent Elements 
 
 [花花酱](https://www.bilibili.com/video/BV1Mt411371T?spm_id_from=333.999.0.0)
 
 [小明](https://www.bilibili.com/video/BV1sk4y1B7vj?spm_id_from=333.999.0.0)
 
 ```py
-#时间复杂度：O(nlogk)
-#空间复杂度：O(n)
+# 时间复杂度：O(n logk)
+# 空间复杂度：O(n)
 import heapq
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -9751,7 +9737,7 @@ object Solution {
 
 ```
 
-##  179. <a name='-1'></a>344. Reverse String
+##  166. <a name='ReverseString'></a>344. Reverse String
 
 [小梦想家](https://www.bilibili.com/video/BV1Gx411o7Ha?spm_id_from=333.999.0.0)
 
@@ -9792,7 +9778,7 @@ object Solution {
 
 ```
 
-##  180. <a name='-1'></a>191 Number of 1 Bits
+##  167. <a name='Numberof1Bits'></a>191 Number of 1 Bits
 
 [小明](https://www.bilibili.com/video/BV1i5411J7SA?spm_id_from=333.999.0.0)
 
@@ -9837,7 +9823,7 @@ object Solution0 {
 
 # 10 day (得分 = 2分) 85
 
-##  181. <a name='-1'></a>443. String Compression
+##  168. <a name='StringCompression'></a>443. String Compression
 
 [小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
 
@@ -9864,7 +9850,7 @@ class Solution:
 # 输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
 ```
 
-##  182. <a name='N'></a>400. 第N个数字
+##  169. <a name='N'></a>400. 第N个数字
 
 ```py
 class Solution:
@@ -9890,7 +9876,7 @@ class Solution:
 
 ```
 
-##  183. <a name='-1'></a>242. Valid Anagram 
+##  170. <a name='ValidAnagram'></a>242. Valid Anagram 
 
 [小梦想家](https://www.bilibili.com/video/BV1Db411s78v?spm_id_from=333.999.0.0)
 
@@ -9944,7 +9930,7 @@ object Solution1 {
 }
 ```
 
-##  184. <a name='-1'></a>100-Same Tree 
+##  171. <a name='SameTree'></a>100-Same Tree 
 
 [哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
 
@@ -9997,7 +9983,7 @@ object Solution {
 }
 ```
 
-##  185. <a name='-1'></a>459 Repeated Substring Pattern
+##  172. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
 
 [小明](https://www.bilibili.com/video/BV1Yt4y1S7XZ?spm_id_from=333.999.0.0)
 
@@ -10011,7 +9997,7 @@ class Solution:
 
 ```
 
-##  186. <a name='-1'></a>442 Find All Duplicates in an Array
+##  173. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
 
 [小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
 
@@ -10042,7 +10028,7 @@ class Solution:
 [-4, [-3], [-2], -7, 8, 2, -3, -1] 
 ```
 
-##  187. <a name='-1'></a>120 【动态🚀规划】Triangle
+##  174. <a name='Triangle'></a>120 【动态🚀规划】Triangle
 
 [小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
 
@@ -10072,7 +10058,7 @@ object Solution {
 }
 ```
 
-##  188. <a name='-1'></a>268 【位运算😜】Missing Number
+##  175. <a name='MissingNumber'></a>268 【位运算😜】Missing Number
 
 
 [小明](https://www.bilibili.com/video/BV1LU4y1p7n7?spm_id_from=333.999.0.0)
@@ -10122,7 +10108,7 @@ object Solution {
 }
 ```
 
-##  189. <a name='-1'></a>887. Super Egg Drop
+##  176. <a name='SuperEggDrop'></a>887. Super Egg Drop
 
 [花花酱](https://www.bilibili.com/video/BV1Tv411i7cP?spm_id_from=333.999.0.0)
 
@@ -10169,7 +10155,7 @@ class Solution:
 ```
 
 
-##  191. <a name='III-1'></a>557. 反转字符串中的单词 III
+##  177. <a name='III-1'></a>557. 反转字符串中的单词 III
 
 ```py
 class Solution:
@@ -10202,9 +10188,9 @@ class Solution:
         return s
 ```
 
-##  192. <a name='14.'></a>补充题14. 阿拉伯数字转中文数字
+##  178. <a name='14.'></a>补充题14. 阿拉伯数字转中文数字
 
-##  193. <a name='Excel'></a>168-Excel Sheet Column Title
+##  179. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
 
 [哈哈哈](https://www.bilibili.com/video/BV1Qj411f7FY?spm_id_from=333.999.0.0)
 
@@ -10221,7 +10207,7 @@ class Solution(object):
         return res
 ```
 
-##  194. <a name='-1'></a>1095. Find in Mountain Array
+##  180. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
 
 [花花酱](https://www.bilibili.com/video/BV1m5411V7x7?spm_id_from=333.999.0.0)
 
@@ -10272,7 +10258,7 @@ class Solution:
 ```
 
 
-##  195. <a name='-1'></a>670. 最大交换
+##  181. <a name='-1'></a>670. 最大交换
 
 ```py
 class Solution:
@@ -10292,7 +10278,7 @@ class Solution:
         return num # 已是最大值就返回原数字
 ```
 
-##  197. <a name='II-1'></a>210. Course Schedule II 210-课程表II
+##  182. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
 
 [花花酱](https://www.bilibili.com/video/BV1gW411y7Kb?spm_id_from=333.999.0.0)
 
@@ -10358,7 +10344,7 @@ import scala.collection.mutable.ArrayBuffer
 
 ```
 
-##  198. <a name='-1'></a>525. 【前缀和🎨】Contiguous Array
+##  183. <a name='ContiguousArray'></a>525. 【前缀和🎨】Contiguous Array
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7SD?spm_id_from=333.999.0.0)
 
@@ -10383,7 +10369,7 @@ class Solution:
 
 ```
 
-##  200. <a name='III-1'></a>556 Next Greater Element III - 类似 31 ★ Next Permutation
+##  184. <a name='NextGreaterElementIII-31NextPermutation'></a>556 Next Greater Element III - 类似 31 ★ Next Permutation
 
 [小明](https://www.bilibili.com/video/BV19t4y167yb?spm_id_from=333.999.0.0)
 
@@ -10424,7 +10410,7 @@ class Solution:
 
 # 11 day (得分 = 2分) 87
 
-##  201. <a name='-1'></a>111-Minimum Depth of Binary Tree
+##  185. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
 
 [哈哈哈](https://www.bilibili.com/video/BV1E7411k7KY?spm_id_from=333.999.0.0)
 
@@ -10522,7 +10508,7 @@ object Solution {
 } 
 ```
 
-##  202. <a name='-1'></a>37. Sudoku Solver 解数独
+##  186. <a name='SudokuSolver'></a>37. Sudoku Solver 解数独
 
 [花花酱](https://www.bilibili.com/video/BV1Tt41137Xr?spm_id_from=333.999.0.0)
 
@@ -10588,7 +10574,7 @@ class Solution:
 
 ```
 
-##  203. <a name='-1'></a>134. Gas Station
+##  187. <a name='GasStation'></a>134. Gas Station
 
 [小梦想家](https://www.bilibili.com/video/BV1BC4y1472f?spm_id_from=333.999.0.0)
 
@@ -10610,11 +10596,11 @@ class Solution:
         return start
 ```
 
-##  204. <a name='22.IP'></a>补充题22. IP地址与整数的转换
+##  188. <a name='22.IP'></a>补充题22. IP地址与整数的转换
 
 https://mp.weixin.qq.com/s/UWCuEtNS2kuAuDY-eIbghg
 
-##  205. <a name='-1'></a>876.Middle of the Linked List 链表的中间结点
+##  189. <a name='MiddleoftheLinkedList'></a>876.Middle of the Linked List 链表的中间结点
 
 [图灵](https://www.bilibili.com/video/BV1Kv411p7vf?spm_id_from=333.999.0.0)
 
@@ -10635,7 +10621,7 @@ class Solution:
 ```
 
 
-##  206. <a name='II-1'></a>63 Unique Paths II
+##  190. <a name='UniquePathsII'></a>63 Unique Paths II
 
 [小明](https://www.bilibili.com/video/BV1Sv411L7qe?spm_id_from=333.999.0.0)
 
@@ -10660,7 +10646,7 @@ class Solution:
         return dp[-1][-1]
 ```
 
-##  207. <a name='Excel-1'></a>171. Excel Sheet Column Number
+##  191. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7nT?spm_id_from=333.999.0.0)
 
@@ -10688,7 +10674,7 @@ object Solution {
 
 ```
 
-##  208. <a name='-1'></a>17. Letter Combinations of a Phone Number 
+##  192. <a name='LetterCombinationsofaPhoneNumber'></a>17. Letter Combinations of a Phone Number 
 
 [花花酱](https://www.bilibili.com/video/BV1PW411y7r2?spm_id_from=333.999.0.0)
 
@@ -10716,7 +10702,7 @@ class Solution:
         return res
 ```
 
-##  209. <a name='-1'></a>494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum
+##  193. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
 
@@ -10871,7 +10857,7 @@ class Solution:
 ```
 
 
-##  210. <a name='Offer03.'></a>剑指 Offer 03. 数组中重复的数字
+##  194. <a name='Offer03.'></a>剑指 Offer 03. 数组中重复的数字
 
 https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/
 
@@ -10897,7 +10883,7 @@ class Solution:
 ```
 
 
-##  212. <a name='Offer33.'></a>剑指 Offer 33. 二叉搜索树的后序遍历序列
+##  195. <a name='Offer33.'></a>剑指 Offer 33. 二叉搜索树的后序遍历序列
 
 ```py
 大家好呀，还有一种解法。简单翻了几篇题解好像没人提到类似的思路。个人理解这题跟构造BST考察的内容是类似的，我们只需要利用数组尝试构建一棵BST就可以了，如果构建完成，最终数组为空，说明是合法的BST。若构建结束数组不为空，说明不是合法的BST。
@@ -10949,7 +10935,7 @@ class Solution:
 
 ```
 
-##  213. <a name='K-1'></a>862. 和至少为 K 的最短子数组
+##  196. <a name='K-1'></a>862. 和至少为 K 的最短子数组
 
 ```py
 class Solution:
@@ -10974,7 +10960,7 @@ class Solution:
 
 ```
 
-##  214. <a name='-1'></a>343-整数拆分
+##  197. <a name='-1'></a>343-整数拆分
 
 [哈哈哈](https://www.bilibili.com/video/BV1Dp4y1U79P?spm_id_from=333.999.0.0)
 
@@ -10992,7 +10978,7 @@ class Solution:
 
 ```
 
-##  215. <a name='-1'></a>673 Number of Longest Increasing Subse
+##  198. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
 
 [小明](https://www.bilibili.com/video/BV1gT4y1F7y3?spm_id_from=333.999.0.0)
 
@@ -11026,7 +11012,7 @@ class Solution:
 
 ```
 
-##  216. <a name='17.24.'></a>面试题 17.24. 最大子矩阵
+##  199. <a name='17.24.'></a>面试题 17.24. 最大子矩阵
 
 https://leetcode-cn.com/problems/max-submatrix-lcci/solution/zhe-yao-cong-zui-da-zi-xu-he-shuo-qi-you-jian-dao-/
 
@@ -11191,7 +11177,7 @@ dp= 1 最大值= 19 [0, 0, 2, 3]
 
 ```
 
-##  217. <a name='-1'></a>611. 有效三角形的个数
+##  200. <a name='-1'></a>611. 有效三角形的个数
 
 ```py
 class Solution:
@@ -11216,7 +11202,7 @@ class Solution:
         # 2 + 3 > 4
 ```
 
-##  218. <a name='II-1'></a>45 Jump Game II
+##  201. <a name='JumpGameII'></a>45 Jump Game II
 
 [小明](https://www.bilibili.com/video/BV1fb4y1Z77x?spm_id_from=333.999.0.0)
 
@@ -11237,7 +11223,7 @@ class Solution:
         return jump
 ```
 
-##  220. <a name='-1'></a>85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram
+##  202. <a name='LargestRectangleinHistogram'></a>85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram
 
 ```py
 # 这一题的算法本质上和84题Largest Rectangle in Histogram一样，
@@ -11304,7 +11290,7 @@ class Solution(object):
 
 # 12 day (得分 = 2分) 89
 
-##  221. <a name='-1'></a>679. 24 点游戏
+##  203. <a name='-1'></a>679. 24 点游戏
 
 ```py
 class Solution:
@@ -11350,7 +11336,7 @@ class Solution:
 
 ```
 
-##  222. <a name='-1'></a>108 Convert Sorted Array to Binary Search Tree 
+##  204. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
 
 [花花酱](https://www.bilibili.com/video/BV1F7411H7tH?spm_id_from=333.999.0.0)
 
@@ -11406,7 +11392,7 @@ object Solution {
 
 ```
 
-##  223. <a name='-1'></a>222. Count Complete Tree Nodes
+##  205. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
 
 [花花酱](https://www.bilibili.com/video/BV1n44y1E73D?spm_id_from=333.999.0.0)
 
@@ -11420,7 +11406,7 @@ class Solution(object):
         return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
 ```
 
-##  224. <a name='-1'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形
+##  206. <a name='LargestRectangleinHistogram-85.'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形
 
 [官方](https://www.bilibili.com/video/BV16D4y1D7ed?spm_id_from=333.999.0.0)
 
@@ -11441,7 +11427,7 @@ class Solution:
         return res
 ```
 
-##  225. <a name='-1'></a>71. Simplify Path
+##  207. <a name='SimplifyPath'></a>71. Simplify Path
 
 [小梦想家](https://www.bilibili.com/video/BV1V7411w7jX?spm_id_from=333.999.0.0)
 
@@ -11460,7 +11446,7 @@ class Solution(object):
 ```
 
 
-##  226. <a name='II-'></a>167-Two Sum II - Input array is sorted
+##  208. <a name='TwoSumII-Inputarrayissorted'></a>167-Two Sum II - Input array is sorted
 
 [哈哈哈](https://www.bilibili.com/video/BV167411h7ou?spm_id_from=333.999.0.0)
 
@@ -11492,7 +11478,7 @@ class Solution:
             visited[target - num] = i
 ```
 
-##  227. <a name='-1'></a>622 Design Circular Queue
+##  209. <a name='DesignCircularQueue'></a>622 Design Circular Queue
 
 [小明](https://www.bilibili.com/video/BV1kV411n7Uk?spm_id_from=333.999.0.0)
 
@@ -11548,7 +11534,7 @@ class MyCircularQueue:
         return self.count == self.capacity
 ```
 
-##  228. <a name='Z'></a>6. ZigZag Conversion
+##  210. <a name='ZigZagConversion'></a>6. ZigZag Conversion
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7uH?spm_id_from=333.999.0.0)
 
@@ -11581,7 +11567,7 @@ class Solution:
 
 ```
 
-##  229. <a name='-1'></a>96. Unique Binary Search Trees
+##  211. <a name='UniqueBinarySearchTrees'></a>96. Unique Binary Search Trees
 
 [小梦想家](https://www.bilibili.com/video/BV1xV411Y731?spm_id_from=333.999.0.0)
 
@@ -11617,7 +11603,7 @@ class Solution:
         return dp[-1]
 ```
 
-##  230. <a name='-1'></a>547 【🍒并查集 + dfs + 队列】朋友圈
+##  212. <a name='dfs'></a>547 【🍒并查集 + dfs + 队列】朋友圈
 
 [哈哈哈](https://www.bilibili.com/video/BV1Ta411F7rk?spm_id_from=333.999.0.0)
 
@@ -11759,7 +11745,7 @@ class UnionFind(M: Int) {
 */
 ``` 
 
-##  231. <a name='II-1'></a>264. 【动态🚀规划 + 3指针】Ugly Number II
+##  213. <a name='UglyNumberII'></a>264. 【动态🚀规划 + 3指针】Ugly Number II
 
 [花花酱](https://www.bilibili.com/video/BV1yW411C7Sm?spm_id_from=333.999.0.0)
 
@@ -11798,7 +11784,7 @@ class Solution(object):
 # 12 12 15 [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
 ```
 
-##  233. <a name='-1'></a>97. 交错字符串
+##  214. <a name='-1'></a>97. 交错字符串
 
 ```py
 class Solution:
@@ -11819,7 +11805,7 @@ class Solution:
 
 ```
 
-##  234. <a name='-1'></a>410. Split Array Largest Sum
+##  215. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
 
@@ -11853,7 +11839,7 @@ class Solution:
         return left
 ```
 
-##  235. <a name='-1'></a>44. 通配符匹配
+##  216. <a name='-1'></a>44. 通配符匹配
 
 ```py
 class Solution:
@@ -11887,7 +11873,7 @@ class Solution:
 ```
 
 
-##  236. <a name='-1'></a>18. 四数之和
+##  217. <a name='-1'></a>18. 四数之和
 
 ```py
 # 双指针法
@@ -11920,7 +11906,7 @@ class Solution:
         return res
 ```
 
-##  237. <a name='-1'></a>405 【位运算😜】Convert a Number to Hexadecimal
+##  218. <a name='ConvertaNumbertoHexadecimal'></a>405 【位运算😜】Convert a Number to Hexadecimal
 
 [哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
 
@@ -11939,7 +11925,7 @@ class Solution:
         return res
 ```
 
-##  238. <a name='8.'></a>补充题8. 计算数组的小和
+##  219. <a name='8.'></a>补充题8. 计算数组的小和
 
 
 https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
@@ -12003,7 +11989,7 @@ nums = list(map(int, input().split()))
 print(mergesmallSum(nums, 0, N-1))
 ```
 
-##  239. <a name='K-1'></a>863. All Nodes Distance K in Binary Tree
+##  220. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
 
@@ -12052,7 +12038,7 @@ class Solution:
         return que
 ```
 
-##  240. <a name='III-1'></a>337 House Robber III
+##  221. <a name='HouseRobberIII'></a>337 House Robber III
 
 [小明](https://www.bilibili.com/video/BV1WD4y1X7JQ?spm_id_from=333.999.0.0)
 
@@ -12073,7 +12059,7 @@ class Solution:
 
 # 13 day (得分 = 1分) 90
 
-##  241. <a name='-1'></a>166. Fraction to Recurring Decimal
+##  222. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
 
 [小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
 
@@ -12120,9 +12106,9 @@ class Solution:
 ```
 
 
-##  242. <a name='08.12.'></a>面试题 08.12. 八皇后
+##  223. <a name='08.12.'></a>面试题 08.12. 八皇后
 
-##  243. <a name='-1'></a>73. Set Matrix Zeroes
+##  224. <a name='SetMatrixZeroes'></a>73. Set Matrix Zeroes
 
 [小梦想家](https://www.bilibili.com/video/BV1W7411T7rX?spm_id_from=333.999.0.0)
 
@@ -12173,9 +12159,9 @@ object Solution1 {
 
 ```
 
-##  244. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
+##  225. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
 
-##  245. <a name='II-1'></a>503 【栈】Next Greater Element II
+##  226. <a name='NextGreaterElementII'></a>503 【栈】Next Greater Element II
 
 [哈哈哈](https://www.bilibili.com/video/BV197411L77N?spm_id_from=333.999.0.0)
 
@@ -12209,13 +12195,13 @@ print(stack)
 
 ```
 
-##  246. <a name='-1'></a>763 Partition Labels
+##  227. <a name='PartitionLabels'></a>763 Partition Labels
 
 [小明](https://www.bilibili.com/video/BV1Ca4y177LW?spm_id_from=333.999.0.0)
 
-##  247. <a name='K-1'></a>340. 至多包含 K 个不同字符的最长子串
+##  228. <a name='K-1'></a>340. 至多包含 K 个不同字符的最长子串
 
-##  248. <a name='-1'></a>130. 【🍒并查集】Surrounded Regions 130-被围绕的区域
+##  229. <a name='SurroundedRegions130-'></a>130. 【🍒并查集】Surrounded Regions 130-被围绕的区域
 
 [花花酱](https://www.bilibili.com/video/BV1dE411f7U4?spm_id_from=333.999.0.0)
 
@@ -12332,7 +12318,7 @@ class Solution:
 ```
 
 
-##  249. <a name='II-1'></a>117 Populating Next Right Pointers in Ea (可跳过)
+##  230. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea (可跳过)
 
 [小明](https://www.bilibili.com/video/BV1np4y1r7fQ?spm_id_from=333.999.0.0)
 
@@ -12370,9 +12356,9 @@ class Solution:
 ```
 
 
-##  250. <a name='Offer07.'></a>剑指 Offer 07. 重建二叉树
+##  231. <a name='Offer07.'></a>剑指 Offer 07. 重建二叉树
 
-##  251. <a name='K-1'></a>378-【最小堆🌵】有序矩阵中第K小的元素
+##  232. <a name='K-1'></a>378-【最小堆🌵】有序矩阵中第K小的元素
 
 [哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
 
@@ -12385,13 +12371,12 @@ class Solution:
         pq = [(matrix[i][0], i, 0) for i in range(n)] # 每行的第一个元素
         heapq.heapify(pq)
 
-
-        for _ in range(k - 1): # 这里pop k - 1 次
+        for _ in range(k - 1): # 这里 pop k - 1 次
             num, x, y = heapq.heappop(pq)
             if y != n - 1:
                 heapq.heappush(pq, (matrix[x][y + 1], x, y + 1))
         
-        return heapq.heappop(pq)[0] # 这里pop  1次
+        return heapq.heappop(pq)[0] # 这里  pop  1 次
 
 
 
@@ -12410,9 +12395,9 @@ class Solution(object):
 
 
 
-##  252. <a name='Offer32-III.III'></a>剑指 Offer 32 - III. 从上到下打印二叉树 III
+##  233. <a name='Offer32-III.III'></a>剑指 Offer 32 - III. 从上到下打印二叉树 III
 
-##  253. <a name='-1'></a>77. 组合
+##  234. <a name='-1'></a>77. 组合
 
 ```py
 class Solution:
@@ -12428,11 +12413,11 @@ class Solution:
         return res
 ```
 
-##  254. <a name='-1'></a>528 Random Pick with Weight
+##  235. <a name='RandomPickwithWeight'></a>528 Random Pick with Weight
 
 [小明](https://www.bilibili.com/video/BV1UV411r7MK?spm_id_from=333.999.0.0)
 
-##  255. <a name='-1'></a>279 【动态🚀规划 + 背包】Perfect Squares
+##  236. <a name='PerfectSquares'></a>279 【动态🚀规划 + 背包】Perfect Squares
 
 [小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
 
@@ -12454,7 +12439,7 @@ class Solution:
         return dp[-1]
 ```
 
-##  256. <a name='-1'></a>257-二叉树的所有路径
+##  237. <a name='-1'></a>257-二叉树的所有路径
 
 [哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
 
@@ -12525,13 +12510,13 @@ package lc0257 {
 
 ```
 
-##  257. <a name='K-1'></a>692. Top K Frequent Words
+##  238. <a name='TopKFrequentWords'></a>692. Top K Frequent Words
 
 [花花酱](https://www.bilibili.com/video/BV1Mt41137eL?spm_id_from=333.999.0.0)
 
-##  258. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
+##  239. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
 
-##  259. <a name='II-1'></a>137 【位运算😜】Single Number II
+##  240. <a name='SingleNumberII'></a>137 【位运算😜】Single Number II
 
 [小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
 
@@ -12573,26 +12558,26 @@ class Solution:
 ```
 
 
-##  260. <a name='21.'></a>补充题21. 字符串相减
+##  241. <a name='21.'></a>补充题21. 字符串相减
 
 
 # 14 day (得分 = 1分) 91
 
-##  261. <a name='-1'></a>354. 俄罗斯套娃信封问题
+##  242. <a name='-1'></a>354. 俄罗斯套娃信封问题
 
-##  262. <a name='II-1'></a>253. 会议室 II
+##  243. <a name='II'></a>253. 会议室 II
 
-##  263. <a name='-1'></a>628. 三个数的最大乘积
+##  244. <a name='-1'></a>628. 三个数的最大乘积
 
-##  264. <a name='-1'></a>674. 最长连续递增序列
+##  245. <a name='-1'></a>674. 最长连续递增序列
 
-##  265. <a name='Offer57-II.s'></a>剑指 Offer 57 - II. 和为s的连续正数序列
+##  246. <a name='Offer57-II.s'></a>剑指 Offer 57 - II. 和为s的连续正数序列
 
-##  266. <a name='-1'></a>315. Count of Smaller Numbers After Self
+##  247. <a name='CountofSmallerNumbersAfterSelf'></a>315. Count of Smaller Numbers After Self
 
 [花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
 
-##  268. <a name='-1'></a>172-Factorial Trailing Zeroes
+##  248. <a name='FactorialTrailingZeroes'></a>172-Factorial Trailing Zeroes
 
 [哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
 
@@ -12633,7 +12618,7 @@ object Solution {
 
 ```
 
-##  269. <a name='-1'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
+##  249. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
 
 [小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
 
@@ -12675,7 +12660,7 @@ class Solution:
         return ans
 ```
 
-##  270. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
+##  250. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
 
 [哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
 
@@ -12720,7 +12705,7 @@ class Solution:
 
 ```
 
-##  271. <a name='IV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
+##  251. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
 
 [小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
 
@@ -12836,9 +12821,9 @@ object Solution1-3 {
 }
 ```
 
-##  272. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
+##  252. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
 
-##  273. <a name='-1'></a>12. Integer to Roman
+##  253. <a name='IntegertoRoman'></a>12. Integer to Roman
 
 [小梦想家](https://www.bilibili.com/video/BV1Lb411x7Wf?spm_id_from=333.999.0.0)
 
@@ -12898,7 +12883,7 @@ package lc0012_integertoroman {
 ```
 
 
-##  274. <a name='-1'></a> 386. 字典序排数
+##  254. <a name='386.'></a> 386. 字典序排数
 
 ```py
 class Solution:
@@ -12937,15 +12922,15 @@ class Solution:
 
 ```
 
-##  275. <a name='-1'></a>752. Open the Lock
+##  255. <a name='OpentheLock'></a>752. Open the Lock
 
 [花花酱](https://www.bilibili.com/video/BV1NW411y74z?spm_id_from=333.999.0.0)
 
-##  276. <a name='K-1'></a>395 Longest Substring with At Least K
+##  256. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
 
 [小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
 
-##  277. <a name='-1'></a>231. 【位运算😜】Power of Two
+##  257. <a name='PowerofTwo'></a>231. 【位运算😜】Power of Two
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
 
@@ -12968,11 +12953,11 @@ object Solution {
 }
 ```
 
-##  278. <a name='-1'></a>977 Squares of a Sorted Array
+##  258. <a name='SquaresofaSortedArray'></a>977 Squares of a Sorted Array
 
 [小明](https://www.bilibili.com/video/BV1EX4y1u7Mb?spm_id_from=333.999.0.0)
 
-##  279. <a name='III-1'></a>437 【前缀和🎨】Path Sum III
+##  259. <a name='PathSumIII'></a>437 【前缀和🎨】Path Sum III
 
 [小明](https://www.bilibili.com/video/BV1tZ4y1M7JR?spm_id_from=333.999.0.0)
 
@@ -13003,14 +12988,14 @@ class Solution:
         return res   
 ```
 
-##  280. <a name='-1'></a>617. 合并二叉树
+##  260. <a name='-1'></a>617. 合并二叉树
 
 
 # 15 day (得分 = 1分) 92
 
-##  281. <a name='k'></a>60. 第k个排列
+##  261. <a name='k'></a>60. 第k个排列
 
-##  282. <a name='strStr'></a>28-Implement str
+##  262. <a name='Implementstr'></a>28-Implement str
 
 [哈哈哈](https://www.bilibili.com/video/BV1eL411n7YS?spm_id_from=333.999.0.0)
 
@@ -13073,7 +13058,7 @@ object Solution {
 
 ```
 
-##  283. <a name='-1'></a>204-Count Primes
+##  263. <a name='CountPrimes'></a>204-Count Primes
 
 [哈哈哈](https://www.bilibili.com/video/BV167411w7Sf?spm_id_from=333.999.0.0)
 
@@ -13130,11 +13115,11 @@ object Solution {
 ```
 
 
-##  284. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
+##  264. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
 
-##  285. <a name='-1'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
+##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
 
-####  1.201.1. <a name='494'></a>相似题目：494题
+####  265.1. <a name='494'></a>相似题目：494题
 
 [花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
 
@@ -13167,11 +13152,11 @@ class Solution:
         return dp[-1] != 0
 ```
 
-##  286. <a name='N-1'></a>51. N皇后
+##  266. <a name='N-1'></a>51. N皇后
 
-##  287. <a name='24.'></a>补充题24. 双栈排序
+##  267. <a name='24.'></a>补充题24. 双栈排序
 
-##  288. <a name='-1'></a>680 【回文🌈】Valid Palindrome II
+##  268. <a name='ValidPalindromeII'></a>680 【回文🌈】Valid Palindrome II
 
 [哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
 
@@ -13202,13 +13187,13 @@ class Solution:
 
 
 
-##  289. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
+##  269. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
 
-##  290. <a name='-1'></a>701 Insert into a Binary Search Tree
+##  270. <a name='InsertintoaBinarySearchTree'></a>701 Insert into a Binary Search Tree
 
 [小明](https://www.bilibili.com/video/BV1q54y1k76s?spm_id_from=333.999.0.0)
 
-##  291. <a name='-1'></a>530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表
+##  271. <a name='MinimumAbsoluteDifferenceinBST-Offer36.'></a>530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表
 
 [花花酱](https://www.bilibili.com/video/BV1fW411k7eT?spm_id_from=333.999.0.0)
 
@@ -13249,9 +13234,9 @@ class Solution:
 
 ```
 
-##  292. <a name='k-1'></a>698. 划分为k个相等的子集
+##  272. <a name='k-1'></a>698. 划分为k个相等的子集
 
-##  293. <a name='-1'></a>173 【构造🏰】Binary Search Tree Iterator
+##  273. <a name='BinarySearchTreeIterator'></a>173 【构造🏰】Binary Search Tree Iterator
 
 [小明](https://www.bilibili.com/video/BV1qK41137h1?spm_id_from=333.999.0.0)
 
@@ -13283,11 +13268,11 @@ class BSTIterator(object):
 
 
 
-##  295. <a name='-1'></a>836. 矩形重叠
+##  274. <a name='-1'></a>836. 矩形重叠
 
-##  296. <a name='-1'></a>99. 恢复二叉搜索树
+##  275. <a name='-1'></a>99. 恢复二叉搜索树
 
-##  297. <a name='-1'></a>316 【贪心🧡】Remove Duplicate Letters
+##  276. <a name='RemoveDuplicateLetters'></a>316 【贪心🧡】Remove Duplicate Letters
 
 [小明](https://www.bilibili.com/video/BV1x54y1R7y7?spm_id_from=333.999.0.0)
 
@@ -13309,7 +13294,7 @@ class Solution:
         return "".join(stack)
 ```
 
-##  298. <a name='-1'></a>109题. 有序链表转换二叉搜索树
+##  277. <a name='-1'></a>109题. 有序链表转换二叉搜索树
 
 https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
 
@@ -13343,7 +13328,7 @@ class Solution:
         return buildTree(head, None)
 ```
 
-##  299. <a name='-1'></a>115. 【动态🚀规划】Distinct Subsequences
+##  278. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
 
 [花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
 
@@ -13370,7 +13355,7 @@ class Solution:
 ```
 
 
-##  300. <a name='-1'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
+##  279. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
 
 [花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
 
