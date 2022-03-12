@@ -1,11 +1,17 @@
 class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        res = ["0"] # 初值不要为空，不然index为-1会报错
-        for idx, char in enumerate(s):
-            print("idx, char:",idx, char,"result: ",res)
-            print("s[idx:]",s[idx:],"数量: ",s[idx:].count(res[-1]),"需要大于0,表示要把c删掉，必须后面还有c")
-            if char not in res:
-                while char < res[-1] and s[idx:].count(res[-1]) > 0:
-                    res.pop(-1) # result 删除最后一位
-                res.append(char)
-        return "".join(res[1:])
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        dummy = ListNode(0, head)
+        pre = dummy
+        for _ in range(left - 1):
+            pre = pre.next
+            # 因为需要保留 pre, 所以 left - 1
+
+        first = pre.next
+        for _ in range(right - left):
+            # 易错点：顺序不能错，中，后，前，忠厚钱
+            second = first.next
+            first.next = second.next
+            second.next = pre.next
+            pre.next = second
+        
+        return dummy.next
