@@ -1,17 +1,14 @@
 class Solution:
-    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
-        dummy = ListNode(0, head)
-        pre = dummy
-        for _ in range(left - 1):
-            pre = pre.next
-            # 因为需要保留 pre, 所以 left - 1
-
-        first = pre.next
-        for _ in range(right - left):
-            # 易错点：顺序不能错，中，后，前，忠厚钱
-            second = first.next
-            first.next = second.next
-            second.next = pre.next
-            pre.next = second
-        
-        return dummy.next
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        if not root:
+            return []
+        if not root.left and not root.right:
+            return [str(root.val)]
+        paths = []
+        if root.left:
+            for pt in self.binaryTreePaths(root.left):
+                paths.append(str(root.val) + '->' + pt)
+        if root.right:
+            for pt in self.binaryTreePaths(root.right):
+                paths.append(str(root.val) + '->' + pt)
+        return paths  

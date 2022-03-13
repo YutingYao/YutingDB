@@ -724,6 +724,7 @@ hp：
 [-3, -2]
 [-2, -1]
 用 heapq 过滤掉较大值
+
 class Solution:
     def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
         q = []
@@ -1378,301 +1379,6 @@ https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
 [洛阳](https://www.bilibili.com/video/BV1np4y1y789?spm_id_from=333.999.0.0)
 
 ```py
-1. 1 day (得分 = 30分) 30
-   1. 1. <a name='ReverseLinkedList'></a>206. 反转链表Reverse Linked List
-   2. 5. <a name='Kadd-1'></a>25. K 个一组翻转链表（add）
-   3. 95. <a name='SwapNodesinPairs'></a>24-Swap Nodes in Pairs
-   4. 24. <a name='ReverseLinkedListII'></a>92-Reverse Linked List II
-   5. 2. <a name='LRULRUCache'></a>146. LRU缓存机制【构造🏰】LRU Cache
-   6. 3. <a name='LongestSubstringWithoutRepeatingCharacters'></a>3. 无重复字符的最长子串 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters
-   7. 4. <a name='Kadd'></a>215. 数组中的第K个最大元素（add）+
-   8. 115. <a name='Offer40.k'></a>剑指 Offer 40. 最小的k个数
-   9. 165. <a name='TopKFrequentElements'></a>347. 【最小堆🌵】Top K Frequent Elements
-   10. 6. <a name='add'></a>912 补充题4. 手撕快速排序（add）
-   11. 7. <a name=''></a>15. 三数之和
-   12. 8. <a name='Maximumsubarray'></a>53. 最大子序和53-【贪心🧡】Maximum subarray
-   13. 9. <a name='-1'></a>1. 两数之和
-   14. 10. <a name='-1'></a>21. 合并两个有序链表
-   15. 11. <a name='LinkedListCycle'></a>141-Linked List Cycle
-   16. 14. <a name='IntersectionofTwoLinkedLists'></a>160-Intersection of Two Linked Lists
-   17. 12. <a name='BinaryTreeLevelOrderTraversal'></a>102-Binary Tree Level Order Traversal
-   18. 13. <a name='BestTimetoBuyandSellStock121-'></a>121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
-   19. 15. <a name='Mergesortedarray'></a>88-Merge sorted array
-   20. 16. <a name='BinaryTreeZigzagLevelOrderTraversal'></a>103. Binary Tree Zigzag Level Order Traversal
-   21. 17. <a name='-1'></a>236-二叉树的最近公共祖先
-   22. 18. <a name='Validparentheses'></a>20-Valid parentheses
-   23. 19. <a name='LongestPalindromicSubstring-'></a>5. 【回文🌈】Longest Palindromic Substring -最长回文🌈子串
-   24. 20. <a name='SearchinRotatedSortedArray'></a>33. Search in Rotated Sorted Array
-2. 2 day (得分 = 15分) 45
-   1. 21. <a name='-1'></a>200 【🍒并查集】岛屿数量
-   2. 22. <a name='AddStrings'></a>415-Add Strings
-   3. 23. <a name='-1'></a>46- ★ 全排列
-   4. 25. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
-   5. 26. <a name='MergekSortedLists'></a>23. 【最小堆🌵】Merge k Sorted Lists
-   6. 232. <a name='K-1'></a>378-【最小堆🌵】有序矩阵中第K小的元素
-   7. 46. <a name='SortList'></a>148. Sort List
-   8. 27. <a name='SpiralMatrix'></a>54. Spiral Matrix
-   9. 28. <a name='LongestIncreasingSubsequence'></a>300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列
-   10. 29. <a name='BinarySearch'></a>704.Binary Search二分查找
-   11. 30. <a name='TrappingRainWater'></a>42. Trapping Rain Water
-   12. 31. <a name='ImplementQueueusingStacks'></a>232-【构造🏰】Implement Queue using Stacks
-   13. 32. <a name='Inorderwihstack'></a>94-Inorder wih stack
-   14. 33. <a name='BinaryTreePreorderTraversal'></a>144-Binary Tree Preorder Traversal
-   15. 34. <a name='BinaryTreePostorderTraversal'></a>145-Binary Tree Postorder Traversal
-   16. 35. <a name='BinaryTreeRightSideView'></a>199 Binary Tree Right Side View
-   17. 36. <a name='ReorderList'></a>143 Reorder List
-   18. 37. <a name='ClimbingStairs'></a>70. Climbing Stairs （重要）
-   19. 38. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
-   20. 39. <a name='MergeIntervals'></a>56. Merge Intervals
-   21. 40. <a name='Offer22.k'></a>剑指 Offer 22. 链表中倒数第k个节点
-   22. 44. <a name='RemoveNthNodeFromEndofList'></a>19-Remove Nth Node From End of List
-   23. 122. <a name='RotateList'></a>61. Rotate List
-   24. 41. <a name='IIRemoveDuplicatesfromSortedList'></a>82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List
-   25. 78. <a name='Removeduplicatesfromsortedarray'></a>83-Remove duplicates from sorted array
-   26. 42. <a name='SqrtxHJ107'></a>69 Sqrt(x) 见 HJ107 求解立方根
-3. 3 day (得分 = 10分) 55
-   1. 43. <a name='StringtoIntegeratoi'></a>8. String to Integer(atoi)
-   2. 45. <a name='AddTwoNumbers'></a>2. Add Two Numbers
-   3. 154. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
-   4. 47. <a name='EditDistance72-'></a>72. Edit Distance 72-编辑距离
-   5. 48. <a name='MedianofTwoSortedArrays'></a>4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays
-   6. 49. <a name='-1'></a>105-从前序与中序遍历序列构
-   7. 50. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
-   8. 51. <a name='MaximumDepthofBinary'></a>104-Maximum Depth of Binary
-   9. 52. <a name='-1'></a>76-【滑动窗口🔹】最小覆盖子串
-   10. 53. <a name='NextPermutation'></a>31 ★ Next Permutation
-   11. 54. <a name='SlidingWindowMaximum'></a>239. ★【最小堆🌵 + 滑动窗口🔹单调队列】Sliding Window Maximum
-   12. 55. <a name='LongestCommonSubsequence'></a>1143 【二维动态🚀规划】Longest Common Subsequence
-   13. 56. <a name='SumRoottoLeafNumbers'></a>129 Sum Root to Leaf Numbers
-   14. 57. <a name='IP'></a>93. 复原 IP 地址
-   15. 58. <a name='BalancedBinaryTree'></a>110-Balanced Binary Tree
-   16. 59. <a name='-1'></a>113. 二叉树中和为某一值的路径
-   17. 60. <a name='GenerateParentheses'></a>22. Generate Parentheses
-   18. 61. <a name='FirstMissingPositive'></a>41 First Missing Positive
-   19. 62. <a name='DiameterofBinaryTree'></a>543 Diameter of Binary Tree
-4. 4 day (得分 = 8分) 63
-   1. 63. <a name='MinStack'></a>155-【构造🏰】Min Stack
-   2. 64. <a name='ValidateBinarySearchTree98-'></a>98. Validate Binary Search Tree 98-验证二叉搜索树
-   3. 65. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
-   4. 66. <a name='Symmetrictree'></a>101-Symmetric tree
-   5. 67. <a name='LongestValidParentheses'></a>32 Longest Valid Parentheses
-   6. 68. <a name='-1'></a>43. 字符串相乘
-   7. 69. <a name='MinimumPathSum64-'></a>64. Minimum Path Sum 64-最小路径和
-   8. 70. <a name='-1'></a>718. 最长重复子数组
-   9. 71. <a name='Subsets'></a>78. Subsets 子集
-   10. 72. <a name='PathSum'></a>112-Path Sum
-   11. 73. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
-   12. 74. <a name='PalindromeLinkedList'></a>234. 【回文🌈】Palindrome Linked List
-   13. 75. <a name='dfsCoinChange-518CoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change
-   14. 76. <a name='CombinationSum39-'></a>39. Combination Sum 39-组合总和
-   15. 77. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element
-   16. 79. <a name='-1'></a>226-翻转二叉树
-   17. 80. <a name='CompareVersionNumbers'></a>165. Compare Version Numbers
-   18. 81. <a name='offer53'></a>34-在排序数组中查找元素的第一个 - 类似剑指offer53
-5. 5 day (得分 = 6分) 69
-   1. 82. <a name='-1'></a>153-寻找旋转排序数组中的最小值
-   2. 83. <a name='-1'></a>62-不同路径
-   3. 84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
-   4. 85. <a name='ValidateIPAddress'></a>468 Validate IP Address
-   5. 86. <a name='SingleNumber'></a>136 【位运算😜】Single Number
-   6. 87. <a name='FindPeakElement'></a>162. Find Peak Element
-   7. 88. <a name='Searcha2DMatrix'></a>240. 二维数组的查找 - 74 Search a 2D Matrix
-   8. 89. <a name='-1'></a>221-【动态🚀规划】最大正方形
-   9. 90. <a name='Longestcommonprefix'></a>14 - Longest common prefix
-   10. 91. <a name='LargestNumber'></a>179 Largest Number
-   11. 92. <a name='-1'></a>138. 复制带随机指针的链表
-   12. 93. <a name='-1'></a>695-岛屿的最大面积
-   13. 94. <a name='Offer36.-530.MinimumAbsoluteDifferenceinBST'></a>剑指 Offer 36. 二叉搜索树与双向链表 - 530. Minimum Absolute Difference in BST
-   14. 96. <a name='DecodeString'></a>394 Decode String
-   15. 97. <a name='HouseRobber198-'></a>198. 【动态🚀规划】House Robber 198-打家劫舍
-   16. 98. <a name='-1'></a>209-长度最小的子数组
-   17. 99. <a name='BasicCalculatorII-224.'></a>227 Basic Calculator II - 见 224. 基本计算器
-   18. 100. <a name='-1'></a>958. 二叉树的完全性检验
-6. 6 day (得分 = 5分) 74
-   1. 101. <a name='Offer09.'></a>剑指 Offer 09. 用两个栈实现队列
-   2. 102. <a name='II122-BestTimetoBuyandSellStockII'></a>122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
-   3. 103. <a name='Offer54.k-230KthSmallestElementinaB'></a>剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B
-   4. 104. <a name='MoveZeros'></a>283. Move Zeros
-   5. 105. <a name='-1'></a>498. 对角线遍历
-   6. 106. <a name='MaximumWidthofBinaryTree'></a>662. Maximum Width of Binary Tree
-   7. 107. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
-   8. 108. <a name='-1'></a>152 【动态🚀规划】乘积最大子数组
-   9. 109. <a name='WordSearch'></a>79. Word Search
-   10. 110. <a name='Offer10-I.'></a>剑指 Offer 10- I. 斐波那契数列
-   11. 111. <a name='Offer21.'></a>剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
-   12. 112. <a name='SpiralMatrixII'></a>59. Spiral Matrix II
-   13. 113. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
-   14. 114. <a name='1.'></a>补充题1. 排序奇升偶降链表
-   15. 161. <a name='PartitionList'></a>86. 分隔链表(Partition List)
-   16. 189. <a name='MiddleoftheLinkedList'></a>876.Middle of the Linked List 链表的中间结点
-   17. 277. <a name='-1'></a>109题. 有序链表转换二叉搜索树
-   18. 116. <a name='CoinChange2-322.dfsCoinChange'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
-   19. 117. <a name='BasicCalculatorII'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
-7. 7 day (得分 = 4分) 78
-   1. 118. <a name='RemoveKDigits'></a>402 Remove K Digits
-   2. 119. <a name='23.'></a>补充题23. 检测循环依赖
-   3. 120. <a name='ReverseInteger'></a>7 Reverse Integer
-   4. 121. <a name='DailyTemperatures'></a>739-Daily Temperatures
-   5. 123. <a name='Offer62.'></a>剑指 Offer 62. 圆圈中最后剩下的数字
-   6. 124. <a name='Offer51.'></a>剑指 Offer 51. 数组中的逆序对
-   7. 125. <a name='SubarraySumEqualsKK'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
-   8. 126. <a name='Powxn'></a>50 Pow(x, n)
-   9. 127. <a name='2.'></a>补充题2. 圆环回原点问题
-   10. 128. <a name='ImplementStackusingQueues'></a>225-【构造🏰】Implement Stack using Queues
-   11. 129. <a name='KthSmallestElementinaB-Offer54.k'></a>230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点
-   12. 130. <a name='SortColors'></a>75. Sort Colors
-   13. 131. <a name='II-'></a>47 - ★ 全排列 II-剪枝版
-   14. 132. <a name='ContainerWithMostWater'></a>11. Container With Most Water
-   15. 133. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
-   16. 134. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
-   17. 135. <a name='RotateArray'></a>189. Rotate Array
-8. 8 day (得分 = 3分) 81
-   1. 136. <a name='Searcha2DMatrix-240.'></a>74 Search a 2D Matrix - 240. 二维数组的查找
-   2. 137. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
-   3. 138. <a name='-1'></a>384. 打乱数组
-   4. 139. <a name='dfsLongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
-   5. 140. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
-   6. 141. <a name='Removeduplicatesfromsortedarray-1'></a>26-Remove duplicates from sorted array
-   7. 142. <a name='CombinationSumII40-II'></a>40. Combination Sum II 40-组合总和 II
-   8. 143. <a name='Palindrome'></a>9-【回文🌈】Palindrome
-   9. 144. <a name='ImplementTriePrefixTree'></a>208. 【构造🏰】Implement Trie (Prefix Tree)
-   10. 145. <a name='K'></a>440. 字典序的第K小数字
-   11. 146. <a name='III'></a>123-买卖股票的最佳时机 III
-   12. 147. <a name='-1'></a>135. 分发糖果
-   13. 148. <a name='-1'></a>207-课程表
-   14. 149. <a name='-1'></a>572-另一个树的子树
-   15. 150. <a name='-1'></a>10. 正则表达式匹配
-   16. 151. <a name='JumpGame'></a>55 Jump Game
-   17. 152. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
-   18. 153. <a name='DecodeWays'></a>91. Decode Ways
-9. 9 day (得分 = 2分) 83
-   1. 155. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
-   2. 156. <a name='9.36-415-AddStrings'></a>补充题9. 36进制加法 - 见 415 - Add Strings
-   3. 157. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
-   4. 158. <a name='-1'></a>295. 数据流的中位数
-   5. 159. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
-   6. 160. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
-   7. 162. <a name='-1'></a>114题. 二叉树展开为链表
-   8. 163. <a name='SumClosest'></a>16. 3Sum Closest
-   9. 164. <a name='DeleteNodeinaBST'></a>450. Delete Node in a BST
-   10. 166. <a name='ReverseString'></a>344. Reverse String
-   11. 167. <a name='Numberof1Bits'></a>191 Number of 1 Bits
-10. 10 day (得分 = 2分) 85
-   1. 168. <a name='StringCompression'></a>443. String Compression
-   2. 169. <a name='N'></a>400. 第N个数字
-   3. 170. <a name='ValidAnagram'></a>242. Valid Anagram
-   4. 171. <a name='SameTree'></a>100-Same Tree
-   5. 172. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
-   6. 173. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
-   7. 174. <a name='Triangle'></a>120 【动态🚀规划】Triangle
-   8. 175. <a name='MissingNumber'></a>268 【位运算😜】Missing Number
-   9. 176. <a name='SuperEggDrop'></a>887. Super Egg Drop
-   10. 177. <a name='III-1'></a>557. 反转字符串中的单词 III
-   11. 178. <a name='14.'></a>补充题14. 阿拉伯数字转中文数字
-   12. 179. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
-   13. 180. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
-   14. 181. <a name='-1'></a>670. 最大交换
-   15. 182. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
-   16. 183. <a name='ContiguousArray'></a>525. 【前缀和🎨】Contiguous Array
-   17. 184. <a name='NextGreaterElementIII-31NextPermutation'></a>556 Next Greater Element III - 类似 31 ★ Next Permutation
-11. 11 day (得分 = 2分) 87
-   1. 185. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
-   2. 186. <a name='SudokuSolver'></a>37. Sudoku Solver 解数独
-   3. 187. <a name='GasStation'></a>134. Gas Station
-   4. 188. <a name='22.IP'></a>补充题22. IP地址与整数的转换
-   5. 190. <a name='UniquePathsII'></a>63 Unique Paths II
-   6. 191. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
-   7. 192. <a name='LetterCombinationsofaPhoneNumber'></a>17. Letter Combinations of a Phone Number
-   8. 193. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum
-   9. 194. <a name='Offer03.'></a>剑指 Offer 03. 数组中重复的数字
-   10. 195. <a name='Offer33.'></a>剑指 Offer 33. 二叉搜索树的后序遍历序列
-   11. 196. <a name='K-1'></a>862. 和至少为 K 的最短子数组
-   12. 197. <a name='-1'></a>343-整数拆分
-   13. 198. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
-   14. 199. <a name='17.24.'></a>面试题 17.24. 最大子矩阵
-   15. 200. <a name='-1'></a>611. 有效三角形的个数
-   16. 201. <a name='JumpGameII'></a>45 Jump Game II
-   17. 202. <a name='LargestRectangleinHistogram'></a>85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram
-12. 12 day (得分 = 2分) 89
-   1. 203. <a name='-1'></a>679. 24 点游戏
-   2. 204. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree
-   3. 205. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
-   4. 206. <a name='LargestRectangleinHistogram-85.'></a>84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形
-   5. 207. <a name='SimplifyPath'></a>71. Simplify Path
-   6. 208. <a name='TwoSumII-Inputarrayissorted'></a>167-Two Sum II - Input array is sorted
-   7. 209. <a name='DesignCircularQueue'></a>622 Design Circular Queue
-   8. 210. <a name='ZigZagConversion'></a>6. ZigZag Conversion
-   9. 211. <a name='UniqueBinarySearchTrees'></a>96. Unique Binary Search Trees
-   10. 212. <a name='dfs'></a>547 【🍒并查集 + dfs + 队列】朋友圈
-   11. 213. <a name='UglyNumberII'></a>264. 【动态🚀规划 + 3指针】Ugly Number II
-   12. 214. <a name='-1'></a>97. 交错字符串
-   13. 215. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
-   14. 216. <a name='-1'></a>44. 通配符匹配
-   15. 217. <a name='-1'></a>18. 四数之和
-   16. 218. <a name='ConvertaNumbertoHexadecimal'></a>405 【位运算😜】Convert a Number to Hexadecimal
-   17. 219. <a name='8.'></a>补充题8. 计算数组的小和
-   18. 220. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
-   19. 221. <a name='HouseRobberIII'></a>337 House Robber III
-13. 13 day (得分 = 1分) 90
-   1. 222. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
-   2. 223. <a name='08.12.'></a>面试题 08.12. 八皇后
-   3. 224. <a name='SetMatrixZeroes'></a>73. Set Matrix Zeroes
-   4. 225. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
-   5. 226. <a name='NextGreaterElementII'></a>503 【栈】Next Greater Element II
-   6. 227. <a name='PartitionLabels'></a>763 Partition Labels
-   7. 228. <a name='K-1'></a>340. 至多包含 K 个不同字符的最长子串
-   8. 229. <a name='SurroundedRegions130-'></a>130. 【🍒并查集】Surrounded Regions 130-被围绕的区域
-   9. 230. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea (可跳过)
-   10. 231. <a name='Offer07.'></a>剑指 Offer 07. 重建二叉树
-   11. 233. <a name='Offer32-III.III'></a>剑指 Offer 32 - III. 从上到下打印二叉树 III
-   12. 234. <a name='-1'></a>77. 组合
-   13. 235. <a name='RandomPickwithWeight'></a>528 Random Pick with Weight
-   14. 236. <a name='PerfectSquares'></a>279 【动态🚀规划 + 背包】Perfect Squares
-   15. 237. <a name='-1'></a>257-二叉树的所有路径
-   16. 238. <a name='TopKFrequentWords'></a>692. Top K Frequent Words
-   17. 239. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
-   18. 240. <a name='SingleNumberII'></a>137 【位运算😜】Single Number II
-   19. 241. <a name='21.'></a>补充题21. 字符串相减
-14. 14 day (得分 = 1分) 91
-   1. 242. <a name='-1'></a>354. 俄罗斯套娃信封问题
-   2. 243. <a name='II'></a>253. 会议室 II
-   3. 244. <a name='-1'></a>628. 三个数的最大乘积
-   4. 245. <a name='-1'></a>674. 最长连续递增序列
-   5. 246. <a name='Offer57-II.s'></a>剑指 Offer 57 - II. 和为s的连续正数序列
-   6. 247. <a name='CountofSmallerNumbersAfterSelf'></a>315. Count of Smaller Numbers After Self
-   7. 248. <a name='FactorialTrailingZeroes'></a>172-Factorial Trailing Zeroes
-   8. 249. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
-   9. 250. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
-   10. 251. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
-   11. 252. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
-   12. 253. <a name='IntegertoRoman'></a>12. Integer to Roman
-   13. 254. <a name='386.'></a> 386. 字典序排数
-   14. 255. <a name='OpentheLock'></a>752. Open the Lock
-   15. 256. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
-   16. 257. <a name='PowerofTwo'></a>231. 【位运算😜】Power of Two
-   17. 258. <a name='SquaresofaSortedArray'></a>977 Squares of a Sorted Array
-   18. 259. <a name='PathSumIII'></a>437 【前缀和🎨】Path Sum III
-   19. 260. <a name='-1'></a>617. 合并二叉树
-15. 15 day (得分 = 1分) 92
-   1. 261. <a name='k'></a>60. 第k个排列
-   2. 262. <a name='Implementstr'></a>28-Implement str
-   3. 263. <a name='CountPrimes'></a>204-Count Primes
-   4. 264. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
-   5. 265. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
-   6. 266. <a name='N-1'></a>51. N皇后
-   7. 267. <a name='24.'></a>补充题24. 双栈排序
-   8. 268. <a name='ValidPalindromeII'></a>680 【回文🌈】Valid Palindrome II
-   9. 269. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
-   10. 270. <a name='InsertintoaBinarySearchTree'></a>701 Insert into a Binary Search Tree
-   11. 271. <a name='MinimumAbsoluteDifferenceinBST-Offer36.'></a>530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表
-   12. 272. <a name='k-1'></a>698. 划分为k个相等的子集
-   13. 273. <a name='BinarySearchTreeIterator'></a>173 【构造🏰】Binary Search Tree Iterator
-   14. 274. <a name='-1'></a>836. 矩形重叠
-   15. 275. <a name='-1'></a>99. 恢复二叉搜索树
-   16. 276. <a name='RemoveDuplicateLetters'></a>316 【贪心🧡】Remove Duplicate Letters
-   17. 278. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
-   18. 279. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
-
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
         visited = set()
@@ -1751,8 +1457,7 @@ https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
 ```py
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
-        if not root:
-            return []
+        if not root: return []
         queue = [root]
         res = []
         while queue:
@@ -1760,11 +1465,8 @@ class Solution:
             for _ in range(len(queue)): # 当前层的个数!!!
                 node = queue.pop(0)
                 level.append(node.val)
-
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
+                if node.left:  queue.append(node.left)
+                if node.right: queue.append(node.right)
             res.append(level)
         return res
 
@@ -1773,8 +1475,7 @@ from collections import deque
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
         
-        if not root:
-            return []
+        if not root: return []
 
         queue = deque([root]) 
         res = []
@@ -1784,10 +1485,8 @@ class Solution:
             for _ in range(len(queue)): 
                 node = queue.popleft() 
                 level.append(node.val) 
-                if node.left:
-                    queue.append(node.left) 
-                if node.right:
-                    queue.append(node.right) 
+                if node.left:  queue.append(node.left) 
+                if node.right: queue.append(node.right) 
             res.append(level) 
         return res
 ```
@@ -1797,8 +1496,7 @@ levelOrderBottom
 ```py
 class Solution:
     def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
-        if not root:
-            return []
+        if not root: return []
         queue = [root]
         res = []
         while queue:
@@ -1806,11 +1504,8 @@ class Solution:
             for _ in range(len(queue)):
                 node = queue.pop(0)
                 level.append(node.val)
-
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
+                if node.left:  queue.append(node.left)
+                if node.right: queue.append(node.right)
             res.append(level)
         return res[::-1] 只需要这里变一下
 ```
@@ -1819,21 +1514,6 @@ class Solution:
 
 
 ```py
-class Solution:
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
-        res = []
-
-        def bfs(node, level):
-            if node: 
-                if len(res) < level + 1:
-                    res.append([])
-                res[level].append(node.val)
-                bfs(node.left, level + 1)
-                bfs(node.right, level + 1)
-
-        bfs(root, 0)
-        return res
-
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
         dic = collections.defaultdict(list)
@@ -2049,10 +1729,13 @@ object Solution {
 > python 队列
 
 ```py
+输入：root = [3,9,20,null,null,15,7]
+输出：[[3],[20,9]反转,[15,7]]
+
+
 class Solution:
     def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
-        if not root: 
-            return []
+        if not root: return []
 
         queue = [root]
         res = []
@@ -2062,15 +1745,13 @@ class Solution:
             for _ in range(len(queue)):
                 node = queue.pop(0)
                 level.append(node.val)
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
+                if node.left:  queue.append(node.left)
+                if node.right: queue.append(node.right)
             indexflag += 1 
-            if not indexflag % 2: 
-                res.append(level[:])
-            else:
+            if indexflag % 2: 
                 res.append(level[::-1])
+            else: 
+                res.append(level[:])
         return res
 
 ```
@@ -2079,20 +1760,20 @@ class Solution:
 
 ```py
 class Solution:
-    def zigzagLevelOrder(self, root):
-        res = []
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        res = collections.defaultdict(list)
         def bfs(node, level):
             if node:
-                if level >= len(res):
-                    res.append([])
                 res[level].append(node.val)
                 bfs(node.left, level + 1)
                 bfs(node.right, level + 1)
 
         bfs(root, 0)
-        for i in range(1, len(res), 2): # flag，各两个逆序
-            res[i] = res[i][::-1]
-        return res
+        for key in res: 
+            if key % 2: res[key] = res[key][::-1]
+        return [*res.values()]  
+# print(res.values()) 
+# dict_values([[3], [20, 9], [15, 7]])
 ```
 
 ##  17. <a name='-1'></a>236-二叉树的最近公共祖先
@@ -2868,15 +2549,15 @@ object Solution {
 # so easy，一遍过
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        arr = []
+        vals = []
         for listhead in lists:
             while listhead:
-                arr.append(listhead.val)
+                vals.append(listhead.val)
                 listhead = listhead.next
-        arr.sort()
+        vals.sort()
         dummy = ListNode(0)
         cur = dummy
-        for value in arr:
+        for value in vals:
             cur.next = ListNode(value)
             cur = cur.next
         return dummy.next
@@ -3034,14 +2715,14 @@ class Solution:
             sortlist.append(head)
             head = tmp
         # 排序
-        sortlist = sorted(sortlist, key=lambda x: x.val)
+        sortlist = sorted(sortlist, key = lambda x: x.val)
         # 把链表串联起来
         n = len(sortlist)
         if n == 0:
             return None
         dummy.next = sortlist[0]
-        for i in range(n-1):
-            sortlist[i].next = sortlist[i+1]
+        for i in range(n - 1):
+            sortlist[i].next = sortlist[i + 1]
         
         return dummy.next
 ```
@@ -3051,12 +2732,17 @@ class Solution:
 
 class Solution:
     def sortList(self, head: ListNode) -> ListNode:
+        # 第一步：递归条件
         if not head or not head.next:
             return head
+            
+        # 第二步：左右切分
         mid = self.findmid(head)
         left = head # 指定左右
         right = mid.next # 指定左右
         mid.next = None # 断开链接
+
+        # 第三步：左右递归 + 两两合并
         l = self.sortList(left)
         r = self.sortList(right)
         return self.merge(l, r) # 最初一定"两两合并"
@@ -3478,15 +3164,7 @@ class Solution:
 
 class Solution(object):
     def preorderTraversal(self, root):
-        if not root:
-            return []
-        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
-
-class Solution:
-    def inorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []            
-        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
+        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right) if root else []
 
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
@@ -3499,12 +3177,11 @@ class Solution:
 
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
         res = []
-        res.extend(self.inorderTraversal(root.left))
-        res.append(root.val)
-        res.extend(self.inorderTraversal(root.right))
+        if root:
+            res.extend(self.inorderTraversal(root.left))
+            res.append(root.val)
+            res.extend(self.inorderTraversal(root.right))
         return res
 
 # 前序遍历-递归-LC144_二叉树的前序遍历
@@ -3512,48 +3189,45 @@ class Solution:
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
         # 保存结果
-        result = []
+        res = []
         
         def traversal(root: TreeNode):
-            if root == None:
-                return
-            result.append(root.val) # 前序
-            traversal(root.left)    # 左
-            traversal(root.right)   # 右
+            if root:
+                res.append(root.val) # 前序
+                traversal(root.left)    # 左
+                traversal(root.right)   # 右
 
         traversal(root)
-        return result
+        return res
 
 中序遍历-递归-LC94_二叉树的中序遍历
 
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
-        result = []
+        res = []
 
         def traversal(root: TreeNode):
-            if root == None:
-                return
-            traversal(root.left)    # 左
-            result.append(root.val) # 中序
-            traversal(root.right)   # 右
+            if root:
+                traversal(root.left)    # 左
+                res.append(root.val) # 中序
+                traversal(root.right)   # 右
 
         traversal(root)
-        return result
+        return res
 
 # 后序遍历-递归-LC145_二叉树的后序遍历
 class Solution:
     def postorderTraversal(self, root: TreeNode) -> List[int]:
-        result = []
+        res = []
 
         def traversal(root: TreeNode):
-            if root == None:
-                return
-            traversal(root.left)    # 左
-            traversal(root.right)   # 右
-            result.append(root.val) # 后序
+            if root:
+                traversal(root.left)    # 左
+                traversal(root.right)   # 右
+                res.append(root.val) # 后序
 
         traversal(root)
-        return result
+        return res
 
 # # 中序遍历需先判断当前结点是否存在，若存在则将该节点放入栈中，再将当前结点设置为结点的左孩子，
 # # 若不存在则取栈顶元素为cur，当且仅当栈空cur也为空，循环结束。
@@ -3623,10 +3297,11 @@ class Solution:
             return res
         stack = [root]
         while stack:
-            tmp = stack.pop()
-            res.append(tmp.val)
-            if tmp.left: stack.append(tmp.left) # 目的是left先出：先进，后出，取反则先
-            if tmp.right: stack.append(tmp.right) 
+            node = stack.pop()
+            res.append(node.val)
+            # 背一背：后左右 - 后座有
+            if node.left: stack.append(node.left) # 目的是left先出：先进，后出，取反则先
+            if node.right: stack.append(node.right) 
         return res[::-1]
 
 class Solution:
@@ -3636,10 +3311,11 @@ class Solution:
             return res
         stack = [root]
         while stack:
-            tmp = stack.pop()
-            res.append(tmp.val)
-            if tmp.right: stack.append(tmp.right)
-            if tmp.left: stack.append(tmp.left) # 目的是left先出：后进，先出
+            node = stack.pop()
+            res.append(node.val)
+            # 背一背：前右左 - 钱优作
+            if node.right: stack.append(node.right)
+            if node.left: stack.append(node.left) # 目的是left先出：后进，先出
         return res
 ```
 
@@ -3668,25 +3344,16 @@ class Solution:
 ```py
 class Solution:
     def rightSideView(self, root: TreeNode):
-        res, level = [], root and [root]
-        while level:
-            res.append(level[-1].val)
-            level = [nxt for n in level for nxt in (n.left, n.right) if nxt]
-        return res
-
-class Solution:
-    def rightSideView(self, root: TreeNode):
-        if not root:
-            return []
+        if not root: return []
         res = []
-        level = [root]
-        while level:
-            tmp = []
-            for n in level:
-                if n.left: tmp.append(n.left)
-                if n.right: tmp.append(n.right)
-            res.append(level[-1].val)
-            level = tmp
+        que = [root]
+        while que:
+            level = []
+            for node in que:
+                if node.left: level.append(node.left)
+                if node.right: level.append(node.right)
+            res.append(que[-1].val)
+            que = level
         return res
 
 # 递归
@@ -3695,6 +3362,7 @@ class Solution:
         res = []
         def bfs(node, level):
             if node:
+                # 因为先右边，后左边，所以 append 的第一个数就是 rightSideView
                 if level == len(res):
                     res.append(node.val)
                 bfs(node.right, level + 1)
@@ -3710,26 +3378,6 @@ https://leetcode-cn.com/problems/reorder-list/
 [小明](https://www.bilibili.com/video/BV1Jf4y1Q7y7?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def reorderList(self, head: ListNode) -> None:
-        que = []
-        
-        cur1 = head
-        while cur1.next: # 链表除了首元素全部加入双向队列
-            que.append(cur1.next)
-            cur1 = cur1.next
-        # 双指针
-        cur2 = head
-        i, j = 0, len(que) - 1
-        while i <= j: # 一后一前加入链表
-            cur2.next = que[j] # 头部连接到尾部
-            cur2 = cur2.next
-            j -= 1
-            cur2.next = que[i] # 当i = j还是指向本身
-            cur2 = cur2.next
-            i += 1
-        cur2.next = None # 尾部置空
-
 # 双向队列
 class Solution:
     def reorderList(self, head: ListNode) -> None:
@@ -3740,10 +3388,10 @@ class Solution:
             cur = cur.next
         cur = head
         # 一后一前加入链表
-        while len(que): # 一后一前加入链表
+        while que: # 一后一前加入链表
             cur.next = que.pop()
             cur = cur.next
-            if len(que):
+            if que:
                 cur.next = que.popleft()
                 cur = cur.next
         cur.next = None # 尾部置空
@@ -3824,6 +3472,17 @@ object Solution {
 [官方](https://www.bilibili.com/video/BV1qT4y1J71C?spm_id_from=333.999.0.0)
 
 ```py
+输入：
+           -10
+          /   \
+         9    20     
+             /  \
+            15   7
+输出：42
+解释：最优路径是 15 -> 20 -> 7 ，路径和为 15 + 20 + 7 = 42
+
+
+
 我的思考：
         # 有两种情况：
         # node.val 往上回收, 构成递归
@@ -3837,8 +3496,7 @@ class Solution:
         # left = right = 0
         def subsum(node) -> int:
             nonlocal res # 也可以写成 self.res
-            if not node:
-                return 0
+            if not node: return 0
             # if node.left:
             left = max(subsum(node.left), 0)     # 正负性：left 为负，就不回收
             # if node.right:
@@ -3981,7 +3639,7 @@ class Solution:
         dummy = ListNode(0, head)
         length = getLength(head)
         cur = dummy
-        for i in range(1, length - n + 1):
+        for i in range(length - n):
             cur = cur.next
         cur.next = cur.next.next
         return dummy.next
@@ -4072,7 +3730,7 @@ object Solution1-2 {
 # 思路：先把链表首尾相连，再找到位置断开循环
 class Solution:
     def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        # 易错点：要排除一些特殊情况
+                # 易错点：要排除一些特殊情况
         if not head or not head.next:
             return head
             
@@ -4086,12 +3744,9 @@ class Solution:
         cur.next = head
 
 
-        # cur 指针指向开头
-        cur = cur.next
         # 输入：head = [1,2,3,4,5], k = 2
         # 输出：[4,5,1,2,3]
-        # steps 到达 new head 的前一个 node，就是 3，steps = 5-2-1
-        steps = nodeNum - k % nodeNum - 1
+        steps = nodeNum - k % nodeNum
         for _ in range(steps):
             cur = cur.next
 
@@ -4118,11 +3773,11 @@ class Solution:
         dummy = ListNode(0, head)
         cur = dummy
         # 目的是删除cur的下一个节点
-        while cur.next and cur.next.next:
+        while cur.next and cur.next.next:  # 😁 while 循环
             if cur.next.val == cur.next.next.val:
                 # 把所有等于 x 的结点全部删除
                 x = cur.next.val
-                while cur.next and cur.next.val == x:
+                while cur.next and cur.next.val == x: # 😁 while 循环
                     cur.next = cur.next.next
             else:
                 cur = cur.next
@@ -4145,7 +3800,7 @@ class Solution:
         if not head or not head.next:
             return head
         cur = head
-        while cur.next:
+        while cur.next:  # 😁 while 循环
             if cur.val == cur.next.val:
                 cur.next = cur.next.next # 要么删除
             else:
@@ -4368,16 +4023,17 @@ class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         dummy = cur = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
         carry = 0 # 易错点：carry需要先赋值
-        while l1 or l2 or carry: # 易错点：carry要存在
+
+        while l1 or l2 or carry: # 易错点：carry要存在 # 😁 while 循环
             # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
             # 易错点：调用listnode要有.val
             sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
             tail = sumNode % 10
             carry = sumNode // 10
+
             cur.next = ListNode(tail)
             cur = cur.next
-            # # l1,l2不一定存在，所以不能写成：l1 = l1.next
-            l1 = l1.next if l1 else None
+            l1 = l1.next if l1 else None # # l1,l2不一定存在，所以不能写成：l1 = l1.next
             l2 = l2.next if l2 else None
         return dummy.next
 ```
@@ -4423,28 +4079,29 @@ object Solution {
 ```py
 输入：l1 = [7,2,4,3], l2 = [5,6,4]
 输出：[7,8,0,7]
+
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        s1, s2 = [], []
+        stack1, stack2 = [], []
         while l1:
-            s1.append(l1.val)
+            stack1.append(l1.val)
             l1 = l1.next
         while l2:
-            s2.append(l2.val)
+            stack2.append(l2.val)
             l2 = l2.next
         res = None
         carry = 0
-        while s1 or s2 or carry:
-            a = s1.pop() if s1 else 0 
-            b = s2.pop() if s2 else 0 
+        while stack1 or stack2 or carry:
+            val1 = stack1.pop() if stack1 else 0 
+            val2 = stack2.pop() if stack2 else 0 
 
-            cur = a + b + carry
-            carry = cur // 10
-            tail = cur % 10
+            sumNode = val1 + val2 + carry
+            carry = sumNode // 10
+            tail = sumNode % 10
 
-            curnode = ListNode(tail)
-            curnode.next = res
-            res = curnode
+            cur = ListNode(tail)
+            cur.next = res
+            res = cur
         return res
 
 ```
@@ -4605,6 +4262,27 @@ class Solution:
             root.right = self.buildTree(preorder, inorder[i + 1:])
             return root
 
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if inorder:
+            root = TreeNode(preorder.pop(0)) # preorder 在这里的作用就是 pop(0)
+            i = inorder.index(root.val)
+            root.left = self.buildTree(preorder[:i], inorder[: i])
+            root.right = self.buildTree(preorder[i:], inorder[i + 1:])
+            return root
+            
+print('preorder:',preorder[:i],preorder[i:])
+print('inorder:',inorder[: i],inorder[i + 1:])
+preorder: [9] [20, 15, 7]
+inorder: [9] [15, 20, 7]
+preorder: [] []
+inorder: [] []
+preorder: [15] [7]
+inorder: [15] [7]
+preorder: [] []
+inorder: [] []
+preorder: [] []
+inorder: [] []
 ```
 
 106-从中序与后序遍历序列构造二叉树
@@ -4622,6 +4300,19 @@ class Solution:
             root.left = self.buildTree(inorder[:i], postorder[:i])
             root.right = self.buildTree(inorder[i+1:], postorder[i:])
             return root
+
+print('inorder:',inorder[:i],inorder[i+1:])
+print('postorder:',postorder[:i],postorder[i:])
+inorder: [9] [15, 20, 7]
+postorder: [9] [15, 7, 20]
+inorder: [] []
+postorder: [] []
+inorder: [15] [7]
+postorder: [15] [7]
+inorder: [] []
+postorder: [] []
+inorder: [] []
+postorder: [] []
 ```
 
 ##  50. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
@@ -4667,6 +4358,10 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1tK41137GM?spm_id_from=333.999.0.0)
 
 ```py
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1 if root else 0
+
 class Solution:
     def maxDepth(self, root: TreeNode) -> int:
         if not root:
@@ -5078,18 +4773,32 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1VK411H7o5?spm_id_from=333.999.0.0)
 
 ```py
+输入：
+       4
+     /  \
+    9    0
+  /  \
+ 5    1
+ 
+输出：1026
+解释：
+从根到叶子节点路径 4->9->5 代表数字 495
+从根到叶子节点路径 4->9->1 代表数字 491
+从根到叶子节点路径 4->0 代表数字 40
+因此，数字总和 = 495 + 491 + 40 = 1026
+
+
+
 class Solution:
     def sumNumbers(self, root: TreeNode) -> int:
         res = 0
         
         def dfs(root, acc):
             nonlocal res
-            if not root.left and not root.right: # 易错点：不要忽视了这种情况
+            if not root.left and not root.right: # 结束
                 res += acc * 10 + root.val 
-            if root.left:
-                dfs(root.left, acc * 10 + root.val)
-            if root.right:
-                dfs(root.right, acc * 10 + root.val)
+            if root.left:  dfs(root.left, acc * 10 + root.val)
+            if root.right: dfs(root.right, acc * 10 + root.val)
         dfs(root, 0)
         return res # 在根节点处cur为0，而不是sums
 
@@ -5144,20 +4853,28 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1k54y177fu?spm_id_from=333.999.0.0)
 
 ```py
+           5
+       /      \
+      4        8
+    /   \    /   \
+  11   null 13    4
+ /  \            / \
+7    2          5   1
+输入： targetSum = 22
+输出：[[5,4,11,2],[5,8,4,5]]
+
+
+
 class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
         res=[]
 
         def dfs(node,path,tsum): # node.val == tsum 结束
-
-            if not node:
-                return
-
-            if node.val == tsum and not node.left and not node.right: # 结束条件
-                res.append(path[:] + [node.val])  # 需要深拷贝
-
-            dfs(node.left, path + [node.val], tsum - node.val) # 三个部分都需要状态转移
-            dfs(node.right, path + [node.val], tsum - node.val)
+            if node:
+                if node.val == tsum and not node.left and not node.right: # 结束条件
+                    res.append(path[:] + [node.val])  # 需要深拷贝
+                dfs(node.left, path + [node.val], tsum - node.val) # 三个部分都需要状态转移
+                dfs(node.right, path + [node.val], tsum - node.val)
             
         dfs(root, [], targetSum)
         return res
@@ -5279,17 +4996,23 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1qA411t7LR?spm_id_from=333.999.0.0)
 
 ```py
+          1
+         / \
+        2   3
+       / \     
+      4   5  
+返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
+
 class Solution:
     def diameterOfBinaryTree(self, root: TreeNode) -> int:
         res = 0
         def depth(node):
             nonlocal res
-            if not node:
-                return 0
-            L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
-            R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
-            res = max(res, L + R)
-            return max(L, R)
+            if node:
+                L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
+                R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
+                res = max(res, L + R)
+                return max(L, R)
 
         depth(root)
         return res
@@ -5467,17 +5190,16 @@ class MinStack() {
 ```py
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
-        result = [float('-inf')]
-        valid = True # 必须用valid这个变量，不能用return False
+        res = [float('-inf')]
+        valid = True # 必须用 valid 这个变量，不能用 return False
 
         def traversal(root: TreeNode):
             nonlocal valid # 这一行必不可少，不然虽然不报错，但不能ac
-            if root == None:
-                return
-            traversal(root.left)    # 左
-            if result[-1] >= root.val: valid = False
-            result.append(root.val) # 中序
-            traversal(root.right)   # 右
+            if root:
+                traversal(root.left)    # 左
+                if res[-1] >= root.val: valid = False
+                res.append(root.val) # 中序
+                traversal(root.right)   # 右
 
         traversal(root)
         return valid
@@ -5662,20 +5384,20 @@ class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         # if not root:
         #     return [] 删除
-        level = [root]
-        while level:
-            tmp = []
+        que = [root]
+        while que:
+            level = []
             vals = [] # 补充
-            for n in level:
-                if n: # 修改，因为none节点也需要append
-                    tmp.append(n.left) # if n.left 被删除
-                    tmp.append(n.right) #  if n.right 被删除
-                    vals.append(n.val)  # 补充
+            for node in que:
+                if node: # 修改，因为none节点也需要append
+                    level.append(node.left) # if n.left 被删除
+                    level.append(node.right) #  if n.right 被删除
+                    vals.append(node.val)  # 补充
                 else:
                     vals.append(None) # 修改，因为none节点也需要append
             if vals != vals[::-1]:  # 补充
                 return False  # 补充
-            level = tmp
+            que = level
         return True
 ```
 
@@ -6045,6 +5767,7 @@ class Solution:
         if root.val == targetSum and not root.left and not root.right:
             return True
         return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
+        # 注意：这里用or链接
 
 # 错误写法
 # class Solution:
@@ -6067,18 +5790,18 @@ class Solution:
 ```py
 队列
 class Solution:
-    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
         if not root:
             return False
         que = collections.deque([(root, root.val)])
         while que:
-            node, tmpsum = que.popleft()
-            if not node.left and not node.right and tmpsum == sum:
+            node, acc = que.popleft()
+            if not node.left and not node.right and acc == targetSum:
                 return True
             if node.left:
-                que.append((node.left, node.left.val + tmpsum))
+                que.append((node.left, node.left.val + acc))
             if node.right:
-                que.append((node.right, node.right.val + tmpsum))
+                que.append((node.right, node.right.val + acc))
         return False
 ```
 
@@ -6430,8 +6153,7 @@ object Solution {
 ```py
 class Solution:
     def invertTree(self, root: TreeNode) -> TreeNode:
-        if not root:
-            return root
+        if not root: return root
         
         left = self.invertTree(root.left)
         right = self.invertTree(root.right)
@@ -6442,8 +6164,7 @@ class Solution:
 ```py
 class Solution:
     def invertTree(self, root: TreeNode) -> TreeNode:
-        if not root:
-            return root
+        if not root: return root
         Q = deque([root])
         while Q:
             r = Q.pop()
@@ -7147,37 +6868,15 @@ class Solution:
         if not root: return
         path = []
         def inorder(root):
-            if not root: return 
-            inorder(root.left)
-            path.append(root)
-            inorder(root.right)    
+            if root: 
+                inorder(root.left)
+                path.append(root)
+                inorder(root.right)    
         inorder(root)
-        for i in range(len(path)):
+        for i in range(len(path)): # 构成一个环
             path[i].left = path[i-1]
             path[i].right = path[(i+1)%len(path)] # 也可以写成 path[i + 1 - len(path)]
         return path[0]
-
-class Solution:
-    def treeToDoublyList(self, root: 'Node') -> 'Node':
-        prenode = None
-        head = None
-        def inorder(root):
-            nonlocal prenode, head
-            if root:
-                inorder(root.left)
-                if prenode:
-                    prenode.right, root.left = root, prenode
-                else:
-                    head = root #第一个节点,bst最小的节点
-                prenode = root
-                inorder(root.right)
-
-        if not root:
-            return
-        inorder(root)
-        prenode.right, head.left = head, prenode
-        return head
-
 ```
 
 
@@ -7394,7 +7093,7 @@ class Solution(object):
     def isCompleteTree(self, root):
         stack = [(root, 1)]
         i = 0
-        # 本来这边应该要用 queue 的，因为需要 popleft
+        # 在一个 完全二叉树 中，除了最后一个关卡外，所有关卡都是完全被填满的
         while i < len(stack):
             node, v = stack[i]
             i += 1
@@ -7491,15 +7190,13 @@ object Solution {
 class Solution:
     def kthLargest(self, root: TreeNode, k: int) -> int:
         def inorder(root):
-            if not root:
-                return
-
-            inorder(root.right)
-            self.k -= 1
-            if self.k == 0: 
-                self.res = root.val
-                return
-            inorder(root.left)
+            if root:
+                inorder(root.right)
+                self.k -= 1
+                if self.k == 0: 
+                    self.res = root.val
+                    return 注意，这里return的是【空】
+                inorder(root.left)
 
         self.k = k
         inorder(root)
@@ -7599,7 +7296,7 @@ class Solution:
         return res
 ```
 
-##  106. <a name='MaximumWidthofBinaryTree'></a>662. Maximum Width of Binary Tree
+##  106. <a name='MaximumWidthofBinar'></a>662. Maximum Width of Binary Tree
 
 [花花酱](https://www.bilibili.com/video/BV1cv411q7pb?spm_id_from=333.999.0.0)
 
@@ -7611,12 +7308,26 @@ class Solution:
         res = 0
         queue = collections.deque([(root, 1)])
         while queue:
-            res = max(res, queue[-1][1] - queue[0][1] + 1)# 只能写在这里！否则不存在
+            res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
             for _ in range(len(queue)):
                 node, pos = queue.popleft()
                 if node.left:  queue.append((node.left,  pos * 2))
                 if node.right: queue.append((node.right, pos * 2 + 1))
         return res 
+
+其他写法
+
+class Solution:
+    def widthOfBinaryTree(self, root: TreeNode) -> int:
+        res = 0
+        queue = collections.deque([(root, 0)])
+        while queue:
+            res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
+            for _ in range(len(queue)):
+                node, pos = queue.popleft()
+                if node.left:  queue.append((node.left,  pos * 2 + 1))
+                if node.right: queue.append((node.right, pos * 2 + 2))
+        return res
 ```
 
 ##  107. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
@@ -7633,9 +7344,9 @@ class Codec:
 
     def deserialize(self, data):
         # 前序遍历
-        lis = data.split(',')[::-1]
+        vals = data.split(',')[::-1]
         def func():
-            val = lis.pop()
+            val = vals.pop()
             return TreeNode(val, func(), func()) if val else None
         return func()
 
@@ -7899,21 +7610,24 @@ class ListNode:
 class Solution:    
     def sortOddEvenList(self,head):     
         if not head or not head.next:      
-            return head        
-        oddList,evenList = self.partition(head)        
+            return head 
+        # 第一步：分割    
+        oddList,evenList = self.partition(head)    
+        # 第二步：反转 
         evenList = self.reverse(evenList)        
+        # 第三步：合并
         return self.merge(oddList,evenList)    
 
     def partition(self, head: ListNode) -> ListNode:        
-        evenHead = head.next        
-        odd, even = head, evenHead        
-        while even and even.next:            
-            odd.next = even.next            
-            odd = odd.next            
-            even.next = odd.next            
-            even = even.next        
-        odd.next = None # 节点需要断开
-        return [head,evenHead]    
+        second = head.next        
+        slow, fast = head, second        
+        while fast and fast.next:  # 🌵 while fast and fast.next:
+            slow.next = fast.next            
+            slow = slow.next            
+            fast.next = slow.next            
+            fast = fast.next        
+        slow.next = None # 节点需要断开
+        return [head,second]    
 
     def reverse(self,head):    
         res = None
@@ -7952,7 +7666,7 @@ class Solution:
         dummy1 = ListNode(0)
         dummy2 = ListNode(0)
         slow, fast, cur = dummy1, dummy2, head
-        while cur:
+        while cur:     # 🌵 用 cur 指针
             if cur.val < x:
                 slow.next = cur # dummy1 指向第一个小于x的node
                 slow = slow.next
@@ -8643,13 +8357,13 @@ kthLargest: 先右后左
 class Solution:
     def kthLargest(self, root: TreeNode, k: int) -> int:
         def inorder(root):
-            if not root: return
-            inorder(root.right)
-            self.k -= 1
-            if self.k == 0: 
-                self.res = root.val
-                return
-            inorder(root.left)
+            if root: 
+                inorder(root.right)
+                self.k -= 1
+                if self.k == 0: 
+                    self.res = root.val
+                    return
+                inorder(root.left)
 
         self.k = k
         inorder(root)
@@ -8659,15 +8373,13 @@ kthSmallest: 先左后右
 class Solution:
     def kthSmallest(self, root, k: int) -> int:
         def dfs(root):
-            if not root:
-                return
-
-            dfs(root.left)
-            self.k -= 1
-            if self.k == 0: 
-                self.res = root.val
-                return
-            dfs(root.right)
+            if root: 
+                dfs(root.left)
+                self.k -= 1
+                if self.k == 0: 
+                    self.res = root.val
+                    return
+                dfs(root.right)
 
         self.k = k
         dfs(root)
@@ -9677,7 +9389,7 @@ class Solution:
 
 class Solution:
     def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
-        def dfs(A,B): # 函数的功能要明确，用来判断当前子树是否一致
+        def isSame(A,B): # 函数的功能要明确，用来判断当前子树是否一致
             if not B and not A: 
                 return True
             if not A and B: 
@@ -9686,12 +9398,12 @@ class Solution:
                 return False
             if A.val != B.val: 
                 return False
-            return dfs(A.left, B.left) and dfs(A.right, B.right)
+            return isSame(A.left, B.left) and isSame(A.right, B.right)
         
         if not root or not subRoot:
             return False
         if root.val == subRoot.val:
-            if dfs(root, subRoot):
+            if isSame(root, subRoot):
                 return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
 ```
@@ -10088,8 +9800,6 @@ class Solution:
 
 ```
 
-
-
 ##  162. <a name='-1'></a>114题. 二叉树展开为链表
 
 https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=15731266160913668837&spm_id_from=333.337.0.0
@@ -10114,13 +9824,13 @@ class Solution:
         stack = [root]
         pre = None # 穿针引线
         while stack:
-            tmp = stack.pop()
+            node = stack.pop()
             if pre:
                 pre.left = None # 穿针引线
-                pre.right = tmp # 穿针引线
-            if tmp.right: stack.append(tmp.right)
-            if tmp.left: stack.append(tmp.left) # 目的是left先出：后进，先出
-            pre = tmp
+                pre.right = node # 穿针引线
+            if node.right: stack.append(node.right)
+            if node.left: stack.append(node.left) # 目的是left先出：后进，先出
+            pre = node
         return root
 
 class Solution:
@@ -10128,10 +9838,10 @@ class Solution:
         preorderList = []
         
         def traversal(root: TreeNode):
-            if not root: return
-            preorderList.append(root) # 前序
-            traversal(root.left)    # 左
-            traversal(root.right)   # 右
+            if root: 
+                preorderList.append(root) # 前序
+                traversal(root.left)    # 左
+                traversal(root.right)   # 右
 
         traversal(root)
         n = len(preorderList)
@@ -10930,11 +10640,11 @@ class Solution:
     def minDepth(self, root: TreeNode) -> int:
         if root:
             if root.left and root.right:
-                return 1 + min(self.minDepth(root.left), self.minDepth(root.right))
+                return 1 + min(self.minDepth(root.left), self.minDepth(root.right)) # 如果有2个子树，取较低一层的值
             elif root.left:
-                return 1 + self.minDepth(root.left) #较高一层的值
+                return 1 + self.minDepth(root.left)  # 如果有1个子树，取较高一层的值
             elif root.right:
-                return 1 + self.minDepth(root.right) #较高一层的值
+                return 1 + self.minDepth(root.right) # 如果有1个子树，取较高一层的值
             else: # not root.left and not root.right
                 return 1
         else:
@@ -10952,12 +10662,9 @@ class Solution:
         que = collections.deque([(root, 1)]) # 注意这个写法：[(root, 1)] 的括号
         while que:
             node, depth = que.popleft()
-            if not node.left and not node.right:
-                return depth
-            if node.left: 
-                que.append((node.left, depth + 1)) # 注意这个写法：(node.left, depth + 1) 的括号
-            if node.right:
-                que.append((node.right, depth + 1))
+            if not node.left and not node.right: return depth
+            if node.left:  que.append((node.left, depth + 1)) # 注意这个写法：(node.left, depth + 1) 的括号
+            if node.right: que.append((node.right, depth + 1))
         
 ```
 
@@ -12898,6 +12605,9 @@ class Solution:
 
 
 ```py
+输入：root = [1,2,3,null,5]
+输出：["1->2->5","1->3"]
+
 class Solution:
     def binaryTreePaths(self, root: TreeNode) -> List[str]:
         if not root:
@@ -12906,16 +12616,14 @@ class Solution:
             return [str(root.val)]
         paths = []
         if root.left:
-            for i in self.binaryTreePaths(root.left):
-                paths.append(str(root.val) + '->' + i)
+            for pt in self.binaryTreePaths(root.left):
+                paths.append(str(root.val) + '->' + pt)
         if root.right:
-            for i in self.binaryTreePaths(root.right):
-                paths.append(str(root.val) + '->' + i)
+            for pt in self.binaryTreePaths(root.right):
+                paths.append(str(root.val) + '->' + pt)
         return paths  
-paths 递归每调用一次要创建一个以便给上一层遍历（叠加）
-调用self.binaryTreePaths(root.left)得到的是左子树的全部路径，
-加入左子树为[1,2,3],那么得到的结果是[1,2],[1,3]两组，
-然后还要和根节点进行拼接，所以要用循环。
+        
+
 ```
 
 ```scala
@@ -13417,12 +13125,18 @@ object Solution {
 时间复杂度 O(n), 空间复杂度 O(n)
 
 ```py
-    
+输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+输出：3
+解释：和等于 8 的路径有 3 条，如图所示。
+
+
+
 class Solution:
     def pathSum(self, root: TreeNode, targetSum: int) -> int:
         dic = collections.defaultdict(int)
         dic[0] = 1
         res = 0
+
         def backtrack(root, preSums):
             nonlocal res
             if not root: return 0
@@ -13654,6 +13368,7 @@ class Solution:
 
 ```py
 用 path 的 list
+
 class Solution:
     def getMinimumDifference(self, root: TreeNode) -> int:
         path = []
@@ -13664,7 +13379,7 @@ class Solution:
                 path.append(root.val)
                 inorder(root.right) 
         inorder(root)
-        return min([path[i]-path[i-1] for i in range(1,len(path))])
+        return min([path[i] - path[i-1] for i in range(1, len(path))])
  
  
 用 preval 存储上一个值
