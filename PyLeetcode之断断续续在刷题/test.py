@@ -1,19 +1,35 @@
-class Solution:
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        queue = []  
-        dummy = ListNode(0)
-        
-        cur = dummy # cur 就是穿针引线的针
-        for i in range(len(lists)):
-            if lists[i]: # lists[i]就是head
-                heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
-                lists[i] = lists[i].next 
+class MountainArray:
+   def get(self, index: int) -> int:
+   def length(self) -> int:
 
-        while queue: 
-            val, idx = heapq.heappop(queue)
-            cur.next = ListNode(val)
-            cur = cur.next
-            if lists[idx]: # 此时 lists[idx] 已经是 head 的下一位
-                heapq.heappush(queue, (lists[idx].val, idx)) # 再把每一项 push 上去
-                lists[idx] = lists[idx].next 
-        return dummy.next
+def binary_search(mountain, target, l, r, key=lambda x: x):
+    target = key(target)
+    while l <= r:
+        mid = (l + r) // 2
+        cur = key(mountain.get(mid))
+        if cur == target:
+            return mid
+        elif cur < target:
+            l = mid + 1
+        else:
+            r = mid - 1
+    return -1
+
+class Solution:
+    def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
+        left, right = 0, mountain_arr.length() - 1
+
+        while left <= right:
+            mid = (right + left) // 2       
+            if left == right : 
+                peak = right # 关键在于这里
+            elif mountain_arr.get(mid) < mountain_arr.get(mid + 1): # 关键在于这里，背一背吧
+                left = mid + 1
+            else:
+                right = mid 
+                
+        index = binary_search(mountain_arr, target, 0, peak) # 递增序列 二分查找
+        if index != -1:
+            return index
+        index = binary_search(mountain_arr, target, peak + 1, mountain_arr.length() - 1, lambda x: -x) # 递减序列 二分查找
+        return index

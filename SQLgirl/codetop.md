@@ -410,7 +410,7 @@ class Solution:
         dummy.next = head # 易错点：这句话不要漏
         pre = dummy
         while pre.next and pre.next.next:
-            # 一共3个指针: first,second,cur
+            # 一共3个指针: first,second,pre
             first = pre.next
             second = pre.next.next
             
@@ -497,7 +497,7 @@ class Solution:
         for _ in range(left - 1):
             pre = pre.next
             # 因为需要保留 pre, 所以 left - 1
-
+        NOTE: first在FOR循环外面，second在FOR循环里面
         first = pre.next
         for _ in range(right - left):
             # 易错点：顺序不能错: 1,2,pre
@@ -542,7 +542,7 @@ class LRUCache:
         if key in self.cache:
             self.cache.pop(key)
         if len(self.cache) == self.capacity:
-            self.cache.popitem(last=False)
+            self.cache.popitem(last = False)
         self.cache[key] = value
 
 ```
@@ -815,14 +815,14 @@ class Solution:
         pivot = random.randint(l, r)
         # 先把 nums[pivot] 靠边站
         nums[pivot], nums[r] = nums[r], nums[pivot]
-        i = l - 1
-        for j in range(l, r):
-            if nums[j] < nums[r]: # nums[r] 就是 pivot
-                i += 1
-                nums[j], nums[i] = nums[i], nums[j] # nums[i] 存的都是较小的数字
-        i += 1
-        nums[i], nums[r] = nums[r], nums[i] # pivot 放到中间
-        return i
+        slow = l - 1
+        for fast in range(l, r):
+            if nums[fast] < nums[r]: # nums[r] 就是 pivot
+                slow += 1
+                nums[fast], nums[slow] = nums[slow], nums[fast] # nums[i] 存的都是较小的数字
+        slow += 1
+        nums[slow], nums[r] = nums[r], nums[slow] # pivot 放到中间
+        return slow
     # 这里需要用到 mid
     def randomized_quicksort(self, nums, l, r):
         if r - l <= 0:
@@ -896,15 +896,15 @@ class Solution:
         self.merge_sort(nums, l, mid)
         self.merge_sort(nums, mid + 1, r)
         tmp = []
-        i, j = l, mid + 1   # i, j 是两个起始点
-        while i <= mid or j <= r:
+        i1, i2 = l, mid + 1   # i, j 是两个起始点
+        while i1 <= mid or i2 <= r:
             # 如果 前半部部分结束了，或者后半部分没有结束
-            if i > mid or (j <= r and nums[j] < nums[i]): # 因为前面是or，所以这里必须是对i进行约束
-                tmp.append(nums[j])
-                j += 1
+            if i1 > mid or (i2 <= r and nums[i2] < nums[i1]): # 因为前面是or，所以这里必须是对i进行约束
+                tmp.append(nums[i2])
+                i2 += 1
             else:
-                tmp.append(nums[i])
-                i += 1
+                tmp.append(nums[i1])
+                i1 += 1
 
         nums[l: r + 1] = tmp
 
@@ -929,6 +929,320 @@ class Solution:
             ans += [i] * bucket[i]
         return ans
 你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
+```
+##  219. <a name='8.'></a>补充题8. 计算数组的小和
+
+
+https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
+
+```py
+在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
+
+例子：
+
+[1,3,4,2,5]
+
+1左边比1小的数，没有；
+
+3左边比3小的数，1；
+
+4左边比4小的数，1、3；
+
+2左边比2小的数，1；
+
+5左边比5小的数，1、3、4、2；
+
+所以小和为1+1+3+1+1+3+4+2=16
+
+要求时间复杂度O(NlogN)，空间复杂度O(N)
+```
+
+
+```py
+
+
+# 这里有2个目的：
+# 1. 排序
+# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
+
+
+def sortSum(arr, left, mid, right):
+    tmparr = []
+    sums = 0
+    i, j = left, mid + 1
+    while i <= mid and j <= right:
+        if arr[i] <= arr[j]:
+            sums += arr[i] * (right-j+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+            tmparr.append(arr[i])
+            i += 1
+        else:
+            tmparr.append(arr[j])   # 把小的值先往res里面填写
+            j += 1
+    tmparr += arr[i:mid + 1] or arr[j:right + 1]   # 全都排完之后，左半部分有剩余
+    arr[left: right + 1] = tmparr   # 修改原 arr 的值
+    return sums
+
+def mergesmallSum(arr, left, right):
+    if left == right:
+        return 0
+    mid = (left + right) // 2
+    s1 = mergesmallSum(arr, left, mid)
+    s2 = mergesmallSum(arr, mid + 1, right)
+    s3 = sortSum(arr, left, mid, right)
+    return  s1+s2+s3 
+
+    
+N = int(input())
+nums = list(map(int, input().split()))
+print(mergesmallSum(nums, 0, N-1))
+```
+
+##  46. <a name='SortList'></a>148. Sort List
+
+[花花酱](https://www.bilibili.com/video/BV1jW411d7z7?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1VK411A7Gm?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        dummy = ListNode(-1, head)
+        sortlist = []
+        # 先把链表断开
+        while head:
+            tmp = head.next
+            head.next = None
+            sortlist.append(head)
+            head = tmp
+        # 排序
+        sortlist = sorted(sortlist, key = lambda x: x.val)
+        # 把链表串联起来
+        n = len(sortlist)
+        if n == 0:
+            return None
+        dummy.next = sortlist[0]
+        for i in range(n - 1):
+            sortlist[i].next = sortlist[i + 1]
+        
+        return dummy.next
+```
+
+```py
+# py3 归并排序，递归实现。空间复杂度主要在递归栈深度：O( log(n) )，整个递归过程有点像后序遍历
+
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        # 第一步：递归条件
+        if not head or not head.next:
+            return head
+            
+        # 第二步：左右切分
+        mid = self.findmid(head)
+        left = head # 指定左右
+        right = mid.next # 指定左右
+        mid.next = None # 断开链接
+
+        # 第三步：左右递归 + 两两合并
+        l = self.sortList(left)
+        r = self.sortList(right)
+        return self.merge(l, r) # 最初一定"两两合并"
+
+    def findmid(self,head):
+        slow, fast = head, head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def merge(self,l,r):
+        dummy = ListNode(0)
+        cur = dummy
+        while l and r:
+            if l.val <= r.val:
+                cur.next = l
+                l = l.next # 下一个
+            else:
+                cur.next = r
+                r = r.next # 下一个
+            cur = cur.next # 下一个
+        cur.next = l or r
+        return dummy.next
+
+        # 基本用法：
+        # v = p1 or p2
+
+        # 它完成的效果等同于：
+        # if p1:
+        #     v = p1
+        # else:
+        #     v = p2
+```
+
+##  49. <a name='-1'></a>105-从前序与中序遍历序列构
+
+[哈哈哈](https://www.bilibili.com/video/BV1uv411B73D?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1x54y1d7e8?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV1ry4y1U7ZR?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV14A411q7Nv?spm_id_from=333.999.0.0)
+
+> PYTHON 递归
+
+```py
+class Solution:
+    def buildTree(self, preorder, inorder):
+        if inorder:
+            root = TreeNode(preorder.pop(0)) # preorder 在这里的作用就是 pop(0)
+            i = inorder.index(root.val)
+            root.left = self.buildTree(preorder, inorder[: i])
+            root.right = self.buildTree(preorder, inorder[i + 1:])
+            return root
+
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if inorder:
+            root = TreeNode(preorder.pop(0)) # preorder 在这里的作用就是 pop(0)
+            i = inorder.index(root.val)
+            root.left = self.buildTree(preorder[:i], inorder[: i])
+            root.right = self.buildTree(preorder[i:], inorder[i + 1:])
+            return root
+            
+print('preorder:',preorder[:i],preorder[i:])
+print('inorder:',inorder[: i],inorder[i + 1:])
+preorder: [9] [20, 15, 7]
+inorder: [9] [15, 20, 7]
+preorder: [] []
+inorder: [] []
+preorder: [15] [7]
+inorder: [15] [7]
+preorder: [] []
+inorder: [] []
+preorder: [] []
+inorder: [] []
+```
+
+106-从中序与后序遍历序列构造二叉树
+
+[哈哈哈](https://www.bilibili.com/video/BV1r5411W7d2?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1jh411Z7y8?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+        if inorder:
+            root = TreeNode(postorder.pop())
+            i = inorder.index(root.val)
+            root.left = self.buildTree(inorder[:i], postorder[:i])
+            root.right = self.buildTree(inorder[i+1:], postorder[i:])
+            return root
+
+print('inorder:',inorder[:i],inorder[i+1:])
+print('postorder:',postorder[:i],postorder[i:])
+inorder: [9] [15, 20, 7]
+postorder: [9] [15, 7, 20]
+inorder: [] []
+postorder: [] []
+inorder: [15] [7]
+postorder: [15] [7]
+inorder: [] []
+postorder: [] []
+inorder: [] []
+postorder: [] []
+```
+
+##  277. <a name='-1'></a>109题. 有序链表转换二叉搜索树
+
+https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
+
+https://www.bilibili.com/video/BV1ff4y197dS?spm_id_from=333.999.0.0
+
+当递归的是一个链表`头`时，需要切断
+
+https://www.bilibili.com/video/BV19K411T73P?p=2&spm_id_from=pageDriver
+
+当递归的是一个链表`头尾`时，不需要切断
+
+```py
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        def getMedian(head: ListNode, tail: ListNode) -> ListNode:
+            fast = slow = head
+            # 和这种写法很像：while fast and fast.next:
+            while fast != tail and fast.next != tail:
+                fast = fast.next.next
+                slow = slow.next
+            return slow
+        
+        def buildTree(left: ListNode, right: ListNode) -> TreeNode:
+            if left == right:
+                return None
+            mid = getMedian(left, right)
+            root = TreeNode(mid.val)
+            root.left = buildTree(left, mid) # 从 head 到 mid-1，所以我们在 findMid 方程里面，需要对 List 进行切分
+            root.right = buildTree(mid.next, right) # 从 mid+1 到 tail
+            return root
+        
+        return buildTree(head, None)
+```
+
+
+##  204. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
+
+[花花酱](https://www.bilibili.com/video/BV1F7411H7tH?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1JJ411q74U?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7FR?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Wa411c7tS?spm_id_from=333.999.0.0)
+
+> python
+
+```py
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        if nums:
+            mid = len(nums) // 2
+            root = TreeNode(nums[mid])
+            root.left = self.sortedArrayToBST(nums[:mid])
+            root.right = self.sortedArrayToBST(nums[mid+1:])
+            return root
+```
+
+scala 中没有这种形式的写法 nums[:mid]，nums[mid+1:]
+
+```scala
+/**
+ * Definition for a binary tree node.
+ * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
+ *   var value: Int = _value
+ *   var left: TreeNode = _left
+ *   var right: TreeNode = _right
+ * }
+ */
+object Solution {
+    
+    def formTree(nums: Array[Int], begin: Int, end: Int): TreeNode = {
+        var mid = begin + Math.ceil((end - begin)/2).toInt
+        TreeNode(
+            nums(mid), 
+            if(mid <= begin) null else formTree(nums, begin, mid-1), 
+            if(mid >= end) null else formTree(nums, mid+1, end)
+        )
+    }
+    
+    def sortedArrayToBST(nums: Array[Int]): TreeNode = {
+        if(nums.isEmpty){
+            null
+        }else{
+            formTree(nums, 0, nums.size - 1)
+        }
+    }
+}
+
 ```
 
 ##  7. <a name=''></a>15. 三数之和
@@ -1937,35 +2251,36 @@ object Solution1-3 {
 * 时间复杂度:O(1)
 
 ```py
-class Solution:
-    def longestPalindrome(self, s: str) -> str:
-        lenStr = len(s)
+容易错
+# class Solution:
+#     def longestPalindrome(self, s: str) -> str:
+#         lenStr = len(s)
 
-        if lenStr == 0:
-            return ''
+#         if lenStr == 0:
+#             return ''
 
-        if lenStr == 1:
-            return s
+#         if lenStr == 1:
+#             return s
 
 
-        def palinLen(l,r) -> int:
-            while l >= 0 and r < lenStr and s[l] == s[r]: # 注意：边界
-                l -= 1
-                r += 1
-            return r - l - 1 # 注意：是 “-1”
+#         def palinLen(l,r) -> int:
+#             while l >= 0 and r < lenStr and s[l] == s[r]: # 注意：边界
+#                 l -= 1
+#                 r += 1
+#             return r - l - 1 # 注意：是 “-1”
 
-        start = 0  
-        end = 1 # 注意：在第一次的时候，end = 1
-        maxmaxLen = maxLen = 1
+#         start = 0  
+#         end = 1 # 注意：在第一次的时候，end = 1
+#         maxmaxLen = maxLen = 1
 
-        for mid in range(lenStr):
-            maxLen = max(palinLen(mid, mid), palinLen(mid, mid + 1))
+#         for mid in range(lenStr):
+#             maxLen = max(palinLen(mid, mid), palinLen(mid, mid + 1))
             
-            if maxLen > maxmaxLen:
-                maxmaxLen = maxLen
-                start = mid - (maxLen - 1) // 2 #易错点：-1，最好背一背
-                end = start + maxLen
-        return s[start:end]
+#             if maxLen > maxmaxLen:
+#                 maxmaxLen = maxLen
+#                 start = mid - (maxLen - 1) // 2 #易错点：-1，最好背一背
+#                 end = start + maxLen
+#         return s[start:end]
 ```
 
 动态规划法：
@@ -2653,6 +2968,9 @@ class Solution:
 
 ```py
 最小堆: 这里下一位的表示方法为 j + 1 和 if j != n - 1:
+时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
+
+空间复杂度：O(n)，堆的大小始终为 n。
 
 class Solution:
     def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
@@ -2677,6 +2995,11 @@ class Solution:
             # [(13, 2, 1)]
 
 二分
+时间复杂度：O(nlog(r−l))，二分查找进行次数为 O(log(r−l))，每次操作时间复杂度为 O(n)。
+
+空间复杂度：O(1)。
+
+
 import bisect
 class Solution(object):
     def kthSmallest(self, matrix, k):
@@ -2691,86 +3014,7 @@ class Solution(object):
 ```
 
 
-##  46. <a name='SortList'></a>148. Sort List
 
-[花花酱](https://www.bilibili.com/video/BV1jW411d7z7?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1VK411A7Gm?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def sortList(self, head: ListNode) -> ListNode:
-        dummy = ListNode(-1, head)
-        sortlist = []
-        # 先把链表断开
-        while head:
-            tmp = head.next
-            head.next = None
-            sortlist.append(head)
-            head = tmp
-        # 排序
-        sortlist = sorted(sortlist, key = lambda x: x.val)
-        # 把链表串联起来
-        n = len(sortlist)
-        if n == 0:
-            return None
-        dummy.next = sortlist[0]
-        for i in range(n - 1):
-            sortlist[i].next = sortlist[i + 1]
-        
-        return dummy.next
-```
-
-```py
-# py3 归并排序，递归实现。空间复杂度主要在递归栈深度：O( log(n) )，整个递归过程有点像后序遍历
-
-class Solution:
-    def sortList(self, head: ListNode) -> ListNode:
-        # 第一步：递归条件
-        if not head or not head.next:
-            return head
-            
-        # 第二步：左右切分
-        mid = self.findmid(head)
-        left = head # 指定左右
-        right = mid.next # 指定左右
-        mid.next = None # 断开链接
-
-        # 第三步：左右递归 + 两两合并
-        l = self.sortList(left)
-        r = self.sortList(right)
-        return self.merge(l, r) # 最初一定"两两合并"
-
-    def findmid(self,head):
-        slow, fast = head, head
-        while fast.next and fast.next.next:
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-    def merge(self,l,r):
-        dummy = ListNode(0)
-        cur = dummy
-        while l and r:
-            if l.val <= r.val:
-                cur.next = l
-                l = l.next # 下一个
-            else:
-                cur.next = r
-                r = r.next # 下一个
-            cur = cur.next # 下一个
-        cur.next = l or r
-        return dummy.next
-
-        # 基本用法：
-        # v = p1 or p2
-
-        # 它完成的效果等同于：
-        # if p1:
-        #     v = p1
-        # else:
-        #     v = p2
-```
 
 
 
@@ -4121,6 +4365,63 @@ class Solution:
         return head
 ```
 
+##  98. <a name='-1'></a>209-长度最小的子数组
+
+[哈哈哈](https://www.bilibili.com/video/BV1JZ4y1N7Rt?spm_id_from=333.999.0.0)
+
+```py
+暴力解法；
+
+class Solution:
+    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        minlen = n + 1
+        for i in range(n):
+            total = 0
+            #  连续子数组, 所以是 i 到 j 累加
+            for j in range(i, n):
+                total += nums[j]
+                if total >= s:
+                    minlen = min(minlen, j - i + 1)
+                    break
+        
+        return 0 if minlen == n + 1 else minlen
+```
+
+
+```py
+       
+O(n log n) 时间复杂度，用二分
+
+class Solution:
+    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+        l, r, res = 0, len(nums), 0
+        def isWinEnough(size):
+            sums = 0
+            for i in range(len(nums)):
+                sums += nums[i]
+                # 固定大小的滑动窗口
+                if i >= size:
+                    sums -= nums[i - size]
+                # 然后判断是否满足要求
+                if sums >= s:
+                    return True
+            return False
+            
+        while l <= r:
+            mid = (l + r) // 2  # 滑动窗口大小
+            if isWinEnough(mid):  # 如果这个大小的窗口可以那么就缩小
+                res = mid
+                r = mid - 1
+            else:  # 否则就增大窗口
+                l = mid + 1
+        return res
+
+```
+
 ##  42. <a name='SqrtxHJ107'></a>69 Sqrt(x) 见 HJ107 求解立方根
 
 [花花酱](https://www.bilibili.com/video/BV1WW411C7YN?spm_id_from=333.999.0.0)
@@ -4553,172 +4854,7 @@ class Solution:
 
 ```
 
-##  49. <a name='-1'></a>105-从前序与中序遍历序列构
 
-[哈哈哈](https://www.bilibili.com/video/BV1uv411B73D?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1x54y1d7e8?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1ry4y1U7ZR?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV14A411q7Nv?spm_id_from=333.999.0.0)
-
-> PYTHON 递归
-
-```py
-class Solution:
-    def buildTree(self, preorder, inorder):
-        if inorder:
-            root = TreeNode(preorder.pop(0)) # preorder 在这里的作用就是 pop(0)
-            i = inorder.index(root.val)
-            root.left = self.buildTree(preorder, inorder[: i])
-            root.right = self.buildTree(preorder, inorder[i + 1:])
-            return root
-
-class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        if inorder:
-            root = TreeNode(preorder.pop(0)) # preorder 在这里的作用就是 pop(0)
-            i = inorder.index(root.val)
-            root.left = self.buildTree(preorder[:i], inorder[: i])
-            root.right = self.buildTree(preorder[i:], inorder[i + 1:])
-            return root
-            
-print('preorder:',preorder[:i],preorder[i:])
-print('inorder:',inorder[: i],inorder[i + 1:])
-preorder: [9] [20, 15, 7]
-inorder: [9] [15, 20, 7]
-preorder: [] []
-inorder: [] []
-preorder: [15] [7]
-inorder: [15] [7]
-preorder: [] []
-inorder: [] []
-preorder: [] []
-inorder: [] []
-```
-
-106-从中序与后序遍历序列构造二叉树
-
-[哈哈哈](https://www.bilibili.com/video/BV1r5411W7d2?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1jh411Z7y8?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        if inorder:
-            root = TreeNode(postorder.pop())
-            i = inorder.index(root.val)
-            root.left = self.buildTree(inorder[:i], postorder[:i])
-            root.right = self.buildTree(inorder[i+1:], postorder[i:])
-            return root
-
-print('inorder:',inorder[:i],inorder[i+1:])
-print('postorder:',postorder[:i],postorder[i:])
-inorder: [9] [15, 20, 7]
-postorder: [9] [15, 7, 20]
-inorder: [] []
-postorder: [] []
-inorder: [15] [7]
-postorder: [15] [7]
-inorder: [] []
-postorder: [] []
-inorder: [] []
-postorder: [] []
-```
-
-##  277. <a name='-1'></a>109题. 有序链表转换二叉搜索树
-
-https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
-
-https://www.bilibili.com/video/BV1ff4y197dS?spm_id_from=333.999.0.0
-
-当递归的是一个链表`头`时，需要切断
-
-https://www.bilibili.com/video/BV19K411T73P?p=2&spm_id_from=pageDriver
-
-当递归的是一个链表`头尾`时，不需要切断
-
-```py
-class Solution:
-    def sortedListToBST(self, head: ListNode) -> TreeNode:
-        def getMedian(head: ListNode, tail: ListNode) -> ListNode:
-            fast = slow = head
-            # 和这种写法很像：while fast and fast.next:
-            while fast != tail and fast.next != tail:
-                fast = fast.next.next
-                slow = slow.next
-            return slow
-        
-        def buildTree(left: ListNode, right: ListNode) -> TreeNode:
-            if left == right:
-                return None
-            mid = getMedian(left, right)
-            root = TreeNode(mid.val)
-            root.left = buildTree(left, mid) # 从 head 到 mid-1，所以我们在 findMid 方程里面，需要对 List 进行切分
-            root.right = buildTree(mid.next, right) # 从 mid+1 到 tail
-            return root
-        
-        return buildTree(head, None)
-```
-
-
-##  204. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
-
-[花花酱](https://www.bilibili.com/video/BV1F7411H7tH?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1JJ411q74U?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7FR?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Wa411c7tS?spm_id_from=333.999.0.0)
-
-> python
-
-```py
-class Solution:
-    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
-        if nums:
-            mid = len(nums) // 2
-            root = TreeNode(nums[mid])
-            root.left = self.sortedArrayToBST(nums[:mid])
-            root.right = self.sortedArrayToBST(nums[mid+1:])
-            return root
-```
-
-scala 中没有这种形式的写法 nums[:mid]，nums[mid+1:]
-
-```scala
-/**
- * Definition for a binary tree node.
- * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
- *   var value: Int = _value
- *   var left: TreeNode = _left
- *   var right: TreeNode = _right
- * }
- */
-object Solution {
-    
-    def formTree(nums: Array[Int], begin: Int, end: Int): TreeNode = {
-        var mid = begin + Math.ceil((end - begin)/2).toInt
-        TreeNode(
-            nums(mid), 
-            if(mid <= begin) null else formTree(nums, begin, mid-1), 
-            if(mid >= end) null else formTree(nums, mid+1, end)
-        )
-    }
-    
-    def sortedArrayToBST(nums: Array[Int]): TreeNode = {
-        if(nums.isEmpty){
-            null
-        }else{
-            formTree(nums, 0, nums.size - 1)
-        }
-    }
-}
-
-```
 
 ##  50. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
 
@@ -6730,6 +6866,78 @@ class Solution:
 
 # 5 day (得分 = 6分) 69
 
+
+##  87. <a name='FindPeakElement'></a>162. Find Peak Element
+
+[小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1 
+        while l < r:
+            mid = (l + r) // 2
+            if nums[mid] < nums[mid + 1]:
+                l = mid + 1
+            else:
+                r = mid
+        return l
+# [1,2,1,3,5,6,4]
+# 3 < 5, 向右移动，left 指向 5，right 指向 4，想较大值方向移动
+# 6 > 4, 向左移动，left 指向 5，right 指向 6 
+# 5 < 6, 向右移动，left 指向 6，right 指向 6 
+```
+
+##  180. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
+
+[花花酱](https://www.bilibili.com/video/BV1m5411V7x7?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1GK4115778?spm_id_from=333.999.0.0)
+
+```py
+注意：这里用
+MountainArray.get(k) - 会返回数组中索引为k 的元素（下标从 0 开始）
+MountainArray.length() - 会返回该数组的长度
+
+"""
+This is MountainArray's API interface.
+You should not implement it, or speculate about its implementation
+"""
+class MountainArray:
+   def get(self, index: int) -> int:
+   def length(self) -> int:
+
+def binary_search(mountain, target, l, r, key=lambda x: x):
+    target = key(target)
+    while l <= r:
+        mid = (l + r) // 2
+        cur = key(mountain.get(mid))
+        if cur == target:
+            return mid
+        elif cur < target:
+            l = mid + 1
+        else:
+            r = mid - 1
+    return -1
+
+class Solution:
+    def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
+        l, r = 0, mountain_arr.length() - 1
+        while l < r:
+            mid = (l + r) // 2
+            if mountain_arr.get(mid) < mountain_arr.get(mid + 1):
+                l = mid + 1
+            else:
+                r = mid
+        peak = l
+        index = binary_search(mountain_arr, target, 0, peak) # 递增序列 二分查找
+        if index != -1:
+            return index
+        index = binary_search(mountain_arr, target, peak + 1, mountain_arr.length() - 1, lambda x: -x) # 递减序列 二分查找
+        return index
+
+```
+
 ##  82. <a name='-1'></a>153-寻找旋转排序数组中的最小值
 
 [哈哈哈](https://www.bilibili.com/video/BV1bT4y1w7yK?spm_id_from=333.999.0.0)
@@ -6745,12 +6953,12 @@ class Solution:
 
         while left <= right:
             mid = (right + left) // 2       
-            if nums[mid] == nums[right]:    # 此时 left 和 right 相等，直接返回
+            if  nums[mid] == nums[right]:    # 此时 left 和 right 相等，直接返回
                 return nums[right]
             elif nums[mid] < nums[right]:   # 比右界小，nums[mid] 可能是最小值，不能去掉
                 right = mid                 # 比如 [5,6,7,0,1,2,4]
             else:                           # 比右界大，nums[mid] 肯定不会是最小值     
-                left = mid + 1
+                left = mid + 1              # 比如 [4,5,6,7,0,1,2]
 ```
 
 ```scala
@@ -6941,30 +7149,6 @@ object Solution {
 }
 ```
 
-##  87. <a name='FindPeakElement'></a>162. Find Peak Element
-
-[小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def findPeakElement(self, nums: List[int]) -> int:
-        l = 0 
-        r = len(nums) - 1 
-
-        while l <= r:
-            mid = (l + r) >> 1
-
-            if l == r : return r # 关键在于这里
-
-            elif nums[mid] < nums[mid + 1]: # 关键在于这里，背一背吧
-                l = mid + 1
-            elif nums[mid] > nums[mid + 1]:
-                r = mid # right 可能是最终结果，所以不能省略
-# [1,2,1,3,5,6,4]
-# 3 < 5, 向右移动，left 指向 5，right 指向 4，想较大值方向移动
-# 6 > 4, 向左移动，left 指向 5，right 指向 6 
-# 5 < 6, 向右移动，left 指向 6，right 指向 6 
-```
 
 ##  88. <a name='Searcha2DMatrix'></a>240. 二维数组的查找 - 74 Search a 2D Matrix
 
@@ -7474,62 +7658,7 @@ object Solution {
 
 ```
 
-##  98. <a name='-1'></a>209-长度最小的子数组
 
-[哈哈哈](https://www.bilibili.com/video/BV1JZ4y1N7Rt?spm_id_from=333.999.0.0)
-
-```py
-暴力解法；
-
-class Solution:
-    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
-        if not nums:
-            return 0
-        
-        n = len(nums)
-        minlen = n + 1
-        for i in range(n):
-            total = 0
-            #  连续子数组, 所以是 i 到 j 累加
-            for j in range(i, n):
-                total += nums[j]
-                if total >= s:
-                    minlen = min(minlen, j - i + 1)
-                    break
-        
-        return 0 if minlen == n + 1 else minlen
-```
-
-
-```py
-       
-O(n log n) 时间复杂度，用二分
-
-class Solution:
-    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
-        l, r, res = 0, len(nums), 0
-        def isWinEnough(size):
-            sums = 0
-            for i in range(len(nums)):
-                sums += nums[i]
-                # 固定大小的滑动窗口
-                if i >= size:
-                    sums -= nums[i - size]
-                # 然后判断是否满足要求
-                if sums >= s:
-                    return True
-            return False
-            
-        while l <= r:
-            mid = (l + r) // 2  # 滑动窗口大小
-            if isWinEnough(mid):  # 如果这个大小的窗口可以那么就缩小
-                res = mid
-                r = mid - 1
-            else:  # 否则就增大窗口
-                l = mid + 1
-        return res
-
-```
 
 ##  99. <a name='BasicCalculatorII-224.'></a>227 Basic Calculator II - 见 224. 基本计算器
 
@@ -9103,6 +9232,10 @@ class Solution:
 要求：
 
 只用常量级 O(1) 的额外空间
+输入：nums = [1,3,4,2,2]
+输出：2
+输入：nums = [3,1,3,4,2]
+输出：3
 
 class Solution(object):
     def findDuplicate(self, nums):
@@ -9113,8 +9246,9 @@ class Solution(object):
             cnt = sum(x <= mid for x in nums)
             if cnt > mid:
                 high = mid - 1
-            else:
+            else: # cnt <= mid:
                 low = mid + 1
+        return low
 
 线性级时间复杂度 O(n)
 
@@ -10705,55 +10839,7 @@ class Solution(object):
         return res
 ```
 
-##  180. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
 
-[花花酱](https://www.bilibili.com/video/BV1m5411V7x7?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1GK4115778?spm_id_from=333.999.0.0)
-
-```py
-注意：这里用
-MountainArray.get(k) - 会返回数组中索引为k 的元素（下标从 0 开始）
-MountainArray.length() - 会返回该数组的长度
-
-"""
-This is MountainArray's API interface.
-You should not implement it, or speculate about its implementation
-"""
-class MountainArray:
-   def get(self, index: int) -> int:
-   def length(self) -> int:
-
-def binary_search(mountain, target, l, r, key=lambda x: x):
-    target = key(target)
-    while l <= r:
-        mid = (l + r) // 2
-        cur = key(mountain.get(mid))
-        if cur == target:
-            return mid
-        elif cur < target:
-            l = mid + 1
-        else:
-            r = mid - 1
-    return -1
-
-class Solution:
-    def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
-        l, r = 0, mountain_arr.length() - 1
-        while l < r:
-            mid = (l + r) // 2
-            if mountain_arr.get(mid) < mountain_arr.get(mid + 1):
-                l = mid + 1
-            else:
-                r = mid
-        peak = l
-        index = binary_search(mountain_arr, target, 0, peak) # 递增序列 二分查找
-        if index != -1:
-            return index
-        index = binary_search(mountain_arr, target, peak + 1, mountain_arr.length() - 1, lambda x: -x) # 递增序列 二分查找
-        return index
-
-```
 
 
 ##  181. <a name='-1'></a>670. 最大交换
@@ -12241,69 +12327,7 @@ class Solution:
         return res
 ```
 
-##  219. <a name='8.'></a>补充题8. 计算数组的小和
 
-
-https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
-
-```py
-在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
-
-例子：
-
-[1,3,4,2,5]
-
-1左边比1小的数，没有；
-
-3左边比3小的数，1；
-
-4左边比4小的数，1、3；
-
-2左边比2小的数，1；
-
-5左边比5小的数，1、3、4、2；
-
-所以小和为1+1+3+1+1+3+4+2=16
-
-要求时间复杂度O(NlogN)，空间复杂度O(N)
-```
-
-
-```py
-def mergesmallSum(arr, left, right):
-    if left == right:
-        return 0
-    mid = (left + right) // 2
-    s1 = mergesmallSum(arr, left, mid)
-    s2 = mergesmallSum(arr, mid + 1, right)
-    s3 = sortSum(arr, left, mid, right)
-    return  s1+s2+s3 
-
-# 这里有2个目的：
-# 1. 排序
-# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
-
-
-def sortSum(arr, left, mid, right):
-    tmparr = []
-    sums = 0
-    i, j = left, mid + 1
-    while i <= mid and j <= right:
-        if arr[i] <= arr[j]:
-            sums += arr[i] * (right-j+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
-            tmparr.append(arr[i])
-            i += 1
-        else:
-            tmparr.append(arr[j])   # 把小的值先往res里面填写
-            j += 1
-    tmparr += arr[i:mid + 1] or arr[j:right + 1]   # 全都排完之后，左半部分有剩余
-    arr[left: right + 1] = tmparr   # 修改原 arr 的值
-    return sums
-  
-N = int(input())
-nums = list(map(int, input().split()))
-print(mergesmallSum(nums, 0, N-1))
-```
 
 ##  220. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
 
