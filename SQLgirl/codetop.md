@@ -815,12 +815,11 @@ class Solution:
         pivot = random.randint(l, r)
         # 先把 nums[pivot] 靠边站
         nums[pivot], nums[r] = nums[r], nums[pivot]
-        slow = l - 1
+        slow = l
         for fast in range(l, r):
             if nums[fast] < nums[r]: # nums[r] 就是 pivot
-                slow += 1
                 nums[fast], nums[slow] = nums[slow], nums[fast] # nums[i] 存的都是较小的数字
-        slow += 1
+                slow += 1
         nums[slow], nums[r] = nums[r], nums[slow] # pivot 放到中间
         return slow
     # 这里需要用到 mid
@@ -888,6 +887,9 @@ class Solution:
 
 ```py
 class Solution:
+    '''
+    在原地排序，不需要 return
+    '''
     def merge_sort(self, nums, l, r):
         if l == r:
             return
@@ -964,22 +966,24 @@ https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
 # 这里有2个目的：
 # 1. 排序
 # 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
+    '''
+    在原地排序，不需要 return
+    '''
 
-
-def sortSum(arr, left, mid, right):
-    tmparr = []
+def merge(nums, l, mid, r):
+    tmp = []
     sums = 0
-    i, j = left, mid + 1
-    while i <= mid and j <= right:
-        if arr[i] <= arr[j]:
-            sums += arr[i] * (right-j+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
-            tmparr.append(arr[i])
-            i += 1
+    i1, i2 = l, mid + 1
+    while i1 <= mid and i2 <= r:
+        if nums[i1] <= nums[i2]:
+            sums += nums[i1] * (r-i2+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+            tmp.append(nums[i1])
+            i1 += 1
         else:
-            tmparr.append(arr[j])   # 把小的值先往res里面填写
-            j += 1
-    tmparr += arr[i:mid + 1] or arr[j:right + 1]   # 全都排完之后，左半部分有剩余
-    arr[left: right + 1] = tmparr   # 修改原 arr 的值
+            tmp.append(nums[i2])   # 把小的值先往res里面填写
+            i2 += 1
+    tmp += nums[i1:mid + 1] or nums[i2:r + 1]   # 全都排完之后，左半部分有剩余
+    nums[l: r + 1] = tmp   # 修改原 arr 的值
     return sums
 
 def mergesmallSum(arr, left, right):
@@ -988,7 +992,7 @@ def mergesmallSum(arr, left, right):
     mid = (left + right) // 2
     s1 = mergesmallSum(arr, left, mid)
     s2 = mergesmallSum(arr, mid + 1, right)
-    s3 = sortSum(arr, left, mid, right)
+    s3 = merge(arr, left, mid, right)
     return  s1+s2+s3 
 
     
@@ -1028,9 +1032,14 @@ class Solution:
 ```
 
 ```py
-# py3 归并排序，递归实现。空间复杂度主要在递归栈深度：O( log(n) )，整个递归过程有点像后序遍历
+# 归并排序，递归实现。
+# 空间复杂度主要在递归栈深度：O( log(n) )，
+# 整个递归过程有点像 后序遍历
 
 class Solution:
+    '''
+    链表排序，需要 return
+    '''
     def sortList(self, head: ListNode) -> ListNode:
         # 第一步：递归条件
         if not head or not head.next:
@@ -1041,7 +1050,9 @@ class Solution:
         left = head # 指定左右
         right = mid.next # 指定左右
         mid.next = None # 断开链接
-
+    '''
+    归并排序，先排序，再归并
+    '''
         # 第三步：左右递归 + 两两合并
         l = self.sortList(left)
         r = self.sortList(right)
@@ -2095,14 +2106,13 @@ p = 5, q = 4  输出：5
 
 class Solution:
     def lowestCommonAncestor(self, root, p, q) -> 'TreeNode':
-
         if root in (None, p, q):
             return root 
 
         L = self.lowestCommonAncestor(root.left, p, q) # 递归到 5 的时候，就直接返回了
         R = self.lowestCommonAncestor(root.right, p, q) # 递归到 right 的时候，永远是none
 
-        return R if None == L else L if None == R else root
+        return R if not L else L if not R else root
 ```
 
 ```scala
@@ -2999,13 +3009,29 @@ class Solution:
 
 空间复杂度：O(1)。
 
+[ 1, 5, 9]
+[10,11,13]
+[12,13,15]
+k = 8
+1 + 15 一半 8
+9 + 15 一半 12
+13 + 15 一半 14
+13 + 13 一半 13
+13 和 12 溢出
+这里有很多易错点，要小心
 
+'''
+这里一定是有返回值的， 不会找不到target
+'''
 import bisect
 class Solution(object):
     def kthSmallest(self, matrix, k):
         l, r = matrix[0][0], matrix[-1][-1]
         while l <= r:
             mid = (l + r) // 2
+            '''
+            l 返回值那侧，不包含 == 
+            '''
             if sum(bisect.bisect_right(row, mid) for row in matrix) < k:
                 l = mid + 1
             else:
@@ -3188,7 +3214,9 @@ class Solution:
             return -1
 
 （版本一）左闭右闭区间，这个模板要记住
-
+'''
+这里会找不到target，返回-1
+'''
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         left, right = 0, len(nums) - 1
@@ -3531,9 +3559,8 @@ class Solution:
 必须用stack，不能用queue，层序遍历可以用queue
 class Solution:
     def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root: return []
         res = []
-        if not root:
-            return res
         stack = [root]
         while stack:
             node = stack.pop()
@@ -3546,9 +3573,8 @@ class Solution:
 必须用stack，不能用queue，层序遍历可以用queue
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root: return []
         res = []
-        if not root:
-            return res
         stack = [root]
         while stack:
             node = stack.pop()
@@ -3574,14 +3600,15 @@ class Solution:
 ```py
 有效 二叉搜索树定义如下：
 
-节点的左子树只包含 小于 当前节点的数。
-节点的右子树只包含 大于 当前节点的数。
+节点的左子树只包含 < 当前节点的数。
+节点的右子树只包含 > 当前节点的数。
 所有左子树和右子树自身必须也是二叉搜索树。
 ```
 
 中序遍历一下就行了
 
 ```py
+res是 list 的写法:
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
         res = [float('-inf')]
@@ -3598,6 +3625,22 @@ class Solution:
         traversal(root)
         return valid
 
+res不是 list 的写法:
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        res = float('-inf')
+        valid = True # 必须用 valid 这个变量，不能用 return False
+
+        def traversal(root: TreeNode):
+            nonlocal valid, res # 这一行必不可少，不然虽然不报错，但不能ac
+            if root:
+                traversal(root.left)    # 左
+                if res >= root.val: valid = False
+                res = root.val # 中序
+                traversal(root.right)   # 右
+
+        traversal(root)
+        return valid
 
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
@@ -3622,12 +3665,11 @@ class Solution:
 ```py
 class Solution:
     def isValidBST(self, root):
-        def BFS(node, lower, upper):
-            if not node:
-                return True
-            return lower < node.val < upper and BFS(node.left, lower, node.val) and BFS(node.right, node.val, upper)
+        def isBetween(node, lower, upper):
+            if not node: return True
+            return lower < node.val < upper and isBetween(node.left, lower, node.val) and isBetween(node.right, node.val, upper)
 
-        return fun(root, float('-inf'), float('inf'))
+        return isBetween(root, float('-inf'), float('inf'))
 ```
 
 ```scala
@@ -3781,17 +3823,17 @@ class Solution:
 kthSmallest: 先左后右
 class Solution:
     def kthSmallest(self, root, k: int) -> int:
-        def dfs(root):
+        def inorder(root):
             if root: 
-                dfs(root.left)
+                inorder(root.left)
                 self.k -= 1
                 if self.k == 0: 
                     self.res = root.val
                     return
-                dfs(root.right)
+                inorder(root.right)
 
         self.k = k
-        dfs(root)
+        inorder(root)
         return self.res
 ```
 
@@ -4076,7 +4118,10 @@ class Solution:
             if not root: return 0, 0
             rob_L, no_rob_L = dfs(root.left)  # 前一项表示根节点偷，后一项表示根节点不偷
             rob_R, no_rob_R = dfs(root.right) # 前一项表示根节点偷，后一项表示根节点不偷
-            return root.val + no_rob_L + no_rob_R, max(rob_L, no_rob_L) + max(rob_R, no_rob_R) # 前一项表示根节点偷，后一项表示根节点不偷
+            return root.val + no_rob_L + no_rob_R, max(rob_L, no_rob_L) + max(rob_R, no_rob_R) 
+            # 前一项表示根节点偷，后一项表示根节点不偷
+            # 根节点偷 + (root.left的根节点no偷     +  root.right的根节点no偷) 
+            #           max(root.left的根节点all)  +  max(root.right的根节点all)
         return max(dfs(root))
 
 ```
@@ -4393,13 +4438,21 @@ class Solution:
 
 
 ```py
+
+'''
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+'''
        
 O(n log n) 时间复杂度，用二分
 
 class Solution:
     def minSubArrayLen(self, s: int, nums: List[int]) -> int:
-        l, r, res = 0, len(nums), 0
         def isWinEnough(size):
+        '''
+        加上新来的 nums[i], 减去旧的 nums[i - size]
+        '''
             sums = 0
             for i in range(len(nums)):
                 sums += nums[i]
@@ -4411,6 +4464,7 @@ class Solution:
                     return True
             return False
             
+        l, r, res = 0, len(nums), 0
         while l <= r:
             mid = (l + r) // 2  # 滑动窗口大小
             if isWinEnough(mid):  # 如果这个大小的窗口可以那么就缩小
@@ -4445,7 +4499,7 @@ class Solution:
         ans = -1
         while l <= r:
             mid = (l + r) // 2
-            if mid * mid <= x: # 2*2=4
+            if mid * mid <= x: # 2 * 2 = 4
                 ans = mid # ans 必须放置在这个位置
                 l = mid + 1
             else:
@@ -4905,9 +4959,40 @@ class Solution:
 
 class Solution:
     def maxDepth(self, root: TreeNode) -> int:
-        if not root:
+        if not root: return 0
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+
+等效于
+
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if root:
+            L = self.maxDepth(root.left) + 1 if root.left else 1 # 注意：这里一定要用 if else 结构
+            R = self.maxDepth(root.right) + 1 if root.right else 1 # 注意：这里是边的条数
+            return max(L, R)
+        else:
             return 0
-        return max(self.maxDepth(root.left),self.maxDepth(root.right))+1
+
+对比
+
+
+class Solution:
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        res = 0
+        def depth(node):
+            nonlocal res
+            if node:
+                """
+                当 node.left, 高度为 1, 否则为 0
+                当 node.right, 高度为 1, 否则为 0
+                """
+                L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
+                R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
+                res = max(res, L + R)
+                return max(L, R)
+
+        depth(root)
+        return res
 ```
 
 ```scala
@@ -4926,6 +5011,111 @@ object Solution {
 }
 
 ```
+
+##  185. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
+
+[哈哈哈](https://www.bilibili.com/video/BV1E7411k7KY?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7Vi?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1XZ4y1G7xM?spm_id_from=333.999.0.0)
+
+递归
+
+```py
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if root:
+            L = self.minDepth(root.left) + 1 if root.left else 1 # 注意：这里一定要用 if else 结构
+            R = self.minDepth(root.right) + 1 if root.right else 1 # 注意：这里是边的条数
+            return L if R == 1 else R if L == 1 else min(L,R)
+        else:
+            return 0
+            
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if root:
+            if root.left and root.right:
+                return 1 + min(self.minDepth(root.left), self.minDepth(root.right)) # 如果有2个子树，取较低一层的值
+            elif root.left:
+                return 1 + self.minDepth(root.left)  # 如果有1个子树，取较高一层的值
+            elif root.right:
+                return 1 + self.minDepth(root.right) # 如果有1个子树，取较高一层的值
+            else: # not root.left and not root.right
+                return 1
+        else:
+            return 0
+```
+
+队列
+
+```py
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+
+        que = collections.deque([(root, 1)]) # 注意这个写法：[(root, 1)] 的括号
+        while que:
+            node, depth = que.popleft()
+            if not node.left and not node.right: return depth
+            if node.left:  que.append((node.left, depth + 1)) # 注意这个写法：(node.left, depth + 1) 的括号
+            if node.right: que.append((node.right, depth + 1))
+        
+```
+
+```scala
+
+object Solution1 {
+    def minDepth(root: TreeNode): Int = {
+        if (root == null) return 0
+        val left = minDepth(root.left) 
+        val right = minDepth(root.right) 
+
+        if (left == 0 || right == 0) left + right + 1 else math.min(left, right) + 1
+        
+    }
+}
+
+object Solution1_2 {
+    def minDepth(root: TreeNode): Int = {
+        if(root == null) 0
+        else if(root.left == null) minDepth(root.right) + 1
+        else if(root.right == null) minDepth(root.left) + 1
+        else minDepth(root.right) + 1 min minDepth(root.left) + 1
+    
+    }
+}
+```
+
+队列
+
+```scala
+object Solution {
+    def minDepth(root: TreeNode): Int = {
+        if(root == null) return 0
+        val que = scala.collection.mutable.Queue[TreeNode]()
+        var depth = 0
+        var flag = true
+        que.enqueue(root)
+        
+        while(que.nonEmpty && flag){
+            depth += 1
+            for(_ <- 0 until que.size; if flag){
+                val node = que.dequeue
+                if(node.left == null && node.right == null) flag = false
+                else {
+                    if(node.left != null) que.enqueue(node.left)
+                    if(node.right != null) que.enqueue(node.right)
+                } 
+            } 
+        }
+        depth
+        
+    }
+} 
+```
+
 
 ##  52. <a name='-1'></a>76-【滑动窗口🔹】最小覆盖子串
 
@@ -5342,14 +5532,12 @@ class Solution:
 ```py
 class Solution:
     def isBalanced(self, root: TreeNode) -> bool:
-        def height(root: TreeNode) -> int:
-            if not root:
-                return 0
-            return max(height(root.left), height(root.right)) + 1
+        def maxDepth(root: TreeNode) -> int:
+            if not root: return 0
+            return max(maxDepth(root.left), maxDepth(root.right)) + 1
 
-        if not root:
-            return True
-        return abs(height(root.left) - height(root.right)) <= 1 and self.isBalanced(root.left) and self.isBalanced(root.right)
+        if not root: return True
+        return abs(maxDepth(root.left) - maxDepth(root.right)) <= 1 and self.isBalanced(root.left) and self.isBalanced(root.right)
         # 注意：左右两个子树也必须balanced
 ```
 
@@ -5373,6 +5561,10 @@ class Solution:
         def depth(node):
             nonlocal res
             if node:
+                """
+                当 node.left, 高度为 1, 否则为 0
+                当 node.right, 高度为 1, 否则为 0
+                """
                 L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
                 R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
                 res = max(res, L + R)
@@ -5382,100 +5574,6 @@ class Solution:
         return res
 ```
 
-##  185. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
-
-[哈哈哈](https://www.bilibili.com/video/BV1E7411k7KY?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7Vi?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1XZ4y1G7xM?spm_id_from=333.999.0.0)
-
-递归
-
-```py
-class Solution:
-    def minDepth(self, root: TreeNode) -> int:
-        if root:
-            if root.left and root.right:
-                return 1 + min(self.minDepth(root.left), self.minDepth(root.right)) # 如果有2个子树，取较低一层的值
-            elif root.left:
-                return 1 + self.minDepth(root.left)  # 如果有1个子树，取较高一层的值
-            elif root.right:
-                return 1 + self.minDepth(root.right) # 如果有1个子树，取较高一层的值
-            else: # not root.left and not root.right
-                return 1
-        else:
-            return 0
-```
-
-队列
-
-```py
-class Solution:
-    def minDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-
-        que = collections.deque([(root, 1)]) # 注意这个写法：[(root, 1)] 的括号
-        while que:
-            node, depth = que.popleft()
-            if not node.left and not node.right: return depth
-            if node.left:  que.append((node.left, depth + 1)) # 注意这个写法：(node.left, depth + 1) 的括号
-            if node.right: que.append((node.right, depth + 1))
-        
-```
-
-```scala
-
-object Solution1 {
-    def minDepth(root: TreeNode): Int = {
-        if (root == null) return 0
-        val left = minDepth(root.left) 
-        val right = minDepth(root.right) 
-
-        if (left == 0 || right == 0) left + right + 1 else math.min(left, right) + 1
-        
-    }
-}
-
-object Solution1_2 {
-    def minDepth(root: TreeNode): Int = {
-        if(root == null) 0
-        else if(root.left == null) minDepth(root.right) + 1
-        else if(root.right == null) minDepth(root.left) + 1
-        else minDepth(root.right) + 1 min minDepth(root.left) + 1
-    
-    }
-}
-```
-
-队列
-
-```scala
-object Solution {
-    def minDepth(root: TreeNode): Int = {
-        if(root == null) return 0
-        val que = scala.collection.mutable.Queue[TreeNode]()
-        var depth = 0
-        var flag = true
-        que.enqueue(root)
-        
-        while(que.nonEmpty && flag){
-            depth += 1
-            for(_ <- 0 until que.size; if flag){
-                val node = que.dequeue
-                if(node.left == null && node.right == null) flag = false
-                else {
-                    if(node.left != null) que.enqueue(node.left)
-                    if(node.right != null) que.enqueue(node.right)
-                } 
-            } 
-        }
-        depth
-        
-    }
-} 
-```
 
 ##  205. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
 
@@ -5484,45 +5582,14 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV1Qz411i7bh?spm_id_from=333.999.0.0)
 
 ```py
+输入：root = [1,2,3,4,5,6]
+输出：6
+
 class Solution(object):
     def countNodes(self, root):
         if not root: return 0
-        if not root.left and not root.right: return 1
+        if root and not root.left and not root.right: return 1
         return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
-```
-
-##  59. <a name='-1'></a>113. 二叉树中和为某一值的路径
-
-[哈哈哈](https://www.bilibili.com/video/BV1P54y1i73U?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1k54y177fu?spm_id_from=333.999.0.0)
-
-```py
-           5
-       /      \
-      4        8
-    /   \    /   \
-  11   null 13    4
- /  \            / \
-7    2          5   1
-输入： targetSum = 22
-输出：[[5,4,11,2],[5,8,4,5]]
-
-
-
-class Solution:
-    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
-        res = []
-
-        def dfs(node,path,tsum): # node.val == tsum 结束
-            if node:
-                if node.val == tsum and not node.left and not node.right: # 结束条件
-                    res.append(path[:] + [node.val])  # 需要深拷贝
-                dfs(node.left, path + [node.val], tsum - node.val) # 三个部分都需要状态转移
-                dfs(node.right, path + [node.val], tsum - node.val)
-            
-        dfs(root, [], targetSum)
-        return res
 ```
 
 
@@ -5537,13 +5604,26 @@ class Solution:
 递归
 
 ```py
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        res = False
+
+        def dfs(node,tsum): # node.val == tsum 结束
+            nonlocal res
+            if node:
+                if node.val == tsum and not node.left and not node.right: # 结束条件
+                    res = True
+                dfs(node.left, tsum - node.val) # 三个部分都需要状态转移
+                dfs(node.right, tsum - node.val)
+            
+        dfs(root, targetSum)
+        return res
+
 # 正确写法
 class Solution:
     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
-        if not root:
-            return False
-        if root.val == targetSum and not root.left and not root.right:
-            return True
+        if not root: return False
+        if root.val == targetSum and not root.left and not root.right: return True
         return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
         # 注意：这里用or链接
 
@@ -5566,20 +5646,65 @@ class Solution:
 ```
 
 ```py
-队列
 class Solution:
-    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
-        if not root:
-            return False
-        que = collections.deque([(root, root.val)])
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        if not root: return False
+        que = collections.deque([(root, targetSum)])
         while que:
-            node, acc = que.popleft()
-            if not node.left and not node.right and acc == targetSum:
+            node, tsum = que.popleft()
+            if not node.left and not node.right and node.val == tsum:
                 return True
-            if node.left:  que.append((node.left,  node.left.val + acc))
-            if node.right: que.append((node.right, node.right.val + acc))
+            if node.left:  que.append((node.left, tsum - node.val))
+            if node.right: que.append((node.right, tsum - node.val))
         return False
 ```
+
+##  59. <a name='-1'></a>113. 二叉树中和为某一值的路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1P54y1i73U?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1k54y177fu?spm_id_from=333.999.0.0)
+
+```py
+           5
+       /      \
+      4        8
+    /   \    /   \
+  11   null 13    4
+ /  \            / \
+7    2          5   1
+输入： targetSum = 22
+输出：[[5,4,11,2],[5,8,4,5]]
+
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        res = []
+
+        def dfs(node,path,tsum): # node.val == tsum 结束
+            if node:
+                if node.val == tsum and not node.left and not node.right: # 结束条件
+                    res.append(path[:] + [node.val])  # 需要深拷贝
+                dfs(node.left,  path + [node.val], tsum - node.val) # 三个部分都需要状态转移
+                dfs(node.right, path + [node.val], tsum - node.val)
+            
+        dfs(root, [], targetSum)
+        return res
+
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        if not root: return []
+        res = []
+        que = collections.deque([(root, [], targetSum)])
+        while que:
+            node, path, tsum = que.popleft()
+            if not node.left and not node.right and node.val == tsum:
+                res.append(path + [node.val])
+            if node.left:  que.append((node.left, path + [node.val], tsum - node.val))
+            if node.right: que.append((node.right, path + [node.val], tsum - node.val))
+        return res
+```
+
+
 
 ##  56. <a name='SumRoottoLeafNumbers'></a>129 Sum Root to Leaf Numbers
 
@@ -5614,6 +5739,20 @@ class Solution:
             if root.right: dfs(root.right, acc * 10 + root.val)
         dfs(root, 0)
         return res # 在根节点处cur为0，而不是sums
+补充一下标准格式：
+class Solution:
+    def sumNumbers(self, root: TreeNode) -> int:
+        res = 0
+        
+        def dfs(root, acc):
+            nonlocal res
+            if root:
+                if not root.left and not root.right: # 结束
+                    res += acc * 10 + root.val 
+                if root.left:  dfs(root.left, acc * 10 + root.val)
+                if root.right: dfs(root.right, acc * 10 + root.val)
+        dfs(root, 0)
+        return res # 在根节点处cur为0，而不是sums
 
 ```
 
@@ -5628,30 +5767,57 @@ class Solution:
 输出：3
 解释：和等于 8 的路径有 3 条，如图所示。
 
+       10
+     /    \
+    5     -3
+   / \      \
+  3   2     11
+ / \   \
+3  -2   1
+ 
+        O
+     /    \
+    5      O
+   / \      \
+  3   O      O
+ / \   \
+O   O   O
 
+        O
+     /    \
+    5      O
+   / \      \
+  O   2      O
+ / \   \
+O   O   1
+
+        O
+     /    \
+    O     -3
+   / \      \
+  O   O     11
+ / \   \
+O   O   O
 
 class Solution:
     def pathSum(self, root: TreeNode, targetSum: int) -> int:
         dic = collections.defaultdict(int)
         dic[0] = 1
         res = 0
-
         def backtrack(root, preSums):
             nonlocal res
-            if not root: return 0
+            if root:
                 
-            preSums += root.val
-            if preSums - targetSum in dic:
-                res += dic[preSums - targetSum]
+                preSums += root.val
+                if preSums - targetSum in dic: res += dic[preSums - targetSum]
                 
-            
-            dic[preSums] += 1
-            backtrack(root.left, preSums)
-            backtrack(root.right, preSums)
-            dic[preSums] -= 1 # Note: 回到上一层时, 需要将当前的前缀和对应的路径数目减1  
+                dic[preSums] += 1
+                backtrack(root.left, preSums)
+                backtrack(root.right, preSums)
+                dic[preSums] -= 1 # Note: 回到上一层时, 需要将当前的前缀和对应的路径数目减1  
         
         backtrack(root, 0)
-        return res   
+        return res 
 ```
 
 
@@ -5934,17 +6100,17 @@ class MinStack() {
 
 class Solution(object):
     def isCompleteTree(self, root):
-        stack = [(root, 1)]
+        alltreepos = [(root, 1)]
         i = 0
         # 在一个 完全二叉树 中，除了最后一个关卡外，所有关卡都是完全被填满的
-        while i < len(stack):
-            node, v = stack[i]
+        while i < len(alltreepos):
+            node, v = alltreepos[i]
             i += 1
             if node:
-                stack.append((node.left,  2 * v))
-                stack.append((node.right, 2 * v + 1))
+                alltreepos.append((node.left,  2 * v))
+                alltreepos.append((node.right, 2 * v + 1))
 
-        return stack[-1][1] == len(stack)
+        return alltreepos[-1][1] == len(alltreepos)
 ```
 
 ##  65. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
@@ -6731,7 +6897,7 @@ class Solution:
         if not root: return root
         # 先翻转
         left = self.invertTree(root.left)
-        right = self.invertTree(root.right
+        right = self.invertTree(root.right)
         # 再交换
         root.left, root.right = right, left
         return root
@@ -6741,14 +6907,13 @@ class Solution:
 class Solution:
     def invertTree(self, root: TreeNode) -> TreeNode:
         if not root: return root
-        que = deque([root])
+        que = [root]
         while que:
             node = que.pop()
             if node.left or node.right:
-                # here，先翻转，还是先append，无所谓啦 ~ 
-                node.left, node.right = node.right, node.left
                 if node.left: que.append(node.left)
                 if node.right: que.append(node.right)
+                node.left, node.right = node.right, node.left
         return root
 ```
 
@@ -6793,7 +6958,9 @@ class Solution:
         left = 0
         right = len(nums)-1
         res = [0,0]
-        
+'''
+这里会找不到target，返回 [-1,-1]
+'''
         if target not in nums:
             return [-1,-1]
 
@@ -6806,6 +6973,9 @@ class Solution:
                 right = mid - 1
             else:
                 left = mid + 1
+'''
+left 返回值那侧，不包含 == 
+'''
         res[0] = left
 
         # 寻找右侧边界
@@ -6818,6 +6988,9 @@ class Solution:
                 right = mid - 1
             else:
                 left = mid + 1
+'''
+right 返回值那侧，不包含 == 
+'''
         res[1] = right
 
         return res
@@ -6872,16 +7045,35 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
 
 ```py
+两种写法
 class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
         l, r = 0, len(nums) - 1 
         while l < r:
             mid = (l + r) // 2
+            '''
+            left 返回值那侧，不包含 == 
+            '''
             if nums[mid] < nums[mid + 1]:
                 l = mid + 1
             else:
                 r = mid
         return l
+
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+
+        l, r = 0, len(nums) - 1 
+        while l < r:
+            mid = (l + r) // 2
+            if nums[mid] <= nums[mid + 1]:
+                l = mid + 1
+            '''
+            right 返回值那侧，不包含 == 
+            '''
+            else:
+                r = mid
+        return r
 # [1,2,1,3,5,6,4]
 # 3 < 5, 向右移动，left 指向 5，right 指向 4，想较大值方向移动
 # 6 > 4, 向左移动，left 指向 5，right 指向 6 
@@ -6922,6 +7114,9 @@ def binary_search(mountain, target, l, r, key=lambda x: x):
 
 class Solution:
     def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
+        """
+        先找到 peak
+        """
         l, r = 0, mountain_arr.length() - 1
         while l < r:
             mid = (l + r) // 2
@@ -6930,9 +7125,14 @@ class Solution:
             else:
                 r = mid
         peak = l
+        """
+        先找 peak 左
+        """
         index = binary_search(mountain_arr, target, 0, peak) # 递增序列 二分查找
-        if index != -1:
-            return index
+        if index != -1: return index
+        """
+        再找 peak 右
+        """
         index = binary_search(mountain_arr, target, peak + 1, mountain_arr.length() - 1, lambda x: -x) # 递减序列 二分查找
         return index
 
@@ -6947,18 +7147,20 @@ class Solution:
 ```py
 class Solution:
     def findMin(self, nums):
-        left, right = 0, len(nums) - 1
+        l, r = 0, len(nums) - 1
         # [4,5,6,7,0,1,2]
-        # 只用 mid 和 right 比较
+        """
+        只用 mid 和 right 比较
+        """
 
-        while left <= right:
-            mid = (right + left) // 2       
-            if  nums[mid] == nums[right]:    # 此时 left 和 right 相等，直接返回
-                return nums[right]
-            elif nums[mid] < nums[right]:   # 比右界小，nums[mid] 可能是最小值，不能去掉
-                right = mid                 # 比如 [5,6,7,0,1,2,4]
+        while l <= r:
+            mid = (r + l) // 2       
+            if  nums[mid] == nums[r]:    # 此时 left 和 right 相等，直接返回
+                return nums[r]
+            elif nums[mid] < nums[r]:   # 比右界小，nums[mid] 可能是最小值，不能去掉
+                r = mid                 # 比如 [5,6,7,0,1,2,4]
             else:                           # 比右界大，nums[mid] 肯定不会是最小值     
-                left = mid + 1              # 比如 [4,5,6,7,0,1,2]
+                l = mid + 1              # 比如 [4,5,6,7,0,1,2]
 ```
 
 ```scala
@@ -7705,6 +7907,7 @@ class Solution(object):
 [小明](https://www.bilibili.com/video/BV16a4y1h7fG?spm_id_from=333.999.0.0)
 
 ```py
+层序遍历
 class Solution:
     def widthOfBinaryTree(self, root: TreeNode) -> int:
         res = 0
@@ -7939,7 +8142,7 @@ class Codec:
         return func(root)
 
     def deserialize(self, data):
-        # 前序遍历
+        # 前序遍历[::-1]后就能直接pop()
         vals = data.split(',')[::-1]
         def func():
             val = vals.pop()
@@ -9239,16 +9442,18 @@ class Solution:
 
 class Solution(object):
     def findDuplicate(self, nums):
-
-        low, high = 1, len(nums) - 1
-        while low <= high:
-            mid = (low + high) >> 1
-            cnt = sum(x <= mid for x in nums)
-            if cnt > mid:
-                high = mid - 1
-            else: # cnt <= mid:
-                low = mid + 1
-        return low
+        '''
+        这个写法很容易出错，最好别
+        '''
+        # low, high = 1, len(nums) - 1
+        # while low <= high:
+        #     mid = (low + high) // 1
+        #     cnt = sum(x <= mid for x in nums)
+        #     if cnt > mid:
+        #         high = mid - 1
+        #     else: # cnt <= mid:
+        #         low = mid + 1
+        # return low
 
 线性级时间复杂度 O(n)
 
@@ -10384,13 +10589,13 @@ object Solution1 {
 class Solution:
     def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
         if not root: return None
-    # 假如要删除的不是根节点
+        # 假如要删除的不是根节点
         if root.val > key:
             root.left = self.deleteNode(root.left, key)
         elif root.val < key:
             root.right = self.deleteNode(root.right, key)
 
-    # 假如删除的是根节点
+        # 假如删除的是根节点
         elif not root.left:
             root = root.right # 删除根节点
         else:
@@ -10403,21 +10608,35 @@ class Solution:
         return root
 
 
+找到left中的最大：
+            p = root.left
+            while p.right:
+                p = p.right
+
+
           5
         /  \
        3    6
      /  \    \
     2    4    7
 
-    删除3
+    2 链接到4  ->  p.right = root.right
 
+          5
+        /  \
+       3    6
+     /       \
+    2         7
+     \
+      4
+
+    删除3 -> root = root.left 
 
           5
         /  \
        2    6
         \    \
          4    7
-    2链接到4
     再删除3
 ```
 
@@ -12740,15 +12959,16 @@ class Solution:
 
 class Solution:
     def binaryTreePaths(self, root: TreeNode) -> List[str]:
-        if not root:
-            return []
-        if not root.left and not root.right:
-            return [str(root.val)]
+        # 结束条件：
+        if not root: return []
+        if not root.left and not root.right: return [str(root.val)]
         paths = []
         if root.left:
+            # 预先知道 subtree 的答案
             for pt in self.binaryTreePaths(root.left):
                 paths.append(str(root.val) + '->' + pt)
         if root.right:
+            # 预先知道 subtree 的答案
             for pt in self.binaryTreePaths(root.right):
                 paths.append(str(root.val) + '->' + pt)
         return paths  
@@ -13482,7 +13702,7 @@ class Solution:
 class Solution:
     def getMinimumDifference(self, root: TreeNode) -> int:
         res = inf
-        preval = None
+        preval = None # 注意：这里是None
         def inorder(root):
             nonlocal res, preval
             if root: 
