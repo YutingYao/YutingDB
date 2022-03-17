@@ -448,7 +448,7 @@ object Solution0 {
             pre = pre.next.next
             curr = pre.next  
         }
-        
+         
         nHead.next
     }
 }
