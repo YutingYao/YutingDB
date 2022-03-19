@@ -309,7 +309,7 @@ https://leetcode-cn.com/problems/reverse-linked-list/submissions/
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:
         cur = None
-        while head:
+        while head: # 😐 while 循环
             headnxt = head.next
             head.next = cur
             cur = head
@@ -357,12 +357,12 @@ class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         cur = head
         cnt = 0
-        while cur and cnt != k:
+        while cur and cnt != k: # 😐 while 循环
             cur = cur.next
             cnt += 1
         if cnt == k:
             cur = self.reverseKGroup(cur,k)
-            while cnt:
+            while cnt: # 😐 while 循环
                 headnxt = head.next
                 head.next = cur
                 cur = head
@@ -409,7 +409,7 @@ class Solution:
         dummy = ListNode(0)
         dummy.next = head # 易错点：这句话不要漏
         pre = dummy
-        while pre.next and pre.next.next:
+        while pre.next and pre.next.next: # 😐 while 循环
             # 一共3个指针: first,second,pre
             first = pre.next
             second = pre.next.next
@@ -852,7 +852,7 @@ class Solution:
 class Solution:
     def max_heapify(self, heap, root, heap_len):
         p = root
-        while p * 2 + 2 <= heap_len: # 当不是叶子节点
+        while p * 2 + 2 <= heap_len: # 😐 while 循环 # 当不是叶子节点 
             l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
             if r < heap_len and heap[l] < heap[r]:
                 bigger = r
@@ -899,7 +899,7 @@ class Solution:
         self.merge_sort(nums, mid + 1, r)
         tmp = []
         i1, i2 = l, mid + 1   # i, j 是两个起始点
-        while i1 <= mid or i2 <= r:
+        while i1 <= mid or i2 <= r: # 😐 while 循环
             # 如果 前半部部分结束了，或者后半部分没有结束
             if i1 > mid or (i2 <= r and nums[i2] < nums[i1]): # 因为前面是or，所以这里必须是对i进行约束
                 tmp.append(nums[i2])
@@ -974,7 +974,7 @@ def merge(nums, l, mid, r):
     tmp = []
     sums = 0
     i1, i2 = l, mid + 1
-    while i1 <= mid and i2 <= r:
+    while i1 <= mid and i2 <= r: # 😐 while 循环
         if nums[i1] <= nums[i2]:
             sums += nums[i1] * (r-i2+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
             tmp.append(nums[i1])
@@ -1013,7 +1013,7 @@ class Solution:
         dummy = ListNode(-1, head)
         sortlist = []
         # 先把链表断开
-        while head:
+        while head: # 😐 while 循环
             tmp = head.next
             head.next = None
             sortlist.append(head)
@@ -1060,7 +1060,7 @@ class Solution:
 
     def findmid(self,head):
         slow, fast = head, head
-        while fast.next and fast.next.next:
+        while fast.next and fast.next.next: # 😐 while 循环
             slow = slow.next
             fast = fast.next.next
         return slow
@@ -1068,7 +1068,7 @@ class Solution:
     def merge(self,l,r):
         dummy = ListNode(0)
         cur = dummy
-        while l and r:
+        while l and r: # 😐 while 循环
             if l.val <= r.val:
                 cur.next = l
                 l = l.next # 下一个
@@ -1182,7 +1182,7 @@ class Solution:
         def getMedian(head: ListNode, tail: ListNode) -> ListNode:
             fast = slow = head
             # 和这种写法很像：while fast and fast.next:
-            while fast != tail and fast.next != tail:
+            while fast != tail and fast.next != tail: # 😐 while 循环
                 fast = fast.next.next
                 slow = slow.next
             return slow
@@ -1296,8 +1296,8 @@ class Solution:
             if nums[i] + nums[n-2] + nums[n-1] < 0: continue
             # 双指针部分：
             left = i + 1
-            right = n - 1
-            while left < right: 
+            right = n - 1 
+            while left < right:  # 😐 while 循环
                 if nums[i] + nums[left] + nums[right] > 0:
                     right -= 1
                 elif nums[i] + nums[left] + nums[right] < 0:
@@ -1305,10 +1305,10 @@ class Solution:
                 else:
                     res.append([nums[i],nums[left],nums[right]])
                     # 去重：
-                    while nums[left] == nums[left + 1] and left + 1 < right: # 注意边界
+                    while nums[left] == nums[left + 1] and left + 1 < right: # 😐 while 循环 # 注意边界
                         left += 1
                     left +=1
-                    while nums[right] == nums[right - 1] and left < right - 1: # 注意边界
+                    while nums[right] == nums[right - 1] and left < right - 1: # 😐 while 循环 # 注意边界
                         right -= 1
                     right -=1
         return res
@@ -1501,7 +1501,7 @@ class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         dummy = ListNode(0)
         cur = dummy # dummy是固定节点，cur是移动指针
-        while list1 and list2: # 这里是and
+        while list1 and list2: # 😐 while 循环 # 这里是and 
             if list1.val < list2.val: # 易错点：这里是list.val，而不是list
                 cur.next = list1
                 list1 = list1.next # 向后进一位
@@ -1629,7 +1629,7 @@ https://leetcode-cn.com/problems/linked-list-cycle/
 class Solution:
     def hasCycle(self, head: ListNode) -> bool:
         visited = set()
-        while head:
+        while head: # 😐 while 循环
             visited.add(head)
             head = head.next
             if head in visited:
@@ -1641,7 +1641,7 @@ class Solution:
 class Solution:
     def hasCycle(self, head: ListNode) -> bool:
         fast = slow = head
-        while fast and fast.next:
+        while fast and fast.next: # 😐 while 循环
             fast = fast.next.next
             slow = slow.next
             if fast == slow:
@@ -1708,10 +1708,10 @@ https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
         visited = set()
-        while headA:
+        while headA: # 😐 while 循环
             visited.add(headA)
             headA = headA.next
-        while headB:
+        while headB: # 😐 while 循环
             if headB in visited:
                 return headB
             headB = headB.next
@@ -1726,7 +1726,7 @@ class Solution:
         if not headA or not headB:
             return None
         pa, pb = headA, headB
-        while pa != pb:
+        while pa != pb: # 😐 while 循环
             pa = pa.next if pa else headB
             pb = pb.next if pb else headA
         return pa
@@ -1789,7 +1789,7 @@ class Solution:
         queue = collections.deque([root]) 
         res = []
         
-        while queue: 
+        while queue: # 😐 while 循环
             vals = [] 
             for _ in range(len(queue)): 
                 node = queue.popleft() 
@@ -1808,7 +1808,7 @@ class Solution:
         if not root: return []
         queue = collections.deque([root]) 
         res = []
-        while queue:
+        while queue: # 😐 while 循环
             vals = []
             for _ in range(len(queue)):
                 node = queue.popleft() 
@@ -1964,7 +1964,7 @@ class Solution:
         cur2 = n - 1
         i = m + n -1
         # 从后往前遍历
-        while cur1 >= 0 and cur2 >= 0:
+        while cur1 >= 0 and cur2 >= 0: # 😐 while 循环
             if nums1[cur1] < nums2[cur2]:
                 nums1[i] = nums2[cur2]
                 cur2 -= 1
@@ -2049,7 +2049,7 @@ class Solution:
         queue = collections.deque([root])
         res = []
         indexflag = 1 
-        while queue:
+        while queue: # 😐 while 循环
             vals = []
             for _ in range(len(queue)):
                 node = queue.popleft()
@@ -2420,7 +2420,7 @@ class Solution:
         l = 0
         r = len(nums) - 1
 
-        while l <= r:
+        while l <= r: # 😐 while 循环
             m = (l+r) // 2
             if nums[m] == target:
                 return m
@@ -2667,7 +2667,7 @@ class Solution:
         i, j, carry, tail = len(num1)-1, len(num2)-1, 0, 0
         res = ''
 
-        while i >= 0 or j >= 0 or carry != 0:
+        while i >= 0 or j >= 0 or carry != 0: # 😐 while 循环
             val = carry
 
             if i >= 0:
@@ -2696,6 +2696,122 @@ class Solution:
 class Solution(object):
     def addStrings(self, num1, num2):
         return str((eval(num1)+eval(num2)))
+```
+
+##  45. <a name='AddTwoNumbers'></a>2. Add Two Numbers
+
+[花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1gJ411V7gJ?spm_id_from=333.999.0.0)
+
+[小梦想](https://www.bilibili.com/video/BV1Wb411e77s?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1rZ4y1j7V3?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1DA411L7YQ?spm_id_from=333.999.0.0)
+
+* 时间复杂度:O(max(m,n))
+
+* 时间复杂度:O(max(m,n))
+
+特殊情况：
+
+两个链表的长度不同。
+
+进位
+
+```py
+输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+输出：[8,9,9,9,0,0,0,1]
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummy = cur = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
+        carry = 0 # 易错点：carry需要先赋值
+
+        while l1 or l2 or carry: # 易错点：carry要存在 # 😁 while 循环
+            # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
+            # 易错点：调用listnode要有.val
+            sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            tail = sumNode % 10
+            carry = sumNode // 10
+
+            cur.next = ListNode(tail)
+            cur = cur.next
+            l1 = l1.next if l1 else None # # l1,l2不一定存在，所以不能写成：l1 = l1.next
+            l2 = l2.next if l2 else None
+        return dummy.next
+```
+
+```scala
+object Solution {
+    def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {
+      var cur1 = l1
+      var cur2 = l2
+      val dummy = ListNode(0)
+      var prev=dummy
+      var carry = 0
+      while (cur1!=null ||  cur2!=null || carry !=0) {
+        val (s1,next1) = cur1 match {
+          case null => (0,null)
+          case _=> (cur1.x, cur1.next)
+        }
+        val (s2,next2) = cur2 match {
+          case null => (0,null)
+          case _=> (cur2.x,cur2.next)
+        }
+        val s = s1+s2+carry
+        val node = ListNode(s % 10)
+        prev.next = node
+        prev=node
+        carry=s/10
+        cur1 = next1
+        cur2=next2
+      }
+      dummy.next
+    }
+  }
+```
+
+##  154. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
+
+[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Pt4y1m78o?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV17a4y1s7BG?spm_id_from=333.999.0.0)
+
+```py
+输入：l1 = [7,2,4,3], l2 = [5,6,4]
+输出：[7,8,0,7]
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        '''d
+        对比上一题，这里使用了stack
+        '''
+        stack1, stack2 = [], []
+        while l1: # 😐 while 循环
+            stack1.append(l1.val)
+            l1 = l1.next
+        while l2: # 😐 while 循环
+            stack2.append(l2.val)
+            l2 = l2.next
+        res = None
+        carry = 0
+        while stack1 or stack2 or carry: # 😐 while 循环
+            val1 = stack1.pop() if stack1 else 0 
+            val2 = stack2.pop() if stack2 else 0 
+
+            sumNode = val1 + val2 + carry
+            carry = sumNode // 10
+            tail = sumNode % 10
+
+            cur = ListNode(tail)
+            cur.next = res
+            res = cur
+        return res
+
 ```
 
 ##  23. <a name='-1'></a>46- ★ 全排列
@@ -2810,14 +2926,14 @@ https://leetcode-cn.com/problems/merge-k-sorted-lists/
 class Solution:
     def detectCycle(self, head: ListNode) -> ListNode:
         slow, fast = head, head
-        while fast and fast.next:
+        while fast and fast.next: # 😐 while 循环
             slow = slow.next
             fast = fast.next.next
             
             if slow == fast: # 如果相遇
                 p = head
                 q = slow
-                while p != q:
+                while p != q: # 😐 while 循环
                     p = p.next
                     q = q.next
                 return p    # 你也可以 return q
@@ -2870,7 +2986,7 @@ class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         vals = []
         for listhead in lists:
-            while listhead:
+            while listhead: # 😐 while 循环
                 vals.append(listhead.val)
                 listhead = listhead.next
         vals.sort()
@@ -2914,7 +3030,7 @@ class Solution:
                 heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
                 lists[i] = lists[i].next 
 
-        while queue: 
+        while queue: # 😐 while 循环
             val, idx = heapq.heappop(queue)
             cur.next = ListNode(val)
             cur = cur.next
@@ -2937,7 +3053,7 @@ class Solution:
     def merge2Lists(self, list1, list2):
         dummy = ListNode(0)
         cur = dummy # dummy是固定节点，cur是移动指针
-        while list1 and list2: # 这里是and
+        while list1 and list2: # 😐 while 循环 # 这里是and
             if list1.val < list2.val: # 易错点：这里是list.val，而不是list
                 cur.next = list1
                 list1 = list1.next # 向后进一位
@@ -2955,7 +3071,7 @@ class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
         n = len(lists)
         interval = 1
-        while n > interval:
+        while n > interval: # 😐 while 循环
             for i in range(0, n - interval, 2 * interval):
                 lists[i] = self.merge2Lists(lists[i], lists[i + interval]) # 易错点：方括号和小括号不要用错
             interval *= 2
@@ -3027,7 +3143,7 @@ import bisect
 class Solution(object):
     def kthSmallest(self, matrix, k):
         l, r = matrix[0][0], matrix[-1][-1]
-        while l <= r:
+        while l <= r: # 😐 while 循环
             mid = (l + r) // 2
             '''
             l 返回值那侧，不包含 == 
@@ -3076,7 +3192,7 @@ return b if a else a
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
         res = []
-        while matrix:
+        while matrix: # 😐 while 循环
             res += matrix.pop(0) # 易错点：注意是 +=
             matrix = list(zip(*matrix))[::-1] # 易错点：注意 [::-1] 的摆放
         return res
@@ -3221,7 +3337,7 @@ class Solution:
     def search(self, nums: List[int], target: int) -> int:
         left, right = 0, len(nums) - 1
         
-        while left <= right:
+        while left <= right: # 😐 while 循环
             mid = (left + right) // 2
 
             if nums[mid] < target:
@@ -3309,7 +3425,7 @@ class Solution:
         leftmax = 0
         rightmax = 0
         res = 0
-        while left < right:
+        while left < right: # 😐 while 循环
             if height[left] < height[right]:
                 # 短板效应，移动小的那个值
                 leftmax = max(leftmax, height[left])
@@ -3342,10 +3458,10 @@ class MyQueue:
 
     def push(self, x):
         # 要把新来的元素压入
-        while self.s1:
+        while self.s1: # 😐 while 循环
             self.s2.append(self.s1.pop())
         self.s2.append(x) # 目的是把最后进来的元素最下面
-        while self.s2:
+        while self.s2: # 😐 while 循环
             self.s1.append(self.s2.pop())
 
     def pop(self):
@@ -3544,13 +3660,13 @@ class Solution:
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
         def appendAllLeft(node):
-            while node:
+            while node: # 😐 while 循环
                 stack.append(node)
                 node = node.left
 
         stack, res = [], []
         appendAllLeft(root)
-        while stack:
+        while stack: # 😐 while 循环
             node = stack.pop()
             res.append(node.val) # res.append 在中间
             appendAllLeft(node.right)
@@ -3562,7 +3678,7 @@ class Solution:
         if not root: return []
         res = []
         stack = [root]
-        while stack:
+        while stack: # 😐 while 循环
             node = stack.pop()
             res.append(node.val)
             # 背一背：后左右 - 后座有
@@ -3576,7 +3692,7 @@ class Solution:
         if not root: return []
         res = []
         stack = [root]
-        while stack:
+        while stack: # 😐 while 循环
             node = stack.pop()
             res.append(node.val)
             # 背一背：前右左 - 钱优作
@@ -3645,13 +3761,13 @@ class Solution:
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
         def appendAllLeft(node):
-            while node:
+            while node: # 😐 while 循环
                 stack.append(node)
                 node = node.left
         # 这里可以直接 return，不需要valid
         stack, res = [], float('-inf')
         appendAllLeft(root)
-        while stack:
+        while stack: # 😐 while 循环
             node = stack.pop()
             if res >= node.val: return False
             res = node.val # res.append 在中间
@@ -3775,7 +3891,7 @@ class BSTIterator(object):
         return tmp.val
             
     def appendAllLeft(self, node):
-        while node:
+        while node: # 😐 while 循环
             self.stack.append(node)
             node = node.left
 ```
@@ -3791,13 +3907,13 @@ class BSTIterator(object):
 class Solution:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         def appendAllLeft(node):
-            while node:
+            while node: # 😐 while 循环
                 stack.append(node)
                 node = node.left
 
         stack, res = [], []
         appendAllLeft(root)
-        while stack:
+        while stack: # 😐 while 循环
             node = stack.pop()
             k -= 1
             if k == 0:
@@ -3924,7 +4040,7 @@ class Solution:
         if not root: return []
         res = []
         que = collections.deque([root])
-        while que:
+        while que: # 😐 while 循环
             res.append(que[-1].val) # res.append 必须放置在第一行
             for _ in range(len(que)):
                 node = que.popleft()
@@ -3960,12 +4076,12 @@ class Solution:
         """
         que = collections.deque()
         cur = head
-        while cur.next: # 链表除了首元素全部加入双向队列
+        while cur.next: # 😐😐 while 循环 # 链表除了首元素全部加入双向队列
             que.append(cur.next)
             cur = cur.next
         cur = head
         # 一后一前加入链表
-        while que: # 一后一前加入链表
+        while que: # 😐 while 循环 # 一后一前加入链表
             cur.next = que.pop()
             cur = cur.next
             if que:
@@ -4180,7 +4296,7 @@ object Solution1-2 {
 class Solution:
     def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
         stack = []
-        while head:
+        while head: # 😐 while 循环
             stack.append(head)
             head = head.next
         return stack[-k]
@@ -4191,7 +4307,7 @@ class Solution:
         slow, fast = head, head
         for i in range(k):
             fast = fast.next
-        while fast:
+        while fast: # 😐 while 循环
             slow = slow.next
             fast = fast.next
         return slow
@@ -4200,7 +4316,7 @@ class Solution:
 class Solution:
     def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
         cur, lenth = head, 0  
-        while cur:
+        while cur: # 😐 while 循环
             cur = cur.next
             lenth += 1
 
@@ -4230,7 +4346,7 @@ class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
         def getLength(head: ListNode) -> int:
             length = 0
-            while head:
+            while head: # 😐 while 循环
                 length += 1
                 head = head.next
             return length
@@ -4255,7 +4371,7 @@ class Solution:
         #                  slow             fast
         for _ in range(n):
             fast = fast.next
-        while fast:
+        while fast: # 😐 while 循环
             fast = fast.next
             slow = slow.next
 
@@ -4272,7 +4388,7 @@ class Solution:
         slow, fast = head, head
         for i in range(k):
             fast = fast.next
-        while fast:
+        while fast: # 😐 while 循环
             slow = slow.next
             fast = fast.next
         return slow
@@ -4336,7 +4452,7 @@ class Solution:
         cur = head
         lenth = 1
         # 链接成一个环
-        while cur.next:
+        while cur.next: # 😐😐 while 循环
             cur = cur.next
             lenth += 1
         # 当 cur.next = None 时, 把头尾连接起
@@ -4372,11 +4488,11 @@ class Solution:
         dummy = ListNode(0, head)
         cur = dummy
         # 目的是删除cur的下一个节点
-        while cur.next and cur.next.next:  # 😁 while 循环
+        while cur.next and cur.next.next:  # 😁😁 while 循环
             if cur.next.val == cur.next.next.val:
                 # 把所有等于 x 的结点全部删除
                 x = cur.next.val
-                while cur.next and cur.next.val == x: # 😁 while 循环
+                while cur.next and cur.next.val == x: # 😁😁😁 while 循环
                     cur.next = cur.next.next
             else:
                 cur = cur.next
@@ -4402,7 +4518,7 @@ class Solution:
         if not head or not head.next:
             return head
         cur = head
-        while cur.next:  # 😁 while 循环
+        while cur.next:  # 😁😁 while 循环
             if cur.val == cur.next.val:
                 cur.next = cur.next.next # 要么删除
             else:
@@ -4465,7 +4581,7 @@ class Solution:
             return False
             
         l, r, res = 0, len(nums), 0
-        while l <= r:
+        while l <= r: # 😐 while 循环
             mid = (l + r) // 2  # 滑动窗口大小
             if isWinEnough(mid):  # 如果这个大小的窗口可以那么就缩小
                 res = mid
@@ -4497,7 +4613,7 @@ class Solution:
     def mySqrt(self, x: int) -> int:
         l, r = 0, x
         ans = -1
-        while l <= r:
+        while l <= r: # 😐 while 循环
             mid = (l + r) // 2
             if mid * mid <= x: # 2 * 2 = 4
                 ans = mid # ans 必须放置在这个位置
@@ -4522,14 +4638,14 @@ class Solution:
             return x
         res = x # 初始值
         c = x # 牛顿迭代法中的常数
-        while res > c / res:
+        while res > c / res: # 😐😐 while 循环
             res = (res + c / res) // 2 # 这里必须用整除
         return int(res)
         
 class Solution:
     def mySqrt(self, num: int) -> int:
         x = 1 # 背一背这个套路
-        while abs(x**2 - num) > 0.001:
+        while abs(x**2 - num) > 0.001: # 😐 while 循环
             x -= (x**2 - num) / (2 * x) # 注意这里是减号
         return floor(x)
 ```
@@ -4661,118 +4777,7 @@ class Solution(object):
 ```
 
 
-##  45. <a name='AddTwoNumbers'></a>2. Add Two Numbers
 
-[花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1gJ411V7gJ?spm_id_from=333.999.0.0)
-
-[小梦想](https://www.bilibili.com/video/BV1Wb411e77s?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1rZ4y1j7V3?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1DA411L7YQ?spm_id_from=333.999.0.0)
-
-* 时间复杂度:O(max(m,n))
-
-* 时间复杂度:O(max(m,n))
-
-特殊情况：
-
-两个链表的长度不同。
-
-进位
-
-```py
-输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
-输出：[8,9,9,9,0,0,0,1]
-
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        dummy = cur = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
-        carry = 0 # 易错点：carry需要先赋值
-
-        while l1 or l2 or carry: # 易错点：carry要存在 # 😁 while 循环
-            # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
-            # 易错点：调用listnode要有.val
-            sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
-            tail = sumNode % 10
-            carry = sumNode // 10
-
-            cur.next = ListNode(tail)
-            cur = cur.next
-            l1 = l1.next if l1 else None # # l1,l2不一定存在，所以不能写成：l1 = l1.next
-            l2 = l2.next if l2 else None
-        return dummy.next
-```
-
-```scala
-object Solution {
-    def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {
-      var cur1 = l1
-      var cur2 = l2
-      val dummy = ListNode(0)
-      var prev=dummy
-      var carry = 0
-      while (cur1!=null ||  cur2!=null || carry !=0) {
-        val (s1,next1) = cur1 match {
-          case null => (0,null)
-          case _=> (cur1.x, cur1.next)
-        }
-        val (s2,next2) = cur2 match {
-          case null => (0,null)
-          case _=> (cur2.x,cur2.next)
-        }
-        val s = s1+s2+carry
-        val node = ListNode(s % 10)
-        prev.next = node
-        prev=node
-        carry=s/10
-        cur1 = next1
-        cur2=next2
-      }
-      dummy.next
-    }
-  }
-```
-
-##  154. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
-
-[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Pt4y1m78o?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV17a4y1s7BG?spm_id_from=333.999.0.0)
-
-```py
-输入：l1 = [7,2,4,3], l2 = [5,6,4]
-输出：[7,8,0,7]
-
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        stack1, stack2 = [], []
-        while l1:
-            stack1.append(l1.val)
-            l1 = l1.next
-        while l2:
-            stack2.append(l2.val)
-            l2 = l2.next
-        res = None
-        carry = 0
-        while stack1 or stack2 or carry:
-            val1 = stack1.pop() if stack1 else 0 
-            val2 = stack2.pop() if stack2 else 0 
-
-            sumNode = val1 + val2 + carry
-            carry = sumNode // 10
-            tail = sumNode % 10
-
-            cur = ListNode(tail)
-            cur.next = res
-            res = cur
-        return res
-
-```
 
 ##  47. <a name='EditDistance72-'></a>72. Edit Distance 72-编辑距离
 
@@ -5056,7 +5061,7 @@ class Solution:
             return 0
 
         que = collections.deque([(root, 1)]) # 注意这个写法：[(root, 1)] 的括号
-        while que:
+        while que: # 😐 while 循环
             node, depth = que.popleft()
             if not node.left and not node.right: return depth
             if node.left:  que.append((node.left, depth + 1)) # 注意这个写法：(node.left, depth + 1) 的括号
@@ -5147,11 +5152,11 @@ class Solution:
         for r in range(len(s)): # 扩展右边界
             if s[r] in tdic:
                 wdic[s[r]] += 1  # 变动的
-            while isContains(wdic,tdic):
+            while isContains(wdic, tdic): # 😐😐😐 while 循环
                 # 如果是 minWindow
-                if r-l+1 <= minlen:
-                    minlen = r-l+1
-                    res = s[l:r+1]
+                if r - l + 1 <= minlen:
+                    minlen = r - l + 1
+                    res = s[l: r + 1]
                 # 收缩左边界
                 if s[l] in wdic:
                     wdic[s[l]] -= 1  # 变动的
@@ -5215,18 +5220,20 @@ object Solution1 {
 ```py
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
-        # 关键在于从后往前，找到非递减序列
+        '''
+        关键在于: 从后往前，找到非递减序列
+        '''
         i = len(nums) - 2
-        while i >= 0:
-            if nums[i] >= nums[i+1]:
+        while i >= 0: # 😐😐 while 循环，找到非递减序列
+            if nums[i] >= nums[i + 1]:
                 i -= 1
             else:
                 # 寻找i后面比i大的数，交换位置,并且排序
-                for j in range(len(nums)-1,i,-1): # 易错点:len(nums)-1,i的区间
+                for j in range(len(nums) - 1, i, -1): # 易错点:len(nums)-1,i的区间
                     # 12(3)5(4)
                     if nums[j] > nums[i]:
-                        nums[i],nums[j] = nums[j],nums[i]
-                        nums[i+1:] = sorted(nums[i+1:])
+                        nums[i], nums[j] = nums[j], nums[i]
+                        nums[i + 1 : ] = sorted(nums[i + 1 : ])
                         return
         nums.reverse() # 易错点:对于[3,2,1]这种情况，i = 0
 ```
@@ -5310,7 +5317,7 @@ class Solution:
         res = []
         for r, v in enumerate(nums):
             # 如果新来的数字更大, 所以最右边的数字是最大的
-            while winQ and nums[winQ[-1]] < v:
+            while winQ and nums[winQ[-1]] < v: # 😐😐😐 while 循环 + 😐 pop
                 winQ.pop() # pop() 可能有多次
             winQ.append(r)
             # 如果出界
@@ -5349,15 +5356,15 @@ class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         n = len(nums)
         # 注意 Python 默认的优先队列是小根堆，求最大值，则需要取复数
-        q = [(-nums[i], i) for i in range(k)]
-        heapq.heapify(q)
+        hp = [(-nums[i], i) for i in range(k)]
+        heapq.heapify(hp)
 
-        res = [-q[0][0]]
+        res = [-hp[0][0]]
         for i in range(k, n):
-            heapq.heappush(q, (- nums[i], i))
-            while q[0][1] + k <= i: 
-                heapq.heappop(q) # 把所有出界的最大值弹出，可能不小心攒了许多个
-            res.append(- q[0][0]) # 最大值永远在 q[0]
+            heapq.heappush(hp, (- nums[i], i))
+            while hp[0][1] + k <= i: # 😐😐😐 while 循环 + 😐 pop
+                heapq.heappop(hp) # 把所有出界的最大值弹出，可能不小心攒了许多个
+            res.append(- hp[0][0]) # 最大值永远在 q[0]
         
         return res
 
@@ -5650,7 +5657,7 @@ class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
         if not root: return False
         que = collections.deque([(root, targetSum)])
-        while que:
+        while que: # 😐 while 循环
             node, tsum = que.popleft()
             if not node.left and not node.right and node.val == tsum:
                 return True
@@ -5695,7 +5702,7 @@ class Solution:
         if not root: return []
         res = []
         que = collections.deque([(root, [], targetSum)])
-        while que:
+        while que: # 😐 while 循环
             node, path, tsum = que.popleft()
             if not node.left and not node.right and node.val == tsum:
                 res.append(path + [node.val])
@@ -5914,7 +5921,7 @@ class Solution:
         n = len(nums)
 
         for i in range(n):
-            while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:
+            while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]: # 😐😐😐 while 循环
                 nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]
 # nums[nums[i] - 1]
 # [-1, 4, 3, 1] 4 在 4 的位置↓
@@ -5930,7 +5937,87 @@ class Solution:
 
 ```
 
+##  137. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
 
+[小明](https://www.bilibili.com/video/BV1Ug4y1v7mF?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Pz4y1X7qR?spm_id_from=333.999.0.0)
+
+```py
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        #数组只能读 所以不能排序,不能swap数组下标
+        #时间复杂度小于 O(n^2) 不能暴力
+        #空间复杂度 O(1) 不能额外开辟数组
+        
+        ''' 1、暴力不符合题意
+        for i in nums:
+            count = 0
+            for num in nums:
+                if num == i:
+                    count += 1
+            if count > 1:
+                return i
+        return -1
+        '''
+        
+        '''2、小于O(n^2) 二分查找
+        我们不要考虑数组,只需要考虑 数字都在 1 到 n 之间
+        示例 1:
+        arr = [1,3,4,2,2] 此时数字在 1 — 5 之间
+
+        mid = (1 + 5) / 2 = 3 arr小于等于的3有4个(1,2,2,3)，1到3中肯定有重复的值
+        mid = (1 + 3) / 2 = 2 arr小于等于的2有3个(1,2,2)，1到2中肯定有重复的值    if cnt > mid:  right = mid
+        mid = (1 + 2) / 2 = 1 arr小于等于的1有1个(1)，2到2中肯定有重复的值        if cnt <= mid: left = mid + 1
+        所以重复的数是 2 
+        '''
+
+要求：
+
+只用常量级 O(1) 的额外空间
+输入：nums = [1,3,4,2,2]
+输出：2
+输入：nums = [3,1,3,4,2]
+输出：3
+
+class Solution(object):
+    def findDuplicate(self, nums):
+        '''
+        这个写法很容易出错，最好别
+        '''
+        # low, high = 1, len(nums) - 1
+        # while low <= high:
+        #     mid = (low + high) // 1
+        #     cnt = sum(x <= mid for x in nums)
+        #     if cnt > mid:
+        #         high = mid - 1
+        #     else: # cnt <= mid:
+        #         low = mid + 1
+        # return low
+
+线性级时间复杂度 O(n)
+
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        # node = index of nums
+        # node.next = nums[node]
+        # node.next.next = nums[nums[node]]
+        slow = nums[0]         #先走一步
+        fast = nums[nums[0]] 
+        while slow != fast: # 😐 while 循环
+            slow = nums[slow]
+            fast = nums[nums[fast]] # 曾经犯的一个错误，以为这里会固定地在环入口，值相同的那个点相遇
+        root = 0                    # 其实它们可以在环上任何一个node相遇，这里就是任何一个数组的下标index    
+        while root != slow: # 😐 while 循环
+            root = nums[root]
+            slow = nums[slow]
+        return slow             # 回到循环结束的上一步
+                                # nums[proot] == nums[pslow]
+                                # The last slow = nums[proot] and this value at least has two slot in the array
+
+```
 
 # 4 day (得分 = 8分) 63
 
@@ -6103,7 +6190,7 @@ class Solution(object):
         alltreepos = [(root, 1)]
         i = 0
         # 在一个 完全二叉树 中，除了最后一个关卡外，所有关卡都是完全被填满的
-        while i < len(alltreepos):
+        while i < len(alltreepos): # 😐😐😐 while 循环
             node, v = alltreepos[i]
             i += 1
             if node:
@@ -6122,7 +6209,7 @@ class Solution(object):
 ```py
 class Solution:
     def rand10(self) -> int:
-        while True:
+        while True: # 😐😐😐 while 循环
             row = rand7()
             col = rand7()
             idx = (row - 1) * 7 + col #（0-42） + （1-7）
@@ -6132,20 +6219,12 @@ class Solution:
 这样写也是对的，因为 0-9 等概率出现
 class Solution:
     def rand10(self):
-        while True:
+        while True: # 😐😐😐 while 循环
             row = rand7()
             col = rand7()
             idx = (row - 1) * 7 + col #（0-42） + （1-7）
             if idx <= 30: # 1-40
                 return 1 + (idx + 1) % 10
-
-class Solution:
-    def rand10(self):
-        while True:
-            res = (rand7()-1)*7 + rand7()#构造1~49的均匀分布
-            if res <= 40: #剔除大于40的值，1-40等概率出现。
-                break
-        return res%10+1 #构造1-10的均匀分布
 ```
 
 ##  66. <a name='Symmetrictree'></a>101-Symmetric tree
@@ -6183,7 +6262,7 @@ class Solution:
         # if not root:
         #     return [] 删除
         que = collections.deque([root])
-        while que:
+        while que: # 😐 while 循环
             vals = [] # 补充
             for _ in range(len(que)):
                 node = que.popleft()
@@ -6424,17 +6503,22 @@ class Solution:
 
 class Solution:
     def findLength(self, nums1: List[int], nums2: List[int]) -> int:
-        lenth = left = 0
+        '''
+        0 <= nums1[i], nums2[i] <= 100suo
+        所以用chr，把数字转换成字符串
+        '''
+
+        length = left = 0
         if nums1 and nums2:
             # 将数字转换为字符串
             a, b, n = ''.join(map(chr, nums1)), ''.join(map(chr, nums2)), len(nums1)
-            while lenth + left < n:
+            while length + left < n: # 😐😐😐 while 循环
                 # 这里使用lenth保存结果，用left跳出循环
-                if a[left : left + lenth + 1] in b:
-                    lenth += 1
+                if a[left : left + length + 1] in b:
+                    length += 1
                 else:
                     left += 1
-        return lenth 
+        return length 
 
 
 
@@ -6458,6 +6542,33 @@ class Solution:
 1 0 0 3 0 0
 
 ```
+
+##  84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
+
+[花花酱](https://www.bilibili.com/video/BV14t411Y7cg?spm_id_from=333.999.0.0)
+
+[一俩三四五](https://www.bilibili.com/video/BV1LJ41137r2?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
+
+```py
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        res = 0
+        numSet = set(nums)
+
+        for num in numSet:
+            if num - 1 not in numSet: # 去重，表示和前面的不连续
+                cur = num
+                curlen = 1
+
+                while cur + 1 in numSet: # 😐😐 while 循环 # 表示和后面的联系
+                    cur += 1
+                    curlen += 1
+
+                res = max(res, curlen)
+
+        return res
+```
+
 
 ##  71. <a name='Subsets'></a>78. Subsets 子集
 
@@ -6618,7 +6729,7 @@ class Solution:
     def isPalindrome(self, head: ListNode) -> bool:
         vals = []
         cur = head
-        while cur:
+        while cur: # 😐 while 循环
             vals.append(cur.val)
             cur = cur.next
         return vals == vals[::-1]
@@ -6908,7 +7019,7 @@ class Solution:
     def invertTree(self, root: TreeNode) -> TreeNode:
         if not root: return root
         que = [root]
-        while que:
+        while que: # 😐 while 循环
             node = que.pop()
             if node.left or node.right:
                 if node.left: que.append(node.left)
@@ -6929,7 +7040,7 @@ class Solution:
         v1 = version1.split(".")
         v2 = version2.split(".")
 
-        while v1 or v2:
+        while v1 or v2: # 😐😐 while 循环
             x = int(v1.pop(0)) if v1 else 0
             y = int(v2.pop(0)) if v2 else 0
 
@@ -6965,7 +7076,7 @@ class Solution:
             return [-1,-1]
 
         # 寻找左侧边界
-        while left <= right:
+        while left <= right: # 😐 while 循环
             mid = (right + left) // 2
             if nums[mid] == target:
                 right = mid - 1 # 结束条件, 因为保留 left，所以移动 right
@@ -6980,7 +7091,7 @@ left 返回值那侧，不包含 ==
 
         # 寻找右侧边界
         right = len(nums)-1 # 只移动 right 端点
-        while left <= right:
+        while left <= right: # 😐 while 循环
             mid = (right + left) // 2
             if nums[mid] == target:
                 left = mid + 1 # 结束条件, 因为保留 right，所以移动 left
@@ -7049,7 +7160,7 @@ right 返回值那侧，不包含 ==
 class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
         l, r = 0, len(nums) - 1 
-        while l < r:
+        while l < r: # 😐😐 while 循环
             mid = (l + r) // 2
             '''
             left 返回值那侧，不包含 == 
@@ -7064,7 +7175,7 @@ class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
 
         l, r = 0, len(nums) - 1 
-        while l < r:
+        while l < r: # 😐😐 while 循环
             mid = (l + r) // 2
             if nums[mid] <= nums[mid + 1]:
                 l = mid + 1
@@ -7101,7 +7212,7 @@ class MountainArray:
 
 def binary_search(mountain, target, l, r, key=lambda x: x):
     target = key(target)
-    while l <= r:
+    while l <= r: # 😐 while 循环
         mid = (l + r) // 2
         cur = key(mountain.get(mid))
         if cur == target:
@@ -7118,7 +7229,7 @@ class Solution:
         先找到 peak
         """
         l, r = 0, mountain_arr.length() - 1
-        while l < r:
+        while l < r: # 😐😐 while 循环
             mid = (l + r) // 2
             if mountain_arr.get(mid) < mountain_arr.get(mid + 1):
                 l = mid + 1
@@ -7153,7 +7264,7 @@ class Solution:
         只用 mid 和 right 比较
         """
 
-        while l <= r:
+        while l <= r: # 😐 while 循环
             mid = (r + l) // 2       
             if  nums[mid] == nums[r]:    # 此时 left 和 right 相等，直接返回
                 return nums[r]
@@ -7253,31 +7364,6 @@ object Solution2-1{
 }
 ```
 
-##  84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
-
-[花花酱](https://www.bilibili.com/video/BV14t411Y7cg?spm_id_from=333.999.0.0)
-
-[一俩三四五](https://www.bilibili.com/video/BV1LJ41137r2?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
-
-```py
-class Solution:
-    def longestConsecutive(self, nums: List[int]) -> int:
-        res = 0
-        numSet = set(nums)
-
-        for num in numSet:
-            if num - 1 not in numSet: # 去重，表示和前面的不连续
-                cur = num
-                curlen = 1
-
-                while cur + 1 in numSet: # 表示和后面的联系
-                    cur += 1
-                    curlen += 1
-
-                res = max(res, curlen)
-
-        return res
-```
 
 ##  85. <a name='ValidateIPAddress'></a>468 Validate IP Address
 
@@ -7362,7 +7448,7 @@ class Solution:
     def searchMatrix(self, matrix, target):
         # 从右上角开始找
         i, j = 0, len(matrix[0]) - 1
-        while i < len(matrix) and j >= 0:
+        while i < len(matrix) and j >= 0: # 😐😐😐 while 循环
             if matrix[i][j] == target: 
                 return True
             elif target < matrix[i][j]: 
@@ -7432,7 +7518,7 @@ class Solution:
         res = ''
         i = 0
         minlen = min(len(string) for string in strs)
-        while i < minlen:
+        while i < minlen: # 😐😐😐 while 循环
             lookup = set(string[i] for string in strs)
             if len(lookup) == 1:
                 res += lookup.pop() # set集合中用pop弹出数据
@@ -7547,12 +7633,12 @@ class Solution:
         hash = {}
 
         cur = head
-        while cur:
+        while cur: # 😐 while 循环
             hash[cur] = Node(cur.val)
             cur = cur.next
         
-        cur = head
-        while cur:
+        cur = head 
+        while cur: # 😐 while 循环
             hash[cur].next = hash.setdefault(cur.next)
             # hash[cur].next = hash.get(cur.next) 这里也可以用 get
             hash[cur].random = hash.setdefault(cur.random)
@@ -7566,22 +7652,22 @@ dict.get(key, default = None)  -->  有key获取值，否则返回 default
 
 ```py
 就背一背吧，反正看不懂
-class Solution:
-    def copyRandomList(self, head):
-        def copyNode(node, visited):
-            if not node: 
-                return None
-            if node in visited: 
-                return visited[node]
-            # 第一步：
-            copy = Node(node.val, None, None)
-            visited[node] = copy
-            # 第二步：顺序不能错
-            copy.next = copyNode(node.next, visited)
-            copy.random = copyNode(node.random, visited)
-            return copy
+# class Solution:
+#     def copyRandomList(self, head):
+#         def copyNode(node, visited):
+#             if not node: 
+#                 return None
+#             if node in visited: 
+#                 return visited[node]
+#             # 第一步：
+#             copy = Node(node.val, None, None)
+#             visited[node] = copy
+#             # 第二步：顺序不能错
+#             copy.next = copyNode(node.next, visited)
+#             copy.random = copyNode(node.random, visited)
+#             return copy
 
-        return copyNode(head, {})
+#         return copyNode(head, {})
 ```
 
 ##  93. <a name='-1'></a>695-岛屿的最大面积
@@ -7602,7 +7688,7 @@ class Solution:
             for j, n in enumerate(lists):
                 area = 0
                 stack = [(i, j)]
-                while stack:
+                while stack: # 😐 while 循环
                     x, y = stack.pop()
                     # if 范围 + 值
                     if x < 0 or y < 0 or x == len(grid) or y == len(grid[0]) or grid[x][y] != 1:
@@ -7912,7 +7998,7 @@ class Solution:
     def widthOfBinaryTree(self, root: TreeNode) -> int:
         res = 0
         queue = collections.deque([(root, 1)])
-        while queue:
+        while queue: # 😐 while 循环
             res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
             for _ in range(len(queue)):
                 node, pos = queue.popleft()
@@ -7926,7 +8012,7 @@ class Solution:
     def widthOfBinaryTree(self, root: TreeNode) -> int:
         res = 0
         queue = collections.deque([(root, 0)])
-        while queue:
+        while queue: # 😐 while 循环
             res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
             for _ in range(len(queue)):
                 node, pos = queue.popleft()
@@ -7959,7 +8045,7 @@ class CQueue:
             if not self.stack_in: # 都为空
                 return -1
             else: # 把in栈中的东西全部倒入out栈中
-                while self.stack_in:
+                while self.stack_in: # 😐😐😐 while 循环
                     self.stack_out.append(self.stack_in.pop())
         # 如果 self.stack_out 有内容，就直接 pop
         return self.stack_out.pop()
@@ -8376,7 +8462,7 @@ class Solution(object):
         odd  = head
         even = evenHead = head.next
         # 当 2 和 3 存在
-        while even and even.next:
+        while even and even.next: # 😐😐 while 循环
             # 1 -> 2的后面
             odd.next = even.next
             # 1 变成 3
@@ -8420,7 +8506,7 @@ class Solution:
     def partition(self, head: ListNode) -> ListNode:        
         second = head.next        
         slow, fast = head, second        
-        while fast and fast.next:  # 🌵 while fast and fast.next:
+        while fast and fast.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
             slow.next = fast.next            
             slow = slow.next            
             fast.next = slow.next            
@@ -8430,7 +8516,7 @@ class Solution:
 
     def reverse(self,head):    
         res = None
-        while head:
+        while head: # 😐 while 循环
             headnxt = head.next
             head.next = res
             res = head
@@ -8440,7 +8526,7 @@ class Solution:
     def merge(self,p,q):        
         dummy = ListNode(0)        
         cur = dummy        
-        while p and q:            
+        while p and q:    # 😐 while 循环        
             if p.val <= q.val:               
                 cur.next = p                
                 p = p.next            
@@ -8465,7 +8551,7 @@ class Solution:
         dummy1 = ListNode(0)
         dummy2 = ListNode(0)
         slow, fast, cur = dummy1, dummy2, head
-        while cur:     # 🌵 用 cur 指针
+        while cur:    # 😐😐😐 while 循环 # 🌵 用 cur 指针
             if cur.val < x:
                 slow.next = cur # dummy1 指向第一个小于x的node
                 slow = slow.next
@@ -8491,7 +8577,7 @@ class Solution:
 class Solution:
     def middleNode(self, head: ListNode) -> ListNode:
         slow = fast = head
-        while fast and fast.next:
+        while fast and fast.next: # 😐 while 循环
             slow = slow.next
             fast = fast.next.next
         return slow
@@ -8534,10 +8620,10 @@ class Solution:
         sign = 1
         i = 0
         res = 0
-        while i < len(s):
+        while i < len(s): # 😐😐😐 while 循环
             if s[i].isdigit():
                 num = 0
-                while i < len(s) and s[i].isdigit():
+                while i < len(s) and s[i].isdigit(): # 😐😐😐 while 循环
                     num = 10 * num + int(s[i])
                     i += 1
                 res += sign * num
@@ -8567,11 +8653,13 @@ class Solution:
 
 class Solution:
     def removeKdigits(self, num: str, k: int) -> str:
+        '''
+        构建单调递增的数字串
+        '''
         numStack = []
         
-        # 构建单调递增的数字串
         for digit in num:
-            while k and numStack and numStack[-1] > digit: # 3个条件
+            while k and numStack and numStack[-1] > digit: # 😐 while 循环 + pop # 3个条件
                 numStack.pop()
                 k -= 1
         
@@ -8614,7 +8702,7 @@ class Solution:
                 que.append(i)
 
         res = []
-        while que:
+        while que: # 😐 while 循环
             start = que.popleft()
             res.append(start)
             # 删除边时，将终点的入度-1。若入度为0，果断入队
@@ -8660,7 +8748,7 @@ class Solution:
         res = 0 
         a = abs(x)
 
-        while a != 0:
+        while a != 0: # 😐😐 while 循环
             tmp = a % 10
             res = res * 10 + tmp
             a = a // 10
@@ -8712,6 +8800,93 @@ object Solution {
 }
 ```
 
+##  126. <a name='Powxn'></a>50 Pow(x, n)
+
+[小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Ai4y147kr?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        res = 1
+
+        if n < 0:
+            x = 1 / x
+            n = - n
+
+        # 类似2分，速度更快
+        while n > 0: # 😐😐 while 循环
+            if n % 2 == 1:
+                res *= x # 注意: res 这里, 同步发生变化
+            n >>= 1 # 等价于 n //= 2
+            x *= x       # 注意: x 这里, 同步发生变化
+        return res
+```
+
+```scala
+
+/**
+* recursive version : bottom-up
+* memo
+*   1. n may be negative or positive
+*   2. n may be odd or even
+* O(logN) in time
+*/
+object Solution1 {
+  def myPow(x: Double, n: Int): Double = {
+    if (n == 0) 1
+    else if(n > 0) {
+      n % 2 match{
+        case 1 => myPow(x * x, n / 2) * x
+        case 0 => myPow(x * x, n / 2)
+      }
+    }else{
+      val t = myPow(x, n / 2)
+      math.abs(n % 2) match{
+        case 1 => t * t * (1 / x)
+        case 0 => t * t
+      }
+    }
+
+  }
+}
+
+/**
+* top-down - iterative version 
+* Binary Exponentiation with negative n
+*
+* each iteration is calculate pow(base, nn) * ans
+*   ex: input x = 2, n = 10
+*    0. base: 2.0, nn: 10 ans: 1.0 => pow(2, 10) * 1 =  1024
+*    1. base: 4.0, nn: 5, ans: 1.0  => pow(4, 5) * 1 = 1024
+*    2. base: 16.0, nn: 2, ans: 4.0 => pow(16, 2) * 4 = 1024
+*    3. base: 256.0, nn: 1, ans: 4.0 => pow(256, 1) * 4 = 1024
+*    4. base: 65536.0, nn: 0, ans: 1024.0 => pow(65536, 0) * 1024 = 1024
+*
+* time complexity: O(logN)
+*/
+
+object Solution2 {
+  def myPow(x: Double, n: Int): Double = {
+    if (n == 0) return 1
+    var ans = 1.0
+    var nn = n
+    var base = x
+
+    while (nn != 0) {
+     /* nn could be -1 if nn < 0 and run nn % 2, so using nn & 1 here */
+      if((nn & 1) == 1)  ans = ans * base
+      nn = nn / 2
+      base = base * base
+    }
+    // judge n to decide whether reverse ans
+    if (n < 0) 1.0 / ans else ans  
+  }
+}
+
+```
+
 ##  121. <a name='DailyTemperatures'></a>739-Daily Temperatures
 
 [哈哈哈](https://www.bilibili.com/video/BV1Q7411L7w8?spm_id_from=333.999.0.0)
@@ -8738,7 +8913,7 @@ class Solution:
             # [2, 5]
             # [6]
             # 如果比前一项大，则直接pop，成功
-            while stack and temperatures[stack[-1]] < tmpt:
+            while stack and temperatures[stack[-1]] < tmpt: # 😐😐 while 循环 + pop
                 preIdx = stack.pop()
                 res[preIdx] = i - preIdx
             stack.append(i) 
@@ -8832,92 +9007,7 @@ class Solution:
 ```
 
 
-##  126. <a name='Powxn'></a>50 Pow(x, n)
 
-[小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Ai4y147kr?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def myPow(self, x: float, n: int) -> float:
-        res = 1
-
-        if n < 0:
-            x = 1 / x
-            n = - n
-
-        # 类似2分，速度更快
-        while n > 0:
-            if n % 2 == 1:
-                res *= x # 注意: res 这里, 同步发生变化
-            n >>= 1 # 等价于 n //= 2
-            x *= x       # 注意: x 这里, 同步发生变化
-        return res
-```
-
-```scala
-
-/**
-* recursive version : bottom-up
-* memo
-*   1. n may be negative or positive
-*   2. n may be odd or even
-* O(logN) in time
-*/
-object Solution1 {
-  def myPow(x: Double, n: Int): Double = {
-    if (n == 0) 1
-    else if(n > 0) {
-      n % 2 match{
-        case 1 => myPow(x * x, n / 2) * x
-        case 0 => myPow(x * x, n / 2)
-      }
-    }else{
-      val t = myPow(x, n / 2)
-      math.abs(n % 2) match{
-        case 1 => t * t * (1 / x)
-        case 0 => t * t
-      }
-    }
-
-  }
-}
-
-/**
-* top-down - iterative version 
-* Binary Exponentiation with negative n
-*
-* each iteration is calculate pow(base, nn) * ans
-*   ex: input x = 2, n = 10
-*    0. base: 2.0, nn: 10 ans: 1.0 => pow(2, 10) * 1 =  1024
-*    1. base: 4.0, nn: 5, ans: 1.0  => pow(4, 5) * 1 = 1024
-*    2. base: 16.0, nn: 2, ans: 4.0 => pow(16, 2) * 4 = 1024
-*    3. base: 256.0, nn: 1, ans: 4.0 => pow(256, 1) * 4 = 1024
-*    4. base: 65536.0, nn: 0, ans: 1024.0 => pow(65536, 0) * 1024 = 1024
-*
-* time complexity: O(logN)
-*/
-
-object Solution2 {
-  def myPow(x: Double, n: Int): Double = {
-    if (n == 0) return 1
-    var ans = 1.0
-    var nn = n
-    var base = x
-
-    while (nn != 0) {
-     /* nn could be -1 if nn < 0 and run nn % 2, so using nn & 1 here */
-      if((nn & 1) == 1)  ans = ans * base
-      nn = nn / 2
-      base = base * base
-    }
-    // judge n to decide whether reverse ans
-    if (n < 0) 1.0 / ans else ans  
-  }
-}
-
-```
 
 ##  127. <a name='2.'></a>补充题2. 圆环回原点问题
 
@@ -8973,7 +9063,7 @@ class MyStack:
         
     def pop(self) -> int:
         # 把 [-1] 用 popleft 搞定 
-        while len(self.q1) > 1:
+        while len(self.q1) > 1: # 😐😐😐 while 循环: 保留一个元素，将其pop掉
             self.tmp.append(self.q1.popleft())
         self.q1, self.tmp = self.tmp, self.q1
         return self.tmp.popleft()
@@ -9112,7 +9202,7 @@ class MyStack1() {
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
         idx, left, right = 0, 0, len(nums) - 1
-        while idx <= right:
+        while idx <= right: # 😐😐😐😐 while 循环
             # 交换完位置后 idx 依旧在原位
             if nums[idx] == 2 and idx < right:
                 nums[idx], nums[right] = nums[right], 2
@@ -9206,7 +9296,7 @@ class Solution:
         left = 0
         right = len(height)-1
         maxRes = res = 0
-        while left < right:
+        while left < right: # 😐 while 循环
             res = (right - left) * min(height[left], height[right])
             if height[left] < height[right]:
                 # 由于短板效应，只需要移动短板即可
@@ -9298,12 +9388,12 @@ class Solution:
     def isPalindrome(self, s: str) -> bool:
         left = 0
         right = len(s) - 1
-        while left < right:
+        while left < right: # 😐 while 循环
             # 易错点：if not s[left].isalnum() 是不对的，因为存在连续多个“非数字的情况”
             # 易错点：while left < right 不能省略
-            while left < right and not s[left].isalnum(): 
+            while left < right and not s[left].isalnum(): # 😐😐 while 循环
                 left += 1
-            while left < right and not s[right].isalnum(): 
+            while left < right and not s[right].isalnum(): # 😐😐 while 循环
                 right -= 1
             if s[left].lower() == s[right].lower():
                 left += 1
@@ -9382,7 +9472,7 @@ class Solution:
         n = len(matrix[0])
         l = 0
         r = m * n - 1
-        while l <= r:
+        while l <= r: # 😐 while 循环
             mid = (l + r) // 2
             midRow = mid // n
             midCol = mid % n
@@ -9395,87 +9485,7 @@ class Solution:
         return False
 ```
 
-##  137. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
 
-[小明](https://www.bilibili.com/video/BV1Ug4y1v7mF?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Pz4y1X7qR?spm_id_from=333.999.0.0)
-
-```py
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        #数组只能读 所以不能排序,不能swap数组下标
-        #时间复杂度小于 O(n^2) 不能暴力
-        #空间复杂度 O(1) 不能额外开辟数组
-        
-        ''' 1、暴力不符合题意
-        for i in nums:
-            count = 0
-            for num in nums:
-                if num == i:
-                    count += 1
-            if count > 1:
-                return i
-        return -1
-        '''
-        
-        '''2、小于O(n^2) 二分查找
-        我们不要考虑数组,只需要考虑 数字都在 1 到 n 之间
-        示例 1:
-        arr = [1,3,4,2,2] 此时数字在 1 — 5 之间
-
-        mid = (1 + 5) / 2 = 3 arr小于等于的3有4个(1,2,2,3)，1到3中肯定有重复的值
-        mid = (1 + 3) / 2 = 2 arr小于等于的2有3个(1,2,2)，1到2中肯定有重复的值    if cnt > mid:  right = mid
-        mid = (1 + 2) / 2 = 1 arr小于等于的1有1个(1)，2到2中肯定有重复的值        if cnt <= mid: left = mid + 1
-        所以重复的数是 2 
-        '''
-
-要求：
-
-只用常量级 O(1) 的额外空间
-输入：nums = [1,3,4,2,2]
-输出：2
-输入：nums = [3,1,3,4,2]
-输出：3
-
-class Solution(object):
-    def findDuplicate(self, nums):
-        '''
-        这个写法很容易出错，最好别
-        '''
-        # low, high = 1, len(nums) - 1
-        # while low <= high:
-        #     mid = (low + high) // 1
-        #     cnt = sum(x <= mid for x in nums)
-        #     if cnt > mid:
-        #         high = mid - 1
-        #     else: # cnt <= mid:
-        #         low = mid + 1
-        # return low
-
-线性级时间复杂度 O(n)
-
-class Solution:
-    def findDuplicate(self, nums: List[int]) -> int:
-        # node = index of nums
-        # node.next = nums[node]
-        # node.next.next = nums[nums[node]]
-        slow = nums[0]         #先走一步
-        fast = nums[nums[0]] 
-        while slow != fast:
-            slow = nums[slow]
-            fast = nums[nums[fast]] # 曾经犯的一个错误，以为这里会固定地在环入口，值相同的那个点相遇
-        root = 0                    # 其实它们可以在环上任何一个node相遇，这里就是任何一个数组的下标index    
-        while root != slow:
-            root = nums[root]
-            slow = nums[slow]
-        return slow             # 回到循环结束的上一步
-                                # nums[proot] == nums[pslow]
-                                # The last slow = nums[proot] and this value at least has two slot in the array
-
-```
 
 ##  138. <a name='-1'></a>384. 打乱数组
 
@@ -9670,7 +9680,7 @@ class Solution:
         bkp = x
         res = 0
 
-        while x:
+        while x: # 😐 while 循环
             tmp = x % 10
             res = res*10 + tmp
             x //= 10
@@ -9810,14 +9820,14 @@ https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/
 class Solution:
     def findKthNumber(self, n: int, k: int) -> int:
         def getCnt(prefix, n):
-            cnt, cur, next = 0, prefix, prefix + 1
-            while cur <= n:
-                cnt += min(next, n + 1) - cur # 比如n是195的情况195到100有96个数
-                cur, next = cur * 10, next * 10
+            cnt, cur, nxt = 0, prefix, prefix + 1
+            while cur <= n: # 😐 while 循环
+                cnt += min(nxt, n + 1) - cur # 比如n是195的情况195到100有96个数
+                cur, nxt = cur * 10, nxt * 10
             return cnt
         
         poi, prefix = 1, 1 # 扣除掉第一个0节点
-        while poi < k:
+        while poi < k: # 😐 while 循环
             cnt = getCnt(prefix, n)
             if poi + cnt > k:
                 prefix *= 10 
@@ -9855,7 +9865,7 @@ class Solution:
         
         def cal_steps(n, n1, n2):
             step = 0
-            while n1 <= n:
+            while n1 <= n: # 😐 while 循环
                 step += min(n2, n + 1) - n1
                 n1 *= 10
                 n2 *= 10
@@ -9864,7 +9874,7 @@ class Solution:
         cur = 1
         k -= 1
         
-        while k > 0:
+        while k > 0: # 😐 while 循环
             steps = cal_steps(n, cur, cur + 1)
             if steps <= k: # 第k个数不在以cur为根节点的树上
                 k -= steps 
@@ -10524,7 +10534,7 @@ class Solution:
             # 三指针：i + left + right
             left = i + 1
             right = n - 1
-            while left < right:
+            while left < right: # 😐 while 循环
                 aim = nums[i] + nums[left] + nums[right] - target
                 if abs(aim) < abs(minAim): minAim = aim
                 if aim == 0:  return target
@@ -10600,7 +10610,7 @@ class Solution:
             root = root.right # 删除根节点
         else:
             p = root.left
-            while p.right:
+            while p.right: # 😐 while 循环
                 p = p.right
     
             p.right = root.right # 找到左子树中最大的节点，链接到 root.right
@@ -10610,7 +10620,7 @@ class Solution:
 
 找到left中的最大：
             p = root.left
-            while p.right:
+            while p.right: # 😐 while 循环
                 p = p.right
 
 
@@ -10655,7 +10665,7 @@ class Solution:
 class Solution: 
     def reverseString(self, s: List[str]) -> None:
         l, r = 0, len(s) - 1
-        while l < r:
+        while l < r: # 😐 while 循环
             s[l], s[r] = s[r], s[l]
             l += 1
             r -= 1
@@ -10700,7 +10710,7 @@ class Solution:
 class Solution:
     def hammingWeight(self, n: int) -> int:
         res = 0
-        while n:
+        while n: # 😐 while 循环
             n &= n - 1
             res += 1
         return res
@@ -10758,7 +10768,7 @@ class Solution:
 class Solution:
     def findNthDigit(self, n: int) -> int:
         d, count = 1, 9
-        while n > d * count:
+        while n > d * count: # 😐 while 循环
             n -= d * count
             d += 1
             count *= 10
@@ -10887,9 +10897,9 @@ class Solution:
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
         i = len(triangle) - 2
-        while i >= 0:
+        while i >= 0: # 😐 while 循环
             subi = i
-            while subi >= 0:
+            while subi >= 0: # 😐 while 循环
                 triangle[i][subi] += min(triangle[i+1][subi],triangle[i+1][subi+1])
                 subi -= 1
             i -= 1
@@ -10991,7 +11001,7 @@ class Solution:
     def superEggDrop(self, eggs: int, level: int) -> int:
             dp = [0] * (eggs + 1)
             m = 0
-            while dp[eggs] < level:
+            while dp[eggs] < level: # 😐 while 循环
                 m += 1
                 for gg in range(eggs, 0, -1): # 从 eggs ~ 1
                     # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层
@@ -11030,7 +11040,7 @@ class Solution:
             s[i] =  list(s[i])
             left = 0
             right = len(s[i]) - 1
-            while left < right:
+            while left < right: # 😐 while 循环
                 s[i][right], s[i][left] = s[i][left], s[i][right]
                 left += 1
                 right -= 1
@@ -11051,7 +11061,7 @@ class Solution:
 class Solution(object):
     def convertToTitle(self, columnNumber):
         res = ''
-        while columnNumber:
+        while columnNumber: # 😐 while 循环
             columnNumber -= 1                       # 又想了好久才知道在哪里减一。。
             res = chr(columnNumber % 26 + 65) + res # A的ascii码为65
             columnNumber = columnNumber // 26 
@@ -11195,7 +11205,7 @@ class Solution:
         nums = list(str(n))
         # 关键在于从后往前，找到非递减序列
         i = len(nums) - 2
-        while i >= 0:
+        while i >= 0: # 😐 while 循环
             if nums[i] >= nums[i+1]:
                 i -= 1
             else:
@@ -11636,10 +11646,10 @@ class Solution:
         res = n + 1 
         queI = collections.deque()  
         for i, Py in enumerate(presum):
-            while queI and Py - presum[queI[-1]] <= 0:
+            while queI and Py - presum[queI[-1]] <= 0: # 😐 while 循环
                 queI.pop()
 
-            while queI and Py - presum[queI[0]] >= k:
+            while queI and Py - presum[queI[0]] >= k: # 😐 while 循环
                 res = min(res, i - queI.popleft())
 
             queI.append(i)
@@ -11874,7 +11884,7 @@ class Solution:
         res = 0
         for k in range(len(nums)):
             i, j = 0, k - 1
-            while i < j:
+            while i < j: # 😐 while 循环
                 if nums[i] + nums[j] > nums[k]:
                     res += j - i
                     j -= 1
@@ -11902,7 +11912,7 @@ class Solution:
         cover = 0
         stop = 0
         i = 0
-        while cover >= i and i < n - 1: 
+        while cover >= i and i < n - 1: # 😐 while 循环
             cover = max(cover,i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
             if i == stop:
                 jump += 1
@@ -11941,7 +11951,7 @@ class Solution:
         stack = []
         res = 0
         for i in range(len(heights)):
-            while stack and heights[i] < heights[stack[-1]]:
+            while stack and heights[i] < heights[stack[-1]]: # 😐 while 循环
                 s = stack.pop()
                 res = max(res, heights[s] * ((i - stack[-1] - 1) if stack else i))
             stack.append(i)
@@ -11965,7 +11975,7 @@ class Solution(object):
                 if matrix[i][j] == '0':
                     height[j + 1] = 0
             for k in range(1, len(height)):
-                while(height[k] < height[stack[-1]]):
+                while(height[k] < height[stack[-1]]): # 😐 while 循环
                     h = height[stack.pop()]
                     w = k - stack[-1] - 1 # 宽度为 k - stack[-1] - 1
                     res = max(res, h * w)
@@ -12040,7 +12050,7 @@ class Solution:
         heights.append(0) # 最左边插个0，heights最后补充一个0可以很好的简化代码
         n, res = len(heights), 0
         for i in range(n):
-            while len(stack) > 1 and heights[stack[-1]] > heights[i]:
+            while len(stack) > 1 and heights[stack[-1]] > heights[i]: # 😐 while 循环
                 h = heights[stack.pop()]
                 w = i - stack[-1] - 1
                 res = max(res, h * w)            
@@ -12080,7 +12090,7 @@ class Solution(object):
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         l, r = 0, len(numbers) - 1 
-        while l <= r:
+        while l <= r: # 😐 while 循环
             if numbers[l] + numbers[r] == target:
                 return [l + 1, r + 1] # 给你一个下标从 1 开始的整数数组 numbers
             elif numbers[l] + numbers[r] < target:
@@ -12286,7 +12296,7 @@ class Solution:
         for i in range(proN):
             if i not in visited:
                 peopleQ = collections.deque([i])
-                while peopleQ:
+                while peopleQ: # 😐 while 循环
                     peo = peopleQ.popleft()
                     visited.add(peo)
                     for fri in range(proN):
@@ -12450,7 +12460,7 @@ class Solution:
 
         left = max(nums)  # 当 划分个数为 len(nums)
         right = sum(nums) # 当 划分个数为 1
-        while left < right:
+        while left < right: # 😐 while 循环
             bagsize = (left + right) // 2
             if check(bagsize): # 检查划分个数够不够
                 right = bagsize
@@ -12513,15 +12523,15 @@ class Solution:
                 p = j + 1
                 q = n - 1
 
-                while p < q:
+                while p < q: # 😐 while 循环
                     if nums[i] + nums[j] + nums[p] + nums[q] > target: q -= 1
                     elif nums[i] + nums[j] + nums[p] + nums[q] < target: p += 1
                     else:
                         res.append([nums[i], nums[j], nums[p], nums[q]])
                         # 第3次 剪枝
-                        while p < q and nums[p] == nums[p + 1]: p += 1
+                        while p < q and nums[p] == nums[p + 1]: p += 1 # 😐 while 循环
                         # 第4次 剪枝
-                        while p < q and nums[q] == nums[q - 1]: q -= 1
+                        while p < q and nums[q] == nums[q - 1]: q -= 1 # 😐 while 循环
                         p += 1
                         q -= 1
         return res
@@ -12540,7 +12550,7 @@ class Solution:
         res = ""
         lib = "0123456789abcdef"
         if num == 0: return "0"
-        while num:
+        while num: # 😐 while 循环
             res = lib[num % 16] + res # 一定要加在右边
             num //= 16
         return res
@@ -12584,9 +12594,9 @@ class Solution:
         # 8: {1}
         que = [target.val]
         visited = {target.val} # 必须用set
-        while k:
+        while k: # 😐 while 循环
             nextnode = [] # 每一次都是临近的节点
-            while que:
+            while que: # 😐 while 循环
                 stt = que.pop()
                 for end in graph[stt]:
                     if end not in visited:
@@ -12633,7 +12643,7 @@ class Solution:
         # 小数部分
         indexMap = {}
         remainder = numerator % denominator
-        while remainder and remainder not in indexMap:
+        while remainder and remainder not in indexMap: # 😐 while 循环
             indexMap[remainder] = len(s) 
             remainder *= 10
             s.append(str(remainder // denominator))
@@ -12718,7 +12728,7 @@ class Solution:
         stack = []
         # 双倍nums大法好
         for idx, cur in enumerate(nums + nums):
-            while stack and nums[stack[-1]] < cur:
+            while stack and nums[stack[-1]] < cur: # 😐 while 循环
                 res[stack[-1]] = cur
                 stack.pop()
             if idx < len(nums): # 易错点：append(idx)是有条件的
@@ -12804,7 +12814,7 @@ class Solution:
                     if board[i][j] == 'O':
                         que.append((i,j))
 
-        while que:
+        while que: # 😐 while 循环
             x,y = que.popleft()
             board[x][y] = 'A'
             for dx,dy in [(1,0),(-1,0),(0,1),(0,-1)]:
@@ -12883,10 +12893,10 @@ class Node:
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         first = root # first 表示当前层的最左边节点
-        while first: # 每次循环连接当前层的下一层
+        while first: # 😐 while 循环 # 每次循环连接当前层的下一层
             dummy = nxtcur = Node(0) # head表示下一层的虚拟头部
             cur = first
-            while cur: #  cur遍历当前层，nxtcur将下一层连接 
+            while cur: # 😐 while 循环 #  cur遍历当前层，nxtcur将下一层连接 
                 if cur.left :
                     nxtcur.next = cur.left
                     nxtcur = nxtcur.next
@@ -13098,7 +13108,7 @@ class Solution:
 class Solution:
     def trailingZeroes(self, n: int) -> int:
         ans = 0
-        while n:
+        while n: # 😐 while 循环
             n //= 5
             ans += n
         return ans
@@ -13162,10 +13172,10 @@ class Solution:
     def countSubstrings(self, s: str) -> int:
         center = ans = 0
         # center 用一个 while 循环
-        while center < len(s):
+        while center < len(s): # 😐 while 循环
             low, high = floor(center), ceil(center)
             # low, high 用一个 while 循环
-            while low >=0 and high < len(s) and s[low] == s[high]:
+            while low >=0 and high < len(s) and s[low] == s[high]: # 😐 while 循环
                 low, high, ans = low-1, high+1, ans+1
             center += 0.5
         return ans
@@ -13349,7 +13359,7 @@ class Solution:
         numlist = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
         res = ''
         for i in range(len(numlist)):
-            while num >= numlist[i]:
+            while num >= numlist[i]: # 😐 while 循环
                 num -= numlist[i]
                 res = res + strlist[i]
         return res
@@ -13422,11 +13432,11 @@ class Solution:
     def lexicalOrder(self, n):
         ans = []
         num = 1
-        while len(ans) < n:
-            while num <= n:  # 不断进入下一层
+        while len(ans) < n: # 😐 while 循环
+            while num <= n: # 😐 while 循环 # 不断进入下一层
                 ans.append(num)
                 num *= 10
-            while num % 10 == 9 or num > n:  # 不断返回上一层
+            while num % 10 == 9 or num > n: # 😐 while 循环 # 不断返回上一层
                 num //= 10
             num += 1  # 遍历该层下一个数
         return ans
@@ -13554,10 +13564,10 @@ class Solution(object):
 
         i = 2
         # 两层 while 循环
-        while i * i < n:
+        while i * i < n: # 😐 while 循环
         	if isPrime[i]:
         		j = i * i    # j 永远是 i 的倍数
-        		while j < n :
+        		while j < n : # 😐 while 循环
         			isPrime[j] = 0
         			j += i   # j 永远是 i 的倍数
         	i += 1
@@ -13649,7 +13659,7 @@ class Solution:
     def validPalindrome(self, s: str) -> bool:
         def checkPalindrome(low, high):
             i, j = low, high
-            while i < j:
+            while i < j: # 😐 while 循环
                 if s[i] != s[j]:
                     return False # 当 需要 跳过 字符串
                 i += 1
@@ -13657,7 +13667,7 @@ class Solution:
             return True # 当 需要 跳过 字符串
 
         low, high = 0, len(s) - 1
-        while low < high:
+        while low < high: # 😐 while 循环
             if s[low] == s[high]: 
                 low += 1
                 high -= 1
@@ -13742,7 +13752,7 @@ class Solution:
             if s[i] in stack:
                 continue
             else:
-                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]: # 如果数比栈顶小，而且栈顶在后面还有的话，
+                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]: # 😐 while 循环 # 如果数比栈顶小，而且栈顶在后面还有的话，
                     stack.pop() # 就弹出栈顶。
                 stack.append(s[i])
             
