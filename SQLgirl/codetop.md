@@ -9865,16 +9865,16 @@ class Solution:
         
         def cal_steps(n, n1, n2):
             step = 0
-            while n1 <= n: # 😐 while 循环
-                step += min(n2, n + 1) - n1
+            while n1 <= n: # 😐😐😐 while 循环
+                step += min(n2, n + 1) - n1 # 比如n是195的情况195到100有96个数
                 n1 *= 10
                 n2 *= 10
             return step
                 
         cur = 1
-        k -= 1
+        k -= 1 # k - 1 就可以与步长
         
-        while k > 0: # 😐 while 循环
+        while k > 0: # 😐😐😐 while 循环
             steps = cal_steps(n, cur, cur + 1)
             if steps <= k: # 第k个数不在以cur为根节点的树上
                 k -= steps 
@@ -10610,7 +10610,7 @@ class Solution:
             root = root.right # 删除根节点
         else:
             p = root.left
-            while p.right: # 😐 while 循环
+            while p.right: # 😐😐 while 循环
                 p = p.right
     
             p.right = root.right # 找到左子树中最大的节点，链接到 root.right
@@ -10710,7 +10710,7 @@ class Solution:
 class Solution:
     def hammingWeight(self, n: int) -> int:
         res = 0
-        while n: # 😐 while 循环
+        while n: # 😐😐😐 while 循环
             n &= n - 1
             res += 1
         return res
@@ -10765,6 +10765,10 @@ class Solution:
 ##  169. <a name='N'></a>400. 第N个数字
 
 ```py
+输入：n = 11
+输出：0
+解释：第 11 位数字在序列 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ... 里是 0 ，它是 10 的一部分。
+
 class Solution:
     def findNthDigit(self, n: int) -> int:
         d, count = 1, 9
@@ -10772,15 +10776,14 @@ class Solution:
             n -= d * count
             d += 1
             count *= 10
-            print
         index = n - 1
         num = 10 ** (d - 1) + index // d
         digitIndex = index % d
         return int(str(num)[digitIndex])
 # 问第 300 个数
-# 1 ~ 9        9个数字
-# 10 ~ 99     90个数字
-# 100 ~ 999  900个数字
+# 1 ~ 9        9个数字 * 1位数字
+# 10 ~ 99     90个数字 * 2位数字
+# 100 ~ 999  900个数字 * 3位数字
 # 300 - 9 - 2*90 = 111
 # (111 - 1) // 3 = 36
 # (111 - 1) % 3 = 2
@@ -10897,10 +10900,10 @@ class Solution:
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
         i = len(triangle) - 2
-        while i >= 0: # 😐 while 循环
+        while i >= 0: # 😐😐 while 循环
             subi = i
-            while subi >= 0: # 😐 while 循环
-                triangle[i][subi] += min(triangle[i+1][subi],triangle[i+1][subi+1])
+            while subi >= 0: # 😐😐 while 循环
+                triangle[i][subi] += min(triangle[i + 1][subi], triangle[i + 1][subi + 1])
                 subi -= 1
             i -= 1
         return triangle[0][0]
@@ -11001,7 +11004,7 @@ class Solution:
     def superEggDrop(self, eggs: int, level: int) -> int:
             dp = [0] * (eggs + 1)
             m = 0
-            while dp[eggs] < level: # 😐 while 循环
+            while dp[eggs] < level: # 😐😐😐 while 循环
                 m += 1
                 for gg in range(eggs, 0, -1): # 从 eggs ~ 1
                     # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层
@@ -11061,7 +11064,7 @@ class Solution:
 class Solution(object):
     def convertToTitle(self, columnNumber):
         res = ''
-        while columnNumber: # 😐 while 循环
+        while columnNumber: # 😐😐 while 循环
             columnNumber -= 1                       # 又想了好久才知道在哪里减一。。
             res = chr(columnNumber % 26 + 65) + res # A的ascii码为65
             columnNumber = columnNumber // 26 
@@ -11205,7 +11208,7 @@ class Solution:
         nums = list(str(n))
         # 关键在于从后往前，找到非递减序列
         i = len(nums) - 2
-        while i >= 0: # 😐 while 循环
+        while i >= 0: # 😐😐😐 while 循环
             if nums[i] >= nums[i+1]:
                 i -= 1
             else:
@@ -11636,6 +11639,14 @@ class Solution:
 ##  196. <a name='K-1'></a>862. 和至少为 K 的最短子数组
 
 ```py
+输入：nums = [2,-1,2], k = 3
+输出：3
+
+找出 nums 中和至少为 k 的 `最短非空子数组` ，
+
+并返回该子数组的`长度`。如果不存在这样的 `子数组` ，返回 -1 。
+
+`子数组` 是数组中 `连续` 的一部分。
 class Solution:
     def shortestSubarray(self, nums: List[int], k: int) -> int:
         n = len(nums)
@@ -11646,10 +11657,14 @@ class Solution:
         res = n + 1 
         queI = collections.deque()  
         for i, Py in enumerate(presum):
-            while queI and Py - presum[queI[-1]] <= 0: # 😐 while 循环
+            # -105 <= nums[i] <= 105
+            # 1 <= k <= 109
+            # k为正数，如果算到复数，肯定是不满足的
+            # 排出所有的局部负值
+            while queI and Py - presum[queI[-1]] <= 0: # 😐😐😐 while 循环
                 queI.pop()
-
-            while queI and Py - presum[queI[0]] >= k: # 😐 while 循环
+            # 找到 sum 至少为 k 的 `最短非空子数组`，则尽可能地缩短答案
+            while queI and Py - presum[queI[0]] >= k: # 😐😐😐 while 循环
                 res = min(res, i - queI.popleft())
 
             queI.append(i)
@@ -11884,10 +11899,13 @@ class Solution:
         res = 0
         for k in range(len(nums)):
             i, j = 0, k - 1
-            while i < j: # 😐 while 循环
+            while i < j: # 😐😐😐 while 循环
+                # 如果满足条件，则i到j之间的，所有i，都满足条件
+                # j 缩小
                 if nums[i] + nums[j] > nums[k]:
                     res += j - i
                     j -= 1
+                # 如果不满足条件，i才需要增大，否则i可以一直躺平
                 else:
                     i += 1
         return res
@@ -11905,6 +11923,11 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1fb4y1Z77x?spm_id_from=333.999.0.0)
 
 ```py
+输入: nums = [2,3,1,1,4]
+输出: 2
+解释: 跳到最后一个位置的最小跳跃数是 2。
+     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+
 class Solution:
     def jump(self, nums: List[int]) -> int:
         n = len(nums)
@@ -11912,10 +11935,10 @@ class Solution:
         cover = 0
         stop = 0
         i = 0
-        while cover >= i and i < n - 1: # 😐 while 循环
-            cover = max(cover,i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
+        while cover >= i and i < n - 1: # 😐😐😐 while 循环, i 不需要达到4，所以 cover 达到 4 就可以了
+            cover = max(cover, i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
             if i == stop:
-                jump += 1
+                jump += 1 # jump + 1 的情况：2(0),stop=2,1(2),stop=4
                 stop = cover
             i += 1
         return jump
@@ -11929,6 +11952,13 @@ class Solution:
 # 这个高度就是对应的连续1的长度，
 # 然后对每一行都更新一次最大矩形面积。
 # 本质上是对矩阵中的每行，均依次执行84题算法。
+输入：matrix = 
+["1","0","1","0","0"],
+["1","0","1","1","1"],
+["1","1","1","1","1"],
+["1","0","0","1","0"]
+输出：6
+
 
 class Solution:
     def maximalRectangle(self, matrix) -> int:
@@ -11936,26 +11966,80 @@ class Solution:
             return 0
         res = 0
         m, n = len(matrix), len(matrix[0])
-        heights = [0] * n
+        heights = [0] * (n + 1)
+        # heights = [0] * n，height需要补充一个0
         for i in range(m):
             for j in range(n):
                 if matrix[i][j] == '0':
                     heights[j] = 0
                 else:
-                    heights[j] = heights[j] + 1
+                    heights[j] += 1
+            # 每行求一次 self.largestRectangleArea
             res = max(res, self.largestRectangleArea(heights))
         return res
 
     def largestRectangleArea(self, heights):
-        heights.append(0)
+        # heights.append(0)
         stack = []
         res = 0
         for i in range(len(heights)):
-            while stack and heights[i] < heights[stack[-1]]: # 😐 while 循环
+            # 新来的 heights[i] 更小
+            while stack and heights[i] < heights[stack[-1]]: # 😐 while 循环 + pop
+                # 算一下，heights[s] 上一个较大的 hight
                 s = stack.pop()
                 res = max(res, heights[s] * ((i - stack[-1] - 1) if stack else i))
             stack.append(i)
         return res
+'''
+s = stack.pop()前：
+'''
+heights: [1, 0, 1, 0, 0, 0]
+stack: [0]
+stack: [1, 2]
+heights: [2, 0, 2, 1, 1, 0, 0]
+stack: [0]
+stack: [1, 2]
+stack: [1, 3, 4]
+stack: [1, 3]
+heights: [3, 1, 3, 2, 2, 0, 0, 0]
+stack: [0]
+stack: [1, 2]
+stack: [1, 3, 4]
+stack: [1, 3]
+stack: [1]
+heights: [4, 0, 0, 3, 0, 0, 0, 0, 0]
+stack: [0]
+stack: [1, 2, 3]
+
+'''
+s = stack.pop()后：
+✨表示pop
+'''
+heights: [1, 0, 1, ✨0, 0, 0]
+stack: [1]    res: 1 = 1 * ( 3 - 1 - 1)
+
+heights: [2, 0, 2, ✨1, 1, ✨0, 0]
+stack: [1]    res: 2 = 2 * ( 3 - 1 - 1)
+stack: [1, 3] res: 2 = 1 * ( 5 - 3 - 1)
+stack: [1]    res: 3 = 1 * ( 5 - 1 - 1)
+
+heights: [3, 1, 3, ✨2, 2, ✨✨0, 0, 0]
+stack: [1]    res: 3 = 3 * ( 3 - 1 -1)
+stack: [1, 3] res: 3 = 2 * ( 5 - 3 -1)
+stack: [1]    res: 6 = 2 * ( 5 - 1 -1)
+
+heights: [4, 0, 0, 3, ✨0, 0, 0, 0, 0]
+stack: [1, 2] res: 4 = 3 * ( 4 - 2 -1)
+
+输入：
+["1","0","1","0","0"]
+["1","0","1","1","1"]
+["1","1","1","1","1"]
+["1","0","0","1","0"]
+输出：
+4
+预期结果：
+6
 
 
 借用了上题的单调栈：
@@ -12043,6 +12127,9 @@ class Solution:
 
 ```py
 单调栈
+输入：heights = [2,1,5,6,2,3]
+输出：10
+解释：最大的矩形为图中红色区域，面积为 10
 
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
@@ -12050,10 +12137,17 @@ class Solution:
         heights.append(0) # 最左边插个0，heights最后补充一个0可以很好的简化代码
         n, res = len(heights), 0
         for i in range(n):
-            while len(stack) > 1 and heights[stack[-1]] > heights[i]: # 😐 while 循环
+            while len(stack) > 1 and heights[stack[-1]] > heights[i]: # 😐😐😐 while 循环
                 h = heights[stack.pop()]
                 w = i - stack[-1] - 1
-                res = max(res, h * w)            
+                res = max(res, h * w)   
+                print(stack)  
+                [-1]
+                [-1, 1, 2]
+                [-1, 1]
+                [-1, 1, 4]
+                [-1, 1]
+                [-1]       
             stack.append(i)
         return res
 ```
@@ -12090,8 +12184,8 @@ class Solution(object):
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         l, r = 0, len(numbers) - 1 
-        while l <= r: # 😐 while 循环
-            if numbers[l] + numbers[r] == target:
+        while l <= r: # 😐 while 循环，<= 和 < 都对，但我觉得，应该用 l < r
+            if numbers[l] + numbers[r] == tart:
                 return [l + 1, r + 1] # 给你一个下标从 1 开始的整数数组 numbers
             elif numbers[l] + numbers[r] < target:
                 l += 1
@@ -12443,7 +12537,7 @@ class Solution:
 ```py
 输入：nums = [7,2,5,10,8], m = 2
 输出：18
-
+答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
 class Solution:
     def splitArray(self, nums: List[int], bagnum: int) -> int:
         def check(bagsize: int) -> bool:
@@ -12460,12 +12554,12 @@ class Solution:
 
         left = max(nums)  # 当 划分个数为 len(nums)
         right = sum(nums) # 当 划分个数为 1
-        while left < right: # 😐 while 循环
-            bagsize = (left + right) // 2
-            if check(bagsize): # 检查划分个数够不够
-                right = bagsize
+        while left < right: # 😐😐😐 while 循环：这里 left < right 和 right = mid 和 left
+            mid = (left + right) // 2
+            if check(mid): # 检查划分个数够不够
+                right = mid
             else:
-                left = bagsize + 1
+                left = mid + 1
 
         return left
 ```
@@ -12514,10 +12608,10 @@ class Solution:
         n = len(nums)
         res = []
         for i in range(n):
-            # 第一次 剪枝
+            # 第1次 剪枝
             if i > 0 and nums[i] == nums[i - 1]: continue
-            for j in range(i + 1, n)
-                # 第二次 剪枝
+            for j in range(i + 1, n):
+                # 第2次 剪枝
                 if j > i + 1 and nums[j] == nums[j - 1]: continue
                 # 双指针
                 p = j + 1
@@ -12630,7 +12724,6 @@ class Solution:
         if (numerator < 0) != (denominator < 0):
             s.append('-')
         # ----------------得到负数----------------
-        # ----------------得到负数----------------
 
 
         # 整数部分
@@ -12643,12 +12736,14 @@ class Solution:
         # 小数部分
         indexMap = {}
         remainder = numerator % denominator
-        while remainder and remainder not in indexMap: # 😐 while 循环
+
+        while remainder and remainder not in indexMap: # 😐😐😐 while 循环
             indexMap[remainder] = len(s) 
             remainder *= 10
             s.append(str(remainder // denominator))
             remainder %= denominator
-        if remainder:  # 有循环节
+
+        if remainder:  # 有循环节，跳出循环时，remainde 不是 
             insertIndex = indexMap[remainder]
             s.insert(insertIndex, '(') #左侧插入
             s.append(')')
@@ -12722,18 +12817,41 @@ object Solution1 {
 
 
 ```py
+注意：不能是 if stack and nums[stack[-1]] < cur:
+输入：
+[5,4,3,2,1]
+输出：
+[-1,-1,-1,4,5]
+预期结果：
+[-1,5,5,5,5]
+输入：
+[5,4,3,2,1][5,4,3,2,1]
+4,3,2,1 存起来，到遇到5的时候，一起pop出来
+[-1,5,5,5,5]
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
         res = [-1] * len(nums)
         stack = []
         # 双倍nums大法好
         for idx, cur in enumerate(nums + nums):
-            while stack and nums[stack[-1]] < cur: # 😐 while 循环
+            while stack and nums[stack[-1]] < cur: # 😐 while 循环 + pop
                 res[stack[-1]] = cur
                 stack.pop()
             if idx < len(nums): # 易错点：append(idx)是有条件的
                 stack.append(idx)
         return res
+输入: nums = [1,2,3,4,3]
+输出: [2,3,4,-1,4]
+[-1, -1, -1, -1, -1]
+[2, -1, -1, -1, -1]
+[2, 3, -1, -1, -1]
+[2, 3, 4, -1, -1]
+[2, 3, 4, -1, -1]
+[2, 3, 4, -1, -1]
+[2, 3, 4, -1, -1]
+[2, 3, 4, -1, -1]
+[2, 3, 4, -1, 4]
+[2, 3, 4, -1, 4]
 print(stack)
 [0]
 [1]
@@ -12889,14 +13007,18 @@ class Node:
         self.right = right
         self.next = next
 """
-
+类似 ListNode
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         first = root # first 表示当前层的最左边节点
-        while first: # 😐 while 循环 # 每次循环连接当前层的下一层
+        while first: # 😐😐 while 循环 # 每次循环连接当前层的下一层
+            """
+            dummy = nxtcur 必须写在一起
+            """
             dummy = nxtcur = Node(0) # head表示下一层的虚拟头部
+            """
             cur = first
-            while cur: # 😐 while 循环 #  cur遍历当前层，nxtcur将下一层连接 
+            while cur: # 😐😐 while 循环 #  cur遍历当前层，nxtcur将下一层连接 
                 if cur.left :
                     nxtcur.next = cur.left
                     nxtcur = nxtcur.next
@@ -12904,6 +13026,7 @@ class Solution:
                     nxtcur.next = cur.right
                     nxtcur = nxtcur.next
                 cur = cur.next
+            """
             first = dummy.next
         return root
 ```
@@ -13105,6 +13228,11 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7tS?spm_id_from=333.999.0.0)
 
 ```py
+输入：n = 5
+输出：1
+解释：5! = 120 ，有一个尾随 0
+当 n = 25 时，ans = 5 + 1
+当 n = 20 时，ans = 4
 class Solution:
     def trailingZeroes(self, n: int) -> int:
         ans = 0
@@ -13163,22 +13291,28 @@ class Solution:
 
 ```py
 
-# 直接利用中心扩展法, 依次计数找到的所有的回文🌈子串即可；
+# 直接利用, 依次计数找到的所有的回文🌈子串即可；
 # 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
 # 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
-
+输入：s = "aaa"
+输出：6
+解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
 from math import floor,ceil
 class Solution:
     def countSubstrings(self, s: str) -> int:
-        center = ans = 0
+        '''
+        中心扩展法: 双😐😐while 循环, center += 0.5, 
+        '''
+        center = cnt = 0
         # center 用一个 while 循环
-        while center < len(s): # 😐 while 循环
+        while center < len(s): # 😐😐 while 循环
             low, high = floor(center), ceil(center)
             # low, high 用一个 while 循环
-            while low >=0 and high < len(s) and s[low] == s[high]: # 😐 while 循环
-                low, high, ans = low-1, high+1, ans+1
+            while low >=0 and high < len(s) and s[low] == s[high]: # 😐😐 while 循环
+                low, high = low - 1, high + 1
+                cnt = cnt + 1
             center += 0.5
-        return ans
+        return cnt
 ```
 
 ##  250. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
@@ -13359,7 +13493,7 @@ class Solution:
         numlist = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
         res = ''
         for i in range(len(numlist)):
-            while num >= numlist[i]: # 😐 while 循环
+            while num >= numlist[i]: # 😐😐😐 while 循环，注意还有 = 号
                 num -= numlist[i]
                 res = res + strlist[i]
         return res
@@ -13428,15 +13562,17 @@ class Solution:
 ```
 
 ```py
+输入：n = 13
+输出：[1,10,11,12,13,2,3,4,5,6,7,8,9]
 class Solution:
     def lexicalOrder(self, n):
         ans = []
         num = 1
-        while len(ans) < n: # 😐 while 循环
-            while num <= n: # 😐 while 循环 # 不断进入下一层
+        while len(ans) < n: # 😐😐😐 while 循环
+            while num <= n: # 😐😐😐 while 循环 # 不断进入下一层
                 ans.append(num)
                 num *= 10
-            while num % 10 == 9 or num > n: # 😐 while 循环 # 不断返回上一层
+            while num % 10 == 9 or num > n: # 😐😐😐 while 循环 # 不断返回上一层
                 num //= 10
             num += 1  # 遍历该层下一个数
         return ans
@@ -13563,11 +13699,13 @@ class Solution(object):
         isPrime = [1 for i in range(n)]
 
         i = 2
-        # 两层 while 循环
-        while i * i < n: # 😐 while 循环
+        '''
+        😐😐😐 两层 while 循环, 将 i*i 至 n 之间的 i 倍数，都变成 isPrime[j] = 0
+        '''
+        while i * i < n: # 😐😐😐 while 循环
         	if isPrime[i]:
         		j = i * i    # j 永远是 i 的倍数
-        		while j < n : # 😐 while 循环
+        		while j < n : # 😐😐😐 while 循环
         			isPrime[j] = 0
         			j += i   # j 永远是 i 的倍数
         	i += 1
@@ -13655,13 +13793,17 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV17i4y147xn?spm_id_from=333.999.0.0)
 
 ```py
+输入: s = "abca"
+输出: true
+解释: 你可以删除c字符。
+
+
 class Solution:
     def validPalindrome(self, s: str) -> bool:
         def checkPalindrome(low, high):
             i, j = low, high
             while i < j: # 😐 while 循环
-                if s[i] != s[j]:
-                    return False # 当 需要 跳过 字符串
+                if s[i] != s[j]: return False # 当 需要 跳过 字符串
                 i += 1
                 j -= 1 
             return True # 当 需要 跳过 字符串
@@ -13744,6 +13886,26 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1Tz4y167pC?spm_id_from=333.999.0.0)
 
 ```py
+去除字符串中重复的字母
+
+使得每个字母只出现一次
+
+返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+
+
+输入：s = "bcabc"
+输出："abc"
+a  小于 stack[-1]，并且 c 在s[i+1:]中，弹出 c
+a  小于 stack[-1]，并且 b 在s[i+1:]中，弹出 b
+
+输入：s = "cbacdcbc"
+输出："acdb"
+
+b  小于 stack[-1]，并且 c 在s[i+1:]中，弹出 c
+a  小于 stack[-1]，并且 b 在s[i+1:]中，弹出 b
+c  in stack
+c  in stack
+
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
         stack = []
@@ -13752,7 +13914,8 @@ class Solution:
             if s[i] in stack:
                 continue
             else:
-                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]: # 😐 while 循环 # 如果数比栈顶小，而且栈顶在后面还有的话，
+                while stack and stack[-1] > s[i] and stack[-1] in s[i+1:]: # 😐😐😐 while 循环 + pop
+                # 如果数比栈顶小，而且栈顶在后面还有的话，
                     stack.pop() # 就弹出栈顶。
                 stack.append(s[i])
             
