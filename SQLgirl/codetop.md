@@ -408,7 +408,7 @@ class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
         dummy = ListNode(0,head)
         pre = dummy
-        while pre.next and pre.next.next: # 😐 while 循环
+        while pre.next and pre.next.next: # 😐😐😐 while 循环
             # 一共3个指针: first,second,pre
             first = pre.next
             second = pre.next.next
@@ -556,22 +556,22 @@ class Solution:
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6ccdr2kcw7c0.png)
 
 ```py
-class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        def getLength(head: ListNode) -> int:
-            length = 0
-            while head: # 😐 while 循环, cur
-                length += 1
-                head = head.next
-            return length
+# class Solution:
+#     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+#         def getLength(head: ListNode) -> int:
+#             length = 0
+#             while head: # 😐 while 循环, cur
+#                 length += 1
+#                 head = head.next
+#             return length
         
-        dummy = ListNode(0, head)
-        length = getLength(head)
-        cur = dummy
-        for i in range(length - n):
-            cur = cur.next
-        cur.next = cur.next.next
-        return dummy.next
+#         dummy = ListNode(0, head)
+#         length = getLength(head)
+#         cur = dummy
+#         for i in range(length - n):
+#             cur = cur.next
+#         cur.next = cur.next.next
+#         return dummy.next
 
 
 class Solution:
@@ -1028,15 +1028,15 @@ class MyQueue:
 
     def __init__(self):
         self.s1 = []
-        self.s2 = []
+        self.tmp = []
 
     def push(self, x):
         # 要把新来的元素压入
         while self.s1: # 😐 while 循环 + append + pop
-            self.s2.append(self.s1.pop())
-        self.s2.append(x) # 目的是把最后进来的元素最下面
-        while self.s2: # 😐 while 循环 + append + pop
-            self.s1.append(self.s2.pop())
+            self.tmp.append(self.s1.pop())
+        self.tmp.append(x) # 目的是把最后进来的元素最下面
+        while self.tmp: # 😐 while 循环 + append + pop
+            self.s1.append(self.tmp.pop())
 
     def pop(self):
         # 假装最后一个元素是开头
@@ -1105,29 +1105,29 @@ class MyQueue() {
 ##  101. <a name='Offer09.'></a>剑指 Offer 09. 用两个栈实现队列
 
 ```py
-stack_in 只负责进入
-stack_out 只负责取出
-
-只有 stack_out 为空时才把 stack_in 的所有元素倾倒进stack_out中，这样顺序就不会乱了
 class CQueue:
 
     def __init__(self):
-        self.stack_in = []
-        self.stack_out = []
+        self.s1 = []
+        self.tmp = []
 
-    def appendTail(self, value: int) -> None:
-        self.stack_in.append(value)
+    def appendTail(self, x: int) -> None:
+        # 要把新来的元素压入
+        while self.s1: # 😐 while 循环 + append + pop
+            self.tmp.append(self.s1.pop())
+        self.tmp.append(x) # 目的是把最后进来的元素最下面
+        while self.tmp: # 😐 while 循环 + append + pop
+            self.s1.append(self.tmp.pop())
 
     def deleteHead(self) -> int:
-        # 如果 self.stack_out 没有内容，就 呼叫 self.stack_in
-        if not self.stack_out:
-            if not self.stack_in: # 都为空
-                return -1
-            else: # 把in栈中的东西全部倒入out栈中
-                while self.stack_in: # 😐😐😐 while 循环 + append + pop
-                    self.stack_out.append(self.stack_in.pop())
-        # 如果 self.stack_out 有内容，就直接 pop
-        return self.stack_out.pop()
+        # 假装最后一个元素是开头
+        return self.s1.pop() if self.s1 else -1
+
+
+# Your CQueue object will be instantiated and called as such:
+# obj = CQueue()
+# obj.appendTail(value)
+# param_2 = obj.deleteHead()
 ```
 
 ##  128. <a name='ImplementStackusingQueues'></a>225-【构造🏰】Implement Stack using Queues
@@ -1155,9 +1155,18 @@ class MyStack:
         
     def pop(self) -> int:
         # 把 [-1] 用 popleft 搞定 
+        '''
+        tmp 中有 n-1 个元素
+        '''
         while len(self.q1) > 1: # 😐😐😐 while 循环 + append + pop : 保留一个元素，将其pop掉
             self.tmp.append(self.q1.popleft())
+        '''
+        tmp 中有 11 个元素
+        '''
         self.q1, self.tmp = self.tmp, self.q1
+        '''
+        tmp 中有 0 个元素
+        '''
         return self.tmp.popleft()
         
     def top(self) -> int:
@@ -1298,6 +1307,9 @@ class BSTIterator(object):
         
 
     def next(self):
+        '''
+        先 pop，再 append
+        '''
         tmp = self.stack.pop()
         self.appendAllLeft(tmp.right)
         return tmp.val
@@ -1320,7 +1332,7 @@ class BSTIterator(object):
 [官方](https://www.bilibili.com/video/BV1ja4y1Y7vY?spm_id_from=333.999.0.0)
 
    
-关键在于  def getMi
+关键在于  def getMin
 
 ```py
 class MinStack:
@@ -1332,7 +1344,7 @@ class MinStack:
 
     def push(self, val: int) -> None:
         self.stack.append(val)
-        if self.minStack == [] or self.minStack[-1] >= val:
+        if not self.minStack or self.minStack[-1] >= val:
             self.minStack.append(val) # minStack 只 append 某一状态下的最小值
 
     def pop(self) -> None:
@@ -1349,43 +1361,43 @@ class MinStack:
 ```
 
 ```py
-面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
-                [3,2,1,4] [0,-1,-1, 3]
-                mins = 3, 2, 1, 1
-                先把这个部分写出来
-class MinStack:
-    def __init__(self):
+# 面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
+#                 [3,2,1,4] [0,-1,-1, 3]
+#                 mins = 3, 2, 1, 1
+#                 先把这个部分写出来
+# class MinStack:
+#     def __init__(self):
 
-        self.diffstack = []
-        self.mins = -1
+#         self.diffstack = []
+#         self.mins = -1
 
 
-    def push(self, x: int) -> None:
-        if not self.diffstack:
-            self.diffstack.append(0)
-            self.mins = x
-        else:
-            diff = x-self.mins
-            self.diffstack.append(diff)
-            self.mins = self.mins if diff > 0 else x
-            # mins 是会变化的
+#     def push(self, x: int) -> None:
+#         if not self.diffstack:
+#             self.diffstack.append(0)
+#             self.mins = x
+#         else:
+#             diff = x-self.mins
+#             self.diffstack.append(diff)
+#             self.mins = self.mins if diff > 0 else x
+#             # mins 是会变化的
 
-    def pop(self) -> None:
-        if self.diffstack:
-            diff = self.diffstack.pop()
-            if diff < 0: 
+#     def pop(self) -> None:
+#         if self.diffstack:
+#             diff = self.diffstack.pop()
+#             if diff < 0: 
 
-                top = self.mins # 第一步：顺序不能错
-                self.mins = self.mins - diff # 第二步：如果 diff < 0, 那就需要还原 self.mins
-            else:     # 如果 diff 一直都 > 0, 那就非常好
-                top = self.mins + diff
-            return top
+#                 top = self.mins # 第一步：顺序不能错
+#                 self.mins = self.mins - diff # 第二步：如果 diff < 0, 那就需要还原 self.mins
+#             else:     # 如果 diff 一直都 > 0, 那就非常好
+#                 top = self.mins + diff
+#             return top
 
-    def top(self) -> int:
-        return self.mins if self.diffstack[-1] < 0 else self.diffstack[-1] + self.mins
+#     def top(self) -> int:
+#         return self.mins if self.diffstack[-1] < 0 else self.diffstack[-1] + self.mins
 
-    def getMin(self) -> int:
-        return self.mins if self.diffstack else -1
+#     def getMin(self) -> int:
+#         return self.mins if self.diffstack else -1
 ```
 
 
@@ -1463,20 +1475,20 @@ https://leetcode-cn.com/problems/shuffle-an-array/solution/da-luan-shu-zu-by-lee
 
 ```py
 官方版本：
-class Solution:
-    def __init__(self, nums: List[int]):
-        self.nums = nums
-        self.original = nums.copy()
+# class Solution:
+#     def __init__(self, nums: List[int]):
+#         self.nums = nums
+#         self.original = nums.copy()
 
-    def reset(self) -> List[int]:
-        self.nums = self.original.copy()
-        return self.nums
+#     def reset(self) -> List[int]:
+#         self.nums = self.original.copy()
+#         return self.nums
 
-    def shuffle(self) -> List[int]:
-        for i in range(len(self.nums)):
-            j = random.randrange(i, len(self.nums))
-            self.nums[i], self.nums[j] = self.nums[j], self.nums[i]
-        return self.nums
+#     def shuffle(self) -> List[int]:
+#         for i in range(len(self.nums)):
+#             j = random.randrange(i, len(self.nums))
+#             self.nums[i], self.nums[j] = self.nums[j], self.nums[i]
+#         return self.nums
 
 精简版本：
 from random import random
@@ -1612,6 +1624,9 @@ class MedianFinder:
         heappush(self.minhp, num)
         # 然后，将最小堆里面的栈顶元素，取出来，放到最大堆中去，这样就能保证最小堆的堆，都比最大堆的堆顶大
         heappush(self.maxhp, - heappop(self.minhp))
+        '''
+        minhp 的 长度 >= maxhp 的 长度 
+        '''
         if len(self.minhp) < len(self.maxhp): # 如果最大堆太大了
             heappush(self.minhp, - heappop(self.maxhp))
 
@@ -1639,9 +1654,15 @@ class MedianFinder:
 
 [小明](https://www.bilibili.com/video/BV1kV411n7Uk?spm_id_from=333.999.0.0)
 
-`循环队列`是一种`线性数据结构`，其操作表现基于 `FIFO（先进先出）原则`并且队尾被连接在队首之后以形成一个`循环`。它也被称为`环形缓冲器`。
+`循环队列`是一种`线性数据结构`，
 
-在一个`普通队列`里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。但是使用`循环队列`，我们能使用这些空间去存储新的值。
+其操作表现基于 `FIFO（先进先出）原则`并且队尾
+
+被连接在队首之后以形成一个`循环`。它也被称为`环形缓冲器`。
+
+在一个`普通队列`里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。
+
+但是使用`循环队列`，我们能使用这些空间去存储新的值。
 
 ```py
 class MyCircularQueue:
@@ -1656,30 +1677,26 @@ class MyCircularQueue:
 
     # enQueue(value): 向循环队列插入一个元素。如果成功插入则返回真。
     def enQueue(self, value: int) -> bool:
-        if self.count == self.capacity:
-            return False
+        if self.count == self.capacity: return False
         self.queue[(self.headIndex + self.count) % self.capacity] = value
         self.count += 1
         return True
 
     # deQueue(): 从循环队列中删除一个元素。如果成功删除则返回真。
     def deQueue(self) -> bool:
-        if self.count == 0:
-            return False
+        if self.count == 0: return False
         self.headIndex = (self.headIndex + 1) % self.capacity
         self.count -= 1
         return True
 
     # Front: 从队首获取元素。如果队列为空，返回 -1 。
     def Front(self) -> int:
-        if self.count == 0:
-            return -1
+        if self.count == 0: return -1
         return self.queue[self.headIndex]
 
     # Rear: 获取队尾元素。如果队列为空，返回 -1 。
     def Rear(self) -> int:
-        if self.count == 0:
-            return -1
+        if self.count == 0: return -1
         return self.queue[(self.headIndex + self.count - 1) % self.capacity]
 
     # isEmpty(): 检查循环队列是否为空。
@@ -1789,7 +1806,7 @@ https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
 ```
 
 ```py
-最小堆：时间复杂度就是nlogn
+最小堆：时间复杂度就是nlogk
 if len(q) > k: 用于限制 q 的宽度
             q:  q 里面 过滤掉了 太小的数
 class Solution:
@@ -1797,8 +1814,7 @@ class Solution:
         q = []
         for num in nums:
             heapq.heappush(q, num) # n * log(k + 1)
-            if len(q) > k:
-                heapq.heappop(q)   # n * log(k)
+            if len(q) > k: heapq.heappop(q)   # n * log(k)
         return heapq.heappop(q)
 ```
 
@@ -1834,8 +1850,7 @@ class Solution:
         q = []
         for num in arr:
             heapq.heappush(q, -num) # n * log(k + 1)
-            if len(q) > k:
-                heapq.heappop(q)   # n * log(k)
+            if len(q) > k: heapq.heappop(q)   # n * log(k)
         return [-x for x in q]
 ```
 
@@ -1861,13 +1876,12 @@ import heapq
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         dic = collections.defaultdict(int)
-        for i in range(len(nums)):
-            dic[nums[i]] += 1
+        for num in nums:
+            dic[num] += 1
         hp = [] # 小顶堆
         for key, freq in dic.items():
             heapq.heappush(hp, (freq, key))
-            if len(hp) > k: 
-                heapq.heappop(hp)
+            if len(hp) > k: heapq.heappop(hp)
         return [x[1] for x in hp]
 ```
 
@@ -1927,11 +1941,10 @@ class Solution:
         return slow
     # 这里需要用到 mid
     def randomized_quicksort(self, nums, l, r):
-        if r - l <= 0:
-            return
-        mid = self.randomized_partition(nums, l, r)
-        self.randomized_quicksort(nums, l, mid - 1)
-        self.randomized_quicksort(nums, mid + 1, r)
+        if l < r:
+            mid = self.randomized_partition(nums, l, r)
+            self.randomized_quicksort(nums, l, mid - 1)
+            self.randomized_quicksort(nums, mid + 1, r)
 
     def sortArray(self, nums: List[int]) -> List[int]:
         self.randomized_quicksort(nums, 0, len(nums) - 1)
@@ -1972,17 +1985,23 @@ class Solution:
         # 时间复杂度O(N)
         # 从叶子节点开始遍历
         # 如果不是从叶子开始，可能白跑一遍
+        '''
+        把最大值放在 0 的位置
+        '''
         for i in range(len(nums) - 1, -1, -1):
             self.max_heapify(nums, i, len(nums))
             
         # 时间复杂度O(N logN)
         for i in range(len(nums) - 1, -1, -1):
             # 把最大的元素放到末尾
+        '''
+        把最大值 从 0 的位置，依次移到 i 的位置
+        '''
             nums[i], nums[0] = nums[0], nums[i]
             self.max_heapify(nums, 0, i)
         return nums
 
-时间复杂度：O(n log(n))
+时间复杂度：O(n logn)
 空间复杂度：O(1)
 ```
 
@@ -1991,24 +2010,23 @@ class Solution:
 ```py
 class Solution:
     def merge_sort(self, nums, l, r):
-        if l == r:
-            return
-        mid = (l + r) // 2
-        # 先把子序列排序完成
-        self.merge_sort(nums, l, mid)
-        self.merge_sort(nums, mid + 1, r)
-        tmp = []
-        i1, i2 = l, mid + 1   # i, j 是两个起始点
-        while i1 <= mid and i2 <= r: # 😐 while 循环
-            # 如果 前半部部分结束了，或者后半部分没有结束
-            if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
-                tmp.append(nums[i2])
-                i2 += 1
-            else:
-                tmp.append(nums[i1])
-                i1 += 1
-        tmp += nums[i1: mid + 1] or nums[i2 r+1] # 注意，这里要+1
-        nums[l: r + 1] = tmp
+        if l < r:
+            mid = (l + r) // 2
+            # 先把子序列排序完成
+            self.merge_sort(nums, l, mid)
+            self.merge_sort(nums, mid + 1, r)
+            tmp = []
+            i1, i2 = l, mid + 1   # i1, i2 是两个起始点
+            while i1 <= mid and i2 <= r: # 😐 while 循环
+                # 如果 前半部部分结束了，或者后半部分没有结束
+                if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
+                    tmp.append(nums[i2])
+                    i2 += 1
+                else:
+                    tmp.append(nums[i1])
+                    i1 += 1
+            tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
+            nums[l: r + 1] = tmp
 
     def sortArray(self, nums: List[int]) -> List[int]:
         self.merge_sort(nums, 0, len(nums) - 1)
@@ -2024,12 +2042,12 @@ class Solution:
 class Solution:
     def sortArray(self, nums: List[int]) -> List[int]:
         bucket = collections.defaultdict(int)
-        for n in nums:
-            bucket[n] += 1
-        ans = []
+        for num in nums:
+            bucket[num] += 1
+        res = []
         for i in range(-50000, 50001):
-            ans += [i] * bucket[i]
-        return ans
+            res += [i] * bucket[i]
+        return res
 你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
 ```
 ##  219. <a name='8.'></a>补充题8. 计算数组的小和
@@ -2066,34 +2084,37 @@ https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
 # 这里有2个目的：
 # 1. 排序
 # 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
+class Solution:
     '''
     在原地排序，不需要 return
     '''
+    def merge(nums, l, mid, r):
+        tmp = []
+        sums = 0
+        i1, i2 = l, mid + 1
+        while i1 <= mid and i2 <= r: # 😐 while 循环
+            if nums[i1] <= nums[i2]:
+                sums += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+                tmp.append(nums[i1])
+                i1 += 1
+            else:
+                tmp.append(nums[i2])   # 把小的值先往res里面填写
+                i2 += 1
+        tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
+        nums[l: r + 1] = tmp   # 修改原 arr 的值
+        return sums
 
-def merge(nums, l, mid, r):
-    tmp = []
-    sums = 0
-    i1, i2 = l, mid + 1
-    while i1 <= mid and i2 <= r: # 😐 while 循环
-        if nums[i1] <= nums[i2]:
-            sums += nums[i1] * (r-i2+1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
-            tmp.append(nums[i1])
-            i1 += 1
-        else:
-            tmp.append(nums[i2])   # 把小的值先往res里面填写
-            i2 += 1
-    tmp += nums[i1:mid + 1] or nums[i2:r + 1]   # 全都排完之后，左半部分有剩余
-    nums[l: r + 1] = tmp   # 修改原 arr 的值
-    return sums
-
-def mergesmallSum(arr, left, right):
-    if left == right:
-        return 0
-    mid = (left + right) // 2
-    s1 = mergesmallSum(arr, left, mid)
-    s2 = mergesmallSum(arr, mid + 1, right)
-    s3 = merge(arr, left, mid, right)
-    return  s1+s2+s3 
+    def mergesmallSum(arr, left, right):
+        '''
+        归并排序 left < right
+        '''
+        if left == right:
+            return 0
+        mid = (left + right) // 2
+        s1 = mergesmallSum(arr, left, mid)
+        s2 = mergesmallSum(arr, mid + 1, right)
+        s3 = merge(arr, left, mid, right)
+        return  s1 + s2 + s3 
 
     
 N = int(input())
@@ -2110,6 +2131,8 @@ print(mergesmallSum(nums, 0, N-1))
 ```py
 class Solution:
     def sortList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
         dummy = ListNode(-1, head)
         sortlist = []
         # 先把链表断开
@@ -2122,8 +2145,6 @@ class Solution:
         sortlist = sorted(sortlist, key = lambda x: x.val)
         # 把链表串联起来
         n = len(sortlist)
-        if n == 0:
-            return None
         dummy.next = sortlist[0]
         for i in range(n - 1):
             sortlist[i].next = sortlist[i + 1]
@@ -2199,15 +2220,15 @@ while fast 总结
 """
 class Solution:
     def partition(self, head: ListNode) -> ListNode:        
-        second = head.next        
-        slow, fast = head, second        
+        headnxt = head.next        
+        slow, fast = head, headnxt        
         while fast and fast.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
             slow.next = fast.next            
             slow = slow.next            
             fast.next = slow.next            
             fast = fast.next        
         slow.next = None # 节点需要断开
-        return [head,second] 
+        return [head,headnxt] 
 
 如果有两个中间结点，则返回第 2 个中间结点。
 
@@ -2388,6 +2409,10 @@ class Solution:
             return slow
         
         def buildTree(left: ListNode, right: ListNode) -> TreeNode:
+            '''
+            归并，必须 left < right 
+            buildTree(left, mid) 和 buildTree(mid.next, right) 是连续的
+            '''
             if left == right:
                 return None
             mid = getMedian(left, right)
@@ -2465,15 +2490,17 @@ object Solution {
 class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         nums.sort()
-        minAim = sum(nums[0:3]) - target
+        minAim = sum(nums[:3]) - target
         n = len(nums)
         for i in range(n - 2):
             # 三指针：i + left + right
+            if i - 1 >= 0 and nums[i] == nums[i-1]: continue # 这里不剪枝也可以
             p = i + 1
             q = n - 1
             while p < q: # 😐 while 循环
                 aim = nums[i] + nums[p] + nums[q] - target
-                if abs(aim) < abs(minAim): minAim = aim
+                if abs(aim) < abs(minAim): 
+                    minAim = aim
                 if aim == 0:  return target
                 elif aim > 0:  q -= 1
                 else:          p += 1
@@ -2644,6 +2671,10 @@ class Solution:
                 q = n - 1
 
                 while p < q: # 😐 while 循环
+                    '''
+                    == target 才需要剪枝
+                    不等于 target 不需要剪枝
+                    '''
                     if nums[i] + nums[j] + nums[p] + nums[q] > target: q -= 1
                     elif nums[i] + nums[j] + nums[p] + nums[q] < target: p += 1
                     else:
@@ -2873,9 +2904,17 @@ class Solution:
         if not list1: return list2
         elif not list2: return list1
         elif list1.val < list2.val:
+            '''
+            list1 提取出来
+            返回 list1
+            '''
             list1.next = self.mergeTwoLists(list1.next, list2) # 找到较小头结点，提取出来
             return list1
         else:
+            '''
+            list2 提取出来
+            返回 list2
+            '''
             list2.next = self.mergeTwoLists(list1, list2.next) # 找到较小头结点，提取出来
             return list2
 ```
@@ -3264,6 +3303,10 @@ https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
 [官方](https://www.bilibili.com/video/BV1hA411t76C?spm_id_from=333.999.0.0)
 
 ```py
+输入：[7,1,5,3,6,4]
+输出：5
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         maxprofit = 0
@@ -3280,6 +3323,249 @@ object Solution {
         prices.foldLeft((Int.MaxValue, 0)){
             case ((minPriceSoFar, maxProfit), price) => (minPriceSoFar min price, maxProfit max (price - minPriceSoFar))
         }._2
+    }
+}
+```
+
+
+##  102. <a name='II122-BestTimetoBuyandSellStockII'></a>122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
+
+[哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1d7411x78d?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7iq?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Fk4y1R7ve?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV17i4y1L7LG?spm_id_from=333.999.0.0)
+
+```py
+在每一天，你可能会决定购买和/或出售股票。
+你在任何时候 最多 只能持有 `一股` 股票。你也可以购买它，然后在 `同一天` 出售。
+
+输入: prices = [7,1,5,3,6,4]
+输出: 7
+解释: 
+
+在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 
+这笔交易所能获得利润 = 5-1 = 4 。
+
+随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 
+这笔交易所能获得利润 = 6-3 = 3 。
+
+
+贪心算法：一次遍历，只要`今天价格`小于`明天价格`就在今天买入然后明天卖出，时间复杂度 O(n)
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxprofit = 0
+        preprice = 1e9
+        for price in prices:
+            if price > preprice:
+                maxprofit += price - preprice
+            preprice = price
+        return maxprofit
+```
+
+```scala
+
+/**
+* greedy alg: one line pass
+*/
+
+object Solution1-2 {
+  def maxProfit(prices: Array[Int]): Int = {
+    if(prices.length > 1) prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum else 0
+  }
+}
+
+//Alternate solution
+object Solution {
+    def maxProfit(prices: Array[Int]): Int = {
+        prices
+            .foldLeft(0,Int.MaxValue)((t, current) => (t._1 + 0.max(current-t._2), current))
+            ._1
+    }
+}
+
+```
+
+
+##  146. <a name='III'></a>123-买卖股票的最佳时机 III
+
+[哈哈哈](https://www.bilibili.com/video/BV1Xp4y1k7aD?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1rk4y117z8?spm_id_from=333.999.0.0)
+
+```py
+设计一个算法来计算你所能获取的最大利润。你最多可以完成 `两笔` 交易。
+
+输入：prices = [3,3,5,0,0,3,1,4]
+输出：6
+解释：
+
+在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，
+这笔交易所能获得利润 = 3-0 = 3 。
+
+随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，
+这笔交易所能获得利润 = 4-1 = 3 。
+
+# 我的写法：
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        profit1 = profit2 = 0
+        buy1 = buy2 = prices[0]
+        for i in range(1,n):
+            # 实际上，是从卖出那天开始算，也就是第二天
+            buy1 = min(buy1, prices[i])
+            profit1 = max(profit1, prices[i] - buy1)
+            buy2 = min(buy2, prices[i] - profit1)  # buy2[i]-profit1[i-1] 相当于一个虚拟的买入价格
+            profit2 = max(profit2, prices[i] - buy2)
+        return profit2
+
+```
+
+```scala
+object Solution3-1 {
+    def maxProfit(prices: Array[Int]): Int = {
+        val (buy1, sell1, buy2, sell2) = prices.foldLeft((Int.MinValue, 0, Int.MinValue, 0)){
+            case ((buy1, sell1, buy2, sell2), cost) =>
+                (
+                    buy1 max -cost,
+                    sell1 max (buy1 + cost),
+                    buy2 max (sell1 - cost),
+                    sell2 max (buy2 + cost)
+                )
+        }
+        sell1 max.sell2
+    }
+}
+```
+
+
+##  251. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
+
+[小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
+
+你最多可以完成 `k 笔` 交易。
+
+```py
+输入：k = 2, prices = [3,2,6,5,0,3]
+输出：7
+解释：
+在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 
+这笔交易所能获得利润 = 6-2 = 4 。
+随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 
+这笔交易所能获得利润 = 3-0 = 3 。
+
+
+# 背一背
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        if not prices:
+            return 0
+
+        buy = [prices[0]] * (k+1)
+        sell = [0] * (k+1)
+        for price in prices:
+            for time in range(1,k+1): 
+                # 对于每一个新来的价格，依 time 比较 and 更新
+                buy[time-1] = min(buy[time-1],  price - sell[time-1])
+                sell[time]  = max(sell[time], price - buy[time-1])
+                # print('价格:',price,'次数:',time,'buy:',buy)
+                # print('价格:',price,'次数:',time,'sell:',sell)
+                
+        return sell[k]
+
+
+if __name__ == "__main__":   
+	s = Solution()
+	print(s.maxProfit(k = 2, prices = [3,2,6,5,0,3,-1,3]))
+
+价格: 3 次数: 1 buy: [3, 3, '*']
+价格: 3 次数: 1 sell: [0, 0, 0]
+价格: 3 次数: 2 buy: [3, 3, '*']
+价格: 3 次数: 2 sell: [0, 0, 0]
+--------------------
+价格: 2 次数: 1 buy: [2, 3, '*']
+价格: 2 次数: 1 sell: [0, 0, 0]
+价格: 2 次数: 2 buy: [2, 2, '*']
+价格: 2 次数: 2 sell: [0, 0, 0]
+--------------------
+价格: 6 次数: 1 buy: [2, 2, '*']
+价格: 6 次数: 1 sell: [0, 4, 0]
+价格: 6 次数: 2 buy: [2, 2, '*']
+价格: 6 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 5 次数: 1 buy: [2, 2, '*']
+价格: 5 次数: 1 sell: [0, 4, 4]
+价格: 5 次数: 2 buy: [2, 1, '*']
+价格: 5 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 0 次数: 1 buy: [0, 1, '*']
+价格: 0 次数: 1 sell: [0, 4, 4]
+价格: 0 次数: 2 buy: [0, -4, '*']
+价格: 0 次数: 2 sell: [0, 4, 4]
+--------------------
+价格: 3 次数: 1 buy: [0, -4, '*']
+价格: 3 次数: 1 sell: [0, 4, 4]
+价格: 3 次数: 2 buy: [0, -4, '*']
+价格: 3 次数: 2 sell: [0, 4, 7]
+--------------------
+价格: -1 次数: 1 buy: [-1, -4, '*']
+价格: -1 次数: 1 sell: [0, 4, 7]
+价格: -1 次数: 2 buy: [-1, -5, '*']
+价格: -1 次数: 2 sell: [0, 4, 7]
+--------------------
+价格: 3 次数: 1 buy: [-1, -5, '*']
+价格: 3 次数: 1 sell: [0, 4, 7]
+价格: 3 次数: 2 buy: [-1, -5, '*']
+价格: 3 次数: 2 sell: [0, 4, 8]
+--------------------
+8
+
+
+```
+
+
+
+
+```scala
+
+/**
+* dp: decrease status array which only keep current and precious status
+* memo
+*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
+* time complexity: O(NK), N: the length of prices; k: transaction's constraint
+* space complexity: O(K),  worst case: O(N)
+*/
+object Solution1-3 {
+    def maxProfit(k: Int, prices: Array[Int]): Int = {
+        if(prices == null || prices.length < 2 || k < 1 ) return 0
+        val kk = if(2 * k > prices.length) prices.length / 2 else k
+        
+        val dp = Array.tabulate(2, kk, 2) {
+            case (_, _, 0) => Int.MinValue
+            case (_, _, 1) => 0
+            case _ => 0
+        }
+        
+        for(i <- prices.indices; j <- 0 until kk){
+            val current = i & 1
+            val previous = current ^1
+            // 0 for buy, 1 for sell
+            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
+            dp(current)(j)(0) = dp(previous)(j)(0) max {
+                if(j == 0) -prices(i)
+                else dp(previous)(j - 1)(1) - prices(i)
+            }
+            
+        }
+        
+        dp((prices.length - 1) & 1).map(_(1)).max
+        
     }
 }
 ```
@@ -7631,6 +7917,21 @@ class Solution:
                                 # nums[proot] == nums[pslow]
                                 # The last slow = nums[proot] and this value at least has two slot in the array
 
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next: # 😐 while 循环
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast: # 如果相遇
+                p = head
+                q = slow
+                while p != q: # 😐 while 循环
+                    p = p.next
+                    q = q.next
+                return p    # 你也可以 return q
+        return None
 ```
 
 # 4 day (得分 = 8分) 63
@@ -9399,55 +9700,6 @@ class Solution:
 
 
 
-##  102. <a name='II122-BestTimetoBuyandSellStockII'></a>122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II
-
-[哈哈哈](https://www.bilibili.com/video/BV12K411A7rL?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1d7411x78d?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Qb411e7iq?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Fk4y1R7ve?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV17i4y1L7LG?spm_id_from=333.999.0.0)
-
-```py
-贪心算法：一次遍历，只要`今天价格`小于`明天价格`就在今天买入然后明天卖出，时间复杂度 O(n)
-
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        maxprofit = 0
-        preprice = 1e9
-        for price in prices:
-            if price > preprice:
-                maxprofit += price - preprice
-            preprice = price
-        return maxprofit
-```
-
-```scala
-
-/**
-* greedy alg: one line pass
-*/
-
-object Solution1-2 {
-  def maxProfit(prices: Array[Int]): Int = {
-    if(prices.length > 1) prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum else 0
-  }
-}
-
-//Alternate solution
-object Solution {
-    def maxProfit(prices: Array[Int]): Int = {
-        prices
-            .foldLeft(0,Int.MaxValue)((t, current) => (t._1 + 0.max(current-t._2), current))
-            ._1
-    }
-}
-
-```
-
 
 ##  103. <a name='Offer54.k-230KthSmallestElementinaB'></a>剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B
 
@@ -9802,7 +10054,7 @@ class Solution:
 ```py
 class Solution(object):
     def oddEvenList(self, head):
-        if head == None:
+        if not head or not head.next:      
             return head
         # odd 和 even 都是移动指针
         # evenHead 是固定的
@@ -10775,45 +11027,6 @@ class Solution:
 
 ```
 
-##  146. <a name='III'></a>123-买卖股票的最佳时机 III
-
-[哈哈哈](https://www.bilibili.com/video/BV1Xp4y1k7aD?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1rk4y117z8?spm_id_from=333.999.0.0)
-
-```py
-# 我的写法：
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        profit1 = profit2 = 0
-        buy1 = buy2 = prices[0]
-        for i in range(1,n):
-            # 实际上，是从卖出那天开始算，也就是第二天
-            buy1 = min(buy1, prices[i])
-            profit1 = max(profit1, prices[i] - buy1)
-            buy2 = min(buy2, prices[i] - profit1)  # buy2[i]-profit1[i-1] 相当于一个虚拟的买入价格
-            profit2 = max(profit2, prices[i] - buy2)
-        return profit2
-
-```
-
-```scala
-object Solution3-1 {
-    def maxProfit(prices: Array[Int]): Int = {
-        val (buy1, sell1, buy2, sell2) = prices.foldLeft((Int.MinValue, 0, Int.MinValue, 0)){
-            case ((buy1, sell1, buy2, sell2), cost) =>
-                (
-                    buy1 max -cost,
-                    sell1 max (buy1 + cost),
-                    buy2 max (sell1 - cost),
-                    sell2 max (buy2 + cost)
-                )
-        }
-        sell1 max.sell2
-    }
-}
-```
 
 ##  147. <a name='-1'></a>135. 分发糖果
 
@@ -13736,122 +13949,6 @@ class Solution:
 
         return [type1, type2]
 
-```
-
-##  251. <a name='BestTimetoBuyandSellStockIV'></a>188 【动态🚀规划】Best Time to Buy and Sell Stock IV
-
-[小明](https://www.bilibili.com/video/BV1f54y1k7cX?spm_id_from=333.999.0.0)
-
-你最多可以完成 k 笔交易。
-
-```py
-# 背一背
-class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        if not prices:
-            return 0
-
-        buy = [prices[0]] * (k+1)
-        sell = [0] * (k+1)
-        for price in prices:
-            for time in range(1,k+1): 
-                # 对于每一个新来的价格，依 time 比较 and 更新
-                buy[time-1] = min(buy[time-1],  price - sell[time-1])
-                sell[time]  = max(sell[time], price - buy[time-1])
-                # print('价格:',price,'次数:',time,'buy:',buy)
-                # print('价格:',price,'次数:',time,'sell:',sell)
-                
-        return sell[k]
-
-
-if __name__ == "__main__":   
-	s = Solution()
-	print(s.maxProfit(k = 2, prices = [3,2,6,5,0,3,-1,3]))
-
-价格: 3 次数: 1 buy: [3, 3, '*']
-价格: 3 次数: 1 sell: [0, 0, 0]
-价格: 3 次数: 2 buy: [3, 3, '*']
-价格: 3 次数: 2 sell: [0, 0, 0]
---------------------
-价格: 2 次数: 1 buy: [2, 3, '*']
-价格: 2 次数: 1 sell: [0, 0, 0]
-价格: 2 次数: 2 buy: [2, 2, '*']
-价格: 2 次数: 2 sell: [0, 0, 0]
---------------------
-价格: 6 次数: 1 buy: [2, 2, '*']
-价格: 6 次数: 1 sell: [0, 4, 0]
-价格: 6 次数: 2 buy: [2, 2, '*']
-价格: 6 次数: 2 sell: [0, 4, 4]
---------------------
-价格: 5 次数: 1 buy: [2, 2, '*']
-价格: 5 次数: 1 sell: [0, 4, 4]
-价格: 5 次数: 2 buy: [2, 1, '*']
-价格: 5 次数: 2 sell: [0, 4, 4]
---------------------
-价格: 0 次数: 1 buy: [0, 1, '*']
-价格: 0 次数: 1 sell: [0, 4, 4]
-价格: 0 次数: 2 buy: [0, -4, '*']
-价格: 0 次数: 2 sell: [0, 4, 4]
---------------------
-价格: 3 次数: 1 buy: [0, -4, '*']
-价格: 3 次数: 1 sell: [0, 4, 4]
-价格: 3 次数: 2 buy: [0, -4, '*']
-价格: 3 次数: 2 sell: [0, 4, 7]
---------------------
-价格: -1 次数: 1 buy: [-1, -4, '*']
-价格: -1 次数: 1 sell: [0, 4, 7]
-价格: -1 次数: 2 buy: [-1, -5, '*']
-价格: -1 次数: 2 sell: [0, 4, 7]
---------------------
-价格: 3 次数: 1 buy: [-1, -5, '*']
-价格: 3 次数: 1 sell: [0, 4, 7]
-价格: 3 次数: 2 buy: [-1, -5, '*']
-价格: 3 次数: 2 sell: [0, 4, 8]
---------------------
-8
-
-
-```
-
-
-
-
-```scala
-
-/**
-* dp: decrease status array which only keep current and precious status
-* memo
-*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
-* time complexity: O(NK), N: the length of prices; k: transaction's constraint
-* space complexity: O(K),  worst case: O(N)
-*/
-object Solution1-3 {
-    def maxProfit(k: Int, prices: Array[Int]): Int = {
-        if(prices == null || prices.length < 2 || k < 1 ) return 0
-        val kk = if(2 * k > prices.length) prices.length / 2 else k
-        
-        val dp = Array.tabulate(2, kk, 2) {
-            case (_, _, 0) => Int.MinValue
-            case (_, _, 1) => 0
-            case _ => 0
-        }
-        
-        for(i <- prices.indices; j <- 0 until kk){
-            val current = i & 1
-            val previous = current ^1
-            // 0 for buy, 1 for sell
-            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
-            dp(current)(j)(0) = dp(previous)(j)(0) max {
-                if(j == 0) -prices(i)
-                else dp(previous)(j - 1)(1) - prices(i)
-            }
-            
-        }
-        
-        dp((prices.length - 1) & 1).map(_(1)).max
-        
-    }
-}
 ```
 
 ##  252. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
