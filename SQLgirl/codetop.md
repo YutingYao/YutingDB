@@ -4124,6 +4124,210 @@ object Solution1-3 {
 
 ```
 
+
+##  60. <a name='GenerateParentheses'></a>22. Generate Parentheses
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7t7?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1vK4y1b744?spm_id_from=333.999.0.0)
+
+回溯法：
+
+* 时间复杂度:O($\frac{4^n}{\sqrt{n}}$)
+
+* 时间复杂度:O($\frac{4^n}{\sqrt{n}}$)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.ud5vx6kpbvk.png" width="50%">
+
+```py
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        def dfs(left,right,itm):
+            if left == 0 and right == 0:
+                res.append(itm)
+            if left > 0:
+                dfs(left - 1, right, itm + '(') #   状态转移
+            if right > left:
+                dfs(left, right - 1, itm + ')')
+        
+        res = []
+        dfs(n, n, '')
+        return res
+```
+
+
+```py
+# 相当于比上一层少了一层循环。
+# 不懂是不是动态规划，每新增一对括号，
+# 就是在上一次的结果的各个位置插入一个"()"，用集合防止重复
+
+# class Solution:
+#     def generateParenthesis(self, n):
+#         res = {''}
+#         for i in range(n):
+#             ini = set()
+#             for s in res:  # 在上一次的结果的所有字符串的各个位置上插入'()'
+#                 for j in range(len(s) + 1): # 如果s的长度为4，那么就有5个可以插入的位置
+#                     ini.add(s[:j] + '()' + s[j:])
+#             res = ini
+#         return list(res)
+                    
+                # 错误写法：
+                # itm = itm[:j] + '()' + itm[j:]
+                # res = res.add(itm)
+                # 错误写法：
+                # res = res.add(itm[:j] + '()' + itm[j:])
+                # 正确写法：
+
+
+
+```
+
+```scala
+
+object Solution {
+    
+    def generateParenthesis(n: Int): List[String] = {
+        import scala.collection.mutable._
+        def backtrack(acc: ListBuffer[String], curr: String, left: Int, right: Int): Unit = {
+            if (left == 0 && right == 0) acc.append(curr)
+            else {
+                if (left > 0) backtrack(acc, curr + "(", left-1, right)
+                if (right > left) backtrack(acc, curr + ")", left, right-1)
+            }
+        }
+      
+        val acc = ListBuffer[String]()
+        backtrack(acc, "", n, n)
+        acc.toList
+    }
+}
+
+```
+
+
+##  67. <a name='LongestValidParentheses'></a>32 Longest Valid Parentheses
+
+[小明](https://www.bilibili.com/video/BV1RZ4y1F7nJ?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1yi4y1G74d?spm_id_from=333.999.0.0)
+
+动态规划：
+
+* 时间复杂度: O(n) 
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6dkova4yjvk0.png)
+
+```py
+# 背一背吧，好难。
+# class Solution:
+#     def longestValidParentheses(self, s: str) -> int:
+#         n = len(s)
+#         dp = [0]*n
+#         if n == 0: return 0
+#         for i in range(n):
+#             if s[i] == ')' and s[i - dp[i-1] - 1] == '(' and i - dp[i-1] - 1 >= 0:
+#                 dp[i] = 2 + dp[i-1] + dp[i-dp[i-1]-2]
+#         return max(dp)
+```
+
+栈：
+
+* 时间复杂度: O(n) 
+
+* 空间复杂度: O(n)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1dgqk0ervhb4.png)
+
+```py
+输入：s = ")()())"
+输出：4
+解释：最长有效括号子串是 "()()"
+
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        stack = [-1]
+        length = maxlength = 0
+        for i, c in enumerate(s):
+            if c == '(':
+                stack.append(i)
+            if c == ')':
+                stack.pop()
+                if not stack:
+                    stack.append(i) # 记录一下stack[-1]为')'，断开区间
+                else:
+                    length = i - stack[-1] # stack[-1]为')'，断开区间
+                    maxlength = max(maxlength, length)
+        return maxlength
+
+```
+
+```scala
+
+
+
+/**
+* using stack to record the char index in oder to calculate the valid length
+* memo:
+* 1. always only have one invalid symbol at stack and its position index is 0
+* time complexity O(n)
+* space complexity O(n)
+*/
+object Solution1 {
+
+  import collection.mutable
+
+  def longestValidParentheses(s: String): Int = {
+    val mapping = Map('(' -> ')')
+    val stack = mutable.Stack[Int]()
+    stack.push(-1)
+    s.indices.foldLeft(0) {
+      case (maxLength, idx) =>
+        val char = s(idx)
+        if (mapping.contains(char)) {
+          stack push idx
+          maxLength
+        } else {
+          stack.pop()
+          if (stack.isEmpty) {
+            stack push idx
+            maxLength
+          } else {
+            (idx - stack.head) max maxLength
+          }
+        }
+    }
+  }
+}
+```
+
+
+##  160. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
+
+[小明](https://www.bilibili.com/video/BV1ap4y1X7nu?spm_id_from=333.999.0.0)
+
+```py
+## 方法三：左右对称
+
+class Solution:
+    def checkValidString(self, s: str) -> bool:
+        left = right = 0
+        for i, c in enumerate(s):    
+            # 从左向右看左括号能否有效
+            left  += -1 if c == ')' else 1 
+            # 从右向左看右括号能否有效
+            right += -1 if s[-i-1] == '(' else 1
+            # 注意：在循环过程中，只要出现一次负数，就直接返回 false
+            if left < 0 or right < 0: return False
+       
+        return True
+
+```
+
+
 ##  19. <a name='LongestPalindromicSubstring-'></a>5. 【回文🌈】Longest Palindromic Substring -最长回文🌈子串
 
 [花花酱](https://www.bilibili.com/video/BV18J411j7Pb?spm_id_from=333.999.0.0)
@@ -4196,6 +4400,10 @@ object Solution1-3 {
 * 时间复杂度:O(n2)
 
 ```py
+输入：s = "babad"
+输出："bab"
+解释："aba" 同样是符合题意的答案。
+
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         lenStr = len(s)
@@ -4228,71 +4436,693 @@ class Solution:
 ```
 
 
+
+##  249. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
+
+[小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
+
+```py
+输入：s = "abc"
+输出：3
+解释：3个回文子串: "a", "b", "c"
+
+输入：s = "aaa"
+输出：6
+解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
+
+
+# class Solution:
+#     def countSubstrings(self, s: str) -> int:
+#         n = len(s)
+#         dp = [[0] * n for _ in range(n)]
+#         res = 0
+#         # 这个部分其实可以不写：
+#         # for i in range(n):
+#         #     dp[i][i]=1
+#         for end in range(n):
+#             for stt in range(end, -1, -1): # stt 从 end 的位置开始移动
+#                 if s[end] == s[stt] and (end - stt <= 1 or dp[end - 1][stt + 1]):
+#                     dp[end][stt] = 1
+#                     res += 1
+#         return res
+
+```
+
+```py
+
+# 直接利用, 依次计数找到的所有的回文🌈子串即可；
+# 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
+# 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
+输入：s = "aaa"
+输出：6
+解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
+
+from math import floor,ceil
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        '''
+        中心扩展法: 双😐😐while 循环, center += 0.5, 
+        '''
+        center = cnt = 0
+        # center 用一个 while 循环
+        while center < len(s): # 😐😐 while 循环
+            low, high = floor(center), ceil(center)
+            # low, high 用一个 while 循环
+            while low >= 0 and high < len(s) and s[low] == s[high]: # 😐😐 while 循环
+                low, high = low - 1, high + 1
+                cnt = cnt + 1
+            center += 0.5
+        return cnt
+```
+
+
+
+
+##  55. <a name='LongestCommonSubsequence'></a>1143 【二维动态🚀规划】Longest Common Subsequence
+
+####  55.1. <a name='516'></a>类似题目：516最长回文🌈子序列
+
+[小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
+
+```py
+输入：text1 = "abcde", text2 = "ace" 
+输出：3  
+解释：最长公共子序列是 "ace" ，它的长度为 3 。
+
+         a   b   c   d   e
+         0   0   0   0   0
+  a  0   1   1   1   1   1
+  c  0   1   1   2   2   2
+  e  0   1   1   2   2   3
+
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        dp = [[0] * (len(text2) + 1) for _ in range(len(text1) + 1)]
+        for i in range(1, len(text1) + 1): 
+            for j in range(1, len(text2) + 1): 
+                """
+                如果相等的话，同时删t1和t2 + 1 
+                """
+                if text1[i - 1] == text2[j - 1]: 
+                    dp[i][j] = dp[i - 1][j - 1] + 1 
+                """
+                如果 not 相等的话，继承 max(x,x)， 因为可以不连续
+                """
+                else: 
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+        return dp[-1][-1]
+
+
+# class Solution:
+#     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+#         n1, n2 = len(text1), len(text2)
+#         pre = [0 for _ in range(n2 + 1)]
+#         dp = [0 for _ in range(n2 + 1)]
+#         for i in range(1, n1 + 1):
+#             for j in range(1, n2 + 1):
+#                 if text1[i-1] == text2[j-1]:
+#                     dp[j] = pre[j-1] + 1
+#                 else:
+#                     dp[j] = max(pre[j], dp[j-1])
+#                 pre[j-1] = dp[j-1] # 注意这里的缩进关系
+#             pre[j] = dp[j]
+#         return dp[-1]
+```
+
+
+
+```scala
+
+
+  object Solution {
+    def longestCommonSubsequence(text1: String, text2: String): Int = {
+      val m = text1.length
+      val n = text2.length
+      //val dp = Array.ofDim[Int](1001,1001)
+      val dp = Array.fill(1001,1001)(0)
+      for (i<- 1 to m) { // must have space?
+        for (j<- 1 to n) {
+          dp(i)(j) = if (text1(i-1)== text2(j-1)) dp(i-1)(j-1)+1 else Math.max(dp(i-1)(j),dp(i)(j-1))
+        }
+      }
+      dp(m)(n)
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      println(Solution.longestCommonSubsequence("abcde", "ace") == 3)
+    }
+    val name = "1143 Longest common sequence"
+  }
+
+```
+
+
+##  70. <a name='-1'></a>718. 最长重复子数组
+
+```py
+输入：nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
+
+输出：3
+
+解释：长度最长的公共子数组是 [3,2,1] 。
+
+
+      3 2 1 4 7
+      0 0 0 0 0 
+
+1 0   0 0 1 0 0
+2 0   0 1 0 0 0
+3 0   1 0 0 0 0
+2 0   0 2 0 0 0
+1 0   0 0 3 0 0
+
+class Solution:
+    def findLength(self, A: List[int], B: List[int]) -> int:
+        dp = [[0] * (len(B)+1) for _ in range(len(A)+1)]
+        result = 0
+        for i in range(1, len(A)+1):
+            for j in range(1, len(B)+1):
+                """
+                如果相等的话， 同时删t1和t2 + 1
+                """
+                if A[i-1] == B[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + 1
+                """
+                如果 not 相等的话， 不能继承，因为与连续
+                """
+                result = max(result, dp[i][j])
+        return result
+
+
+
+
+# 这个滑动窗口，用的是 left 和 lenth
+
+class Solution:
+    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+        '''
+        0 <= nums1[i], nums2[i] <= 100
+        所以用chr，把数字转换成字符串
+        '''
+
+        length = left = 0
+        if nums1 and nums2:
+            # 将数字转换为字符串
+            a, b = ''.join(map(chr, nums1)), ''.join(map(chr, nums2))
+            n = len(nums1)
+            while length + left < n: # 😐😐😐 while 循环
+                # 这里使用lenth保存结果，用left跳出循环
+                if a[left : left + length + 1] in b:
+                    length += 1
+                else:
+                    left += 1
+        return length 
+```
+
+##  84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
+
+[花花酱](https://www.bilibili.com/video/BV14t411Y7cg?spm_id_from=333.999.0.0)
+
+[一俩三四五](https://www.bilibili.com/video/BV1LJ41137r2?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
+
+```py
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        res = 0
+        numSet = set(nums)
+
+        for num in numSet:
+            if num - 1 not in numSet: # 去重，表示和前面的不连续
+                cur = num
+                curlen = 1
+
+                while cur + 1 in numSet: # 😐😐 while 循环
+                    cur += 1
+                    curlen += 1
+
+                res = max(res, curlen)
+
+        return res
+```
+
+
+
+##  47. <a name='EditDistance72-'></a>72. Edit Distance 72-编辑距离
+
+[花花酱](https://www.bilibili.com/video/BV1cb411u7uX?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1wv411P7aQ?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV13Z4y1W7UB?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1ea4y147FK?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5kci5ryyi3k0.png)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7fq2ehol7rg0.png)
+
+```py
+输入：word1 = "intention", word2 = "execution"
+输出：5
+解释：
+intention -> inention (删除 't')
+inention  -> enention (将 'i' 替换为 'e')
+enention  -> exention (将 'n' 替换为 'x')
+exention  -> exection (将 'n' 替换为 'c')
+exection  -> execution (插入 'u')
+
+ 
+         i   n   t   e   n   t   i   o   n
+     0   1   2   3   4   5   6   7   8   9
+ e   1   1   n   t   3   n   t   i   o   n
+ x   2   i   n   t   e   n   t   i   o   n
+ e   3   i   n   t   e   n   t   i   o   n
+ c   4   i   n   t   e   n   t   i   o   n
+ u   5   i   n   t   e   n   t   i   o   n
+ t   6   i   n   t   e   n   t   i   o   n
+ i   7   i   n   t   e   n   t   i   o   n
+ o   8   i   n   t   e   n   t   i   o   n
+ n   9   i   n   t   e   n   t   i   o   n
+
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        len1 = len(word1)
+        len2 = len(word2)
+
+        DP = [[0 for _ in range(len2 + 1)] for _ in range(len1 + 1)]
+        
+        for i in range(0, len1 + 1):
+            for j in range(0, len2 + 1):
+                """
+                l1 和 l2 都能删干净
+                """
+                if i == 0:               # 初始化
+                    DP[i][j] = j
+                elif j == 0:             # 初始化
+                    DP[i][j] = i
+                """
+                如果相等的话，可以直接从 左上角 “继承”
+                """
+                elif word1[i - 1] == word2[j - 1]:
+                    DP[i][j] = DP[i - 1][j - 1]
+                """
+                如果 not 相等的话，一步操作min(x,x,x) + 计数
+                """
+                else:
+                    DP[i][j] = min(DP[i - 1][j], DP[i][j - 1], DP[i - 1][j - 1]) + 1
+                    
+        return DP[-1][-1]
+```
+
+```py
+# class Solution:
+#     def minDistance(self, word1: str, word2: str) -> int:
+#         @cache
+#         def dp(i, j) -> int:
+#             if i == -1:
+#                 return j + 1
+#             if j == -1:
+#                 return i + 1
+#             # 做出选择
+#             if word1[i] == word2[j]:
+#                 return dp(i - 1, j - 1) # 什么都不做
+#             else:
+#                 return min(
+#                     dp(i, j-1) + 1,  # insert
+#                     dp(i-1, j) + 1,  # delete
+#                     dp(i-1, j-1) + 1 # replace
+#                 )
+#         return dp(len(word1)-1, len(word2)-1)
+```
+
 ```scala
 /**
-* chosen solution
-* expand around center
-* time complexity: O(N * 2 * N) = O(N^2)
-*        expandLengths: O(N)
-* space complexity: O(1)
+* dynamic programming  - Levenshtein distance
+* memo
+*    1. dp(i)(j) represent the minimum edit distance from the length i substring from word1 to the length j substring from word2
+*    2. dp(i)(j) is solved by its sub-optimal problem 
+*         1, delete op: dp(i -1)(j)
+*         2. replacement op: dp(i -1)(j - 1)
+*         3. insertion op: dp(i)(j - 1)
+* time complexity: O(NM) N is the length of word1, N is the length of word2
+* space complexity: O(NM)
 */
+object Solution1 {
+  def minDistance(word1: String, word2: String): Int = {
+    val m = word1.length
+    val n = word2.length
+    /* initial  Levenshtein distance table 
+    * dp(i)(j) represent the minimum distance transforming from length i of substring word1 to length j of substring word2
+    */
+    val dp = Array.tabulate(m + 1, n + 1) {
+      case (0, j) => j
+      case (i, 0) => i
+      case _ => 0
+    }
 
-object Solution0 {
-    def longestPalindrome(s: String): String = {
-        if(s == null || s.isEmpty) return ""
-        
-        // 0 1 2 3 4 5 6 7
-        // r a c e c a r
-        // r a c e e c a r
-        // b b c e c a a
-        val (head, maxlen) = s.indices.foldLeft((0, 1)){
-            case ((h, maxlen), i) => 
-                val oddlen =  expandLengths(s, i, i)
-                val evenlen = expandLengths(s, i, i + 1)
-                val len = oddlen max evenlen
-                if(len > maxlen)  (i -  (len - 1) / 2, len)
-                else (h, maxlen)
-        }
-        s.slice(head, head + maxlen)
+    for (i <- 1 to m; j <- 1 to n) {
+      /* i-1 is word1 index, j-1 is word2 index */
+      if (word1(i - 1) == word2(j - 1)) {
+        // do nothing case
+        dp(i)(j) = dp(i - 1)(j - 1)
+      } else {
+        /**
+        *       i-1,    i
+        * j-1 replace  insertion     
+        *  j   delete  dp(i)(j)
+        */
+        val replace = dp(i - 1)(j - 1)
+        val insert = dp(i)(j - 1)
+        val delete = dp(i - 1)(j)
+        dp(i)(j) = (replace min insert min delete) + 1
+      }
     }
-    // return length
-    @annotation.tailrec
-    def expandLengths(s: String, left: Int, right: Int): Int = {
-        if(0 <= left && right < s.length && s(left) == s(right)) expandLengths(s, left - 1, right + 1)
-        else right - left - 1
-    }
+    dp(m)(n)
+  }
 }
+```
 
-/**
-* dynamic programming
-*/
-object Solution3 {
-    def longestPalindrome(s: String): String = {
-        if(s == null || s.isEmpty ) return ""
-        if(s.length < 2) return s
- 
-        val dp = Array.ofDim[Boolean](s.length, s.length)
-        var maxLen = 1
-        var head = 0
- 
-        for(j <- 1 until s.length; i <- 0 until j){
-            val currentLen = j - i + 1
-            if(s(i) != s(j))  dp(i)(j) = false
-            else if(currentLen < 4)  dp(i)(j) = true // currentLen - 2 < 2
-            else dp(i)(j) = dp(i + 1)(j - 1)
-            
-            
-            if(dp(i)(j) && currentLen > maxLen){
-                maxLen = currentLen
-                head = i
 
-            }
-        }
+##  278. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
+
+[花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV185411G7F6?spm_id_from=333.999.0.0)
+
+```py
+字符串的一个 子序列 是指，通过 `删除` 一些（也可以 `不删除`）
+字符且不干扰剩余字符相对位置所组成的新字符串。
+
+输入：s = "rabbbit", t = "rabbit"
+ra-bbit
+rab-bit
+rabb-it
+输出：3
+
+
+输入：s = "babgbag", t = "bag"
+输出：5
+ba-g---
+ba----g
+b----ag
+--b--ag
+----bag
+
+              b    a    b    g    b    a    g  【si】
+         -    1    1    1    1    1    1    1
+     b   0   [1]   1   [2]   2   [3]   3    3
+     a   0    0   [1]   1    1    1   [4]   4
+     g   0    0    0    0   [1]   1    1   [5]
+   【ti】
+
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        sN = len(s)
+        tN = len(t)
+        dp = [[0] * (tN + 1) for _ in range(sN + 1)]
+
+        for si in range(sN + 1):
+            for ti in range(tN + 1):
+                """
+                只有s能删，t不能删
+                """
+                if ti == 0:  
+                    dp[si][ti] = 1
+                elif si == 0:  
+                    dp[si][ti] = 0
+                """
+                如果相等的话：只删 s + st 同时删除
+                """
+                elif s[i - 1] == t[j - 1]:
+                    dp[si][ti] = dp[si - 1][ti - 1] + dp[si - 1][ti]
+                """
+                如果 not 相等的话：只删 s
+                """
+                else:
+                    dp[si][ti] = dp[si - 1][ti]
+        return dp[-1][-1]
+```
+
+##  150. <a name='-1'></a>10. 正则表达式匹配
+
+https://leetcode-cn.com/problems/regular-expression-matching/solution/
+
+```py
+输入：s = "aa", p = "a"
+输出：false
+解释："a" 无法匹配 "aa" 整个字符串。
+
+        """
+        思路：动态规划， 定义二维dp数组，其中dp[i][j]表示s的前i个字符和p的前j个字符是否匹配，
+        为了方便初始化，我们将s和p的长度均+1
+        考虑到P中可能出现三种字符：普通字母(a-z)、'*'或者是'.', 则其动态转移方程分别是：
+        1) 如果p[j]为普通字母，dp[i][j]==dp[i-1][j-1] and s[i]==p[j]
+        2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
+        3) 
+        """
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
+        # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
+        s = " " + s
+        p = " " + p
+        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
+        dp[0][0] = True  # 假定s和p都从空字符开始
         
-        s.slice(head, head + maxLen)
+        for si in range(len(s)):  # s的空字符需要额外初始化
+            for pi in range(1, len(p)):
+        '''
+        如果 p[j] 为 '*', 则情况比较复杂, 分以下两种情况讨论：
+           A. 以 s="c", p="ca*" 为例，此时 '*' 匹配0次，dp[si][pi] = dp[si][pi-2]
+           B. 以 s="caa", p="ca*", p="c.*" 为例，此时 '*' 匹配多次
+        '''
+                if p[pi] == '*' and dp[si][pi-2]:   # *可以出现0次或者多次
+                    dp[si][pi] = dp[si][pi-2]
+                elif p[pi] == '*' and p[pi-1] in ('.', s[si]):
+                    dp[si][pi] = dp[si-1][pi]
+                elif p[pi] in ('.', s[si]):
+                    dp[si][pi] = dp[si-1][pi-1]
+        return dp[-1][-1]
+```
+
+
+
+
+##  216. <a name='-1'></a>44. 通配符匹配
+
+```py
+给定一个 `字符串 (s)` 和一个 `字符模式 (p)` ，实现一个支持 '?' 和 '*' 的通配符匹配。
+
+'?' 可以匹配任何 `单个字符`。
+'*' 可以匹配 `任意字符串`（包括 `空字符串`）。
+两个字符串完全匹配才算匹配成功。
+
+说明:
+
+s 可能为空，且只包含从 `a-z` 的小写字母。
+p 可能为空，且只包含从 `a-z` 的小写字母，以及字符 ? 和 *。
+
+
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+
+        dp = [[False] * (n + 1) for _ in range(m + 1)]
+
+        dp[0][0] = True # dp[0][0]:什么都没有,所以为true
+        for pi in range(1, n + 1):
+            if p[pi - 1] == '*': 
+                dp[0][pi] = True
+            else:
+                break
+        # 也可以这么写
+        # for j in range(1, n + 1):
+        #     if p[j - 1] == "*":
+        #         dp[0][j] = dp[0][j - 1]
+        
+        for si in range(1, m + 1):
+            for pi in range(1, n + 1):
+                if p[pi - 1] == '*': # 如果p[j] == "*" && (dp[i-1][j] = true || dp[i][j-1] = true) 有dp[i][j] = true
+                    dp[si][pi] = dp[si][pi - 1] | dp[si - 1][pi] 
+                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
+                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
+                elif p[pi - 1] in ('?', s[si - 1]): # 如果(s[i] == p[j] || p[j] == "?") && dp[i-1][j-1] ,有dp[i][j] = true
+                    dp[si][pi] = dp[si - 1][pi - 1]
+                
+        return dp[m][n]
+
+```
+
+
+
+
+##  83. <a name='-1'></a>62-不同路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1mC4y1W7Je?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Sg4y1v7PM?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1cp4y167qx?spm_id_from=333.999.0.0)
+
+二维动态规划：
+
+时间复杂度：O(mn)
+
+空间复杂度：O(mn)
+
+```py
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # 易错点：dp千万不要写错
+        # 其他写法：dp = [[1 for i in range(n)] for j in range(m)]
+        # 其他写法：dp = [[1]*n]*m
+        dp = [[1] * n] + [[1] + [0] * (n - 1) for _ in range(m - 1)]
+        for i in range(1, m): # 这里从 1 开始
+            for j in range(1, n): # 这里从 1 开始
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        return dp[-1][-1]
+```
+
+一维动态规划：
+
+时间复杂度：O(mn)
+
+空间复杂度：O(n)
+
+```py
+# class Solution:
+#     def uniquePaths(self, m: int, n: int) -> int:
+#         # 易错点：dp千万不要写错
+#         dp = [1] * n
+#         for i in range(1, m):
+#             for j in range(1, n):
+#                 dp[j] += dp[j - 1]
+#         return dp[-1]
+```
+
+```scala
+/**
+* fill dp array with 1
+*/
+object Solution2-1{
+    def uniquePaths(m: Int, n: Int): Int = {
+      val dp = Array.fill[Int](m, n)(1)
+      for (i <- 1 until m; j <- 1 until n) {
+        dp(i)(j) = dp(i - 1)(j) + dp(i)(j - 1)
+      }
+      
+      dp.last.last
     }
 }
 ```
+
+
+##  190. <a name='UniquePathsII'></a>63 Unique Paths II
+
+[小明](https://www.bilibili.com/video/BV1Sv411L7qe?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Pp4y1v7KR?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+        # 易错点：注意边界上也可能有obstacle
+        # 易错点：dp = [[0]*(n+1)]*(m+1)这些写法是错误的
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        # 易错点：dp[1][1] = 1,这个数字会被重新计算，所以应该写成：
+        dp[0][1] = 1
+        # 构建了一个大一圈的矩阵，但实际计算的时候，仍然是mn的大小
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if not obstacleGrid[i - 1][j - 1]:
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        print(dp)
+        return dp[-1][-1]
+```
+
+
+
+##  89. <a name='-1'></a>221-【动态🚀规划】最大正方形
+
+[哈哈哈](https://www.bilibili.com/video/BV1XT4y137Gq?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV16K411575r?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1mA411q7Sw?spm_id_from=333.999.0.0)
+
+```py
+# 右下角的坐标为 (x, y)
+# 那么 (x - 1, y - 1) 一定需要是一个 square，
+# 并且该点的左边全为1，上边也为1，按照这个进行理解变长的增加。
+构建dp：
+class Solution:
+    def maximalSquare(self, matrix):
+        m, n = len(matrix), len(matrix[0])
+        dp = [[0] * n for _ in range(m)]
+        maxEdge = 0
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == '1':
+                    # 当 i 和 j 等于0时，i-1 为 -1
+                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
+                    maxEdge = max(dp[i][j], res)
+        return maxEdge * maxEdge
+
+# 原地修改：
+# class Solution:
+#     def maximalSquare(self, matrix):
+#         maxEdge = 0
+#         for i in range(len(matrix)):
+#             for j in range(len(matrix[i])):
+#                 if i and j: # 这个写法妙啊，刚好就跳过了 i-1
+#                     if matrix[i][j] == "1":
+#                         matrix[i][j] = min(int(matrix[i-1][j-1]), int(matrix[i][j-1]), int(matrix[i-1][j])) + 1
+#                     else:
+#                         matrix[i][j] = 0
+#                 maxEdge = max(maxEdge, int(matrix[i][j]))
+#         return maxEdge**2       
+```
+
+
+
+##  127. <a name='2.'></a>补充题2. 圆环回原点问题
+
+```s
+圆环上有 10 个点，编号为 0 ~ 9。
+从`0点`出发，每次可以`逆时针`和`顺时针`走一步，问走`n步`回到`0点`共有多少种走法。
+
+输入: 2
+输出: 2
+解释：有 2 种方案。分别是 0->1->0 和 0->9->0
+```
+
+```py
+# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
+# 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
+class Solution:
+    def backToOrigin(self,n):
+        # 点的个数为 10
+        circle = 10
+        # step 在外面，site 在里面
+        dp = [[0 for site in range(circle)] for step in range(n + 1)]
+        dp[0][0] = 1
+        for step in range(1, n + 1): # 走 1 ~ n 步
+            for site in range(circle):
+                # dp[i][j] 表示从 0 出发，走 step 步到 site 的方案数
+                # ps:公式之所以`取余`是因为 site-1 或 site+1 可能会超过圆环 0~9 的范围
+                dp[step][site] = dp[step - 1][(site - 1 + circle) % circle] \
+                               + dp[step - 1][(site + 1) % circle]
+        return dp[n][0]
+```
+
+
+
+
 
 ##  20. <a name='SearchinRotatedSortedArray'></a>33. Search in Rotated Sorted Array
 
@@ -5044,6 +5874,102 @@ class Solution(object):
         return str((eval(num1)+eval(num2)))
 ```
 
+
+
+##  68. <a name='-1'></a>43. 字符串相乘
+
+```py
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        m, n = len(num1), len(num2)
+        ansArr = [0] * (m + n)
+        # 从后往前
+        for i in range(m - 1, -1, -1):
+            x = int(num1[i])
+            for j in range(n - 1, -1, -1):
+                ansArr[i + j + 1] += x * int(num2[j])
+        
+        # 从后往前
+        for i in range(m + n - 1, 0, -1):
+            ansArr[i - 1] += ansArr[i] // 10
+            ansArr[i] %= 10
+        
+        res = ''.join(str(x) for x in ansArr)
+        return str(int(res))
+```
+
+
+
+##  156. <a name='9.36-415-AddStrings'></a>补充题9. 36进制加法 - 见 415 - Add Strings
+
+```s
+36进制由 0-9，a-z，共 36 个字符表示。
+
+要求按照加法规则计算出任意两个36进制正整数的和，如 1b + 2x = 48  （解释：47 + 105 = 152）
+
+要求：不允许使用先将36进制数字整体转为10进制，相加后再转回为36进制的做法
+
+题目分析：此题难度倒不是很大，实际上是 LC415. 字符串相加的扩展。
+
+LC415 是十进制的大数相加，而本题是`36进制`的大数相加。
+
+顺便提一句，我强烈推荐415题使用以下代码的写法，优雅简洁，不容易出Bug。
+
+如果第一次见，可能需要多反应会儿，但明白了以后就会有相见恨晚的感觉。
+```
+
+
+##  179. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
+
+[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7FY?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H777?spm_id_from=333.999.0.0)
+
+```py
+class Solution(object):
+    def convertToTitle(self, columnNumber):
+        res = ''
+        '''
+        余加除
+        '''
+        while columnNumber: # 😐😐 while 循环
+            columnNumber -= 1                       # 又想了好久才知道在哪里减一。。
+            res = chr(columnNumber % 26 + 65) + res # A的ascii码为65
+            columnNumber = columnNumber // 26 
+        return res
+```
+
+
+
+##  191. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H7nT?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1h541187Sv?spm_id_from=333.999.0.0)
+
+```py
+# python 从左到右遍历
+        # 26进制转10进制
+class Solution:
+def titleToNumber(self, columnTitle: str) -> int:
+        res = 0
+        for char in columnTitle:
+            res *= 26
+            res += ord(char) - ord('A') + 1 
+        return res
+```
+
+
+```scala
+//Alternate solution
+object Solution {
+    def titleToNumber(s: String): Int = 
+        s.foldLeft(0)((acc, ch) => acc * 26 + (ch - 'A' + 1))
+}
+
+```
+
+
 ##  45. <a name='AddTwoNumbers'></a>2. Add Two Numbers
 
 [花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
@@ -5291,6 +6217,56 @@ class Solution:
 
 
 ```
+
+
+##  85. <a name='ValidateIPAddress'></a>468 Validate IP Address
+
+[小明](https://www.bilibili.com/video/BV1tg4y1q7Kq?spm_id_from=333.999.0.0)
+
+```py
+
+class Solution:
+    """
+    第1步：分割字符串
+    第2步：判断长度
+    第3步：分析其中的每个元素
+    """
+    def validIPAddress(self, IP: str) -> str:
+        if "." in IP:
+            # ipv4
+            ipv4 = IP.split(".")
+            if len(ipv4) != 4:
+                return "Neither"
+            for num in ipv4:
+                # 192.168.01.1 为无效IPv4地址
+                # 192.168@1.1 为无效IPv4地址
+                # 0 <= xi <= 255 
+                if  (len(num) >= 2 and num[0] == "0")  \
+                    or not num.isdigit()  \
+                    or (not 0 <= int(num) <= 255):
+                    return "Neither"
+            return "IPv4"
+        else:
+            ipv6 = IP.split(":")
+            if len(ipv6) != 8:
+                return "Neither"
+            for num in ipv6:
+                # 1 <= xi.length <= 4
+                # 可以包含数字、小写英文字母( 'a' 到 'f' )和大写英文字母( 'A' 到 'F' )。
+                if  (not 1 <= len(num) <= 4) \
+                    or not all(map(lambda x: x.lower() in "0123456789abcdef", num)):
+                    return "Neither"
+            return "IPv6"
+
+
+```
+
+
+##  188. <a name='22.IP'></a>补充题22. IP地址与整数的转换
+
+https://mp.weixin.qq.com/s/UWCuEtNS2kuAuDY-eIbghg
+
+
 
 
 ##  259. <a name='PathSumIII'></a>437 【前缀和🎨】Path Sum III
@@ -7815,30 +8791,45 @@ object Solution {
 [正则表达式中小括号、中括号、大括号的作用](https://blog.csdn.net/weixin_45621662/article/details/103921232)
 
 ```py
-import re
-class Solution(object):
-    def myAtoi(self, s):
-        return max(min(int(*re.findall('^[+-]?\d+', s.lstrip())), 2**31 - 1), -2**31)
+# import re
+# class Solution(object):
+#     def myAtoi(self, s):
+#         return max(min(int(*re.findall('^[+-]?\d+', s.lstrip())), 2**31 - 1), -2**31)
 
-import re
-class Solution:
-    def myAtoi(self, s: str) -> int:
-        at_oi_re = re.compile('^[ ]*([+-]?\d+)')
-        # 易错点：要注意中括号[]和小括号()的区别
-        # 易错点：要注意小括号()的位置，小括号的作用是匹配并提取，所以+-要包括起来
-        # 易错点：不能漏掉*？
+# import re
+# class Solution:
+#     def myAtoi(self, s: str) -> int:
+#         at_oi_re = re.compile('^[ ]*([+-]?\d+)')
+#         # 易错点：要注意中括号[]和小括号()的区别
+#         # 易错点：要注意小括号()的位置，小括号的作用是匹配并提取，所以+-要包括起来
+#         # 易错点：不能漏掉*？
 
-        # 字符串的 开头 匹配 0个或多个[空格]
-        # 匹配 0个或多个[+-]
-        # 匹配 0个或多个[0-9]
-        if not at_oi_re.search(s):
-            return 0
-        res = int(at_oi_re.findall(s)[0])
-        # 易错点：findall返回一个列表，所以必须有[0]
-        # 易错点：必须有int()
-        #  在范围 [-2^31, 2^31 - 1] 内
-        return min(max(res, -(1<<31)), (1<<31) - 1) # 在两者之间，背一背
-        # 要加小括号(1<<31)
+#         # 字符串的 开头 匹配 0个或多个[空格]
+#         # 匹配 0个或多个[+-]
+#         # 匹配 0个或多个[0-9]
+#         if not at_oi_re.search(s):
+#             return 0
+#         res = int(at_oi_re.findall(s)[0])
+#         # 易错点：findall返回一个列表，所以必须有[0]
+#         # 易错点：必须有int()
+#         #  在范围 [-2^31, 2^31 - 1] 内
+#         return min(max(res, -(1<<31)), (1<<31) - 1) # 在两者之间，背一背
+#         # 要加小括号(1<<31)
+输入：s = "   -42"
+
+输出：-42
+
+解释：
+
+第 1 步："   -42"（读入前导空格，但忽视掉）
+            ^
+第 2 步："   -42"（读入 '-' 字符，所以结果应该是负数）
+             ^
+第 3 步："   -42"（读入 "42"）
+               ^
+解析得到整数 -42 。
+
+由于 "-42" 在范围 [-231, 231 - 1] 内，最终结果为 -42 。
 
 class Solution(object):
     def myAtoi(self, str):
@@ -7856,7 +8847,7 @@ class Solution(object):
         for char in str:
             if '0' <= char <='9':
                 strNum = strNum * 10 +  ord(char) - ord('0')
-            if char < '0' or char > '9':
+            else:
                 break
         strNum *= flag
         return min(max(strNum, -(1<<31)), (1<<31) - 1) 
@@ -7865,109 +8856,6 @@ class Solution(object):
 
 
 
-##  47. <a name='EditDistance72-'></a>72. Edit Distance 72-编辑距离
-
-[花花酱](https://www.bilibili.com/video/BV1cb411u7uX?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1wv411P7aQ?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV13Z4y1W7UB?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1ea4y147FK?spm_id_from=333.999.0.0)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5kci5ryyi3k0.png)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7fq2ehol7rg0.png)
-
-```py
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        len1 = len(word1)
-        len2 = len(word2)
-
-        DP = [[0 for _ in range(len2 + 1)] for _ in range(len1 + 1)]
-        
-        for i in range(0, len1 + 1):
-            for j in range(0, len2 + 1):
-                if i == 0:               # 初始化
-                    DP[i][j] = j
-                elif j == 0:             # 初始化
-                    DP[i][j] = i
-                elif word1[i - 1] == word2[j - 1]:
-                    DP[i][j] = DP[i-1][j-1]
-                else:
-                    DP[i][j] = min(DP[i-1][j], DP[i][j-1], DP[i-1][j-1]) + 1
-                    
-        return DP[-1][-1]
-```
-
-```py
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        @cache
-        def dp(i, j) -> int:
-            if i == -1:
-                return j + 1
-            if j == -1:
-                return i + 1
-            # 做出选择
-            if word1[i] == word2[j]:
-                return dp(i - 1, j - 1) # 什么都不做
-            else:
-                return min(
-                    dp(i, j-1) + 1,  # insert
-                    dp(i-1, j) + 1,  # delete
-                    dp(i-1, j-1) + 1 # replace
-                )
-        return dp(len(word1)-1, len(word2)-1)
-```
-
-```scala
-/**
-* dynamic programming  - Levenshtein distance
-* memo
-*    1. dp(i)(j) represent the minimum edit distance from the length i substring from word1 to the length j substring from word2
-*    2. dp(i)(j) is solved by its sub-optimal problem 
-*         1, delete op: dp(i -1)(j)
-*         2. replacement op: dp(i -1)(j - 1)
-*         3. insertion op: dp(i)(j - 1)
-* time complexity: O(NM) N is the length of word1, N is the length of word2
-* space complexity: O(NM)
-*/
-object Solution1 {
-  def minDistance(word1: String, word2: String): Int = {
-    val m = word1.length
-    val n = word2.length
-    /* initial  Levenshtein distance table 
-    * dp(i)(j) represent the minimum distance transforming from length i of substring word1 to length j of substring word2
-    */
-    val dp = Array.tabulate(m + 1, n + 1) {
-      case (0, j) => j
-      case (i, 0) => i
-      case _ => 0
-    }
-
-    for (i <- 1 to m; j <- 1 to n) {
-      /* i-1 is word1 index, j-1 is word2 index */
-      if (word1(i - 1) == word2(j - 1)) {
-        // do nothing case
-        dp(i)(j) = dp(i - 1)(j - 1)
-      } else {
-        /**
-        *       i-1,    i
-        * j-1 replace  insertion     
-        *  j   delete  dp(i)(j)
-        */
-        val replace = dp(i - 1)(j - 1)
-        val insert = dp(i)(j - 1)
-        val delete = dp(i - 1)(j)
-        dp(i)(j) = (replace min insert min delete) + 1
-      }
-    }
-    dp(m)(n)
-  }
-}
-```
 
 ##  48. <a name='MedianofTwoSortedArrays'></a>4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays
 
@@ -8044,16 +8932,16 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1tK41137GM?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1 if root else 0
+# class Solution:
+#     def maxDepth(self, root: Optional[TreeNode]) -> int:
+#         return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1 if root else 0
 
-class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        if not root: return 0
-        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+# class Solution:
+#     def maxDepth(self, root: TreeNode) -> int:
+#         if not root: return 0
+#         return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
 
-等效于
+# 等效于
 
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
@@ -8123,22 +9011,22 @@ class Solution:
         else:
             return 0
             
-class Solution:
-    def minDepth(self, root: TreeNode) -> int:
-        if root:
-            if root.left and root.right:
-                return 1 + min(self.minDepth(root.left), self.minDepth(root.right)) # 如果有2个子树，取较低一层的值
-            elif root.left:
-                return 1 + self.minDepth(root.left)  # 如果有1个子树，取较高一层的值
-            elif root.right:
-                return 1 + self.minDepth(root.right) # 如果有1个子树，取较高一层的值
-            else: # not root.left and not root.right
-                return 1
-        else:
-            return 0
+# class Solution:
+#     def minDepth(self, root: TreeNode) -> int:
+#         if root:
+#             if root.left and root.right:
+#                 return 1 + min(self.minDepth(root.left), self.minDepth(root.right)) # 如果有2个子树，取较低一层的值
+#             elif root.left:
+#                 return 1 + self.minDepth(root.left)  # 如果有1个子树，取较高一层的值
+#             elif root.right:
+#                 return 1 + self.minDepth(root.right) # 如果有1个子树，取较高一层的值
+#             else: # not root.left and not root.right
+#                 return 1
+#         else:
+#             return 0
 ```
 
-队列
+层序遍历
 
 ```py
 class Solution:
@@ -8208,6 +9096,85 @@ object Solution {
 ```
 
 
+##  58. <a name='BalancedBinaryTree'></a>110-Balanced Binary Tree
+
+[哈哈哈](https://www.bilibili.com/video/BV1NJ411v7b1?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7Lb?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1sV411b7hR?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def maxDepth(root: TreeNode) -> int:
+            return max(maxDepth(root.left), maxDepth(root.right)) + 1 if root else 0
+
+        if not root: 
+            return True
+        return abs(maxDepth(root.left) - maxDepth(root.right)) <= 1 and \
+            self.isBalanced(root.left) and self.isBalanced(root.right)
+        # 注意：左右两个子树也必须balanced
+```
+
+
+
+
+##  62. <a name='DiameterofBinaryTree'></a>543 Diameter of Binary Tree
+
+[小明](https://www.bilibili.com/video/BV12K4y1r78T?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1qA411t7LR?spm_id_from=333.999.0.0)
+
+```py
+          1
+         / \
+        2   3
+       / \     
+      4   5  
+返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
+
+class Solution:
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        res = 0
+        def depth(node):
+            nonlocal res
+            if node:
+                """
+                当 node.left, 高度为 1, 否则为 0
+                当 node.right, 高度为 1, 否则为 0
+                """
+                L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
+                R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
+                res = max(res, L + R)
+                return max(L, R)
+
+        depth(root)
+        return res
+```
+
+
+##  205. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
+
+[花花酱](https://www.bilibili.com/video/BV1n44y1E73D?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Qz411i7bh?spm_id_from=333.999.0.0)
+
+```py
+输入：root = [1,2,3,4,5,6]
+输出：6
+
+class Solution(object):
+    def countNodes(self, root):
+        if not root: 
+            return 0
+        if root and not root.left and not root.right: 
+            return 1
+        return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
+```
+
+
+
 ##  52. <a name='-1'></a>76-【滑动窗口🔹】最小覆盖子串
 
 [哈哈哈](https://www.bilibili.com/video/BV1PM4y1K7p6?spm_id_from=333.999.0.0)
@@ -8217,35 +9184,43 @@ object Solution {
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ud8tslp4vz4.png)
 
 ```py
+输入：s = "ADOBECODEBANC", t = "ABC"
+输出："BANC"
+
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
     
-        def isContains(windic,targetdic):
-            for key in targetdic:
-                if windic[key] < targetdic[key]:
+        def isContains(outerdic,innerdic):
+            for key in innerdic:
+                if outerdic[key] < innerdic[key]:
                     return False # 只要有一个不满足，则不满足
             return True
 
-        tdic = defaultdict(int) # 固定的
-        wdic = defaultdict(int) # 变动的
+        inndic = defaultdict(int) # 固定的
+        outdic = defaultdict(int) # 变动的
         for char in t:
-            tdic[char] += 1
+            inndic[char] += 1 # 固定的
 
         minlen = len(s)
         l = 0
         res = ''
 
         for r in range(len(s)): # 扩展右边界
-            if s[r] in tdic:
-                wdic[s[r]] += 1  # 变动的
-            while isContains(wdic, tdic): # 😐😐😐 while 循环
+            if s[r] in inndic:
+                outdic[s[r]] += 1  # 变动的
+            '''
+            等到 outdic 够大，才触发计算
+            第一步：先保存答案
+            第二步：收缩左边界
+            '''
+            while isContains(outdic, inndic): # 😐😐😐 while 循环
                 # 如果是 minWindow
                 if r - l + 1 <= minlen:
                     minlen = r - l + 1
                     res = s[l: r + 1]
                 # 收缩左边界
-                if s[l] in wdic:
-                    wdic[s[l]] -= 1  # 变动的
+                if s[l] in outdic:
+                    outdic[s[l]] -= 1  # 变动的
                 l += 1   
         return res
 ```
@@ -8309,17 +9284,17 @@ class Solution:
         '''
         关键在于: 从后往前，找到非递减序列
         '''
-        i = len(nums) - 2
-        while i >= 0: # 😐😐 while 循环，找到非递减序列
-            if nums[i] >= nums[i + 1]:
-                i -= 1
+        stt = len(nums) - 2
+        while stt >= 0: # 😐😐 while 循环，找到非递减序列
+            if nums[stt] >= nums[stt + 1]:
+                stt -= 1
             else:
                 # 寻找i后面比i大的数，交换位置,并且排序
-                for j in range(len(nums) - 1, i, -1): # 易错点:len(nums)-1,i的区间
+                for end in range(len(nums) - 1, stt, -1): # 易错点:len(nums)-1,i的区间
                     # 12(3)5(4)
-                    if nums[j] > nums[i]:
-                        nums[i], nums[j] = nums[j], nums[i]
-                        nums[i + 1 : ] = sorted(nums[i + 1 : ])
+                    if nums[end] > nums[stt]:
+                        nums[stt], nums[end] = nums[end], nums[stt]
+                        nums[stt + 1 : ] = sorted(nums[stt + 1 : ])
                         return
         nums.reverse() # 易错点:对于[3,2,1]这种情况，i = 0
 ```
@@ -8394,191 +9369,22 @@ class Solution:
     def nextGreaterElement(self, n: int) -> int:
         nums = list(str(n))
         # 关键在于从后往前，找到非递减序列
-        i = len(nums) - 2
-        while i >= 0: # 😐😐😐 while 循环
-            if nums[i] >= nums[i+1]:
-                i -= 1
+        stt = len(nums) - 2
+        while stt >= 0: # 😐😐😐 while 循环
+            if nums[stt] >= nums[stt + 1]:
+                stt -= 1
             else:
                 # 寻找i后面比i大的数，交换位置,并且排序
-                for j in range(len(nums)-1,i,-1): # 易错点:len(nums)-1,i的区间
+                for end in range(len(nums) - 1, stt, -1): # 易错点:len(nums)-1,i的区间
                     # 12(3)5(4)
-                    if nums[j] > nums[i]:
-                        nums[i],nums[j] = nums[j],nums[i]
-                        nums[i+1:] = sorted(nums[i+1:])
+                    if nums[end] > nums[stt]:
+                        nums[stt], nums[end] = nums[end], nums[stt]
+                        nums[stt + 1 : ] = sorted(nums[stt + 1 : ])
                         res =  int(''.join(nums))
                         return res if res < (1<<31) else -1
         return -1 # 易错点:对于[3,2,1]这种情况，i = 0
 
-class Solution:
-    def nextPermutation(self, nums: List[int]) -> None:
-        i = len(nums) - 2
-        while i >= 0: # 😐😐 while 循环，找到非递减序列
-            if nums[i] >= nums[i + 1]:
-                i -= 1
-            else:
-                # 寻找i后面比i大的数，交换位置,并且排序
-                for j in range(len(nums) - 1, i, -1): # 易错点:len(nums)-1,i的区间
-                    # 12(3)5(4)
-                    if nums[j] > nums[i]:
-                        nums[i], nums[j] = nums[j], nums[i]
-                        nums[i + 1 : ] = sorted(nums[i + 1 : ])
-                        return
-        nums.reverse() # 易错点:对于[3,2,1]这种情况，i = 0
 ```
-
-
-
-##  55. <a name='LongestCommonSubsequence'></a>1143 【二维动态🚀规划】Longest Common Subsequence
-
-####  55.1. <a name='516'></a>类似题目：516最长回文🌈子序列
-
-[小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
-
-```py
-做了几个dp的题之后，总结了dp需要注意的几个要素：
-
-1、 明确dp二维数组表示的含义
-
-2、 base case
-
-3、 状态的转移：对于`回文🌈/LCS`之类的问题则是考虑当前字串和已经计算过的子串之间的关系
-
-4、 由`状态的转移`来确定 loop的边界
-
-5、 由loop的边界`打出表格` 可得出最后一个dp的状态值，即结果。
-
-
-class Solution:
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        dp = [[0] * (len(text2)+1) for _ in range(len(text1)+1)]
-        for i in range(1, len(text1)+1): 
-            for j in range(1, len(text2)+1): 
-                if text1[i-1] == text2[j-1]: 
-                    dp[i][j] = dp[i-1][j-1] + 1 
-                else: 
-                    dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-        return dp[-1][-1]
-
-
-class Solution:
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        n1, n2 = len(text1), len(text2)
-        pre = [0 for _ in range(n2 + 1)]
-        dp = [0 for _ in range(n2 + 1)]
-        for i in range(1, n1 + 1):
-            for j in range(1, n2 + 1):
-                if text1[i-1] == text2[j-1]:
-                    dp[j] = pre[j-1] + 1
-                else:
-                    dp[j] = max(pre[j], dp[j-1])
-                pre[j-1] = dp[j-1] # 注意这里的缩进关系
-            pre[j] = dp[j]
-        return dp[-1]
-```
-
-
-
-```scala
-
-
-  object Solution {
-    def longestCommonSubsequence(text1: String, text2: String): Int = {
-      val m = text1.length
-      val n = text2.length
-      //val dp = Array.ofDim[Int](1001,1001)
-      val dp = Array.fill(1001,1001)(0)
-      for (i<- 1 to m) { // must have space?
-        for (j<- 1 to n) {
-          dp(i)(j) = if (text1(i-1)== text2(j-1)) dp(i-1)(j-1)+1 else Math.max(dp(i-1)(j),dp(i)(j-1))
-        }
-      }
-      dp(m)(n)
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      println(Solution.longestCommonSubsequence("abcde", "ace") == 3)
-    }
-    val name = "1143 Longest common sequence"
-  }
-
-```
-
-
-
-
-##  58. <a name='BalancedBinaryTree'></a>110-Balanced Binary Tree
-
-[哈哈哈](https://www.bilibili.com/video/BV1NJ411v7b1?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7Lb?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1sV411b7hR?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def isBalanced(self, root: TreeNode) -> bool:
-        def maxDepth(root: TreeNode) -> int:
-            if not root: return 0
-            return max(maxDepth(root.left), maxDepth(root.right)) + 1
-
-        if not root: return True
-        return abs(maxDepth(root.left) - maxDepth(root.right)) <= 1 and self.isBalanced(root.left) and self.isBalanced(root.right)
-        # 注意：左右两个子树也必须balanced
-```
-
-##  62. <a name='DiameterofBinaryTree'></a>543 Diameter of Binary Tree
-
-[小明](https://www.bilibili.com/video/BV12K4y1r78T?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1qA411t7LR?spm_id_from=333.999.0.0)
-
-```py
-          1
-         / \
-        2   3
-       / \     
-      4   5  
-返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
-
-class Solution:
-    def diameterOfBinaryTree(self, root: TreeNode) -> int:
-        res = 0
-        def depth(node):
-            nonlocal res
-            if node:
-                """
-                当 node.left, 高度为 1, 否则为 0
-                当 node.right, 高度为 1, 否则为 0
-                """
-                L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
-                R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
-                res = max(res, L + R)
-                return max(L, R)
-
-        depth(root)
-        return res
-```
-
-
-##  205. <a name='CountCompleteTreeNodes'></a>222. Count Complete Tree Nodes
-
-[花花酱](https://www.bilibili.com/video/BV1n44y1E73D?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Qz411i7bh?spm_id_from=333.999.0.0)
-
-```py
-输入：root = [1,2,3,4,5,6]
-输出：6
-
-class Solution(object):
-    def countNodes(self, root):
-        if not root: return 0
-        if root and not root.left and not root.right: return 1
-        return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
-```
-
 
 ##  72. <a name='PathSum'></a>112-Path Sum
 
@@ -8588,9 +9394,9 @@ class Solution(object):
 
 [官方](https://www.bilibili.com/video/BV1uK411T7kX?spm_id_from=333.999.0.0)
 
-递归
 
 ```py
+dfs
 class Solution:
     def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
         res = False
@@ -8600,48 +9406,35 @@ class Solution:
             if node:
                 if node.val == tsum and not node.left and not node.right: # 结束条件
                     res = True
-                dfs(node.left, tsum - node.val) # 三个部分都需要状态转移
+                dfs(node.left,  tsum - node.val) # 三个部分都需要状态转移
                 dfs(node.right, tsum - node.val)
             
         dfs(root, targetSum)
         return res
 
-# 正确写法
-class Solution:
-    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
-        if not root: return False
-        if root.val == targetSum and not root.left and not root.right: return True
-        return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
-        # 注意：这里用or链接
-
-# 错误写法
-# class Solution:
-#     def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
-#         if not root:
-#             return False
-#         if root.val == targetSum:
-#             return not root.left and not root.right
-#         return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
-
+# 递归
 # class Solution:
 #     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
-#         if not root:
+#         if not root: 
 #             return False
-#         if root.val == targetSum:
+#         if root.val == targetSum and not root.left and not root.right: 
 #             return True
-#         return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
+#         return self.hasPathSum(root.left,  targetSum - root.val) or \
+#                self.hasPathSum(root.right, targetSum - root.val)
+        # 注意：这里用or链接
 ```
 
 ```py
 class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
-        if not root: return False
+        if not root: 
+            return False
         que = collections.deque([(root, targetSum)])
         while que: # 😐 while 循环
             node, tsum = que.popleft()
             if not node.left and not node.right and node.val == tsum:
                 return True
-            if node.left:  que.append((node.left, tsum - node.val))
+            if node.left:  que.append((node.left,  tsum - node.val))
             if node.right: que.append((node.right, tsum - node.val))
         return False
 ```
@@ -8667,7 +9460,7 @@ class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
         res = []
 
-        def dfs(node,path,tsum): # node.val == tsum 结束
+        def dfs(node, path, tsum): # node.val == tsum 结束
             if node:
                 if node.val == tsum and not node.left and not node.right: # 结束条件
                     res.append(path[:] + [node.val])  # 需要深拷贝
@@ -8686,7 +9479,7 @@ class Solution:
             node, path, tsum = que.popleft()
             if not node.left and not node.right and node.val == tsum:
                 res.append(path + [node.val])
-            if node.left:  que.append((node.left, path + [node.val], tsum - node.val))
+            if node.left:  que.append((node.left,  path + [node.val], tsum - node.val))
             if node.right: que.append((node.right, path + [node.val], tsum - node.val))
         return res
 ```
@@ -8707,26 +9500,12 @@ class Solution:
  
 输出：1026
 解释：
-从根到叶子节点路径 4->9->5 代表数字 495
-从根到叶子节点路径 4->9->1 代表数字 491
-从根到叶子节点路径 4->0 代表数字 40
+从根到叶子节点路径 4 -> 9 -> 5 代表数字 495
+从根到叶子节点路径 4 -> 9 -> 1 代表数字 491
+从根到叶子节点路径 4 -> 0 代表数字 40
 因此，数字总和 = 495 + 491 + 40 = 1026
 
 
-
-class Solution:
-    def sumNumbers(self, root: TreeNode) -> int:
-        res = 0
-        
-        def dfs(root, acc):
-            nonlocal res
-            if not root.left and not root.right: # 结束
-                res += acc * 10 + root.val 
-            if root.left:  dfs(root.left, acc * 10 + root.val)
-            if root.right: dfs(root.right, acc * 10 + root.val)
-        dfs(root, 0)
-        return res # 在根节点处cur为0，而不是sums
-补充一下标准格式：
 class Solution:
     def sumNumbers(self, root: TreeNode) -> int:
         res = 0
@@ -8736,95 +9515,17 @@ class Solution:
             if root:
                 if not root.left and not root.right: # 结束
                     res += acc * 10 + root.val 
-                if root.left:  dfs(root.left, acc * 10 + root.val)
-                if root.right: dfs(root.right, acc * 10 + root.val)
+                dfs(root.left,  acc * 10 + root.val)
+                dfs(root.right, acc * 10 + root.val)
         dfs(root, 0)
         return res # 在根节点处cur为0，而不是sums
 
 ```
 
 
-##  60. <a name='GenerateParentheses'></a>22. Generate Parentheses
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411i7t7?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1vK4y1b744?spm_id_from=333.999.0.0)
-
-回溯法：
-
-* 时间复杂度:O($\frac{4^n}{\sqrt{n}}$)
-
-* 时间复杂度:O($\frac{4^n}{\sqrt{n}}$)
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.ud5vx6kpbvk.png" width="50%">
-
-```py
-class Solution:
-    def generateParenthesis(self, n: int) -> List[str]:
-
-        def dfs(left,right,itm):
-            if left == 0 and right == 0:
-                res.append(itm)
-                return  # 这里return写不写居然都ac了，可能是因为没有循环吧
-            if left > 0:
-                dfs(left-1, right, itm + '(') #   状态转移
-            if right > left:
-                dfs(left, right-1, itm + ')')
-        
-        res = []
-        dfs(n, n, '')
-        return res
-```
-
-
-```py
-# 相当于比上一层少了一层循环。
-# 不懂是不是动态规划，每新增一对括号，
-# 就是在上一次的结果的各个位置插入一个"()"，用集合防止重复
-
-class Solution:
-    def generateParenthesis(self, n):
-        res = {''}
-        for i in range(n):
-            ini = set()
-            for s in res:  # 在上一次的结果的所有字符串的各个位置上插入'()'
-                for j in range(len(s) + 1): # 如果s的长度为4，那么就有5个可以插入的位置
-                    ini.add(s[:j] + '()' + s[j:])
-            res = ini
-        return list(res)
-                    
-                # 错误写法：
-                # itm = itm[:j] + '()' + itm[j:]
-                # res = res.add(itm)
-                # 错误写法：
-                # res = res.add(itm[:j] + '()' + itm[j:])
-                # 正确写法：
 
 
 
-```
-
-```scala
-
-object Solution {
-    
-    def generateParenthesis(n: Int): List[String] = {
-        import scala.collection.mutable._
-        def backtrack(acc: ListBuffer[String], curr: String, left: Int, right: Int): Unit = {
-            if (left == 0 && right == 0) acc.append(curr)
-            else {
-                if (left > 0) backtrack(acc, curr + "(", left-1, right)
-                if (right > left) backtrack(acc, curr + ")", left, right-1)
-            }
-        }
-      
-        val acc = ListBuffer[String]()
-        backtrack(acc, "", n, n)
-        acc.toList
-    }
-}
-
-```
 
 ##  61. <a name='FirstMissingPositive'></a>41 First Missing Positive
 
@@ -8921,21 +9622,19 @@ class Solution(object):
 
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
-        # node = index of nums
         # node.next = nums[node]
         # node.next.next = nums[nums[node]]
-        slow = nums[0]         #先走一步
+        slow = nums[0]        
         fast = nums[nums[0]] 
         while slow != fast: # 😐😐 while 循环
             slow = nums[slow]
-            fast = nums[nums[fast]] # 曾经犯的一个错误，以为这里会固定地在环入口，值相同的那个点相遇
-        root = 0                    # 其实它们可以在环上任何一个node相遇，这里就是任何一个数组的下标index    
-        while root != slow: # 😐😐 while 循环
-            root = nums[root]
-            slow = nums[slow]
-        return slow             # 回到循环结束的上一步
-                                # nums[proot] == nums[pslow]
-                                # The last slow = nums[proot] and this value at least has two slot in the array
+            fast = nums[nums[fast]] 
+        p = 0                    
+        q = slow  
+        while p != q: # 😐😐 while 循环
+            p = nums[p]
+            q = nums[q]
+        return p           
 
 class Solution:
     def detectCycle(self, head: ListNode) -> ListNode:
@@ -9076,7 +9775,9 @@ class Solution:
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         def twoSym(node1, node2):
-            if node1 and node2 and node1.val == node2.val and twoSym(node1.left, node2.right) and twoSym(node1.right, node2.left): 
+            if  node1 and node2 and \
+                node1.val == node2.val and \
+                twoSym(node1.left, node2.right) and twoSym(node1.right, node2.left): 
                 return True
             elif not node1 and not node2:
                 return True
@@ -9123,143 +9824,6 @@ object Solution {
 
 ```
 
-##  67. <a name='LongestValidParentheses'></a>32 Longest Valid Parentheses
-
-[小明](https://www.bilibili.com/video/BV1RZ4y1F7nJ?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1yi4y1G74d?spm_id_from=333.999.0.0)
-
-动态规划：
-
-* 时间复杂度: O(n) 
-
-* 空间复杂度: O(n)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6dkova4yjvk0.png)
-
-```py
-# 背一背吧，好难。
-class Solution:
-    def longestValidParentheses(self, s: str) -> int:
-        n = len(s)
-        dp = [0]*n
-        if n == 0: return 0
-        for i in range(n):
-            if s[i] == ')' and s[i-dp[i-1]-1] == '(' and i - dp[i-1] - 1 >= 0:
-                dp[i] = 2 + dp[i-1] + dp[i-dp[i-1]-2]
-        return max(dp)
-```
-
-栈：
-
-* 时间复杂度: O(n) 
-
-* 空间复杂度: O(n)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1dgqk0ervhb4.png)
-
-```py
-class Solution:
-    def longestValidParentheses(self, s: str) -> int:
-        stack = [-1]
-        length = maxlength = 0
-        for i,c in enumerate(s):
-            if c == '(':
-                stack.append(i)
-            if c == ')':
-                stack.pop()
-                if not stack:
-                    stack.append(i) # 记录一下stack[-1]为')'，断开区间
-                else:
-                    length = i - stack[-1] # stack[-1]为')'，断开区间
-                    maxlength = max(maxlength,length)
-        return maxlength
-
-```
-
-```scala
-
-
-
-/**
-* using stack to record the char index in oder to calculate the valid length
-* memo:
-* 1. always only have one invalid symbol at stack and its position index is 0
-* time complexity O(n)
-* space complexity O(n)
-*/
-object Solution1 {
-
-  import collection.mutable
-
-  def longestValidParentheses(s: String): Int = {
-    val mapping = Map('(' -> ')')
-    val stack = mutable.Stack[Int]()
-    stack.push(-1)
-    s.indices.foldLeft(0) {
-      case (maxLength, idx) =>
-        val char = s(idx)
-        if (mapping.contains(char)) {
-          stack push idx
-          maxLength
-        } else {
-          stack.pop()
-          if (stack.isEmpty) {
-            stack push idx
-            maxLength
-          } else {
-            (idx - stack.head) max maxLength
-          }
-        }
-    }
-  }
-}
-```
-
-##  68. <a name='-1'></a>43. 字符串相乘
-
-```py
-class Solution:
-    def multiply(self, num1: str, num2: str) -> str:
-        m, n = len(num1), len(num2)
-        ansArr = [0] * (m + n)
-        # 从后往前
-        for i in range(m - 1, -1, -1):
-            x = int(num1[i])
-            for j in range(n - 1, -1, -1):
-                ansArr[i + j + 1] += x * int(num2[j])
-        
-        # 从后往前
-        for i in range(m + n - 1, 0, -1):
-            ansArr[i - 1] += ansArr[i] // 10
-            ansArr[i] %= 10
-        
-        res = ''.join(str(x) for x in ansArr)
-        return str(int(res))
-```
-
-```py
-class Solution:
-    def multiply(self, num1: str, num2: str) -> str:
-        if num1 == "0" or num2 == "0":
-            return "0"
-        
-        m, n = len(num1), len(num2)
-        ansArr = [0] * (m + n)
-        for i in range(m - 1, -1, -1):
-            x = int(num1[i])
-            for j in range(n - 1, -1, -1):
-                ansArr[i + j + 1] += x * int(num2[j])
-        
-        for i in range(m + n - 1, 0, -1):
-            ansArr[i - 1] += ansArr[i] // 10
-            ansArr[i] %= 10
-        
-        index = 1 if ansArr[0] == 0 else 0
-        ans = "".join(str(x) for x in ansArr[index:])
-        return ans
-
-```
 
 ##  69. <a name='MinimumPathSum64-'></a>64. Minimum Path Sum 64-最小路径和
 
@@ -9289,79 +9853,7 @@ class Solution:
         return grid[-1][-1]
 ```
 
-##  70. <a name='-1'></a>718. 最长重复子数组
 
-```py
-# 这个滑动窗口，用的是 left 和 lenth
-
-class Solution:
-    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
-        '''
-        0 <= nums1[i], nums2[i] <= 100
-        所以用chr，把数字转换成字符串
-        '''
-
-        length = left = 0
-        if nums1 and nums2:
-            # 将数字转换为字符串
-            a, b = ''.join(map(chr, nums1)), ''.join(map(chr, nums2))
-            n = len(nums1)
-            while length + left < n: # 😐😐😐 while 循环
-                # 这里使用lenth保存结果，用left跳出循环
-                if a[left : left + length + 1] in b:
-                    length += 1
-                else:
-                    left += 1
-        return length 
-
-
-
-class Solution:
-    def findLength(self, A: List[int], B: List[int]) -> int:
-        dp = [[0] * (len(B)+1) for _ in range(len(A)+1)]
-        result = 0
-        for i in range(1, len(A)+1):
-            for j in range(1, len(B)+1):
-                if A[i-1] == B[j-1]:
-                    dp[i][j] = dp[i-1][j-1] + 1
-                result = max(result, dp[i][j])
-        return result
-
-
-  3 2 1 4 7
-1 0 0 1 0 0
-2 0 1 0 0 0
-3 1 0 0 0 0
-2 0 2 0 0 0
-1 0 0 3 0 0
-
-```
-
-##  84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
-
-[花花酱](https://www.bilibili.com/video/BV14t411Y7cg?spm_id_from=333.999.0.0)
-
-[一俩三四五](https://www.bilibili.com/video/BV1LJ41137r2?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
-
-```py
-class Solution:
-    def longestConsecutive(self, nums: List[int]) -> int:
-        res = 0
-        numSet = set(nums)
-
-        for num in numSet:
-            if num - 1 not in numSet: # 去重，表示和前面的不连续
-                cur = num
-                curlen = 1
-
-                while cur + 1 in numSet: # 😐😐 while 循环
-                    cur += 1
-                    curlen += 1
-
-                res = max(res, curlen)
-
-        return res
-```
 
 
 ##  73. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
@@ -9439,52 +9931,58 @@ https://leetcode-cn.com/problems/coin-change/
 [小明](https://www.bilibili.com/video/BV1ty4y187dh?spm_id_from=333.999.0.0)
 
 ```py
-动态🚀规划
+输入：coins = [1, 2, 5], amount = 11
+输出：3 
+解释：11 = 5 + 5 + 1
 
+动态🚀规划
+'''
+求硬币数量
+'''
+import functools
 class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
+    def coinChange(self, coins, amount):
         dp = [10e9] * (amount + 1)
         dp[0] = 0
 
-        for i in range(1, amount + 1):
-            for coin in coins:
-                if i >= coin:
-                    # i 就是一个 target, 求出每个 target 的最小值
-                    dp[i] = min(dp[i], dp[i-coin] + 1)
+        for coin in coins:
+            for tar in range(coin, amount + 1):
+                # i 就是一个 target, 求出每个 target 的最小值
+                dp[tar] = min(dp[tar], dp[tar-coin] + 1)
          # 这道题的难点在于：最后结果的输出
         return dp[-1] if dp[-1] != 10e9 else -1
 
 
-import functools
-class Solution:
-    def coinChange(self, coins, amount):
-        @functools.lru_cache(None)
-        def helper(amount):
-            tmp = float("inf")
-            if amount == 0:
-                return 0
-            for c in coins:
-                if amount - c >= 0:
-                    tmp = min(tmp, helper(amount - c) + 1) # 这个 +1 一定要在大括号里面
-            return tmp
+# import functools
+# class Solution:
+#     def coinChange(self, coins, amount):
+#         @functools.lru_cache(None)
+#         def helper(amount):
+#             tmp = float("inf")
+#             if amount == 0:
+#                 return 0
+#             for c in coins:
+#                 if amount - c >= 0:
+#                     tmp = min(tmp, helper(amount - c) + 1) # 这个 +1 一定要在大括号里面
+#             return tmp
             
-        res = helper(amount)
-        return res if res != float("inf") else -1
+#         res = helper(amount)
+#         return res if res != float("inf") else -1
 
 
 
-class Solution:
-    def coinChange(self, coins, amount):
-        import functools
+# class Solution:
+#     def coinChange(self, coins, amount):
+#         import functools
 
-        @functools.lru_cache(None)
-        def helper(amount):
-            if amount == 0:
-                return 0
-            return min(helper(amount - c) if amount - c >= 0 else float("inf") for c in coins) + 1
+#         @functools.lru_cache(None)
+#         def helper(amount):
+#             if amount == 0:
+#                 return 0
+#             return min(helper(amount - c) if amount - c >= 0 else float("inf") for c in coins) + 1
 
-        res = helper(amount)
-        return res if res != float("inf") else -1
+#         res = helper(amount)
+#         return res if res != float("inf") else -1
 
 
 ```
@@ -9515,6 +10013,351 @@ object Solution {
 
 ```
 
+
+
+##  236. <a name='PerfectSquares'></a>279 【动态🚀规划 + 背包】Perfect Squares
+
+[小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
+
+```py
+'''
+求硬币数量
+'''
+输入：n = 12
+输出：3 
+解释：12 = 4 + 4 + 4
+
+输入：n = 13
+输出：2
+解释：13 = 4 + 9
+
+# 动态🚀规划
+        '''版本一，先遍历背包, 再遍历物品'''
+        '''版本二， 先遍历物品, 再遍历背包'''
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [10e5] * (n + 1)
+        dp[0] = 0
+        # 也可以 sqrt = floor(n**0.5) 
+        sqrt = ceil(n ** 0.5) 
+        for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
+            coin = i ** 2
+            for tar in range(coin, n + 1):
+                dp[tar] = min(dp[tar], dp[tar - coin] + 1) 
+        return dp[-1]
+```
+
+##  116. <a name='CoinChange2-322.dfsCoinChange'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
+
+https://leetcode-cn.com/problems/coin-change-2/
+
+[小明](https://www.bilibili.com/video/BV1jC4y1a7YT?spm_id_from=333.999.0.0)
+
+```py
+'''
+求种类
+'''
+输入：amount = 5, coins = [1, 2, 5]
+输出：4
+解释：有四种方式可以凑成总金额：
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+
+
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        # dp[i]代表金额为i的时候能凑成总金额的硬币组合数量
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        for coin in coins:
+            # 假如只有1个硬币，假如有2个硬币，假如有3个硬币~ ~ ~
+            for tar in range(coin, amount + 1):
+               dp[tar] += dp[tar - coin]
+        return dp[-1]
+```
+
+
+
+
+##  133. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
+
+[小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
+
+```py
+# python 动态🚀规划
+
+# 从 i = 0 开始分析：i = 0， 遍历 j in range(1, n+1)， 
+
+# 即遍历所有以 s[0] 开头的组合，把第一个单词可能的情况全部找出来。
+
+# 此时相当于把打头的单词可能的情况全部找出来了。
+
+# 然后基于第一个单词一个单词一个单词地接上去。
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        n = len(s) 
+        dp = [True] + [False]*n
+
+        for end in range(1, n + 1):
+            for stt in range(end):
+                # 前提是 start 为 true, end 才为 true
+                if dp[stt] and s[stt: end] in wordDict:
+                    dp[end] = True # 说明 s[: i] 在 wordDict 中
+                    break # 优化部分：剩下的切分点 j 不用再寻找了，也可以不写，像下方一样
+        return dp[-1]
+
+```
+
+
+##  193. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum
+
+[花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
+
+[花花酱 下](https://www.bilibili.com/video/BV1WW411C7Mr?spm_id_from=333.999.0.0)
+
+0 - 1 背包（二维动态规划）
+
+```py
+'''
+求种类
+'''
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        # 求得新的目标
+        # 注意，需要排除掉一些特殊状况
+        # 也可以写成：bagSize = sums - target
+        n = len(nums)
+        sums = sum(nums)
+        bagSize = sums + target
+
+        if bagSize % 2 == 1 or bagSize < 0:
+            return 0
+        bagSize = bagSize // 2
+        dp = [[0] * (bagSize + 1) for _ in range(n + 1)]  # 构建dp，numLen在外围
+        dp[0][0] = 1 # 赋值，dp的第一个元素
+
+        for i in range(1, n + 1):
+            num = nums[i - 1] # 易错点: num = nums[i-1]单独提出来写，不容易出错
+            for tar in range(bagSize + 1):
+                if tar - num >= 0: # 易错点: 这里必需要是>=
+                    dp[i][tar] = dp[i - 1][tar] + dp[i - 1][tar - num]
+                else:
+                    dp[i][tar] = dp[i - 1][tar]
+        return dp[-1][-1]
+#    [[1, 0, 0, 0, 0], 
+#     [1, 1, 0, 0, 0], 
+#     [1, 2, 1, 0, 0], 
+#     [1, 3, 3, 1, 0], 
+#     [1, 4, 6, 4, 1], 
+#     [1, 5, 10, 10, 5]]
+```
+
+0-1背包（一维动态规划）
+
+```py
+'''
+求种类，每个coin只能用1次
+'''
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        n = len(nums)
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        bagSize = sums + target
+        # 也可以写成：bagSize = sums - target
+        if bagSize % 2 == 1 or bagSize < 0:
+            return 0
+        bagSize = bagSize // 2
+        # 构建dp，numLen在外围
+        dp = [0] * (bagSize+1)
+        # 赋值，dp的第一个元素
+        dp[0] = 1
+        for coin in nums:
+            for tar in range(bagSize, coin - 1, -1):
+                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对弈2个num，bagsize的填满情况
+        return dp[-1]
+
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 1, 0, 0, 0]
+--------------------
+数字： 1 dp: [1, 1, 0, 0, 0]
+数字： 1 dp: [1, 1, 0, 0, 0]
+数字： 1 dp: [1, 1, 1, 0, 0]
+数字： 1 dp: [1, 2, 1, 0, 0]
+--------------------
+数字： 1 dp: [1, 2, 1, 0, 0]
+数字： 1 dp: [1, 2, 1, 1, 0]
+数字： 1 dp: [1, 2, 3, 1, 0]
+数字： 1 dp: [1, 3, 3, 1, 0]
+--------------------
+数字： 1 dp: [1, 3, 3, 1, 1]
+数字： 1 dp: [1, 3, 3, 4, 1]
+数字： 1 dp: [1, 3, 6, 4, 1]
+数字： 1 dp: [1, 4, 6, 4, 1]
+--------------------
+数字： 1 dp: [1, 4, 6, 4, 5]
+数字： 1 dp: [1, 4, 6, 10, 5]
+数字： 1 dp: [1, 4, 10, 10, 5]
+数字： 1 dp: [1, 5, 10, 10, 5]
+--------------------
+
+# class Solution:
+#     def findTargetSumWays(self, nums: List[int], target) -> int:
+#         n = len(nums)
+#         sums = sum(nums)
+#         bagSize = sums + target
+#         if bagSize % 2 == 1 or bagSize < 0:
+#             return 0
+#         bagSize = bagSize // 2
+
+#         @cache
+#         def dfs(startI,total):
+#             # 如果要写递归，那么这个递归的结束条件一定要背出来
+#             if startI == len(nums):
+#                 return 1 if total == 0 else 0
+#             # 如果要写递归，那么这个递归的结束条件一定要背出来
+#             return dfs(startI + 1, total - nums[startI]) + dfs(startI + 1, total)
+
+#         return dfs(0, bagSize)
+
+```
+
+```py
+# 思路
+
+# 每个数，只有取正、取负数，这两种处理。因此可以做深度优先遍历，为了避免重复计算，加上记忆法。
+
+# DFS 到 nums[i] 时，取正数，则要求后面的数，处理后的 next_target = current_target - nums[i];
+# 取负数的处理同上，后续要处理的 next_target = current_target + nums[i]；
+# 用 python 语法糖简单演示下：
+
+# class Solution:
+#     def findTargetSumWays(self, nums: List[int], target) -> int:
+#         # @lru_cache(None)
+#         def dfs(startIdx, sum) -> int:
+#             if startIdx == len(nums):
+#                 return 1 if sum == 0 else 0
+#             return dfs(startIdx + 1, sum - nums[startIdx]) + dfs(startIdx + 1, sum + nums[startIdx])
+
+#         return dfs(0, target)
+
+# @lru_cache(None) 好神奇，瞬间提高效率
+# 如果不用@lru_cache(None)，用这种方式会超时，Java的就不会啊
+# 同样的解法，Java 不超时是因为 Java 运行速度比 Python 快得多。
+# 而 Python 如果不用 lru_cache 或者显式的记忆数组存储 dfs 的结果，
+# 大量重复计算会导致超时，因为 Python 运行速度慢
+
+# DFS
+输入：nums = [1,1,1,1,1], target = 3
+输出：5
+解释：一共有 5 种方法让最终目标和为 3 。
+-1 + 1 + 1 + 1 + 1 = 3
++1 - 1 + 1 + 1 + 1 = 3
++1 + 1 - 1 + 1 + 1 = 3
++1 + 1 + 1 - 1 + 1 = 3
++1 + 1 + 1 + 1 - 1 = 3
+
+
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        def dfs(startIdx, sum):
+            if startIdx == len(nums):
+                return 1 if sum == 0 else 0
+            res = 0
+            res += dfs(startIdx + 1, sum - nums[startIdx])
+            res += dfs(startIdx + 1, sum + nums[startIdx])
+            return res
+        return dfs(0, target)
+
+
+```
+
+
+
+##  215. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
+
+```py
+输入：nums = [7,2,5,10,8], m = 2
+输出：18
+答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
+class Solution:
+    def splitArray(self, nums: List[int], bagnum: int) -> int:
+        def check(bagsize: int) -> bool:
+            tmpsums, bagcnt = 0, 1
+            for num in nums:
+                # 如果超出了背包的尺寸，则 bagcnt += 1
+                if tmpsums + num > bagsize: 
+                    bagcnt += 1
+                    tmpsums = num   # 清空
+                else:
+                    tmpsums += num  # 累加
+            return bagcnt <= bagnum
+
+
+        left = max(nums)  # 当 划分个数为 len(nums)
+        right = sum(nums) # 当 划分个数为 1
+        while left <= right: # 😐 while 循环
+            mid = (left + right) // 2
+            if check(mid): # 检查划分个数够不够
+                res = mid
+                right = mid - 1
+            else:
+                left = mid + 1
+
+        return res
+```
+
+
+##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
+
+####  265.1. <a name='494'></a>相似题目：494题
+
+[花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1DD4y1X7Cp?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1oZ4y1G7QY?spm_id_from=333.999.0.0)
+
+“动态🚀规划” 的解法
+
+```py
+根据494题修改的动态规划：
+输入：nums = [1,5,11,5]
+输出：true
+解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+'''
+求数量，每个coin只能用1次
+'''
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        
+        sums = sum(nums) 
+        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
+        bagSize = sums // 2 # 求得新的目标
+        
+        dp = [0] * (bagSize+1) # 构建dp，numLen在外围
+        dp[0] = 1 # 赋值，dp的第一个元素
+        
+        for coin in nums:
+            for tar in range(bagSize, coin - 1, -1):
+                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对于2个num，bagsize的填满情况
+        return dp[-1] != 0
+```
 
 ##  77. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element
 
@@ -9678,39 +10521,26 @@ class Solution:
         left = 0
         right = len(nums)-1
         res = [0,0]
-'''
-这里会找不到target，返回 [-1,-1]
-'''
         if target not in nums:
             return [-1,-1]
 
         # 寻找左侧边界
         while left <= right: # 😐 while 循环
             mid = (right + left) // 2
-            if nums[mid] == target:
+            if nums[mid] >= target:
                 right = mid - 1 # 结束条件, 因为保留 left，所以移动 right
-            elif nums[mid] > target:
-                right = mid - 1
-            else:
+            elif nums[mid] < target:
                 left = mid + 1
-'''
-left 返回值那侧，不包含 == 
-'''
         res[0] = left
 
         # 寻找右侧边界
         right = len(nums)-1 # 只移动 right 端点
         while left <= right: # 😐 while 循环
             mid = (right + left) // 2
-            if nums[mid] == target:
+            if nums[mid] <= target:
                 left = mid + 1 # 结束条件, 因为保留 right，所以移动 left
             elif nums[mid] > target:
                 right = mid - 1
-            else:
-                left = mid + 1
-'''
-right 返回值那侧，不包含 == 
-'''
         res[1] = right
 
         return res
@@ -9765,35 +10595,26 @@ right 返回值那侧，不包含 ==
 [小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
 
 ```py
-两种写法
+输入：nums = [1,2,1,3,5,6,4]
+输出：1 或 5 
+解释：你的函数可以返回索引 1，其峰值元素为 2；
+     或者返回索引 5， 其峰值元素为 6。
+
 class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
         l, r = 0, len(nums) - 1 
+        res = 0
         while l < r: # 😐😐 while 循环
             mid = (l + r) // 2
             '''
-            left 返回值那侧，不包含 == 
+            找到最大值，不能写成 while l <= r
             '''
             if nums[mid] < nums[mid + 1]:
+                res =  mid + 1
                 l = mid + 1
             else:
                 r = mid
-        return l
-
-class Solution:
-    def findPeakElement(self, nums: List[int]) -> int:
-
-        l, r = 0, len(nums) - 1 
-        while l < r: # 😐😐 while 循环
-            mid = (l + r) // 2
-            if nums[mid] <= nums[mid + 1]:
-                l = mid + 1
-            '''
-            right 返回值那侧，不包含 == 
-            '''
-            else:
-                r = mid
-        return r
+        return res
 # [1,2,1,3,5,6,4]
 # 3 < 5, 向右移动，left 指向 5，right 指向 4，想较大值方向移动
 # 6 > 4, 向左移动，left 指向 5，right 指向 6 
@@ -9819,25 +10640,12 @@ class MountainArray:
    def get(self, index: int) -> int:
    def length(self) -> int:
 
-def binary_search(mountain, target, l, r, key=lambda x: x):
-    target = key(target)
-    while l <= r: # 😐 while 循环
-        mid = (l + r) // 2
-        cur = key(mountain.get(mid))
-        if cur == target:
-            return mid
-        elif cur < target:
-            l = mid + 1
-        else:
-            r = mid - 1
-    return -1
-
 class Solution:
     def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
-        """
-        先找到 peak
-        """
         l, r = 0, mountain_arr.length() - 1
+        '''
+        找到山峰
+        '''
         while l < r: # 😐😐 while 循环
             mid = (l + r) // 2
             if mountain_arr.get(mid) < mountain_arr.get(mid + 1):
@@ -9845,17 +10653,34 @@ class Solution:
             else:
                 r = mid
         peak = l
-        """
-        先找 peak 左
-        """
-        index = binary_search(mountain_arr, target, 0, peak) # 递增序列 二分查找
-        if index != -1: return index
-        """
-        再找 peak 右
-        """
-        index = binary_search(mountain_arr, target, peak + 1, mountain_arr.length() - 1, lambda x: -x) # 递减序列 二分查找
-        return index
+        '''
+        找到左侧
+        '''
+        l, r = 0, peak
+        while l <= r: # 😐 while 循环
+            mid = (l + r) // 2
+            cur = mountain_arr.get(mid)
+            if cur == target:
+                return mid
+            elif cur < target:
+                l = mid + 1
+            else:
+                r = mid - 1
+        '''
+        找到右侧
+        '''
+        l, r = peak + 1, mountain_arr.length() - 1
+        while l <= r: # 😐 while 循环
+            mid = (l + r) // 2
+            cur = mountain_arr.get(mid)
+            if cur == target:
+                return mid
+            elif cur > target:
+                l = mid + 1
+            else:
+                r = mid - 1
 
+        return -1
 ```
 
 ##  82. <a name='-1'></a>153-寻找旋转排序数组中的最小值
@@ -9870,7 +10695,8 @@ class Solution:
         l, r = 0, len(nums) - 1
         # [4,5,6,7,0,1,2]
         """
-        只用 mid 和 right 比较
+        用 mid 和 right 比较
+        而不是用 mid 和 target 比较
         """
 
         while l <= r: # 😐 while 循环
@@ -9913,105 +10739,6 @@ object Solution1 {
 }
 ```
 
-##  83. <a name='-1'></a>62-不同路径
-
-[哈哈哈](https://www.bilibili.com/video/BV1mC4y1W7Je?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Sg4y1v7PM?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1cp4y167qx?spm_id_from=333.999.0.0)
-
-二维动态规划：
-
-时间复杂度：O(mn)
-
-空间复杂度：O(mn)
-
-```py
-class Solution:
-    def uniquePaths(self, m: int, n: int) -> int:
-        # 易错点：dp千万不要写错
-        # 其他写法：dp = [[1 for i in range(n)] for j in range(m)]
-        # 其他写法：dp = [[1]*n]*m
-        dp = [[1] * n] + [[1] + [0] * (n - 1) for _ in range(m - 1)]
-        for i in range(1, m): # 这里从 1 开始
-            for j in range(1, n): # 这里从 1 开始
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-        return dp[-1][-1]
-```
-
-一维动态规划：
-
-时间复杂度：O(mn)
-
-空间复杂度：O(n)
-
-```py
-class Solution:
-    def uniquePaths(self, m: int, n: int) -> int:
-        # 易错点：dp千万不要写错
-        dp = [1] * n
-        for i in range(1, m):
-            for j in range(1, n):
-                dp[j] += dp[j - 1]
-        return dp[-1]
-```
-
-```scala
-/**
-* fill dp array with 1
-*/
-object Solution2-1{
-    def uniquePaths(m: Int, n: Int): Int = {
-      val dp = Array.fill[Int](m, n)(1)
-      for (i <- 1 until m; j <- 1 until n) {
-        dp(i)(j) = dp(i - 1)(j) + dp(i)(j - 1)
-      }
-      
-      dp.last.last
-    }
-}
-```
-
-
-##  85. <a name='ValidateIPAddress'></a>468 Validate IP Address
-
-[小明](https://www.bilibili.com/video/BV1tg4y1q7Kq?spm_id_from=333.999.0.0)
-
-```py
-
-class Solution:
-    def validIPAddress(self, IP: str) -> str:
-        if "." in IP:
-            # ipv4
-            ipv4 = IP.split(".")
-            if len(ipv4) != 4:
-                return "Neither"
-            for num in ipv4:
-                # 192.168.01.1 为无效IPv4地址
-                # 192.168@1.1 为无效IPv4地址
-                # 0 <= xi <= 255 
-                if (len(num) > 1 and num[0] == "0")  \
-                    or not num.isdigit()  \
-                    or (int(num) < 0)  \
-                    or (int(num) > 255):
-                    return "Neither"
-            return "IPv4"
-        else:
-            ipv6 = IP.split(":")
-            if len(ipv6) != 8:
-                return "Neither"
-            for num in ipv6:
-                # 1 <= xi.length <= 4
-                # 可以包含数字、小写英文字母( 'a' 到 'f' )和大写英文字母( 'A' 到 'F' )。
-                if not num \
-                    or len(num) > 4  \
-                    or not all(map(lambda x: x.lower() in "0123456789abcdef", num)):
-                    return "Neither"
-            return "IPv6"
-
-
-```
 
 ##  86. <a name='SingleNumber'></a>136 【位运算😜】Single Number
 
@@ -10057,7 +10784,7 @@ class Solution:
     def searchMatrix(self, matrix, target):
         # 从右上角开始找
         i, j = 0, len(matrix[0]) - 1
-        while i < len(matrix) and j >= 0: # 😐😐😐 while 循环
+        while i <= len(matrix) - 1 and j >= 0: # 😐😐😐 while 循环
             if matrix[i][j] == target: 
                 return True
             elif target < matrix[i][j]: 
@@ -10067,46 +10794,6 @@ class Solution:
         return False
 ```
 
-##  89. <a name='-1'></a>221-【动态🚀规划】最大正方形
-
-[哈哈哈](https://www.bilibili.com/video/BV1XT4y137Gq?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV16K411575r?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1mA411q7Sw?spm_id_from=333.999.0.0)
-
-```py
-# 右下角的坐标为 (x, y)
-# 那么 (x - 1, y - 1) 一定需要是一个 square，
-# 并且该点的左边全为1，上边也为1，按照这个进行理解变长的增加。
-构建dp：
-class Solution:
-    def maximalSquare(self, matrix):
-        m, n = len(matrix), len(matrix[0])
-        dp = [[0] * n for _ in range(m)]
-        maxEdge = 0
-        for i in range(m):
-            for j in range(n):
-                if matrix[i][j] == '1':
-                    # 当 i 和 j 等于0时，i-1 为 -1
-                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
-                    maxEdge = max(dp[i][j], res)
-        return maxEdge * maxEdge
-
-原地修改：
-class Solution:
-    def maximalSquare(self, matrix):
-        maxEdge = 0
-        for i in range(len(matrix)):
-            for j in range(len(matrix[i])):
-                if i and j: # 这个写法妙啊，刚好就跳过了 i-1
-                    if matrix[i][j] == "1":
-                        matrix[i][j] = min(int(matrix[i-1][j-1]), int(matrix[i][j-1]), int(matrix[i-1][j])) + 1
-                    else:
-                        matrix[i][j] = 0
-                maxEdge = max(maxEdge, int(matrix[i][j]))
-        return maxEdge**2       
-```
 
 ##  90. <a name='Longestcommonprefix'></a>14 - Longest common prefix
 
@@ -10695,25 +11382,6 @@ class Solution(object):
 
 
 
-##  116. <a name='CoinChange2-322.dfsCoinChange'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
-
-https://leetcode-cn.com/problems/coin-change-2/
-
-[小明](https://www.bilibili.com/video/BV1jC4y1a7YT?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def change(self, amount: int, coins: List[int]) -> int:
-        # dp[i]代表金额为i的时候能凑成总金额的硬币组合数量
-        dp = [0] * (amount + 1)
-        dp[0] = 1
-        for i in range(len(coins)):
-            # 假如只有1个硬币，假如有2个硬币，假如有3个硬币~ ~ ~
-            for j in range(coins[i], amount + 1):
-               dp[j] += dp[j - coins[i]]
-        return dp[-1]
-```
-
 ##  117. <a name='BasicCalculatorII'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
 
 https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357&spm_id_from=333.337.0.0
@@ -11058,36 +11726,6 @@ class Solution:
 
 
 
-##  127. <a name='2.'></a>补充题2. 圆环回原点问题
-
-```s
-圆环上有 10 个点，编号为 0 ~ 9。
-从`0点`出发，每次可以`逆时针`和`顺时针`走一步，问走`n步`回到`0点`共有多少种走法。
-
-输入: 2
-输出: 2
-解释：有 2 种方案。分别是 0->1->0 和 0->9->0
-```
-
-```py
-# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
-# 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
-class Solution:
-    def backToOrigin(self,n):
-        # 点的个数为 10
-        circle = 10
-        # step 在外面，site 在里面
-        dp = [[0 for site in range(circle)] for step in range(n + 1)]
-        dp[0][0] = 1
-        for step in range(1, n + 1): # 走 1 ~ n 步
-            for site in range(circle):
-                # dp[i][j] 表示从 0 出发，走 step 步到 site 的方案数
-                # ps:公式之所以`取余`是因为 site-1 或 site+1 可能会超过圆环 0~9 的范围
-                dp[step][site] = dp[step-1][(site-1+circle)%circle] + dp[step-1][(site+1)%circle]
-        return dp[n][0]
-```
-
-
 
 ##  130. <a name='SortColors'></a>75. Sort Colors
 
@@ -11115,37 +11753,6 @@ class Solution:
             else:
             # idx 为 1, 或者 idx 与 [right/left] 相交
                 idx += 1
-```
-
-
-##  133. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
-
-[小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
-
-```py
-# python 动态🚀规划
-
-# 从 i = 0 开始分析：i = 0， 遍历 j in range(1, n+1)， 
-
-# 即遍历所有以 s[0] 开头的组合，把第一个单词可能的情况全部找出来。
-
-# 此时相当于把打头的单词可能的情况全部找出来了。
-
-# 然后基于第一个单词一个单词一个单词地接上去。
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        n = len(s) 
-        dp = [True] + [False]*n
-
-        for end in range(1, n + 1):
-            for start in range(end):
-                # 前提是 start 为 true, end 才为 true
-                if dp[start] and s[start: end] in wordDict:
-                    dp[end] = True # 说明 s[: i] 在 wordDict 中
-                    break # 优化部分：剩下的切分点 j 不用再寻找了，也可以不写，像下方一样
-        return dp[-1]
-
 ```
 
 ##  134. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
@@ -11695,40 +12302,6 @@ object Solution {
 }
 ```
 
-##  150. <a name='-1'></a>10. 正则表达式匹配
-
-https://leetcode-cn.com/problems/regular-expression-matching/solution/
-
-```py
-        """
-        思路：动态规划， 定义二维dp数组，其中dp[i][j]表示s的前i个字符和p的前j个字符是否匹配，
-        为了方便初始化，我们将s和p的长度均+1
-        考虑到P中可能出现三种字符：普通字母(a-z)、'*'或者是'.', 则其动态转移方程分别是：
-        1) 如果p[j]为普通字母，dp[i][j]==dp[i-1][j-1] and s[i]==p[j]
-        2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
-        3) 如果p[j]为'*', 则情况比较复杂, 分以下两种情况讨论：
-           A. 以s="c", p="ca*"为例，此时'*'匹配0次，dp[i][j]==dp[i][j-2]
-           B. 以s="caa", p="ca*"为例，此时'*'匹配多次，dp[i][j]==dp[i-1][j] and s[i]==p[j-1] (考虑到通配符'.', 还有p[j-1]=='.'的情况)
-        """
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
-        # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
-        s = " " + s
-        p = " " + p
-        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
-        dp[0][0] = True  # 假定s和p都从空字符开始
-        
-        for i in range(len(s)):  # s的空字符需要额外初始化
-            for j in range(1, len(p)):
-                if p[j] == '*' and dp[i][j-2]:   # *可以出现0次或者多次
-                    dp[i][j] = dp[i][j-2]
-                elif p[j] == '*' and p[j-1] in ('.', s[i]):
-                    dp[i][j] = dp[i-1][j]
-                elif p[j] in ('.', s[i]):
-                    dp[i][j] = dp[i-1][j-1]
-        return dp[-1][-1]
-```
 
 ##  151. <a name='JumpGame'></a>55 Jump Game
 
@@ -11931,26 +12504,6 @@ class Solution:
         return max(robrange(0, n - 1), robrange(1, n))
 ```
 
-
-##  156. <a name='9.36-415-AddStrings'></a>补充题9. 36进制加法 - 见 415 - Add Strings
-
-```s
-36进制由 0-9，a-z，共 36 个字符表示。
-
-要求按照加法规则计算出任意两个36进制正整数的和，如 1b + 2x = 48  （解释：47 + 105 = 152）
-
-要求：不允许使用先将36进制数字整体转为10进制，相加后再转回为36进制的做法
-
-题目分析：此题难度倒不是很大，实际上是 LC415. 字符串相加的扩展。
-
-LC415 是十进制的大数相加，而本题是`36进制`的大数相加。
-
-顺便提一句，我强烈推荐415题使用以下代码的写法，优雅简洁，不容易出Bug。
-
-如果第一次见，可能需要多反应会儿，但明白了以后就会有相见恨晚的感觉。
-```
-
-
 ##  157. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
 
 [1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
@@ -12027,31 +12580,6 @@ class Solution:
         return ma - mi < 5 # 最大牌 - 最小牌 < 5 则可构成顺子 
 
 ```
-
-##  160. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
-
-[小明](https://www.bilibili.com/video/BV1ap4y1X7nu?spm_id_from=333.999.0.0)
-
-```py
-## 方法三：左右对称
-
-class Solution:
-    def checkValidString(self, s: str) -> bool:
-        left = right = 0
-        for i, c in enumerate(s):    
-            # 从左向右看左括号能否有效
-            left  += -1 if c == ')' else 1 
-            # 从右向左看右括号能否有效
-            right += -1 if s[-i-1] == '(' else 1
-            # 注意：在循环过程中，只要出现一次负数，就直接返回 false
-            if left < 0 or right < 0: return False
-       
-        return True
-
-```
-
-
-
 
 
 
@@ -12430,28 +12958,6 @@ class Solution:
 
 ##  178. <a name='14.'></a>补充题14. 阿拉伯数字转中文数字
 
-##  179. <a name='ExcelSheetColumnTitle'></a>168-Excel Sheet Column Title
-
-[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7FY?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H777?spm_id_from=333.999.0.0)
-
-```py
-class Solution(object):
-    def convertToTitle(self, columnNumber):
-        res = ''
-        '''
-        余加除
-        '''
-        while columnNumber: # 😐😐 while 循环
-            columnNumber -= 1                       # 又想了好久才知道在哪里减一。。
-            res = chr(columnNumber % 26 + 65) + res # A的ascii码为65
-            columnNumber = columnNumber // 26 
-        return res
-```
-
-
-
 
 ##  181. <a name='-1'></a>670. 最大交换
 
@@ -12593,65 +13099,7 @@ class Solution:
         return start
 ```
 
-##  188. <a name='22.IP'></a>补充题22. IP地址与整数的转换
 
-https://mp.weixin.qq.com/s/UWCuEtNS2kuAuDY-eIbghg
-
-
-
-
-##  190. <a name='UniquePathsII'></a>63 Unique Paths II
-
-[小明](https://www.bilibili.com/video/BV1Sv411L7qe?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Pp4y1v7KR?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
-        m = len(obstacleGrid)
-        n = len(obstacleGrid[0])
-        # 易错点：注意边界上也可能有obstacle
-        # 易错点：dp = [[0]*(n+1)]*(m+1)这些写法是错误的
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        # 易错点：dp[1][1] = 1,这个数字会被重新计算，所以应该写成：
-        dp[0][1] = 1
-        # 构建了一个大一圈的矩阵，但实际计算的时候，仍然是mn的大小
-        for i in range(1,m+1):
-            for j in range(1,n+1):
-                if not obstacleGrid[i-1][j-1]:
-                    dp[i][j] = dp[i-1][j] + dp[i][j-1]
-        print(dp)
-        return dp[-1][-1]
-```
-
-##  191. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7nT?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1h541187Sv?spm_id_from=333.999.0.0)
-
-```py
-# python 从左到右遍历
-        # 26进制转10进制
-class Solution:
-def titleToNumber(self, columnTitle: str) -> int:
-        res = 0
-        for char in columnTitle:
-            res *= 26
-            res += ord(char) - ord('A') + 1 
-        return res
-```
-
-
-```scala
-//Alternate solution
-object Solution {
-    def titleToNumber(s: String): Int = 
-        s.foldLeft(0)((acc, ch) => acc * 26 + (ch - 'A' + 1))
-}
-
-```
 
 ##  192. <a name='LetterCombinationsofaPhoneNumber'></a>17. Letter Combinations of a Phone Number 
 
@@ -12680,161 +13128,6 @@ class Solution:
             res = [string + char for string in res for char in dic[num]]
         return res
 ```
-
-##  193. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum
-
-[花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
-
-[花花酱 下](https://www.bilibili.com/video/BV1WW411C7Mr?spm_id_from=333.999.0.0)
-
-0 - 1 背包（二维动态规划）
-
-```py
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        # 求得新的目标
-        # 注意，需要排除掉一些特殊状况
-        # 也可以写成：bagSize = sums - target
-        n = len(nums)
-        sums = sum(nums)
-        bagSize = sums + target
-
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-        dp = [[0] * (bagSize + 1) for _ in range(n + 1)]  # 构建dp，numLen在外围
-        dp[0][0] = 1 # 赋值，dp的第一个元素
-
-        for i in range(1, n + 1):
-            num = nums[i - 1] # 易错点: num = nums[i-1]单独提出来写，不容易出错
-            for j in range(bagSize + 1):
-                if j - num >= 0: # 易错点: 这里必需要是>=
-                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - num]
-                else:
-                    dp[i][j] = dp[i - 1][j]
-        return dp[-1][-1]
-#    [[1, 0, 0, 0, 0], 
-#     [1, 1, 0, 0, 0], 
-#     [1, 2, 1, 0, 0], 
-#     [1, 3, 3, 1, 0], 
-#     [1, 4, 6, 4, 1], 
-#     [1, 5, 10, 10, 5]]
-```
-
-0-1背包（一维动态规划）
-
-```py
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        n = len(nums)
-        # 求得新的目标
-        sums = sum(nums)
-        # 注意，需要排除掉一些特殊状况
-        bagSize = sums + target
-        # 也可以写成：bagSize = sums - target
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-        # 构建dp，numLen在外围
-        dp = [0] * (bagSize+1)
-        # 赋值，dp的第一个元素
-        dp[0] = 1
-        for num in nums:
-            for j in range(bagSize, num - 1, -1):
-                dp[j] += dp[j - num] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        # 含义就是：
-        # 对于1个num，bagsize的填满情况
-        # 对弈2个num，bagsize的填满情况
-        return dp[-1]
-
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 1, 0, 0, 0]
---------------------
-数字： 1 dp: [1, 1, 0, 0, 0]
-数字： 1 dp: [1, 1, 0, 0, 0]
-数字： 1 dp: [1, 1, 1, 0, 0]
-数字： 1 dp: [1, 2, 1, 0, 0]
---------------------
-数字： 1 dp: [1, 2, 1, 0, 0]
-数字： 1 dp: [1, 2, 1, 1, 0]
-数字： 1 dp: [1, 2, 3, 1, 0]
-数字： 1 dp: [1, 3, 3, 1, 0]
---------------------
-数字： 1 dp: [1, 3, 3, 1, 1]
-数字： 1 dp: [1, 3, 3, 4, 1]
-数字： 1 dp: [1, 3, 6, 4, 1]
-数字： 1 dp: [1, 4, 6, 4, 1]
---------------------
-数字： 1 dp: [1, 4, 6, 4, 5]
-数字： 1 dp: [1, 4, 6, 10, 5]
-数字： 1 dp: [1, 4, 10, 10, 5]
-数字： 1 dp: [1, 5, 10, 10, 5]
---------------------
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        n = len(nums)
-        sums = sum(nums)
-        bagSize = sums + target
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-
-        @cache
-        def dfs(startI,total):
-            # 如果要写递归，那么这个递归的结束条件一定要背出来
-            if startI == len(nums):
-                return 1 if total == 0 else 0
-            # 如果要写递归，那么这个递归的结束条件一定要背出来
-            return dfs(startI + 1, total - nums[startI]) + dfs(startI + 1, total)
-
-        return dfs(0, bagSize)
-
-```
-
-```py
-# 思路
-
-# 每个数，只有取正、取负数，这两种处理。因此可以做深度优先遍历，为了避免重复计算，加上记忆法。
-
-# DFS 到 nums[i] 时，取正数，则要求后面的数，处理后的 next_target = current_target - nums[i];
-# 取负数的处理同上，后续要处理的 next_target = current_target + nums[i]；
-# 用 python 语法糖简单演示下：
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        # @lru_cache(None)
-        def dfs(startIdx, sum) -> int:
-            if startIdx == len(nums):
-                return 1 if sum == 0 else 0
-            return dfs(startIdx + 1, sum - nums[startIdx]) + dfs(startIdx + 1, sum + nums[startIdx])
-
-        return dfs(0, target)
-
-# @lru_cache(None) 好神奇，瞬间提高效率
-# 如果不用@lru_cache(None)，用这种方式会超时，Java的就不会啊
-# 同样的解法，Java 不超时是因为 Java 运行速度比 Python 快得多。
-# 而 Python 如果不用 lru_cache 或者显式的记忆数组存储 dfs 的结果，
-# 大量重复计算会导致超时，因为 Python 运行速度慢
-
-# DFS
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], V) -> int:
-        def dfs(sum, startIdx):
-            if startIdx == len(nums):
-                return 1 if sum==0 else 0
-            res = 0
-            res += dfs(sum-nums[startIdx], startIdx+1)
-            res += dfs(sum+nums[startIdx], startIdx+1)
-            return res
-        return dfs(V, 0)
-
-
-```
-
 
 ##  194. <a name='Offer03.'></a>剑指 Offer 03. 数组中重复的数字
 
@@ -13328,74 +13621,6 @@ class Solution:
 
 ```
 
-##  215. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
-
-[花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
-
-```py
-输入：nums = [7,2,5,10,8], m = 2
-输出：18
-答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
-class Solution:
-    def splitArray(self, nums: List[int], bagnum: int) -> int:
-        def check(bagsize: int) -> bool:
-            tmpsums, bagcnt = 0, 1
-            for num in nums:
-                # 如果超出了背包的尺寸，则 bagcnt += 1
-                if tmpsums + num > bagsize: 
-                    bagcnt += 1
-                    tmpsums = num   # 清空
-                else:
-                    tmpsums += num  # 累加
-            return bagcnt <= bagnum
-
-
-        left = max(nums)  # 当 划分个数为 len(nums)
-        right = sum(nums) # 当 划分个数为 1
-        while left < right: # 😐😐😐 while 循环：这里 left < right 和 right = mid 和 left
-            mid = (left + right) // 2
-            if check(mid): # 检查划分个数够不够
-                right = mid
-            else:
-                left = mid + 1
-
-        return left
-```
-
-##  216. <a name='-1'></a>44. 通配符匹配
-
-```py
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        m, n = len(s), len(p)
-
-        dp = [[False] * (n + 1) for _ in range(m + 1)]
-
-        dp[0][0] = True # dp[0][0]:什么都没有,所以为true
-        for j in range(1, n + 1):
-            if p[j - 1] == '*': 
-                dp[0][j] = True
-            else:
-                break
-        # 也可以这么写
-        # for j in range(1, n + 1):
-        #     if p[j - 1] == "*":
-        #         dp[0][j] = dp[0][j - 1]
-        
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if p[j - 1] == '*': # 如果p[j] == "*" && (dp[i-1][j] = true || dp[i][j-1] = true) 有dp[i][j] = true
-                    dp[i][j] = dp[i][j - 1] | dp[i - 1][j] 
-                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
-                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
-                elif p[j - 1] == '?' or s[i - 1] == p[j - 1]: # 如果(s[i] == p[j] || p[j] == "?") && dp[i-1][j-1] ,有dp[i][j] = true
-                    dp[i][j] = dp[i - 1][j - 1]
-                
-        return dp[m][n]
-
-```
-
-
 
 ##  218. <a name='ConvertaNumbertoHexadecimal'></a>405 【位运算😜】Convert a Number to Hexadecimal
 
@@ -13605,27 +13830,7 @@ object Solution1 {
 
 [小明](https://www.bilibili.com/video/BV1UV411r7MK?spm_id_from=333.999.0.0)
 
-##  236. <a name='PerfectSquares'></a>279 【动态🚀规划 + 背包】Perfect Squares
 
-[小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
-
-```py
-# 动态🚀规划
-        '''版本一，先遍历背包, 再遍历物品'''
-        '''版本二， 先遍历物品, 再遍历背包'''
-class Solution:
-    def numSquares(self, n: int) -> int:
-        dp = [10e5] * (n + 1)
-        dp[0] = 0
-        # 也可以 sqrt = floor(n**0.5) 
-        sqrt = ceil(n ** 0.5) 
-        for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
-            numSquare = i ** 2
-            for j in range(numSquare, n + 1):
-                if j >= numSquare:
-                    dp[j] = min(dp[j], dp[j - numSquare] + 1) 
-        return dp[-1]
-```
 
 ##  237. <a name='-1'></a>257-二叉树的所有路径
 
@@ -13813,53 +14018,6 @@ object Solution {
 
 ```
 
-##  249. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
-
-[小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        n = len(s)
-        dp = [[0] * n for _ in range(n)]
-        res = 0
-        # 这个部分其实可以不写：
-        # for i in range(n):
-        #     dp[i][i]=1
-        for end in range(n):
-            for stt in range(end, -1, -1): # stt 从 end 的位置开始移动
-                if s[end] == s[stt] and (end - stt <= 1 or dp[end - 1][stt + 1]):
-                    dp[end][stt] = 1
-                    res += 1
-        return res
-
-```
-
-```py
-
-# 直接利用, 依次计数找到的所有的回文🌈子串即可；
-# 无需在字符串中插入特殊字符, center中心位置从0到最后一个元素移动,
-# 每次移动0.5, 表示移动到当前元素与下一个元素中间作为中心。
-输入：s = "aaa"
-输出：6
-解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
-from math import floor,ceil
-class Solution:
-    def countSubstrings(self, s: str) -> int:
-        '''
-        中心扩展法: 双😐😐while 循环, center += 0.5, 
-        '''
-        center = cnt = 0
-        # center 用一个 while 循环
-        while center < len(s): # 😐😐 while 循环
-            low, high = floor(center), ceil(center)
-            # low, high 用一个 while 循环
-            while low >= 0 and high < len(s) and s[low] == s[high]: # 😐😐 while 循环
-                low, high = low - 1, high + 1
-                cnt = cnt + 1
-            center += 0.5
-        return cnt
-```
 
 ##  250. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
 
@@ -14138,40 +14296,6 @@ object Solution {
 
 ##  264. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
 
-##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
-
-####  265.1. <a name='494'></a>相似题目：494题
-
-[花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1DD4y1X7Cp?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1oZ4y1G7QY?spm_id_from=333.999.0.0)
-
-“动态🚀规划” 的解法
-
-```py
-根据494题修改的动态规划：
-
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        n = len(nums)
-        
-        sums = sum(nums) 
-        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
-        bagSize = sums // 2 # 求得新的目标
-        
-        dp = [0] * (bagSize+1) # 构建dp，numLen在外围
-        dp[0] = 1 # 赋值，dp的第一个元素
-        
-        for num in nums:
-            for j in range(bagSize, num-1, -1):
-                dp[j] += dp[j-num] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        # 含义就是：
-        # 对于1个num，bagsize的填满情况
-        # 对于2个num，bagsize的填满情况
-        return dp[-1] != 0
-```
 
 ##  266. <a name='N-1'></a>51. N皇后
 
@@ -14228,34 +14352,6 @@ class Solution:
 ##  274. <a name='-1'></a>836. 矩形重叠
 
 ##  275. <a name='-1'></a>99. 恢复二叉搜索树
-
-
-
-##  278. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
-
-[花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV185411G7F6?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def numDistinct(self, s: str, t: str) -> int:
-        sN = len(s)
-        tN = len(t)
-        dp = [[0] * (tN+1) for _ in range(sN+1)]
-
-        for i in range(sN+1):
-            for j in range(tN+1):
-                if j == 0:  
-                    dp[i][j] = 1
-                elif i == 0:  
-                    dp[i][j] = 0
-                elif s[i-1] == t[j-1]:
-                    dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
-                else:
-                    dp[i][j] = dp[i-1][j]
-        return dp[-1][-1]
-```
 
 
 ##  279. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
