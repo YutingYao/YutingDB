@@ -1918,6 +1918,98 @@ object Solution {
 ```
 
 
+##  104. <a name='MoveZeros'></a>283. Move Zeros
+
+[小梦想家](https://www.bilibili.com/video/BV1m441187Kt?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1ba4y1t7eK?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1Wp4y1y7pT?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] != 0:
+                # 把 index 的位置变成不是 0, i 的位置变成是 0
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                # slow 的位置不是 0, 都在前面
+                slow += 1
+#                       [0, 1, 0, 3, 12]
+# slow: 0 fast: 1 nums: [1, 0, 0, 3, 12]
+# slow: 1 fast: 3 nums: [1, 3, 0, 0, 12]
+# slow: 2 fast: 4 nums: [1, 3, 12, 0, 0]
+
+```
+
+```scala
+//Alternate solution: calculate the number of shifts 
+object Solution {
+    def moveZeroes(nums: Array[Int]): Unit = {
+        
+        var zeroCount = 0
+        //count of zero is amount character is shifted to left
+        //from first zero position traverse array left
+        for(a <- 0 to nums.size-1){   
+            //count zeroes and shift when not zero
+            if(nums(a) == 0){
+                zeroCount = zeroCount + 1
+            }else if(zeroCount > 0){
+                //shift left if not 0 by zeroCount
+                nums(a - zeroCount) = nums(a)
+                nums(a) = 0
+            }
+        }
+    }
+}
+
+```
+
+
+##  111. <a name='Offer21.'></a>剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+
+```py
+类似前面的移动0
+class Solution:
+    def exchange(self, nums: List[int]) -> List[int]:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] & 1 == 1:
+                # 把 [fast上的奇数] 移动到 [slow的位置] 上
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                slow += 1
+        return nums
+```
+
+
+##  130. <a name='SortColors'></a>75. Sort Colors
+
+[小梦想家](https://www.bilibili.com/video/BV1rE411n7mL?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1ua4y1v7yd?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1tz4y1o7n5?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5l1bfbznzwc0.png)
+
+```py
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        idx, left, right = 0, 0, len(nums) - 1
+        while idx <= right: # 😐😐😐😐 while 循环
+            # 交换完位置后 idx 依旧在原位
+            if nums[idx] == 2 and idx < right:
+                nums[idx], nums[right] = nums[right], 2
+                right -= 1
+            # 交换完位置后 idx 依旧在原位
+            elif nums[idx] == 0 and idx > left:
+                nums[idx], nums[left] = nums[left], 0
+                left += 1
+            else:
+            # idx 为 1, 或者 idx 与 [right/left] 相交
+                idx += 1
+```
 
 ##  6. <a name='add'></a>912 补充题4. 手撕快速排序（add）
 
@@ -6908,6 +7000,150 @@ object Solution2-1 {
 
 ```
 
+
+
+##  73. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
+
+[官方](https://www.bilibili.com/video/BV1mf4y1e7ox?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Wy4y1s7fs?spm_id_from=333.999.0.0)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3kl7avrsvhi0.png" width="30%">
+
+```py
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        for i in range(n//2): # n 和 下面的(n+1) 可以调换位置
+            for j in range((n+1)//2):
+                matrix[i][j], matrix[j][n-1-i], matrix[n-1-i][n-1-j], matrix[n-1-j][i] = \
+                matrix[n-1-j][i], matrix[i][j], matrix[j][n-1-i], matrix[n-1-i][n-1-j]
+        return matrix
+```
+
+```scala
+/**
+* my first commitment
+* rotate 4 cell in each iteration
+*
+*   pattern:  (row, col) -> (col, n - 1- row)
+*       1. (i, j) - > (j, n - 1 -i)
+*       2. (j, n - 1 -i) -> (n - 1 - i, n - 1 - j)
+*       3. (n - 1 - i, n - 1 - j) -> (n -1 -j, n - 1 - (n -1 - i) ) =  (n - 1 -j, i)
+*       4. (n - 1 -j, i) -> (i, n - 1 - (n - 1 - j)) = (i, j)
+*
+* ((0,0) -> (0,3) -> (3,3) -> (3,0))
+* ((0,1) -> (1,3) -> (3,2) -> (2,0))
+* ((1,0) -> (0,2) -> (2,3) -> (3,1))
+* ((1,1) -> (1,2) -> (2,2) -> (2,1))
+* 
+*/
+object Solution1 {
+    def rotate(matrix: Array[Array[Int]]): Unit = {
+      val n = matrix.size
+      printMatrix(n)
+      
+      for (i <- 0 until (n / 2).toInt + n % 2; j <- 0 until (n / 2).toInt){      
+        val tmp = matrix(n - 1 -j)(i)
+        matrix(n - 1 - j)(i) = matrix(n - 1 - i)(n - j - 1)
+        matrix(n - 1 - i)(n - j - 1) = matrix(j)(n - 1 - i)
+        matrix(j)(n - 1 - i) = matrix(i)(j)
+        matrix(i)(j) = tmp
+      }
+    }
+
+    /**
+        (0, 0) (0, 1) (0, 2) (0, 3)  
+        (1, 0) (1, 1) (1, 2) (1, 3)  
+        (2, 0) (2, 1) (2, 2) (2, 3)  
+        (3, 0) (3, 1) (3, 2) (3, 3)  
+    */
+}
+
+```
+
+
+##  105. <a name='-1'></a>498. 对角线遍历
+
+```py
+
+
+'''
+
+
+    m, n = 7
+   每层的索引和:
+            0:              (00)               i: 0 ~ 0
+            1:            (01)(10)             i: 0 ~ 1
+            2:          (20)(11)(02)           i: 0 ~ 2
+            3:        (03)(12)(21)(30)         i: 0 ~ 3
+            4:      (40)(31)(22)(13)(04)       i: 0 ~ 4
+            5:    (05)(14)(23)(32)(41)(50)     i: 0 ~ 5
+            6:  (60)(51)................(06)   i: 0 ~ 6
+            7:    (16)................(61)     i: 1 ~ 6
+            8:      (62)............(26)       i: 2 ~ 6
+            9:        (36)........(36)         i: 3 ~ 6
+           10:          (64)....(46)           i: 4 ~ 6
+           11:            (56)(65)             i: 5 ~ 6
+           12:              (66)               i: 6 ~ 6
+
+        按照“层次”遍历，依次append在索引边界内的值即可
+'''
+
+
+
+输入：mat = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,4,7,5,3,6,8,9]
+
+class Solution:
+    def findDiagonalOrder(self, matrix: List[List[int]]) -> List[int]:
+        m, n = len(matrix), len(matrix) and len(matrix[0])
+        # dic = collections.defaultdict(list), 这个方法相对没那么好，因为次序会乱掉
+        dic = [[] for _ in range(m + n - 1)]
+        for i in range(m):
+            for j in range(n):
+                dic[i + j].append(matrix[i][j])
+        res = []
+        for i, diag in enumerate(dic):
+            '''
+            extend, 而不是append
+            '''
+            res.extend(diag if i % 2 else diag[::-1])
+        return res
+```
+
+##  112. <a name='SpiralMatrixII'></a>59. Spiral Matrix II 
+
+[小梦想家](https://www.bilibili.com/video/BV1J741157Kt?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1q5411G7MY?spm_id_from=333.999.0.0)
+
+```py
+输入：n = 3
+输出：[[1,2,3],[8,9,4],[7,6,5]]
+
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        res    = [[0 for _ in range(n)] for _ in range(n)]
+        x,  y  = 0, 0 
+        dx, dy = 0, 1
+        # 0,1 -> 1,0 -> 0,-1 -> -1,0
+        for num in range(1, n * n + 1):
+            res[x][y] = num
+            nx, ny = x + dx, y + dy
+
+            if not 0 <= nx < n or not 0 <= ny < n or res[nx][ny] != 0:
+            # 易错点：or res[nx][ny] != 0 顺序很重要，一定要在最后，就像贪吃蛇
+                dx, dy = dy, -dx # 调头
+
+            x += dx
+            y += dy
+        return res
+```
+
 ##  28. <a name='LongestIncreasingSubsequence'></a>300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列
 
 https://leetcode-cn.com/problems/longest-increasing-subsequence/
@@ -9688,6 +9924,43 @@ class Solution(object):
         return alltreepos[-1][1] == len(alltreepos)
 ```
 
+
+
+##  106. <a name='MaximumWidthofBinar'></a>662. Maximum Width of Binary Tree
+
+[花花酱](https://www.bilibili.com/video/BV1cv411q7pb?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV16a4y1h7fG?spm_id_from=333.999.0.0)
+
+```py
+层序遍历
+class Solution:
+    def widthOfBinaryTree(self, root: TreeNode) -> int:
+        res = 0
+        queue = collections.deque([(root, 1)])
+        while queue: # 😐 while 循环
+            res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
+            for _ in range(len(queue)):
+                node, pos = queue.popleft()
+                if node.left:  queue.append((node.left,  pos * 2))
+                if node.right: queue.append((node.right, pos * 2 + 1))
+        return res 
+
+其他写法
+
+class Solution:
+    def widthOfBinaryTree(self, root: TreeNode) -> int:
+        res = 0
+        queue = collections.deque([(root, 0)])
+        while queue: # 😐 while 循环
+            res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
+            for _ in range(len(queue)):
+                node, pos = queue.popleft()
+                if node.left:  queue.append((node.left,  pos * 2 + 1))
+                if node.right: queue.append((node.right, pos * 2 + 2))
+        return res
+```
+
 ##  65. <a name='ImplementRand10UsingRand7'></a>470. Implement Rand10() Using Rand7()
 
 [花花酱](https://www.bilibili.com/video/BV1Ut411Z7KX?spm_id_from=333.999.0.0)
@@ -9854,70 +10127,6 @@ class Solution:
 ```
 
 
-
-
-##  73. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
-
-[官方](https://www.bilibili.com/video/BV1mf4y1e7ox?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Wy4y1s7fs?spm_id_from=333.999.0.0)
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3kl7avrsvhi0.png" width="30%">
-
-```py
-class Solution:
-    def rotate(self, matrix: List[List[int]]) -> None:
-        """
-        Do not return anything, modify matrix in-place instead.
-        """
-        n = len(matrix)
-        for i in range(n//2): # n 和 下面的(n+1) 可以调换位置
-            for j in range((n+1)//2):
-                matrix[i][j], matrix[j][n-1-i], matrix[n-1-i][n-1-j], matrix[n-1-j][i] = \
-                matrix[n-1-j][i], matrix[i][j], matrix[j][n-1-i], matrix[n-1-i][n-1-j]
-        return matrix
-```
-
-```scala
-/**
-* my first commitment
-* rotate 4 cell in each iteration
-*
-*   pattern:  (row, col) -> (col, n - 1- row)
-*       1. (i, j) - > (j, n - 1 -i)
-*       2. (j, n - 1 -i) -> (n - 1 - i, n - 1 - j)
-*       3. (n - 1 - i, n - 1 - j) -> (n -1 -j, n - 1 - (n -1 - i) ) =  (n - 1 -j, i)
-*       4. (n - 1 -j, i) -> (i, n - 1 - (n - 1 - j)) = (i, j)
-*
-* ((0,0) -> (0,3) -> (3,3) -> (3,0))
-* ((0,1) -> (1,3) -> (3,2) -> (2,0))
-* ((1,0) -> (0,2) -> (2,3) -> (3,1))
-* ((1,1) -> (1,2) -> (2,2) -> (2,1))
-* 
-*/
-object Solution1 {
-    def rotate(matrix: Array[Array[Int]]): Unit = {
-      val n = matrix.size
-      printMatrix(n)
-      
-      for (i <- 0 until (n / 2).toInt + n % 2; j <- 0 until (n / 2).toInt){      
-        val tmp = matrix(n - 1 -j)(i)
-        matrix(n - 1 - j)(i) = matrix(n - 1 - i)(n - j - 1)
-        matrix(n - 1 - i)(n - j - 1) = matrix(j)(n - 1 - i)
-        matrix(j)(n - 1 - i) = matrix(i)(j)
-        matrix(i)(j) = tmp
-      }
-    }
-
-    /**
-        (0, 0) (0, 1) (0, 2) (0, 3)  
-        (1, 0) (1, 1) (1, 2) (1, 3)  
-        (2, 0) (2, 1) (2, 2) (2, 3)  
-        (3, 0) (3, 1) (3, 2) (3, 3)  
-    */
-}
-
-```
 
 
 ##  75. <a name='dfsCoinChange-518CoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change
@@ -10884,17 +11093,17 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV1mV411m7aN?spm_id_from=333.999.0.0)
 
 ```py
-from functools import cmp_to_key
-class Solution(object):
-    def largestNumber(self, nums):
-        # 第一步：定义比较函数，把最大的放左边
-        # 第二步：排序
-        # 第三步：返回结果
-        def compare(a, b):
-            return int(b + a) - int(a + b)
-        nums = sorted([str(x) for x in nums], key = cmp_to_key(compare))
-        # nums = sorted(map(str, nums), key = cmp_to_key(compare))
-        return str(int(''.join(nums)))
+# from functools import cmp_to_key
+# class Solution(object):
+#     def largestNumber(self, nums):
+#         # 第一步：定义比较函数，把最大的放左边
+#         # 第二步：排序
+#         # 第三步：返回结果
+#         def compare(a, b):
+#             return int(b + a) - int(a + b)
+#         nums = sorted([str(x) for x in nums], key = cmp_to_key(compare))
+#         # nums = sorted(map(str, nums), key = cmp_to_key(compare))
+#         return str(int(''.join(nums)))
 ```
 
 ```py
@@ -10930,19 +11139,22 @@ class Solution:
 class Solution:
     def decodeString(self, s: str) -> str:
         stack = []  
-        tmp, num = "", 0 
-        for c in s:
-            if c.isdigit():
-                num = num * 10 + int(c) # 3
-            elif c == "[":
-                stack.append((tmp, num)) # 比如abc3[def], 当遇到第一个 "[" 的时候，压入栈中的是("abc", 3)
-                tmp, num = "", 0
-            elif c == "]":
-                top = stack.pop() # 然后遍历括号里面的字符串def, 当遇到 "]" 的时候, 从栈里面弹出一个元素(s1, n1)
-                tmp = top[0] + tmp * top[1] # 得到新的字符串为 abc + def * 3
+        tmpstr, num = "", 0 
+        for char in s:
+            if char.isdigit():
+                num = num * 10 + int(char) # 3
+            elif char == "[":
+                stack.append((tmpstr, num)) # 比如abc3[def], 当遇到第一个 "[" 的时候，压入栈中的是("abc", 3)
+                '''
+                遇到左括号，abc，3，都要被清空
+                '''
+                tmpstr, num = "", 0
+            elif char == "]":
+                pre, cnt = stack.pop() # 然后遍历括号里面的字符串def, 当遇到 "]" 的时候, 从栈里面弹出一个元素(s1, n1)
+                tmpstr = pre + tmpstr * cnt # 得到新的字符串为 abc + def * 3
             else:
-                tmp += c # abc def
-        return tmp
+                tmpstr += char # abc def
+        return tmpstr
 
 ```
 
@@ -11054,40 +11266,40 @@ class Solution(object):
 ```
 
 
-##  106. <a name='MaximumWidthofBinar'></a>662. Maximum Width of Binary Tree
 
-[花花酱](https://www.bilibili.com/video/BV1cv411q7pb?spm_id_from=333.999.0.0)
+##  117. <a name='BasicCalculatorII'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
 
-[小明](https://www.bilibili.com/video/BV16a4y1h7fG?spm_id_from=333.999.0.0)
+https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357&spm_id_from=333.337.0.0
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.71qtf391s5w0.png" width="40%">
 
 ```py
-层序遍历
-class Solution:
-    def widthOfBinaryTree(self, root: TreeNode) -> int:
-        res = 0
-        queue = collections.deque([(root, 1)])
-        while queue: # 😐 while 循环
-            res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
-            for _ in range(len(queue)):
-                node, pos = queue.popleft()
-                if node.left:  queue.append((node.left,  pos * 2))
-                if node.right: queue.append((node.right, pos * 2 + 1))
-        return res 
-
-其他写法
 
 class Solution:
-    def widthOfBinaryTree(self, root: TreeNode) -> int:
+    def calculate(self, s: str) -> int:
+        stack = [1]
+        sign = 1
+        i = 0
         res = 0
-        queue = collections.deque([(root, 0)])
-        while queue: # 😐 while 循环
-            res = max(res, queue[-1][1] - queue[0][1] + 1) # 只能写在这里！否则不存在
-            for _ in range(len(queue)):
-                node, pos = queue.popleft()
-                if node.left:  queue.append((node.left,  pos * 2 + 1))
-                if node.right: queue.append((node.right, pos * 2 + 2))
+        while i < len(s): # 😐😐😐 while 循环, i 从 0 开始
+            if s[i].isdigit():
+                num = 0
+                while i < len(s) and s[i].isdigit(): # 😐😐😐 while 循环, 是否存在连续 num
+                    num = 10 * num + int(s[i])
+                    i += 1
+                res += sign * num
+            else:
+                if s[i] == '+':   sign = stack[-1]
+                elif s[i] == '-': sign = -stack[-1]
+                # -(1-(4+5+2)-3) + (6+8)
+                # stack[-1] 是因为负负得正
+                elif s[i] == '(': stack.append(sign)
+                elif s[i] == ')': stack.pop()
+                i += 1
         return res
 ```
+
+
 
 # 6 day (得分 = 5分) 74
 
@@ -11113,99 +11325,6 @@ class Solution:
         return self.res
 ```
 
-##  104. <a name='MoveZeros'></a>283. Move Zeros
-
-[小梦想家](https://www.bilibili.com/video/BV1m441187Kt?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ba4y1t7eK?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1Wp4y1y7pT?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def moveZeroes(self, nums: List[int]) -> None:
-        slow = 0
-        for fast in range(len(nums)):
-            if nums[fast] != 0:
-                # 把 index 的位置变成不是 0, i 的位置变成是 0
-                nums[slow], nums[fast] = nums[fast], nums[slow]
-                # slow 的位置不是 0, 都在前面
-                slow += 1
-#                       [0, 1, 0, 3, 12]
-# slow: 0 fast: 1 nums: [1, 0, 0, 3, 12]
-# slow: 1 fast: 3 nums: [1, 3, 0, 0, 12]
-# slow: 2 fast: 4 nums: [1, 3, 12, 0, 0]
-
-```
-
-```scala
-//Alternate solution: calculate the number of shifts 
-object Solution {
-    def moveZeroes(nums: Array[Int]): Unit = {
-        
-        var zeroCount = 0
-        //count of zero is amount character is shifted to left
-        //from first zero position traverse array left
-        for(a <- 0 to nums.size-1){   
-            //count zeroes and shift when not zero
-            if(nums(a) == 0){
-                zeroCount = zeroCount + 1
-            }else if(zeroCount > 0){
-                //shift left if not 0 by zeroCount
-                nums(a - zeroCount) = nums(a)
-                nums(a) = 0
-            }
-        }
-    }
-}
-
-```
-
-##  105. <a name='-1'></a>498. 对角线遍历
-
-```py
-
-
-'''
-
-
-    m, n = 7
-   每层的索引和:
-            0:              (00)               i: 0 ~ 0
-            1:            (01)(10)             i: 0 ~ 1
-            2:          (20)(11)(02)           i: 0 ~ 2
-            3:        (03)(12)(21)(30)         i: 0 ~ 3
-            4:      (40)(31)(22)(13)(04)       i: 0 ~ 4
-            5:    (05)(14)(23)(32)(41)(50)     i: 0 ~ 5
-            6:  (60)(51)................(06)   i: 0 ~ 6
-            7:    (16)................(61)     i: 1 ~ 6
-            8:      (62)............(26)       i: 2 ~ 6
-            9:        (36)........(36)         i: 3 ~ 6
-           10:          (64)....(46)           i: 4 ~ 6
-           11:            (56)(65)             i: 5 ~ 6
-           12:              (66)               i: 6 ~ 6
-
-        按照“层次”遍历，依次append在索引边界内的值即可
-'''
-
-
-
-
-
-class Solution:
-    def findDiagonalOrder(self, matrix: List[List[int]]) -> List[int]:
-        m, n = len(matrix), len(matrix) and len(matrix[0])
-        # tmp = collections.defaultdict(list), 这个方法相对没那么好
-        tmp = [[] for _ in range(m + n - 1)]
-        for i in range(m):
-            for j in range(n):
-                tmp[i + j].append(matrix[i][j])
-        res = []
-        for i, diag in enumerate(tmp):
-            res.extend(diag if i % 2 else diag[::-1])
-        return res
-```
-
 
 
 ##  107. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
@@ -11216,17 +11335,17 @@ class Solution:
 class Codec:
     def serialize(self, root):
         # 前序遍历
-        def func(r):
-            return str(r.val) + ',' + func(r.left) + func(r.right) if r else ','
-        return func(root)
+        def tree2str(node):
+            return str(node.val) + ',' + tree2str(node.left) + tree2str(node.right) if node else ','
+        return tree2str(root)
 
     def deserialize(self, data):
         # 前序遍历[::-1]后就能直接pop()
         vals = data.split(',')[::-1]
-        def func():
+        def str2tree():
             val = vals.pop()
-            return TreeNode(val, func(), func()) if val else None
-        return func()
+            return TreeNode(val, str2tree(), str2tree()) if val else None
+        return str2tree()
 
 ```
 
@@ -11250,7 +11369,8 @@ class Solution:
         maxdp = nums[0]
         mindp = nums[0]
         for num in nums[1:]:
-            maxdp, mindp = max(maxdp * num, mindp * num, num), min(maxdp * num, mindp * num, num)
+            maxdp = max(maxdp * num, mindp * num, num)
+            mindp = min(maxdp * num, mindp * num, num)
             res = max(res, maxdp)
         return res
 
@@ -11285,14 +11405,14 @@ object Solution2-1 {
 
 ```py
 
-from functools import lru_cache
-class Solution:
-    @lru_cache(None)
-    def fib(self, n: int) -> int:
-        if n < 2:
-            return n
-        return (self.fib(n - 1) + self.fib(n - 2)) % 1000000007
-        # 1 1 2 3 5
+# from functools import lru_cache
+# class Solution:
+#     @lru_cache(None)
+#     def fib(self, n: int) -> int:
+#         if n < 2:
+#             return n
+#         return (self.fib(n - 1) + self.fib(n - 2)) % 1000000007
+#         # 1 1 2 3 5
 
 
 也可以这样写，同时赋值。
@@ -11302,6 +11422,9 @@ class Solution:
         if n < 2:
             return n
         dp0, dp1 = 0, 1
+        '''
+        遍历范围是 2 ~ n
+        '''
         for _ in range(2, n + 1): # 注意：这里的边界
             dp1, dp0 = (dp1 + dp0) % MOD, dp1
             # index: 1 2 3 4 5
@@ -11309,46 +11432,8 @@ class Solution:
         return dp1
 ```
 
-##  111. <a name='Offer21.'></a>剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
 
-```py
-类似前面的移动0
-class Solution:
-    def exchange(self, nums: List[int]) -> List[int]:
-        slow = 0
-        for fast in range(len(nums)):
-            if nums[fast] & 1 == 1:
-                # 把 [fast上的奇数] 移动到 [slow的位置] 上
-                nums[slow], nums[fast] = nums[fast], nums[slow]
-                slow += 1
-        return nums
-```
 
-##  112. <a name='SpiralMatrixII'></a>59. Spiral Matrix II 
-
-[小梦想家](https://www.bilibili.com/video/BV1J741157Kt?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1q5411G7MY?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def generateMatrix(self, n: int) -> List[List[int]]:
-        res    = [[0 for _ in range(n)] for _ in range(n)]
-        x,  y  = 0, 0 
-        dx, dy = 0, 1
-        # 0,1 -> 1,0 -> 0,-1 -> -1,0
-        for num in range(1, n * n + 1):
-            res[x][y] = num
-            nx, ny = x + dx, y + dy
-
-            if not 0 <= nx < n or not 0 <= ny < n or res[nx][ny] != 0:
-            # 易错点：or res[nx][ny] != 0 顺序很重要，一定要在最后，就像贪吃蛇
-                dx, dy = dy, -dx # 调头
-
-            x += dx
-            y += dy
-        return res
-```
 
 ##  113. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
 
@@ -11365,7 +11450,7 @@ class Solution(object):
         # evenHead 是固定的
     
         slow  = head
-        fast = evenHead = head.next
+        fast = headnxt = head.next
         # 当 2 和 3 存在
         while fast and fast.next: # 😐😐 while 循环
             # 1 -> 2的后面
@@ -11376,43 +11461,10 @@ class Solution(object):
             fast.next = slow.next 
             # 2 变成 4
             fast = fast.next
-        slow.next = evenHead # 先奇数，后偶数
+        slow.next = headnxt # 先奇数，后偶数
         return head 
 ```
 
-
-
-##  117. <a name='BasicCalculatorII'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
-
-https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357&spm_id_from=333.337.0.0
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.71qtf391s5w0.png" width="40%">
-
-```py
-
-class Solution:
-    def calculate(self, s: str) -> int:
-        stack = [1]
-        sign = 1
-        i = 0
-        res = 0
-        while i < len(s): # 😐😐😐 while 循环, i 从 0 开始
-            if s[i].isdigit():
-                num = 0
-                while i < len(s) and s[i].isdigit(): # 😐😐😐 while 循环, 是否存在连续 num
-                    num = 10 * num + int(s[i])
-                    i += 1
-                res += sign * num
-            else:
-                if s[i] == '+':   sign = stack[-1]
-                elif s[i] == '-': sign = -stack[-1]
-                # -(1-(4+5+2)-3) + (6+8)
-                # stack[-1] 是因为负负得正
-                elif s[i] == '(': stack.append(sign)
-                elif s[i] == ')': stack.pop()
-                i += 1
-        return res
-```
 
 # 7 day (得分 = 4分) 78
 
@@ -11436,28 +11488,261 @@ class Solution:
         indegree = [0 for _ in range(n)] # 每个点的入度
         # 将依赖关系加入邻接表中g，并各个点入度
         for pre in prerequisites:
-            a, b = pre[0], pre[1]
-            graph[a].append(b)
-            indegree[b] += 1
+            stt, end = pre[0], pre[1]
+            graph[stt].append(end)
+            indegree[end] += 1
             
         # 一次性将入度为0的点全部入队
-        que = deque()
+        que0 = deque()
         for i in range(n):
             if indegree[i] == 0:
-                que.append(i)
+                que0.append(i)
 
         res = []
-        while que: # 😐 while 循环
-            start = que.popleft()
-            res.append(start)
+        '''
+        indegree 和 que0 是变动的量
+        '''
+        while que0: # 😐 while 循环
+            stt = que0.popleft()
+            res.append(stt)
             # 删除边时，将终点的入度-1。若入度为0，果断入队
-            for end in graph[start]:
+            for end in graph[stt]:
                 indegree[end] -= 1
                 if indegree[end] == 0:
-                    que.append(end)
+                    que0.append(end)
         # 若存在循环依赖则返回空；不存在依赖则返回可行的编译顺序。
         return res if len(res) == n else []
 ```
+
+
+##  148. <a name='-1'></a>207-课程表
+
+[花花酱](https://www.bilibili.com/video/BV1Ut411a74a?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV19k4y1r76s?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1jz411B7UJ?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Xp4y1Y7FJ?spm_id_from=333.999.0.0)
+
+
+```py
+输入：
+numCourses = 2, 
+prerequisites = [[1,0],[0,1]]
+end, stt
+
+输出：false
+解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
+
+# python
+from collections import defaultdict 
+class Solution:
+    def canFinish(self, numCourses, prerequisites):
+        indegree = defaultdict(lambda:0)  
+        graph = defaultdict(list)         
+        for end, stt in prerequisites:
+            graph[stt].append(end)
+            indegree[end] += 1
+        que0 = []                  
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                que0.append(i)    
+        for stt in que0:
+            for end in graph[stt]:
+                indegree[end] -= 1
+                if indegree[end] == 0: 
+                    que0.append(end)
+        return len(que0) == numCourses
+```
+
+```scala
+
+// new and apply
+// Use the new keyword when you want to refer to a class's own constructor:
+// 解法是 每个node(node)，1.它依赖的node个数(parent) 2.统计依赖它的node个数(son)，
+// 一个node没有依赖其它节点，放入zeroInDegree
+// 对zeroIndegree的node遍历，对每个依赖它的node都可以直接除去依赖
+
+
+  import scala.collection.mutable.ArrayBuffer
+
+  object Solution {
+    def canFinish(numCourses: Int, prerequisites: Array[Array[Int]]): Boolean = {
+      val inDegree = new Array[Int](numCourses)
+      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
+
+      prerequisites.foreach(p=> {
+        inDegree(p(0)) += 1
+        neighbour(p(1)) += p(0)
+      })
+
+      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
+      var canFinshNum = zeroInDegree.length
+      while (zeroInDegree.nonEmpty) {
+        val cur = zeroInDegree.head
+        zeroInDegree = zeroInDegree.tail
+        neighbour(cur).foreach(p=>{
+          inDegree(p)-=1
+          if (inDegree(p) == 0) {
+            zeroInDegree :+= p
+            canFinshNum+=1
+          }
+        })
+      }
+      canFinshNum == numCourses
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val input = Array(Array(0,1),Array(1,2))
+      println(Solution.canFinish(3,input) == true)
+      //println(lru.get(1) == 1)
+    }
+
+    val name = "207 course schedule"
+  }
+
+```
+
+##  182. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
+
+[花花酱](https://www.bilibili.com/video/BV1gW411y7Kb?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ja4y147on?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1qt4y1X7oC?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1kK411W7rL?spm_id_from=333.999.0.0)
+
+```py
+输入：
+numCourses = 4, 
+prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+
+输出：[0,2,1,3]
+
+解释：总共有 4 门课程。
+要学习课程 3，你应该先完成课程 1 和课程 2。
+并且课程 1 和课程 2 都应该排在课程 0 之后。
+因此，一个正确的课程顺序是 [0,1,2,3] 。另一个正确的排序是 [0,2,1,3] 。
+
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        indegre = [0] * numCourses
+        graph = [[] for _ in range(numCourses)]
+        for end, stt in prerequisites:
+            indegre[end] += 1
+            graph[stt].append(end)
+        que0 = []                  
+        for i in range(numCourses):
+            if indegre[i] == 0:
+                que0.append(i)    
+        for stt in que0:
+            for end in graph[stt]:
+                indegre[end] -= 1
+                if indegre[end] == 0: 
+                    que0.append(end)
+        return len(que0) == numCourses and que0 or []
+```
+
+```scala
+
+import scala.collection.mutable.ArrayBuffer
+// 与lc207类似，不过要给出顺序
+
+  object Solution {
+    def findOrder(numCourses: Int, prerequisites: Array[Array[Int]]): Array[Int] = {
+      val inDegree = new Array[Int](numCourses)
+      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
+
+      prerequisites.foreach(p=> {
+        inDegree(p(0)) += 1
+        neighbour(p(1)) += p(0)
+      })
+
+      val ans = ArrayBuffer[Int]()
+      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
+      var canFinshNum = zeroInDegree.length
+      while (zeroInDegree.nonEmpty) {
+        val cur = zeroInDegree.head
+        ans += cur
+        zeroInDegree = zeroInDegree.tail
+        neighbour(cur).foreach(p=>{
+          inDegree(p)-=1
+          if (inDegree(p) == 0) {
+            zeroInDegree :+= p
+            canFinshNum+=1
+          }
+        })
+      }
+      canFinshNum match {
+        case canFinshNum if canFinshNum == numCourses => ans.toArray
+        case _ => Array()
+      }
+    }
+  }
+
+```
+
+
+
+##  220. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
+
+```py
+输入：root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
+输出：[7,4,1]
+解释：所求结点为与目标结点（值为 5）距离为 2 的结点，值分别为 7，4，以及 1
+
+
+这道题就是先把二叉树转化图,再用图的bfs,求得解
+
+所以,这道题关键就是如何把树转化成图,不难直接看代码就可以理解.
+
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        from collections import defaultdict
+        graph = defaultdict(set)
+        # 建图
+        def dfs(root):
+            if root.left :
+                graph[root.val].add(root.left.val)
+                graph[root.left.val].add(root.val)
+                dfs(root.left)
+            if root.right:
+                graph[root.val].add(root.right.val)
+                graph[root.right.val].add(root.val)
+                dfs(root.right)
+        dfs(root)
+        # 3: {1, 5}, 
+        # 5: {2, 3, 6}, 
+        # 6: {5}, 
+        # 2: {4, 5, 7}, 
+        # 7: {2}, 
+        # 4: {2}, 
+        # 1: {0, 8, 3}, 
+        # 0: {1}, 
+        # 8: {1}
+        que = [target.val]
+        visited = {target.val} # 必须用set
+        while k: # 😐 while 循环
+            nextnode = [] # 每一次都是临近的节点
+            while que: # 😐 while 循环
+                stt = que.pop()
+                for end in graph[stt]:
+                    if end not in visited:
+                        visited.add(end)
+                        nextnode.append(end) # 每一次都是临近的节点
+            k -= 1 
+            que = nextnode # 每一次都是临近的节点
+        return que
+```
+
 
 ##  120. <a name='ReverseInteger'></a>7 Reverse Integer
 
@@ -11470,22 +11755,22 @@ class Solution:
 * 时间复杂度: O(1)
 
 ```py
-字符串法：
-class Solution:
-    def reverse(self, x: int) -> int:
-        s = str(x)
+# 字符串法：
+# class Solution:
+#     def reverse(self, x: int) -> int:
+#         s = str(x)
 
-        if '-' in s:
-            sn = '-'
-            s = s[1:len(s)]
-        else:
-            sn = ''
+#         if '-' in s:
+#             sn = '-'
+#             s = s[1:len(s)]
+#         else:
+#             sn = ''
 
-        for i in range(len(s)):
-            sn = sn + s[len(s)-1-i]
-        if int(sn) < -2**31 or int(sn) > 2**31-1:
-            return 0
-        return int(sn)
+#         for i in range(len(s)):
+#             sn = sn + s[len(s)-1-i]
+#         if int(sn) < -2**31 or int(sn) > 2**31-1:
+#             return 0
+#         return int(sn)
 
 计算法：
 class Solution:
@@ -11669,13 +11954,13 @@ class Solution:
 输出: 5
 class Solution:
     def reversePairs(self, nums: List[int]) -> int:
-        q = []
+        negUpQue = []
         res = 0
-        for v in nums:
+        for num in nums:
             # 变负数插入，绝了-v，构成递增序列
-            i = bisect.bisect_left(q,-v) # bisect_left 返回的待插入位置分别是 0，1，1，3，
+            i = bisect.bisect_left(negUpQue,-num) # bisect_left 返回的待插入位置分别是 0，1，1，3，
             res += i # 前面有多少个比它大的，当前数就有多少个逆序对,加起来就是逆序对总数 5
-            q[i:i] = [-v]
+            negUpQue[i:i] = [-num]
             # 这里也可以写：q.insert(i, -v)
         return res
 # q[i:i] = [-v] 的效果如下，是一个排好序的数组：
@@ -11701,9 +11986,15 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV13t4y1y7ya?spm_id_from=333.999.0.0)
 
 ```py
+输入：nums = [1,2,3], k = 3
+输出：2
+
 查表法：
 class Solution:
     def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
+        '''
+        presum - target 为之前的 presum
+        '''
         presum, res, dic = 0, 0, {}
         dic[0] = 1 # 刚好前 n 个的和为 target
         for num in nums:
@@ -11714,46 +12005,19 @@ class Solution:
             if presum not in dic:
                 dic[presum] = 0
             dic[presum] += 1
+        return res
         # 输入：nums = [1,2,3], k = 3
         # 输出：2
         # -1000 <= nums[i] <= 1000 注意: nums 有正负
         # {0:1, 1:1}
         # {0:1, 1:1, 3:1}
         # {0:1, 1:1, 3:1, 6:1}
-        return res
 ```
 
 
 
 
 
-##  130. <a name='SortColors'></a>75. Sort Colors
-
-[小梦想家](https://www.bilibili.com/video/BV1rE411n7mL?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ua4y1v7yd?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1tz4y1o7n5?spm_id_from=333.999.0.0)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5l1bfbznzwc0.png)
-
-```py
-class Solution:
-    def sortColors(self, nums: List[int]) -> None:
-        idx, left, right = 0, 0, len(nums) - 1
-        while idx <= right: # 😐😐😐😐 while 循环
-            # 交换完位置后 idx 依旧在原位
-            if nums[idx] == 2 and idx < right:
-                nums[idx], nums[right] = nums[right], 2
-                right -= 1
-            # 交换完位置后 idx 依旧在原位
-            elif nums[idx] == 0 and idx > left:
-                nums[idx], nums[left] = nums[left], 0
-                left += 1
-            else:
-            # idx 为 1, 或者 idx 与 [right/left] 相交
-                idx += 1
-```
 
 ##  134. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
 
@@ -11836,6 +12100,13 @@ object Solution1 {
 [小明](https://www.bilibili.com/video/BV1N541177Bk?spm_id_from=333.999.0.0)
 
 ```py
+输入: nums = [1,2,3,4,5,6,7], k = 3
+输出: [5,6,7,1,2,3,4]
+解释:
+向右轮转 1 步: [7,1,2,3,4,5,6]
+向右轮转 2 步: [6,7,1,2,3,4,5]
+向右轮转 3 步: [5,6,7,1,2,3,4]
+
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
         rotate = k % len(nums)
@@ -12141,88 +12412,6 @@ class Solution:
         return sum(dp)
 # 输入: [1,0,2]
 # 输出: 5
-```
-
-##  148. <a name='-1'></a>207-课程表
-
-[花花酱](https://www.bilibili.com/video/BV1Ut411a74a?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV19k4y1r76s?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1jz411B7UJ?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Xp4y1Y7FJ?spm_id_from=333.999.0.0)
-
-
-```py
-# python
-from collections import defaultdict 
-class Solution:
-    def canFinish(self, numCourses, prerequisites):
-        indegree = defaultdict(lambda:0)  
-        graph = defaultdict(list)         
-        for end,stt in prerequisites:
-            graph[stt].append(end)
-            indegree[end] += 1
-        que = []                  
-        for i in range(numCourses):
-            if indegree[i] == 0:
-                que.append(i)    
-        for i in que:
-            for j in graph[i]:
-                indegree[j] -= 1
-                if indegree[j] == 0: que.append(j)
-        return len(que) == numCourses
-```
-
-```scala
-
-// new and apply
-// Use the new keyword when you want to refer to a class's own constructor:
-// 解法是 每个node(node)，1.它依赖的node个数(parent) 2.统计依赖它的node个数(son)，
-// 一个node没有依赖其它节点，放入zeroInDegree
-// 对zeroIndegree的node遍历，对每个依赖它的node都可以直接除去依赖
-
-
-  import scala.collection.mutable.ArrayBuffer
-
-  object Solution {
-    def canFinish(numCourses: Int, prerequisites: Array[Array[Int]]): Boolean = {
-      val inDegree = new Array[Int](numCourses)
-      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
-
-      prerequisites.foreach(p=> {
-        inDegree(p(0)) += 1
-        neighbour(p(1)) += p(0)
-      })
-
-      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
-      var canFinshNum = zeroInDegree.length
-      while (zeroInDegree.nonEmpty) {
-        val cur = zeroInDegree.head
-        zeroInDegree = zeroInDegree.tail
-        neighbour(cur).foreach(p=>{
-          inDegree(p)-=1
-          if (inDegree(p) == 0) {
-            zeroInDegree :+= p
-            canFinshNum+=1
-          }
-        })
-      }
-      canFinshNum == numCourses
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      val input = Array(Array(0,1),Array(1,2))
-      println(Solution.canFinish(3,input) == true)
-      //println(lru.get(1) == 1)
-    }
-
-    val name = "207 course schedule"
-  }
-
 ```
 
 ##  149. <a name='-1'></a>572-另一个树的子树
@@ -12979,71 +13168,6 @@ class Solution:
         return num # 已是最大值就返回原数字
 ```
 
-##  182. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
-
-[花花酱](https://www.bilibili.com/video/BV1gW411y7Kb?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Ja4y147on?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1qt4y1X7oC?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1kK411W7rL?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        indgree = [0] * numCourses
-        graph = [[] for _ in range(numCourses)]
-        for end, stt in prerequisites:
-            indgree[end] += 1
-            graph[stt].append(end)
-        res = [i for i, j in enumerate(indgree) if not j]
-        for end in res:
-            for stt in graph[end]:
-                indgree[stt] -= 1
-                if not indgree[stt]:
-                    res.append(stt)
-        return len(res) == numCourses and res or []
-```
-
-```scala
-
-import scala.collection.mutable.ArrayBuffer
-// 与lc207类似，不过要给出顺序
-
-  object Solution {
-    def findOrder(numCourses: Int, prerequisites: Array[Array[Int]]): Array[Int] = {
-      val inDegree = new Array[Int](numCourses)
-      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
-
-      prerequisites.foreach(p=> {
-        inDegree(p(0)) += 1
-        neighbour(p(1)) += p(0)
-      })
-
-      val ans = ArrayBuffer[Int]()
-      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
-      var canFinshNum = zeroInDegree.length
-      while (zeroInDegree.nonEmpty) {
-        val cur = zeroInDegree.head
-        ans += cur
-        zeroInDegree = zeroInDegree.tail
-        neighbour(cur).foreach(p=>{
-          inDegree(p)-=1
-          if (inDegree(p) == 0) {
-            zeroInDegree :+= p
-            canFinshNum+=1
-          }
-        })
-      }
-      canFinshNum match {
-        case canFinshNum if canFinshNum == numCourses => ans.toArray
-        case _ => Array()
-      }
-    }
-  }
-
-```
 
 ##  183. <a name='ContiguousArray'></a>525. 【前缀和🎨】Contiguous Array
 
@@ -13644,56 +13768,6 @@ class Solution:
         return res
 ```
 
-
-
-##  220. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
-
-[花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
-
-```py
-这道题就是先把二叉树转化图,再用图的bfs,求得解
-
-所以,这道题关键就是如何把树转化成图,不难直接看代码就可以理解.
-
-
-class Solution:
-    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-        from collections import defaultdict
-        graph = defaultdict(set)
-        # 建图
-        def dfs(root):
-            if root.left :
-                graph[root.val].add(root.left.val)
-                graph[root.left.val].add(root.val)
-                dfs(root.left)
-            if root.right:
-                graph[root.val].add(root.right.val)
-                graph[root.right.val].add(root.val)
-                dfs(root.right)
-        dfs(root)
-        # 3: {1, 5}, 
-        # 5: {2, 3, 6}, 
-        # 6: {5}, 
-        # 2: {4, 5, 7}, 
-        # 7: {2}, 
-        # 4: {2}, 
-        # 1: {0, 8, 3}, 
-        # 0: {1}, 
-        # 8: {1}
-        que = [target.val]
-        visited = {target.val} # 必须用set
-        while k: # 😐 while 循环
-            nextnode = [] # 每一次都是临近的节点
-            while que: # 😐 while 循环
-                stt = que.pop()
-                for end in graph[stt]:
-                    if end not in visited:
-                        visited.add(end)
-                        nextnode.append(end) # 每一次都是临近的节点
-            k -= 1 
-            que = nextnode # 每一次都是临近的节点
-        return que
-```
 
 
 
