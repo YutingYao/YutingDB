@@ -752,6 +752,137 @@ class Solution:
         return head
 ```
 
+##  141. <a name='Removeduplicatesfromsortedarray-1'></a>26-Remove duplicates from sorted array
+
+[哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i77e?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV13V41177Mq?spm_id_from=333.999.0.0)
+
+> for循环法：
+
+```py
+给你一个 `升序排列` 的数组 nums 
+
+nums 的前 k 个元素应该保存最终结果。
+
+将最终结果插入 nums 的前 k 个位置后返回 k 。
+
+不要使用额外的空间，你必须在 `原地` 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        slow = 0 #注意：count是从0开始的
+        for fast in range(len(nums)):
+            if nums[fast] != nums[slow]:
+                slow += 1
+                nums[slow] = nums[fast]
+        return slow + 1
+```
+
+##  168. <a name='StringCompression'></a>443. String Compression
+
+[小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
+
+```py
+压缩后得到的字符串 储到字符数组 chars 中
+
+需要注意的是，如果组长度为 10 或 10 以上，则在 chars 数组中会被`拆分`为多个字符。
+
+请在 修改完输入数组后 ，`返回`该数组的`新长度`。
+
+你必须设计并实现一个只使用`常量额外空间`的算法来解决此问题。
+
+'''
+slow += 1
+cnt += 1
+'''
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        n = len(chars)
+        slow = 0
+        cnt = 1
+        for fast in range(n):
+            # 在 aa，bb，ccc 的最后一位触发计算
+            if fast == n - 1 or chars[fast] != chars[fast+1]:
+                chars[slow] = chars[fast] 
+                slow += 1
+                if cnt > 1: # cnt 重新置为 1 前，需要统计是几位数
+                    for k in str(cnt):
+                        chars[slow] = k
+                        slow += 1
+                cnt = 1 # cnt 重新置为 1，而不是 0
+            else:
+                cnt += 1
+        return slow
+# 输入：chars = ["a","a","b","b","c","c","c"]
+# 输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
+```
+
+
+##  152. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
+
+类似消消看
+
+```py
+输入："abbaca"
+输出："ca"
+
+class Solution(object):
+    def removeDuplicates(self, S):
+        # 初始化栈
+        stack = []
+        # 遍历栈元素
+        for char in S:
+            if stack and stack[-1] == char:
+                stack.pop()
+            else:
+                stack.append(char)
+        return "".join(stack)
+```
+
+##  173. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
+
+[小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
+
+```py
+请你找出所有出现 两次 的整数，并以数组形式返回。
+
+输入：nums = [4,3,2,7,8,2,3,1]
+输出：[2,3]
+
+你必须设计并实现一个时间复杂度为 O(n) 且仅使用常量额外空间的算法解决此问题。
+
+一个长度为 n 的整数数组 nums ，其中 nums 的所有整数都在范围 [1, n] 内
+
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        res = []
+        for num in nums:
+            # 取绝对值
+            num = abs(num)
+            # 把相应下标减1的值设为负数
+            if nums[num-1] > 0:
+                nums[num-1] *= -1
+            # 值为负的话，说明该值已经出现过，添加到输出列表l中
+            else:
+                res.append(num)
+                
+        return res
+
+[4, 3, 2, 7, 8, 2, 3, 1]
+[4, 3, 2, -7, 8, 2, 3, 1]   
+[4, 3, -2, -7, 8, 2, 3, 1]    
+[4, -3, -2, -7, 8, 2, 3, 1]
+[4, -3, -2, -7, 8, 2, -3, 1]
+[4, -3, -2, -7, 8, 2, -3, -1]
+[4, [-3], -2, -7, 8, 2, -3, -1] 
+[4, [-3], [-2], -7, 8, 2, -3, -1] 
+[-4, [-3], [-2], -7, 8, 2, -3, -1] 
+```
+
 
 ##  74. <a name='PalindromeLinkedList'></a>234. 【回文🌈】Palindrome Linked List
 
@@ -2011,6 +2142,8 @@ class Solution:
                 idx += 1
 ```
 
+
+
 ##  6. <a name='add'></a>912 补充题4. 手撕快速排序（add）
 
 https://leetcode-cn.com/problems/sort-an-array/submissions/
@@ -2940,6 +3073,154 @@ object Solution {
 }
 ```
 
+
+##  125. <a name='SubarraySumEqualsKK'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
+
+[花花酱](https://www.bilibili.com/video/BV1XW411d71i?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1d54y127ri?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1vK4y1k7ku?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV13t4y1y7ya?spm_id_from=333.999.0.0)
+
+```py
+输入：nums = [1,2,3], k = 3
+输出：2
+
+查表法：
+class Solution:
+    def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
+        '''
+        presum - target 为之前的 presum
+        '''
+        presum, res, dic = 0, 0, {}
+        dic[0] = 1 # 刚好前 n 个的和为 target
+        for num in nums:
+            presum += num
+            if presum - target in dic:
+                res += dic[presum - target]
+                # sums - target 就是前缀和
+            if presum not in dic:
+                dic[presum] = 0
+            dic[presum] += 1
+        return res
+        # 输入：nums = [1,2,3], k = 3
+        # 输出：2
+        # -1000 <= nums[i] <= 1000 注意: nums 有正负
+        # {0:1, 1:1}
+        # {0:1, 1:1, 3:1}
+        # {0:1, 1:1, 3:1, 6:1}
+```
+
+
+##  183. <a name='ContiguousArray'></a>525. 【前缀和🎨】Contiguous Array
+
+[花花酱](https://www.bilibili.com/video/BV14W411d7SD?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV185411t7tu?spm_id_from=333.999.0.0)
+
+```py
+找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
+
+输入: nums = [0,1,0]
+输出: 2
+说明: [0, 1] (或 [1, 0]) 是具有相同数量0和1的最长连续子数组。
+
+0 变 -1 是精髓，sum_dct = {0:-1} 是细节。
+
+class Solution:
+    def findMaxLength(self, nums: List[int]) -> int:
+        presumDic = {}
+        presumDic[0] = -1
+        res = 0
+        s = 0
+        for i in range(len(nums)):
+            s += 1 if nums[i] == 1 else -1
+            if s in presumDic:
+                res = max(res, i - presumDic[s])
+            else:
+                presumDic[s] = i
+        return res
+
+```
+
+##  196. <a name='K-1'></a>862. 和至少为 K 的最短子数组
+
+```py
+输入：nums = [2, -1, 2], k = 3
+输出：3
+
+找出 nums 中和至少为 k 的 `最短非空子数组` ，
+
+并返回该子数组的`长度`。如果不存在这样的 `子数组` ，返回 -1 。
+
+`子数组` 是数组中 `连续` 的一部分。
+class Solution:
+    def shortestSubarray(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        presums = [0]
+        for x in nums:
+            presums.append(presums[-1] + x)
+
+        res = n + 1 
+        deqI = collections.deque()  
+        for i, cursum in enumerate(presums):
+            # -105 <= nums[i] <= 105
+            # 1 <= k <= 109
+            # k为正数，如果算到复数，肯定是不满足的
+            while deqI and cursum - presums[deqI[-1]] <= 0: # 😐😐😐 while 循环, 排出所有的局部负值
+                deqI.pop()
+            # 找到 sum 至少为 k 的 `最短非空子数组`，则尽可能地缩短答案
+            while deqI and cursum - presums[deqI[0]] >= k: # 😐😐😐 while 循环
+                res = min(res, i - deqI.popleft())
+
+            deqI.append(i)
+
+        return res if res < n + 1 else -1
+
+输入：    [84,-37,32,40,95] 167
+presums:  [84,]
+输出：    5
+预期结果：3
+
+pop()后 []
+popleft()后 []
+
+
+pre的append [0]
+判断： 84  -  0 = 84
+pop()后 [0]
+popleft()后 [0]
+
+
+pre的append [0, 84]
+判断： 47  -  84 = -37
+pop()后 [0]
+popleft()后 [0]
+
+
+pre的append [0, 47]
+判断： 79  -  47 = 32
+pop()后 [0, 47]
+popleft()后 [0, 47]
+
+
+pre的append [0, 47, 79]
+判断： 119  -  79 = 40
+pop()后 [0, 47, 79]
+popleft()后 [0, 47, 79]
+
+
+pre的append [0, 47, 79, 119]
+判断： 214  -  119 = 95
+pop()后 [0, 47, 79, 119]
+判断：  >= k
+popleft()后 [79, 119]
+
+
+pre的append [79, 119, 214]
+```
 
 
 ##  10. <a name='-1'></a>21. 合并两个有序链表
@@ -7180,6 +7461,7 @@ class Solution(object):
 
 ```
 
+
 贪心 + 二分查找
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6wjfuj0uqvo0.webp)
@@ -7218,6 +7500,79 @@ object Solution0 {
         
     }
 }
+
+```
+
+
+##  198. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
+
+[小明](https://www.bilibili.com/video/BV1gT4y1F7y3?spm_id_from=333.999.0.0)
+
+
+```py
+note：这道题返回序列个数
+
+输入: [1,3,5,4,7]
+输出: 2
+解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
+
+dp:   [1, 2, 1, 1, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 1, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 3, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 3, 4]
+cnt:  [1, 1, 1, 1, 2]
+
+end,stt: 3 1 此时: 2 > 1
+end,stt: 5 1 此时: 2 > 1
+end,stt: 5 3 此时: 3 > 2
+end,stt: 4 1 此时: 2 > 1
+end,stt: 4 3 此时: 3 > 2
+end,stt: 7 1 此时: 2 > 1
+end,stt: 7 3 此时: 3 > 2
+end,stt: 7 5 此时: 4 > 3
+end,stt: 7 4 此时: 4 == 4
+
+i,j: 7 4 此时: 4 == 4
+
+
+输入: [2,2,2,2,2]
+输出: 5
+解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
+
+class Solution:
+    def findNumberOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 1: return n
+
+        dp = [1 for _ in range(n)] # dp[i] 表示以 nums[i] 结尾的最长的子序列的长度
+        cnt = [1 for _ in range(n)]
+
+        maxCount = 0
+        for end in range(1, n):
+            for stt in range(end):
+                if nums[end] > nums[stt]:
+                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
+                        dp[end] = dp[stt] + 1
+                        cnt[end] = cnt[stt]
+                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
+                        cnt[end] += cnt[stt]
+                '''
+                输入: [2,2,2,2,2]
+                这种情况，cnt的每个1都是答案
+                '''
+                if dp[end] > maxCount:
+                    maxCount = dp[end] # 统计最长的序列的所有次数
+        res = 0
+        for end in range(n):
+            if maxCount == dp[end]: # 长度和个数一一对应
+                res += cnt[end]
+        return res
 
 ```
 
@@ -9125,6 +9480,79 @@ class Solution:
 
 
 
+##  166. <a name='ReverseString'></a>344. Reverse String
+
+[小梦想家](https://www.bilibili.com/video/BV1Gx411o7Ha?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1nC4y1a7DR?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV1nQ4y1R7nH?spm_id_from=333.999.0.0)
+
+```py
+class Solution: 
+    def reverseString(self, s: List[str]) -> None:
+        l, r = 0, len(s) - 1
+        while l < r: # 😐 while 循环
+            s[l], s[r] = s[r], s[l]
+            l += 1
+            r -= 1
+        return s
+```
+
+```scala
+object Solution {
+    def reverseString(s: Array[Char]): Unit = {
+        var begin = 0
+        var end = s.length - 1
+        while(begin < end){
+            var temp = s(begin)
+            s(begin) = s(end)
+            s(end) = temp
+            
+            begin += 1
+            end -= 1
+        }
+    }
+}
+
+```
+
+##  177. <a name='III-1'></a>557. 反转字符串中的单词 III
+
+```py
+输入：s = "Let's take LeetCode contest"
+输出："s'teL ekat edoCteeL tsetnoc"
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        return ' '.join([i[::-1] for i in s.split(' ')])
+
+一行就是快乐
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        return ' '.join(i[::-1] for i in s.split())
+
+
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        strs = s.split(' ')
+        n = len(strs)
+        for i in range(n):
+            # 把 str 转换成 list
+            strs[i] =  list(strs[i])
+            l = 0
+            r = len(strs[i]) - 1
+            while l < r: # 😐 while 循环
+                strs[i][r], strs[i][l] = strs[i][l], strs[i][r]
+                l += 1
+                r -= 1
+            strs[i] = ''.join(strs[i])
+        strs = ' '.join(strs)
+        return strs
+```
+
 ##  50. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411i7g4?spm_id_from=333.999.0.0)
@@ -9134,6 +9562,15 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Ei4y1V7yA?spm_id_from=333.999.0.0)
 
 ```py
+输入：s = "the sky is blue"
+输出："blue is sky the"
+
+输入：s = "  hello world  "
+输出："world hello"
+
+输入：s = "a good   example"
+输出："example good a"
+
 class Solution:
     def reverseWords(self, s: str) -> str:
         return " ".join(reversed(s.split()))
@@ -9156,6 +9593,61 @@ class Solution:
 
         return ' '.join(que)
 ```
+
+
+##  120. <a name='ReverseInteger'></a>7 Reverse Integer
+
+[哈哈哈](https://www.bilibili.com/video/BV1sE411e73m?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Jb411i7bM?spm_id_from=333.999.0.0)
+
+* 时间复杂度: O(log10(n)), 每次迭代都会除以 10
+
+* 时间复杂度: O(1)
+
+```py
+# 字符串法：
+# class Solution:
+#     def reverse(self, x: int) -> int:
+#         s = str(x)
+
+#         if '-' in s:
+#             sn = '-'
+#             s = s[1:len(s)]
+#         else:
+#             sn = ''
+
+#         for i in range(len(s)):
+#             sn = sn + s[len(s)-1-i]
+#         if int(sn) < -2**31 or int(sn) > 2**31-1:
+#             return 0
+#         return int(sn)
+
+计算法：
+class Solution:
+    def reverse(self, x: int) -> int:
+        res = 0 
+        a = abs(x)
+
+        while a: # 😐😐 while 循环
+            '''
+            余加除
+            '''
+            tmp = a % 10
+            res = res * 10 + tmp
+            a = a // 10
+        # 要注意return和while的相对位置
+        # 不要写在while循环内部
+
+        if x > 0 and res < 1<<31:
+            return res 
+        elif x < 0 and res <= 1<<31:
+            return -res
+        else:
+            return 0
+```
+
+
 
 ##  51. <a name='MaximumDepthofBinary'></a>104-Maximum Depth of Binary
 
@@ -9768,10 +10260,19 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1fy4y1k7pV?spm_id_from=333.999.0.0)
 
 ```py
-置换法：
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
+
+输入：nums = [1,2,0]
+输出：3
 
 输入：nums = [3,4,-1,1]
 输出：2
+
+输入：nums = [7,8,9,11,12]
+输出：1
+
+置换法：
+
 
 class Solution:
     def firstMissingPositive(self, nums: List[int]) -> int:
@@ -9792,6 +10293,63 @@ class Solution:
 # 输入：[1] 预期结果：2
         return n + 1
 
+```
+
+
+##  175. <a name='MissingNumber'></a>268 【位运算😜】Missing Number [0, n] 中
+
+
+[小明](https://www.bilibili.com/video/BV1LU4y1p7n7?spm_id_from=333.999.0.0)
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1caw225arjj4.webp)
+
+```py
+ [0, n] 中 n 个数的数组 nums
+输入：nums = [9,6,4,2,3,5,7,0,1]
+输出：8
+解释：n = 9，因为有 9 个数字，所以所有的数字都在范围 [0,9] 内。8 是丢失的数字，因为它没有出现在 nums 中。
+
+
+# class Solution:
+#     def missingNumber(self, nums: List[int]) -> int:
+#         n = len(nums)
+#         total = n * (n + 1) // 2
+#         arrSum = sum(nums)
+#         return total - arrSum
+```
+
+```py
+你能否实现`线性时间复杂度`、仅使用`额外常数空间`的算法解决此问题 ?
+
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        xor = len(nums) # 注意这里
+        for i, num in enumerate(nums):
+            xor ^= i
+            xor ^= num
+        return xor
+
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        xor = 0
+        for i, num in enumerate(nums):
+            xor ^= i ^ num
+        return xor ^ len(nums) # 注意这里
+```
+
+
+```scala
+//Removing foldLeft improved time
+object Solution {
+    def missingNumber(nums: Array[Int]): Int = {
+        val size = nums.size
+        var idealSum = (size * (size + 1))/2
+        for(num <- nums){
+            idealSum -= num
+        }
+        idealSum
+    }
+}
 ```
 
 ##  137. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
@@ -11226,6 +11784,58 @@ object Solution {
 
 ```
 
+##  155. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
+
+[18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[哈哈哈](https://www.bilibili.com/video/BV1Ea4y147oh?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1GD4y1d7DS?spm_id_from=333.999.0.0)
+
+```py
+房屋都 围成一圈 
+
+# dp[i] = max(dp[i-2] + nums[i], dp[i-1])
+# class Solution:
+#     def rob(self, nums: List[int]) -> int:
+#         n = len(nums)
+#         # 易错点：注意特殊情况
+#         if n <= 2:
+#             return max(nums)
+
+#         dp1 = [0] * (n - 1)
+#         dp1[0] = nums[0]
+#         dp1[1] = max(nums[1], nums[0])
+#         for i in range(2, n - 1):
+#             dp1[i] = max(dp1[i-2] + nums[i], dp1[i-1])
+
+#         dp2 = [0] * (n - 1)
+#         dp2[0] = nums[1]
+#         dp2[1] = max(nums[1], nums[2])
+#         # 易错点：注意，根据递推式，这里不是，dp2[1] = nums[2]
+#         for i in range(2, n - 1):
+#             dp2[i] = max(dp2[i-2] + nums[i + 1], dp2[i-1])
+
+#         return max(dp1[-1],dp2[-1])
+
+降维以后：
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        # 易错点：注意特殊情况
+        if n <= 2:
+            return max(nums)
+
+        def robrange(start,end):
+            dp0 = 0
+            dp1 = 0
+            for num in nums[start:end]:
+                dp1, dp0 = max(dp0 + num, dp1), dp1
+            return dp1
+
+        return max(robrange(0, n - 1), robrange(1, n))
+```
 
 
 ##  99. <a name='BasicCalculatorII-224.'></a>227 Basic Calculator II - 见 224. 基本计算器
@@ -11413,9 +12023,17 @@ object Solution2-1 {
 #             return n
 #         return (self.fib(n - 1) + self.fib(n - 2)) % 1000000007
 #         # 1 1 2 3 5
+class Solution:
+    def fib(self, n: int) -> int:
+        a, b = 0, 1
+        '''
+        遍历范围是 2 ~ n，遍历 n - 1 次
+        '''
+        for i in range(n): 
+            a, b = b, a + b # py的单行更新值
+    	return a
 
 
-也可以这样写，同时赋值。
 class Solution:
     def fib(self, n: int) -> int:
         MOD = 10 ** 9 + 7
@@ -11423,15 +12041,68 @@ class Solution:
             return n
         dp0, dp1 = 0, 1
         '''
-        遍历范围是 2 ~ n
+        遍历范围是 2 ~ n，遍历 n - 1 次
         '''
         for _ in range(2, n + 1): # 注意：这里的边界
             dp1, dp0 = (dp1 + dp0) % MOD, dp1
-            # index: 1 2 3 4 5
-            # fib:   1 1 2 3 5
         return dp1
 ```
 
+
+
+##  157. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
+
+[1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV15y4y147Re?spm_id_from=333.999.0.0)
+
+```py
+
+
+
+
+    
+class Solution:
+    @cache
+    def fib(self, n: int) -> int:
+        if n < 2:
+            return n
+        return self.fib(n - 1) + self.fib(n - 2)
+
+# 记忆化递归
+class Solution:
+    def fib(self, n: int) -> int:
+        dic = {}
+        def helper(n):
+            # 这个写法是错误的：if n == 0 or 1:
+            if n < 2:
+                return n
+            elif n in dic:
+                return dic[n]
+            else:
+                dic[n] = helper(n - 1) + helper(n - 2)
+                return dic[n]
+        return helper(n)
+```
+
+```scala
+/**
+* recursive version - top-down
+* time complexity: O(2^N）
+* space complexity: O(N)
+*/
+
+object Solution3 {
+    def fib(N: Int): Int = {
+        if (N <= 1) N
+        else {
+           fib(N - 1) + fib(N - 2)
+        }
+    }
+}
+
+
+```
 
 
 
@@ -11744,94 +12415,6 @@ class Solution:
 ```
 
 
-##  120. <a name='ReverseInteger'></a>7 Reverse Integer
-
-[哈哈哈](https://www.bilibili.com/video/BV1sE411e73m?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Jb411i7bM?spm_id_from=333.999.0.0)
-
-* 时间复杂度: O(log10(n)), 每次迭代都会除以 10
-
-* 时间复杂度: O(1)
-
-```py
-# 字符串法：
-# class Solution:
-#     def reverse(self, x: int) -> int:
-#         s = str(x)
-
-#         if '-' in s:
-#             sn = '-'
-#             s = s[1:len(s)]
-#         else:
-#             sn = ''
-
-#         for i in range(len(s)):
-#             sn = sn + s[len(s)-1-i]
-#         if int(sn) < -2**31 or int(sn) > 2**31-1:
-#             return 0
-#         return int(sn)
-
-计算法：
-class Solution:
-    def reverse(self, x: int) -> int:
-        res = 0 
-        a = abs(x)
-
-        while a: # 😐😐 while 循环
-            '''
-            余加除
-            '''
-            tmp = a % 10
-            res = res * 10 + tmp
-            a = a // 10
-        # 要注意return和while的相对位置
-        # 不要写在while循环内部
-
-        if x > 0 and res < 1<<31:
-            return res 
-        elif x < 0 and res <= 1<<31:
-            return -res
-        else:
-            return 0
-```
-
-
-```scala
-object Solution {
-    def reverse(x: Int): Int = {
-        if(x == 0){
-            0
-        }else{
-            var output = 0L
-            var num = x
-            var flag = false
-            
-            if(x < 0){
-                num = Math.abs(num)
-                flag = true
-            }
-            
-        
-            while(num!=0){
-                var mod = num%10
-            
-                output = (output*10) + mod
-            
-                num = num/10
-            }
-            
-            val res = if(flag){
-                output * (-1)
-            }else{
-                output
-            }
-            //To avoid overflow
-            if(res < Int.MinValue || res > Int.MaxValue) 0 else res.toInt
-        }
-    }
-}
-```
 
 ##  126. <a name='Powxn'></a>50 Pow(x, n)
 
@@ -11974,47 +12557,6 @@ class Solution:
 并且要改用 i = bisect.bisect(q, v)。
 
 ```
-
-##  125. <a name='SubarraySumEqualsKK'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
-
-[花花酱](https://www.bilibili.com/video/BV1XW411d71i?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1d54y127ri?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1vK4y1k7ku?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV13t4y1y7ya?spm_id_from=333.999.0.0)
-
-```py
-输入：nums = [1,2,3], k = 3
-输出：2
-
-查表法：
-class Solution:
-    def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
-        '''
-        presum - target 为之前的 presum
-        '''
-        presum, res, dic = 0, 0, {}
-        dic[0] = 1 # 刚好前 n 个的和为 target
-        for num in nums:
-            presum += num
-            if presum - target in dic:
-                res += dic[presum - target]
-                # sums - target 就是前缀和
-            if presum not in dic:
-                dic[presum] = 0
-            dic[presum] += 1
-        return res
-        # 输入：nums = [1,2,3], k = 3
-        # 输出：2
-        # -1000 <= nums[i] <= 1000 注意: nums 有正负
-        # {0:1, 1:1}
-        # {0:1, 1:1, 3:1}
-        # {0:1, 1:1, 3:1, 6:1}
-```
-
-
 
 
 
@@ -12171,26 +12713,7 @@ class Solution:
 
 ```
 
-##  141. <a name='Removeduplicatesfromsortedarray-1'></a>26-Remove duplicates from sorted array
 
-[哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411i77e?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV13V41177Mq?spm_id_from=333.999.0.0)
-
-> for循环法：
-
-```py
-class Solution:
-    def removeDuplicates(self, nums: List[int]) -> int:
-        slow = 0 #注意：count是从0开始的
-        for fast in range(len(nums)):
-            if nums[fast] != nums[slow]:
-                slow += 1
-                nums[slow] = nums[fast]
-        return slow + 1
-```
 
 ##  143. <a name='Palindrome'></a>9-【回文🌈】Palindrome
 
@@ -12201,29 +12724,25 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1Af4y1m7kk?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def isPalindrome(self, x: int) -> bool:
-        return True if str(x) == str(x)[::-1] else False
+# class Solution:
+#     def isPalindrome(self, x: int) -> bool:
+#         return True if str(x) == str(x)[::-1] else False
 ```
 
 ```py
 class Solution:
     def isPalindrome(self, x: int) -> bool:
-        if x < 0:
-            return False
-
-        if x < 10:
-            return True
+        # -231 <= x <= 231 - 1
+        if x < 0: return False
 
         bkp = x
         res = 0
-
         while x: # 😐 while 循环
             '''
             余加除
             '''
             tmp = x % 10
-            res = res*10 + tmp
+            res = res * 10 + tmp
             x //= 10
 
         return bkp == res
@@ -12255,10 +12774,10 @@ package lc009 {
 class Solution:
     def lexicalOrder(self, n):
         def dfs(num):
-            if num > n: return
-            res.append(num)
-            for nxt in range(num * 10, num * 10 + 10):
-                dfs(nxt)
+            if num <= n: 
+                res.append(num)
+                for nxt in range(num * 10, num * 10 + 10):
+                    dfs(nxt)
 
         res = []
         for num in range(1, 10):
@@ -12267,26 +12786,26 @@ class Solution:
 ```
 
 ```py
-class Solution:
-    def lexicalOrder(self, n):
-        return sorted(list(range(1, n+1)), key = lambda x: str(x))
+# class Solution:
+#     def lexicalOrder(self, n):
+#         return sorted(list(range(1, n+1)), key = lambda x: str(x))
 ```
 
 ```py
-输入：n = 13
-输出：[1,10,11,12,13,2,3,4,5,6,7,8,9]
-class Solution:
-    def lexicalOrder(self, n):
-        ans = []
-        num = 1
-        while len(ans) < n: # 😐😐😐 while 循环
-            while num <= n: # 😐😐😐 while 循环 # 不断进入下一层
-                ans.append(num)
-                num *= 10
-            while num % 10 == 9 or num > n: # 😐😐😐 while 循环 # 不断返回上一层
-                num //= 10
-            num += 1  # 遍历该层下一个数
-        return ans
+# 输入：n = 13
+# 输出：[1,10,11,12,13,2,3,4,5,6,7,8,9]
+# class Solution:
+#     def lexicalOrder(self, n):
+#         ans = []
+#         num = 1
+#         while len(ans) < n: # 😐😐😐 while 循环
+#             while num <= n: # 😐😐😐 while 循环 # 不断进入下一层
+#                 ans.append(num)
+#                 num *= 10
+#             while num % 10 == 9 or num > n: # 😐😐😐 while 循环 # 不断返回上一层
+#                 num //= 10
+#             num += 1  # 遍历该层下一个数
+#         return ans
 
 ```
 
@@ -12321,19 +12840,19 @@ https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/solution
 class Solution:
     def findKthNumber(self, n: int, k: int) -> int:
         
-        def cal_steps(n, n1, n2):
+        def calSteps(n, cur, nxt):
             step = 0
-            while n1 <= n: # 😐😐😐 while 循环
-                step += min(n2, n + 1) - n1 # 比如n是195的情况195到100有96个数
-                n1 *= 10
-                n2 *= 10
+            while cur <= n: # 😐😐😐 while 循环
+                step += min(nxt, n+1) - cur # 比如n是195的情况195到100有96个数
+                cur *= 10
+                nxt *= 10
             return step
                 
         cur = 1
         k -= 1 # k - 1 就可以与步长 比较
         
         while k > 0: # 😐😐😐 while 循环
-            steps = cal_steps(n, cur, cur + 1)
+            steps = calSteps(n, cur, cur + 1)
             if steps <= k: # 第k个数不在以cur为根节点的树上
                 k -= steps 
                 cur += 1  # prefix在字典序数组中从左往右移动
@@ -12369,14 +12888,17 @@ print(ss.findKthNumber(23,15))
 
 class Solution:
     def findNthDigit(self, n: int) -> int:
-        d, count = 1, 9
-        while n > d * count: # 😐 while 循环
-            n -= d * count
-            d += 1
+        dnum, count = 1, 9
+        while n > dnum * count: # 😐 while 循环
+            n -= dnum * count
+            dnum += 1
             count *= 10
         index = n - 1
-        num = 10 ** (d - 1) + index // d
-        digitIndex = index % d
+        carry = 10 ** (dnum - 1)
+        tail = index // dnum
+        digitIndex = index % dnum
+
+        num = carry + tail
         return int(str(num)[digitIndex])
 # 问第 300 个数
 # 1 ~ 9        9个数字 * 1位数字
@@ -12395,6 +12917,20 @@ class Solution:
 https://leetcode-cn.com/problems/candy/
 
 ```py
+每个孩子至少分配到 1 个糖果。
+相邻两个孩子评分更高的孩子会获得更多的糖果。
+
+
+输入：ratings = [1,0,2]
+输出：5
+解释：你可以分别给第一个、第二个、第三个孩子分发 2、1、2 颗糖果。
+
+输入：ratings = [1,2,2]
+输出：4
+解释：你可以分别给第一个、第二个、第三个孩子分发 1、2、1 颗糖果。
+     第三个孩子只得到 1 颗糖果，这满足题面中的两个条件。
+
+
 class Solution:
     def candy(self, ratings: List[int]) -> int:
         n = len(ratings)
@@ -12506,10 +13042,9 @@ object Solution {
 # 精简一下的for循环😁
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-
         cover = 0
-        n = len(nums)
 
+        n = len(nums)
         for i in range(n):
             if cover >= i: # 易错点：在判断下一个cover前，先要判断i是否能够到达
                 cover = max(cover, i + nums[i])
@@ -12543,23 +13078,37 @@ object Solution3-1 {
 
 ```
 
-##  152. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
 
-类似消消看
+##  201. <a name='JumpGameII'></a>45 Jump Game II
+
+[小明](https://www.bilibili.com/video/BV1fb4y1Z77x?spm_id_from=333.999.0.0)
 
 ```py
-class Solution(object):
-    def removeDuplicates(self, S):
-        # 初始化栈
-        stack = []
-        # 遍历栈元素
-        for char in S:
-            if stack and stack[-1] == char:
-                stack.pop()
-            else:
-                stack.append(char)
-        return "".join(stack)
+输入: nums = [2,3,1,1,4]
+输出: 2
+解释: 跳到最后一个位置的最小跳跃数是 2。
+     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+假设你`总是`可以到达数组的最后一个位置。
+
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        jump = 0
+        cover = stop = 0
+
+        n = len(nums)
+        for i in range(n-1):
+            cover = max(cover, i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
+            '''
+            代表从 stop 位置能到达的最远的地点
+            '''
+            if i == stop:
+                jump += 1 # jump + 1 的情况：2(0),stop=2,1(2),stop=4
+                stop = cover
+        return jump
 ```
+
+
+
 
 ##  153. <a name='DecodeWays'></a>91. Decode Ways
 
@@ -12636,135 +13185,28 @@ object Solution1 {
 
 
 
-##  155. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
-
-[18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Ea4y147oh?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1GD4y1d7DS?spm_id_from=333.999.0.0)
-
-```py
-# dp[i] = max(dp[i-2] + nums[i], dp[i-1])
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        n = len(nums)
-        # 易错点：注意特殊情况
-        if n <= 2:
-            return max(nums)
-
-        dp1 = [0] * (n - 1)
-        dp1[0] = nums[0]
-        dp1[1] = max(nums[1],nums[0])
-        for i in range(2, n - 1):
-            dp1[i] = max(dp1[i-2] + nums[i], dp1[i-1])
-
-        dp2 = [0] * (n - 1)
-        dp2[0] = nums[1]
-        dp2[1] = max(nums[1], nums[2])
-        # 易错点：注意，根据递推式，这里不是，dp2[1] = nums[2]
-        for i in range(2, n - 1):
-            dp2[i] = max(dp2[i-2] + nums[i + 1], dp2[i-1])
-
-        return max(dp1[-1],dp2[-1])
-
-降维以后：
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        n = len(nums)
-        # 易错点：注意特殊情况
-        if n <= 2:
-            return max(nums)
-
-        def robrange(start, end):
-            dp0 = 0
-            dp1 = 0
-            for i in range(start, end):
-                dp1, dp0 = max(dp0 + nums[i], dp1), dp1
-            return dp1
-        # 也可以这么写：
-        # def robrange(start,end):
-        #     dp0 = 0
-        #     dp1 = 0
-        #     for num in nums[start:end]:
-        #         dp1, dp0 = max(dp0 + num, dp1), dp1
-        #     return dp1
-        return max(robrange(0, n - 1), robrange(1, n))
-```
-
-##  157. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
-
-[1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV15y4y147Re?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def fib(self, n: int) -> int:
-        a, b = 0, 1
-        for i in range(n): 
-            a, b = b, a + b # py的单行更新值
-    	return a
-
-
-
-    
-class Solution:
-    @cache
-    def fib(self, n: int) -> int:
-        if n < 2:
-            return n
-        return self.fib(n - 1) + self.fib(n - 2)
-
-# 记忆化递归
-class Solution:
-    def fib(self, n: int) -> int:
-        dic = {}
-        def helper(n):
-            # 这个写法是错误的：if n == 0 or 1:
-            if n < 2:
-                return n
-            elif n in dic:
-                return dic[n]
-            else:
-                dic[n] = helper(n - 1) + helper(n - 2)
-                return dic[n]
-        return helper(n)
-```
-
-```scala
-/**
-* recursive version - top-down
-* time complexity: O(2^N）
-* space complexity: O(N)
-*/
-
-object Solution3 {
-    def fib(N: Int): Int = {
-        if (N <= 1) N
-        else {
-           fib(N - 1) + fib(N - 2)
-        }
-    }
-}
-
-
-```
-
 
 ##  159. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
 
 ```py
+从若干副扑克牌中随机抽 5 张牌，判断是不是一个顺子
+输入: [1,2,3,4,5]
+输出: True
+
+输入: [0,0,1,2,5]
+输出: True
+
+而大、小王为 0 ，可以看成任意数字
+
 class Solution:
     def isStraight(self, nums: List[int]) -> bool:
         repeat = set()
         ma, mi = 0, 14
         for num in nums:
+            if num in repeat: return False # 若有重复，提前返回 false
             if num == 0: continue # 跳过大小王
             ma = max(ma, num) # 最大牌
             mi = min(mi, num) # 最小牌
-            if num in repeat: return False # 若有重复，提前返回 false
             repeat.add(num) # 添加牌至 Set
         return ma - mi < 5 # 最大牌 - 最小牌 < 5 则可构成顺子 
 
@@ -12773,52 +13215,16 @@ class Solution:
 
 
 
-##  166. <a name='ReverseString'></a>344. Reverse String
-
-[小梦想家](https://www.bilibili.com/video/BV1Gx411o7Ha?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1nC4y1a7DR?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1nQ4y1R7nH?spm_id_from=333.999.0.0)
-
-```py
-class Solution: 
-    def reverseString(self, s: List[str]) -> None:
-        l, r = 0, len(s) - 1
-        while l < r: # 😐 while 循环
-            s[l], s[r] = s[r], s[l]
-            l += 1
-            r -= 1
-        return s
-```
-
-```scala
-object Solution {
-    def reverseString(s: Array[Char]): Unit = {
-        var begin = 0
-        var end = s.length - 1
-        while(begin < end){
-            var temp = s(begin)
-            s(begin) = s(end)
-            s(end) = temp
-            
-            begin += 1
-            end -= 1
-        }
-    }
-}
-
-```
 
 ##  167. <a name='Numberof1Bits'></a>191 Number of 1 Bits
 
 [小明](https://www.bilibili.com/video/BV1i5411J7SA?spm_id_from=333.999.0.0)
 
 ```py
-class Solution:
-    def hammingWeight(self, n: int) -> int:
-        res = sum(1 for i in range(32) if n & (1 << i)) 
-        return res
+# class Solution:
+#     def hammingWeight(self, n: int) -> int:
+#         res = sum(1 for i in range(32) if n & (1 << i)) 
+#         return res
 
 
 1111000
@@ -12855,32 +13261,6 @@ object Solution0 {
 
 # 10 day (得分 = 2分) 85
 
-##  168. <a name='StringCompression'></a>443. String Compression
-
-[小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def compress(self, chars: List[str]) -> int:
-        n = len(chars)
-        slow = 0
-        cnt = 1
-        for fast in range(n):
-            # 在 aa，bb，ccc 的最后一位触发计算
-            if fast == n - 1 or chars[fast] != chars[fast+1]:
-                chars[slow] = chars[fast] 
-                slow += 1
-                if cnt > 1: # cnt 重新置为 1 前，需要统计是几位数
-                    for k in str(cnt):
-                        chars[slow] = k
-                        slow += 1
-                cnt = 1 # cnt 重新置为 1，而不是 0
-            else:
-                cnt += 1
-        return slow
-# 输入：chars = ["a","a","b","b","c","c","c"]
-# 输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
-```
 
 
 
@@ -12945,51 +13325,47 @@ object Solution1 {
 [小明](https://www.bilibili.com/video/BV1Yt4y1S7XZ?spm_id_from=333.999.0.0)
 
 ```py
+输入: s = "abab"
+输出: true
+解释: 可由子串 "ab" 重复两次构成。
+
+输入: s = "aba"
+输出: false
+
+输入: s = "abcabcabcabc"
+输出: true
+解释: 可由子串 "abc" 重复四次构成。 (或子串 "abcabc" 重复两次构成。)
+
 class Solution:
     def repeatedSubstringPattern(self, s: str) -> bool:
         for i in range(1, len(s) // 2 + 1):
+            '''
+            i 的范围 1 到 len(s) // 2
+            s[:i] * (len(s) // i) 能构成一个完整的 s
+            '''
             if s == s[:i] * (len(s) // i):
                 return True
         return False
 
 ```
 
-##  173. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
 
-[小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def findDuplicates(self, nums: List[int]) -> List[int]:
-        l = []
-        for i in nums:
-            # 取绝对值
-            i = abs(i)
-            # 把相应下标减1的值设为负数
-            if nums[i-1] > 0:
-                nums[i-1] *= -1
-            # 值为负的话，说明该值已经出现过，添加到输出列表l中
-            else:
-                l.append(i)
-                
-        return l
-
-[4, 3, 2, 7, 8, 2, 3, 1]
-[4, 3, 2, -7, 8, 2, 3, 1]   
-[4, 3, -2, -7, 8, 2, 3, 1]    
-[4, -3, -2, -7, 8, 2, 3, 1]
-[4, -3, -2, -7, 8, 2, -3, 1]
-[4, -3, -2, -7, 8, 2, -3, -1]
-[4, [-3], -2, -7, 8, 2, -3, -1] 
-[4, [-3], [-2], -7, 8, 2, -3, -1] 
-[-4, [-3], [-2], -7, 8, 2, -3, -1] 
-```
 
 ##  174. <a name='Triangle'></a>120 【动态🚀规划】Triangle
 
 [小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
 
 ```py
+输入：triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
+输出：11
+解释：如下面简图所示：
+   2
+  3 4
+ 6 5 7
+4 1 8 3
+自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
+
+
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
         i = len(triangle) - 2
@@ -13015,55 +13391,6 @@ object Solution {
 }
 ```
 
-##  175. <a name='MissingNumber'></a>268 【位运算😜】Missing Number
-
-
-[小明](https://www.bilibili.com/video/BV1LU4y1p7n7?spm_id_from=333.999.0.0)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1caw225arjj4.webp)
-
-```py
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        n = len(nums)
-        total = n * (n + 1) // 2
-        arrSum = sum(nums)
-        return total - arrSum
-```
-
-```py
-你能否实现`线性时间复杂度`、仅使用`额外常数空间`的算法解决此问题 ?
-
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        xor = len(nums) # 注意这里
-        for i, num in enumerate(nums):
-            xor ^= i
-            xor ^= num
-        return xor
-
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        xor = 0
-        for i, num in enumerate(nums):
-            xor ^= i ^ num
-        return xor ^ len(nums) # 注意这里
-```
-
-
-```scala
-//Removing foldLeft improved time
-object Solution {
-    def missingNumber(nums: Array[Int]): Int = {
-        val size = nums.size
-        var idealSum = (size * (size + 1))/2
-        for(num <- nums){
-            idealSum -= num
-        }
-        idealSum
-    }
-}
-```
 
 ##  176. <a name='SuperEggDrop'></a>887. Super Egg Drop
 
@@ -13112,45 +13439,61 @@ class Solution:
 ```
 
 
-##  177. <a name='III-1'></a>557. 反转字符串中的单词 III
 
-```py
-class Solution:
-    def reverseWords(self, s: str) -> str:
-        return ' '.join([i[::-1] for i in s.split(' ')])
-
-一行就是快乐
-
-class Solution:
-    def reverseWords(self, s: str) -> str:
-        return ' '.join(i[::-1] for i in s.split())
-
-
-
-class Solution:
-    def reverseWords(self, s: str) -> str:
-        s = s.split(' ')
-        sll = len(s)
-        for i in range(sll):
-            # 把 str 转换成 list
-            s[i] =  list(s[i])
-            p = 0
-            q = len(s[i]) - 1
-            while p < q: # 😐 while 循环
-                s[i][q], s[i][p] = s[i][p], s[i][q]
-                p += 1
-                q -= 1
-            s[i] = ''.join(s[i])
-        s = ' '.join(s)
-        return s
-```
 
 ##  178. <a name='14.'></a>补充题14. 阿拉伯数字转中文数字
+
+```py
+def money(l,r):
+    dic = {'0':'零','1':'壹','2':'贰','3':'叁','4':'肆','5':'伍','6':'陆','7':'柒','8':'捌','9':'玖'}
+    p = '仟,佰,拾,亿,仟,佰,拾,万,仟,佰,拾,元'.split(',')
+    q = '角,分'.split(',')
+    resL = ''
+    resR = '人民币'
+    #小数部分解决
+    if int(r):
+        for i, char in enumerate(r):
+            resL = resL + dic[char] + q[i] if char != '0' else resL + ''
+    else:
+        resL += '整'
+    #整数部分
+    if int(l):
+        for i, char in enumerate(l):
+            #这种情况是几十几百万，所以在这些拾后面没必要加元等单位
+            idx = i-len(l)
+            resR = resR + dic[char] + p[idx] if char != '0' or (idx+1) % 4 == 0 else resR + '零'
+        resR = resR.replace('零零', '零')
+        resR = resR.replace('拾零', '拾')
+        resR = resR.replace('仟零零', '仟')
+        resR = resR.replace('壹拾', '拾')
+        resR = resR.replace('人民币零', '人民币')
+    return resR + resL
+ 
+         
+     
+while 1:
+    try:
+        raw = input().split('.')
+        print(money(raw[0],raw[1]))
+    except:
+        break
+```
 
 
 ##  181. <a name='-1'></a>670. 最大交换
 
 ```py
+'''
+让最早出现的数字， string[i]
+用后面 lastI[j] > i
+比他大的 ，且最大的数字交换 for j in range(9, int(d), -1)
+'''
+输入: 2736
+输出: 7236
+
+输入: 9973
+输出: 9973
+
 class Solution:
     def maximumSwap(self, num: int) -> int:
         string = list(str(num))
@@ -13169,31 +13512,6 @@ class Solution:
 ```
 
 
-##  183. <a name='ContiguousArray'></a>525. 【前缀和🎨】Contiguous Array
-
-[花花酱](https://www.bilibili.com/video/BV14W411d7SD?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV185411t7tu?spm_id_from=333.999.0.0)
-
-```py
-0 变 -1 是精髓，sum_dct = {0:-1} 是细节。
-
-class Solution:
-    def findMaxLength(self, nums: List[int]) -> int:
-        presumDic = {}
-        presumDic[0] = -1
-        res = 0
-        s = 0
-        for i in range(len(nums)):
-            s += 1 if nums[i] == 1 else -1
-            if s in presumDic:
-                res = max(res, i - presumDic[s])
-            else:
-                presumDic[s] = i
-        return res
-
-```
-
 
 
 
@@ -13208,17 +13526,27 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1754y1176F?spm_id_from=333.999.0.0)
 
 ```py
+输入：
+[1,2,3,4,5]
+[3,4,5,1,2]
+
+输出：
+4
+
+预期结果：
+3
+
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         start = 0
         curSum = 0
         totalSum = 0
         for i in range(len(gas)):
-            curSum += gas[i] - cost[i]
+            curSum   += gas[i] - cost[i]
             totalSum += gas[i] - cost[i]
             if curSum < 0:
-                curSum = 0
-                start = i + 1
+                curSum = 0 # curSum 必须置为 0
+                start  = i + 1
         if totalSum < 0: return -1
         return start
 ```
@@ -13242,6 +13570,9 @@ class Solution:
 * 时间复杂度:O(3m × 4n), m是对应3个字母的数字, n是对应4个字母的数字
 
 ```py
+输入：digits = "23"
+输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
         if not digits: # 易错点：一定要判断判断字符串是否为空
@@ -13258,6 +13589,11 @@ class Solution:
 https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/
 
 ```py
+输入：
+[2, 3, 1, 0, 2, 5, 3]
+
+输出：2 或 3 
+
 class Solution:
     def findRepeatNumber(self, nums: List[int]) -> int:
         repeatDict = {}
@@ -13279,93 +13615,23 @@ class Solution:
 ```
 
 
-##  196. <a name='K-1'></a>862. 和至少为 K 的最短子数组
-
-```py
-输入：nums = [2, -1, 2], k = 3
-输出：3
-
-找出 nums 中和至少为 k 的 `最短非空子数组` ，
-
-并返回该子数组的`长度`。如果不存在这样的 `子数组` ，返回 -1 。
-
-`子数组` 是数组中 `连续` 的一部分。
-class Solution:
-    def shortestSubarray(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        presums = [0]
-        for x in nums:
-            presums.append(presums[-1] + x)
-
-        res = n + 1 
-        deq = collections.deque()  
-        for i, cursum in enumerate(presums):
-            # -105 <= nums[i] <= 105
-            # 1 <= k <= 109
-            # k为正数，如果算到复数，肯定是不满足的
-            while deq and cursum - presums[deq[-1]] <= 0: # 😐😐😐 while 循环, 排出所有的局部负值
-                deq.pop()
-            # 找到 sum 至少为 k 的 `最短非空子数组`，则尽可能地缩短答案
-            while deq and cursum - presums[deq[0]] >= k: # 😐😐😐 while 循环
-                res = min(res, i - deq.popleft())
-
-            deq.append(i)
-
-        return res if res < n + 1 else -1
-
-输入：    [84,-37,32,40,95] 167
-presums:  [84,]
-输出：    5
-预期结果：3
-
-pop()后 []
-popleft()后 []
-
-
-pre的append [0]
-判断： 84  -  0 = 84
-pop()后 [0]
-popleft()后 [0]
-
-
-pre的append [0, 84]
-判断： 47  -  84 = -37
-pop()后 [0]
-popleft()后 [0]
-
-
-pre的append [0, 47]
-判断： 79  -  47 = 32
-pop()后 [0, 47]
-popleft()后 [0, 47]
-
-
-pre的append [0, 47, 79]
-判断： 119  -  79 = 40
-pop()后 [0, 47, 79]
-popleft()后 [0, 47, 79]
-
-
-pre的append [0, 47, 79, 119]
-判断： 214  -  119 = 95
-pop()后 [0, 47, 79, 119]
-popleft()后 [79, 119]
-
-
-pre的append [79, 119, 214]
-```
 
 ##  197. <a name='-1'></a>343-整数拆分
 
 [哈哈哈](https://www.bilibili.com/video/BV1Dp4y1U79P?spm_id_from=333.999.0.0)
 
 ```py
+输入: n = 10
+输出: 36
+解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
+
+
 class Solution:
     def integerBreak(self, n: int) -> int:
         dp = [0] * (n + 1)
-        for i in range(2, n + 1):
-            for j in range(i):
-                dp[i] = max(dp[i], j * (i - j), j * dp[i - j])
+        for end in range(2, n + 1):
+            for stt in range(end):
+                dp[end] = max(dp[end], stt * (end - stt), stt * dp[end - stt])
         return dp[n]
         # 假设对正整数 i 拆分出的第一个正整数是 j（1 <= j < i），则有以下两种方案：
         # 1) 将 i 拆分成 j 和 i−j 的和，且 i−j 不再拆分成多个正整数，此时的乘积是 j * (i-j)
@@ -13373,39 +13639,7 @@ class Solution:
 
 ```
 
-##  198. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
 
-[小明](https://www.bilibili.com/video/BV1gT4y1F7y3?spm_id_from=333.999.0.0)
-
-
-```py
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        if n <= 1: return n
-
-        dp = [1 for _ in range(n)] # dp[i] 表示以 nums[i] 结尾的最长的子序列的长度
-        cnt = [1 for _ in range(n)]
-
-        maxCount = 0
-        for i in range(1, n):
-            for j in range(i):
-                # 发现 nums[i] > nums[j]，则说明出现了新的递增序列，根据 nums[j] 和 l[j] 对应更新最长序列的个数及长度
-                if nums[i] > nums[j]: # 如果当前数比nums[j]大，说明可以构成递增序列
-                    if dp[j] + 1 > dp[i] : # 更长，则更新最长的长度和个数
-                        dp[i] = dp[j] + 1
-                        cnt[i] = cnt[j]
-                    elif dp[j] + 1 == dp[i] : # 相等时，把个数加上去
-                        cnt[i] += cnt[j]
-                if dp[i] > maxCount:
-                    maxCount = dp[i] # 统计最长的序列的所有次数
-        res = 0
-        for i in range(n):
-            if maxCount == dp[i]: # 长度和个数一一对应
-                res += cnt[i]
-        return res
-
-```
 
 ##  199. <a name='17.24.'></a>面试题 17.24. 最大子矩阵
 
@@ -13597,30 +13831,6 @@ class Solution:
         # 2 + 3 > 4
         # 2 + 4 > 4
         # 2 + 3 > 4
-```
-
-##  201. <a name='JumpGameII'></a>45 Jump Game II
-
-[小明](https://www.bilibili.com/video/BV1fb4y1Z77x?spm_id_from=333.999.0.0)
-
-```py
-输入: nums = [2,3,1,1,4]
-输出: 2
-解释: 跳到最后一个位置的最小跳跃数是 2。
-     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
-
-class Solution:
-    def jump(self, nums: List[int]) -> int:
-        i, n = 0, len(nums)
-        jump = 0
-        cover = stop = 0
-        while i <= min(cover, n - 2): # 😐😐😐 while 循环, i 不需要达到4，所以 cover 达到 4 就可以了
-            cover = max(cover, i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
-            if i == stop:
-                jump += 1 # jump + 1 的情况：2(0),stop=2,1(2),stop=4
-                stop = cover
-            i += 1
-        return jump
 ```
 
 

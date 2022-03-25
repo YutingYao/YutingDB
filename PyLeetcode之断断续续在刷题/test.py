@@ -1,11 +1,25 @@
 class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
-        negUpQue = []
+    def findNumberOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 1: return n
+
+        dp = [1 for _ in range(n)] # dp[i] 表示以 nums[i] 结尾的最长的子序列的长度
+        cnt = [1 for _ in range(n)]
+
+        maxCount = 0
+        for end in range(1, n):
+            for stt in range(end):
+                
+                if nums[end] > nums[stt]:
+                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
+                        dp[end] = dp[stt] + 1
+                        cnt[end] = cnt[stt]
+                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
+                        cnt[end] += cnt[stt]
+                if dp[end] > maxCount:
+                    maxCount = dp[end] # 统计最长的序列的所有次数
         res = 0
-        for num in nums:
-            # 变负数插入，绝了-v，构成递增序列
-            i = bisect.bisect_left(negUpQue,-num) # bisect_left 返回的待插入位置分别是 0，1，1，3，
-            res += i # 前面有多少个比它大的，当前数就有多少个逆序对,加起来就是逆序对总数 5
-            negUpQue[i:i] = [-num]
-            # 这里也可以写：q.insert(i, -v)
+        for end in range(n):
+            if maxCount == dp[end]: # 长度和个数一一对应
+                res += cnt[end]
         return res
