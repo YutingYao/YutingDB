@@ -1,25 +1,20 @@
 class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        if n <= 1: return n
+    def isInterleave(self, string1: str, string2: str, stringtar: str) -> bool:
+        n1, n2, tar = len(string1), len(string2), len(stringtar)
+        if n1 + n2 != tar: return False
 
-        dp = [1 for _ in range(n)] # dp[i] 表示以 nums[i] 结尾的最长的子序列的长度
-        cnt = [1 for _ in range(n)]
-
-        maxCount = 0
-        for end in range(1, n):
-            for stt in range(end):
-                
-                if nums[end] > nums[stt]:
-                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
-                        dp[end] = dp[stt] + 1
-                        cnt[end] = cnt[stt]
-                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
-                        cnt[end] += cnt[stt]
-                if dp[end] > maxCount:
-                    maxCount = dp[end] # 统计最长的序列的所有次数
-        res = 0
-        for end in range(n):
-            if maxCount == dp[end]: # 长度和个数一一对应
-                res += cnt[end]
-        return res
+        dp = [False] * (n2 + 1)
+        dp[0] = True
+        for i1 in range(n1 + 1):
+            for i2 in range(n2 + 1):
+                '''
+                i1 为 1 ~ n1
+                i2 为 1 ~ n2
+                p 为 0 ~ n1 + n2 - 1
+                '''
+                p = i1 + i2 - 1
+                if i1: # s1 和 s3 比较
+                    dp[i2] = dp[i2] and string1[i1 - 1] == stringtar[p]
+                if i2: # s2 和 s3 比较
+                    dp[i2] = dp[i2] or (dp[i2 - 1] and string2[i2 - 1] == stringtar[p])
+        return dp[n2]

@@ -4810,6 +4810,7 @@ class Solution:
 
 
 
+
 ##  249. <a name='PalindromicSubstrings'></a>647 【动态🚀规划 + 回文🌈】Palindromic Substrings
 
 [小明](https://www.bilibili.com/video/BV1g54y1h7uv?spm_id_from=333.999.0.0)
@@ -4867,6 +4868,175 @@ class Solution:
             center += 0.5
         return cnt
 ```
+
+
+
+
+##  134. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
+
+[哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Qb411e7ML?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV17h411Z7ey?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
+
+isalnum() 方法检测字符串是否由`字母`和`数字`组成。
+
+isalpha() 方法检测字符串是否只由`字母`组成。
+
+```py
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        left = 0
+        right = len(s) - 1
+        while left < right: # 😐 while 循环
+            # 易错点：if not s[left].isalnum() 是不对的，因为存在连续多个“非数字的情况”
+            # 易错点：while left < right 不能省略
+            while left < right and not s[left].isalnum(): # 😐😐 while 循环
+                left += 1
+            while left < right and not s[right].isalnum(): # 😐😐 while 循环
+                right -= 1
+            if s[left].lower() == s[right].lower():
+                left += 1
+                right -= 1
+            else:
+                return False
+        return True
+```
+
+python牛逼的一行代码：
+
+```py
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        sgood = "".join(ch.lower() for ch in s if ch.isalnum())
+        return sgood == sgood[::-1]
+
+class Solution:
+    def isPalindrome(self, s):
+        s = ''.join(filter(str.isalnum,s)).lower()
+        return s==s[::-1]
+```
+
+
+```scala
+/**
+* two pointer comparison
+* memo
+*  1. alphanumeric = letters + numerals
+* time complexity: O(2N)
+* space complexity: O(N)
+*/
+
+object Solution1 {
+    def isPalindrome(s: String): Boolean = {
+      val newString = s.filter(_.isLetterOrDigit).toLowerCase
+      isPalindrome(newString, 0, newString.length - 1)
+    }
+    @annotation.tailrec
+    def isPalindrome(s: String, left: Int, right: Int): Boolean = {
+      if (left > right) return true
+      if (s(left) == s(right)) isPalindrome(s, left + 1, right - 1)
+      else false
+    }
+}
+```
+
+
+
+##  143. <a name='Palindrome'></a>9-【回文🌈】Palindrome
+
+[哈哈哈](https://www.bilibili.com/video/BV1hJ411S7kt?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Jb411i7YG?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1Af4y1m7kk?spm_id_from=333.999.0.0)
+
+```py
+# class Solution:
+#     def isPalindrome(self, x: int) -> bool:
+#         return True if str(x) == str(x)[::-1] else False
+```
+
+```py
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        # -231 <= x <= 231 - 1
+        if x < 0: return False
+
+        bkp = x
+        res = 0
+        while x: # 😐 while 循环
+            '''
+            余加除
+            '''
+            tmp = x % 10
+            res = res * 10 + tmp
+            x //= 10
+
+        return bkp == res
+```
+
+翻转一半字符法：
+
+* 时间复杂度:O(log10(n)), 每次迭代都会除以10
+
+
+
+```scala
+package lc009 {
+  object Solution {
+    def isPalindrome(x: Int): Boolean = {
+      if (x<0) return false
+      if (x==0) return true
+      if (x%10==0) return false
+      val y=x.toString.reverse
+      return y==x.toString
+    }
+  }
+}
+```
+
+
+##  268. <a name='ValidPalindromeII'></a>680 【回文🌈】Valid Palindrome II
+
+[哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV17i4y147xn?spm_id_from=333.999.0.0)
+
+```py
+输入: s = "abca"
+输出: true
+解释: 你可以删除c字符。
+
+
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        def checkPalindrome(low, high):
+            i, j = low, high
+            while i < j: # 😐 while 循环
+                if s[i] != s[j]: return False # 当 需要 跳过 字符串
+                i += 1
+                j -= 1 
+            return True # 当 需要 跳过 字符串
+
+        low, high = 0, len(s) - 1
+        while low < high: # 😐 while 循环
+            if s[low] == s[high]: 
+                low += 1
+                high -= 1
+            else:
+                '''
+                删除c字符
+                '''
+                
+                return checkPalindrome(low + 1, high) or checkPalindrome(low, high - 1)
+        return True # 当不需要 跳过 字符串
+
+```
+
 
 
 
@@ -6312,7 +6482,27 @@ class Solution(object):
         return res
 ```
 
+##  218. <a name='ConvertaNumbertoHexadecimal'></a>405 【位运算😜】Convert a Number to Hexadecimal
 
+[哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
+
+```py
+0xffffffff = 1111 1111 1111 1111 1111 1111 1111 1111 # (8个F的二进制形式, 一个F占4个字节 )  # 2 ^ 32 - 1
+
+class Solution:
+    def toHex(self, num):
+        num = num & 0xffffffff 
+        res = ""
+        lib = "0123456789abcdef"
+        if num == 0: return "0"
+        while num: # 😐 while 循环
+            '''
+            余加除
+            '''
+            res = lib[num % 16] + res # 一定要加在右边
+            num //= 16
+        return res
+```
 
 ##  191. <a name='ExcelSheetColumnNumber'></a>171. Excel Sheet Column Number
 
@@ -9647,6 +9837,56 @@ class Solution:
             return 0
 ```
 
+##  222. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+
+        # ----------情况一：没有余数----------
+        if numerator % denominator == 0:
+            return str(numerator // denominator)
+
+        # -----------情况二：有余数-----------
+        s = []
+        # ----------------得到负数----------------
+        if (numerator < 0) != (denominator < 0):
+            s.append('-')
+        # ----------------得到负数----------------
+
+
+        # 整数部分
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+        integerPart = numerator // denominator
+        s.append(str(integerPart))
+        s.append('.')
+
+        # 小数部分
+        indexMap = {}
+        remainder = numerator % denominator
+
+        while remainder and remainder not in indexMap: # 😐😐😐 while 循环
+            indexMap[remainder] = len(s) 
+            remainder *= 10
+            '''
+            余加除
+            '''
+            s.append(str(remainder // denominator))
+            remainder %= denominator
+
+        if remainder:  # 有循环节，跳出循环时，remainde 不是 
+            insertIndex = indexMap[remainder]
+            s.insert(insertIndex, '(') #左侧插入
+            s.append(')')
+
+        return ''.join(s)
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+```
+
 
 
 ##  51. <a name='MaximumDepthofBinary'></a>104-Maximum Depth of Binary
@@ -9902,6 +10142,78 @@ class Solution(object):
 ```
 
 
+##  237. <a name='-1'></a>257-二叉树的所有路径
+
+[哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
+
+
+```py
+输入：root = [1,2,3,null,5]
+输出：["1->2->5","1->3"]
+
+class Solution:
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        # 结束条件：
+        if not root: return []
+        if not root.left and not root.right: return [str(root.val)]
+        paths = []
+        if root.left:
+            # 预先知道 subtree 的答案
+            for pt in self.binaryTreePaths(root.left):
+                paths.append(str(root.val) + '->' + pt)
+        if root.right:
+            # 预先知道 subtree 的答案
+            for pt in self.binaryTreePaths(root.right):
+                paths.append(str(root.val) + '->' + pt)
+        return paths  
+        
+
+```
+
+```scala
+
+
+package lc0257 {
+
+  import scala.collection.mutable.ArrayBuffer
+
+  object Solution {
+    def binaryTreePaths(root: TreeNode): List[String] = {
+      val tmp = ArrayBuffer[Int]()
+      val ret =ArrayBuffer[ArrayBuffer[Int]]()
+      helper(root, tmp, ret)
+      ret.toList.map({
+        x=>x.mkString("->")
+      })
+    }
+
+    def helper(node:TreeNode,tmp:ArrayBuffer[Int],ret:ArrayBuffer[ArrayBuffer[Int]]): Unit = {
+      if (node==null) {
+        return
+      }
+
+      tmp += node.value
+
+      if (node.left == null && node.right==null) {
+          ret += tmp.clone()
+      } else {
+        helper(node.left, tmp, ret)
+        helper(node.right, tmp, ret)
+      }
+      tmp.remove(tmp.length-1)
+    }
+  }
+
+  class Test extends BaseExtension {
+    def init {
+      val t1 = Tree.build(IndexedSeq("1","2 3","5 N N N"))
+      println(Solution.binaryTreePaths(t1))
+    }
+    val name = "257 binary tree path"
+  }
+}
+
+```
 
 ##  52. <a name='-1'></a>76-【滑动窗口🔹】最小覆盖子串
 
@@ -10329,12 +10641,12 @@ class Solution:
             xor ^= num
         return xor
 
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        xor = 0
-        for i, num in enumerate(nums):
-            xor ^= i ^ num
-        return xor ^ len(nums) # 注意这里
+# class Solution:
+#     def missingNumber(self, nums: List[int]) -> int:
+#         xor = 0
+#         for i, num in enumerate(nums):
+#             xor ^= i ^ num
+#         return xor ^ len(nums) # 注意这里
 ```
 
 
@@ -10348,6 +10660,117 @@ object Solution {
             idealSum -= num
         }
         idealSum
+    }
+}
+```
+
+##  240. <a name='SingleNumberII'></a>137 【位运算😜】Single Number II
+
+[小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
+
+方法二：依次确定每一个二进制位
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ro27dupbn40.webp)
+
+```py
+细节：
+
+需要注意的是，如果使用的语言对「有符号整数类型」和「无符号整数类型」没有区分，
+
+那么可能会得到错误的答案。
+
+这是因为「有符号整数类型」（即 int 类型）的第 31 个二进制位（即最高位）是补码意义下的符号位，对应着 -2^{31}
+
+而「无符号整数类型」由于没有符号，第 31 个二进制位对应着 2^{31}
+
+因此在某些语言（例如 Python ）中需要对最高位进行特殊判断。
+
+时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
+
+空间复杂度：O(1)
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ans = 0
+        for i in range(32):
+            total = sum((num >> i) & 1 for num in nums)
+            if total % 3:
+                # Python 这里对于最高位需要特殊判断
+                if i == 31:
+                    ans -= (1 << i)
+                else:
+                    ans |= (1 << i)
+        return ans
+
+给你一个整数数组 nums ，除某个元素仅出现 `一次` 外，其余每个元素都恰出现 `三次` 。请你找出并返回那个只出现了一次的元素。
+输入：nums = [0,1,0,1,0,1,99]
+输出：99
+```
+
+##  250. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
+
+[哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1QK411J7dN?spm_id_from=333.999.0.0)
+
+难点在于只出现一次的数字不止一个，
+
+但是刚好有且只有两个
+
+```py
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        freq = Counter(nums)
+        return [num for num, occ in freq.items() if occ == 1]
+
+```
+
+```py
+
+时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+
+空间复杂度：O(1)。
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        xorsum = 0
+        # 先全部异或一次, 得到的结果 # 找到这两个数的差异
+        for num in nums:
+            xorsum ^= num 
+        # 找到这两个数的差异的最后一位1, 在这个位上一个为0, 一个为1
+        diff = xorsum & (-xorsum) 
+        type1 = type2 = 0
+        for num in nums:
+            # 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
+            if num & diff: 
+                type1 ^= num
+            else:
+                type2 ^= num
+
+        return [type1, type2]
+
+```
+
+##  257. <a name='PowerofTwo'></a>231. 【位运算😜】Power of Two
+
+[小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1rV411r7AL?spm_id_from=333.999.0.0)
+
+```py
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        return n > 0 and (n & (n - 1)) == 0
+```
+
+```scala
+/**
+* time complexity  O(1)
+*/
+object Solution {
+    def isPowerOfTwo(n: Int): Boolean = {
+        n > 0 && (n & (n - 1) ) == 0
     }
 }
 ```
@@ -12561,80 +12984,6 @@ class Solution:
 
 
 
-##  134. <a name='ValidPalindrome'></a>125 【回文🌈】Valid Palindrome
-
-[哈哈哈](https://www.bilibili.com/video/BV1d7411n7cF?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Qb411e7ML?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV17h411Z7ey?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
-
-isalnum() 方法检测字符串是否由`字母`和`数字`组成。
-
-isalpha() 方法检测字符串是否只由`字母`组成。
-
-```py
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        left = 0
-        right = len(s) - 1
-        while left < right: # 😐 while 循环
-            # 易错点：if not s[left].isalnum() 是不对的，因为存在连续多个“非数字的情况”
-            # 易错点：while left < right 不能省略
-            while left < right and not s[left].isalnum(): # 😐😐 while 循环
-                left += 1
-            while left < right and not s[right].isalnum(): # 😐😐 while 循环
-                right -= 1
-            if s[left].lower() == s[right].lower():
-                left += 1
-                right -= 1
-            else:
-                return False
-        return True
-```
-
-python牛逼的一行代码：
-
-```py
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        sgood = "".join(ch.lower() for ch in s if ch.isalnum())
-        return sgood == sgood[::-1]
-
-class Solution:
-    def isPalindrome(self, s):
-        s = ''.join(filter(str.isalnum,s)).lower()
-        return s==s[::-1]
-```
-
-
-```scala
-/**
-* two pointer comparison
-* memo
-*  1. alphanumeric = letters + numerals
-* time complexity: O(2N)
-* space complexity: O(N)
-*/
-
-object Solution1 {
-    def isPalindrome(s: String): Boolean = {
-      val newString = s.filter(_.isLetterOrDigit).toLowerCase
-      isPalindrome(newString, 0, newString.length - 1)
-    }
-    @annotation.tailrec
-    def isPalindrome(s: String, left: Int, right: Int): Boolean = {
-      if (left > right) return true
-      if (s(left) == s(right)) isPalindrome(s, left + 1, right - 1)
-      else false
-    }
-}
-```
-
-
-
 ##  135. <a name='RotateArray'></a>189. Rotate Array 
 
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7Yy?spm_id_from=333.999.0.0)
@@ -12714,59 +13063,6 @@ class Solution:
 ```
 
 
-
-##  143. <a name='Palindrome'></a>9-【回文🌈】Palindrome
-
-[哈哈哈](https://www.bilibili.com/video/BV1hJ411S7kt?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Jb411i7YG?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Af4y1m7kk?spm_id_from=333.999.0.0)
-
-```py
-# class Solution:
-#     def isPalindrome(self, x: int) -> bool:
-#         return True if str(x) == str(x)[::-1] else False
-```
-
-```py
-class Solution:
-    def isPalindrome(self, x: int) -> bool:
-        # -231 <= x <= 231 - 1
-        if x < 0: return False
-
-        bkp = x
-        res = 0
-        while x: # 😐 while 循环
-            '''
-            余加除
-            '''
-            tmp = x % 10
-            res = res * 10 + tmp
-            x //= 10
-
-        return bkp == res
-```
-
-翻转一半字符法：
-
-* 时间复杂度:O(log10(n)), 每次迭代都会除以10
-
-
-
-```scala
-package lc009 {
-  object Solution {
-    def isPalindrome(x: Int): Boolean = {
-      if (x<0) return false
-      if (x==0) return true
-      if (x%10==0) return false
-      val y=x.toString.reverse
-      return y==x.toString
-    }
-  }
-}
-```
 
 ##  254. <a name='386.'></a> 386. 字典序排数
 
@@ -13652,26 +13948,31 @@ class Solution:
     def getMaxMatrix(self, matrix: List[List[int]]) -> List[int]:
         n = len(matrix)
         m = len(matrix[0])
-        sums = [0] * m
-        maxdp = float('-inf')
+        height = [0] * m
+        maxArea = float('-inf')
         res = [0] * 4
         for slowA in range(n):           
-            for fastB in range(m):
-                sums[fastB] = 0
+            height = [0] * m
             for fastA in range(slowA, n):
-                dp = 0
+                acc = 0
                 for fastB in range(m):
-                    sums[fastB] += matrix[fastA][fastB]
+                    '''
+                    由上往下累加
+                    '''
+                    height[fastB] += matrix[fastA][fastB]
                     # print('sums[rightB] =', sums[fastB])
-                    if dp <= 0:
-                        dp = sums[fastB]
+                    if acc <= 0:
+                        acc = height[fastB]
                         slowB = fastB
                         # print('dp <= 0:', slowB)
                     else:
-                        dp += sums[fastB]
+                    '''
+                    由左往右累加
+                    '''
+                        acc += height[fastB]
                     # 把答案存下来
-                    if dp > maxdp:
-                        maxdp = dp
+                    if acc > maxArea:
+                        maxArea = acc
                         res[0] = slowA
                         res[1] = slowB
                         res[2] = fastA
@@ -13689,6 +13990,7 @@ class Solution:
 预期结果: 
 [0,0,2,3]
 
+从第一行开始：
 sums[rightB] = 9
 sums[rightB] = -8
 sums[rightB] = 1
@@ -13706,6 +14008,9 @@ sums[rightB] = -5
 sums[rightB] = 3
 sums[rightB] = 9
 sums[rightB] = -5
+
+
+从第二行开始：
 # 由上往下累加
 sums[rightB] = -3
 sums[rightB] = 7
@@ -13718,6 +14023,9 @@ sums[rightB] = 3
 sums[rightB] = 2
 sums[rightB] = 6
 sums[rightB] = -3
+
+
+从第三行开始：
 # 由上往下累加
 sums[rightB] = 6
 sums[rightB] = -4
@@ -13813,16 +14121,16 @@ class Solution:
     def triangleNumber(self, nums: List[int]) -> int:
         nums.sort()
         res = 0
-        for i in range(len(nums)):
-            p, q = 0, i - 1
-            while p < q: # 😐😐😐 while 循环
-                # 如果满足条件，则 p 到 q 之间的，所有 p ，都满足条件
-                if nums[p] + nums[q] > nums[i]:
-                    res += q - p
-                    q -= 1
-                # 如果不满足条件，p 才需要增大，否则 p 可以一直躺平
+        for i3 in range(len(nums)):
+            i1, i2 = 0, i3 - 1
+            while i1 < i2: # 😐😐😐 while 循环
+                # 如果满足条件，则 i1 到 i2 之间的，所有 i1，都满足条件
+                if nums[i1] + nums[i2] > nums[i3]:
+                    res += i2 - i1
+                    i2 -= 1
+                # 如果不满足条件，i1 才需要增大，否则 i1 可以一直躺平
                 else:
-                    p += 1
+                    i1 += 1
         return res
         # 2,3,4,4
         # 2,3,4,-
@@ -13847,6 +14155,35 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1D5411J72c?spm_id_from=333.999.0.0)
 
 ```py
+输入：path = "/home/"
+输出："/home"
+解释：注意，最后一个目录名后面没有斜杠。 
+
+输入：path = "/../"
+输出："/"
+解释：从根目录向上一级是不可行的，因为根目录是你可以到达的最高级。
+
+输入：path = "/home//foo/"
+输出："/home/foo"
+解释：在规范路径中，多个连续斜杠需要用一个斜杠替换。
+
+输入：path = "/a/./b/../../c/"
+输出："/c"
+
+一个点（.）表示当前目录本身；
+两个点 （..） 表示将目录切换到上一级（指向父目录）
+（例如，'...'）均被视为文件/目录名称。
+任意多个连续的斜杠（即，'//'）都被视为单个斜杠 '/' 。 
+
+始终以斜杠 '/' 开头。
+两个目录名之间必须只有一个斜杠 '/' 。
+最后一个目录名（如果存在）不能 以 '/' 结尾。
+此外，路径仅包含从根目录到目标文件或目录的路径上的目录（即，不含 '.' 或 '..'）。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/simplify-path
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
 class Solution(object):
     def simplifyPath(self, path):
         stack = []
@@ -13873,23 +14210,28 @@ class Solution:
     def convert(self, s: str, numRows: int) -> str:
         if numRows == 1: return s
         dic = defaultdict(str)
+        '''
+        用 index 和 cycleCount 来定位 key
+        '''
         cycleCount = numRows * 2 - 2 # 循环为6
         for index, char in enumerate(s):
-            row = index % cycleCount
-            if row >= numRows: # 如果 >= 4, 则需要反过来
-                row  = cycleCount - row
-            dic[row] += char
-        ans = ""
+            key = index % cycleCount
+            if key >= numRows: # 如果 >= 4, 则需要反过来
+                key  = cycleCount - key
+            dic[key] += char
+
+        res = ""
         for i in range(numRows):
-            ans += dic[i]
-        return ans
-# 输入：s = "PAYPALISHIRING", numRows = 4
-# 输出："PINALSIGYAHRPI"
-# 解释：
-# P0      I6       N12
-# A1   L5 S7   I11 G13
-# Y2 A4   H8 R10
-# P3      I9
+            res += dic[i]
+        return res
+
+输入：s = "PAYPALISHIRING", numRows = 4
+输出："PINALSIGYAHRPI"
+解释：
+P0      I6       N12
+A1   L5 S7   I11 G13
+Y2 A4   H8 R10
+P3      I9
 
 ```
 
@@ -13910,7 +14252,7 @@ class Solution(object):
         idx2 = 0
         idx3 = 0
         idx5 = 0
-        for i in range(n-1):
+        for _ in range(n-1):
             # 根据指针，求得最小值
             nxt = min(res[idx2] * 2, res[idx3] * 3, res[idx5] * 5)
             res.append(nxt)
@@ -13937,46 +14279,149 @@ class Solution(object):
 ##  214. <a name='-1'></a>97. 交错字符串
 
 ```py
+给定三个字符串 s1、s2、s3，请你帮忙验证 s3 是否是由 s1 和 s2 交错 组成的。
+输入：s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+输出：true
+
 class Solution:
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        n1, n2, tar = len(s1), len(s2), len(s3)
+    def isInterleave(self, string1: str, string2: str, stringtar: str) -> bool:
+        n1, n2, tar = len(string1), len(string2), len(stringtar)
         if n1 + n2 != tar: return False
 
         dp = [False] * (n2 + 1)
         dp[0] = True
         for i1 in range(n1 + 1):
             for i2 in range(n2 + 1):
+                '''
+                i1 为 1 ~ n1
+                i2 为 1 ~ n2
+                p 为 0 ~ n1 + n2 - 1
+                每次遍历：
+                i1 固定
+                i2 变化
+                '''
                 p = i1 + i2 - 1
                 if i1: # s1 和 s3 比较
-                    dp[i2] = dp[i2] and s1[i1 - 1] == s3[p]
+                    dp[i2] = dp[i2] and string1[i1 - 1] == stringtar[p]
                 if i2: # s2 和 s3 比较
-                    dp[i2] = dp[i2] or (dp[i2 - 1] and s2[i2 - 1] == s3[p])
+                    dp[i2] = dp[i2] or (dp[i2 - 1] and string2[i2 - 1] == stringtar[p])
         return dp[n2]
 
+"aabcc"
+"dbbca"
+"aadbbcbcac"
+i1 和 i2 分别为:  0 0
+i1 和 i2 分别为:  0 1
+d a [True, False, False, False, False, False]
+i1 和 i2 分别为:  0 2
+b a [True, False, False, False, False, False]
+i1 和 i2 分别为:  0 3
+b d [True, False, False, False, False, False]
+i1 和 i2 分别为:  0 4
+c b [True, False, False, False, False, False]
+i1 和 i2 分别为:  0 5
+a b [True, False, False, False, False, False]
+
+
+i1 和 i2 分别为:  1 0
+a a [True, False, False, False, False, False]
+i1 和 i2 分别为:  1 1
+a a [True, False, False, False, False, False]
+d a [True, False, False, False, False, False]
+i1 和 i2 分别为:  1 2
+a d [True, False, False, False, False, False]
+b d [True, False, False, False, False, False]
+i1 和 i2 分别为:  1 3
+a b [True, False, False, False, False, False]
+b b [True, False, False, False, False, False]
+i1 和 i2 分别为:  1 4
+a b [True, False, False, False, False, False]
+c b [True, False, False, False, False, False]
+i1 和 i2 分别为:  1 5
+a c [True, False, False, False, False, False]
+a c [True, False, False, False, False, False]
+
+
+i1 和 i2 分别为:  2 0
+a a [True, False, False, False, False, False]
+i1 和 i2 分别为:  2 1
+a d [True, False, False, False, False, False]
+d d [True, True, False, False, False, False]
+i1 和 i2 分别为:  2 2
+a b [True, True, False, False, False, False]
+b b [True, True, True, False, False, False]
+i1 和 i2 分别为:  2 3
+a b [True, True, True, False, False, False]
+b b [True, True, True, True, False, False]
+i1 和 i2 分别为:  2 4
+a c [True, True, True, True, False, False]
+c c [True, True, True, True, True, False]
+i1 和 i2 分别为:  2 5
+a b [True, True, True, True, True, False]
+a b [True, True, True, True, True, False]
+
+
+i1 和 i2 分别为:  3 0
+b d [False, True, True, True, True, False]
+i1 和 i2 分别为:  3 1
+b b [False, True, True, True, True, False]
+d b [False, True, True, True, True, False]
+i1 和 i2 分别为:  3 2
+b b [False, True, True, True, True, False]
+b b [False, True, True, True, True, False]
+i1 和 i2 分别为:  3 3
+b c [False, True, True, False, True, False]
+b c [False, True, True, False, True, False]
+i1 和 i2 分别为:  3 4
+b b [False, True, True, False, True, False]
+c b [False, True, True, False, True, False]
+i1 和 i2 分别为:  3 5
+b c [False, True, True, False, True, False]
+a c [False, True, True, False, True, False]
+
+
+i1 和 i2 分别为:  4 0
+c b [False, True, True, False, True, False]
+i1 和 i2 分别为:  4 1
+c b [False, False, True, False, True, False]
+d b [False, False, True, False, True, False]
+i1 和 i2 分别为:  4 2
+c c [False, False, True, False, True, False]
+b c [False, False, True, False, True, False]
+i1 和 i2 分别为:  4 3
+c b [False, False, True, False, True, False]
+b b [False, False, True, True, True, False]
+i1 和 i2 分别为:  4 4
+c c [False, False, True, True, True, False]
+c c [False, False, True, True, True, False]
+i1 和 i2 分别为:  4 5
+c a [False, False, True, True, True, False]
+a a [False, False, True, True, True, True]
+
+
+i1 和 i2 分别为:  5 0
+c b [False, False, True, True, True, True]
+i1 和 i2 分别为:  5 1
+c c [False, False, True, True, True, True]
+d c [False, False, True, True, True, True]
+i1 和 i2 分别为:  5 2
+c b [False, False, False, True, True, True]
+b b [False, False, False, True, True, True]
+i1 和 i2 分别为:  5 3
+c c [False, False, False, True, True, True]
+b c [False, False, False, True, True, True]
+i1 和 i2 分别为:  5 4
+c a [False, False, False, True, False, True]
+c a [False, False, False, True, False, True]
+i1 和 i2 分别为:  5 5
+c c [False, False, False, True, False, True]
+a c [False, False, False, True, False, True]
+
+
 ```
 
 
-##  218. <a name='ConvertaNumbertoHexadecimal'></a>405 【位运算😜】Convert a Number to Hexadecimal
 
-[哈哈哈](https://www.bilibili.com/video/BV1pj411f7ds?spm_id_from=333.999.0.0)
-
-```py
-0xffffffff = 1111 1111 1111 1111 1111 1111 1111 1111 # (8个F的二进制形式, 一个F占4个字节 )  # 2 ^ 32 - 1
-
-class Solution:
-    def toHex(self, num):
-        num = num & 0xffffffff 
-        res = ""
-        lib = "0123456789abcdef"
-        if num == 0: return "0"
-        while num: # 😐 while 循环
-            '''
-            余加除
-            '''
-            res = lib[num % 16] + res # 一定要加在右边
-            num //= 16
-        return res
-```
 
 
 
@@ -13984,55 +14429,6 @@ class Solution:
 
 # 13 day (得分 = 1分) 90
 
-##  222. <a name='FractiontoRecurringDecimal'></a>166. Fraction to Recurring Decimal
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def fractionToDecimal(self, numerator, denominator):
-
-        # ----------情况一：没有余数----------
-        if numerator % denominator == 0:
-            return str(numerator // denominator)
-
-        # -----------情况二：有余数-----------
-        s = []
-        # ----------------得到负数----------------
-        if (numerator < 0) != (denominator < 0):
-            s.append('-')
-        # ----------------得到负数----------------
-
-
-        # 整数部分
-        numerator = abs(numerator)
-        denominator = abs(denominator)
-        integerPart = numerator // denominator
-        s.append(str(integerPart))
-        s.append('.')
-
-        # 小数部分
-        indexMap = {}
-        remainder = numerator % denominator
-
-        while remainder and remainder not in indexMap: # 😐😐😐 while 循环
-            indexMap[remainder] = len(s) 
-            remainder *= 10
-            '''
-            余加除
-            '''
-            s.append(str(remainder // denominator))
-            remainder %= denominator
-
-        if remainder:  # 有循环节，跳出循环时，remainde 不是 
-            insertIndex = indexMap[remainder]
-            s.insert(insertIndex, '(') #左侧插入
-            s.append(')')
-
-        return ''.join(s)
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-```
 
 
 ##  223. <a name='08.12.'></a>面试题 08.12. 八皇后
@@ -14044,19 +14440,25 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1X64y1Y7kG?spm_id_from=333.999.0.0)
 
 ```py
+给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
         Do not return anything, modify matrix in-place instead.
         """
-        tmp = []
+        setrow = set()
+        setcol = set()
+        记录含0的位置
         for i in range(len(matrix)):
             for j in range(len(matrix[0])):
                 if matrix[i][j] == 0:
-                    tmp.append([i,j])
-        for r,c in tmp:
+                    setrow.add(i)
+                    setcol.add(j)
+        将其所在行和列的所有元素都设为 0
+        for r in setrow:
             for j in range(len(matrix[0])):
                 matrix[r][j] = 0
+        for c in setcol:
             for i in range(len(matrix)):
                 matrix[i][c] = 0
         return matrix
@@ -14116,78 +14518,6 @@ object Solution1 {
 
 
 
-##  237. <a name='-1'></a>257-二叉树的所有路径
-
-[哈哈哈](https://www.bilibili.com/video/BV1rf4y1X7He?spm_id_from=333.999.0.0)
-
-
-```py
-输入：root = [1,2,3,null,5]
-输出：["1->2->5","1->3"]
-
-class Solution:
-    def binaryTreePaths(self, root: TreeNode) -> List[str]:
-        # 结束条件：
-        if not root: return []
-        if not root.left and not root.right: return [str(root.val)]
-        paths = []
-        if root.left:
-            # 预先知道 subtree 的答案
-            for pt in self.binaryTreePaths(root.left):
-                paths.append(str(root.val) + '->' + pt)
-        if root.right:
-            # 预先知道 subtree 的答案
-            for pt in self.binaryTreePaths(root.right):
-                paths.append(str(root.val) + '->' + pt)
-        return paths  
-        
-
-```
-
-```scala
-
-
-package lc0257 {
-
-  import scala.collection.mutable.ArrayBuffer
-
-  object Solution {
-    def binaryTreePaths(root: TreeNode): List[String] = {
-      val tmp = ArrayBuffer[Int]()
-      val ret =ArrayBuffer[ArrayBuffer[Int]]()
-      helper(root, tmp, ret)
-      ret.toList.map({
-        x=>x.mkString("->")
-      })
-    }
-
-    def helper(node:TreeNode,tmp:ArrayBuffer[Int],ret:ArrayBuffer[ArrayBuffer[Int]]): Unit = {
-      if (node==null) {
-        return
-      }
-
-      tmp += node.value
-
-      if (node.left == null && node.right==null) {
-          ret += tmp.clone()
-      } else {
-        helper(node.left, tmp, ret)
-        helper(node.right, tmp, ret)
-      }
-      tmp.remove(tmp.length-1)
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      val t1 = Tree.build(IndexedSeq("1","2 3","5 N N N"))
-      println(Solution.binaryTreePaths(t1))
-    }
-    val name = "257 binary tree path"
-  }
-}
-
-```
 
 ##  238. <a name='TopKFrequentWords'></a>692. Top K Frequent Words
 
@@ -14195,46 +14525,6 @@ package lc0257 {
 
 ##  239. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
 
-##  240. <a name='SingleNumberII'></a>137 【位运算😜】Single Number II
-
-[小明](https://www.bilibili.com/video/BV1Hv411B7rd?spm_id_from=333.999.0.0)
-
-方法二：依次确定每一个二进制位
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1ro27dupbn40.webp)
-
-```py
-细节：
-
-需要注意的是，如果使用的语言对「有符号整数类型」和「无符号整数类型」没有区分，
-
-那么可能会得到错误的答案。
-
-这是因为「有符号整数类型」（即 int 类型）的第 31 个二进制位（即最高位）是补码意义下的符号位，对应着 -2^{31}
-
-而「无符号整数类型」由于没有符号，第 31 个二进制位对应着 2^{31}
-
-因此在某些语言（例如 Python ）中需要对最高位进行特殊判断。
-
-时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
-
-空间复杂度：O(1)
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        ans = 0
-        for i in range(32):
-            total = sum((num >> i) & 1 for num in nums)
-            if total % 3:
-                # Python 这里对于最高位需要特殊判断
-                if i == 31:
-                    ans -= (1 << i)
-                else:
-                    ans |= (1 << i)
-        return ans
-
-
-```
 
 
 ##  241. <a name='21.'></a>补充题21. 字符串相减
@@ -14303,50 +14593,7 @@ object Solution {
 ```
 
 
-##  250. <a name='III-1'></a>260-【位运算😜】只出现一次的数字 III
 
-[哈哈哈](https://www.bilibili.com/video/BV15Z4y1H7Sw?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1QK411J7dN?spm_id_from=333.999.0.0)
-
-难点在于只出现一次的数字不止一个，
-
-但是刚好有且只有两个
-
-```py
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> List[int]:
-        freq = Counter(nums)
-        return [num for num, occ in freq.items() if occ == 1]
-
-```
-
-```py
-
-时间复杂度：O(n)，其中 n 是数组 nums 的长度。
-
-空间复杂度：O(1)。
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> List[int]:
-        xorsum = 0
-        # 先全部异或一次, 得到的结果 # 找到这两个数的差异
-        for num in nums:
-            xorsum ^= num 
-        # 找到这两个数的差异的最后一位1, 在这个位上一个为0, 一个为1
-        diff = xorsum & (-xorsum) 
-        type1 = type2 = 0
-        for num in nums:
-            # 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
-            if num & diff: 
-                type1 ^= num
-            else:
-                type2 ^= num
-
-        return [type1, type2]
-
-```
 
 ##  252. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
 
@@ -14420,28 +14667,7 @@ package lc0012_integertoroman {
 
 [小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
 
-##  257. <a name='PowerofTwo'></a>231. 【位运算😜】Power of Two
 
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H73f?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1rV411r7AL?spm_id_from=333.999.0.0)
-
-```py
-class Solution:
-    def isPowerOfTwo(self, n: int) -> bool:
-        return n > 0 and (n & (n - 1)) == 0
-```
-
-```scala
-/**
-* time complexity  O(1)
-*/
-object Solution {
-    def isPowerOfTwo(n: Int): Boolean = {
-        n > 0 && (n & (n - 1) ) == 0
-    }
-}
-```
 
 ##  258. <a name='SquaresofaSortedArray'></a>977 Squares of a Sorted Array
 
@@ -14469,6 +14695,12 @@ object Solution {
 解法一：直接用.index()
 
 ```py
+给你两个字符串 haystack 和 needle ，
+
+请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。
+
+如果不存在，则返回  -1 
+
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         if needle == "":
@@ -14484,8 +14716,8 @@ class Solution:
 ```py
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-        for i in range(len(haystack)-len(needle)+1):
-            if haystack[i:i+len(needle)] == needle:
+        for i in range(len(haystack) - len(needle) + 1):
+            if haystack[i : i + len(needle)] == needle:
                 return i 
         return -1
 ```
@@ -14584,40 +14816,6 @@ object Solution {
 ##  266. <a name='N-1'></a>51. N皇后
 
 ##  267. <a name='24.'></a>补充题24. 双栈排序
-
-##  268. <a name='ValidPalindromeII'></a>680 【回文🌈】Valid Palindrome II
-
-[哈哈哈](https://www.bilibili.com/video/BV167411h7x1?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV17i4y147xn?spm_id_from=333.999.0.0)
-
-```py
-输入: s = "abca"
-输出: true
-解释: 你可以删除c字符。
-
-
-class Solution:
-    def validPalindrome(self, s: str) -> bool:
-        def checkPalindrome(low, high):
-            i, j = low, high
-            while i < j: # 😐 while 循环
-                if s[i] != s[j]: return False # 当 需要 跳过 字符串
-                i += 1
-                j -= 1 
-            return True # 当 需要 跳过 字符串
-
-        low, high = 0, len(s) - 1
-        while low < high: # 😐 while 循环
-            if s[low] == s[high]: 
-                low += 1
-                high -= 1
-            else:
-                return checkPalindrome(low + 1, high) or checkPalindrome(low, high - 1)
-        return True # 当不需要 跳过 字符串
-
-```
-
 
 
 ##  269. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
