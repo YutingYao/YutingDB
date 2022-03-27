@@ -1,3 +1,1210 @@
+## 手写 HQL 第 1 题
+
+```sql
+表结构：uid,subject_id,score
+求：找出所有科目成绩都大于某一学科平均成绩的学生
+数据集如下
+
+
+1001 01 90
+1001 02 90
+1001 03 90
+1002 01 85
+1002 02 85
+1002 03 70
+1003 01 70
+1003 02 70
+1003 03 85
+
+
+1）建表语句
+
+
+create table score(
+ uid string,
+ subject_id string,
+ score int)
+row format delimited fields terminated by '\t'; 
+
+
+2）求出每个学科平均成绩
+
+
+select
+ uid,
+ score,
+ avg(score) over(partition by subject_id) avg_score
+from
+ score;t1
+
+
+3）根据是否大于平均成绩记录 flag，大于则记为 0 否则记为 1
+
+
+select
+ uid,
+ if(score>avg_score,0,1) flag
+from
+ t1;t2
+
+
+4）根据学生 id 进行分组统计 flag 的和，和为 0 则是所有学科都大于平均成绩
+
+
+select
+ uid
+from
+ t2
+group by
+ uid
+having
+ sum(flag)=0;
+
+
+5）最终 SQL
+
+
+select
+ uid
+from
+ (select
+ uid,
+ if(score>avg_score,0,1) flag
+from
+ (select
+ uid,
+ score,
+ avg(score) over(partition by subject_id) avg_score
+from
+ score)t1)t2
+group by
+ uid
+having
+ sum(flag)=0;
+
+```
+
+## 手写 HQL 第 2 题
+
+```sql
+我们有如下的用户访问数据
+
+userId visitDate visitCount
+u01 2017/1/21 5
+u02 2017/1/23 6
+u03 2017/1/22 8
+u04 2017/1/20 3
+u01 2017/1/23 6
+u01 2017/2/21 8
+U02 2017/1/23 6
+U01 2017/2/22 4
+
+要求使用 SQL 统计出每个用户的累积访问次数，如下表所示：
+
+用户 id 月份 小计 累积
+u01 2017-01 11 11
+u01 2017-02 12 23
+u02 2017-01 12 12
+u03 2017-01 8 8
+u04 2017-01 3 3
+
+数据集
+
+u01 2017/1/21 5
+u02 2017/1/23 6
+u03 2017/1/22 8
+u04 2017/1/20 3
+u01 2017/1/23 6
+u01 2017/2/21 8
+u02 2017/1/23 6
+u01 2017/2/22 4
+
+1）创建表
+
+
+create table action
+(userId string,
+visitDate string,
+visitCount int) 
+row format delimited fields terminated by "\t";
+
+
+2）修改数据格式
+
+
+select
+ userId,
+ date_format(regexp_replace(visitDate,'/','-'),'yyyy-MM') mn,
+ visitCount
+from
+ action;t1
+
+
+3）计算每人单月访问量
+
+
+select
+ userId,
+ mn,
+ sum(visitCount) mn_count
+from
+ t1
+group by 
+userId,mn;t2
+
+
+4）按月累计访问量
+
+
+select
+ userId,
+ mn,
+ mn_count,
+ sum(mn_count) over(partition by userId order by mn)
+from t2;
+
+
+5）最终 SQL
+
+
+select
+ userId,
+ mn,
+ mn_count,
+ sum(mn_count) over(partition by userId order by mn)
+from 
+( select
+ userId,
+ mn,
+ sum(visitCount) mn_count
+ from
+ (select
+ userId,
+ date_format(regexp_replace(visitDate,'/','-'),'yyyy-MM') mn,
+ visitCount
+ from
+ action)t1
+group by userId,mn)t2;
+
+```
+
+## 手写 HQL 第 3 题
+
+```sql
+
+有 50W 个京东店铺，每个顾客访客访问任何一个店铺的任何一个商品时都会产生一条访问日志，访问日志存
+储的表名为 Visit，访客的用户 id 为 user_id，被访问的店铺名称为 shop，请统计：
+
+1）每个店铺的 UV（访客数）
+2）每个店铺访问次数 top3 的访客信息。输出店铺名称、访客 id、访问次数
+
+数据集
+
+u1 a
+u2 b
+u1 b
+u1 a
+u3 c
+u4 b
+u1 a
+u2 c
+u5 b
+u4 b
+u6 c
+u2 c
+u1 b
+u2 a
+u2 a
+u3 a
+u5 a
+u5 a
+u5 a
+
+
+1）建表
+
+create table visit(user_id string,shop string) row format delimited fields 
+terminated by '\t';
+
+
+2）每个店铺的 UV（访客数）
+
+
+select shop,count(distinct user_id) from visit group by shop;
+
+
+3）每个店铺访问次数 top3 的访客信息。输出店铺名称、访客 id、访问次数
+
+
+（1）查询每个店铺被每个用户访问次数
+
+
+select shop,user_id,count(*) ct
+from visit
+group by shop,user_id;t1
+
+
+（2）计算每个店铺被用户访问次数排名
+
+
+select shop,user_id,ct,rank() over(partition by shop order by ct) rk
+from t1;t2
+
+
+（3）取每个店铺排名前 3 的
+
+
+select shop,user_id,ct
+from t2
+where rk<=3;
+
+
+（4）最终 SQL
+
+
+select 
+shop,
+user_id,
+ct
+from
+(select 
+shop,
+user_id,
+ct,
+rank() over(partition by shop order by ct) rk
+from 
+(select 
+shop,
+user_id,
+count(*) ct
+from visit
+group by 
+shop,
+user_id)t1
+)t2
+where rk<=3;
+```
+
+## 手写 HQL 第 4 题
+
+```sql
+已知一个表 STG.ORDER，有如下字段:Date，Order_id，User_id，amount。
+
+请给出 sql 进行统计:数据样例:
+
+2017-01-01,10029028,1000003251,33.57。
+
+
+1）给出 2017 年每个月的订单数、用户数、总成交金额。
+2）给出 2017 年 11 月的新客数(指在 11 月才有第一笔订单)
+
+
+建表
+
+
+create table order_tab(dt string,order_id string,user_id string,amount 
+decimal(10,2)) row format delimited fields terminated by '\t';
+
+
+1）给出 2017 年每个月的订单数、用户数、总成交金额。
+
+
+select
+ date_format(dt,'yyyy-MM'),
+ count(order_id),
+ count(distinct user_id),
+ sum(amount)
+from
+ order_tab
+where
+ date_format(dt,'yyyy')='2017'
+group by
+ date_format(dt,'yyyy-MM');
+
+
+2）给出 2017 年 11 月的新客数(指在 11 月才有第一笔订单)
+
+
+select
+ count(user_id)
+from
+ order_tab
+group by
+ user_id
+having
+ date_format(min(dt),'yyyy-MM')='2017-11';
+
+
+手写 HQL 第 5 题
+
+
+有日志如下，请写出代码求得所有用户和活跃用户的总数及平均年龄。
+（活跃用户指连续两天都有访问记录的用户）
+
+日期 用户 年龄
+数据集
+2019-02-11,test_1,23
+2019-02-11,test_2,19
+2019-02-11,test_3,39
+2019-02-11,test_1,23
+2019-02-11,test_3,39
+2019-02-11,test_1,23
+2019-02-12,test_2,19
+2019-02-13,test_1,23
+2019-02-15,test_2,19
+2019-02-16,test_2,19
+
+
+1）建表
+
+
+create table user_age(dt string,user_id string,age int)row format delimited 
+fields terminated by ',';
+
+
+2）按照日期以及用户分组，按照日期排序并给出排名
+
+
+select
+ dt,
+ user_id,
+ min(age) age,
+ rank() over(partition by user_id order by dt) rk
+from
+ user_age
+group by
+ dt,user_id;t1
+
+
+3）计算日期及排名的差值
+
+
+select
+ user_id,
+ age,
+ date_sub(dt,rk) flag
+from
+ t1;t2
+
+
+4）过滤出差值大于等于 2 的，即为连续两天活跃的用户
+
+
+select
+ user_id,
+ min(age) age
+from
+ t2
+group by
+ user_id,flag
+having
+ count(*)>=2;t3
+
+
+5）对数据进行去重处理（一个用户可以在两个不同的时间点连续登录），
+例如：a 用户在 1 月 10 号 1 月 11 号以及 1 月 20 号和 1 月 21 号 4 天登录。
+
+
+select
+ user_id,
+ min(age) age
+from
+ t3
+group by
+ user_id;t4
+
+
+6）计算活跃用户（两天连续有访问）的人数以及平均年龄
+
+
+select
+ count(*) ct,
+ cast(sum(age)/count(*) as decimal(10,2))
+from t4;
+
+
+7）对全量数据集进行按照用户去重
+
+
+select
+ user_id,
+ min(age) age 
+from
+ user_age 
+group by 
+ user_id;t5
+
+
+8）计算所有用户的数量以及平均年龄
+
+
+select
+ count(*) user_count,
+ cast((sum(age)/count(*)) as decimal(10,1)) 
+from 
+ t5;
+
+
+9）将第 5 步以及第 7 步两个数据集进行 union all 操作
+
+
+select
+ 0 user_total_count,
+ 0 user_total_avg_age,
+ count(*) twice_count,
+ cast(sum(age)/count(*) as decimal(10,2)) twice_count_avg_age
+from 
+(
+ select
+ user_id,
+ min(age) age
+from
+ (select
+ user_id,
+ min(age) age
+from
+ (
+ select
+ user_id,
+ age,
+ date_sub(dt,rk) flag
+from
+ (
+ select
+ dt,
+ user_id,
+ min(age) age,
+ rank() over(partition by user_id order by dt) rk
+ from
+ user_age
+ group by
+ dt,user_id
+ )t1
+ )t2
+group by
+ user_id,flag
+having
+ count(*)>=2)t3
+group by
+ user_id 
+)t4
+union all
+select
+ count(*) user_total_count,
+ cast((sum(age)/count(*)) as decimal(10,1)),
+ 0 twice_count,
+ 0 twice_count_avg_age
+from 
+ (
+ select
+ user_id,
+ min(age) age 
+ from 
+ user_age 
+ group by 
+ user_id
+ )t5;t6
+
+
+10）求和并拼接为最终 SQL
+
+
+select 
+ sum(user_total_count),
+ sum(user_total_avg_age),
+ sum(twice_count),
+ sum(twice_count_avg_age)
+from 
+(select
+ 0 user_total_count,
+ 0 user_total_avg_age,
+ count(*) twice_count,
+ cast(sum(age)/count(*) as decimal(10,2)) twice_count_avg_age
+from 
+(
+ select
+ user_id,
+ min(age) age
+from
+ (select
+ user_id,
+ min(age) age
+from
+ (
+ select
+ user_id,
+ age,
+ date_sub(dt,rk) flag
+from
+ (
+ select
+ dt,
+ user_id,
+ min(age) age,
+ rank() over(partition by user_id order by dt) rk
+ from
+ user_age
+ group by
+ dt,user_id
+ )t1
+ )t2
+group by
+ user_id,flag
+having
+ count(*)>=2)t3
+group by
+ user_id 
+)t4
+union all
+select
+ count(*) user_total_count,
+ cast((sum(age)/count(*)) as decimal(10,1)),
+ 0 twice_count,
+ 0 twice_count_avg_age
+from 
+ (
+ select
+ user_id,
+ min(age) age 
+ from 
+ user_age 
+ group by 
+ user_id
+ )t5)t6;
+
+```
+
+## 手写 HQL 第 6 题
+
+```sql
+请用 sql 写出所有用户中在今年 10 月份第一次购买商品的金额，表 ordertable 字段
+（购买用户：userid，金额：money，购买时间：paymenttime(格式：2017-10-01)，订单 id：orderid）
+
+
+1）建表
+
+
+create table ordertable(
+ userid string,
+ money int,
+ paymenttime string,
+ orderid string)
+row format delimited fields terminated by '\t';
+
+
+2）查询出
+
+
+select
+ userid,
+ min(paymenttime) paymenttime
+from
+ ordertable
+where
+ date_format(paymenttime,'yyyy-MM')='2017-10'
+group by
+ userid;t1
+select
+ t1.userid,
+ t1.paymenttime,
+ od.money
+from
+ t1
+join
+ ordertable od
+on
+ t1.userid=od.userid
+ and
+ t1.paymenttime=od.paymenttime;
+select
+ t1.userid,
+ t1.paymenttime,
+ od.money
+from
+ (select
+ userid,
+ min(paymenttime) paymenttime
+from
+ ordertable
+where
+ date_format(paymenttime,'yyyy-MM')='2017-10'
+group by
+ userid)t1
+join
+ ordertable od
+on
+ t1.userid=od.userid
+ and
+ t1.paymenttime=od.paymenttime;
+```
+
+## 手写 HQL 第 7 题
+
+```sql
+有一个线上服务器访问日志格式如下（用 sql 答题）
+
+
+时间 接口 ip 地址
+
+
+2016-11-09 11：22：05 /api/user/login 110.23.5.33
+2016-11-09 11：23：10 /api/user/detail 57.3.2.16
+.....
+2016-11-09 23：59：40 /api/user/login 200.6.5.166
+
+
+求 11 月 9 号下午 14 点（14-15 点），访问 api/user/login 接口的 top10 的 ip 地址
+
+
+数据集
+
+
+2016-11-09 14:22:05 /api/user/login 110.23.5.33
+2016-11-09 11:23:10 /api/user/detail 57.3.2.16
+2016-11-09 14:59:40 /api/user/login 200.6.5.166
+2016-11-09 14:22:05 /api/user/login 110.23.5.34
+2016-11-09 14:22:05 /api/user/login 110.23.5.34
+2016-11-09 14:22:05 /api/user/login 110.23.5.34
+2016-11-09 11:23:10 /api/user/detail 57.3.2.16
+2016-11-09 23:59:40 /api/user/login 200.6.5.166
+2016-11-09 14:22:05 /api/user/login 110.23.5.34
+2016-11-09 11:23:10 /api/user/detail 57.3.2.16
+2016-11-09 23:59:40 /api/user/login 200.6.5.166
+2016-11-09 14:22:05 /api/user/login 110.23.5.35
+2016-11-09 14:23:10 /api/user/detail 57.3.2.16
+2016-11-09 23:59:40 /api/user/login 200.6.5.166
+2016-11-09 14:59:40 /api/user/login 200.6.5.166
+2016-11-09 14:59:40 /api/user/login 200.6.5.166
+
+
+1）建表
+
+
+create table ip(
+ time string,
+ interface string,
+ ip string)
+row format delimited fields terminated by '\t';
+
+
+2）最终 SQL
+
+
+select
+ ip,
+ interface,
+ count(*) ct
+from
+ ip
+where
+ date_format(time,'yyyy-MM-dd HH')>='2016-11-09 14'
+ and 
+ date_format(time,'yyyy-MM-dd HH')<='2016-11-09 15'
+ and
+ interface='/api/user/login'
+group by
+ip,interface
+order by
+ ct desc
+limit 2;t1
+
+```
+
+## 手写 SQL 第 8 题
+
+```sql
+有一个账号表如下，请写出 SQL 语句，查询各自区组的 money 排名前十的账号（分组取前 10）
+
+
+1）建表（MySQL）
+
+
+CREATE TABLE `account`
+( `dist_id` int（11）DEFAULT NULL COMMENT '区组 id',
+ `account` varchar（100）DEFAULT NULL COMMENT '账号',
+ `gold` int（11）DEFAULT 0 COMMENT '金币'）;
+
+
+2）最终 SQL
+
+
+select
+ *
+from
+ account as a
+where
+ (select
+ count(distinct(a1.gold))
+ from
+ account as a1 
+ where
+ a1.dist_id=a.dist_id
+ and
+ a1.gold>a.gold)<3;
+```
+
+## 手写 HQL 第 9 题
+
+```sql
+1）有三张表分别为会员表（member）销售表（sale）退货表（regoods）
+（1）会员表有字段 memberid（会员 id，主键）credits（积分）；
+（2）销售表有字段 memberid（会员 id，外键）购买金额（MNAccount）；
+（3）退货表中有字段 memberid（会员 id，外键）退货金额（RMNAccount）。
+
+
+2）业务说明
+（1）销售表中的销售记录可以是会员购买，也可以是非会员购买。（即销售表中的 memberid 可以为空）；
+（2）销售表中的一个会员可以有多条购买记录；
+（3）退货表中的退货记录可以是会员，也可是非会员；
+（4）一个会员可以有一条或多条退货记录。
+
+
+查询需求：分组查出销售表中所有会员购买金额，同时分组查出退货表中所有会员的退货金额，把会员 id 相同
+的购买金额-退款金额得到的结果更新到表会员表中对应会员的积分字段（credits）
+
+
+数据集
+
+
+sale
+1001 50.3
+1002 56.5
+1003 235
+1001 23.6
+1005 56.2
+ 25.6
+ 33.5
+
+
+regoods
+1001 20.1
+1002 23.6
+1001 10.1
+ 23.5
+ 10.2
+1005 0.8
+
+
+1）建表
+
+
+create table member(memberid string,credits double) row format delimited 
+fields terminated by '\t';
+create table sale(memberid string,MNAccount double) row format delimited 
+fields terminated by '\t';
+create table regoods(memberid string,RMNAccount double) row format delimited 
+fields terminated by '\t';
+
+
+2）最终 SQL
+
+
+insert into table member
+select
+ t1.memberid,
+ MNAccount-RMNAccount
+from
+ (select
+ memberid,
+ sum(MNAccount) MNAccount
+ from
+ sale
+ where
+ memberid!=''
+ group by
+ memberid
+ )t1
+join
+ (select
+ memberid,
+ sum(RMNAccount) RMNAccount
+ from
+ regoods
+ where
+ memberid!=''
+ group by
+ memberid
+ )t2
+on
+ t1.memberid=t2.memberid;
+
+```
+
+## 手写 HQL 第 10 题
+
+```sql
+1.用一条 SQL 语句查询出每门课都大于 80 分的学生姓名
+
+
+name kecheng fenshu
+张三 语文 81
+张三 数学 75
+李四 语文 76
+李四 数学 90
+王五 语文 81
+王五 数学 100
+王五 英语 90
+
+
+A: select distinct name from table where name not in (select distinct name from table where fenshu<=80)
+
+
+B：select name from table group by name having min(fenshu)>80
+
+
+2. 学生表 如下:
+
+
+自动编号 学号 姓名 课程编号 课程名称 分数
+1 2005001 张三 0001 数学 69
+2 2005002 李四 0001 数学 89
+3 2005001 张三 0001 数学 69
+
+
+删除除了自动编号不同, 其他都相同的学生冗余信息
+
+
+A: delete tablename where 自动编号 not in(select min(自动编号) from tablename group by 学号, 姓名, 课程编号, 课程名称, 分数)
+
+
+3.一个叫 team 的表，里面只有一个字段 name,一共有 4 条纪录，分别是 a,b,c,d,对应四个球队，现在四个球队进
+行比赛，用一条 sql 语句显示所有可能的比赛组合.
+
+
+答：select a.name, b.name
+from team a, team b
+where a.name < b.name
+
+
+4.面试题：怎么把这样一个
+
+
+year month amount
+1991 1 1.1
+1991 2 1.2
+1991 3 1.3
+1991 4 1.4
+1992 1 2.1
+1992 2 2.2
+1992 3 2.3
+1992 4 2.4
+
+
+查成这样一个结果
+
+
+year m1 m2 m3 m4
+1991 1.1 1.2 1.3 1.4
+1992 2.1 2.2 2.3 2.4
+
+
+答案
+
+
+select year,
+(select amount from aaa m where month=1 and m.year=aaa.year) as m1,
+(select amount from aaa m where month=2 and m.year=aaa.year) as m2,
+(select amount from aaa m where month=3 and m.year=aaa.year) as m3,
+(select amount from aaa m where month=4 and m.year=aaa.year) as m4
+from aaa group by year
+
+
+
+*********************************************************************
+
+
+
+5.说明：复制表(只复制结构,源表名：a 新表名：b)
+
+SQL: select * into b from a where 1<>1 (where1=1，拷贝表结构和数据内容)
+
+
+ORACLE:
+
+create table b
+As
+Select * from a where 1=2
+
+
+[<>（不等于）(SQL Server Compact)
+比较两个表达式。 当使用此运算符比较非空表达式时，如果左操作数不等于右操作数，则结果为 TRUE。 否则，
+结果为 FALSE。]
+
+
+6. 原表:
+courseid coursename score
+-------------------------------------
+1 java 70
+2 oracle 90
+3 xml 40
+4 jsp 30
+5 servlet 80
+-------------------------------------
+
+
+为了便于阅读,查询此表后的结果显式如下(及格分数为 60):
+courseid coursename score mark
+---------------------------------------------------
+1 java 70 pass
+2 oracle 90 pass
+3 xml 40 fail
+4 jsp 30 fail
+5 servlet 80 pass
+---------------------------------------------------
+
+
+写出此查询语句
+
+
+select courseid, coursename ,score ,if(score>=60, "pass","fail") as mark from course
+
+
+7.表名：购物信息
+
+
+购物人 商品名称 数量
+A 甲 2
+B 乙 4
+C 丙 1
+A 丁 2
+B 丙 5
+……
+
+
+给出所有购入商品为两种或两种以上的购物人记录
+
+
+答：
+
+select * from 购物信息 where 购物人 in (select 购物人 from 购物信息 group by 购物人 having 
+count(*) >= 2);
+
+
+8. info 表
+
+
+date result
+2005-05-09 win
+2005-05-09 lose 
+2005-05-09 lose 
+2005-05-09 lose 
+2005-05-10 win 
+2005-05-10 lose 
+2005-05-10 lose 
+
+
+如果要生成下列结果, 该如何写 sql 语句? 
+ win lose
+2005-05-09 2 2 
+2005-05-10 1 2 
+
+
+答案：
+
+
+(1) 
+
+select date, sum(case when result = "win" then 1 else 0 end) as "win", sum(case when result = "lose" 
+then 1 else 0 end) as "lose" from info group by date; 
+
+
+(2) 
+
+select a.date, a.result as win, b.result as lose 
+ from 
+ (select date, count(result) as result from info where result = "win" group by date) as a 
+ join 
+ (select date, count(result) as result from info where result = "lose" group by date) as b 
+on a.date = b.date;
+
+
+```
+
+## 手写 HQL 第 11 题
+
+```sql
+
+有一个订单表 order。
+
+已知字段有：
+
+order_id(订单 ID), user_id(用户 ID),amount(金额), pay_datetime(付费时间), channel_id(渠道 ID), dt(分区字段)。
+
+
+1. 在 Hive 中创建这个表。
+2. 查询 dt=‘2018-09-01‘里每个渠道的订单数，下单人数（去重），总金额。
+3. 查询 dt=‘2018-09-01‘里每个渠道的金额最大 3 笔订单。
+4. 有一天发现订单数据重复，请分析原因
+
+
+create external table order(
+order_id int,
+user_id int,
+amount double,
+pay_datatime timestamp,
+channel_id int
+)partitioned by(dt string)
+row format delimited fields terminated by '\t';
+select
+count(order_id),
+count(distinct(user_id))
+sum(amount)
+from
+order
+where dt="2019-09-01"
+select
+order_id
+channel_id
+channel_id_amount
+from(
+select
+order_id
+channel_id,
+amount,
+max(amount) over(partition by channel_id)
+min(amount) over(partition by channel_id)
+row_number()
+over(
+partition by channel_id
+order by amount desc
+)rank
+from
+order
+where dt="2019-09-01"
+)t
+where t.rank<4
+
+
+订单属于业务数据，在关系型数据库中不会存在数据重复
+hive 建表时也不会导致数据重复，
+我推测是在数据迁移时，迁移失败导致重复迁移数据冗余了
+
+
+t_order 订单表
+order_id,//订单 id
+item_id, //商品 id
+create_time,//下单时间
+amount//下单金额
+t_item 商品表
+item_id,//商品 id
+item_name,//商品名称
+category//品类
+t_item 商品表
+item_id,//商品 id
+item_name,//名称
+category_1,//一级品类
+category_2,//二级品类
+
+
+1. 最近一个月，销售数量最多的 10 个商品
+
+
+select
+item_id,
+count(order_id)a
+from 
+t_order
+where
+dataediff(create_time,current_date)<=30
+group by 
+item_id
+order by a desc;
+
+
+2. 最近一个月，每个种类里销售数量最多的 10 个商品
+#一个订单对应一个商品 一个商品对应一个品类
+
+
+with(
+select
+order_id,
+item_id,
+item_name,
+category
+from
+t_order
+join
+t_item
+on
+t_order.item_id = t_item.item_id
+) t
+select
+order_id,
+item_id,
+item_name,
+category,
+count(item_id)over(
+partition by category
+)item_count
+from
+t
+group by category
+order by item_count desc
+limit 10;
+
+
+计算平台的每一个用户发过多少日记、获得多少点赞数
+
+
+with t3 as(
+select * from 
+t1 left join t2 
+on t1.log_id = t2.log_id
+)
+select
+uid,//用户 Id
+count(log_id)over(partition by uid)log_cnt,//
+count(like_uid)over(partition by log_id)liked_cnt//获得多少点赞数
+from
+t3
+
+
+处理产品版本号
+
+
+1、需求 A:找出 T1 表中最大的版本号
+思路：列转行 切割版本号 一列变三列
+主版本号 子版本号 阶段版本号
+
+
+
+with t2 as(//转换
+select
+v_id v1,//版本号
+v_id v2 //主
+from
+t1
+lateral view explode(v2) tmp as v2
+)
+select //第一层 找出第一个
+v1,
+max(v2)
+from 
+t2
+
+1、需求 A:找出 T1 表中最大的版本号
+
+
+select
+v_id,//版本号
+max(split(v_id,".")[0]) v1,//主版本不会为空
+max(if(split(v_id,".")[1]="",0,split(v_id,".")[1]))v2,//取出子版本并判断是否为空，并给默认值
+max(if(split(v_id,".")[2]="",0,split(v_id,".")[2]))v3//取出阶段版本并判断是否为空，并给默认
+值
+from
+t1
+
+
+2、需求 B：计算出如下格式的所有版本号排序，要求对于相同的版本号，顺序号并列：
+
+
+select
+v_id,
+rank() over(partition by v_id order by v_id)seq
+from
+t1
+```
+
 
 ## SQL1 各个视频的平均完播率
 

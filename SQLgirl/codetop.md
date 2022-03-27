@@ -290,6 +290,49 @@
 
 [Hive SQL面试题(附答案)](https://mp.weixin.qq.com/s/4C4wQdaLdtLuTADi16dEsA)
 
+
+## 冒泡排序
+
+```py
+def bubble_sort(lst):
+    n = len(lst)
+    for i in range(n):
+        for j in range(1, n - i):
+            if lst[j - 1] > lst[j]:
+                lst[j - 1], lst[j] = lst[j], lst[j - 1]
+    return lst
+def bubbleSort(arr):
+    for i in range(1, len(arr)):
+        for j in range(0, len(arr)-i):
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+
+使冒泡排序的平均和最坏情况下的时间复杂度为 O（n 2）
+def bubble_sort(array):
+     n = len(array)
+ 
+     for i in range(n):
+         # 创建一个标识，当没有可以排序的时候就使函数终止。
+         already_sorted = True
+ 
+         # 从头开始逐个比较相邻元素，每一次循环的总次数减1，
+         # 因为每次循环一次，最后面元素的排序就确定一个。
+         for j in range(n - i - 1):
+             if array[j] > array[j + 1]:
+                 # 如果此时的元素大于相邻后一个元素，那么交换。
+                 array[j], array[j + 1] = array[j + 1], array[j]
+ 
+                 # 如果有了交换，设置already_sorted标志为False算法不会提前停止
+                 already_sorted = False
+ 
+         # 如果最后一轮没有交换，数据已经排序完毕，退出
+         if already_sorted:
+             break
+ 
+     return array
+```
+
 # 1 day (得分 = 30分) 30
 
 ##  1. <a name='ReverseLinkedList'></a>206. 反转链表Reverse Linked List
