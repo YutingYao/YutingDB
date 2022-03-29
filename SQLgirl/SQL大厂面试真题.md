@@ -1,4 +1,7 @@
-## 手写 HQL 第 1 题
+
+[Hive SQL面试题(附答案)](https://mp.weixin.qq.com/s/4C4wQdaLdtLuTADi16dEsA)
+
+## 手写 HQL 第 1 题 +
 
 ```sql
 表结构：uid,subject_id,score
@@ -15,6 +18,18 @@
 1003 01 70
 1003 02 70
 1003 03 85
+
+我的答案
+select
+    uid
+from(
+    select 
+        uid,
+        score
+        avg(score) over(partition by subject_id) avg_score
+    from score
+    ) t1
+group by uid having sum(if(score>avg_score,1,0)) = 3
 
 
 1）建表语句
@@ -43,7 +58,7 @@ from
 
 select
  uid,
- if(score>avg_score,0,1) flag
+ if(score > avg_score, 0, 1) flag
 from
  t1;t2
 
@@ -58,33 +73,32 @@ from
 group by
  uid
 having
- sum(flag)=0;
+ sum(flag) = 0;
 
 
 5）最终 SQL
 
 
 select
- uid
-from
- (select
- uid,
- if(score>avg_score,0,1) flag
-from
- (select
- uid,
- score,
- avg(score) over(partition by subject_id) avg_score
-from
- score)t1)t2
-group by
- uid
-having
- sum(flag)=0;
+    uid
+from(
+    select
+        uid,
+        if(score>avg_score,0,1) flag
+    from(  
+        select
+            uid,
+            score,
+            avg(score) over(partition by subject_id) avg_score
+        from
+            score
+        )t1
+    )t2
+group by uid having sum(flag)=0;
 
 ```
 
-## 手写 HQL 第 2 题
+## 手写 HQL 第 2 题 +
 
 ```sql
 我们有如下的用户访问数据
@@ -119,13 +133,35 @@ u01 2017/2/21 8
 u02 2017/1/23 6
 u01 2017/2/22 4
 
+select
+    userId
+    mn
+    cnt
+    sum(cnt) over(partition by userId order by mn)
+from(
+    select
+        userId
+        mn
+        sum(visitCount) cnt
+    from(
+        select
+            userId,
+            date_format(regexp_replace(visitDate,'/','-'), 'yyyy-MM') mn
+            visitCount
+        from
+            action
+        )t1
+    group by userId, mn
+    )t2
+
+
 1）创建表
 
 
 create table action
-(userId string,
-visitDate string,
-visitCount int) 
+    (userId string,
+    visitDate string,
+    visitCount int) 
 row format delimited fields terminated by "\t";
 
 
@@ -133,62 +169,63 @@ row format delimited fields terminated by "\t";
 
 
 select
- userId,
- date_format(regexp_replace(visitDate,'/','-'),'yyyy-MM') mn,
- visitCount
+    userId,
+    date_format(regexp_replace(visitDate, '/', '-'), 'yyyy-MM') mn,
+    visitCount
 from
- action;t1
+    action; t1
 
 
 3）计算每人单月访问量
 
 
 select
- userId,
- mn,
- sum(visitCount) mn_count
+    userId,
+    mn,
+    sum(visitCount) mn_count
 from
- t1
+    t1
 group by 
-userId,mn;t2
+    userId, mn; t2
 
 
 4）按月累计访问量
 
 
 select
- userId,
- mn,
- mn_count,
- sum(mn_count) over(partition by userId order by mn)
-from t2;
+    userId,
+    mn,
+    mn_count,
+    sum(mn_count) over(partition by userId order by mn)
+from 
+    t2;
 
 
 5）最终 SQL
 
 
 select
- userId,
- mn,
- mn_count,
- sum(mn_count) over(partition by userId order by mn)
+    userId,
+    mn,
+    mn_count,
+    sum(mn_count) over(partition by userId order by mn)
 from 
-( select
- userId,
- mn,
- sum(visitCount) mn_count
- from
- (select
- userId,
- date_format(regexp_replace(visitDate,'/','-'),'yyyy-MM') mn,
- visitCount
- from
- action)t1
-group by userId,mn)t2;
+    ( select
+        userId,
+        mn,
+        sum(visitCount) mn_count
+    from
+        (select
+            userId,
+            date_format(regexp_replace(visitDate,'/','-'),'yyyy-MM') mn,
+            visitCount
+        from
+        action)t1
+    group by userId,mn)t2;
 
 ```
 
-## 手写 HQL 第 3 题
+## 手写 HQL 第 3 题 + 
 
 ```sql
 
@@ -220,17 +257,42 @@ u5 a
 u5 a
 u5 a
 
+select
+    shop,
+    user_id,
+    cnt
+from(
+    select
+        shop,
+        user_id,
+        cnt,
+        rank() over(partition by shop order by cnt) rnk
+    from(
+        select
+            user_id
+            shop
+            count(user_id) cnt
+        from visit
+        group by shop, user_id
+        )t1
+    )t2
+where rnk <= 3
 
 1）建表
 
-create table visit(user_id string,shop string) row format delimited fields 
-terminated by '\t';
+create table visit(
+    user_id string,
+    shop string) 
+row format delimited fields terminated by '\t';
 
 
 2）每个店铺的 UV（访客数）
 
 
-select shop,count(distinct user_id) from visit group by shop;
+select 
+    shop,
+    count(distinct user_id) 
+from visit group by shop;
 
 
 3）每个店铺访问次数 top3 的访客信息。输出店铺名称、访客 id、访问次数
@@ -239,7 +301,10 @@ select shop,count(distinct user_id) from visit group by shop;
 （1）查询每个店铺被每个用户访问次数
 
 
-select shop,user_id,count(*) ct
+select 
+    shop,
+    user_id,
+    count(*) ct
 from visit
 group by shop,user_id;t1
 
@@ -247,14 +312,21 @@ group by shop,user_id;t1
 （2）计算每个店铺被用户访问次数排名
 
 
-select shop,user_id,ct,rank() over(partition by shop order by ct) rk
+select 
+    shop,
+    user_id,
+    ct,
+    rank() over(partition by shop order by ct) rk
 from t1;t2
 
 
 （3）取每个店铺排名前 3 的
 
 
-select shop,user_id,ct
+select 
+    shop,
+    user_id,
+    ct
 from t2
 where rk<=3;
 
@@ -263,26 +335,26 @@ where rk<=3;
 
 
 select 
-shop,
-user_id,
-ct
+    shop,
+    user_id,
+    ct
 from
-(select 
-shop,
-user_id,
-ct,
-rank() over(partition by shop order by ct) rk
-from 
-(select 
-shop,
-user_id,
-count(*) ct
-from visit
-group by 
-shop,
-user_id)t1
-)t2
-where rk<=3;
+    (select 
+        shop,
+        user_id,
+        ct,
+        rank() over(partition by shop order by ct) rk
+    from 
+        (select 
+            shop,
+            user_id,
+            count(*) ct
+        from visit
+        group by 
+            shop,
+            user_id)t1
+    )t2
+where rk <= 3;
 ```
 
 ## 手写 HQL 第 4 题
@@ -302,37 +374,41 @@ where rk<=3;
 建表
 
 
-create table order_tab(dt string,order_id string,user_id string,amount 
-decimal(10,2)) row format delimited fields terminated by '\t';
+create table order_tab(
+    dt string,
+    order_id string,
+    user_id string,
+    amount decimal(10,2)) 
+row format delimited fields terminated by '\t';
 
 
 1）给出 2017 年每个月的订单数、用户数、总成交金额。
 
 
 select
- date_format(dt,'yyyy-MM'),
- count(order_id),
- count(distinct user_id),
- sum(amount)
+    date_format(dt,'yyyy-MM'),
+    count(order_id),
+    count(distinct user_id),
+    sum(amount)
 from
- order_tab
+    order_tab
 where
- date_format(dt,'yyyy')='2017'
+    date_format(dt,'yyyy') = '2017'
 group by
- date_format(dt,'yyyy-MM');
+    date_format(dt,'yyyy-MM');
 
 
 2）给出 2017 年 11 月的新客数(指在 11 月才有第一笔订单)
 
 
 select
- count(user_id)
+    count(user_id)
 from
- order_tab
+    order_tab
 group by
- user_id
+    user_id
 having
- date_format(min(dt),'yyyy-MM')='2017-11';
+    date_format(min(dt),'yyyy-MM')='2017-11';
 
 
 手写 HQL 第 5 题
@@ -358,8 +434,8 @@ having
 1）建表
 
 
-create table user_age(dt string,user_id string,age int)row format delimited 
-fields terminated by ',';
+create table user_age(dt string,user_id string,age int)
+row format delimited fields terminated by ',';
 
 
 2）按照日期以及用户分组，按照日期排序并给出排名
@@ -788,12 +864,12 @@ regoods
 1）建表
 
 
-create table member(memberid string,credits double) row format delimited 
-fields terminated by '\t';
-create table sale(memberid string,MNAccount double) row format delimited 
-fields terminated by '\t';
-create table regoods(memberid string,RMNAccount double) row format delimited 
-fields terminated by '\t';
+create table member(memberid string,credits double) 
+row format delimited fields terminated by '\t';
+create table sale(memberid string,MNAccount double) 
+row format delimited fields terminated by '\t';
+create table regoods(memberid string,RMNAccount double) 
+row format delimited fields terminated by '\t';
 
 
 2）最终 SQL
