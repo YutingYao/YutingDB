@@ -14,22 +14,26 @@ create database if not exists db_hive;
 create database db_hive2 location '/db_hive2.db';
 
 # 4.2 查询数据库
-# 1.显示数据库
+
+显示数据库
 show databases;
+
 # 2.查看数据库详情
 desc database extended db_hive;
 # 3.切换当前数据库
 use db_hive;
 
-# 4.3修改数据库
+修改数据库
+
 # 用户可以使用ALTER DATABASE命令为某个数据库的DBPROPERTIES设置键-值对属性值，来描述这个数据库的属性信息。
 # 数据库的其他元数据信息都是不可更改的，包括数据库名和数据库所在的目录位置。
 alter database db_hive set dbproperties('createtime'='20170830');
 
 # 4.4 删除数据库
-# 1.删除空数据库
+
+1. 删除空数据库
 drop database db_hive2;
-# 2.删除不空数据库
+2. 删除不空数据库
 drop database db_hive cascade;
 
 # 4.5创建表
@@ -82,8 +86,10 @@ select * from dept_partition where month='201709'
               select * from dept_partition where month='201707';
 # 增加分区
 alter table dept_partition add partition(month='201706') ;
-# 删除分区
+
+删除分区
 alter table dept_partition drop partition (month='201704');
+
 # 创建二级分区
 create table dept_partition2(
                deptno int, dname string, loc string
@@ -97,7 +103,9 @@ select * from dept_partition2 where month='201709' and day='13';
 # 在现有数据情况下添加分区（3总方式）
 # （1）创建文件夹后load到分区
 dfs -mkdir -p /user/hive/warehouse/dept_partition2/month=201709/day=10;
+
 load data local inpath '/opt/module/datas/dept.txt' into table dept_partition2 partition(month='201709',day='10');
+
 # （2）上传数据后添加分区
 dfs -mkdir -p /user/hive/warehouse/dept_partition2/month=201709/day=11;
 alter table dept_partition2 add partition(month='201709', day='11');
@@ -111,7 +119,9 @@ alter table dept_partition add columns(deptdesc string);
 alter table dept_partition change column deptdesc desc int;
 # 替换列
 alter table dept_partition replace columns(deptno string, dname string, loc string);
-# 删除表 
+
+
+删除表 
 drop table dept_partition;
 
 
@@ -122,11 +132,15 @@ drop table dept_partition;
 ```sql
 # 第五章_DML数据操作
 # 5.1 数据导入
+
 # 5.1.1 数据装载（load)
+
 load data [local] inpath '/opt/module/datas/student.txt' 
 [overwrite] into table student [partition (partcol1=val1,…)];
 # 有local表示从本地加载数据，否则从hdfs中加载
+
 # 有overwrite表示覆写，如无则追加
+
 load data local inpath '/opt/module/datas/student.txt' into table default.student;
 
 # 5.1.2 插入数据（Insert）
@@ -168,7 +182,7 @@ bin/hive -e 'select * from default.student;' > /opt/module/datas/export/student4
 # 5.2.4 Export导出到HDFS
 export table default.student to '/user/hive/warehouse/export/student';
 
-# 5.3 清除表数据
+清除表数据
 truncate table student;
 
 ```
@@ -445,17 +459,18 @@ insert overwrite local directory '/opt/module/datas/distribute-result'
 select * from emp cluster by deptno;
 select * from emp distribute by deptno sort by deptno;
 
-# 6.6 分桶及抽样查询
-# 6.6.1 分桶表数据存储
-# 分区针对的是数据的存储路径；分桶针对的是数据文件。
-set hive.enforce.bucketing=true;
-set mapreduce.job.reduces=-1;
+分桶及抽样查询
+
+分区针对的是数据的存储路径；分桶针对的是数据文件。
+set hive.enforce.bucketing = true;
+set mapreduce.job.reduces = -1;
 
 insert into table stu_buck
 select id, name from stu;
 
-# 6.6.2 分桶抽样查询
+分桶抽样查询
 select * from stu_buck tablesample(bucket 1 out of 4 on id);
+
 ```
 
 ## 函数
@@ -463,7 +478,9 @@ select * from stu_buck tablesample(bucket 1 out of 4 on id);
 ```sql
 # 第七章_函数
 # 7.1 系统自带函数
+
 show functions;
+
 desc function extended upper;
 
 # 7.2 自定义函数
