@@ -101,7 +101,7 @@ tbDateDS.show()
 只显示20行
 ```
 
-###  3.2. <a name='-1'></a>注册表
+###  3.2. <a name='-1'></a>注册表 
 
 ```sql
 tbStockDS.createOrReplaceTempView("tbStock")
