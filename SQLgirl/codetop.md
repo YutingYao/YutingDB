@@ -2151,6 +2151,61 @@ class Solution:
 
 https://leetcode-cn.com/problems/sort-an-array/submissions/
 
+希尔排序：
+
+```py
+设定一个初始增量, 对原始数列进行分组:
+
+对每一个分组进行排序
+
+设置一个更小的增量
+
+对第一轮排序后的数列再按增量重新分组
+
+对每一个分组进行排序
+
+以此,直到增量为1, 再排序
+
+结果为我们想要的结果
+
+对分组进行排序用的是插入排序算法.因此,希尔排序是插入排序的一种优化的算法
+
+def shellSort(arr): 
+  
+    n = len(arr)
+    gap = int(n/2)
+  
+    while gap > 0: 
+  
+        for i in range(gap,n): 
+  
+            temp = arr[i] 
+            j = i 
+            while  j >= gap and arr[j-gap] >temp: 
+                arr[j] = arr[j-gap] 
+                j -= gap 
+            arr[j] = temp 
+        gap = int(gap/2)
+```
+
+选择排序：
+
+选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
+
+```py
+A = [64, 25, 12, 22, 11] 
+  
+for i in range(len(A)): 
+      
+   
+    min_idx = i 
+    for j in range(i+1, len(A)): 
+        if A[min_idx] > A[j]: 
+            min_idx = j 
+                
+    A[i], A[min_idx] = A[min_idx], A[i] 
+```
+
 冒泡排序：
 
 ```py

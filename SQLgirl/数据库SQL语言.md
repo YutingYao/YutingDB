@@ -287,7 +287,7 @@ select id,name,lead(name,1,0) over ( order by id )  from kkk;
          4 4name                5name                             
          5 5name                0         
 ```
-
+ 
 ```sql
  select id,name,lead(name,1,'alsdfjlasdjfsaf') over ( order by id )  from kkk; 
 ```
@@ -356,7 +356,10 @@ FROM(
     FROM (
         SELECT *, DATEDIFF(login_date,lag1)-1 as dg, @row := 1 
         from (
-            SELECT user_id, login_date, lag(login_date) over (PARTITION by user_id ORDER BY login_date) lag1 FROM login_detail
+            SELECT 
+                    user_id, login_date, 
+                    lag(login_date) over (PARTITION by user_id ORDER BY login_date) lag1 
+            FROM login_detail
             ) t1 
         )t2
     GROUP BY user_id,login_date

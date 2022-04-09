@@ -4,9 +4,19 @@
 ## 手写 HQL 第 1 题 +
 
 ```sql
+- avg(score) group by subject_id
+- 由于每一行都要比较 score 和 avg_score, 改写成
+- avg(score) over(partition by subject_id)
+
+- 过滤 sum(if(score>avg_score,1,0)) = 3
+- 放在 group by uid having 最简便
+```
+
+```sql
 表结构：uid,subject_id,score
 求：找出所有科目成绩都大于某一学科平均成绩的学生
 数据集如下
+
 
 
 1001 01 90
@@ -31,74 +41,17 @@ from(
     ) t1
 group by uid having sum(if(score>avg_score,1,0)) = 3
 
-
-1）建表语句
-
-
-create table score(
- uid string,
- subject_id string,
- score int)
-row format delimited fields terminated by '\t'; 
-
-
-2）求出每个学科平均成绩
-
-
-select
- uid,
- score,
- avg(score) over(partition by subject_id) avg_score
-from
- score;t1
-
-
-3）根据是否大于平均成绩记录 flag，大于则记为 0 否则记为 1
-
-
-select
- uid,
- if(score > avg_score, 0, 1) flag
-from
- t1;t2
-
-
-4）根据学生 id 进行分组统计 flag 的和，和为 0 则是所有学科都大于平均成绩
-
-
-select
- uid
-from
- t2
-group by
- uid
-having
- sum(flag) = 0;
-
-
-5）最终 SQL
-
-
-select
-    uid
-from(
-    select
-        uid,
-        if(score>avg_score,0,1) flag
-    from(  
-        select
-            uid,
-            score,
-            avg(score) over(partition by subject_id) avg_score
-        from
-            score
-        )t1
-    )t2
-group by uid having sum(flag)=0;
-
 ```
 
 ## 手写 HQL 第 2 题 +
+
+```sql
+- visitDate 格式转换 regexp_replace(visitDate,'/','-')
+- visitDate 格式转换 date_format(visitDate,'yyyy-MM')
+- order by userId, visitDate
+- 小计 用 sum() group by userId, visitDate
+- 累积 用 sum() over(partition by userId order by visitDate)
+```
 
 ```sql
 我们有如下的用户访问数据
@@ -114,6 +67,8 @@ U02 2017/1/23 6
 U01 2017/2/22 4
 
 要求使用 SQL 统计出每个用户的累积访问次数，如下表所示：
+
+
 
 用户 id 月份 小计 累积
 u01 2017-01 11 11
@@ -2149,7 +2104,7 @@ WHERE DATE_FORMAT(event_time,'%Y-%m')>='2021-10' AND shop_id='901'
 GROUP BY product_id
 HAVING TRIM(TRAILING '%' FROM profit_rate) > 24.9;
 ```
-
+ 
 ## SQL16 零食类商品中复购率top3高的商品
 
 https://www.nowcoder.com/practice/9c175775e7ad4d9da41602d588c5caf3?tpId=268&tags=&title=&difficulty=0&judgeStatus=0&rp=0
