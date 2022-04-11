@@ -318,6 +318,10 @@ class Solution:
             cur = head
             head = headnxt
         return cur
+
+时间复杂度：O(n)，其中 n 是链表的节点数量。需要对每个节点进行更新指针的操作。
+
+空间复杂度：O(n)，其中 n 是链表的节点数量。空间复杂度主要取决于递归调用的栈空间。
 ```
 
 ```scala
@@ -374,6 +378,9 @@ class Solution:
             head = cur # 易错点: 这一步不能漏
         return head # head 进来，head 返回
 
+时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
+
+空间复杂度：O(1)。
 ```
 
 
@@ -401,6 +408,11 @@ class Solution:
         first.next = self.swapPairs(first.next.next)
         second.next = first
         return second # 易错点：注意，新的头已经变成了second
+
+时间复杂度：O(n)，其中 n 是链表的节点数量。需要对每个节点进行更新指针的操作。
+
+空间复杂度：O(n)，其中 n 是链表的节点数量。空间复杂度主要取决于递归调用的栈空间。
+
 ``` 
 
 ![](https://s3.bmp.ovh/imgs/2022/02/18153c0d0979e358.png)
@@ -424,6 +436,9 @@ class Solution:
             # 指针移动
             pre = pre.next.next
         return dummy.next
+时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
+
+空间复杂度：O(1)。
 ```
 
 ```scala
@@ -509,6 +524,10 @@ class Solution:
             pre.next = second
         
         return dummy.next
+
+时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
+
+空间复杂度：O(1)。
 ```
 
 
@@ -540,7 +559,9 @@ class Solution:
                 cur = cur.next
         cur.next = None # 尾部置空
  
+时间复杂度：O(N)，其中 N 是链表中的节点数。
 
+空间复杂度：O(N)，其中 N 是链表中的节点数。主要为线性表的开销。
 ```
 
 
@@ -595,6 +616,10 @@ class Solution:
         slow.next = slow.next.next
 
         return dummy.next
+
+时间复杂度：O(L)，其中 L 是链表的长度。
+
+空间复杂度：O(1)。
 
 区别与
 
@@ -686,6 +711,10 @@ class Solution:
         res = cur.next
         cur.next = None
         return res
+
+时间复杂度：O(n)，最坏情况下，我们需要遍历该链表两次。
+
+空间复杂度：O(1)，我们只需要常数的空间存储若干变量。
 ```
 
 ##  41. <a name='IIRemoveDuplicatesfromSortedList'></a>82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List
@@ -726,6 +755,10 @@ class Solution:
             else:
                 cur =  cur.next # 要么下一个
         return head
+
+时间复杂度：O(n)，其中 n 是链表的长度。
+
+空间复杂度：O(1)。
 ```
 
 ##  78. <a name='Removeduplicatesfromsortedarray'></a>83-Remove duplicates from sorted array
@@ -783,6 +816,10 @@ class Solution:
                 slow += 1
                 nums[slow] = nums[fast]
         return slow + 1
+
+时间复杂度：O(n)，其中 n 是数组的长度。快指针和慢指针最多各移动 n 次。
+
+空间复杂度：O(1)。只需要使用常数的额外空间。
 ```
 
 ##  168. <a name='StringCompression'></a>443. String Compression
@@ -822,6 +859,10 @@ class Solution:
         return slow
 # 输入：chars = ["a","a","b","b","c","c","c"]
 # 输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
+时间复杂度：O(n)，其中 n 为字符串长度，我们只需要遍历该字符串一次。
+
+空间复杂度：O(1)。我们只需要常数的空间保存若干变量。
+
 ```
 
 
@@ -844,6 +885,11 @@ class Solution(object):
             else:
                 stack.append(char)
         return "".join(stack)
+
+时间复杂度：O(n)，其中 n 是字符串的长度。我们只需要遍历该字符串一次。
+
+空间复杂度：O(n)
+
 ```
 
 ##  173. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
@@ -874,7 +920,8 @@ class Solution:
                 res.append(num)
                 
         return res
-
+时间复杂度： O(n) 
+常量额外空间
 [4, 3, 2, 7, 8, 2, 3, 1]
 [4, 3, 2, -7, 8, 2, 3, 1]   
 [4, 3, -2, -7, 8, 2, 3, 1]    
@@ -900,6 +947,10 @@ class Solution:
             vals.append(cur.val)
             cur = cur.next
         return vals == vals[::-1]
+
+时间复杂度：O(n)
+
+空间复杂度：O(n)
 ```
 
 ```scala
@@ -963,6 +1014,13 @@ class Solution:
 
 dict.setdefault(key, default = None)  -->  有key获取值，否则设置 default，并返回default
 dict.get(key, default = None)  -->  有key获取值，否则返回 default
+
+时间复杂度：O(n)，其中 n 是链表的长度。
+
+对于每个节点，我们至多访问其「后继节点」和「随机指针指向的节点」各一次，均摊每个点至多被访问两次。
+
+空间复杂度：O(n)，其中 n 是链表的长度。为哈希表的空间开销。
+
 ```
 
 ```py
@@ -986,7 +1044,7 @@ dict.get(key, default = None)  -->  有key获取值，否则返回 default
 ```
 
 
-##  230. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea (可跳过)
+##  230. <a name='PopulatingNextRightPointersinEa'></a>117 Populating Next Right Pointers in Ea
 
 [小明](https://www.bilibili.com/video/BV1np4y1r7fQ?spm_id_from=333.999.0.0)
 
@@ -1013,7 +1071,7 @@ class Solution:
             注意Note：dummy = nxtcur 必须写在一起
             """
             dummy = nxtcur = Node(0) # head表示下一层的虚拟头部
-            """
+
             cur = first
             while cur: # 😐😐 while 循环, cur #  cur遍历当前层，nxtcur将下一层连接 
                 if cur.left :
@@ -1023,9 +1081,13 @@ class Solution:
                     nxtcur.next = cur.right
                     nxtcur = nxtcur.next
                 cur = cur.next
-            """
+            
             first = dummy.next
         return root
+
+时间复杂度：O(N)。我们需要遍历这棵树上所有的点。
+
+空间复杂度：O(1)
 ```
 
 
@@ -1041,6 +1103,10 @@ class Solution:
             head = head.next
         return stack[-k]
 
+时间复杂度：O(N)
+
+空间复杂度：O(N)
+
 快慢指针
 class Solution:
     def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
@@ -1051,6 +1117,10 @@ class Solution:
             slow = slow.next
             fast = fast.next
         return slow
+
+时间复杂度：O(N)
+
+空间复杂度：O(1)
 
 总长度减k
 class Solution:
@@ -1104,6 +1174,10 @@ class LRUCache:
         if len(self.cache) == self.capacity:
             self.cache.popitem(last = False)
         self.cache[key] = value
+
+时间复杂度：对于 put 和 get 都是 O(1)。
+
+空间复杂度：O(capacity)，因为哈希表和双向链表最多存储 capacity+1 个元素。
 
 ```
 
@@ -1171,18 +1245,29 @@ class MyQueue:
         self.tmp.append(x) # 目的是把最后进来的元素最下面
         while self.tmp: # 😐 while 循环 + append + pop
             self.s1.append(self.tmp.pop())
+时间复杂度：O(n)
+
+对于除了新元素之外的所有元素，它们都会被压入两次，弹出两次。
+新元素只被压入一次，弹出一次。
+这个过程产生了 4n + 2 次操作，其中 n 是队列的大小。由于 压入 操作和 弹出 操作的时间复杂度为 O(1)， 所以时间复杂度为 O(n)。
+
+空间复杂度：O(n)
+需要额外的内存来存储队列中的元素。
+
 
     def pop(self):
         # 假装最后一个元素是开头
         return self.s1.pop() if self.s1 else None
-        
+时间复杂度：O(1)
 
     def peek(self):
         # 假装最后一个元素是开头
         return self.s1[-1] if self.s1 else None
+时间复杂度：O(1)
 
     def empty(self):
         return False if self.s1 else True
+时间复杂度：O(1)
 ```
 
 ```scala
@@ -1309,6 +1394,10 @@ class MyStack:
     def empty(self) -> bool:
         return not self.q1
 
+时间复杂度：pop 操作 O(n)，其余操作都是 O(1)，其中 n 是栈内的元素个数。
+
+空间复杂度：O(n)，其中 n 是栈内的元素个数。需要使用一个队列存储栈内的元素。
+
 ```
 
 ```scala
@@ -1434,11 +1523,11 @@ class BSTIterator(object):
     def __init__(self, root):
         self.stack = []
         self.appendAllLeft(root)
-        
+时间复杂度：O(1)      
 
     def hasNext(self):
         return self.stack != []
-        
+时间复杂度：O(1)
 
     def next(self):
         '''
@@ -1447,11 +1536,20 @@ class BSTIterator(object):
         tmp = self.stack.pop()
         self.appendAllLeft(tmp.right)
         return tmp.val
-            
+时间复杂度：最坏情况下需要 O(n)
+总共会遍历全部的 n 个节点，
+因此总的时间复杂度为 O(n)，
+因此单次调用平均下来的均摊复杂度为 O(1)
+
     def appendAllLeft(self, node):
         while node: # 😐 while 循环
             self.stack.append(node)
             node = node.left
+
+
+空间复杂度：O(n)，其中 n 是二叉树的节点数量。空间复杂度取决于栈深度，而栈深度在二叉树为一条链的情况下会达到 O(n) 的级别。
+
+
 ```
 
 递归解法不符合题目：不能用递归 应该用迭代
@@ -1491,7 +1589,13 @@ class MinStack:
 
 
     def getMin(self) -> int:
-        return self.minStack[-1]        
+        return self.minStack[-1]     
+
+时间复杂度：均为 O(1)。因为栈的插入、删除与读取操作都是 O(1)，我们定义的每个操作最多调用栈操作两次。
+
+空间复杂度：O(n)，其中 n 为总操作数。最坏情况下，我们会连续插入 n 个元素，此时两个栈占用的空间为 O(n)。
+
+ 
 ```
 
 ```py
@@ -1636,6 +1740,28 @@ class Solution:
 
     def shuffle(self) -> [int]:
         return sorted(self.nums, key=lambda k: random())
+        shuffle：O(nlogn)
+
+
+空间复杂度：O(n)。记录初始状态和临时的乱序数组均需要存储 n 个元素。
+
+class Solution:
+    def __init__(self, nums: List[int]):
+        self.nums = nums
+        self.original = nums.copy()
+
+    def reset(self) -> List[int]:
+        self.nums = self.original.copy()
+        return self.nums
+
+    def shuffle(self) -> List[int]:
+        for i in range(len(self.nums)):
+            j = random.randrange(i, len(self.nums))
+            self.nums[i], self.nums[j] = self.nums[j], self.nums[i]
+        return self.nums
+
+时间复杂度：初始化：O(n) reset：O(n) shuffle：O(n)
+空间复杂度：O(n)。记录初始状态和临时的乱序数组均需要存储 n 个元素。
 ```
 
 
@@ -1685,6 +1811,8 @@ class Trie:
             r = r[c]
         return True
 
+时间复杂度：初始化为 O(1) ，其余操作为 O(|S|) ，其中 |S| 是每次入插或查询的字符串的长度。
+空间复杂度：O(|T|⋅ Σ)，其中 |T| 为所有插入字符串的长度之和，Σ 为字符集的大小，本题 Σ = 26。
 
 ```
 
@@ -1775,11 +1903,15 @@ class MedianFinder:
         # 满足两个特性：
         # 1. `大顶堆`中最大的数值 <= `小顶堆`中的最小数, 也就是小于小顶堆的堆顶
         # 2. 两个堆中元素相差为 0, 或者为 1, 不能 > 1
+时间复杂度：O(logn) 其中 n 累计添加的数的数量。
 
     def findMedian(self):
         max_len = len(self.maxhp)
         min_len = len(self.minhp)
         return self.minhp[0] if max_len != min_len else (- self.maxhp[0] + self.minhp[0]) / 2
+时间复杂度：O(1
+
+空间复杂度：O(n)
 ```
 
 
@@ -1840,6 +1972,10 @@ class MyCircularQueue:
     # isFull(): 检查循环队列是否已满。
     def isFull(self) -> bool:
         return self.count == self.capacity
+时间复杂度： O(1)。该数据结构中，所有方法都具有恒定的时间复杂度。
+
+空间复杂度： O(N)，其中 N 是队列的预分配容量。循环队列的整个生命周期中，都持有该预分配的空间。
+
 ```
 
 ##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a>3. 无重复字符的最长子串 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters
@@ -1878,7 +2014,12 @@ class Solution:
                 res = max(res, rightI - leftI + 1)      # 易错点: +1
             dic[char] = rightI                          # 易错点: dic[char]滞后更新
         return res
-    
+时间复杂度：O(N)，其中 N是字符串的长度。左指针和右指针分别会遍历整个字符串一次。
+
+空间复杂度：O(∣Σ∣)，其中 Σ 表示字符集（即字符串中可以出现的字符），
+∣Σ∣ 表示字符集的大小。
+默认为所有 ASCII 码在 [0, 128)内的字符，即∣Σ∣= 128。
+我们需要用到哈希集合来存储出现过的字符，而字符最多有∣Σ∣ 个
 ```
 
 ```scala
@@ -1950,6 +2091,8 @@ class Solution:
             heapq.heappush(q, num) # n * log(k + 1)
             if len(q) > k: heapq.heappop(q)   # n * log(k)
         return heapq.heappop(q)
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
 ```
 
 ```py
@@ -1986,6 +2129,8 @@ class Solution:
             heapq.heappush(q, -num) # n * log(k + 1)
             if len(q) > k: heapq.heappop(q)   # n * log(k)
         return [-x for x in q]
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
 ```
 
 ##  165. <a name='TopKFrequentElements'></a>347. 【最小堆🌵】Top K Frequent Elements 
@@ -2017,6 +2162,8 @@ class Solution:
             heapq.heappush(hp, (freq, key))
             if len(hp) > k: heapq.heappop(hp)
         return [x[1] for x in hp]
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
 ```
 
 ```scala
@@ -2074,7 +2221,8 @@ class Solution:
 # slow: 0 fast: 1 nums: [1, 0, 0, 3, 12]
 # slow: 1 fast: 3 nums: [1, 3, 0, 0, 12]
 # slow: 2 fast: 4 nums: [1, 3, 12, 0, 0]
-
+时间复杂度： O(N) 
+空间复杂度： O(1) 
 ```
 
 ```scala
@@ -2114,6 +2262,8 @@ class Solution:
                 nums[slow], nums[fast] = nums[fast], nums[slow]
                 slow += 1
         return nums
+时间复杂度： O(N) 
+空间复杂度： O(1) 
 ```
 
 
@@ -2143,6 +2293,8 @@ class Solution:
             else:
             # idx 为 1, 或者 idx 与 [right/left] 相交
                 idx += 1
+时间复杂度： O(N) 
+空间复杂度： O(1) 
 ```
 
 
@@ -2154,38 +2306,37 @@ https://leetcode-cn.com/problems/sort-an-array/submissions/
 希尔排序：
 
 ```py
-设定一个初始增量, 对原始数列进行分组:
-
-对每一个分组进行排序
-
-设置一个更小的增量
+设定一个
 
 对第一轮排序后的数列再按增量重新分组
 
 对每一个分组进行排序
 
-以此,直到增量为1, 再排序
+以此
 
 结果为我们想要的结果
 
 对分组进行排序用的是插入排序算法.因此,希尔排序是插入排序的一种优化的算法
 
-def shellSort(arr): 
+def shellSort(nums): 
   
-    n = len(arr)
-    gap = int(n/2)
+    n = len(nums)
+    gap = n//2 # 初始增量
   
     while gap > 0: 
   
-        for i in range(gap,n): 
+        for i in range(gap,n):  # 对原始数列进行分组 对每一个分组进行排序
   
-            temp = arr[i] 
+            right = nums[i] 
             j = i 
-            while  j >= gap and arr[j-gap] >temp: 
-                arr[j] = arr[j-gap] 
+            while  j >= gap and nums[j-gap] > right: # nums[j-gap] 是 left
+                nums[j] = nums[j-gap]   # 把 nums[j-gap] 这个 bigger 往后面放
                 j -= gap 
-            arr[j] = temp 
-        gap = int(gap/2)
+            nums[j] = right  # 把 right 值 插入
+        gap = int(gap/2) # 设置一个更小的增量, 直到增量为1, 再排序
+
+最坏时间复杂度：O(n2)
+空间复杂度：O(1)
 ```
 
 选择排序：
@@ -2193,17 +2344,14 @@ def shellSort(arr):
 选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
 
 ```py
-A = [64, 25, 12, 22, 11] 
-  
-for i in range(len(A)): 
+for i in range(len(nums)): 
       
-   
-    min_idx = i 
-    for j in range(i+1, len(A)): 
-        if A[min_idx] > A[j]: 
-            min_idx = j 
+    minpos = i 
+    for j in range(i + 1, len(nums)): 
+        if nums[j] < nums[minpos]: 
+            minpos = j 
                 
-    A[i], A[min_idx] = A[min_idx], A[i] 
+    nums[i], nums[minpos] = nums[minpos], nums[i] 
 ```
 
 冒泡排序：
@@ -2347,6 +2495,7 @@ class Solution:
         return res
 你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
 ```
+
 ##  219. <a name='8.'></a>补充题8. 计算数组的小和
 
 
@@ -2445,7 +2594,6 @@ class Solution:
         dummy.next = sortlist[0]
         for i in range(n - 1):
             sortlist[i].next = sortlist[i + 1]
-        
         return dummy.next
 ```
 
@@ -2509,6 +2657,10 @@ class Solution:
         #     v = p1
         # else:
         #     v = p2
+时间复杂度： O(nlogn)，其中 n 是链表的长度。
+
+空间复杂度： O(logn)，其中 n 是链表的长度。空间复杂度主要取决于递归调用的栈空间。
+
 ```
 
 ```py
@@ -2615,6 +2767,15 @@ class Solution:
 > PYTHON 递归
 
 ```py
+递归:
+
+时间复杂度：O(n)，其中 n 是树中的节点个数。
+
+空间复杂度：O(n)，除去返回的答案需要的 O(n) 空间之外，
+我们还需要使用 O(n) 的空间存储哈希映射，以及 O(h) （其中 h 是树的高度）的空间表示递归时栈空间。
+这里 h < n，所以总空间复杂度为 O(n)。
+
+
 class Solution:
     def buildTree(self, preorder, inorder):
         if inorder:
@@ -2719,6 +2880,15 @@ class Solution:
             return root
         
         return buildTree(head, None)
+
+时间复杂度：O(nlogn)，其中 n 是链表的长度。
+
+设长度为 n 的链表构造二叉搜索树的时间为 T(n)，递推式为 T(n) = 2⋅T(n/2) + O(n)，根据主定理， T(n) = O(nlogn)。
+
+空间复杂度：O(logn)，这里只计算除了返回答案之外的空间。平衡二叉树的高度为 O(logn)，
+
+即为递归过程中栈的最大深度，也就是需要的空间。
+
 ```
 
 
@@ -2735,6 +2905,12 @@ class Solution:
 > python
 
 ```py
+时间复杂度：O(n)，其中 n 是数组的长度。每个数字只访问一次。
+
+空间复杂度：O(logn)，其中 n 是数组的长度。空间复杂度不考虑返回值，
+
+因此空间复杂度主要取决于递归栈的深度，递归栈的深度是 O(logn)。
+
 class Solution:
     def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
         if nums:
@@ -2802,6 +2978,12 @@ class Solution:
                 elif aim > 0:  q -= 1
                 else:          p += 1
         return minAim + target
+时间复杂度：O(NlogN)排序 + O(N^2)，其中 N 是数组 nums 的长度。
+
+使用一重循环 O(N) 枚举 i，双指针 O(N) 枚举 p 和 q，故一共是 O(N^2)。
+
+空间复杂度： O(N)。python中的sort之timsort
+
 ```
 
 
@@ -2906,6 +3088,11 @@ class Solution:
                     p +=1
                     q -=1
         return res
+时间复杂度：O(NlogN)排序 + O(N^2)，其中 N 是数组 nums 的长度。
+
+使用一重循环 O(N) 枚举 i，双指针 O(N) 枚举 p 和 q，故一共是 O(N^2)。
+
+空间复杂度： O(N)。python中的sort之timsort
 ```
 
 ```scala
@@ -2983,6 +3170,12 @@ class Solution:
                         p += 1
                         q -= 1
         return res
+
+时间复杂度：O(NlogN)排序 + O(N^3)，其中 N 是数组 nums 的长度。
+
+
+
+空间复杂度： O(N)。python中的sort之timsort
 ```
 
 ##  9. <a name='-1'></a>1. 两数之和
@@ -3000,7 +3193,7 @@ class Solution:
 
 * 时间复杂度:O(n2)
 
-* 时间复杂度:O(1)
+* 空间复杂度:O(1)
 
 ```py
 class Solution:
@@ -3019,7 +3212,7 @@ class Solution:
 
 * 时间复杂度:O(n)
 
-* 时间复杂度:O(n)
+* 空间复杂度:O(n)
 
 ```py
 class Solution:
@@ -3078,6 +3271,9 @@ object Solution1-2 {
 
 给你一个下标从 1 开始的整数数组 numbers
 
+* 时间复杂度:O(n)
+
+* 空间复杂度:O(1)
 
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
@@ -3090,6 +3286,10 @@ class Solution:
             else:
                 r -= 1
         return [-1, -1]
+
+* 时间复杂度:O(n)
+
+* 空间复杂度:O(n)
 
 查表法
 class Solution:
@@ -3120,6 +3320,9 @@ https://leetcode-cn.com/problems/maximum-subarray/
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5qrso4wuc440.png)
 
 ```py
+* 时间复杂度:O(n)
+
+* 空间复杂度:O(1)
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         res = preSum = nums[0]
@@ -3129,8 +3332,6 @@ class Solution:
         return res
 ```
 
-时间复杂度：O(n)
-时间复杂度：O(1)
 
 ```scala
 object Solution {
@@ -3159,6 +3360,9 @@ object Solution {
 ```py
 输入：nums = [1,2,3], k = 3
 输出：2
+
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
 
 查表法：
 class Solution:
@@ -3200,6 +3404,9 @@ class Solution:
 说明: [0, 1] (或 [1, 0]) 是具有相同数量0和1的最长连续子数组。
 
 0 变 -1 是精髓，sum_dct = {0:-1} 是细节。
+
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
 
 class Solution:
     def findMaxLength(self, nums: List[int]) -> int:
@@ -3250,6 +3457,8 @@ class Solution:
             deqI.append(i)
 
         return res if res < n + 1 else -1
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
 
 输入：    [84,-37,32,40,95] 167
 presums:  [84,]
@@ -3341,7 +3550,7 @@ class Solution:
 
 * 时间复杂度:O(M+N)
 
-* 时间复杂度:O(M+N)
+* 空间复杂度:O(M+N)
 
 ```py
 class Solution:
@@ -3365,10 +3574,7 @@ class Solution:
 ```
 
 ```scala
-/**
-* iterative version
-* time complexity: O(N + M), N is the length of l1, M is the length of l2
-*/
+
 object Solution1 {
     def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
         val headNode = new ListNode(-1, null)
@@ -3462,7 +3668,8 @@ class Solution:
             if head in visited:
                 return True
         return False
-
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
 感觉初始时把快慢指针都指向 head 反而更简洁：
 
 class Solution:
@@ -3475,7 +3682,8 @@ class Solution:
             if fast == slow:
                 return True
         return False
-        
+* 时间复杂度:O(n)
+* 空间复杂度:O(1)      
 ```
 
 
@@ -3564,14 +3772,6 @@ class Solution:
 
 
 ```scala
-/**
- * Definition for singly-linked list.
- * class ListNode(var _x: Int = 0) {
- *   var next: ListNode = null
- *   var x: Int = _x
- * }
- */
-
 object Solution {
     
     def getIntersectionNode(headA: ListNode, headB: ListNode): ListNode = {
@@ -3609,6 +3809,9 @@ https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
 > python queue
 
 ```py
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
+
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
         
@@ -3631,6 +3834,8 @@ class Solution:
 levelOrderBottom
 
 ```py
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
 class Solution:
     def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
         if not root: return []
@@ -3651,6 +3856,9 @@ class Solution:
 
 
 ```py
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
+
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
         dic = collections.defaultdict(list)
@@ -3752,6 +3960,9 @@ https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
 输出：5
 解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         maxprofit = 0
@@ -3801,6 +4012,9 @@ object Solution {
 
 
 贪心算法：一次遍历，只要`今天价格`小于`明天价格`就在今天买入然后明天卖出，时间复杂度 O(n)
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -3856,6 +4070,9 @@ object Solution {
 随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，
 这笔交易所能获得利润 = 4-1 = 3 。
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
 # 我的写法：
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -3904,13 +4121,13 @@ object Solution3-1 {
 随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 
 这笔交易所能获得利润 = 3-0 = 3 。
 
-
+0 <= k <= 100
 # 背一背
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
         if not prices:
             return 0
-
+        k =  min(k,len(prices))
         buy = [10e9] * (k+1)
         sell = [0] * (k+1)
         for price in prices:
@@ -3923,6 +4140,9 @@ class Solution:
                 
         return sell[k]
 
+时间复杂度： O(n min(n,k))，其中 n 是数组 prices 的大小，即我们使用二重循环进行动态规划需要的时间。
+空间复杂度： O(n min(n,k)) 或 O(min(n,k))，取决于我们使用二维数组还是一维数组进行动态规划。
+ 
 if __name__ == "__main__":   
 	s = Solution()
 	print(s.maxProfit(k = 2, prices = [3,2,6,5,0,3,-1,3]))
@@ -4056,6 +4276,9 @@ class Solution:
         if cur2 >= 0:
             nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
         """
@@ -4143,9 +4366,7 @@ class Solution:
 
 优先队列：
 
-* 时间复杂度: O(N logk) 
 
-* 空间复杂度: O(N) + O(1)
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
 
@@ -4161,7 +4382,8 @@ class Solution:
 将它们合并到一个有序链表中得到。
 1->1->2->3->4->4->5->6
 
-
+* 时间复杂度: O(kn×logk)
+* 空间复杂度: O(k)
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         queue = []  
@@ -4188,9 +4410,9 @@ class Solution:
 
 两两合并：
 
-* 时间复杂度: O(N logk) 
+* 时间复杂度: O(kn×logk)
 
-* 空间复杂度: O(1)
+* 空间复杂度: O(logk)空间代价的栈空间。
 
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
 
@@ -4242,6 +4464,7 @@ class ListNode:
         self.val = x        
         self.next = None
 
+
 class Solution:    
     def sortOddEvenList(self,head):     
         if not head or not head.next:      
@@ -4253,6 +4476,8 @@ class Solution:
         # 第三步：合并
         return self.merge(oddList, evenList)    
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
     def partition(self, head: ListNode) -> ListNode:        
         headnxt = head.next        
         slow, fast = head, headnxt        
@@ -4264,6 +4489,8 @@ class Solution:
         slow.next = None # 节点需要断开
         return [head, headnxt]    
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
     def reverse(self,head):    
         res = None
         while head: # 😐 while 循环, cur
@@ -4273,6 +4500,8 @@ class Solution:
             head = headnxt
         return res    
 
+* 时间复杂度: O(min(n1,n2))
+* 空间复杂度: O(1)
     def merge(self,p,q):        
         dummy = ListNode(0)        
         cur = dummy        
@@ -4296,6 +4525,8 @@ class Solution:
 快慢指针 slow -> fast -> None
 链表中节点的数目在范围 [0, 200] 内
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
 class Solution:
     def partition(self, head: ListNode, x: int) -> ListNode:
         '''
@@ -4331,6 +4562,8 @@ class Solution:
 ```py
 如果有两个中间结点，则返回第 2 个中间结点。
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
 class Solution:
     def middleNode(self, head: ListNode) -> ListNode:
         slow = fast = head
@@ -4376,6 +4609,8 @@ class Solution:
 输出：[[3],[20,9]反转,[15,7]]
 
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(n)
 class Solution:
     def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
         if not root: return []
@@ -4403,6 +4638,8 @@ class Solution:
 递归
 
 ```py
+* 时间复杂度: O(n)
+* 空间复杂度: O(n)
 class Solution:
     def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
         res = collections.defaultdict(list)
@@ -4441,6 +4678,9 @@ root = [3,5,1,6,2,0,8,null,null,7,4],
 
 p = 5, q = 4  输出：5
 
+* 时间复杂度: O(n)
+* 空间复杂度: O(n)
+
 class Solution:
     def lowestCommonAncestor(self, root, p, q) -> 'TreeNode':
         if root in (None, p, q):
@@ -4450,6 +4690,16 @@ class Solution:
         R = self.lowestCommonAncestor(root.right, p, q) # 递归到 right 的时候，永远是none
 
         return R if not L else L if not R else root
+
+时间复杂度：O(N)，其中 N 是二叉树的节点数。
+
+二叉树的所有节点有且只会被访问一次，因此时间复杂度为 O(N)。
+
+空间复杂度：O(N)，其中 N 是二叉树的节点数。
+
+递归调用的栈深度取决于二叉树的高度，二叉树最坏情况下为一条链，此时高度为 N，因此空间复杂度为 O(N)。
+
+
 ```
 
 ```scala
@@ -4585,6 +4835,12 @@ object Solution1-3 {
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.ud5vx6kpbvk.png" width="50%">
 
 ```py
+时间复杂度：O(4^n / sqrt{n})，在回溯过程中，每个答案需要 O(n) 的时间复制到答案数组中。
+
+空间复杂度：O(n)，除了答案数组之外，我们所需要的空间取决于递归栈的深度，
+
+每一层递归函数需要 O(1) 的空间，最多递归 2n 层，因此空间复杂度为 O(n)。
+
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -4681,9 +4937,7 @@ object Solution {
 
 栈：
 
-* 时间复杂度: O(n) 
 
-* 空间复杂度: O(n)
 
 ![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.1dgqk0ervhb4.png)
 
@@ -4692,6 +4946,8 @@ object Solution {
 输出：4
 解释：最长有效括号子串是 "()()"
 
+* 时间复杂度: O(n) 
+* 空间复杂度: O(n)
 class Solution:
     def longestValidParentheses(self, s: str) -> int:
         stack = [-1]
@@ -4757,6 +5013,8 @@ object Solution1 {
 ```py
 ## 方法三：左右对称
 
+* 时间复杂度: O(n) 
+* 空间复杂度: O(1)
 class Solution:
     def checkValidString(self, s: str) -> bool:
         left = right = 0
@@ -4923,6 +5181,8 @@ class Solution:
 输出：6
 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
 
+* 时间复杂度: O(n2) 
+* 空间复杂度: O(1)
 from math import floor,ceil
 class Solution:
     def countSubstrings(self, s: str) -> int:
@@ -4959,6 +5219,9 @@ isalnum() 方法检测字符串是否由`字母`和`数字`组成。
 isalpha() 方法检测字符串是否只由`字母`组成。
 
 ```py
+
+* 时间复杂度: O(n) 
+* 空间复杂度: O(1)
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         left = 0
@@ -5033,6 +5296,10 @@ object Solution1 {
 ```
 
 ```py
+
+* 时间复杂度: O(logn)，对于每次迭代，我们会将输入除以 10
+* 空间复杂度: O(1)
+
 class Solution:
     def isPalindrome(self, x: int) -> bool:
         # -231 <= x <= 231 - 1
@@ -5083,7 +5350,8 @@ package lc009 {
 输出: true
 解释: 你可以删除c字符。
 
-
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
 class Solution:
     def validPalindrome(self, s: str) -> bool:
         def checkPalindrome(low, high):
@@ -5129,6 +5397,9 @@ class Solution:
   a  0   1   1   1   1   1
   c  0   1   1   2   2   2
   e  0   1   1   2   2   3
+
+* 时间复杂度: O(n2)
+* 空间复杂度: O(n2)
 
 class Solution:
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
@@ -5213,6 +5484,9 @@ class Solution:
 2 0   0 2 0 0 0
 1 0   0 0 3 0 0
 
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
 class Solution:
     def findLength(self, A: List[int], B: List[int]) -> int:
         dp = [[0] * (len(B)+1) for _ in range(len(A)+1)]
@@ -5232,28 +5506,29 @@ class Solution:
 
 
 
-
+这个方法时间复杂度讲不清楚了
 # 这个滑动窗口，用的是 left 和 lenth
+# * 时间复杂度: O(min(N,M))
+# * 空间复杂度: O(1)
+# class Solution:
+#     def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+#         '''
+#         0 <= nums1[i], nums2[i] <= 100
+#         所以用chr，把数字转换成字符串
+#         '''
 
-class Solution:
-    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
-        '''
-        0 <= nums1[i], nums2[i] <= 100
-        所以用chr，把数字转换成字符串
-        '''
-
-        length = left = 0
-        if nums1 and nums2:
-            # 将数字转换为字符串
-            a, b = ''.join(map(chr, nums1)), ''.join(map(chr, nums2))
-            n = len(nums1)
-            while length + left < n: # 😐😐😐 while 循环
-                # 这里使用lenth保存结果，用left跳出循环
-                if a[left : left + length + 1] in b:
-                    length += 1
-                else:
-                    left += 1
-        return length 
+#         length = left = 0
+#         if nums1 and nums2:
+#             # 将数字转换为字符串
+#             a, b = ''.join(map(chr, nums1)), ''.join(map(chr, nums2))
+#             n = len(nums1)
+#             while length + left < n: # 😐😐😐 while 循环
+#                 # 这里使用lenth保存结果，用left跳出循环
+#                 if a[left : left + length + 1] in b:
+#                     length += 1
+#                 else:
+#                     left += 1
+#         return length 
 ```
 
 ##  84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
@@ -5263,6 +5538,18 @@ class Solution:
 [一俩三四五](https://www.bilibili.com/video/BV1LJ41137r2?from=search&seid=18400815010859255620&spm_id_from=333.337.0.0)
 
 ```py
+时间复杂度：O(n)，其中 n 为数组的长度。
+
+增加了判断跳过的逻辑之后，时间复杂度是多少呢？
+
+外层循环需要 O(n) 的时间复杂度，只有当一个数是连续序列的第一个数的情况下才会进入内层循环，
+
+然后在内层循环中匹配连续序列中的数，因此数组中的每个数只会进入内层循环一次。
+
+根据上述分析可知，总时间复杂度为 O(n)，符合题目要求。
+ 
+空间复杂度：O(n)。哈希表存储数组中所有的数需要 O(n) 的空间。
+ 
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
         res = 0
@@ -5321,7 +5608,8 @@ exection  -> execution (插入 'u')
  o   8   i   n   t   e   n   t   i   o   n
  n   9   i   n   t   e   n   t   i   o   n
 
-
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
         len1 = len(word1)
@@ -5453,6 +5741,8 @@ b----ag
      g   0    0    0    0   [1]   1    1   [5]
    【ti】
 
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 class Solution:
     def numDistinct(self, s: str, t: str) -> int:
         sN = len(s)
@@ -5498,6 +5788,8 @@ https://leetcode-cn.com/problems/regular-expression-matching/solution/
         2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
         3) 
         """
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
         # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
@@ -5540,7 +5832,8 @@ class Solution:
 s 可能为空，且只包含从 `a-z` 的小写字母。
 p 可能为空，且只包含从 `a-z` 的小写字母，以及字符 ? 和 *。
 
-
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
         m, n = len(s), len(p)
@@ -5642,6 +5935,8 @@ object Solution2-1{
 [官方](https://www.bilibili.com/video/BV1Pp4y1v7KR?spm_id_from=333.999.0.0)
 
 ```py
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 class Solution:
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
         m = len(obstacleGrid)
@@ -5675,6 +5970,8 @@ class Solution:
 # 那么 (x - 1, y - 1) 一定需要是一个 square，
 # 并且该点的左边全为1，上边也为1，按照这个进行理解变长的增加。
 构建dp：
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 class Solution:
     def maximalSquare(self, matrix):
         m, n = len(matrix), len(matrix[0])
@@ -5717,6 +6014,8 @@ class Solution:
 ```
 
 ```py
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 # 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
 # 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
 class Solution:
@@ -5749,7 +6048,12 @@ class Solution:
 
 ```py
 # 我的模仿！啊😋
+时间复杂度： O(logn)，其中 n 为 nums 数组的大小。
 
+整个算法时间复杂度即为二分查找的时间复杂度 O(logn)。
+
+空间复杂度： O(1) 。我们只需要常数级别的空间存放变量。
+ 
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         # 定义第一个元素和最后一个元素

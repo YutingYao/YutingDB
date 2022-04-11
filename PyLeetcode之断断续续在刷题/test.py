@@ -1,8 +1,10 @@
-def bubble_sort(nums):
-    n = len(nums)
-
-    for i in range(n):
-        for j in range(1, n - i):
-            if nums[j - 1] > nums[j]:
-                nums[j - 1], nums[j] = nums[j], nums[j - 1]
-    return nums
+nums = [64, 25, 12, 22, 11] 
+  
+for i in range(len(nums)): 
+      
+    minpos = i 
+    for j in range(i + 1, len(nums)): 
+        if nums[j] < nums[minpos]: 
+            minpos = j 
+                
+    nums[i], nums[minpos] = nums[minpos], nums[i] 
