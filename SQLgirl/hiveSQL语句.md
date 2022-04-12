@@ -72,9 +72,9 @@ deptno int, dname string, loc string
 partitioned by (month string)
 row format delimited fields terminated by '\t';
 
-load data local inpath '/opt/module/datas/dept.txt' into table default.dept_partition partition(month='201709');
-load data local inpath '/opt/module/datas/dept.txt' into table default.dept_partition partition(month='201708');
-load data local inpath '/opt/module/datas/dept.txt' into table default.dept_partition partition(month='201707');
+load data local inpath '/本地路径/dept.txt' into table default.dept_partition partition(month='201709');
+load data local inpath '/本地路径/dept.txt' into table default.dept_partition partition(month='201708');
+load data local inpath '/本地路径/dept.txt' into table default.dept_partition partition(month='201707');
 
 # 单分区查询
 select * from dept_partition where month='201709';
@@ -84,6 +84,7 @@ select * from dept_partition where month='201709'
               select * from dept_partition where month='201708'
               union
               select * from dept_partition where month='201707';
+
 # 增加分区
 alter table dept_partition add partition(month='201706') ;
 
@@ -92,23 +93,35 @@ alter table dept_partition drop partition (month='201704');
 
 # 创建二级分区
 create table dept_partition2(
-               deptno int, dname string, loc string
-               )
-               partitioned by (month string, day string)
-               row format delimited fields terminated by '\t';
+      deptno int, 
+      dname string, 
+      loc string
+      )
+partitioned by (
+      month string, 
+      day string)
+row format delimited 
+fields terminated by '\t';
 
-load data local inpath '/opt/module/datas/dept.txt' into table default.dept_partition2 partition(month='201709', day='13');
+load data local inpath '/本地路径/dept.txt' 
+into table default.dept_partition2 
+partition(month='201709', day='13');
 
-select * from dept_partition2 where month='201709' and day='13';
+select * from dept_partition2 
+where month='201709' and day='13';
 # 在现有数据情况下添加分区（3总方式）
 # （1）创建文件夹后load到分区
-dfs -mkdir -p /user/hive/warehouse/dept_partition2/month=201709/day=10;
+dfs -mkdir -p /hdfs路径/dept_partition2/month=201709/day=10;
 
-load data local inpath '/opt/module/datas/dept.txt' into table dept_partition2 partition(month='201709',day='10');
+load data local inpath '/本地路径/dept.txt' 
+into table dept_partition2 
+partition(month='201709',day='10');
 
 # （2）上传数据后添加分区
-dfs -mkdir -p /user/hive/warehouse/dept_partition2/month=201709/day=11;
-alter table dept_partition2 add partition(month='201709', day='11');
+dfs -mkdir -p /hdfs路径/dept_partition2/month=201709/day=11;
+
+alter table dept_partition2 
+add partition(month='201709', day='11');
 
 # 4.7修改表
 # 重命名表
@@ -135,13 +148,13 @@ drop table dept_partition;
 
 # 5.1.1 数据装载（load)
 
-load data [local] inpath '/opt/module/datas/student.txt' 
+load data [local] inpath '/本地路径/student.txt' 
 [overwrite] into table student [partition (partcol1=val1,…)];
 # 有local表示从本地加载数据，否则从hdfs中加载
 
 # 有overwrite表示覆写，如无则追加
 
-load data local inpath '/opt/module/datas/student.txt' into table default.student;
+load data local inpath '/本地路径/student.txt' into table default.student;
 
 # 5.1.2 插入数据（Insert）
 insert into table  student partition(month='201709') values(1,'wangwu'),(2,’zhaoliu’);
@@ -154,33 +167,57 @@ insert overwrite table student partition(month='201708')
 create table if not exists student3 as select id, name from student;
 
 # 5.1.4 创建表时通过Location指定加载数据路径
-dfs -mkdir /student;
-dfs -put /opt/module/datas/student.txt /student;
 
-create external table if not exists student5(
-              id int, name string
-              )
-              row format delimited fields terminated by '\t'
-              location '/student';
+dfs -mkdir /student;
+
+dfs -put /本地路径/student.txt /student;
+
+create external table 
+if not exists student5(
+      id int, name string
+      )
+row format delimited 
+fields terminated by '\t'
+location '/student';
+
+
 # 5.1.5 Import数据到指定的Hive中
-import table student2 partition(month='201709') from '/user/hive/warehouse/export/student';
+import table student2 partition(month='201709') from '/hdfs路径/export/student';
 
 # 5.2 数据导出
-# 5.2.1 Insert导出
-# 查询结果格式化导出到本地
-insert overwrite local directory '/opt/module/datas/export/student1'
-           ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'             
+
+# Insert导出
+
+    # 查询结果格式化导出到本地
+insert overwrite 
+local directory '/本地路径/export/student1'
+           ROW FORMAT DELIMITED 
+           FIELDS TERMINATED BY '\t'             
            select * from student;
-# 查询结果导出到HDFS
-insert overwrite directory '/user/atguigu/student2'
-             ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+
+    # 查询结果导出到HDFS
+insert overwrite 
+directory '/hdfs路径/student2'
+             ROW FORMAT DELIMITED 
+             FIELDS TERMINATED BY '\t' 
              select * from student;
-# 5.2.2 Hadoop导出到本地
-dfs -get /user/hive/warehouse/student/month=201709/000000_0 /opt/module/datas/export/student3.txt;
-# 5.2.3 Shell命令导出
-bin/hive -e 'select * from default.student;' > /opt/module/datas/export/student4.txt;
-# 5.2.4 Export导出到HDFS
-export table default.student to '/user/hive/warehouse/export/student';
+
+
+# Hadoop导出到本地
+dfs -get /hdfs路径/student/month=201709/000000_0 
+          /本地路径/export/student3.txt;
+
+
+# Shell命令导出
+bin/hive -e 'select * from default.student;' 
+          > /本地路径/export/student4.txt;
+
+
+# Export导出到HDFS
+export table default.student 
+          to '/hdfs路径/export/student';
+
+
 
 清除表数据
 truncate table student;
@@ -192,17 +229,21 @@ truncate table student;
 ```sql
 # 6.7 其他常用查询函数
 # 6.7.1 空字段赋值
-select comm,nvl(comm, -1) from emp;
-select comm, nvl(comm,mgr) from emp;
+select comm, nvl(comm, -1) from emp;
+select comm, nvl(comm, mgr) from emp;
 
 # 6.7.2 CASE WHEN
 # 1.导入数据
+
+
 create table emp_sex(
-name string, 
-dept_id string, 
-sex string) 
-row format delimited fields terminated by "\t";
-load data local inpath '/opt/module/datas/emp_sex.txt' into table emp_sex;
+    name string, 
+    dept_id string, 
+    sex string) 
+row format delimited 
+fields terminated by "\t";
+load data local inpath '/本地路径/emp_sex.txt' 
+into table emp_sex;
 
 # 2.查询
 select 
@@ -217,40 +258,47 @@ group by
 # 6.7.3 行转列
 # 1.导入数据
 create table person_info(
-name string, 
-constellation string, 
-blood_type string) 
-row format delimited fields terminated by "\t";
-load data local inpath "/opt/module/datas/constellation.txt" into table person_info;
+    name string, 
+    星座 string, 
+    血型 string) 
+row format delimited 
+fields terminated by "\t";
+load data local inpath "/本地路径/星座.txt" 
+into table person_info;
 
 # 2.查询数据
 select
-    t1.base,
+    t1.同一类人,
     concat_ws('|', collect_set(t1.name)) name
 from
     (select
         name,
-        concat(constellation, ",", blood_type) base
+        concat(星座, ",", 血型) 同一类人
     from
         person_info) t1
 group by
-    t1.base;
+    t1.同一类人;
 
 # 6.7.4 列转行
+
 # 1.导入数据
 create table movie_info(
     movie string, 
-    category array<string>) 
-row format delimited fields terminated by "\t"
-collection items terminated by ",";
-load data local inpath "/opt/module/datas/movie.txt" into table movie_info;
+    目录 array<string>) 
+row format delimited 
+    fields terminated by "\t"
+    collection items terminated by ",";
+load data local inpath "/本地路径/movie.txt" 
+    into table movie_info;
 
 # 2.查询
+
 select
     movie,
-    category_name
+    目录_name
 from 
-    movie_info lateral view explode(category) table_tmp as category_name;
+    movie_info 
+lateral view explode(目录) table_tmp as 目录_name;
 
 # 6.7.5 窗口函数
 # 1.导入数据
@@ -259,7 +307,7 @@ name string,
 orderdate string,
 cost int
 ) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
-load data local inpath "/opt/module/datas/business.txt" into table business;
+load data local inpath "/本地路径/business.txt" into table business;
 
 # 2.查询
 # (1)查询在2017年4月份购买过的顾客及总人数
@@ -274,7 +322,12 @@ from business;
 
 #（3）上述的场景, 将每个顾客的cost按照日期进行累加
 select name,orderdate,cost, 
-sum(cost) over(partition by name order by orderdate rows between UNBOUNDED PRECEDING and current row ) as sample4,
+
+sum(cost) over(
+    partition by name 
+    order by orderdate 
+    rows between UNBOUNDED PRECEDING and current row 
+    )
 from business;
 
 #（4）查看顾客上次的购买时间
@@ -284,8 +337,13 @@ lag(orderdate,2) over (partition by name order by orderdate) as time2
 from business;
 
 #（5）查询前20%时间的订单信息
+
 select * from (
-    select name,orderdate,cost, ntile(5) over(order by orderdate) sorted
+    select 
+        name,
+        orderdate,
+        cost, 
+        ntile(5) over(order by orderdate) sorted
     from business
 ) t
 where sorted = 1;
@@ -297,7 +355,7 @@ name string,
 subject string, 
 score int) 
 row format delimited fields terminated by "\t";
-load data local inpath '/opt/module/datas/score.txt' into table score;
+load data local inpath '/本地路径/score.txt' into table score;
 
 # 2.查询
 select name,
@@ -338,8 +396,8 @@ comm double,
 deptno int)
 row format delimited fields terminated by '\t';
 
-load data local inpath '/opt/module/datas/dept.txt' into table dept;
-load data local inpath '/opt/module/datas/emp.txt' into table emp;
+load data local inpath '/本地路径/dept.txt' into table dept;
+load data local inpath '/本地路径/emp.txt' into table emp;
 # 2.查询
 select * from emp;
 select empno, ename from emp;
@@ -364,10 +422,13 @@ select * from emp limit 5;
 # 6.2 Where语句
 select * from emp where sal >1000;
 
-# 6.2.1 比较运算符（Between/In/ Is Null）
-select * from emp where sal between 500 and 1000;
-select * from emp where comm is null;
-select * from emp where sal IN (1500, 5000);
+（Between / In / Is Null）
+
+select * from emp where sal  between 500 and 1000;
+
+select * from emp where sal  is null;
+
+select * from emp where sal  in (1500, 5000);
 
 # 6.2.2 Like和RLike
 select * from emp where sal LIKE '2%';
@@ -405,22 +466,28 @@ select e.empno, e.ename, d.deptno from emp e right join dept d on e.deptno = d.d
 # 将会返回所有表中符合WHERE语句条件的所有记录。如果任一表的指定字段没有符合条件的值的话，那么就使用NULL值替代。
 select e.empno, e.ename, d.deptno from emp e full join dept d on e.deptno = d.deptno;
 
-# 6.4.6 多表链接
+多表链接
+
+
 # 注意：连接 n个表，至少需要n-1个连接条件。例如：连接三个表，至少需要两个连接条件。
-create table if not exists location(
-loc int,
-loc_name string
-)
-row format delimited fields terminated by '\t';
+create table 
+if not exists 表3(
+    loc int,
+    loc_name string
+    )
+row format delimited 
+fields terminated by '\t';
 
-load data local inpath '/opt/module/datas/location.txt' into table location;
+load data local inpath '/本地路径/表3.txt' 
+into table 表3;
 
-SELECT e.ename, d.dname, l.loc_name
+SELECT e.ename, d.dname, 表3.loc_name
 FROM   emp e 
 JOIN   dept d
 ON     d.deptno = e.deptno 
-JOIN   location l
-ON     d.loc = l.loc;
+
+JOIN   表3
+ON     d.loc = 表3.loc;
 
 # 6.4.7 笛卡尔积
 # 1.笛卡尔集会在下面条件下产生
@@ -431,7 +498,10 @@ ON     d.loc = l.loc;
 select empno, dname from emp, dept;
 
 # 6.4.8 连接谓词中不支持or
-select e.empno, e.ename, d.deptno from emp e join dept d on e.deptno = d.deptno or e.ename=d.ename;
+
+select e.empno, e.ename, d.deptno 
+from emp e join dept d 
+on e.deptno = d.deptno or e.ename=d.ename;
 
 # 6.5 排序
 # 6.5.1 全局排序（Order By）——只有一个Reducer
@@ -448,7 +518,7 @@ select * from emp sort by deptno desc;
 
 # 6.5.4 分区排序（Distributed By）——类似于MR中的partition
 set mapreduce.job.reduces=3;
-insert overwrite local directory '/opt/module/datas/distribute-result' 
+insert overwrite local directory '/本地路径/distribute-result' 
 	select * from emp distribute by deptno sort by empno desc;
 # 1．distribute by的分区规则是根据分区字段的hash码与reduce的个数进行模除后，余数相同的分到一个区。
 # 2．Hive要求DISTRIBUTE BY语句要写在SORT BY语句之前
@@ -494,7 +564,7 @@ desc function extended upper;
 #（2）需要实现evaluate函数；evaluate函数支持重载；
 #（3）在hive的命令行窗口创建函数
 # 1）添加jar
-add jar /opt/module/datas/udf.jar
+add jar /本地路径/udf.jar
 # 2）创建function
 create [temporary] function [dbname.]function_name AS class_name;
 create temporary function mylower as "com.atguigu.hive.Lower";
@@ -568,56 +638,86 @@ set hive.exec.mode.local.auto.input.files.max=10;
 # </property>
 # sbin/mr-jobhistory-daemon.sh start historyserver
 
-insert overwrite table jointable select n.* from (select * from nullidtable where id is not null ) n  left join ori o on n.id = o.id;
+insert overwrite table jointable  
+select n.* from (
+    select * from nullidtable 
+    where id is not null 
+    ) n  
+left join ori o on n.id = o.id;
 
 #（2）空Key转换
-set mapreduce.job.reduces = 5;
-insert overwrite table jointable
-select n.* from nullidtable n full join ori o on 
-case when n.id is null then concat('hive', rand()) else n.id end = o.id;
 
-# 9.3.3 MapJoin(小表join大表)
+set mapreduce.job.reduces = 5;
+
+insert overwrite table jointable
+select n.* from nullidtable n 
+full join ori o on 
+(case when n.id is null 
+      then concat('hive', rand()) 
+      else n.id end) = o.id;
+
+MapJoin(小表join大表)优化
+
 set hive.auto.convert.join = true;
 set hive.mapjoin.smalltable.filesize=25000000;
 
-# 9.3.4 Group By
-set hive.map.aggr = true;
+Group By优化
+
+set hive.map.aggr = true;1
 set hive.groupby.mapaggr.checkinterval = 100000;
 set hive.groupby.skewindata = true;
 
 # 9.3.5 Count(Distinct) 去重统计
+
 set mapreduce.job.reduces = 5;
-select count(id) from (select id from bigtable group by id) a;
+select count(id) from (
+    select id from bigtable group by id
+    ) a;
 
 # 9.3.6 笛卡尔积
 
 # 9.3.7 行列过滤
 
 # 9.3.8 动态分区调整（Dynamic Partition）
-hive.exec.dynamic.partition=true
-hive.exec.dynamic.partition.mode=nonstrict
-insert into table dept_partition partition(location) select deptno, dname, loc from dept;
+
+hive.exec.dynamic.partition = true
+hive.exec.dynamic.partition.mode = nonstrict
+insert into table dept_partition 
+partition(location) 
+select deptno, dname, loc from dept;
 
 # 9.3.9 分桶
 # 9.3.10 分区
 
 # 9.4 合理设置 Map 及 Reduce 数
-# 9.4.1 复杂文件增加 Map 数
-computeSliteSize(Math.max(minSize,Math.min(maxSize,blocksize)))=blocksize=128M
-# maxSize最大值低于blocksize即可增加map个数
+
+复杂文件增加 Map 数
+computeSliteSize(
+    Math.max(
+        minSize, 
+        Math.min(maxSize,blocksize)
+        )
+    ) = blocksize = 128M
+
+maxSize < blocksize  -> 即可增加map个数
 
 # 9.4.2 小文件进行合并
-set hive.input.format= org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
+
+
+set hive.input.format = org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
 SET hive.merge.mapfiles = true;
 SET hive.merge.mapredfiles = true;
 SET hive.merge.size.per.task = 268435456;
 SET hive.merge.smallfiles.avgsize = 16777216;
 
 # 9.4.3 合理设置Reduce数
+
 set mapreduce.job.reduces = 15;
+
 # 详细算法见MR理论文件
 
 # 9.5 并行执行
+
 set hive.exec.parallel=true;
 
 # 9.6 严格模式
@@ -662,6 +762,8 @@ set hive.exec.parallel=true;
 </property>
 
 # 9.9 执行计划(Explain)
+
+
 explain extended select * from emp;
 
 ```

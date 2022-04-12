@@ -6190,6 +6190,18 @@ class Solution:
                 if grid[i][j] == "1":
                     res.add(find(col * i + j))
         return len(res)
+
+时间复杂度： O(MN×α(MN))，其中 M 和 N 分别为行数和列数。
+
+实现并查集时，单次操作的时间复杂度为 α(MN)，其中 α(x) 为反阿克曼函数，
+
+当自变量 x 的值在人类可观测的范围内（宇宙中粒子的数量）时，函数 α(x) 的值不会超过 5，
+
+因此也可以看成是常数时间复杂度。
+
+空间复杂度： O(MN)，这是并查集需要使用的空间。
+
+
 ```
 
 ```py
@@ -6214,6 +6226,9 @@ class Solution:
                     res += 1
                     dfs(i, j)
         return res
+时间复杂度： O(MN)，其中 M 和 N 分别为行数和列数。
+
+空间复杂度： O(MN)，在最坏情况下，整个网格均为陆地，深度优先搜索的深度达到 MN。
 
 ```
 
@@ -6263,7 +6278,8 @@ class Solution:
 #         return res
 
 dfs
-
+时间复杂度： O(MN)，其中 M 和 N 分别为行数和列数。
+空间复杂度： O(MN)，在最坏情况下，整个网格均为陆地，深度优先搜索的深度达到 MN。
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         
@@ -6284,6 +6300,9 @@ class Solution:
                 if grid[i][j] == 1:
                     res = max(res, dfs(i, j))
         return res
+
+
+
 
 并查集
 
@@ -6337,7 +6356,35 @@ class Solution:
     [1,1,0],
     [1,1,0],
     [0,0,1]]
-    
+
+时间复杂度：
+
+最坏情况下 O(n2 logn)，
+
+平均情况下 O(n2 α(n))，
+
+α 为阿克曼函数的反函数， 
+
+α(n) 可以认为是一个很小的常数。
+
+ n 是城市的数量。
+ 
+需要遍历矩阵 isConnected 中的所有元素，时间复杂度是 O(n2)，
+
+如果遇到相连关系，则需要进行 2 次查找和最多 1 次合并，
+
+一共需要进行 2n^2 次查找和最多 n^2 次合并，
+
+因此总时间复杂度是 O(2n2 logn2 )=O(n2 logn)。
+
+
+
+
+空间复杂度： O(n)
+
+其中 n 是城市的数量。需要使用数组 parent 记录每个城市所属的连通分量的祖先。
+
+
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         def find(i: int) -> int:
@@ -6365,7 +6412,12 @@ class Solution:
 ```
 
 ```py
-以下的这两个方法可以跳过
+时间复杂度：O(n^2)，其中 n 是城市的数量。需要遍历矩阵 n 中的每个元素。
+
+空间复杂度：O(n)，其中 n 是城市的数量。调用栈的深度.
+
+需要使用数组 visited 记录每个城市是否被访问过，数组长度是 n，递归调用栈的深度不会超过 n。
+
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         def dfs(stt: int):
@@ -6490,6 +6542,10 @@ class Solution:
 dfs
 
 ```py
+时间复杂度： O(MN)，其中 M 和 N 分别为行数和列数。
+
+空间复杂度： O(MN)，在最坏情况下，整个网格均为陆地，深度优先搜索的深度达到 MN。
+
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
         if not board:
@@ -6525,6 +6581,23 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1iZ4y1T78D?spm_id_from=333.999.0.0)
 
 ```py
+空间复杂度：O(MN)。我们额外开辟了 O(MN) 的 visited 数组，同时栈的深度最大为 O(min(L,MN))。L 为字符串 word 的长度
+
+时间复杂度：Θ(MN⋅3^L )
+
+由于剪枝的存在，我们在遇到不匹配或已访问的字符时会提前退出，终止递归流程。
+
+因此，实际的时间复杂度会远远小于 Θ(MN⋅3^L )
+
+在每次调用函数 dfs 时，除了第一次可以进入 4 个分支以外，其余时间我们最多会进入 3 个分支
+
+（因为每个位置只能使用一次，所以走过来的分支没法走回去）。
+
+由于单词长为 L，故 dfs(i,j,0) 的时间复杂度为 O(3^L)
+
+而我们要执行 O(MN) 次 dfs
+
+
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
 
@@ -6647,6 +6720,17 @@ object Solution2 {
 输出：4 
 解释：最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。
 
+时间复杂度： O(mn)，其中 m 和 n 分别是矩阵的行数和列数。
+
+深度优先搜索的时间复杂度是 O(V+E)，其中 V 是节点数，E 是边数。
+
+在矩阵中，O(V)=O(mn)， O(E)≈O(4mn)=O(mn)。
+
+空间复杂度： O(mn)，其中 m 和 n 分别是矩阵的行数和列数。
+
+
+空间复杂度主要取决于缓存和递归调用深度，缓存的空间复杂度是 O(mn)，递归调用深度不会超过 mn。
+ 
 class Solution:
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         if not matrix:
@@ -6777,7 +6861,7 @@ class Solution:
 
         return res  
 
-时间复杂度： n
+时间复杂度：O(max(len1,len2))
 
 空间复杂度： 1
 
@@ -6798,6 +6882,10 @@ class Solution(object):
 ##  68. <a name='-1'></a>43. 字符串相乘
 
 ```py
+时间复杂度：O(mn)， 需要计算 num1, num2的每一位的乘积。
+
+空间复杂度：O(m+n) 需要创建一个长度为 m+n 的数组存储乘积。
+
 class Solution:
     def multiply(self, num1: str, num2: str) -> str:
         m, n = len(num1), len(num2)
@@ -6845,6 +6933,10 @@ LC415 是十进制的大数相加，而本题是`36进制`的大数相加。
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H777?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(log26columnNumber)。
+
+空间复杂度：O(1)。
+
 class Solution(object):
     def convertToTitle(self, columnNumber):
         res = ''
@@ -6864,6 +6956,11 @@ class Solution(object):
 
 ```py
 0xffffffff = 1111 1111 1111 1111 1111 1111 1111 1111 # (8个F的二进制形式, 一个F占4个字节 )  # 2 ^ 32 - 1
+时间复杂度： O(k)，其中 k 是整数的十六进制数的位数，这道题中 k=8。
+
+空间复杂度： O(k)，其中 k 是整数的十六进制数的位数，这道题中 k=8。
+
+空间复杂度主要取决于中间结果的存储空间，这道题中需要存储前导零以外的全部数位。
 
 class Solution:
     def toHex(self, num):
@@ -6887,6 +6984,10 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1h541187Sv?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(n)，其中 n 是列名称 columnTitle 的长度。需要遍历列名称一次。
+
+空间复杂度： O(1)。
+
 # python 从左到右遍历
         # 26进制转10进制
 class Solution:
@@ -6923,7 +7024,7 @@ object Solution {
 
 * 时间复杂度:O(max(m,n))
 
-* 时间复杂度:O(max(m,n))
+* 时间复杂度:O(1).注意返回值不计入空间复杂度。
 
 特殊情况：
 
@@ -7000,6 +7101,14 @@ object Solution {
 输入：l1 = [7,2,4,3], l2 = [5,6,4]
 输出：[7,8,0,7]
 
+时间复杂度： O(max(m,n))，其中 m 和 n 分别为两个链表的长度。
+
+我们需要遍历两个链表的全部位置，而处理每个位置只需要 O(1) 的时间。
+
+空间复杂度： O(m+n)，其中 m 和 n 分别为两个链表的长度。
+
+空间复杂度主要取决于我们把链表内容放入栈中所用的空间。
+ 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         '''
@@ -7040,6 +7149,17 @@ class Solution:
 https://leetcode-cn.com/problems/permutation-i-lcci/
 
 ```py
+时间复杂度： O(n×n!)，其中 n 为序列的长度。
+
+算法的复杂度首先受 backtrack 的调用次数制约
+backtrack 的调用次数是 O(n!) 的。
+我们需要将当前答案使用 O(n) 的时间复制到答案数组中
+相乘得时间复杂度为 O(n×n!)
+
+空间复杂度：O(n)，递归函数在递归过程中需要为每一层递归函数分配栈空间，
+
+所以这里需要额外的空间且该空间取决于递归的深度
+
 class Solution:
     def permutation(self, S: str) -> List[str]:
         res = []
@@ -7154,7 +7274,13 @@ class Solution:
         backtrack(s, [])    
         return res
 
+时间复杂度： O(3^SEG_COUNT})
 
+由于 IP 地址的每一段的位数不会超过 3，因此在递归的每一层，我们最多只会深入到下一层的 3 种情况.
+
+由于 SEG_COUNT=4，对应着递归的最大层数，所以递归本身的时间复杂度为 O(3^SEG_COUNT}).
+
+空间复杂度：O(SEG_COUNT) 递归使用的空间与递归的最大深度 SEG_COUNT 成正比。
 ```
 
 
@@ -7251,6 +7377,12 @@ O   O   1
  / \   \
 O   O   O
 
+时间复杂度： O(N)，其中 N 为二叉树中节点的个数。
+
+利用`前缀和`只需遍历一次二叉树即可。
+
+空间复杂度： O(N)。
+
 class Solution:
     def pathSum(self, root: TreeNode, targetSum: int) -> int:
         dic = collections.defaultdict(int)
@@ -7334,6 +7466,9 @@ class Solution:
 输入：nums = [1,2,3]
 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 
+时间复杂度：O(n×2^n)。一共 2^n 个状态，每种状态需要 O(n)的时间来构造子集。
+空间复杂度：O(n)。临时数组 t 的空间代价是 O(n)，递归时栈空间的代价为 O(n)。
+
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         res = []  
@@ -7382,6 +7517,17 @@ object Solution {
 
 输入: candidates = [2,3,5], target = 8
 输出: [[2,2,2,2],[2,3,3],[3,5]]
+
+
+时间复杂度： O(S)，其中 S 为所有可行解的长度之和。O(n×2^n) 是一个比较松的上界.实际运行情况是远远小于这个上界的。
+
+从分析给出的搜索树我们可以看出时间复杂度取决于搜索树所有叶子节点的深度之和.
+
+即在这份代码中，n 个位置每次考虑选或者不选，如果符合条件，就加入答案的时间代价。
+
+空间复杂度： O(target)。除答案数组外，空间复杂度取决于递归的栈深度，在最差情况下需要递归 O(target) 层。
+ 
+
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         res = []
@@ -7439,6 +7585,17 @@ object Solution1-1 {
 https://leetcode-cn.com/problems/permutation-ii-lcci/
 
 ```py
+时间复杂度： O(n×n!)，其中 n 为序列的长度。
+
+算法的复杂度首先受 backtrack 的调用次数制约
+backtrack 的调用次数是 O(n!) 的。
+我们需要将当前答案使用 O(n) 的时间复制到答案数组中
+相乘得时间复杂度为 O(n×n!)
+
+空间复杂度：O(n)，递归函数在递归过程中需要为每一层递归函数分配栈空间，
+
+所以这里需要额外的空间且该空间取决于递归的深度
+
 class Solution:
     def permutation(self, S: str) -> List[str]:
         res = []
@@ -7488,6 +7645,19 @@ class Solution:
 [哈哈哈](https://www.bilibili.com/video/BV1gT4y1J7JE?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(S)，其中 S 为所有可行解的长度之和。O(n×2^n) 是一个比较松的上界.实际运行情况是远远小于这个上界的。
+
+从分析给出的搜索树我们可以看出时间复杂度取决于搜索树所有叶子节点的深度之和.
+
+即在这份代码中，n 个位置每次考虑选或者不选，如果符合条件，就加入答案的时间代价。
+
+每得到一个满足要求的组合，需要 O(n) 的时间将其放入答案中，因此我们将 O(2^n) 与 O(n) 相乘，即可估算出一个宽松的时间复杂度上界。
+
+
+
+
+空间复杂度： O(n)。除了存储答案的数组外，我们需要 O(n) 的空间存储列表 freq、递归中存储当前选择的数的列表、以及递归需要的栈。
+
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         res = []
@@ -7514,6 +7684,12 @@ class Solution:
 
 
 ```py
+时间复杂度：O(1) 。一共有 9216 种可能性，对于每种可能性，各项操作的时间复杂度都是 O(1)，因此总时间复杂度是 O(1)。
+
+空间复杂度：O(1) 。空间复杂度取决于递归调用层数与存储中间状态的列表，
+
+因为一共有 4 个数，所以递归调用的层数最多为 4，存储中间状态的列表最多包含 4 个元素，因此空间复杂度为常数。
+
 class Solution:
     def judgePoint24(self, nums: List[int]) -> bool:
         TARGET = 24
@@ -7597,6 +7773,13 @@ class Solution:
             for subi in range(i):
                 dp[i] += dp[subi] * dp[i - subi - 1]
         return dp[-1]
+
+时间复杂度 : O(n^2) ，其中 n 表示二叉搜索树的节点个数。
+
+G(n) 函数一共有 n 个值需要求解，每次求解需要 O(n) 的时间复杂度，因此总时间复杂度为 O(n^2)。
+
+空间复杂度 : O(n)。我们需要 O(n) 的空间存储 G 数组。
+ 
 ```
 
 ##  234. <a name='-1'></a>77. 组合
@@ -7632,6 +7815,9 @@ class Solution:
                 backtrack(i + 1,path + [i])
         backtrack(1, [])
         return res
+
+时间复杂度：O((kn的组合枚举)×k)，每次记录答案的复杂度为 O(k)
+空间复杂度：O(n + k) = O(n) 
 ```
 
 ##  25. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
@@ -7645,6 +7831,16 @@ https://leetcode-cn.com/problems/merge-k-sorted-lists/
 ![](https://s3.bmp.ovh/imgs/2022/02/5ca7ad17ae2ceeed.png)
 
 ```py
+时间复杂度： O(N)，其中 N 为链表中节点的数目。
+
+在最初判断快慢指针是否相遇时， slow 指针走过的距离不会超过链表的总长度；
+
+随后寻找入环点时，走过的距离也不会超过链表的总长度。
+
+因此，总的执行时间为 O(N)+O(N)=O(N)。
+
+空间复杂度： O(1)。我们只使用了 slow,fast,ptr 三个指针。
+ 
 class Solution:
     def detectCycle(self, head: ListNode) -> ListNode:
         slow, fast = head, head
@@ -7704,6 +7900,7 @@ object Solution {
 
 ```py
 最小堆: 这里下一位的表示方法为 j + 1 和 if j != n - 1:
+
 时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
 
 空间复杂度：O(n)，堆的大小始终为 n。
@@ -7858,6 +8055,11 @@ object Solution2-1 {
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3kl7avrsvhi0.png" width="30%">
 
 ```py
+时间复杂度：O(N^2)，其中 N 是 matrix 的边长。 
+
+空间复杂度：O(1)。为原地旋转。
+
+
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
         """
@@ -7940,7 +8142,8 @@ object Solution1 {
         按照“层次”遍历，依次append在索引边界内的值即可
 '''
 
-
+时间复杂度： O(N⋅M)
+空间复杂度：O(N+M-1)
 
 输入：mat = [[1,2,3],[4,5,6],[7,8,9]]
 输出：[1,2,4,7,5,3,6,8,9]
@@ -7971,6 +8174,9 @@ class Solution:
 ```py
 输入：n = 3
 输出：[[1,2,3],[8,9,4],[7,6,5]]
+
+时间复杂度： O(N⋅N)
+空间复杂度：O(1)
 
 class Solution:
     def generateMatrix(self, n: int) -> List[List[int]]:
@@ -8025,6 +8231,10 @@ class Solution(object):
 
         return max(dp)
 
+时间复杂度：O(n^2) 
+
+空间复杂度：O(n) ，需要额外使用长度为 n 的 dp 数组。
+
 ```
 
 
@@ -8044,6 +8254,9 @@ class Solution:
             else:
                 res[i] = num # 如果新元素代替旧元素
         return len(res)
+时间复杂度：O(N logN) 
+
+空间复杂度：O(N)
 ```
 
 ```scala
@@ -8111,6 +8324,9 @@ i,j: 7 4 此时: 4 == 4
 输出: 5
 解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
 
+时间复杂度：O(N^2) 
+空间复杂度：O(N)
+
 class Solution:
     def findNumberOfLIS(self, nums: List[int]) -> int:
         n = len(nums)
@@ -8164,6 +8380,10 @@ class Solution:
 '''
 这里会找不到target，返回-1
 '''
+
+时间复杂度：O(logN) 
+空间复杂度：O(1)
+
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         left, right = 0, len(nums) - 1
@@ -8365,6 +8585,10 @@ https://leetcode-cn.com/problems/binary--inorder-traversal/
 [洛阳](https://www.bilibili.com/video/BV1o54y1B7Z8?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度：O(n) ，其中 nn 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+
+空间复杂度：O(n) 。空间复杂度取决于递归的栈深度
+ 
 
 最少代码递归：
 
@@ -8553,6 +8777,10 @@ class Solution:
 中序遍历一下就行了
 
 ```py
+时间复杂度：O(n) ，其中 n 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+
+空间复杂度：O(n) 。空间复杂度取决于递归的栈深度。最坏情况下空间复杂度为 O(n)
+
 res是 list 的写法:
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
@@ -8712,6 +8940,10 @@ object Solution4 {
 ![](https://s3.bmp.ovh/imgs/2022/01/11d8ac60b4c3deb6.png)
 
 ```py
+时间复杂度：O(n) ，其中 n 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+
+空间复杂度：O(n) 。空间复杂度取决于递归的栈深度。最坏情况下空间复杂度为 O(n)
+
 class Solution:
     def treeToDoublyList(self, root: 'Node') -> 'Node':
         if not root: return
@@ -8746,24 +8978,32 @@ https://www.bilibili.com/video/BV1T7411A7S8?from=search&seid=1573126616091366883
 ```
 
 ```py
-这个方法可以不看
-# class Solution:
-#     def flatten(self, root: TreeNode) -> None:
-#         if not root: return
-#         stack = [root]
-#         pre = None # 穿针引线
-#         while stack:
-#             node = stack.pop()
-#             if pre:
-#                 pre.left = None # 穿针引线
-#                 pre.right = node # 穿针引线
-#             if node.right: stack.append(node.right)
-#             if node.left: stack.append(node.left) # 目的是left先出：后进，先出
-#             pre = node
-#         return root
+时间复杂度：O(n) ，其中 n 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+
+空间复杂度：O(n)
+class Solution:
+    def flatten(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root: return
+        stack = [root]
+        pre = None # 穿针引线
+        while stack:
+            node = stack.pop()
+            if pre:
+                pre.left = None # 穿针引线
+                pre.right = node # 穿针引线
+            if node.right: stack.append(node.right)
+            if node.left: stack.append(node.left) # 目的是left先出：后进，先出
+            pre = node
+        # return root
 
 class Solution:
     def flatten(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
         preorderList = []
         
         def preorder(root: TreeNode):
@@ -8778,7 +9018,7 @@ class Solution:
             prev, curr = preorderList[i - 1], preorderList[i] # 穿针引线
             prev.left = None # 穿针引线
             prev.right = curr # 穿针引线
-        return preorderList and preorderList[0]
+        # return preorderList and preorderList[0]
         # 等效return preorderList[0] if preorderList else []
         
 ```
@@ -8844,6 +9084,17 @@ class Solution:
         \    \
          4    7
     再删除3
+
+时间复杂度： O(logN)。在算法的执行过程中，我们一直在树上向左或向右移动。
+
+首先先用 O(H1) 的时间找到要删除的节点，H_1 是从根节点到要删除节点的高度。
+
+然后删除节点需要 O(H2) 的时间，H_2 是从要删除节点到替换节点的高度。
+
+由于 O(H_1 + H_2) = O(H)，H 值得是树的高度，若树是一个平衡树则 H =  logN。
+
+空间复杂度： O(H)，递归时堆栈使用的空间，H 是树的高度。
+
 ```
 
 
@@ -8862,24 +9113,23 @@ class Solution:
 
 class Solution:
     def verifyPostorder(self, postorder: List[int]) -> bool:
-        def build(postorder: List[int], ma: int, mi: int):
+        def isBetween(postorder: List[int], ma: int, mi: int):
             if postorder: 
                 val = postorder[-1]
                 if mi < val < ma:
                     postorder.pop() # 根
-                    build(postorder, ma, val) # 右
-                    build(postorder, val, mi) # 左
+                    isBetween(postorder, ma, val) # 右
+                    isBetween(postorder, val, mi) # 左
 
-        build(postorder, sys.maxsize, -sys.maxsize)
+        isBetween(postorder, sys.maxsize, -sys.maxsize)
         '''
         如果是 postorder 的话，返回结果应该是空
         '''
         return not postorder 
 
 
-
-
-
+时间复杂度 O(N)
+空间复杂度 O(N)
 ```
 
 ##  271. <a name='MinimumAbsoluteDifferenceinBST-Offer36.'></a>530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表
@@ -8890,6 +9140,9 @@ class Solution:
 
 ```py
 用 path 的 list
+
+时间复杂度 O(N)
+空间复杂度 O(N)
 
 class Solution:
     def getMinimumDifference(self, root: TreeNode) -> int:
@@ -8931,6 +9184,15 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1ha4y1i7dZ?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(H+k)，其中 H 是树的高度。
+
+在开始遍历之前，我们需要 O(H) 到达叶结点。
+当树是平衡树时，时间复杂度取得最小值 O(logN+k)
+当树是线性树（树中每个结点都只有一个子结点或没有子结点）时，时间复杂度取得最大值 O(N+k)。
+
+空间复杂度： O(H)，栈中最多需要存储 H 个元素。
+当树是`平衡树`时，空间复杂度取得`最小值` O(logN)；
+当树是`线性树`时，空间复杂度取得`最大值` O(N)O(N)。
 # 中序遍历
 class Solution:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
@@ -9063,6 +9325,9 @@ object Solution2-1 {
 [官方](https://www.bilibili.com/video/BV1xK4y1b7Wh?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度 O(N)
+空间复杂度 O(N)
+
 class Solution:
     def rightSideView(self, root: TreeNode):
         if not root: return []
@@ -9171,6 +9436,14 @@ class Solution:
         
         return res
 
+时间复杂度： O(nlogn)
+
+在最坏情况下，数组 nums 中的元素单调递增，那么最终优先队列中包含了所有元素，没有元素被移除。
+
+由于将一个元素放入优先队列的时间复杂度为 O(logn)，因此总时间复杂度为 O(nlogn)。
+
+空间复杂度： O(n)，即为优先队列需要使用的空间
+
 ```
 
 ```scala
@@ -9264,6 +9537,14 @@ class Solution:
         # 抹去前导零
         return "".join(finalStack).lstrip('0') or "0"
 
+时间复杂度： O(n) 。
+
+尽管存在嵌套循环，但内部循环最多运行 k 次。由于 0 < k ≤ n，
+
+主循环的时间复杂度被限制在 2n 以内。对于主循环之外的逻辑，它们的时间复杂度是 O(n)，因此总时间复杂度为 O(n)。
+
+空间复杂度： O(n)。栈存储数字需要线性的空间。
+ 
 ```
 
 ##  121. <a name='DailyTemperatures'></a>739-Daily Temperatures
@@ -9300,6 +9581,10 @@ class Solution:
                 res[preIdx] = i - preIdx
             stackI.append(i) 
         return res
+时间复杂度： O(n)，其中 n 是温度列表的长度。正向遍历温度列表一遍，对于温度列表中的每个下标，最多有一次进栈和出栈的操作。
+
+空间复杂度： O(n)，其中 n 是温度列表的长度。需要维护一个单调栈存储温度列表中的下标。
+ 
 ```
 
 ##  202. <a name='LargestRectangleinHistogram'></a>85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram
@@ -9316,6 +9601,12 @@ class Solution:
 ["1","1","1","1","1"],
 ["1","0","0","1","0"]
 输出：6
+
+时间复杂度： O(mn)。 对每一列应用柱状图算法需要 O(m) 的时间，一共需要 O(mn) 的时间。
+
+空间复杂度： O(mn)，其中 m 和 n 分别是矩阵的行数和列数。
+
+我们分配了一个与给定矩阵等大的数组，用于存储每个元素的左边连续 1 的数量。
 
 
 class Solution:
@@ -9385,6 +9676,10 @@ stack: [1, 2] res: 4 = 3 * ( 4 - 2 -1)
 输入：heights = [2,1,5,6,2,3]
 输出：10
 解释：最大的矩形为图中红色区域，面积为 10
+
+时间复杂度： O(N)。
+
+空间复杂度： O(N)。
 
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
@@ -9457,6 +9752,12 @@ pre的append： [-1, 6]
 4,3,2,1 存起来，到遇到5的时候，一起pop出来
 [-1,5,5,5,5]
 
+时间复杂度:  O(n)，其中 n 是序列的长度。我们需要遍历该数组中每个元素最多 2 次，每个元素出栈与入栈的总次数也不超过 4 次。
+
+空间复杂度:  O(n)，其中 n 是序列的长度。空间复杂度主要取决于栈的大小，栈的大小至多为 2n − 1。
+
+ 
+
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
         res = [-1] * len(nums)
@@ -9472,8 +9773,10 @@ class Solution:
             if idx < len(nums): # 易错点：append(idx)是有条件的
                 stackI.append(idx)
         return res
+
 输入: nums = [1,2,3,4,3]
 输出: [2,3,4,-1,4]
+
 [-1, -1, -1, -1, -1]
 [2, -1, -1, -1, -1]
 [2, 3, -1, -1, -1]
@@ -9539,6 +9842,16 @@ class Solution:
                 stack.append(s[i])
             
         return "".join(stack)
+
+时间复杂度： O(N)。代码中虽然有双重循环，但是每个字符至多只会入栈、出栈各一次。
+
+空间复杂度： O(∣Σ∣)，其中 Σ 为字符集合，本题中字符均为小写字母，所以 ∣Σ∣= 26。
+
+由于栈中的字符不能重复，因此栈中最多只能有 ∣Σ∣ 个字符，
+
+另外需要维护两个数组，
+
+分别记录每个字符是否出现在栈中以及每个字符的剩余数量。
 ```
 
 
@@ -9565,7 +9878,10 @@ https://leetcode-cn.com/problems/climbing-stairs/
 
 ```py
 # 我的模仿
+时间复杂度：循环执行 n 次，每次花费常数的时间代价，故渐进时间复杂度为 O(n)。
+空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 O(1)。
 
+ 
 class Solution:
     def climbStairs(self, n: int) -> int:
         dp0 = 1
@@ -9638,6 +9954,8 @@ object Solution {
         # node.val 不往上回收, 左中右
         res = max(left + right + node.val, res)
 
+
+
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         res = -1e9
@@ -9655,6 +9973,17 @@ class Solution:
             return max(left, right) + node.val # 正负性：node.val必须回收
         subsum(root)
         return res
+
+
+时间复杂度： O(N)，其中 N 是二叉树中的节点个数。对每个节点访问不超过 2 次。
+
+空间复杂度： O(N)，其中 N 是二叉树中的节点个数。
+
+空间复杂度主要取决于递归调用层数，最大层数等于二叉树的高度，
+
+最坏情况下，二叉树的高度等于二叉树中的节点个数。
+
+ 
 ```
 
 ```scala
@@ -9682,7 +10011,9 @@ object Solution1 {
 
 ```py
 # 补充一个Python的：
+时间复杂度： O(n)。
 
+空间复杂度： O(n)。
 class Solution:
     def rob(self, root: TreeNode) -> int:
         def dfs(root):
@@ -9708,6 +10039,14 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1pV411a7t4?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(nlogn)，其中 n 为区间的数量。
+
+除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 O(nlogn)。
+
+空间复杂度： O(logn)，其中 n 为区间的数量。
+
+这里计算的是存储答案之外，使用的额外空间。 O(logn) 即为排序所需要的空间复杂度。
+ 
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         intervals.sort() # 等价于：intervals.sort(key = lambda x: x[0])
@@ -9752,7 +10091,8 @@ object Solution1-2 {
 
 ```py
 暴力解法；
-
+时间复杂度：O(n^2) 
+空间复杂度：O(1) 
 class Solution:
     def minSubArrayLen(self, s: int, nums: List[int]) -> int:
         if not nums:
@@ -9781,7 +10121,8 @@ class Solution:
 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
 '''
        
-O(n log n) 时间复杂度，用二分
+时间复杂度: O(n log n) ，用二分
+空间复杂度: O(1)
 
 class Solution:
     def minSubArrayLen(self, s: int, nums: List[int]) -> int:
@@ -10008,6 +10349,11 @@ class Solution(object):
                 break
         strNum *= flag
         return min(max(strNum, -(1<<31)), (1<<31) - 1) 
+
+时间复杂度： O(n)。我们只需要依次处理所有的字符，处理每个字符需要的时间为 O(1)。
+
+空间复杂度： O(1)。
+
 ```
 
 
@@ -10019,6 +10365,10 @@ class Solution(object):
 [官方](https://www.bilibili.com/video/BV1Xv411z76J?spm_id_from=333.999.0.0)
 
 ```py
+给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+
+算法的时间复杂度应该为 O(log (m+n)) 。
+
 class Solution:
     def findMedianSortedArrays(self, A: List[int], B: List[int]) -> float:
         lenA = len(A)
@@ -10042,6 +10392,92 @@ class Solution:
         else:
             return fast
 
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        if len(nums1) > len(nums2):
+            return self.findMedianSortedArrays(nums2, nums1)
+
+        infinty = 2**40
+        m, n = len(nums1), len(nums2)
+        left, right = 0, m
+        # median1：前一部分的最大值
+        # median2：后一部分的最小值
+        median1, median2 = 0, 0
+
+        while left <= right:
+            # 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
+            # // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
+            i = (left + right) // 2
+            j = (m + n + 1) // 2 - i
+
+            # nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
+            nums_im1 = (-infinty if i == 0 else nums1[i - 1])
+            nums_i = (infinty if i == m else nums1[i])
+            nums_jm1 = (-infinty if j == 0 else nums2[j - 1])
+            nums_j = (infinty if j == n else nums2[j])
+
+            if nums_im1 <= nums_j:
+                median1, median2 = max(nums_im1, nums_jm1), min(nums_i, nums_j)
+                left = i + 1
+            else:
+                right = i - 1
+
+        return (median1 + median2) / 2 if (m + n) % 2 == 0 else median1
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        def getKthElement(k):
+            """
+            - 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
+            - 这里的 "/" 表示整除
+            - nums1 中小于等于 pivot1 的元素有 nums1[0 .. k/2-2] 共计 k/2-1 个
+            - nums2 中小于等于 pivot2 的元素有 nums2[0 .. k/2-2] 共计 k/2-1 个
+            - 取 pivot = min(pivot1, pivot2)，两个数组中小于等于 pivot 的元素共计不会超过 (k/2-1) + (k/2-1) <= k-2 个
+            - 这样 pivot 本身最大也只能是第 k-1 小的元素
+            - 如果 pivot = pivot1，那么 nums1[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums1 数组
+            - 如果 pivot = pivot2，那么 nums2[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums2 数组
+            - 由于我们 "删除" 了一些元素（这些元素都比第 k 小的元素要小），因此需要修改 k 的值，减去删除的数的个数
+            """
+            
+            index1, index2 = 0, 0
+            while True:
+                # 特殊情况
+                if index1 == m:
+                    return nums2[index2 + k - 1]
+                if index2 == n:
+                    return nums1[index1 + k - 1]
+                if k == 1:
+                    return min(nums1[index1], nums2[index2])
+
+                # 正常情况
+                newIndex1 = min(index1 + k // 2 - 1, m - 1)
+                newIndex2 = min(index2 + k // 2 - 1, n - 1)
+                pivot1, pivot2 = nums1[newIndex1], nums2[newIndex2]
+                if pivot1 <= pivot2:
+                    k -= newIndex1 - index1 + 1
+                    index1 = newIndex1 + 1
+                else:
+                    k -= newIndex2 - index2 + 1
+                    index2 = newIndex2 + 1
+        
+        m, n = len(nums1), len(nums2)
+        totalLength = m + n
+        if totalLength % 2 == 1:
+            return getKthElement((totalLength + 1) // 2)
+        else:
+            return (getKthElement(totalLength // 2) + getKthElement(totalLength // 2 + 1)) / 2
+
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 ```
 
 
@@ -10055,6 +10491,8 @@ class Solution:
 [图灵](https://www.bilibili.com/video/BV1nQ4y1R7nH?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度：O(N)。一共执行了 N/2 次的交换。
+空间复杂度：O(1)
 class Solution: 
     def reverseString(self, s: List[str]) -> None:
         l, r = 0, len(s) - 1
@@ -10117,6 +10555,8 @@ class Solution:
             strs[i] = ''.join(strs[i])
         strs = ' '.join(strs)
         return strs
+时间复杂度：O(N)。
+空间复杂度：O(N)
 ```
 
 ##  50. <a name='ReverseWordsinaString'></a>151. Reverse Words in a String
@@ -10143,6 +10583,8 @@ class Solution:
 ```
 
 ```py
+时间复杂度：O(N)
+空间复杂度：O(N)
 class Solution:
     def reverseWords(self, s: str) -> str:
         s = s.strip()
@@ -10218,6 +10660,8 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Wb411e7PE?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度：O(l) 其中 l 是答案字符串的长度
+空间复杂度：O(l)
 class Solution:
     def fractionToDecimal(self, numerator, denominator):
 
@@ -10286,6 +10730,11 @@ class Solution:
 #         return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
 
 # 等效于
+时间复杂度：O(n) n 为二叉树节点的个数
+空间复杂度：O(height)，其中 height 表示二叉树的高度。
+
+递归函数需要栈空间，而栈空间取决于递归的深度，因此空间复杂度等价于二叉树的高度。
+
 
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
@@ -10346,6 +10795,10 @@ object Solution {
 递归
 
 ```py
+时间复杂度：O(n) n 为二叉树节点的个数
+空间复杂度：O(height)，其中 height 表示二叉树的高度。
+
+递归函数需要栈空间，而栈空间取决于递归的深度，因此空间复杂度等价于二叉树的高度。
 class Solution:
     def minDepth(self, root: TreeNode) -> int:
         if root:
@@ -10373,6 +10826,15 @@ class Solution:
 层序遍历
 
 ```py
+时间复杂度： O(N)，其中 N 是树的节点数。
+
+对每个节点访问一次。
+
+空间复杂度： O(N)，其中 N 是树的节点数。
+
+空间复杂度主要取决于队列的开销，队列中的元素个数不会超过树的节点数。
+
+
 class Solution:
     def minDepth(self, root: TreeNode) -> int:
         if not root:
@@ -10459,6 +10921,47 @@ class Solution:
         return abs(maxDepth(root.left) - maxDepth(root.right)) <= 1 and \
             self.isBalanced(root.left) and self.isBalanced(root.right)
         # 注意：左右两个子树也必须balanced
+
+时间复杂度：O(n^2) 
+
+    最坏情况下，二叉树是满二叉树，需要遍历二叉树中的所有节点，时间复杂度是 O(n)。
+
+    对于节点 p，如果它的高度是 d，则  height(p) 最多会被调用 d 次（即遍历到它的每一个祖先节点时）。
+
+    对于平均的情况，一棵树的高度 h 满足 O(h) = O(logn)，因为 d ≤ h，所以总时间复杂度为 O(nlogn)
+
+    对于最坏的情况，二叉树形成链式结构，高度为 O(n)，此时总时间复杂度为 O(n^2)
+
+空间复杂度：O(n) ，其中 n 是二叉树中的节点个数。
+
+    空间复杂度主要取决于递归调用的层数，递归调用的层数不会超过 n。
+
+
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def height(root: TreeNode) -> int:
+            if not root:
+                return 0
+            leftHeight = height(root.left)
+            rightHeight = height(root.right)
+            if leftHeight == -1 or rightHeight == -1 or abs(leftHeight - rightHeight) > 1:
+                return -1
+            else:
+                return max(leftHeight, rightHeight) + 1
+
+        return height(root) >= 0
+
+时间复杂度： O(n)，其中 n 是二叉树中的节点个数。
+
+使用自底向上的递归，每个节点的计算高度和判断是否平衡都只需要处理一次，
+
+最坏情况下需要遍历二叉树中的所有节点，因此时间复杂度是 O(n)。
+
+空间复杂度： O(n)，其中 n 是二叉树中的节点个数。
+
+空间复杂度主要取决于递归调用的层数，递归调用的层数不会超过 n。
+
+
 ```
 
 
@@ -10495,6 +10998,11 @@ class Solution:
 
         depth(root)
         return res
+
+时间复杂度： O(N)，其中 N 为二叉树的节点数，即遍历一棵二叉树的时间复杂度，每个结点只被访问一次。
+
+空间复杂度： O(Height)，其中 Height 为二叉树的高度。
+
 ```
 
 
@@ -10515,6 +11023,7 @@ class Solution(object):
         if root and not root.left and not root.right: 
             return 1
         return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
+时间复杂度为 O(n) 
 ```
 
 
@@ -10543,7 +11052,19 @@ class Solution:
                 paths.append(str(root.val) + '->' + pt)
         return paths  
         
+时间复杂度：O(n^2) 
 
+    最坏情况下，二叉树是满二叉树，需要遍历二叉树中的所有节点，时间复杂度是 O(n)。
+
+    对于节点 p，如果它的高度是 d，则  height(p) 最多会被调用 d 次（即遍历到它的每一个祖先节点时）。
+
+    对于平均的情况，一棵树的高度 h 满足 O(h) = O(logn)，因为 d ≤ h，所以总时间复杂度为 O(nlogn)
+
+    对于最坏的情况，二叉树形成链式结构，高度为 O(n)，此时总时间复杂度为 O(n^2)
+
+空间复杂度：O(n) ，其中 n 是二叉树中的节点个数。
+
+    空间复杂度主要取决于递归调用的层数，递归调用的层数不会超过 n。
 ```
 
 ```scala
@@ -10639,6 +11160,12 @@ class Solution:
                     outdic[s[l]] -= 1  # 变动的
                 l += 1   
         return res
+
+时间复杂度：
+    最坏情况下左右指针对 s 的每个元素各遍历一遍
+    每次检查是否可行会遍历整个 t 的哈希表
+    哈希表的大小与字符集的大小有关，设字符集大小为 C, s 和 t 由英文字母组成
+    则渐进时间复杂度为 O(52⋅∣s∣+∣t∣)
 ```
 
 ```scala
@@ -10713,6 +11240,11 @@ class Solution:
                         nums[stt + 1 : ] = sorted(nums[stt + 1 : ])
                         return
         nums.reverse() # 易错点:对于[3,2,1]这种情况，i = 0
+
+时间复杂度： O(N)，其中 N 为给定序列的长度。我们至多只需要扫描两次序列，以及进行一次反转操作。
+
+空间复杂度： O(1)，只需要常数的空间存放若干变量。
+ 
 ```
 
 ```scala
@@ -10800,6 +11332,10 @@ class Solution:
                         return res if res < (1<<31) else -1
         return -1 # 易错点:对于[3,2,1]这种情况，i = 0
 
+时间复杂度： O(n)。最坏情况下，只会扫描整个数组两遍，这里 n 是给定数字的位数。
+
+空间复杂度： O(n)。使用了大小为 n 的数组 a，其中 n 是给定数字的位数。
+ 
 ```
 
 ##  72. <a name='PathSum'></a>112-Path Sum
@@ -10827,6 +11363,14 @@ class Solution:
             
         dfs(root, targetSum)
         return res
+时间复杂度： O(N)，其中 N 是树的节点数。对每个节点访问一次。
+
+空间复杂度： O(H)，其中 H 是树的高度。
+
+空间复杂度主要取决于递归时栈空间的开销，最坏情况下，树呈现链状，空间复杂度为 O(N)。
+
+平均情况下树的高度与节点数的对数正相关，空间复杂度为 O(logN)。
+
 
 # 递归
 # class Solution:
@@ -10853,6 +11397,14 @@ class Solution:
             if node.left:  que.append((node.left,  tsum - node.val))
             if node.right: que.append((node.right, tsum - node.val))
         return False
+
+时间复杂度： O(N)，其中 N 是树的节点数。
+
+对每个节点访问一次。
+
+空间复杂度： O(N)，其中 N 是树的节点数。
+
+空间复杂度主要取决于队列的开销，队列中的元素个数不会超过树的节点数。
 ```
 
 ##  59. <a name='-1'></a>113. 二叉树中和为某一值的路径
@@ -10886,6 +11438,23 @@ class Solution:
         dfs(root, [], targetSum)
         return res
 
+时间复杂度：O(N^2) ，其中 N 是树的节点数。
+
+        在最坏情况下，树的上半部分为链状，下半部分为完全二叉树，
+
+        并且从根节点到每一个叶子节点的路径都符合题目要求。
+
+        此时，路径的数目为 O(N)，并且每一条路径的节点个数也为 O(N)，
+
+        因此要将这些路径全部添加进答案中，时间复杂度为 O(N^2) 。
+
+空间复杂度： O(N)，其中 N 是树的节点数。
+
+        空间复杂度主要取决于栈空间的开销，栈中的元素个数不会超过树的节点数。
+
+
+
+
 class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
         if not root: return []
@@ -10898,6 +11467,9 @@ class Solution:
             if node.left:  que.append((node.left,  path + [node.val], tsum - node.val))
             if node.right: que.append((node.right, path + [node.val], tsum - node.val))
         return res
+
+时间复杂度：O(N^2) ，其中 N 是树的节点数。
+空间复杂度： O(N)，其中 N 是树的节点数。
 ```
 
 
@@ -10936,6 +11508,15 @@ class Solution:
         dfs(root, 0)
         return res # 在根节点处cur为0，而不是sums
 
+
+时间复杂度： O(n)，其中 n 是二叉树的节点个数。对每个节点访问一次。
+
+空间复杂度： O(n)，其中 n 是二叉树的节点个数。
+
+空间复杂度主要取决于递归调用的栈空间，递归栈的深度等于二叉树的高度，
+
+最坏情况下，二叉树的高度等于节点个数，空间复杂度为 O(n)。
+ 
 ```
 
 
@@ -10981,6 +11562,9 @@ class Solution:
 # 输入：[1] 预期结果：2
         return n + 1
 
+时间复杂度： O(N)，其中 N 是数组的长度。
+
+空间复杂度： O(1)。
 ```
 
 
@@ -11016,6 +11600,11 @@ class Solution:
             xor ^= i
             xor ^= num
         return xor
+
+时间复杂度： O(n)，其中 n 是数组  nums 的长度。需要对 2n+1 个数字计算按位异或的结果。
+
+空间复杂度： O(1)。
+
 
 # class Solution:
 #     def missingNumber(self, nums: List[int]) -> int:
@@ -11135,6 +11724,9 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1rV411r7AL?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(1)。
+
+空间复杂度： O(1)。
 class Solution:
     def isPowerOfTwo(self, n: int) -> bool:
         return n > 0 and (n & (n - 1)) == 0
@@ -11279,6 +11871,9 @@ class Solution(object):
                 alltreepos.append((node.right, 2 * v + 1))
 
         return alltreepos[-1][1] == len(alltreepos)
+
+时间复杂度： O(N)，其中 N 是树节点个数。
+空间复杂度： O(N)。
 ```
 
 
@@ -11291,6 +11886,13 @@ class Solution(object):
 
 ```py
 层序遍历
+
+时间复杂度：  O(N) ，其中 N 是树中节点的数目，我们需要遍历每个节点。
+
+空间复杂度：  O(N) ，这部分空间是因为我们 DFS 递归过程中有 N 层的栈。
+
+ 
+
 class Solution:
     def widthOfBinaryTree(self, root: TreeNode) -> int:
         res = 0
@@ -11329,6 +11931,10 @@ class Solution:
 给定方法 rand7 可生成 [1,7] 范围内的均匀随机整数
 试写一个方法 rand10 生成 [1,10] 范围内的均匀随机整数。
 """
+时间复杂度：期望时间复杂度为 O(1) ，但最坏情况下会达到 O(∞)（一直被拒绝）。
+
+空间复杂度：O(1) 。
+
 class Solution:
     def rand10(self) -> int:
         while True: # 😐😐😐 while 循环
@@ -11379,6 +11985,11 @@ class Solution:
 
         return True
 
+时间复杂度：这里遍历了这棵树，渐进时间复杂度为 O(n)。
+空间复杂度：这里的空间复杂度和递归使用的栈空间有关，这里递归层数不超过 n，故渐进空间复杂度为 O(n)。
+
+
+
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         # if not root:
@@ -11397,6 +12008,9 @@ class Solution:
             if vals != vals[::-1]:  # 补充
                 return False  # 补充
         return True
+
+时间复杂度：  O(n)。
+空间复杂度：  O(n)。
 ```
 
 > Python 递归：
@@ -11414,6 +12028,8 @@ class Solution:
             else:
                 return False
         return twoSym(root.left, root.right)
+时间复杂度：  O(n)。
+空间复杂度：  O(n)。
 ```
 
 > scala:
@@ -11518,6 +12134,8 @@ class Solution:
          # 这道题的难点在于：最后结果的输出
         return dp[-1] if dp[-1] != 10e9 else -1
 
+时间复杂度： O(Sn)，其中 S 是金额，n 是面额数
+空间复杂度： O(S)。数组 dp 需要开长度为总金额 S 的空间。
 
 # import functools
 # class Solution:
@@ -11611,6 +12229,14 @@ class Solution:
             for tar in range(coin, n + 1):
                 dp[tar] = min(dp[tar], dp[tar - coin] + 1) 
         return dp[-1]
+
+时间复杂度：O(n sqrt{n}) ，其中 n 为给定的正整数。
+
+状态转移方程的时间复杂度为 O(sqrt{n}) ，共需要计算 n 个状态，因此总时间复杂度为 O(n sqrt{n}) 
+
+空间复杂度： O(n)。我们需要 O(n) 的空间保存状态。
+
+。
 ```
 
 ##  116. <a name='CoinChange2-322.dfsCoinChange'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
@@ -11630,6 +12256,9 @@ https://leetcode-cn.com/problems/coin-change-2/
 5=2+2+1
 5=2+1+1+1
 5=1+1+1+1+1
+
+时间复杂度： O(amount × n) 
+空间复杂度： O(amount) 
 
 
 class Solution:
@@ -11674,6 +12303,13 @@ class Solution:
                     dp[end] = True # 说明 s[: i] 在 wordDict 中
                     break # 优化部分：剩下的切分点 j 不用再寻找了，也可以不写，像下方一样
         return dp[-1]
+时间复杂度：O(n^2)
+
+我们一共有 O(n) 个状态需要计算，每次计算需要枚举 O(n) 个分割点，
+
+哈希表判断一个字符串是否出现在给定的字符串列表需要 O(1) 的时间，因此总时间复杂度为 O(n^2) 
+
+空间复杂度：O(n) 
 
 ```
 
@@ -11690,6 +12326,17 @@ class Solution:
 '''
 求种类
 '''
+
+时间复杂度： O(n × (sum − target))
+
+    sum 是数组 nums 的元素和
+    动态规划有 (n+1)×( (sum−target)/2 + 1 ) 个状态，需要计算每个状态的值
+
+空间复杂度： O(sum−target)
+
+    需要创建长度为 (sum−target)/2 + 1 的数组
+
+
 class Solution:
     def findTargetSumWays(self, nums: List[int], target) -> int:
         # 求得新的目标
@@ -11844,7 +12491,12 @@ class Solution:
             return res
         return dfs(0, target)
 
+时间复杂度：O(2^n) 回溯需要遍历所有不同的表达式，共有 2^n 种不同的表达式，
 
+每种表达式计算结果需要 O(1) 的时间 
+
+空间复杂度： O(n) 。空间复杂度主要取决于递归调用的栈空间，栈的深度不超过 n。
+ 
 ```
 
 
@@ -11856,7 +12508,9 @@ class Solution:
 ```py
 输入：nums = [7,2,5,10,8], m = 2
 输出：18
+
 答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
+
 class Solution:
     def splitArray(self, nums: List[int], bagnum: int) -> int:
         def check(bagsize: int) -> bool:
@@ -11882,6 +12536,16 @@ class Solution:
                 left = mid + 1
 
         return res
+
+时间复杂度： O(n × log(sum−maxn))，
+
+        其中 sum 表示数组 nums 中所有元素的和， maxn 表示数组所有元素的最大值。
+
+        每次二分查找时，需要对数组进行一次遍历，时间复杂度为 O(n)，
+
+空间复杂度： O(1)。
+
+ 
 ```
 
 
@@ -11923,6 +12587,17 @@ class Solution:
         # 对于1个num，bagsize的填满情况
         # 对于2个num，bagsize的填满情况
         return dp[-1] != 0
+
+时间复杂度： O(n × target)，其中 n 是数组的长度， target 是整个数组的元素和的一半。
+
+需要计算出所有的状态，每个状态在进行转移时的时间复杂度为 O(1)。
+
+空间复杂度： O(target)，其中 target 是整个数组的元素和的一半。
+
+空间复杂度取决于 dp 数组，在不进行空间优化的情况下，空间复杂度是 O(n × target)，
+
+在进行空间优化的情况下，空间复杂度可以降到 O(target)。
+
 ```
 
 ##  77. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element
@@ -11963,6 +12638,10 @@ class Solution:
             count += (1 if vot == candidate else -1)
 
         return candidate
+
+时间复杂度： O(N)
+空间复杂度： O(1)
+
 ```
 
 ```scala
@@ -12021,6 +12700,14 @@ object Solution {
 [小明](https://www.bilibili.com/video/BV1FK411p7Co?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度：O(N)
+
+空间复杂度：
+
+在平均情况下，二叉树的高度与节点个数为对数关系，即 O(logN)。
+
+而在最坏情况下，树形成链状，空间复杂度为  O(N)。
+
 class Solution:
     def invertTree(self, root: TreeNode) -> TreeNode:
         if not root: return root
@@ -12053,6 +12740,13 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1Pk4y117dF?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(n+m)（或 O(max(n,m))，这是等价的），
+
+其中 n 是字符串 version1 的长度，m 是字符串 version2 的长度。
+
+空间复杂度： O(n+m)，我们需要 O(n+m) 的空间存储分割后的修订号列表。
+ 
+
 class Solution:
     def compareVersion(self, version1: str, version2: str) -> int:
         v1 = version1.split(".")
@@ -12081,7 +12775,10 @@ https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/
 
 ```py
 # Python 二分法
+时间复杂度：  O(logn) ，其中 n 为数组的长度。 一共会执行两次，因此总时间复杂度为 O(logn)。
 
+空间复杂度： O(1) 。只需要常数空间存放若干变量。
+ 
 class Solution:
     def searchRange(self, nums, target):
         left = 0
@@ -12161,10 +12858,17 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
 
 ```py
+
 输入：nums = [1,2,1,3,5,6,4]
 输出：1 或 5 
+
 解释：你的函数可以返回索引 1，其峰值元素为 2；
      或者返回索引 5， 其峰值元素为 6。
+
+
+时间复杂度： O(logn)，其中 n 是数组 nums 的长度。
+空间复杂度： O(1)。
+
 
 class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
@@ -12247,6 +12951,12 @@ class Solution:
                 r = mid - 1
 
         return -1
+
+时间复杂度： O(logn)，我们进行了三次二分搜索，每次的时间复杂度都为 O(logn)。
+
+空间复杂度： O(1)，只需要常数的空间存放若干变量。
+
+ 
 ```
 
 ##  82. <a name='-1'></a>153-寻找旋转排序数组中的最小值
@@ -12256,6 +12966,14 @@ class Solution:
 [小梦想家](https://www.bilibili.com/video/BV1yK411L7rp?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(logn)，其中 n 是数组 nums 的长度。
+
+在二分查找的过程中，每一步会忽略一半的区间，因此时间复杂度为  O(logn)。
+
+空间复杂度： O(1)。
+
+
+
 class Solution:
     def findMin(self, nums):
         l, r = 0, len(nums) - 1
@@ -12319,6 +13037,9 @@ object Solution1 {
 [官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历一次。
+空间复杂度： O(1)。
+
 class Solution:
     def singleNumber(self, nums):
         a = 0
@@ -12346,6 +13067,8 @@ object Solution {
 
 
 ```py
+时间复杂度：O(m + n)
+空间复杂度：O(1)
 class Solution:
     def searchMatrix(self, matrix, target):
         # 从右上角开始找
@@ -12464,6 +13187,8 @@ object Solution {
 ```
 
 ```py
+时间复杂度： O(nlogn + n^2)
+空间复杂度： O(logn)，排序需要  O(logn) 的栈空间。
 class Solution:
     def largestNumber(self, nums: List[int]) -> str:
         # 按照字典序由大到小排序
@@ -12492,6 +13217,9 @@ class Solution:
 本题核心思路：是在栈里面每次存储两个信息, 
 
 (左括号前的`字符串`, 左括号前的`数字`)
+
+时间复杂度 O(S)
+空间复杂度 O(S)
 
 class Solution:
     def decodeString(self, s: str) -> str:
@@ -12530,6 +13258,9 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV18g4y1i7f9?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历一次。
+空间复杂度： O(1)
+
 动态🚀规划，典型例题：
 class Solution:
     def rob(self, nums: List[int]) -> int:
@@ -12616,7 +13347,8 @@ object Solution {
 #             dp2[i] = max(dp2[i-2] + nums[i + 1], dp2[i-1])
 
 #         return max(dp1[-1],dp2[-1])
-
+时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历2次。
+空间复杂度： O(1)
 降维以后：
 
 class Solution:
@@ -12646,6 +13378,9 @@ https://www.bilibili.com/video/BV1t4411c7m6?from=search&seid=1435485098386272961
 https://www.bilibili.com/video/BV1v54y1a74b?from=search&seid=14354850983862729610&spm_id_from=333.337.0.0
 
 ```py
+时间复杂度：O(n) 
+空间复杂度：O(n) 
+
 class Solution:
     def calculate(self, s: str) -> int:
         stack = []
@@ -12683,7 +13418,8 @@ https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357
 <img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.71qtf391s5w0.png" width="40%">
 
 ```py
-
+时间复杂度：O(n) 
+空间复杂度：O(n) 
 class Solution:
     def calculate(self, s: str) -> int:
         stack = [1]
@@ -12741,6 +13477,23 @@ class Solution:
 [花花酱](https://www.bilibili.com/video/BV1Hb411c7cr?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度：
+
+        序列化时做了一次遍历，渐进时间复杂度为 O(n)。
+
+        反序列化时，在解析字符串的时候 ptr 指针对字符串做了一次顺序遍历，字符串长度为 O(n)，
+
+        故这里的渐进时间复杂度为 O(n)。
+
+空间复杂度：
+
+        考虑递归使用的栈空间的大小，这里栈空间的使用和递归深度有关，
+
+        递归深度又和二叉树的深度有关，在最差情况下，二叉树退化成一条链，
+
+        故这里的渐进空间复杂度为 O(n)。
+
+
 class Codec:
     def serialize(self, root):
         # 前序遍历
@@ -12768,8 +13521,9 @@ maxdp * num, mindp * num, num
 
 ```py
 # 动态🚀规划：
-
 # 遍历时，每次分别存储 前i个中连续数组 [最大的乘积和] 和 [最小乘积和]
+时间复杂度为 O(n)
+空间复杂度为 O(1)
 
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
@@ -12845,6 +13599,9 @@ class Solution:
         for _ in range(2, n + 1): # 注意：这里的边界
             dp1, dp0 = (dp1 + dp0) % MOD, dp1
         return dp1
+
+时间复杂度： O(n)。
+空间复杂度： O(1)
 ```
 
 
@@ -12912,6 +13669,9 @@ object Solution3 {
 [小明](https://www.bilibili.com/video/BV1ag4y1B78z?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(n)。
+空间复杂度： O(1)
+
 class Solution(object):
     def oddEvenList(self, head):
         if not head or not head.next:      
@@ -12997,6 +13757,19 @@ class Solution:
 
 
 ```py
+时间复杂度:  O(n+m)，其中 n 为课程数，m 为先修课程的要求数。
+
+这其实就是对图进行广度优先搜索的时间复杂度。
+
+空间复杂度: O(n+m)。
+
+题目中是以列表形式给出的先修课程关系，为了对图进行广度优先搜索，我们需要存储成邻接表的形式，空间复杂度为 O(n+m)。
+
+在广度优先搜索的过程中，我们需要最多 O(n) 的队列空间（迭代）进行广度优先搜索。
+
+
+
+。
 输入：
 numCourses = 2, 
 prerequisites = [[1,0],[0,1]]
@@ -13087,6 +13860,20 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1kK411W7rL?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度: O(n+m)，其中 n 为课程数，m 为先修课程的要求数。
+
+这其实就是对图进行广度优先搜索的时间复杂度。
+
+空间复杂度: O(n+m)。
+
+题目中是以列表形式给出的先修课程关系，为了对图进行广度优先搜索，我们需要存储成邻接表的形式，空间复杂度为 O(n+m)。
+
+在广度优先搜索的过程中，我们需要最多 O(n) 的队列空间（迭代）进行广度优先搜索。
+
+
+
+
+
 输入：
 numCourses = 4, 
 prerequisites = [[1,0],[2,0],[3,1],[3,2]]
@@ -13211,6 +13998,13 @@ class Solution:
             k -= 1 
             que = nextnode # 每一次都是临近的节点
         return que
+
+时间复杂度： O(n)，其中 n 是二叉树的结点个数。
+
+需要执行两次深度优先搜索，每次的时间复杂度均为 O(n)。
+
+空间复杂度： O(n)。记录父节点需要 O(n) 的空间，深度优先搜索需要 O(n) 的栈空间。
+
 ```
 
 
@@ -13237,6 +14031,10 @@ class Solution:
             n >>= 1 # 等价于 n //= 2
             x *= x       # 注意: x 这里, 同步发生变化
         return res
+
+时间复杂度： O(logn)，即为对 n 进行二进制拆分的时间复杂度。
+
+空间复杂度： O(1)。
 ```
 
 ```scala
@@ -13326,14 +14124,27 @@ class Solution:
         for i in range(2, n + 1):
             res = (res + m) % i
         return res
+
+
+时间复杂度： O(n)，需要求解的函数值有 n 个。
+
+空间复杂度： O(1)，只使用常数个变量。
 ```
 
 ##  124. <a name='Offer51.'></a>剑指 Offer 51. 数组中的逆序对
 
 ```py
+时间复杂度：O(N logN) 
+空间复杂度：O(N)
+
+
 如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对：
+
+
 输入: [7,5,6,4]
 输出: 5
+
+
 class Solution:
     def reversePairs(self, nums: List[int]) -> int:
         negUpQue = []
@@ -13381,6 +14192,9 @@ class Solution:
             nums[:] = nums[::-1]
             nums[:rotate] = nums[:rotate][::-1]
             nums[rotate:] = nums[rotate:][::-1]
+
+时间复杂度：O(N) 
+空间复杂度：O(1)
 ```
 
 # 8 day (得分 = 3分) 81
@@ -13390,6 +14204,9 @@ class Solution:
 [小明](https://www.bilibili.com/video/BV1aK4y1h7Bb?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(logmn)，其中 m 和 n 分别是矩阵的行数和列数。
+空间复杂度： O(1)。
+
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         m = len(matrix)
@@ -13421,6 +14238,14 @@ https://leetcode-cn.com/problems/intersection-of-two-arrays/
 [小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(m+n)，其中 m 和 n  分别是两个数组的长度。
+
+使用两个集合分别存储两个数组中的元素需要 O(m+n) 的时间，
+
+遍历较小的集合并判断元素是否在另一个集合中需要 O(min(m,n)) 的时间，因此总时间复杂度是 O(m+n)。
+
+空间复杂度： O(m+n)，其中 m 和 n 分别是两个数组的长度。空间复杂度主要取决于两个集合。
+
 class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
         set1 = set(nums1)
@@ -13443,6 +14268,9 @@ class Solution:
 ##  254. <a name='386.'></a> 386. 字典序排数
 
 ```py
+时间复杂度： O(n)，n 为给定的数
+空间复杂度： O(n)，为递归栈占用的空间
+
 class Solution:
     def lexicalOrder(self, n):
         def dfs(num):
@@ -13549,6 +14377,13 @@ class Solution:
 ss = Solution()
 print(ss.findKthNumber(23,15))
 
+时间复杂度：O(log N)^2 ，其中 n 为 给定的 数值的大小。
+
+每次计算子树下的节点数目的搜索深度最大为 log 10 N，最多需要搜索 log 10 N
+​
+每一层最多需要计算 10 次，最多需要计算  10 × (log 10 n) ^ 2 次，因此时间复杂度为 O(log N)^2。
+
+空间复杂度：O(1) ，不需要开辟额外的空间，只需常数空间记录常量即可。
 ```
 
 ##  169. <a name='N'></a>400. 第N个数字
@@ -13580,6 +14415,9 @@ class Solution:
 # (111 - 1) // 3 = 36
 # (111 - 1) % 3 = 2
 # 100 + 36 = 136
+时间复杂度： O(log 10 n)。用 d 表示第 n 位数字所在整数的位数，循环需要遍历 d 次，由于 d=O(log 10 n)，
+
+空间复杂度：O(1)。
 
 ```
 
@@ -13620,6 +14458,12 @@ class Solution:
         return sum(dp)
 # 输入: [1,0,2]
 # 输出: 5
+
+时间复杂度： O(n)。我们需要遍历两次数组以分别计算满足左规则或右规则的最少糖果数量。
+
+空间复杂度： O(n)。我们需要保存所有的左规则对应的糖果数量。
+
+
 ```
 
 ##  149. <a name='-1'></a>572-另一个树的子树
@@ -13646,6 +14490,9 @@ class Solution:
         if isSame(root, subRoot):
             return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
+时间复杂度为  O(∣s∣×∣t∣)。
+空间复杂度为  O(max{s深度, t深度})
 ```
 
 ##  171. <a name='SameTree'></a>100-Same Tree 
@@ -13661,6 +14508,20 @@ class Solution:
 > python:
 
 ```py
+时间复杂度： O(min(m,n))，其中 m 和 n 分别是两个二叉树的节点数。
+
+对两个二叉树同时进行深度优先搜索，只有当两个二叉树中的对应节点都不为空时才会访问到该节点，
+
+因此被访问到的节点数不会超过较小的二叉树的节点数。
+
+空间复杂度： O(min(m,n))，其中 m 和 n 分别是两个二叉树的节点数。
+
+空间复杂度取决于递归调用的层数，递归调用的层数不会超过较小的二叉树的最大高度，
+
+最坏情况下，二叉树的高度等于节点数。
+
+
+
 self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 
 class Solution:
@@ -13725,6 +14586,12 @@ class Solution:
                 if cover >= n - 1:
                     return True
         return False
+
+时间复杂度： O(n)，其中 n 为数组的大小。只需要访问 nums 数组一遍，共 n 个位置。
+
+空间复杂度： O(1)，不需要额外的空间开销
+
+
 ```
 
 ```scala
@@ -13768,7 +14635,7 @@ class Solution:
         cover = stop = 0
 
         n = len(nums)
-        for i in range(n-1):
+        for i in range(n - 1):
             cover = max(cover, i + nums[i]) #易错点：是n-1，不是n，只要调到最后一格就算成功
             '''
             代表从 stop 位置能到达的最远的地点
@@ -13777,6 +14644,10 @@ class Solution:
                 jump += 1 # jump + 1 的情况：2(0),stop=2,1(2),stop=4
                 stop = cover
         return jump
+
+时间复杂度： O(n)，其中 n 为数组的大小。只需要访问 nums 数组一遍，共 n 个位置。
+
+空间复杂度： O(1)
 ```
 
 
@@ -13808,6 +14679,14 @@ class Solution:
                 res += dp0
             dp1, dp0 = res, dp1
         return dp1
+时间复杂度： O(n)，其中 n 是字符串 s 的长度。
+
+空间复杂度： O(n) 或 O(1)。
+
+如果使用数组进行状态转移，空间复杂度为 O(n)；
+
+如果仅使用三个变量，空间复杂度为 O(1)。
+
 ```
 
 ```scala
@@ -13882,6 +14761,11 @@ class Solution:
             repeat.add(num) # 添加牌至 Set
         return ma - mi < 5 # 最大牌 - 最小牌 < 5 则可构成顺子 
 
+时间复杂度 O(N) = O(5) = O(1)  ： 
+        其中 N 为 nums 长度，本题中 N ≡ 5 ；遍历数组使用 O(N) 时间。
+空间复杂度 O(N) = O(5) = O(1)  ： 
+        用于判重的辅助 Set 使用 O(N) 额外空间。
+ 
 ```
 
 
@@ -13912,6 +14796,9 @@ class Solution:
             n &= n - 1
             res += 1
         return res
+时间复杂度： O(logn)。循环次数等于 n 的二进制位中 1 的个数，最坏情况下 n 的二进制位全部为 1。我们需要循环 logn 次。
+
+空间复杂度： O(1)，我们只需要常数的空间保存若干变量。
 
 ```
 
@@ -13963,6 +14850,10 @@ class Solution:
         for x in t: tdic[x] += 1
 
         return sdic == tdic
+
+时间复杂度： O(n)，其中 n 为 s 的长度。
+
+空间复杂度： O(S)，其中 S 为字符集大小，此处 S=26。
 ```
 
 ```scala
@@ -14019,6 +14910,9 @@ class Solution:
                 return True
         return False
 
+时间复杂度：O(n)，其中 n 是字符串 s 的长度。
+
+空间复杂度：O(1)。
 ```
 
 
@@ -14037,6 +14931,8 @@ class Solution:
 4 1 8 3
 自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
 
+时间复杂度：O(n^2) ，其中 n 是三角形的行数。
+空间复杂度：O(n^2)。
 
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
@@ -14091,6 +14987,9 @@ dp[k][m] 最多能够确定的楼层数为 L
 根据递推公式 如果采用 k 倒着从大到小计算 就可以只存一行的 dp[k] 直接原地更新 dp[k] 不影响后续计算 
 
 只需要 O(K) 空间复杂度 O(KlogN) 鸡蛋完全够用的时候 就是走 LogN 步 最差情况是 1 个鸡蛋走 N 步 O(KN)
+
+时间复杂度：O(eggs*log level) 
+空间复杂度：O(eggs)。
 
 class Solution:
     def superEggDrop(self, eggs: int, level: int) -> int:
@@ -14166,6 +15065,9 @@ while 1:
 输入: 9973
 输出: 9973
 
+时间复杂度：O(10 N) 。其中，N 是输入数字的总位数。每个数字最多只考虑一次。
+空间复杂度：O(10)。last 使用的额外空间最多只有 10 个。
+
 class Solution:
     def maximumSwap(self, num: int) -> int:
         string = list(str(num))
@@ -14208,6 +15110,8 @@ class Solution:
 预期结果：
 3
 
+时间复杂度： O(N)，其中 N 为数组的长度。我们对数组进行了单次遍历。
+空间复杂度： O(1)。
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         start = 0
@@ -14237,9 +15141,8 @@ class Solution:
 
 深度优先 or 广度优先
 
-* 时间复杂度:O(3m × 4n), m是对应3个字母的数字, n是对应4个字母的数字
-
-* 时间复杂度:O(3m × 4n), m是对应3个字母的数字, n是对应4个字母的数字
+* 时间复杂度：O(3^m × 4^n), m是对应3个字母的数字, n是对应4个字母的数字
+* 空间复杂度：O(m+n)
 
 ```py
 输入：digits = "23"
@@ -14283,7 +15186,14 @@ class Solution:
             tmp.add(nums[i])
             if len(tmp) < i + 1:
                 return nums[i]
-        
+
+
+时间复杂度： O(n)。
+
+遍历数组一遍。使用哈希集合（HashSet），添加元素的时间复杂度为 O(1)，故总的时间复杂度是 O(n)。
+
+空间复杂度： O(n)。不重复的每个元素都可能存入集合，因此占用 O(n) 额外空间。
+ 
 ```
 
 
@@ -14309,6 +15219,12 @@ class Solution:
         # 1) 将 i 拆分成 j 和 i−j 的和，且 i−j 不再拆分成多个正整数，此时的乘积是 j * (i-j)
         # 2) 将 i 拆分成 j 和 i−j 的和，且 i−j 继续拆分成多个正整数，此时的乘积是 j * dp[i-j]
 
+
+
+时间复杂度：O(n^2) ，其中 n 是给定的正整数。对于从 2 到 n 的每一个整数都要计算对应的 dp 值，
+空间复杂度： O(n)，其中 n 是给定的正整数。创建一个数组 dp，其长度为 n + 1。
+
+
 ```
 
 
@@ -14319,6 +15235,9 @@ https://leetcode-cn.com/problems/max-submatrix-lcci/solution/zhe-yao-cong-zui-da
 
 ```py
 翻译一个python版本
+
+1.时间复杂度：O(n^2*m)
+2.空间复杂度：O(m)
 
 class Solution:
     def getMaxMatrix(self, matrix: List[List[int]]) -> List[int]:
@@ -14515,6 +15434,15 @@ class Solution:
         # 2 + 3 > 4
         # 2 + 4 > 4
         # 2 + 3 > 4
+
+时间复杂度：O(n^2)，其中 n 是数组 nums 的长度。
+
+        我们需要 O(nlogn) 的时间对数组 nums 进行排序，
+
+        随后需要 O(n^2) 的时间使用一重循环枚举 a 的下标以及使用双指针维护 b, c 的下标。
+
+空间复杂度： O(logn)，即为排序需要的栈空间。
+ 
 ```
 
 
@@ -14556,9 +15484,10 @@ class Solution:
 最后一个目录名（如果存在）不能 以 '/' 结尾。
 此外，路径仅包含从根目录到目标文件或目录的路径上的目录（即，不含 '.' 或 '..'）。
 
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/simplify-path
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+时间复杂度： O(n)，其中 n 是字符串 path 的长度。
+
+空间复杂度： O(n)。我们需要 O(n) 的空间存储 names 中的所有字符串。
+
 
 class Solution(object):
     def simplifyPath(self, path):
@@ -14582,6 +15511,9 @@ class Solution(object):
 
 遍历字符串， 对于每个字母， 计算在第几行， 加入字典。
 
+时间复杂度： O(n)。n 为字符串 s 的长度。
+
+空间复杂度： O(r)。其中 r = numRows
 class Solution: 
     def convert(self, s: str, numRows: int) -> str:
         if numRows == 1: return s
@@ -14641,6 +15573,9 @@ class Solution(object):
                 idx5 += 1
         return res[-1]
 
+时间复杂度： O(n)。需要计算数组 dp 中的 n 个元素，每个元素的计算都可以在 O(1) 的时间内完成。
+空间复杂度： O(n)。空间复杂度主要取决于数组 dp 的大小。
+ 
 # 2 3 5 [1, 2]
 # 4 3 5 [1, 2, 3]
 # 4 6 5 [1, 2, 3, 4]
@@ -14682,6 +15617,9 @@ class Solution:
                 if i2: # s2 和 s3 比较
                     dp[i2] = dp[i2] or (dp[i2 - 1] and string2[i2 - 1] == stringtar[p])
         return dp[n2]
+
+时间复杂度： O(nm)，两重循环的时间代价为 O(nm)。
+空间复杂度： O(m)，即 s2 的长度。
 
 "aabcc"
 "dbbca"
@@ -14816,6 +15754,14 @@ a c [False, False, False, True, False, True]
 [小明](https://www.bilibili.com/video/BV1X64y1Y7kG?spm_id_from=333.999.0.0)
 
 ```py
+时间复杂度： O(mn)，其中 m 是矩阵的行数，n 是矩阵的列数。
+
+        我们至多只需要遍历该矩阵两次。
+
+空间复杂度： O(m+n)，其中 m 是矩阵的行数，n 是矩阵的列数。
+
+        我们需要分别记录每一行或每一列是否有零出现。
+ 
 给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
@@ -14824,13 +15770,13 @@ class Solution:
         """
         setrow = set()
         setcol = set()
-        记录含0的位置
+        # 记录含0的位置
         for i in range(len(matrix)):
             for j in range(len(matrix[0])):
                 if matrix[i][j] == 0:
                     setrow.add(i)
                     setcol.add(j)
-        将其所在行和列的所有元素都设为 0
+        # 将其所在行和列的所有元素都设为 0
         for r in setrow:
             for j in range(len(matrix[0])):
                 matrix[r][j] = 0
@@ -14942,6 +15888,9 @@ class Solution:
             ans += n
         return ans
 
+时间复杂度： O(logn)。
+
+空间复杂度： O(1)。
 ```
 
 ```scala
@@ -14992,6 +15941,17 @@ class Solution:
                 num -= numlist[i]
                 res = res + strlist[i]
         return res
+
+时间复杂度： O(1)。
+
+        由于 valueSymbols 长度是固定的，且这 13 字符中的每个字符的出现次数均不会超过 3，
+
+        因此循环次数有一个确定的上限。对于本题给出的数据范围，循环次数不会超过 15 次。
+
+        计算量与输入数字的大小无关。
+
+空间复杂度： O(1)。
+
 ```
 
 ```scala
@@ -15096,6 +16056,14 @@ class Solution:
             if haystack[i : i + len(needle)] == needle:
                 return i 
         return -1
+时间复杂度： O(n×m)，其中 n 是字符串 haystack 的长度，m 是字符串 needle 的长度。
+
+最坏情况下我们需要将字符串 needle 与字符串 haystack 的所有长度为 m 的子串均匹配一次。
+
+空间复杂度： O(1)。我们只需要常数的空间保存若干变量。
+
+
+
 ```
 
 ```scala
@@ -15134,6 +16102,9 @@ object Solution {
 [小梦想家](https://www.bilibili.com/video/BV1Yb411H7cV?spm_id_from=333.999.0.0)
 
 ```py
+埃氏筛
+时间复杂度： O(nloglogn)
+空间复杂度：O(n) 
 class Solution(object):
     def countPrimes(self, n):
 
