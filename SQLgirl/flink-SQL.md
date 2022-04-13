@@ -783,7 +783,9 @@ RTRIM(string)
 -- INT 个 string 连接的字符串
 REPEAT(string, int)
 -- STRING1 所有与正则表达式 STRING2 匹配的子字符串被 STRING3 替换后的字符串
--- 例如 'foobar'.regexpReplace('oo|ar', '') 返回 "fb"。
+
+例如 'foobar'.regexpReplace('oo|ar', '') 返回 "fb"。
+
 REGEXP_REPLACE(string1, string2, string3)
 -- 该字符串
 -- 从位置 INT1 用 STRING2 替换 STRING1 的 INT2（默认为 STRING2 的长度）字符。 

@@ -1,387 +1,6 @@
 
 [Hive SQL面试题(附答案)](https://mp.weixin.qq.com/s/4C4wQdaLdtLuTADi16dEsA)
 
-## 手写 HQL 第 1 题 +
-
-```sql
-思路：
-- avg(score) group by subject_id
-- 由于每一行都要比较 score 和 avg_score, 改写成
-- avg(score) over(partition by subject_id)
-
-- 过滤 sum(if(score>avg_score,1,0)) = 3
-- 放在 group by uid having 最简便
-```
-
-```sql
-表结构：uid,subject_id,score
-求：找出所有科目成绩都大于某一学科平均成绩的学生
-数据集如下
-
-
-
-1001 01 90
-1001 02 90
-1001 03 90
-1002 01 85
-1002 02 85
-1002 03 70
-1003 01 70
-1003 02 70
-1003 03 85
-
-我的答案
-select
-    uid
-from(
-    select 
-        uid,
-        score
-        avg(score) over(partition by subject_id) avg_score
-    from score
-    ) t1
-group by uid having sum(if(score>avg_score,1,0)) = 3
-
-```
-
-## 手写 HQL 第 2 题 +
-
-```sql
-思路：
-- visitDate 格式转换 regexp_replace(visitDate,'/','-')
-- visitDate 格式转换 date_format(visitDate,'yyyy-MM')
-- order by userId, visitDate
-- 小计 用 sum() group by userId, visitDate
-- 累积 用 sum() over(partition by userId order by visitDate)
-```
-
-```sql
-我们有如下的用户访问数据
-
-userId visitDate visitCount
-u01 2017/1/21 5
-u02 2017/1/23 6
-u03 2017/1/22 8
-u04 2017/1/20 3
-u01 2017/1/23 6
-u01 2017/2/21 8
-U02 2017/1/23 6
-U01 2017/2/22 4
-
-要求使用 SQL 统计出每个用户的累积访问次数，如下表所示：
-
-
-
-用户 id 月份 小计 累积
-u01 2017-01 11 11
-u01 2017-02 12 23
-u02 2017-01 12 12
-u03 2017-01 8 8
-u04 2017-01 3 3
-
-数据集
-
-u01 2017/1/21 5
-u02 2017/1/23 6
-u03 2017/1/22 8
-u04 2017/1/20 3
-u01 2017/1/23 6
-u01 2017/2/21 8
-u02 2017/1/23 6
-u01 2017/2/22 4
-```
-
-## 手写 HQL 第 3 题 + 
-
-```sql
-
-有 50W 个京东店铺，每个顾客访客访问任何一个店铺的任何一个商品时都会产生一条访问日志，访问日志存
-储的表名为 Visit，访客的用户 id 为 user_id，被访问的店铺名称为 shop，请统计：
-
-1）每个店铺的 UV（访客数）
-
-思路：
-- count(distinct user_id) 并且 group by shop
-
-2）每个店铺访问次数 top3 的访客信息。输出店铺名称、访客 id、访问次数
-
-思路：
-- count(distinct user_id) 并且 group by shop, user_id
-
-- rank() over(partition by shop order by usr_cnt)
-- select shop, user_id, usr_cnt 需要过滤 where rnk <= 3
-
-数据集
-
-u1 a
-u2 b
-u1 b
-u1 a
-u3 c
-u4 b
-u1 a
-u2 c
-u5 b
-u4 b
-u6 c
-u2 c
-u1 b
-u2 a
-u2 a
-u3 a
-u5 a
-u5 a
-u5 a
-
-```
-
-## 手写 HQL 第 4 题
-
-```sql
-已知一个表 STG.ORDER，有如下字段:Date，Order_id，User_id，amount。
-
-请给出 sql 进行统计:数据样例:
-
-2017-01-01, 10029028, 1000003251, 33.57。
-
-
-1）给出 2017 年每个月的订单数、用户数、总成交金额。
-
-思路：
-- date_format(date, 'yyyy-MM') 作为 mon
-- 用户数 count(distinct User_id) \ 总成交金额 sum(amount) 需要 group by mon
-
-2）给出 2017 年 11 月的新客数(指在 11 月才有第一笔订单)
-
-思路：
-- rank() over(partition by User_id order by mon) 
-- where mon = '2017-11' and rnk = 1
-- count(distinct User_id)
-
-标准答案的逻辑更好：having 用起来
-
-select
-    count(user_id)
-from
-    order_tab
-group by
-    user_id
-having
-    date_format(min(dt),'yyyy-MM')='2017-11';
-
-
-建表
-
-
-create table order_tab(
-    dt string,
-    order_id string,
-    user_id string,
-    amount decimal(10,2)) 
-row format delimited 
-fields terminated by '\t';
-```
-
-## 手写 HQL 第 5 题
-
-```sql
-
-
-
-有日志如下，请写出代码求得所有用户和活跃用户的总数及平均年龄。
-（活跃用户指连续两天都有访问记录的用户）
-
-思路：
-所有用户的总数及平均年龄
-- group by user_id
-- count(user_id) avg(age)
-活跃用户的总数及平均年龄
-- rank() over(partition by user_id order by dt) rnk
-- dt - rnk 相等，就是连续登录 需要用 date_sub(dt,rk)
-- count(dt - rnk) over(partition by user_id) 大于等于 2 
-- 用 having 按照 gttwo 过滤
-- count(distinct user_id) avg(age)
-
-日期 用户 年龄
-数据集
-2019-02-11,test_1,23
-2019-02-11,test_2,19
-2019-02-11,test_3,39
-2019-02-11,test_1,23
-2019-02-11,test_3,39
-2019-02-11,test_1,23
-2019-02-12,test_2,19
-2019-02-13,test_1,23
-2019-02-15,test_2,19
-2019-02-16,test_2,19
-
-```
-
-## 手写 HQL 第 6 题
-
-```sql
-请用 sql 写出所有用户中在今年 10 月份第一次购买商品的金额，表 ordertable 字段
-（购买用户：userid，金额：money，购买时间：paymenttime(格式：2017-10-01)，订单 id：orderid）
-
-思路：
-- 过滤 date_format(paymenttime, 'yyyy-MM') = '2017-10'
-- rank() over(partition by userid order by paymenttime)
-- 过滤 where rnk = 1
-
-
-1）建表
-
-
-create table ordertable(
- userid string,
- money int,
- paymenttime string,
- orderid string)
-row format delimited fields terminated by '\t';
-
-
-```
-
-## 手写 HQL 第 7 题
-
-```sql
-有一个线上服务器访问日志格式如下（用 sql 答题）
-
-
-时间 接口 ip 地址
-
-
-2016-11-09 11：22：05 /api/user/login 110.23.5.33
-2016-11-09 11：23：10 /api/user/detail 57.3.2.16
-.....
-2016-11-09 23：59：40 /api/user/login 200.6.5.166
-
-
-求 11 月 9 号下午 14 点（14-15 点），访问 api/user/login 接口的 top10 的 ip 地址
-
-思路：
-
-- 11 月 9 号下午 14 点（14-15 点）:
-- where hour(time) between 14 and 15
-
-- 访问 api/user/login 接口:
-- where interface = 'api/user/login'
-
-- 访问次数 top10 的 ip 地址:
-- count(*) group by ip
-- order by cnt desc
-- limit 10
-
-
-数据集
-
-
-2016-11-09 14:22:05 /api/user/login 110.23.5.33
-2016-11-09 11:23:10 /api/user/detail 57.3.2.16
-2016-11-09 14:59:40 /api/user/login 200.6.5.166
-2016-11-09 14:22:05 /api/user/login 110.23.5.34
-2016-11-09 14:22:05 /api/user/login 110.23.5.34
-2016-11-09 14:22:05 /api/user/login 110.23.5.34
-2016-11-09 11:23:10 /api/user/detail 57.3.2.16
-2016-11-09 23:59:40 /api/user/login 200.6.5.166
-2016-11-09 14:22:05 /api/user/login 110.23.5.34
-2016-11-09 11:23:10 /api/user/detail 57.3.2.16
-2016-11-09 23:59:40 /api/user/login 200.6.5.166
-2016-11-09 14:22:05 /api/user/login 110.23.5.35
-2016-11-09 14:23:10 /api/user/detail 57.3.2.16
-2016-11-09 23:59:40 /api/user/login 200.6.5.166
-2016-11-09 14:59:40 /api/user/login 200.6.5.166
-2016-11-09 14:59:40 /api/user/login 200.6.5.166
-
-
-```
-
-## 手写 SQL 第 8 题
-
-```sql
-有一个账号表如下，请写出 SQL 语句，查询各自区组的 money 排名前十的账号（分组取前 10）
-
-
-1）建表（MySQL）
-
-
-CREATE TABLE `account`
-( `dist_id` int（11）DEFAULT NULL COMMENT '区组 id',
- `account` varchar（100）DEFAULT NULL COMMENT '账号',
- `gold` int（11）DEFAULT 0 COMMENT '金币'）;
-
-思路：
-- rank() over(partition by `dist_id` order by `gold` desc)
-- where rnk <= 10
-
-```
-
-## 手写 HQL 第 9 题
-
-```sql
-
-
-
-create table member( 会员表
-    memberid string, 主键
-    credits double) 积分
-row format delimited 
-fields terminated by '\t';
-
-create table sale( 销售表
-    memberid string, 外键 - 销售表中的 memberid 可以为空 - 一个会员可以有多条购买记录
-    MNAccount double)  购买金额
-row format delimited 
-fields terminated by '\t';
-
-sale
-1001 50.3
-1002 56.5
-1003 235
-1001 23.6
-1005 56.2
- 25.6
- 33.5
-
-create table regoods( 退货表
-    memberid string, 外键 - memberid 可以为空 - 可以有一条或多条退货记录
-    RMNAccount double)  退货金额
-row format delimited 
-fields terminated by '\t';
-
-regoods
-1001 20.1
-1002 23.6
-1001 10.1
- 23.5
- 10.2
-1005 0.8
-
-
-
-查询需求：分组查出`销售表`中`所有会员`购买金额，同时分组查出`退货表`中`所有会员`的退货金额，把`会员 id 相同
-的购买金额`-`退款金额`得到的结果更新到表`会员表`中对应会员的`积分字段（credits）`
-
-
-思路：
-- 分组查出`销售表`中`所有会员`购买金额：
-- where memberid is not null
-- where memberid != ''s
-- group by memberid
-- 分组查出`退货表`中`所有会员`的退货金额
-- where memberid is not null
-- where memberid != ''
-- group by memberid
-- 把`会员 id 相同`的`购买金额`-`退款金额`得到的结果
-- MNAccount - RMNAccount
-- join on sale.memberid = regoods.memberid
-
-
-- 更新到表`会员表`中对应会员的`积分字段（credits）`
-insert into table member 放在 select 语句的上方
-
-
-```
 
 ## 1. 用一条 SQL 语句查询出每门课都大于 80 分的学生姓名
 
@@ -400,10 +19,21 @@ name kecheng fenshu
 having 后面的 min(fenshu) 对应于
 having 前面的 group by name 
 
-select name 
-from table 
-group by name 
+select 
+    name 
+from 
+    table 
+group by 
+    name 
 having min(fenshu)>80
+
+注意：
+第一步：
+定位 group by 逻辑
+第二步：
+定位 `其他` 逻辑
+第三步：
+定位 `其他` 逻辑 的 `position`
 ```
 
 
@@ -418,14 +48,18 @@ having min(fenshu)>80
 
 
 思路：
-表一：
-- 其他都相同的学生冗余信息：
-group by 学号, 姓名, 课程编号, 课程名称, 分数
-- 把编号的最小值取出来：
-min(自动编号) 
-表二：
-- 用 where 过滤：
-select * where 自动编号 in (表一)
+
+    表一：
+    - 其他都相同的学生冗余信息：
+        group by 学号, 姓名, 课程编号, 课程名称, 分数
+    - 把编号的最小值取出来：
+        min(自动编号) 
+
+    表二：
+    - 用 where 过滤：
+        select * where 自动编号 in (表一)
+
+
 ```
 
 ## 3. 排列组合
@@ -638,9 +272,16 @@ partition by category
 )
 
 10 个: 注意 每个 category 里面都要保留 10 个
+
 group by category
 order by cnt desc
 limit 10
+
+等效于
+
+rank() over(partition by category order by cnt desc) 作为 ranK
+where rank() <= 10
+
 ```
 
 
