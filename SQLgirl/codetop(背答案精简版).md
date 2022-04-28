@@ -1,309 +1,6 @@
-<!-- vscode-markdown-toc -->
-* 1. [206. 反转链表Reverse Linked List](#ReverseLinkedList)
-* 2. [146. LRU缓存机制【构造🏰】LRU Cache](#LRULRUCache)
-* 3. [3. 无重复字符的最长子串 【滑动窗口🔹】数组中重复的数字 Longest Substring Without Repeating Characters](#LongestSubstringWithoutRepeatingCharacters)
-* 4. [215. 数组中的第K个最大元素（add）](#Kadd)
-* 5. [25. K 个一组翻转链表（add）](#Kadd-1)
-* 6. [912 补充题4. 手撕快速排序（add）](#add)
-* 7. [15. 三数之和](#)
-* 8. [53. 最大子序和53-【贪心🧡】Maximum subarray](#Maximumsubarray)
-* 9. [1. 两数之和](#-1)
-* 10. [21. 合并两个有序链表](#-1)
-* 11. [141-Linked List Cycle](#LinkedListCycle)
-* 12. [102-Binary Tree Level Order Traversal](#BinaryTreeLevelOrderTraversal)
-* 13. [121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机](#BestTimetoBuyandSellStock121-)
-* 14. [160-Intersection of Two Linked Lists](#IntersectionofTwoLinkedLists)
-* 15. [88-Merge sorted array](#Mergesortedarray)
-* 16. [103. Binary Tree Zigzag Level Order Traversal](#BinaryTreeZigzagLevelOrderTraversal)
-* 17. [236-二叉树的最近公共祖先](#-1)
-* 18. [20-Valid parentheses](#Validparentheses)
-* 19. [5. 【回文🌈】Longest Palindromic Substring -最长回文🌈子串](#LongestPalindromicSubstring-)
-* 20. [33. Search in Rotated Sorted Array](#SearchinRotatedSortedArray)
-* 21. [200 【🍒并查集】岛屿数量](#-1)
-* 22. [415-Add Strings](#AddStrings)
-* 23. [46- ★ 全排列](#-1)
-* 24. [92-Reverse Linked List II](#ReverseLinkedListII)
-* 25. [142 Linked List Cycle II](#LinkedListCycleII)
-* 26. [23. 【最小堆🌵】Merge k Sorted Lists](#MergekSortedLists)
-* 27. [54. Spiral Matrix](#SpiralMatrix)
-* 28. [300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列](#LongestIncreasingSubsequence)
-* 29. [704.Binary Search二分查找](#BinarySearch)
-* 30. [42. Trapping Rain Water](#TrappingRainWater)
-* 31. [232-【构造🏰】Implement Queue using Stacks](#ImplementQueueusingStacks)
-* 32. [94-Inorder wih stack](#Inorderwihstack)
-* 33. [144-Binary Tree Preorder Traversal](#BinaryTreePreorderTraversal)
-* 34. [145-Binary Tree Postorder Traversal](#BinaryTreePostorderTraversal)
-* 35. [199 Binary Tree Right Side View](#BinaryTreeRightSideView)
-* 36. [143 Reorder List](#ReorderList)
-* 37. [70. Climbing Stairs （重要）](#ClimbingStairs)
-* 38. [124. Binary Tree Maximum Path Sum](#BinaryTreeMaximumPathSum)
-* 39. [56. Merge Intervals](#MergeIntervals)
-* 40. [剑指 Offer 22. 链表中倒数第k个节点](#Offer22.k)
-* 41. [82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List](#IIRemoveDuplicatesfromSortedList)
-* 42. [69 Sqrt(x) 见 HJ107 求解立方根](#SqrtxHJ107)
-* 43. [8. String to Integer(atoi)](#StringtoIntegeratoi)
-* 44. [19-Remove Nth Node From End of List](#RemoveNthNodeFromEndofList)
-* 45. [2. Add Two Numbers](#AddTwoNumbers)
-* 46. [148. Sort List](#SortList)
-* 47. [72. Edit Distance 72-编辑距离](#EditDistance72-)
-* 48. [4. 寻找两个正序数组的中位数 Median of Two Sorted Arrays](#MedianofTwoSortedArrays)
-* 49. [105-从前序与中序遍历序列构](#-1)
-* 50. [151. Reverse Words in a String](#ReverseWordsinaString)
-* 51. [104-Maximum Depth of Binary](#MaximumDepthofBinary)
-* 52. [76-【滑动窗口🔹】最小覆盖子串](#-1)
-* 53. [31 ★ Next Permutation](#NextPermutation)
-* 54. [239. ★【最小堆🌵 + 滑动窗口🔹单调队列】Sliding Window Maximum](#SlidingWindowMaximum)
-		* 54.1. [不类似567，567类似187](#567567187)
-* 55. [1143 【二维动态🚀规划】Longest Common Subsequence](#LongestCommonSubsequence)
-		* 55.1. [类似题目：516最长回文🌈子序列](#516)
-* 56. [129 Sum Root to Leaf Numbers](#SumRoottoLeafNumbers)
-* 57. [93. 复原 IP 地址](#IP)
-* 58. [110-Balanced Binary Tree](#BalancedBinaryTree)
-* 59. [113. 二叉树中和为某一值的路径](#-1)
-* 60. [22. Generate Parentheses](#GenerateParentheses)
-* 61. [41 First Missing Positive](#FirstMissingPositive)
-* 62. [543 Diameter of Binary Tree](#DiameterofBinaryTree)
-* 63. [155-【构造🏰】Min Stack](#MinStack)
-* 64. [98. Validate Binary Search Tree 98-验证二叉搜索树](#ValidateBinarySearchTree98-)
-* 65. [470. Implement Rand10() Using Rand7()](#ImplementRand10UsingRand7)
-* 66. [101-Symmetric tree](#Symmetrictree)
-* 67. [32 Longest Valid Parentheses](#LongestValidParentheses)
-* 68. [43. 字符串相乘](#-1)
-* 69. [64. Minimum Path Sum 64-最小路径和](#MinimumPathSum64-)
-* 70. [718. 最长重复子数组](#-1)
-* 71. [78. Subsets 子集](#Subsets)
-* 72. [112-Path Sum](#PathSum)
-* 73. [48. 旋转图像 Rotate Image](#RotateImage)
-* 74. [234. 【回文🌈】Palindrome Linked List](#PalindromeLinkedList)
-* 75. [322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change](#dfsCoinChange-518CoinChange)
-* 76. [39. Combination Sum 39-组合总和](#CombinationSum39-)
-* 77. [169. 【位运算😜】Majority Element](#MajorityElement)
-* 78. [83-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray)
-* 79. [226-翻转二叉树](#-1)
-* 80. [165. Compare Version Numbers](#CompareVersionNumbers)
-* 81. [34-在排序数组中查找元素的第一个 - 类似剑指offer53](#offer53)
-* 82. [153-寻找旋转排序数组中的最小值](#-1)
-* 83. [62-不同路径](#-1)
-* 84. [128. 【🍒并查集】Longest Consecutive Sequence](#LongestConsecutiveSequence)
-* 85. [468 Validate IP Address](#ValidateIPAddress)
-* 86. [136 【位运算😜】Single Number](#SingleNumber)
-* 87. [162. Find Peak Element](#FindPeakElement)
-* 88. [240. 二维数组的查找 - 74 Search a 2D Matrix](#Searcha2DMatrix)
-* 89. [221-【动态🚀规划】最大正方形](#-1)
-* 90. [14 - Longest common prefix](#Longestcommonprefix)
-* 91. [179 Largest Number](#LargestNumber)
-* 92. [138. 复制带随机指针的链表](#-1)
-* 93. [695-岛屿的最大面积](#-1)
-* 94. [剑指 Offer 36. 二叉搜索树与双向链表 - 530. Minimum Absolute Difference in BST](#Offer36.-530.MinimumAbsoluteDifferenceinBST)
-* 95. [24-Swap Nodes in Pairs](#SwapNodesinPairs)
-* 96. [394 Decode String](#DecodeString)
-* 97. [198. 【动态🚀规划】House Robber 198-打家劫舍](#HouseRobber198-)
-* 98. [209-长度最小的子数组](#-1)
-* 99. [227 Basic Calculator II - 见 224. 基本计算器](#BasicCalculatorII-224.)
-* 100. [958. 二叉树的完全性检验](#-1)
-* 101. [剑指 Offer 09. 用两个栈实现队列](#Offer09.)
-* 102. [122-【贪心🧡】买卖股票的最佳时机 II 122-Best Time to Buy and Sell Stock II](#II122-BestTimetoBuyandSellStockII)
-* 103. [剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B](#Offer54.k-230KthSmallestElementinaB)
-* 104. [283. Move Zeros](#MoveZeros)
-* 105. [498. 对角线遍历](#-1)
-* 106. [662. Maximum Width of Binary Tree](#MaximumWidthofBinaryTree)
-* 107. [297. Serialize and Deserialize Binary Tree](#SerializeandDeserializeBinaryTree)
-* 108. [152 【动态🚀规划】乘积最大子数组](#-1)
-* 109. [79. Word Search](#WordSearch)
-* 110. [剑指 Offer 10- I. 斐波那契数列](#Offer10-I.)
-* 111. [剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](#Offer21.)
-* 112. [59. Spiral Matrix II](#SpiralMatrixII)
-* 113. [328. 奇偶链表 (Odd Even Linked List)](#OddEvenLinkedList)
-* 114. [补充题1. 排序奇升偶降链表](#1.)
-* 115. [剑指 Offer 40. 最小的k个数](#Offer40.k)
-* 116. [518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change](#CoinChange2-322.dfsCoinChange)
-* 117. [224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同](#BasicCalculatorII)
-* 118. [402 Remove K Digits](#RemoveKDigits)
-* 119. [补充题23. 检测循环依赖](#23.)
-* 120. [7 Reverse Integer](#ReverseInteger)
-* 121. [739-Daily Temperatures](#DailyTemperatures)
-* 122. [61. Rotate List](#RotateList)
-* 123. [剑指 Offer 62. 圆圈中最后剩下的数字](#Offer62.)
-* 124. [剑指 Offer 51. 数组中的逆序对](#Offer51.)
-* 125. [560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组](#SubarraySumEqualsKK)
-* 126. [50 Pow(x, n)](#Powxn)
-* 127. [补充题2. 圆环回原点问题](#2.)
-* 128. [225-【构造🏰】Implement Stack using Queues](#ImplementStackusingQueues)
-* 129. [230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点](#KthSmallestElementinaB-Offer54.k)
-* 130. [75. Sort Colors](#SortColors)
-* 131. [47 - ★ 全排列 II-剪枝版](#II-)
-* 132. [11. Container With Most Water](#ContainerWithMostWater)
-* 133. [139 【动态🚀规划 + 背包】Word Break](#WordBreak)
-* 134. [125 【回文🌈】Valid Palindrome](#ValidPalindrome)
-* 135. [189. Rotate Array](#RotateArray)
-* 136. [74 Search a 2D Matrix - 240. 二维数组的查找](#Searcha2DMatrix-240.)
-* 137. [287 Find the Duplicate Number](#FindtheDuplicateNumber)
-* 138. [384. 打乱数组](#-1)
-* 139. [329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix](#dfsLongestIncreasingPathinaMatrix)
-* 140. [349. Intersection of Two Arrays](#IntersectionofTwoArrays)
-* 141. [26-Remove duplicates from sorted array](#Removeduplicatesfromsortedarray-1)
-* 142. [40. Combination Sum II 40-组合总和 II](#CombinationSumII40-II)
-* 143. [9-【回文🌈】Palindrome](#Palindrome)
-* 144. [208. 【构造🏰】Implement Trie (Prefix Tree)](#ImplementTriePrefixTree)
-* 145. [440. 字典序的第K小数字](#K)
-* 146. [123-买卖股票的最佳时机 III](#III)
-* 147. [135. 分发糖果](#-1)
-* 148. [207-课程表](#-1)
-* 149. [572-另一个树的子树](#-1)
-* 150. [10. 正则表达式匹配](#-1)
-* 151. [55 Jump Game](#JumpGame)
-* 152. [1047. 删除字符串中的所有相邻重复项](#-1)
-* 153. [91. Decode Ways](#DecodeWays)
-* 154. [445-Add Two Numbers II](#AddTwoNumbersII)
-* 155. [213.【动态🚀规划】 House Robber II 213-打家劫舍II](#HouseRobberII213-II)
-* 156. [补充题9. 36进制加法 - 见 415 - Add Strings](#9.36-415-AddStrings)
-* 157. [509. 【动态🚀规划 + 递归】Fibonacci Number](#FibonacciNumber)
-* 158. [295. 数据流的中位数](#-1)
-* 159. [剑指 Offer 61. 扑克牌中的顺子](#Offer61.)
-* 160. [678 Valid Parenthesis String](#ValidParenthesisString)
-* 161. [86. 分隔链表(Partition List)](#PartitionList)
-* 162. [114题. 二叉树展开为链表](#-1)
-* 163. [16. 3Sum Closest](#SumClosest)
-* 164. [450. Delete Node in a BST](#DeleteNodeinaBST)
-* 165. [347. 【最小堆🌵】Top K Frequent Elements](#TopKFrequentElements)
-* 166. [344. Reverse String](#ReverseString)
-* 167. [191 Number of 1 Bits](#Numberof1Bits)
-* 168. [443. String Compression](#StringCompression)
-* 169. [400. 第N个数字](#N)
-* 170. [242. Valid Anagram](#ValidAnagram)
-* 171. [100-Same Tree](#SameTree)
-* 172. [459 Repeated Substring Pattern](#RepeatedSubstringPattern)
-* 173. [442 Find All Duplicates in an Array](#FindAllDuplicatesinanArray)
-* 174. [120 【动态🚀规划】Triangle](#Triangle)
-* 175. [268 【位运算😜】Missing Number](#MissingNumber)
-* 176. [887. Super Egg Drop](#SuperEggDrop)
-* 177. [557. 反转字符串中的单词 III](#III-1)
-* 178. [补充题14. 阿拉伯数字转中文数字](#14.)
-* 179. [168-Excel Sheet Column Title](#ExcelSheetColumnTitle)
-* 180. [1095. Find in Mountain Array](#FindinMountainArray)
-* 181. [670. 最大交换](#-1)
-* 182. [210. Course Schedule II 210-课程表II](#CourseScheduleII210-II)
-* 183. [525. 【前缀和🎨】Contiguous Array](#ContiguousArray)
-* 184. [556 Next Greater Element III - 类似 31 ★ Next Permutation](#NextGreaterElementIII-31NextPermutation)
-* 185. [111-Minimum Depth of Binary Tree](#MinimumDepthofBinaryTree)
-* 186. [37. Sudoku Solver 解数独](#SudokuSolver)
-* 187. [134. Gas Station](#GasStation)
-* 188. [补充题22. IP地址与整数的转换](#22.IP)
-* 189. [876.Middle of the Linked List 链表的中间结点](#MiddleoftheLinkedList)
-* 190. [63 Unique Paths II](#UniquePathsII)
-* 191. [171. Excel Sheet Column Number](#ExcelSheetColumnNumber)
-* 192. [17. Letter Combinations of a Phone Number](#LetterCombinationsofaPhoneNumber)
-* 193. [494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum](#dfsstartIforTargetSum)
-* 194. [剑指 Offer 03. 数组中重复的数字](#Offer03.)
-* 195. [剑指 Offer 33. 二叉搜索树的后序遍历序列](#Offer33.)
-* 196. [862. 和至少为 K 的最短子数组](#K-1)
-* 197. [343-整数拆分](#-1)
-* 198. [673 Number of Longest Increasing Subse](#NumberofLongestIncreasingSubse)
-* 199. [面试题 17.24. 最大子矩阵](#17.24.)
-* 200. [611. 有效三角形的个数](#-1)
-* 201. [45 Jump Game II](#JumpGameII)
-* 202. [85. 最大矩形 - 84. 柱状图中最大的矩形 Largest Rectangle in Histogram](#LargestRectangleinHistogram)
-* 203. [679. 24 点游戏](#-1)
-* 204. [108 Convert Sorted Array to Binary Search Tree](#ConvertSortedArraytoBinarySearchTree)
-* 205. [222. Count Complete Tree Nodes](#CountCompleteTreeNodes)
-* 206. [84. 柱状图中最大的矩形 Largest Rectangle in Histogram - 见85. 最大矩形](#LargestRectangleinHistogram-85.)
-* 207. [71. Simplify Path](#SimplifyPath)
-* 208. [167-Two Sum II - Input array is sorted](#TwoSumII-Inputarrayissorted)
-* 209. [622 Design Circular Queue](#DesignCircularQueue)
-* 210. [6. ZigZag Conversion](#ZigZagConversion)
-* 211. [96. Unique Binary Search Trees](#UniqueBinarySearchTrees)
-* 212. [547 【🍒并查集 + dfs + 队列】朋友圈](#dfs)
-* 213. [264. 【动态🚀规划 + 3指针】Ugly Number II](#UglyNumberII)
-* 214. [97. 交错字符串](#-1)
-* 215. [410. Split Array Largest Sum](#SplitArrayLargestSum)
-* 216. [44. 通配符匹配](#-1)
-* 217. [18. 四数之和](#-1)
-* 218. [405 【位运算😜】Convert a Number to Hexadecimal](#ConvertaNumbertoHexadecimal)
-* 219. [补充题8. 计算数组的小和](#8.)
-* 220. [863. All Nodes Distance K in Binary Tree](#AllNodesDistanceKinBinaryTree)
-* 221. [337 House Robber III](#HouseRobberIII)
-* 222. [166. Fraction to Recurring Decimal](#FractiontoRecurringDecimal)
-* 223. [面试题 08.12. 八皇后](#08.12.)
-* 224. [73. Set Matrix Zeroes](#SetMatrixZeroes)
-* 225. [剑指 Offer 46. 把数字翻译成字符串](#Offer46.)
-* 226. [503 【栈】Next Greater Element II](#NextGreaterElementII)
-* 227. [763 Partition Labels](#PartitionLabels)
-* 228. [340. 至多包含 K 个不同字符的最长子串](#K-1)
-* 229. [130. 【🍒并查集】Surrounded Regions 130-被围绕的区域](#SurroundedRegions130-)
-* 230. [117 Populating Next Right Pointers in Ea (可跳过)](#PopulatingNextRightPointersinEa)
-* 231. [剑指 Offer 07. 重建二叉树](#Offer07.)
-* 232. [378-【最小堆🌵】有序矩阵中第K小的元素](#K-1)
-* 233. [剑指 Offer 32 - III. 从上到下打印二叉树 III](#Offer32-III.III)
-* 234. [77. 组合](#-1)
-* 235. [528 Random Pick with Weight](#RandomPickwithWeight)
-* 236. [279 【动态🚀规划 + 背包】Perfect Squares](#PerfectSquares)
-* 237. [257-二叉树的所有路径](#-1)
-* 238. [692. Top K Frequent Words](#TopKFrequentWords)
-* 239. [剑指 Offer 50. 第一个只出现一次的字符](#Offer50.)
-* 240. [137 【位运算😜】Single Number II](#SingleNumberII)
-* 241. [补充题21. 字符串相减](#21.)
-* 242. [354. 俄罗斯套娃信封问题](#-1)
-* 243. [253. 会议室 II](#II)
-* 244. [628. 三个数的最大乘积](#-1)
-* 245. [674. 最长连续递增序列](#-1)
-* 246. [剑指 Offer 57 - II. 和为s的连续正数序列](#Offer57-II.s)
-* 247. [315. Count of Smaller Numbers After Self](#CountofSmallerNumbersAfterSelf)
-* 248. [172-Factorial Trailing Zeroes](#FactorialTrailingZeroes)
-* 249. [647 【动态🚀规划 + 回文🌈】Palindromic Substrings](#PalindromicSubstrings)
-* 250. [260-【位运算😜】只出现一次的数字 III](#III-1)
-* 251. [188 【动态🚀规划】Best Time to Buy and Sell Stock IV](#BestTimetoBuyandSellStockIV)
-* 252. [剑指 Offer 35. 复杂链表的复制](#Offer35.)
-* 253. [12. Integer to Roman](#IntegertoRoman)
-* 254. [ 386. 字典序排数](#386.)
-* 255. [752. Open the Lock](#OpentheLock)
-* 256. [395 Longest Substring with At Least K](#LongestSubstringwithAtLeastK)
-* 257. [231. 【位运算😜】Power of Two](#PowerofTwo)
-* 258. [977 Squares of a Sorted Array](#SquaresofaSortedArray)
-* 259. [437 【前缀和🎨】Path Sum III](#PathSumIII)
-* 260. [617. 合并二叉树](#-1)
-* 261. [60. 第k个排列](#k)
-* 262. [28-Implement str](#Implementstr)
-* 263. [204-Count Primes](#CountPrimes)
-* 264. [剑指 Offer 65. 不用加减乘除做加法](#Offer65.)
-* 265. [416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum](#dfsstartIforPartitionEqualSubsetSum)
-		* 265.1. [相似题目：494题](#494)
-* 266. [51. N皇后](#N-1)
-* 267. [补充题24. 双栈排序](#24.)
-* 268. [680 【回文🌈】Valid Palindrome II](#ValidPalindromeII)
-* 269. [剑指 Offer 38. 字符串的排列](#Offer38.)
-* 270. [701 Insert into a Binary Search Tree](#InsertintoaBinarySearchTree)
-* 271. [530. Minimum Absolute Difference in BST - 剑指 Offer 36. 二叉搜索树与双向链表](#MinimumAbsoluteDifferenceinBST-Offer36.)
-* 272. [698. 划分为k个相等的子集](#k-1)
-* 273. [173 【构造🏰】Binary Search Tree Iterator](#BinarySearchTreeIterator)
-* 274. [836. 矩形重叠](#-1)
-* 275. [99. 恢复二叉搜索树](#-1)
-* 276. [316 【贪心🧡】Remove Duplicate Letters](#RemoveDuplicateLetters)
-* 277. [109题. 有序链表转换二叉搜索树](#-1)
-* 278. [115. 【动态🚀规划】Distinct Subsequences](#DistinctSubsequences)
-* 279. [1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom](#MinimumInsertionStepstoMakeaStringPalindrom)
-
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
-
-
-
-
-
-
 # 1 day (得分 = 30分) 30
 
-##  1. <a name='ReverseLinkedList'></a>206. 反转链表Reverse Linked List
-
-https://leetcode-cn.com/problems/reverse-linked-list/submissions/
-
-[哈哈哈](https://www.bilibili.com/video/BV1Q7411V7zr?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1XQ4y1h735?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV16Q4y1M767?spm_id_from=333.999.0.0)
+##  1. <a name='ReverseLinkedList'></a> reverseList
 
 ```py
 输入：head = [1,2,3,4,5]
@@ -312,51 +9,22 @@ https://leetcode-cn.com/problems/reverse-linked-list/submissions/
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:
         cur = None
-        while head: # 😐 while 循环, cur
+        while head: 
             headnxt = head.next
             head.next = cur
             cur = head
             head = headnxt
         return cur
 
-时间复杂度：O(n)，其中 n 是链表的节点数量。需要对每个节点进行更新指针的操作。
+时间复杂度：O(n)，其中 n 是链表的节点数量。
 
-空间复杂度：O(n)，其中 n 是链表的节点数量。空间复杂度主要取决于递归调用的栈空间。
+空间复杂度：O(n)，
 ```
 
-```scala
-/**
-* time complexity: O(n)
-* space complexity: O(1) 
-*/
-object Solution {
-    def reverseList(head: ListNode): ListNode = {
-        var res: ListNode = null
-        var pre = head
 
-        while (pre != null) {
-            val prenxt = pre.next
-            pre.next = res
-            res = pre
-            pre = prenxt
-        }
-        res
-    }
-}
-
-```
-
-##  5. <a name='Kadd-1'></a>25. K 个一组翻转链表（add）
-
-https://leetcode-cn.com/problems/reverse-nodes-in-k-group/solution/dong-hua-yan-shi-di-gui-25-kge-yi-zu-fan-y6hv/
+##  5. <a name='Kadd-1'></a> reverseKGroup
 
 ```py
-递归
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
 输入：head = [1,2,3,4,5], k = 3
 输出：[3,2,1,4,5]
 
@@ -364,11 +32,14 @@ class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         cur = head
         cnt = 0
-        while cur and cnt != k: # 😐 while 循环, cur
+        while cur and cnt != k: 
+            # 必须用 cnt += 1
+            # 而不能用 k -= 1
             cur = cur.next
             cnt += 1
         if cnt == k:
             cur = self.reverseKGroup(cur,k)
+            # 不能写 while head
             while cnt: # 😐 while 循环
                 headnxt = head.next
                 head.next = cur
@@ -384,17 +55,7 @@ class Solution:
 ```
 
 
-##  95. <a name='SwapNodesinPairs'></a>24-Swap Nodes in Pairs
-
-[哈哈哈](https://www.bilibili.com/video/BV1M7411n7FT?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV13J411V7hG?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ih411f7YK?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1VC4y1s75E?spm_id_from=333.999.0.0)
-
-![](https://s3.bmp.ovh/imgs/2022/02/3738eb13202e2566.png)
+##  95. <a name='SwapNodesinPairs'></a> swapPairs
 
 ```py
 输入：head = [1,2,3,4]
@@ -419,104 +80,21 @@ class Solution:
         if not head or not head.next:
             return head
         headnxt = head.next
+
         head.next = self.swapPairs(head.next.next)
         headnxt.next = head
-        return headnxt # 易错点：注意，新的头已经变成了second
+        return headnxt
 
 
-时间复杂度：O(n)，其中 n 是链表的节点数量。需要对每个节点进行更新指针的操作。
+时间复杂度：O(n)，其中 n 是链表的节点数量。
 
 空间复杂度：O(n)，其中 n 是链表的节点数量。空间复杂度主要取决于递归调用的栈空间。
 
 ``` 
 
-![](https://s3.bmp.ovh/imgs/2022/02/18153c0d0979e358.png)
 
-```py
-# # 方法二：迭代
-# class Solution:
-#     def swapPairs(self, head: ListNode) -> ListNode:
-#         dummy = ListNode(0,head)
-#         pre = dummy
-#         while pre.next and pre.next.next: # 😐😐😐 while 循环
-#             # 一共3个指针: first,second,pre
-#             first = pre.next
-#             second = pre.next.next
-            
-#             # 把图画出来 cur.next = second.next = first.next = 上一个 second.next
-#             first.next = second.next
-#             # second.next = first 也可以
-#             second.next = pre.next
-#             pre.next = second
-#             # 指针移动
-#             pre = pre.next.next
-#         return dummy.next
-# 时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
+##  24. <a name='ReverseLinkedListII'></a> reverseBetween
 
-# 空间复杂度：O(1)。
-```
-
-```scala
-/**
-* chosen solution
-* iterative version
-* memo
-*   1. dummyHead
-*   2. need two pointer: pre node and current node
-*  time complexity: O(N), each node only visit once
-*/
-object Solution0 {
-    def swapPairs(head: ListNode): ListNode = {
-        val nHead = new ListNode(0, head)
-        var pre: ListNode  = nHead
-        var curr = pre.next
-
-        while (curr != null && curr.next != null) {
-            val (pos1, pos2, next) = (curr, curr.next, curr.next.next)
-            pre.next = pos2
-            pos2.next = pos1
-            pos1.next = next
-
-            pre = pre.next.next
-            curr = pre.next  
-        }
-         
-        nHead.next
-    }
-}
-
-
-
-/**
-* recursive version
-*/
-object Solution2 {
-    def swapPairs(head: ListNode): ListNode = {
-        _swap(head)
-    }   
-    
-    def _swap(n: ListNode): ListNode = {
-        if(n == null) n
-        else {
-            (n, n.next) match {
-                case (a, null) => a
-                case (a: ListNode, b: ListNode) => 
-                    /** a b 要交換位子
-                     */
-                    a.next = _swap(b.next) // a 指向 b 的 next (已交換完成）
-                    b.next = a // b 的 next 接上 a 就交換完成
-                    b
-            }
-        } 
-    }
-}
-```
-
-##  24. <a name='ReverseLinkedListII'></a>92-Reverse Linked List II
-
-[哈哈哈](https://www.bilibili.com/video/BV1n7411G7N4?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV19c411h7UE?spm_id_from=333.999.0.0)
 
 ```py
 输入：head = [1,2,3,4,5], left = 2, right = 4
@@ -528,13 +106,14 @@ class Solution:
     def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
         dummy = ListNode(0, head)
         pre = dummy
+        # 这里用到3个指针，pre，first，second
         for _ in range(left - 1):
             pre = pre.next
-            # 因为需要保留 pre, 所以 left - 1
+        # 因为需要保留 pre, 所以 left - 1
         NOTE: first在FOR循环外面，second在FOR循环里面
         first = pre.next
         for _ in range(right - left):
-            # 易错点：顺序不能错: 1,2,pre
+        # 易错点：顺序不能错: 2,1,2,pre
             second = first.next
             first.next = second.next
             second.next = pre.next
@@ -550,11 +129,7 @@ class Solution:
 ```
 
 
-##  36. <a name='ReorderList'></a>143 Reorder List
-
-https://leetcode-cn.com/problems/reorder-list/
-
-[小明](https://www.bilibili.com/video/BV1Jf4y1Q7y7?spm_id_from=333.999.0.0)
+##  36. <a name='ReorderList'></a> reorderList
 
 ```py
 输入：head = [1,2,3,4]
@@ -575,12 +150,13 @@ class Solution:
         """
         que = collections.deque()
         cur = head
-        while cur.next: # 😐😐 while 循环, cur # 链表除了首元素全部加入双向队列
+        #  链表除了首元素全部加入双向队列
+        while cur.next: 
             que.append(cur.next)
             cur = cur.next
         cur = head
         # 一后一前加入链表
-        while que: # 😐 while 循环 # 一后一前加入链表
+        while que: 
             cur.next = que.pop()
             cur = cur.next
             if que:
@@ -594,53 +170,20 @@ class Solution:
 ```
 
 
-##  44. <a name='RemoveNthNodeFromEndofList'></a>19-Remove Nth Node From End of List
+##  44. <a name='RemoveNthNodeFromEndofList'></a> removeNthFromEnd
 
-[哈哈哈](https://www.bilibili.com/video/BV1Q7411V7DQ?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1eL411n7KE?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1654y1R7Xe?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1KK4y1E7st?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Z5411c79y?spm_id_from=333.999.0.0)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6ccdr2kcw7c0.png)
 
 ```py
-# class Solution:
-#     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-#         def getLength(head: ListNode) -> int:
-#             length = 0
-#             while head: # 😐 while 循环, cur
-#                 length += 1
-#                 head = head.next
-#             return length
-        
-#         dummy = ListNode(0, head)
-#         length = getLength(head)
-#         cur = dummy
-#         for i in range(length - n):
-#             cur = cur.next
-#         cur.next = cur.next.next
-#         return dummy.next
-
 输入：head = [1,2,3,4,5], n = 2
 输出：[1,2,3,5]
-
-
 
 
 输入：head = [1], n = 1
 输出：[]
 
 
-
 输入：head = [1,2], n = 1
 输出：[1]
-
-
 
 
 class Solution:
@@ -648,13 +191,10 @@ class Solution:
         dummy = ListNode(0,head)
         slow = dummy # 慢指针需要指向前一个
         fast = head
-        # dummy   1    2    3         4     5
-        # slow  fast
-        # slow             fast(当n=2)
-        #                  slow             fast
+
         for _ in range(n):
             fast = fast.next
-        while fast: # 😐 while 循环
+        while fast: 
             fast = fast.next
             slow = slow.next
 
@@ -665,13 +205,21 @@ class Solution:
 时间复杂度：O(L)，其中 L 是链表的长度。
 
 空间复杂度：O(1)。
+```
 
-区别与
 
 
-快慢指针
+##  40. <a name='Offer22.k'></a> getKthFromEnd
+
+```py
+
+给定一个链表: 1->2->3->4->5, 和 k = 2.
+
+返回链表 4->5.
+
 class Solution:
     def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        # 上一问用 dummy
         slow, fast = head, head
         for i in range(k):
             fast = fast.next
@@ -679,58 +227,19 @@ class Solution:
             slow = slow.next
             fast = fast.next
         return slow
-```
 
-```scala
-/**
-* my first commitment - fast & slow pointer
-* time complexity O(N + N / 2)
-*   1. keep fast pointer is n + 1 ahead to slow pointer
-*   2. if fast == null, slow pointer would points to the  preNode of target removing node
-*           t 
-*   0 1 2 3 4 5
-*   s     f
-*     s     f
-*       s     f
-*         s     f
-*/
-object Solution1-2 {
-    def removeNthFromEnd(head: ListNode, n: Int): ListNode = {
-      val dummyHead = ListNode(0, head)
-      var slow = dummyHead
-      var fast = dummyHead
-      
-      for (i <- 0 until (n + 1) if fast != null) {
-        fast = fast.next
-      }
-      
-      while(fast != null) {
-        slow = slow.next
-        fast = fast.next
-      }
-      
-      slow.next = slow.next.next
-      dummyHead.next
-    }
-  
-}
+时间复杂度：O(N)
+
+空间复杂度：O(1)
+
 ```
 
 
-##  122. <a name='RotateList'></a>61. Rotate List
-
-[花花酱](https://www.bilibili.com/video/BV14y4y1r728?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV117411L7UG?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1jK411N7e6?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1Xk4y1d7gF?spm_id_from=333.999.0.0)
+##  122. <a name='RotateList'></a> rotateRight
 
 ```py
 输入：head = [1,2,3,4,5], k = 2
 输出：[4,5,1,2,3]
-
 
 
 输入：head = [0,1,2], k = 4
@@ -738,31 +247,27 @@ object Solution1-2 {
 
 
 
-注意：这里很喜欢用 cur.next
-# 思路：先把链表首尾相连，再找到位置断开循环
 class Solution:
     def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-                # 易错点：要排除一些特殊情况
+        
         if not head or not head.next:
             return head
             
-        cur = head
         lenth = 1
-        # 链接成一个环
-        while cur.next: # 😐😐 while 循环, cur
+        # 第一步：链接成一个环
+        cur = head
+        while cur.next:
             cur = cur.next
             lenth += 1
-        # 当 cur.next = None 时, 把头尾连接起
         cur.next = head
 
-        这里，cur指向的是head前一个节点，相当于dummy
-        # 输入：head = [1,2,3,4,5], k = 2
-        # 输出：[4,5,1,2,3]
+        # 第二步，cur指向的是head前一个节点
+        
         steps = lenth - k % lenth
         for _ in range(steps):
             cur = cur.next
 
-
+        # 第三步：断开
         res = cur.next
         cur.next = None
         return res
@@ -772,11 +277,7 @@ class Solution:
 空间复杂度：O(1)，我们只需要常数的空间存储若干变量。
 ```
 
-##  41. <a name='IIRemoveDuplicatesfromSortedList'></a>82. 删除排序链表中的重复元素 II(Remove Duplicates from Sorted List
-
-https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
-
-[洛阳](https://www.bilibili.com/video/BV1Fi4y187pj?spm_id_from=333.999.0.0)
+##  41. <a name='IIRemoveDuplicatesfromSortedList'></a> deleteDuplicates
 
 ```py
 输入：head = [1,2,3,3,4,4,5]
@@ -789,31 +290,19 @@ class Solution:
         if not head or not head.next:
             return head
         dummy = ListNode(0, head)
+        # 后一问，cur = head
         cur = dummy
         # 目的是删除cur的下一个节点
-        while cur.next and cur.next.next:  # 😁😁 while 循环, cur
+        while cur.next and cur.next.next:  
             if cur.next.val == cur.next.next.val:
                 # 把所有等于 x 的结点全部删除
                 x = cur.next.val
-                while cur.next and cur.next.val == x: # 😁😁😁 while 循环
+                # while cur.next 不要漏
+                while cur.next and cur.next.val == x: 
                     cur.next = cur.next.next
             else:
                 cur = cur.next
         return dummy.next
-
-
-
-class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        cur = head
-        while cur.next:  # 😁😁 while 循环, cur
-            if cur.val == cur.next.val:
-                cur.next = cur.next.next # 要么删除
-            else:
-                cur =  cur.next # 要么下一个
-        return head
 
 
 
@@ -822,30 +311,20 @@ class Solution:
 空间复杂度：O(1)。
 ```
 
-##  78. <a name='Removeduplicatesfromsortedarray'></a>83-Remove duplicates from sorted array
-
-[哈哈哈](https://www.bilibili.com/video/BV1yJ411R7FZ?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7s7?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1zK411L7Gg?spm_id_from=333.999.0.0)
+##  78. <a name='Removeduplicatesfromsortedarray'></a> deleteDuplicates
 
 ```py
 输入：head = [1,1,2,3,3]
 输出：[1,2,3]
 
 
-
-这里没有用 dummy 和 cur.next.next
-但同样用了 cur.next = cur.next.next
-
-
 class Solution:
     def deleteDuplicates(self, head: ListNode) -> ListNode:
         if not head or not head.next:
             return head
+        # 前一问 cur = dummy
         cur = head
-        while cur.next:  # 😁😁 while 循环, cur
+        while cur.next:  
             if cur.val == cur.next.val:
                 cur.next = cur.next.next # 要么删除
             else:
@@ -853,23 +332,9 @@ class Solution:
         return head
 ```
 
-##  141. <a name='Removeduplicatesfromsortedarray-1'></a>26-Remove duplicates from sorted array
-
-[哈哈哈](https://www.bilibili.com/video/BV1UJ411m7Pz?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411i77e?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV13V41177Mq?spm_id_from=333.999.0.0)
-
-> for循环法：
+##  141. <a name='Removeduplicatesfromsortedarray-1'></a> removeDuplicates
 
 ```py
-给你一个 `升序排列` 的数组 nums 
-
-nums 的前 k 个元素应该保存最终结果。
-
-将最终结果插入 nums 的前 k 个位置后返回 k 。
-
 不要使用额外的空间，你必须在 `原地` 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
 
 
@@ -877,31 +342,18 @@ nums 的前 k 个元素应该保存最终结果。
 输入：nums = [1,1,2]
 输出：2, nums = [1,2,_]
 
-解释：函数应该返回新的长度 2 ，
-
-并且原数组 nums 的前两个元素被修改为 1, 2 。不
-
-需要考虑数组中超出新长度后面的元素。
-
 
 
 
 输入：nums = [0,0,1,1,1,2,2,3,3,4]
 输出：5, nums = [0,1,2,3,4]
 
-解释：函数应该返回新的长度 5 ， 
-
-并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。
-
-不需要考虑数组中超出新长度后面的元素。
-
-
 
 
 
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
-        slow = 0 #注意：count是从0开始的
+        slow = 0 # 注意：count是从0开始的
         for fast in range(len(nums)):
             if nums[fast] != nums[slow]:
                 slow += 1
@@ -915,39 +367,26 @@ class Solution:
 空间复杂度：O(1)。只需要使用常数的额外空间。
 ```
 
-##  168. <a name='StringCompression'></a>443. String Compression
+##  168. <a name='StringCompression'></a> compress
 
-[小梦想家](https://www.bilibili.com/video/BV1rE411f7Ld?spm_id_from=333.999.0.0)
 
 ```py
 输入：chars = ["a","a","b","b","c","c","c"]
 输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
-解释："aa" 被 "a2" 替代。"bb" 被 "b2" 替代。"ccc" 被 "c3" 替代。
 
 
 
 
 输入：chars = ["a"]
 输出：返回 1 ，输入数组的前 1 个字符应该是：["a"]
-解释：唯一的组是“a”，它保持未压缩，因为它是一个字符。
 
 
 
 
 输入：chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
 输出：返回 4 ，输入数组的前 4 个字符应该是：["a","b","1","2"]。
-解释：由于字符 "a" 不重复，所以不会被压缩。"bbbbbbbbbbbb" 被 “b12” 替代。
 
 
-
-
-
-
-压缩后得到的字符串 储到字符数组 chars 中
-
-需要注意的是，如果组长度为 10 或 10 以上，则在 chars 数组中会被`拆分`为多个字符。
-
-请在 修改完输入数组后 ，`返回`该数组的`新长度`。
 
 你必须设计并实现一个只使用`常量额外空间`的算法来解决此问题。
 
@@ -961,26 +400,30 @@ cnt += 1
 
 class Solution:
     def compress(self, chars: List[str]) -> int:
+
         n = len(chars)
+
         slow = 0
         cnt = 1
         for fast in range(n):
             # 在 aa，bb，ccc 的最后一位触发计算
+            # 这边不是比较 chars[fast] != chars[slow]
+            # fast == n - 1 不要漏
             if fast == n - 1 or chars[fast] != chars[fast+1]:
+
                 chars[slow] = chars[fast] 
                 slow += 1
+
                 if cnt > 1: # cnt 重新置为 1 前，需要统计是几位数
-                    for k in str(cnt):
-                        chars[slow] = k
+                    for digit in str(cnt):
+                        chars[slow] = digit
                         slow += 1
-                cnt = 1 # cnt 重新置为 1，而不是 0
+
+                cnt = 1 # cnt 重新置为 1
             else:
                 cnt += 1
-        return slow
-
-
-# 输入：chars = ["a","a","b","b","c","c","c"]
-# 输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
+        return slow 
+        # 前一问是 slow + 1
 
 
 时间复杂度：O(n)，其中 n 为字符串长度，我们只需要遍历该字符串一次。
@@ -990,7 +433,7 @@ class Solution:
 ```
 
 
-##  152. <a name='-1'></a>1047. 删除字符串中的所有相邻重复项
+##  152. <a name='-1'></a> removeDuplicates
 
 类似消消看
 
@@ -1000,9 +443,7 @@ class Solution:
 
 class Solution(object):
     def removeDuplicates(self, S):
-        # 初始化栈
         stack = []
-        # 遍历栈元素
         for char in S:
             if stack and stack[-1] == char:
                 stack.pop()
@@ -1016,7 +457,7 @@ class Solution(object):
 
 ```
 
-##  173. <a name='FindAllDuplicatesinanArray'></a>442 Find All Duplicates in an Array
+##  173. <a name='FindAllDuplicatesinanArray'></a> findDuplicates
 
 [小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
 
@@ -1044,8 +485,10 @@ class Solution:
                 res.append(num)
                 
         return res
+
 时间复杂度： O(n) 
 常量额外空间
+
 [4, 3, 2, 7, 8, 2, 3, 1]
 [4, 3, 2, -7, 8, 2, 3, 1]   
 [4, 3, -2, -7, 8, 2, 3, 1]    
@@ -1236,58 +679,6 @@ class Solution:
 时间复杂度：O(N)。我们需要遍历这棵树上所有的点。
 
 空间复杂度：O(1)
-```
-
-
-##  40. <a name='Offer22.k'></a>剑指 Offer 22. 链表中倒数第k个节点
-
-```py
-
-给定一个链表: 1->2->3->4->5, 和 k = 2.
-
-返回链表 4->5.
-
-
-栈
-class Solution:
-    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
-        stack = []
-        while head: # 😐 while 循环, cur
-            stack.append(head)
-            head = head.next
-        return stack[-k]
-
-时间复杂度：O(N)
-
-空间复杂度：O(N)
-
-快慢指针
-class Solution:
-    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
-        slow, fast = head, head
-        for i in range(k):
-            fast = fast.next
-        while fast: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next
-        return slow
-
-时间复杂度：O(N)
-
-空间复杂度：O(1)
-
-总长度减k
-class Solution:
-    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
-        cur, lenth = head, 0  
-        while cur: # 😐 while 循环, cur
-            cur = cur.next
-            lenth += 1
-
-        cur = head
-        for _ in range(lenth - k):
-            cur = cur.next
-        return cur  
 ```
 
 
