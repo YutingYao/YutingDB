@@ -916,27 +916,28 @@ class Solution:
 
 ```py
 class Solution:
-    def merge_sort(self, nums, l, r):
-        if l < r:
-            mid = (l + r) // 2
-            # 先把子序列排序完成
-            self.merge_sort(nums, l, mid)
-            self.merge_sort(nums, mid + 1, r)
-            tmp = []
-            i1, i2 = l, mid + 1   # i1, i2 是两个起始点
-            while i1 <= mid and i2 <= r: # 😐 while 循环
-                # 如果 前半部部分结束了，或者后半部分没有结束
-                if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
-                    tmp.append(nums[i2])
-                    i2 += 1
-                else:
-                    tmp.append(nums[i1])
-                    i1 += 1
-            tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
-            nums[l: r + 1] = tmp
-
     def sortArray(self, nums: List[int]) -> List[int]:
-        self.merge_sort(nums, 0, len(nums) - 1)
+        def merge_sort(nums, l, r):
+            if l < r:
+                mid = (l + r) // 2
+                # 先把子序列排序完成
+                merge_sort(nums, l, mid)
+                merge_sort(nums, mid + 1, r)
+                tmp = []
+                i1, i2 = l, mid + 1   # i1, i2 是两个起始点
+                while i1 <= mid and i2 <= r: # 😐 while 循环
+                    # 如果 前半部部分结束了，或者后半部分没有结束
+                    if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
+                        tmp.append(nums[i2])
+                        i2 += 1
+                    else:
+                        tmp.append(nums[i1])
+                        i1 += 1
+                tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
+                nums[l: r + 1] = tmp
+
+
+        merge_sort(nums, 0, len(nums) - 1)
         return nums
 
 时间复杂度：O(n log(n))
@@ -982,34 +983,29 @@ class Solution:
     '''
     在原地排序，不需要 return
     '''
-    def merge(nums, l, mid, r):
-        tmp = []
-        sums = 0
-        i1, i2 = l, mid + 1
-        while i1 <= mid and i2 <= r: # 😐 while 循环
-            if nums[i1] <= nums[i2]:
-                sums += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
-                tmp.append(nums[i1])
-                i1 += 1
-            else:
-                tmp.append(nums[i2])   # 把小的值先往res里面填写
-                i2 += 1
-        tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
-        nums[l: r + 1] = tmp   # 修改原 arr 的值
-        return sums
-
-    def mergesmallSum(arr, left, right):
-        '''
-        归并排序 left < right
-        '''
-        if left == right:
-            return 0
-        mid = (left + right) // 2
-        s1 = mergesmallSum(arr, left, mid)
-        s2 = mergesmallSum(arr, mid + 1, right)
-        s3 = merge(arr, left, mid, right)
-        return  s1 + s2 + s3 
-
+    def mergesmallSum(nums):
+        def merge(nums, l, r):
+            if l == r:
+                return 0
+            if l < r:
+                mid = (l + r) // 2
+                s1 = merge(nums, l, mid)
+                s2 = merge(nums, mid + 1, r)
+                tmp = []
+                s3 = 0
+                i1, i2 = l, mid + 1
+                while i1 <= mid and i2 <= r: # 😐 while 循环
+                    if nums[i1] <= nums[i2]:
+                        s3 += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+                        tmp.append(nums[i1])
+                        i1 += 1
+                    else:
+                        tmp.append(nums[i2])   # 把小的值先往res里面填写
+                        i2 += 1
+                tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
+                nums[l: r + 1] = tmp   # 修改原 arr 的值
+                return s1 + s2 + s3
+        return merge(nums, 0, n-1)
     
 N = int(input())
 nums = list(map(int, input().split()))
@@ -1017,19 +1013,7 @@ print(mergesmallSum(nums, 0, N-1))
 ```
 
 
-##  10. <a name='-1'></a>21. 合并两个有序链表
-
-https://leetcode-cn.com/problems/merge-two-sorted-lists/
-
-[哈哈哈](https://www.bilibili.com/video/BV1rJ41127ry?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411i7D7?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1my4y127bK?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1qZ4y1j7Jb?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1ck4y1k7J9?spm_id_from=333.999.0.0)
+##  10. <a name='-1'></a> mergeTwoLists
 
 暴力解法：
 
@@ -1042,22 +1026,12 @@ https://leetcode-cn.com/problems/merge-two-sorted-lists/
 输出：[1,1,2,3,4,4]
 
 
-
-
-
 输入：l1 = [], l2 = []
 输出：[]
 
 
-
-
-
 输入：l1 = [], l2 = [0]
 输出：[0]
-
-
-
-
 
 
 class Solution:
@@ -1081,116 +1055,9 @@ class Solution:
         return dummy.next
 ```
 
-递归解法：
-
-* 时间复杂度:O(M+N)
-
-* 空间复杂度:O(M+N)
-
-```py
-class Solution:
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        if not list1: return list2
-        elif not list2: return list1
-        elif list1.val < list2.val:
-            '''
-            list1 提取出来
-            返回 list1
-            '''
-            list1.next = self.mergeTwoLists(list1.next, list2) # 找到较小头结点，提取出来
-            return list1
-        else:
-            '''
-            list2 提取出来
-            返回 list2
-            '''
-            list2.next = self.mergeTwoLists(list1, list2.next) # 找到较小头结点，提取出来
-            return list2
-```
-
-```scala
-
-object Solution1 {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-        val headNode = new ListNode(-1, null)
-        var cur = headNode
-        
-        var no1 = l1;
-        var no2 = l2;
-        
-        while(no1 != null && no2 != null) {
-            if (no1.x >= no2.x){
-                
-                cur.next = no2
-                no2 = no2.next
-            }else {
-                cur.next = no1
-                no1 = no1.next
-            }
-            cur = cur.next
-        }
-        (no1, no2) match {
-            case (_, null) => cur.next = no1
-            case (null, _) => cur.next = no2
-            case _ => throw new RuntimeException()
-        }
-        
-        headNode.next
-    }
-}
 
 
-
-/**
-* recursive version
-*/
-
-object Solution1-2 {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-        (l1, l2) match {
-            case (null, _) => l2
-            case (_, null) => l1
-            case (a, b) => 
-                if (a.x >= b.x){
-                    b.next = mergeTwoLists(b.next, a)
-                    b
-                } else {
-                    a.next = mergeTwoLists(a.next, b)
-                    a   
-                }
-        }
-    }
-}
-
-object Solution {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-    if(l1 == null) return l2
-    if(l2 == null) return l1
-
-    if (l1.x < l2.x) {
-      l1.next = mergeTwoLists(l1.next, l2)
-      l1
-    } else {
-      l2.next = mergeTwoLists(l1, l2.next)
-      l2
-    }
-  }
-}
-
-```
-
-
-##  15. <a name='Mergesortedarray'></a>88-Merge sorted array
-
-https://leetcode-cn.com/problems/merge-sorted-array/
-
-[哈哈哈](https://www.bilibili.com/video/BV14J411X7JE?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7bg?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1g54y1s7ZG?spm_id_from=333.999.0.0)
-
-直接合并后排序
+##  15. <a name='Mergesortedarray'></a> merge
 
 ```py
 输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
@@ -1205,7 +1072,6 @@ https://leetcode-cn.com/problems/merge-sorted-array/
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
         """
-        最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。
         Do not return anything, modify nums1 in-place instead.
         """
         # 三个指针
@@ -1225,105 +1091,17 @@ class Solution:
         if cur2 >= 0:
             nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
 
-
-
-
 * 时间复杂度: O(n)
 * 空间复杂度: O(1)
-
-
-
-
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        """
-        Do not return anything, modify nums1 in-place instead.
-        """
-        nums1[m:] = nums2
-        nums1.sort()
 ```
 
-```scala
-object Solution {
-    def merge(nums1: Array[Int], m: Int, nums2: Array[Int], n: Int): Unit = {
-        var trail = m+n-1
-        
-        var t1 = m-1
-        var t2 = n-1
-        
-        while(t1 > -1 && t2 > -1){
-            val e1 = nums1(t1)
-            val e2 = nums2(t2)
-            
-            if(e1 > e2){
-                nums1(trail) = e1
-                t1 -= 1
-                trail -= 1
-            }else{
-                nums1(trail) = e2
-                t2 -= 1
-                trail -= 1
-            }
-        }
-        
-        if(t1 == -1){
-            while(t2 > -1){
-                nums1(trail) = nums2(t2)
-                t2 -= 1
-                trail -= 1
-            }
-        }else{
-            while(t1 > -1){
-                nums1(trail) = nums1(t1)
-                t1 -= 1
-                trail -= 1
-            }
-        }
-        
-    }
-}
 
-```
 
-##  26. <a name='MergekSortedLists'></a>23. 【最小堆🌵】Merge k Sorted Lists
+##  26. <a name='MergekSortedLists'></a> mergeKLists
 
-[花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Ty4y1178e?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1GK41157mu?spm_id_from=333.999.0.0)
-
-暴力求解法：
-
-* 时间复杂度: O(N) + O(N logN) + O(N)
-
-* 空间复杂度: O(N) + O(N)
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.65tcjjz2oy80.png" width="50%">
-
-```py
-# so easy，一遍过
-class Solution:
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        vals = []
-        for listhead in lists:
-            while listhead: # 😐 while 循环
-                vals.append(listhead.val)
-                listhead = listhead.next
-        vals.sort()
-        dummy = ListNode(0)
-        cur = dummy
-        for value in vals:
-            cur.next = ListNode(value)
-            cur = cur.next
-        return dummy.next
-```
 
 优先队列：
 
-
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
 
 ```py
 输入：lists = [[1,4,5],[1,3,4],[2,6]]
@@ -1337,17 +1115,14 @@ class Solution:
 将它们合并到一个有序链表中得到。
 1->1->2->3->4->4->5->6
 
-* 时间复杂度: O(kn×logk)
-* 空间复杂度: O(k)
+* 时间复杂度: O(N logk) 一共有N个结点
+* 空间复杂度: O(k), 此外，新链表需要  O(N) 的空间
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         queue = []  
         dummy = ListNode(0)
         
         for i in range(len(lists)):
-            '''
-            这里只 heappush 一次，并且必须把 i 序号，放入最小堆
-            '''
             if lists[i]: # lists[i] 就是 head
                 heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
                 lists[i] = lists[i].next 
@@ -1365,11 +1140,9 @@ class Solution:
 
 两两合并：
 
-* 时间复杂度: O(kn×logk)
+* 时间复杂度: O(N logk)
 
 * 空间复杂度: O(logk)空间代价的栈空间。
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
 
 ```py
 class Solution:
@@ -1403,23 +1176,11 @@ class Solution:
 ```
 
 
-##  39. <a name='MergeIntervals'></a>56. Merge Intervals
-
-[花花酱](https://www.bilibili.com/video/BV11t411J7zV?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1w7411a7Wo?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1pV411a7t4?spm_id_from=333.999.0.0)
+##  39. <a name='MergeIntervals'></a> merge
 
 ```py
 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
 输出：[[1,6],[8,10],[15,18]]
-
-
-解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
-
-
-
 
 
 输入：intervals = [[1,4],[4,5]]
@@ -1449,37 +1210,462 @@ class Solution:
         intervals.sort() # 等价于：intervals.sort(key = lambda x: x[0])
         res = []
         for interval in intervals: # res[-1] 和 interval 比较
-            if not res or res[-1][1] < interval[0]:
-                res.append(interval[:])
-            else:
+            if res and res[-1][1] >= interval[0]:
                 res[-1][1] = max(res[-1][1], interval[1])
+            else:
+                res.append(interval[:])
                 # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
                 # 比如，[[1,4],[2,3]]
         return res
 ```
 
-```scala
 
-/**
-*  time complexity: O(nlogn) + O(n) = O(nlogn) 
-*  space complexity: O(n): sorted array
-*/
 
-object Solution1-2 {
-    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
-      intervals.sortBy(_(0)).foldLeft(List.empty[Array[Int]]){
-        case (last::ans, arr) =>
-          if (last.last < arr.head) {
-            arr::last::ans
-          } else {
-            Array(last.head, last.last max arr.last)::ans
-          }
-        case (ans, arr) => arr::ans // for empty ans list
-      }.toArray
-    }
-}
+##  4. <a name='Kadd'></a> findKthLargest
+
+```py
+输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+输出: 4
+[3]
+[2, 3]
+[2, 3, 3]
+[1, 2, 3, 3]
+[2, 2, 3, 3]
+[2, 3, 3, 4]
+[3, 3, 5, 4]
+[3, 4, 5, 5]
+[4, 5, 5, 6]
+
+
+输入: [3,2,1,5,6,4] 和 k = 2
+[3]
+[2, 3]
+[2, 3]
+[3, 5]
+[5, 6]
+[5, 6]
 ```
 
+```py
+最小堆：时间复杂度就是nlogk
+if len(q) > k: 用于限制 q 的宽度
+            q:  q 里面 过滤掉了 太小的数
+
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        q = []
+        for num in nums:
+            heapq.heappush(q, num) # n * log(k + 1)
+            if len(q) > k: heapq.heappop(q)   # n * log(k)
+        return heapq.heappop(q)
+
+
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
+```
+
+
+
+##  115. <a name='Offer40.k'></a> getLeastNumbers
+
+```py
+输入：arr = [3,2,1], k = 2
+输出：[1,2] 或者 [2,1]
+hp：
+[-3, -2]
+[-2, -1]
+用 heapq 过滤掉较大值
+
+class Solution:
+    def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
+        q = []
+        for num in arr:
+            heapq.heappush(q, -num) # n * log(k + 1)
+            if len(q) > k: heapq.heappop(q)   # n * log(k)
+        return [-x for x in q]
+
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
+```
+
+##  165. <a name='TopKFrequentElements'></a> topKFrequent
+
+```py
+输入: nums = [1,1,1,2,2,3], k = 2
+输出: [1,2]
+
+hp 为：
+[(3, 1)]
+[(2, 2), (3, 1)]
+[(2, 2), (3, 1)]
+
+
+过滤较小值
+import heapq
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        dic = collections.defaultdict(int)
+        for num in nums:
+            dic[num] += 1
+        hp = [] # 小顶堆
+        for key, freq in dic.items():
+            heapq.heappush(hp, (freq, key))
+            if len(hp) > k: heapq.heappop(hp)
+        return [x[1] for x in hp]
+
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
+```
+
+##  104. <a name='MoveZeros'></a> moveZeroes
+
+```py
+输入: nums = [0,1,0,3,12]
+输出: [1,3,12,0,0]
+
+
+输入: nums = [0]
+输出: [0]
+
+
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] != 0:
+                # 把 index 的位置变成不是 0, i 的位置变成是 0
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                # slow 的位置不是 0, 都在前面
+                slow += 1
+
+时间复杂度： O(N) 
+空间复杂度： O(1) 
+```
+
+##  111. <a name='Offer21.'></a> exchange
+
+```py
+输入：nums = [1,2,3,4]
+输出：[1,3,2,4] 
+注：[3,1,2,4] 也是正确的答案之一。
+
+调整数组顺序使`奇数`位于`偶数`前面
+
+类似前面的移动0
+
+class Solution:
+    def exchange(self, nums: List[int]) -> List[int]:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] & 1 == 1:
+                # 把 [fast上的奇数] 移动到 [slow的位置] 上
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                slow += 1
+        return nums
+
+时间复杂度： O(N) 
+空间复杂度： O(1) 
+```
+
+
+##  130. <a name='SortColors'></a> sortColors
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5l1bfbznzwc0.png)
+
+```py
+输入：nums = [2,0,2,1,1,0]
+输出：[0,0,1,1,2,2]
+
+
+
+输入：nums = [2,0,1]
+输出：[0,1,2]
+
+
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        fast, slow, right = 0, 0, len(nums) - 1
+        while fast <= right: # 😐😐😐😐 while 循环
+            # 交换完位置后 idx 依旧在原位
+            if nums[fast] == 2 and fast < right:
+                nums[fast], nums[right] = nums[right], 2
+                right -= 1
+            # 交换完位置后 idx 依旧在原位
+            elif nums[fast] == 0 and fast > slow:
+                nums[fast], nums[slow] = nums[slow], 0
+                slow += 1
+            else:
+            # idx 为 1, 或者 idx 与 [right/left] 相交
+                fast += 1
+
+
+时间复杂度： O(N) 
+空间复杂度： O(1) 
+```
+
+## 堆排序:
+
+```py
+
+
+     0
+    / \
+   1   2
+  / \ / \
+ 3  4 5  6
+
+class Solution:
+    def maxheapify(self, heap, root, heap_len):
+        p = root
+        while p * 2 + 2 <= heap_len: # 😐 while 循环 # 当不是叶子节点 
+            l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
+            if r < heap_len and heap[l] < heap[r]:
+                bigger = r
+            else:
+                bigger = l
+            # 把最大的元素往上提
+            if heap[p] < heap[bigger]:
+                heap[p], heap[bigger] = heap[bigger], heap[p]
+                p = bigger
+            else:
+                return
+        
+    def sortArray(self, nums: List[int]) -> List[int]:
+        # 时间复杂度O(N)
+        # 从叶子节点开始遍历
+        # 如果不是从叶子开始，可能白跑一遍
+        '''
+        把最大值放在 0 的位置
+        '''
+        for i in range(len(nums) - 1, -1, -1):
+            self.maxheapify(nums, i, len(nums))
+            
+        # 时间复杂度O(N logN)
+        for i in range(len(nums) - 1, -1, -1):
+            # 把最大的元素放到末尾
+        '''
+        把最大值 从 0 的位置，依次移到 i 的位置
+        '''
+            nums[i], nums[0] = nums[0], nums[i]
+            self.maxheapify(nums, 0, i)
+        return nums
+
+时间复杂度：O(n logn)
+空间复杂度：O(1)
+```
+
+
+
+
+##  232. <a name='K-1'></a> kthSmallest
+
+[哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
+
+[图灵](https://www.bilibili.com/video/BV1Zy4y127qr?spm_id_from=333.999.0.0)
+
+```py
+输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
+输出：13
+
+
+解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15], 第 8 小元素是 13
+```
+
+```py
+时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
+
+空间复杂度：O(n)，堆的大小始终为 n。
+
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+        n = len(matrix)
+        pq = [(matrix[i][0], i, 0) for i in range(n)] # 每行的 第一个元素
+        heapq.heapify(pq)
+
+        for _ in range(k - 1): # 这里 pop k - 1 次
+            num, i, j = heapq.heappop(pq)
+            if j != n - 1:
+                heapq.heappush(pq, (matrix[i][j + 1], i, j + 1)) # 每行的 下一个元素
+        
+        return heapq.heappop(pq)[0] # 这里  pop  1 次
+
+```
+
+
+
+##  54. <a name='SlidingWindowMaximum'></a> maxSlidingWindow
+
+```py
+输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
+输出：[3,3,5,5,6,7]
+
+解释：
+滑动窗口的位置                最大值
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+
+
+[(-3, 1), (-1, 0), (1, 2), (3, 3)]
+[(-5, 4), (-3, 1), (1, 2), (3, 3), (-1, 0)]
+[(-5, 4), (-3, 1), (-3, 5), (3, 3), (-1, 0), (1, 2)]
+[(-6, 6), (-3, 1), (-5, 4), (3, 3), (-1, 0), (1, 2), (-3, 5)]
+[(-7, 7), (-6, 6), (-5, 4), (-3, 1), (-1, 0), (1, 2), (-3, 5), (3, 3)]
+
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        # 求最大值，则需要取复数
+        hp = [(-nums[i], i) for i in range(k-1)]
+        heapq.heapify(hp)
+        res = []
+
+        for i in range(k-1, len(nums)):
+            heapq.heappush(hp, (- nums[i], i))
+            while i - hp[0][1] >= k: # 😐😐😐 while 循环 + pop + append
+                heapq.heappop(hp) # 把所有出界的最大值弹出，可能不小心攒了许多个
+            res.append(- hp[0][0]) # 最大值永远在 q[0]
+        
+        return res
+
+
+
+时间复杂度： O((n-k)logk)
+
+空间复杂度： O(k)，即为优先队列需要使用的空间
+
+```
+
+
+
+## 希尔排序：
+
+```py
+输入：nums = [5,2,3,1]
+输出：[1,2,3,5]
+示例 2：
+
+输入：nums = [5,1,1,2,0,0]
+输出：[0,0,1,1,2,5]
+
+
+
+
+
+设定一个
+
+对第一轮排序后的数列再按增量重新分组
+
+对每一个分组进行排序
+
+以此
+
+结果为我们想要的结果
+
+对分组进行排序用的是插入排序算法.因此,希尔排序是插入排序的一种优化的算法
+
+def shellSort(nums): 
+  
+    n = len(nums)
+    gap = n//2 # 初始增量
+  
+    while gap > 0: 
+  
+        for i in range(gap,n):  # 对原始数列进行分组 对每一个分组进行排序
+  
+            right = nums[i] 
+            j = i 
+            while  j >= gap and nums[j-gap] > right: # nums[j-gap] 是 left
+                nums[j] = nums[j-gap]   # 把 nums[j-gap] 这个 bigger 往后面放
+                j -= gap 
+            nums[j] = right  # 把 right 值 插入
+        gap = int(gap/2) # 设置一个更小的增量, 直到增量为1, 再排序
+
+最坏时间复杂度：O(n2)
+空间复杂度：O(1)
+```
+
+## 选择排序：
+
+选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
+
+```py
+for i in range(len(nums)): 
+      
+    minpos = i 
+    for j in range(i + 1, len(nums)): 
+        if nums[j] < nums[minpos]: 
+            minpos = j 
+                
+    nums[i], nums[minpos] = nums[minpos], nums[i] 
+```
+
+## 冒泡排序：
+
+```py
+把最大值移到最后一位上：
+def bubble_sort(nums):
+    n = len(nums)
+
+    for i in range(n):
+        for j in range(1, n - i):
+            if nums[j - 1] > nums[j]:
+                nums[j - 1], nums[j] = nums[j], nums[j - 1]
+    return nums
+```
+
+## 快速排序:
+
+```py
+class Solution:
+    # 这里需要用到 pivot
+    def randomized_partition(self, nums, l, r):
+        pivot = random.randint(l, r)
+        # 先把 nums[pivot] 靠边站
+        nums[pivot], nums[r] = nums[r], nums[pivot]
+        slow = l
+        for fast in range(l, r):
+            if nums[fast] < nums[r]: # nums[r] 就是 pivot
+                nums[fast], nums[slow] = nums[slow], nums[fast] # nums[i] 存的都是较小的数字
+                slow += 1
+        nums[slow], nums[r] = nums[r], nums[slow] # pivot 放到中间
+        return slow
+    # 这里需要用到 mid
+    def randomized_quicksort(self, nums, l, r):
+        if l < r:
+            mid = self.randomized_partition(nums, l, r)
+            self.randomized_quicksort(nums, l, mid - 1)
+            self.randomized_quicksort(nums, mid + 1, r)
+
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.randomized_quicksort(nums, 0, len(nums) - 1)
+        return nums
+
+时间复杂度：O(n log(n))
+空间复杂度：O(log n) ~ O(n)
+```
+
+## 桶排序：
+
+```py
+排序问题各有各的招，我来说一个凑热闹的桶排序。反正所有数字在正负五万之间，你就拿100001个桶，遍历一遍把数字仍对应的桶里边，然后你就排好了。
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        bucket = collections.defaultdict(int)
+        for num in nums:
+            bucket[num] += 1
+        res = []
+        for i in range(-50000, 50001):
+            res += [i] * bucket[i]
+        return res
+你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
+```
 
 
 
@@ -1508,32 +1694,6 @@ class Solution:
 时间复杂度：O(n)
 
 空间复杂度：O(n)
-```
-
-```scala
-/**
-* very brilliant solution
-*/
-object Solution2 {
-    def isPalindrome(head: ListNode): Boolean = {
-        if (head == null) {
-            return true
-        }
-        var p = head
-        var result = true
-        def go(node: ListNode): Unit = {
-            if (node.next != null) {
-                go(node.next)
-            }
-            if (p.x != node.x) {
-                result = false
-            }
-            p = p.next
-        }
-        go(head)
-        result
-    }
-}
 ```
 
 
@@ -1588,26 +1748,6 @@ dict.get(key, default = None)  -->  有key获取值，否则返回 default
 
 空间复杂度：O(n)，其中 n 是链表的长度。为哈希表的空间开销。
 
-```
-
-```py
-就背一背吧，反正看不懂
-# class Solution:
-#     def copyRandomList(self, head):
-#         def copyNode(node, visited):
-#             if not node: 
-#                 return None
-#             if node in visited: 
-#                 return visited[node]
-#             # 第一步：
-#             copy = Node(node.val, None, None)
-#             visited[node] = copy
-#             # 第二步：顺序不能错
-#             copy.next = copyNode(node.next, visited)
-#             copy.random = copyNode(node.random, visited)
-#             return copy
-
-#         return copyNode(head, {})
 ```
 
 
@@ -1708,46 +1848,6 @@ class LRUCache:
 
 ```
 
-```scala
-
-/**
-* chosen solution
-* build-in linkedHashMap
-* time complexity: O(1)
-*/
-class LRUCache(_capacity: Int) {
-
-    private val capacity = _capacity
-    val cache = collection.mutable.LinkedHashMap[Int, Int]()
-
-
-    def get(key: Int): Int = {
-        cache.get(key) match {
-            case Some(v) => 
-                cache.remove(key)
-                cache.put(key, v)
-                v
-            case None => -1
-        }
-    }
-
-    def put(key: Int, value: Int): Unit = {
-        cache.get(key) match {
-            case Some(_) =>
-                cache.remove(key)
-                cache.update(key, value)
-
-            case None =>
-                if(cache.size >= capacity){
-                cache.remove(cache.head._1)
-                }
-                cache.put(key, value)
-        }   
-
-    }
-}
-
-```
 
 ##  31. <a name='ImplementQueueusingStacks'></a>232-【构造🏰】Implement Queue using Stacks
 
@@ -1795,57 +1895,6 @@ class MyQueue:
     def empty(self):
         return False if self.s1 else True
 时间复杂度：O(1)
-```
-
-```scala
-/**
-* using two stack to implement
-* one for push, the other for pop
-* time complexity amortized O(1) per operation
-* space complexity
-*/
-
-class MyQueue() {
-
-  /** Initialize your data structure here. */
-  private val inputStack = scala.collection.mutable.ArrayStack[Int]()
-  private val outputStack = scala.collection.mutable.ArrayStack[Int]()
-
-
-  /** Push element x to the back of queue. */
-  def push(x: Int) {
-    inputStack.push(x)
-
-  }
-
-  /** Removes the element from in front of queue and returns that element. */
-  def pop(): Int = {
-    if(outputStack.isEmpty) {
-      while (inputStack.nonEmpty) {
-        outputStack.push(inputStack.pop())
-      }
-    }
-    if(outputStack.isEmpty) -1 else outputStack.pop()
-
-  }
-
-  /** Get the front element. */
-  def peek(): Int = {
-    if(outputStack.isEmpty) {
-      while (inputStack.nonEmpty) {
-        outputStack.push(inputStack.pop())
-      }
-    }
-    if(outputStack.isEmpty) -1 else outputStack.head
-  }
-
-  /** Returns whether the queue is empty. */
-  def empty(): Boolean = {
-    outputStack.isEmpty && inputStack.isEmpty
-  }
-
-}
-
 ```
 
 ##  101. <a name='Offer09.'></a>剑指 Offer 09. 用两个栈实现队列
@@ -1926,118 +1975,6 @@ class MyStack:
 空间复杂度：O(n)，其中 n 是栈内的元素个数。需要使用一个队列存储栈内的元素。
 
 ```
-
-```scala
-/**
- * Your MyStack object will be instantiated and called as such:
- * var obj = new MyStack()
- * obj.push(x)
- * var param_2 = obj.pop()
- * var param_3 = obj.top()
- * var param_4 = obj.empty()
- */
-
-
-/**
-* chosen solution
-* one queue version
-* time complexity
-*   push: O(2n+1) n is the element in queue1
-*   pop: O(1)
-*   top: O(1)
-*/
-class MyStack0() {
-
-    /** Initialize your data structure here. */
-    val queue1 = scala.collection.mutable.Queue[Int]()
-
-
-    /** Push element x onto stack. */
-    def push(x: Int) {
-        val iter = queue1.indices
-        queue1.enqueue(x)
-        (iter).foreach(e => queue1.enqueue(queue1.dequeue))
-        
-        
-    }
-
-    /** Removes the element on top of the stack and returns that element. */
-    def pop(): Int = {
-       if(queue1.nonEmpty) queue1.dequeue else -1
-        
-    }
-
-    /** Get the top element. */
-    def top(): Int = {
-       queue1.headOption.getOrElse(-1)
-    }
-
-    /** Returns whether the stack is empty. */
-    def empty(): Boolean = {
-        queue1.isEmpty
-    }
-
-}
-
-
-
-
- /**
- * my first commit
- * two queue version
- * time complexity: 
- *   push: O(1)
- *   pop: O(2n - 1)  n is the element in queue1
- *   top: O(2n - 1)
- */
-class MyStack1() {
-
-    /** Initialize your data structure here. */
-    var queue1 = scala.collection.mutable.Queue[Int]()
-    var queue2 = scala.collection.mutable.Queue[Int]()
-
-    /** Push element x onto stack. */
-    def push(x: Int) {
-        queue1.enqueue(x)
-        
-    }
-
-    /** Removes the element on top of the stack and returns that element. */
-    def pop(): Int = {
-       while(queue1.size > 1) {
-           queue2.enqueue(queue1.dequeue)
-       }
-    
-        val ret = if(queue1.isEmpty) -1 else queue1.dequeue
-        val tmp = queue1
-        queue1 = queue2
-        queue2 = tmp
-        ret
-        
-    }
-
-    /** Get the top element. */
-    def top(): Int = {
-        while(queue1.size > 1) {
-           queue2.enqueue(queue1.dequeue)
-        }
-        val ret = if(queue1.isEmpty) -1 else queue1.dequeue
-        val tmp = queue1
-        queue1 = queue2
-        queue2 = tmp
-        queue1.enqueue(ret)
-        ret
-    }
-
-    /** Returns whether the stack is empty. */
-    def empty(): Boolean = {
-        queue1.isEmpty && queue2.isEmpty
-    }
-
-}
-
-```
-
 
 ##  273. <a name='BinarySearchTreeIterator'></a>173 【构造🏰】Binary Search Tree Iterator
 
@@ -2123,114 +2060,6 @@ class MinStack:
 空间复杂度：O(n)，其中 n 为总操作数。最坏情况下，我们会连续插入 n 个元素，此时两个栈占用的空间为 O(n)。
 
  
-```
-
-```py
-# 面试的时候被问到不能用额外空间，就去网上搜了下不用额外空间的做法。思路是栈里保存差值。
-#                 [3,2,1,4] [0,-1,-1, 3]
-#                 mins = 3, 2, 1, 1
-#                 先把这个部分写出来
-# class MinStack:
-#     def __init__(self):
-
-#         self.diffstack = []
-#         self.mins = -1
-
-
-#     def push(self, x: int) -> None:
-#         if not self.diffstack:
-#             self.diffstack.append(0)
-#             self.mins = x
-#         else:
-#             diff = x-self.mins
-#             self.diffstack.append(diff)
-#             self.mins = self.mins if diff > 0 else x
-#             # mins 是会变化的
-
-#     def pop(self) -> None:
-#         if self.diffstack:
-#             diff = self.diffstack.pop()
-#             if diff < 0: 
-
-#                 top = self.mins # 第一步：顺序不能错
-#                 self.mins = self.mins - diff # 第二步：如果 diff < 0, 那就需要还原 self.mins
-#             else:     # 如果 diff 一直都 > 0, 那就非常好
-#                 top = self.mins + diff
-#             return top
-
-#     def top(self) -> int:
-#         return self.mins if self.diffstack[-1] < 0 else self.diffstack[-1] + self.mins
-
-#     def getMin(self) -> int:
-#         return self.mins if self.diffstack else -1
-```
-
-
-```scala
-class MinStack() {
-
-    /** initialize your data structure here. */
-    var stack = List.empty[Int]
-    var min = Int.MaxValue
-
-    def push(x: Int) {
-        stack = stack :+ x
-        if(x < min){
-            min = x
-        }
-    }
-
-    def pop() {
-        stack = stack.init
-        min = Int.MaxValue
-        stack.map(x => {
-            if(x < min) min = x
-        })
-    }
-
-    def top(): Int = {
-        stack.last
-    }
-
-    def getMin(): Int = {
-        min
-    }
-
-}
-
-//替代解决方案：更快
-//这里我们将元素添加到列表中而不是附加
-//请注意，由于List实际上是一个LinkedList，因此处理列表的“头部”要容易得多
-//还有另一个列表来维护列表的最小元素
-class MinStack() {
-
-    /** initialize your data structure here. */
-    var stack = List.empty[Int]
-    var mins = List.empty[Int]
-
-    def push(x: Int) {
-        //如果我们将第二个条件设为 x < mins.head，则此行失败
-        //with NoSuchElementException: 空列表的头部
-        //为什么？？？
-        if(mins.isEmpty || mins.head >= x) mins = x +: mins
-        stack = x +: stack
-    }
-
-    def pop() {
-        if(mins.head == stack.head) mins = mins.tail
-        stack = stack.tail
-    }
-
-    def top(): Int = {
-        stack.head
-    }
-
-    def getMin(): Int = {
-        mins.head
-    }
-
-}
-
 ```
 
 
@@ -2342,60 +2171,6 @@ class Trie:
 空间复杂度：O(|T|⋅ Σ)，其中 |T| 为所有插入字符串的长度之和，Σ 为字符集的大小，本题 Σ = 26。
 
 ```
-
-```scala
-/**
-* Node implement by hashmap
-*/
-case class Node(next: scala.collection.mutable.Map[Char, Node] = scala.collection.mutable.Map(), var isWord: Boolean = false){
-  def update(char: Char, node: Node): Unit = next(char) = node
-  def apply(char: Char): Option[Node] = next.get(char)
-}
-
-class Trie2() {
-  /** Initialize your data structure here. */
-  val root = Node()
-
-  /** Inserts a word into the trie. */
-  def insert(word: String) {
-    var node = root
-    word.foreach{ c =>
-      node(c) match {
-        case Some(n) =>
-          node = n
-        case None =>
-          node(c) = Node()
-          node = node(c).get
-      }
-    }
-    node.isWord = true
-  }
-
-  /** Returns if the word is in the trie. */
-  def search(word: String): Boolean = {
-    searchUtil(word).exists(_.isWord)
-  }
-
-  /** Returns if there is any word in the trie that starts with the given prefix. */
-  def startsWith(prefix: String): Boolean = {
-    searchUtil(prefix).isDefined
-  }
-
-  private def searchUtil(s: String): Option[Node] = {
-    var node = root
-
-    s.foreach{ c =>
-      node(c) match {
-        case Some(n) => node = n
-        case None => return None
-      }
-    }
-    Some(node)
-  }
-
-}
-```
-
 
 ##  158. <a name='-1'></a>295. 数据流的中位数
 
@@ -2575,488 +2350,6 @@ class Solution:
 我们需要用到哈希集合来存储出现过的字符，而字符最多有∣Σ∣ 个
 ```
 
-```scala
-/**
-* my first commit
-* sliding windows
-*  time  complexity: O(N), worst: O(2N) -> each char was visited twice
-*/
-object Solution1 {
-    def lengthOfLongestSubstring(s: String): Int = {
-        var right = 0
-        var left = 0
-        var current = ""
-        var ret = ""
-        
-        while(right < s.length) {
-            val char = s(right)
-            if (current.contains(char)){
-                current = current.drop(1)
-                left += 1
-                 
-            }else {
-                right += 1
-                current += char
-            }     
-            if(current.length > ret.length) ret = current
-        }
-        ret.length
-    }
-}
-
-```
-
-##  4. <a name='Kadd'></a>215. 数组中的第K个最大元素（add）+
-
-https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
-
-```py
-输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
-输出: 4
-[3]
-[2, 3]
-[2, 3, 3]
-[1, 2, 3, 3]
-[2, 2, 3, 3]
-[2, 3, 3, 4]
-[3, 3, 5, 4]
-[3, 4, 5, 5]
-[4, 5, 5, 6]
-
-
-输入: [3,2,1,5,6,4] 和 k = 2
-[3]
-[2, 3]
-[2, 3]
-[3, 5]
-[5, 6]
-[5, 6]
-```
-
-```py
-最小堆：时间复杂度就是nlogk
-if len(q) > k: 用于限制 q 的宽度
-            q:  q 里面 过滤掉了 太小的数
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        q = []
-        for num in nums:
-            heapq.heappush(q, num) # n * log(k + 1)
-            if len(q) > k: heapq.heappop(q)   # n * log(k)
-        return heapq.heappop(q)
-时间复杂度： O((NlogK)) 
-空间复杂度： O(K) 
-```
-
-```py
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        return sorted(nums)[-k]
-```
-
-
-##  115. <a name='Offer40.k'></a>剑指 Offer 40. 最小的k个数
-
-```py
-import heapq
-class Solution(object):
-    def getLeastNumbers(self, arr, k):
-        return heapq.nsmallest(k, arr)
-
-class Solution:
-    def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
-        arr.sort()
-        return arr[:k]
-
-输入：arr = [3,2,1], k = 2
-输出：[1,2] 或者 [2,1]
-hp：
-[-3, -2]
-[-2, -1]
-用 heapq 过滤掉较大值
-
-class Solution:
-    def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
-        q = []
-        for num in arr:
-            heapq.heappush(q, -num) # n * log(k + 1)
-            if len(q) > k: heapq.heappop(q)   # n * log(k)
-        return [-x for x in q]
-时间复杂度： O((NlogK)) 
-空间复杂度： O(K) 
-```
-
-##  165. <a name='TopKFrequentElements'></a>347. 【最小堆🌵】Top K Frequent Elements 
-
-[花花酱](https://www.bilibili.com/video/BV1Mt411371T?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1sk4y1B7vj?spm_id_from=333.999.0.0)
-
-```py
-输入: nums = [1,1,1,2,2,3], k = 2
-输出: [1,2]
-
-hp 为：
-[(3, 1)]
-[(2, 2), (3, 1)]
-[(2, 2), (3, 1)]
-
-# 时间复杂度：O(n logk)
-# 空间复杂度：O(n)
-过滤较小值
-import heapq
-class Solution:
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        dic = collections.defaultdict(int)
-        for num in nums:
-            dic[num] += 1
-        hp = [] # 小顶堆
-        for key, freq in dic.items():
-            heapq.heappush(hp, (freq, key))
-            if len(hp) > k: heapq.heappop(hp)
-        return [x[1] for x in hp]
-时间复杂度： O((NlogK)) 
-空间复杂度： O(K) 
-```
-
-```scala
-object Solution {
-    def topKFrequent(nums: Array[Int], k: Int): Array[Int] = {
-        var hm = scala.collection.mutable.Map.empty[Int, Int]
-        for(elem <- nums){
-            hm.get(elem) match{
-                case Some(count) => hm += (elem -> (count+1))
-                case None => hm += (elem -> 1)
-            }
-        }
-        
-        // hm.toList.sortBy(x => (x._2)*(-1)).take(k).map(_._1).toArray
-        // The above is a sorting approach. We can use Heap/PriorityQueue to achieve better time complexity
-        
-        import scala.math.Ordering.Implicits._
-        
-        def orderByFrequency(tup: (Int, Int)) = tup._2
-        
-        val pq = new scala.collection.mutable.PriorityQueue[(Int, Int)]()(Ordering.by(orderByFrequency))
-        
-        for(entry <- hm){
-            pq.enqueue(entry)
-        }
-        
-        println(pq)
-        (1 to k).map(_ => pq.dequeue).map(_._1).toArray
-        
-    }
-}
-
-```
-
-
-##  104. <a name='MoveZeros'></a>283. Move Zeros
-
-[小梦想家](https://www.bilibili.com/video/BV1m441187Kt?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ba4y1t7eK?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1Wp4y1y7pT?spm_id_from=333.999.0.0)
-
-```py
-输入: nums = [0,1,0,3,12]
-输出: [1,3,12,0,0]
-
-
-
-
-输入: nums = [0]
-输出: [0]
-
-
-class Solution:
-    def moveZeroes(self, nums: List[int]) -> None:
-        slow = 0
-        for fast in range(len(nums)):
-            if nums[fast] != 0:
-                # 把 index 的位置变成不是 0, i 的位置变成是 0
-                nums[slow], nums[fast] = nums[fast], nums[slow]
-                # slow 的位置不是 0, 都在前面
-                slow += 1
-#                       [0, 1, 0, 3, 12]
-# slow: 0 fast: 1 nums: [1, 0, 0, 3, 12]
-# slow: 1 fast: 3 nums: [1, 3, 0, 0, 12]
-# slow: 2 fast: 4 nums: [1, 3, 12, 0, 0]
-时间复杂度： O(N) 
-空间复杂度： O(1) 
-```
-
-```scala
-//Alternate solution: calculate the number of shifts 
-object Solution {
-    def moveZeroes(nums: Array[Int]): Unit = {
-        
-        var zeroCount = 0
-        //count of zero is amount character is shifted to left
-        //from first zero position traverse array left
-        for(a <- 0 to nums.size-1){   
-            //count zeroes and shift when not zero
-            if(nums(a) == 0){
-                zeroCount = zeroCount + 1
-            }else if(zeroCount > 0){
-                //shift left if not 0 by zeroCount
-                nums(a - zeroCount) = nums(a)
-                nums(a) = 0
-            }
-        }
-    }
-}
-
-```
-
-
-##  111. <a name='Offer21.'></a>剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
-
-```py
-输入：nums = [1,2,3,4]
-输出：[1,3,2,4] 
-注：[3,1,2,4] 也是正确的答案之一。
-
-
-
-类似前面的移动0
-class Solution:
-    def exchange(self, nums: List[int]) -> List[int]:
-        slow = 0
-        for fast in range(len(nums)):
-            if nums[fast] & 1 == 1:
-                # 把 [fast上的奇数] 移动到 [slow的位置] 上
-                nums[slow], nums[fast] = nums[fast], nums[slow]
-                slow += 1
-        return nums
-时间复杂度： O(N) 
-空间复杂度： O(1) 
-```
-
-
-##  130. <a name='SortColors'></a>75. Sort Colors
-
-[小梦想家](https://www.bilibili.com/video/BV1rE411n7mL?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ua4y1v7yd?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1tz4y1o7n5?spm_id_from=333.999.0.0)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5l1bfbznzwc0.png)
-
-```py
-输入：nums = [2,0,2,1,1,0]
-输出：[0,0,1,1,2,2]
-
-
-
-输入：nums = [2,0,1]
-输出：[0,1,2]
-
-
-class Solution:
-    def sortColors(self, nums: List[int]) -> None:
-        idx, left, right = 0, 0, len(nums) - 1
-        while idx <= right: # 😐😐😐😐 while 循环
-            # 交换完位置后 idx 依旧在原位
-            if nums[idx] == 2 and idx < right:
-                nums[idx], nums[right] = nums[right], 2
-                right -= 1
-            # 交换完位置后 idx 依旧在原位
-            elif nums[idx] == 0 and idx > left:
-                nums[idx], nums[left] = nums[left], 0
-                left += 1
-            else:
-            # idx 为 1, 或者 idx 与 [right/left] 相交
-                idx += 1
-
-
-时间复杂度： O(N) 
-空间复杂度： O(1) 
-```
-
-
-
-##  6. <a name='add'></a>912 补充题4. 手撕快速排序（add）
-
-https://leetcode-cn.com/problems/sort-an-array/submissions/
-
-希尔排序：
-
-```py
-输入：nums = [5,2,3,1]
-输出：[1,2,3,5]
-示例 2：
-
-输入：nums = [5,1,1,2,0,0]
-输出：[0,0,1,1,2,5]
-
-
-
-
-
-设定一个
-
-对第一轮排序后的数列再按增量重新分组
-
-对每一个分组进行排序
-
-以此
-
-结果为我们想要的结果
-
-对分组进行排序用的是插入排序算法.因此,希尔排序是插入排序的一种优化的算法
-
-def shellSort(nums): 
-  
-    n = len(nums)
-    gap = n//2 # 初始增量
-  
-    while gap > 0: 
-  
-        for i in range(gap,n):  # 对原始数列进行分组 对每一个分组进行排序
-  
-            right = nums[i] 
-            j = i 
-            while  j >= gap and nums[j-gap] > right: # nums[j-gap] 是 left
-                nums[j] = nums[j-gap]   # 把 nums[j-gap] 这个 bigger 往后面放
-                j -= gap 
-            nums[j] = right  # 把 right 值 插入
-        gap = int(gap/2) # 设置一个更小的增量, 直到增量为1, 再排序
-
-最坏时间复杂度：O(n2)
-空间复杂度：O(1)
-```
-
-选择排序：
-
-选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
-
-```py
-for i in range(len(nums)): 
-      
-    minpos = i 
-    for j in range(i + 1, len(nums)): 
-        if nums[j] < nums[minpos]: 
-            minpos = j 
-                
-    nums[i], nums[minpos] = nums[minpos], nums[i] 
-```
-
-冒泡排序：
-
-```py
-把最大值移到最后一位上：
-def bubble_sort(nums):
-    n = len(nums)
-
-    for i in range(n):
-        for j in range(1, n - i):
-            if nums[j - 1] > nums[j]:
-                nums[j - 1], nums[j] = nums[j], nums[j - 1]
-    return nums
-```
-
-快速排序:
-
-```py
-class Solution:
-    # 这里需要用到 pivot
-    def randomized_partition(self, nums, l, r):
-        pivot = random.randint(l, r)
-        # 先把 nums[pivot] 靠边站
-        nums[pivot], nums[r] = nums[r], nums[pivot]
-        slow = l
-        for fast in range(l, r):
-            if nums[fast] < nums[r]: # nums[r] 就是 pivot
-                nums[fast], nums[slow] = nums[slow], nums[fast] # nums[i] 存的都是较小的数字
-                slow += 1
-        nums[slow], nums[r] = nums[r], nums[slow] # pivot 放到中间
-        return slow
-    # 这里需要用到 mid
-    def randomized_quicksort(self, nums, l, r):
-        if l < r:
-            mid = self.randomized_partition(nums, l, r)
-            self.randomized_quicksort(nums, l, mid - 1)
-            self.randomized_quicksort(nums, mid + 1, r)
-
-    def sortArray(self, nums: List[int]) -> List[int]:
-        self.randomized_quicksort(nums, 0, len(nums) - 1)
-        return nums
-
-时间复杂度：O(n log(n))
-空间复杂度：O(log n) ~ O(n)
-```
-
-
-
-```py
-堆排序:
-
-     0
-    / \
-   1   2
-  / \ / \
- 3  4 5  6
-
-class Solution:
-    def max_heapify(self, heap, root, heap_len):
-        p = root
-        while p * 2 + 2 <= heap_len: # 😐 while 循环 # 当不是叶子节点 
-            l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
-            if r < heap_len and heap[l] < heap[r]:
-                bigger = r
-            else:
-                bigger = l
-            # 把最大的元素往上提
-            if heap[p] < heap[bigger]:
-                heap[p], heap[bigger] = heap[bigger], heap[p]
-                p = bigger
-            else:
-                break
-        
-    def sortArray(self, nums: List[int]) -> List[int]:
-        # 时间复杂度O(N)
-        # 从叶子节点开始遍历
-        # 如果不是从叶子开始，可能白跑一遍
-        '''
-        把最大值放在 0 的位置
-        '''
-        for i in range(len(nums) - 1, -1, -1):
-            self.max_heapify(nums, i, len(nums))
-            
-        # 时间复杂度O(N logN)
-        for i in range(len(nums) - 1, -1, -1):
-            # 把最大的元素放到末尾
-        '''
-        把最大值 从 0 的位置，依次移到 i 的位置
-        '''
-            nums[i], nums[0] = nums[0], nums[i]
-            self.max_heapify(nums, 0, i)
-        return nums
-
-时间复杂度：O(n logn)
-空间复杂度：O(1)
-```
-
-
-
-```py
-排序问题各有各的招，我来说一个凑热闹的桶排序。反正所有数字在正负五万之间，你就拿100001个桶，遍历一遍把数字仍对应的桶里边，然后你就排好了。
-
-class Solution:
-    def sortArray(self, nums: List[int]) -> List[int]:
-        bucket = collections.defaultdict(int)
-        for num in nums:
-            bucket[num] += 1
-        res = []
-        for i in range(-50000, 50001):
-            res += [i] * bucket[i]
-        return res
-你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
-```
 
 
 
@@ -3201,38 +2494,6 @@ class Solution:
             return root
 ```
 
-scala 中没有这种形式的写法 nums[:mid]，nums[mid+1:]
-
-```scala
-/**
- * Definition for a binary tree node.
- * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
- *   var value: Int = _value
- *   var left: TreeNode = _left
- *   var right: TreeNode = _right
- * }
- */
-object Solution {
-    
-    def formTree(nums: Array[Int], begin: Int, end: Int): TreeNode = {
-        var mid = begin + Math.ceil((end - begin)/2).toInt
-        TreeNode(
-            nums(mid), 
-            if(mid <= begin) null else formTree(nums, begin, mid-1), 
-            if(mid >= end) null else formTree(nums, mid+1, end)
-        )
-    }
-    
-    def sortedArrayToBST(nums: Array[Int]): TreeNode = {
-        if(nums.isEmpty){
-            null
-        }else{
-            formTree(nums, 0, nums.size - 1)
-        }
-    }
-}
-
-```
 
 ##  163. <a name='SumClosest'></a>16. 3Sum Closest
 
@@ -3278,52 +2539,6 @@ class Solution:
 
 空间复杂度： O(N)。python中的sort之timsort
 
-```
-
-
-```scala
-
-/**
-* my first commitment
-* two pointer approximate
-* 
-* time complexity: O(N^2)
-*/
-object Solution1 {
-  def threeSumClosest(nums: Array[Int], target: Int): Int = {
-    val l = nums.sorted
-    // slice(0, 3) is slower 
-    l.indices.foldLeft(l.take(3).sum){
-      case (closestSum, idx) => twoSum(l, target, idx, closestSum)
-    }
-
-  }
-
-  def twoSum(nums: Array[Int], target: Int, from: Int, closestSum: Int): Int = {
-    val fromValue = nums(from)
-
-    @annotation.tailrec
-    def _twoSum(left: Int, right: Int, previousSum: Int): Int = {
-      if(left >= right) return previousSum
-
-
-      val currentSum = fromValue + nums(left) + nums(right)
-
-      val currentDiff = math.abs(target - currentSum)
-      val previousDiff = math.abs(target - previousSum)
-
-      val newClosest = if(currentDiff > previousDiff) previousSum else currentSum
-
-
-      if(currentSum < target) _twoSum(left + 1, right, newClosest)
-      else if(currentSum > target) _twoSum(left, right - 1, newClosest)
-      else _twoSum(left + 1, right - 1, newClosest)
-
-    }
-
-    _twoSum(from + 1, nums.length - 1, closestSum)
-  }
-}
 ```
 
 ##  7. <a name=''></a>15. 三数之和
@@ -3409,45 +2624,6 @@ class Solution:
 空间复杂度： O(N)。python中的sort之timsort
 ```
 
-```scala
-/**
-* my first commit
-* hashset in twoSum
-* a very time consuming version
-* O(N^2)
-*/
-object Solution1 {
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-
-      val l = nums.groupBy(identity).mapValues(aa => if(aa.length >=3) aa.take(3) else aa ).values.flatten.toList
-
-     l.zipWithIndex.flatMap {
-      case (value, index) =>
-        val ll = collection.mutable.ListBuffer(l: _*)
-        ll.remove(index)
-
-        twoSum(ll.toList, -value).filter(_.nonEmpty)
-          .map(_ :+ value)
-    }.map(pair => (pair.toSet, pair)).toMap.values.toList
-
-  }
-
-   def twoSum(nums: List[Int], target: Int): List[List[Int]] = {
-    val valueCounter = nums.groupBy(identity).mapValues(_.length)
-
-    nums.collect {
-      case value if target - value == value && valueCounter.get(target - value).exists(_ >= 2) =>
-        List(value, target - value)
-      case value if target - value != value && valueCounter.contains(target - value) =>
-        List(value, target - value)
-
-    }
-  }
-
-}
-
-
-```
 
 ##  217. <a name='-1'></a>18. 四数之和
 
@@ -3572,39 +2748,6 @@ class Solution:
             dic[target - num] = i
 ```
 
-```scala
-/**
-* chosen solution
-* time complexity: O(N)
-*/
-
-
-object Solution0 {
-  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-    val value2Idx = nums.zipWithIndex.toMap
-    nums.zipWithIndex.collectFirst {
-      case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
-        Array(index, value2Idx(target - value))
-    }.get
-  }
-}
-
-
-/**
-* more elegant
-*/
-
-
-object Solution1-2 {
-  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-    val value2Idx = nums.zipWithIndex.toMap
-    nums.zipWithIndex.collectFirst {
-      case (value, index) if value2Idx.get(target - value).exists(_ != index) =>
-        Array(index, value2Idx(target - value))
-    }.get
-  }
-}
-```
 
 ##  208. <a name='TwoSumII-Inputarrayissorted'></a>167-Two Sum II - Input array is sorted
 
@@ -3731,19 +2874,6 @@ class Solution:
         return res
 ```
 
-
-```scala
-object Solution {
-    def maxSubArray(nums: Array[Int]): Int = {
-        for (i <- Range(1, nums.length)) {
-            if (nums(i-1) > 0) {
-                nums(i) += nums(i-1)
-            }
-        }
-        nums.max
-    }
-}
-```
 
 
 ##  125. <a name='SubarraySumEqualsKK'></a>560. 【前缀和🎨】Subarray Sum Equals K 和为K的子数组
@@ -4012,71 +3142,6 @@ class Solution:
         return [*dic.values()]
 ```
 
-> scala queue
-
-```scala
-object Solution {
-    def levelOrder(root: TreeNode): List[List[Int]] = {
-        val buffer =  scala.collection.mutable.Queue[TreeNode]()
-        val res =  scala.collection.mutable.ListBuffer[List[Int]]()
-
-        if(root == null) return List[List[Int]]()
-        buffer.enqueue(root)
-    
-        while(buffer.nonEmpty) {
-          val cur = scala.collection.mutable.ListBuffer[Int]()
-          for ( _ <- 0 until buffer.size) {
-            val node = buffer.dequeue
-            cur.append(node.value)
-            if(node.left != null) buffer.enqueue(node.left)
-            if(node.right != null) buffer.enqueue(node.right)
-        }
-        res += cur.toList
-        }
-        res.toList
-    }
-}
-```
-
-> scala 递归
-
-```scala
-object Solution {
-    def levelOrder(root: TreeNode): List[List[Int]] = {
-        val oderMap = scala.collection.mutable.Map[Int, List[Int]]()
-        bfs(root, 1, oderMap)
-        oderMap.values.toList
-    }
-    def bfs(node: TreeNode, level: Int, map: scala.collection.mutable.Map[Int, List[Int]]): Unit = {
-        if (node != null) {
-            val l = map.get(level)
-                .map(_ :+ node.value)
-                .getOrElse(List(node.value))
-
-            map(level) = l
-            bfs(node.left, level + 1, map)
-            bfs(node.right, level + 1, map)
-        }
-    }
-}
-```
-
-```scala
-object Solution {
-    def levelOrder(root: TreeNode): List[List[Int]] = {
-        bfs(if(root == null) List() else List(root), List())
-    }
-
-    // @annotation.tailrec
-    // @annotation.tailrec 告诉编译器，下面这个函数是递归的，在栈桢的管理上，希望编译器能所有优化。
-    def bfs(queue: List[TreeNode], ans: List[List[Int]]): List[List[Int]] = {
-        if(queue.isEmpty) ans
-        else{
-        bfs(queue.flatMap(n => List(n.left, n.right)).filter(_ != null), ans :+ queue.map(n => n.value))
-        }
-    }
-}
-```
 
 ##  13. <a name='BestTimetoBuyandSellStock121-'></a>121. Best Time to Buy and Sell Stock  121-买卖股票的最佳时机
 
@@ -4116,16 +3181,6 @@ class Solution:
             maxprofit = max(maxprofit,price - minprice)
             minprice = min(minprice,price)
         return maxprofit
-```
-
-```scala
-object Solution {
-    def maxProfit(prices: Array[Int]): Int = {
-        prices.foldLeft((Int.MaxValue, 0)){
-            case ((minPriceSoFar, maxProfit), price) => (minPriceSoFar min price, maxProfit max (price - minPriceSoFar))
-        }._2
-    }
-}
 ```
 
 
@@ -4183,29 +3238,6 @@ class Solution:
         return maxprofit
 ```
 
-```scala
-
-/**
-* greedy alg: one line pass
-*/
-
-object Solution1-2 {
-  def maxProfit(prices: Array[Int]): Int = {
-    if(prices.length > 1) prices.sliding(2).collect{case arr if arr(1) > arr(0) => arr(1) - arr(0)}.sum else 0
-  }
-}
-
-//Alternate solution
-object Solution {
-    def maxProfit(prices: Array[Int]): Int = {
-        prices
-            .foldLeft(0,Int.MaxValue)((t, current) => (t._1 + 0.max(current-t._2), current))
-            ._1
-    }
-}
-
-```
-
 
 ##  146. <a name='III'></a>123-买卖股票的最佳时机 III
 
@@ -4251,23 +3283,6 @@ class Solution:
             buy2 = min(buy2, price - profit1)  # buy2[i]-profit1[i-1] 相当于一个虚拟的买入价格
             profit2 = max(profit2, price - buy2)
         return profit2
-```
-
-```scala
-object Solution3-1 {
-    def maxProfit(prices: Array[Int]): Int = {
-        val (buy1, sell1, buy2, sell2) = prices.foldLeft((Int.MinValue, 0, Int.MinValue, 0)){
-            case ((buy1, sell1, buy2, sell2), cost) =>
-                (
-                    buy1 max -cost,
-                    sell1 max (buy1 + cost),
-                    buy2 max (sell1 - cost),
-                    sell2 max (buy2 + cost)
-                )
-        }
-        sell1 max.sell2
-    }
-}
 ```
 
 
@@ -4363,46 +3378,6 @@ if __name__ == "__main__":
 
 ```
 
-
-
-
-```scala
-
-/**
-* dp: decrease status array which only keep current and precious status
-* memo
-*    1. dp definition: dp[2][j][l] means the best profit we can have at i-th day using EXACT j transactions and with/without stocks in hand.
-* time complexity: O(NK), N: the length of prices; k: transaction's constraint
-* space complexity: O(K),  worst case: O(N)
-*/
-object Solution1-3 {
-    def maxProfit(k: Int, prices: Array[Int]): Int = {
-        if(prices == null || prices.length < 2 || k < 1 ) return 0
-        val kk = if(2 * k > prices.length) prices.length / 2 else k
-        
-        val dp = Array.tabulate(2, kk, 2) {
-            case (_, _, 0) => Int.MinValue
-            case (_, _, 1) => 0
-            case _ => 0
-        }
-        
-        for(i <- prices.indices; j <- 0 until kk){
-            val current = i & 1
-            val previous = current ^1
-            // 0 for buy, 1 for sell
-            dp(current)(j)(1) = dp(previous)(j)(1) max (dp(previous)(j)(0) + prices(i))
-            dp(current)(j)(0) = dp(previous)(j)(0) max {
-                if(j == 0) -prices(i)
-                else dp(previous)(j - 1)(1) - prices(i)
-            }
-            
-        }
-        
-        dp((prices.length - 1) & 1).map(_(1)).max
-        
-    }
-}
-```
 
 
 
@@ -4521,38 +3496,6 @@ class Solution:
 
 ```
 
-```scala
-/**
-*  chosen solution
-*  DFS with recursive
-*  time complexity O(N), N is the number of node in the tree
-*  space complexity O(N)
-*/
-object Solution0 {
-  def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
-    _lowestCommonAncestor(root, p, q)
-  }
-
-  private def _lowestCommonAncestor(node: TreeNode, p: TreeNode, q: TreeNode): TreeNode = {
-    if (node == null || node == p || node == q) return node
-    /**
-    *  1. if p and q are node 's child, return p q 's LCA 
-    *  2.  if p and q are not node's child return null
-    *  3. if p and q, only one of then ar node's child return that node (p or q)
-    */
-    val left = _lowestCommonAncestor(node.left, p, q)
-    val right = _lowestCommonAncestor(node.right, p, q)
-
-    (left, right) match {
-      case (null, _) => right  // p and q are both not in left
-      case (_, null) => left  // p and q are both not in right
-      case (l, r) =>  node // only lowest common ancestor could return both non null node
-      // p and q, one of then in left and the other one in right
-    }
-  }
-}
-```
-
 ##  18. <a name='Validparentheses'></a>20-Valid parentheses
 
 [哈哈哈](https://www.bilibili.com/video/BV1DJ41127uA?spm_id_from=333.999.0.0)
@@ -4619,56 +3562,6 @@ class Solution:
         return not stack # 如果append上了，但没有被完全pop也是不对的
 ```
 
-```scala
-/**
-* my first commitment
-* using stack
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-object Solution1 {
-    def isValid(s: String): Boolean = {
-        if(s.isEmpty || s.length % 2 != 0) return false
-        val stack = scala.collection.mutable.Stack[Char]()
-        
-        val mapping = Map('(' -> ')', '{' -> '}', '[' -> ']')
-
-        s.foreach{c => 
-            
-            if (mapping.contains(c)){
-                stack push c
-            }else{
-                if(stack.isEmpty || mapping(stack.pop) != c) return false 
-             
-            }
-        }
-        stack.isEmpty
-        
-    }
-}
-
-
-/**
-* using stack X FP
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-object Solution1-3 {
-    def isValid(s: String): Boolean = {
-        val mapping = Map('(' -> ')', '{' -> '}', '[' -> ']')
-        
-        s.foldLeft(List.empty[Char]){ (stack, c) => 
-            stack match {
-                case pop :: stackAfterPop if  c.equals(mapping.getOrElse(pop, None)) => stackAfterPop
-                case _ => c +: stack
-            }
-           
-        }.isEmpty
-        
-    }
-}
-
-```
 
 
 ##  60. <a name='GenerateParentheses'></a>22. Generate Parentheses
@@ -4725,55 +3618,6 @@ class Solution:
         return res
 ```
 
-
-```py
-# 相当于比上一层少了一层循环。
-# 不懂是不是动态规划，每新增一对括号，
-# 就是在上一次的结果的各个位置插入一个"()"，用集合防止重复
-
-# class Solution:
-#     def generateParenthesis(self, n):
-#         res = {''}
-#         for i in range(n):
-#             ini = set()
-#             for s in res:  # 在上一次的结果的所有字符串的各个位置上插入'()'
-#                 for j in range(len(s) + 1): # 如果s的长度为4，那么就有5个可以插入的位置
-#                     ini.add(s[:j] + '()' + s[j:])
-#             res = ini
-#         return list(res)
-                    
-                # 错误写法：
-                # itm = itm[:j] + '()' + itm[j:]
-                # res = res.add(itm)
-                # 错误写法：
-                # res = res.add(itm[:j] + '()' + itm[j:])
-                # 正确写法：
-
-
-
-```
-
-```scala
-
-object Solution {
-    
-    def generateParenthesis(n: Int): List[String] = {
-        import scala.collection.mutable._
-        def backtrack(acc: ListBuffer[String], curr: String, left: Int, right: Int): Unit = {
-            if (left == 0 && right == 0) acc.append(curr)
-            else {
-                if (left > 0) backtrack(acc, curr + "(", left-1, right)
-                if (right > left) backtrack(acc, curr + ")", left, right-1)
-            }
-        }
-      
-        val acc = ListBuffer[String]()
-        backtrack(acc, "", n, n)
-        acc.toList
-    }
-}
-
-```
 
 
 ##  67. <a name='LongestValidParentheses'></a>32 Longest Valid Parentheses
@@ -4839,46 +3683,6 @@ class Solution:
         return maxlength
 
 ```
-
-```scala
-
-
-
-/**
-* using stack to record the char index in oder to calculate the valid length
-* memo:
-* 1. always only have one invalid symbol at stack and its position index is 0
-* time complexity O(n)
-* space complexity O(n)
-*/
-object Solution1 {
-
-  import collection.mutable
-
-  def longestValidParentheses(s: String): Int = {
-    val mapping = Map('(' -> ')')
-    val stack = mutable.Stack[Int]()
-    stack.push(-1)
-    s.indices.foldLeft(0) {
-      case (maxLength, idx) =>
-        val char = s(idx)
-        if (mapping.contains(char)) {
-          stack push idx
-          maxLength
-        } else {
-          stack.pop()
-          if (stack.isEmpty) {
-            stack push idx
-            maxLength
-          } else {
-            (idx - stack.head) max maxLength
-          }
-        }
-    }
-  }
-}
-```
-
 
 ##  160. <a name='ValidParenthesisString'></a>678 Valid Parenthesis String
 
@@ -5181,30 +3985,6 @@ class Solution:
 ```
 
 
-```scala
-/**
-* two pointer comparison
-* memo
-*  1. alphanumeric = letters + numerals
-* time complexity: O(2N)
-* space complexity: O(N)
-*/
-
-object Solution1 {
-    def isPalindrome(s: String): Boolean = {
-      val newString = s.filter(_.isLetterOrDigit).toLowerCase
-      isPalindrome(newString, 0, newString.length - 1)
-    }
-    @annotation.tailrec
-    def isPalindrome(s: String, left: Int, right: Int): Boolean = {
-      if (left > right) return true
-      if (s(left) == s(right)) isPalindrome(s, left + 1, right - 1)
-      else false
-    }
-}
-```
-
-
 
 ##  143. <a name='Palindrome'></a>9-【回文🌈】Palindrome
 
@@ -5270,21 +4050,6 @@ class Solution:
 
 * 时间复杂度:O(log10(n)), 每次迭代都会除以10
 
-
-
-```scala
-package lc009 {
-  object Solution {
-    def isPalindrome(x: Int): Boolean = {
-      if (x<0) return false
-      if (x==0) return true
-      if (x%10==0) return false
-      val y=x.toString.reverse
-      return y==x.toString
-    }
-  }
-}
-```
 
 
 ##  268. <a name='ValidPalindromeII'></a>680 【回文🌈】Valid Palindrome II
@@ -5376,51 +4141,9 @@ class Solution:
                     dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
         return dp[-1][-1]
 
-
-# class Solution:
-#     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-#         n1, n2 = len(text1), len(text2)
-#         pre = [0 for _ in range(n2 + 1)]
-#         dp = [0 for _ in range(n2 + 1)]
-#         for i in range(1, n1 + 1):
-#             for j in range(1, n2 + 1):
-#                 if text1[i-1] == text2[j-1]:
-#                     dp[j] = pre[j-1] + 1
-#                 else:
-#                     dp[j] = max(pre[j], dp[j-1])
-#                 pre[j-1] = dp[j-1] # 注意这里的缩进关系
-#             pre[j] = dp[j]
-#         return dp[-1]
 ```
 
 
-
-```scala
-
-
-  object Solution {
-    def longestCommonSubsequence(text1: String, text2: String): Int = {
-      val m = text1.length
-      val n = text2.length
-      //val dp = Array.ofDim[Int](1001,1001)
-      val dp = Array.fill(1001,1001)(0)
-      for (i<- 1 to m) { // must have space?
-        for (j<- 1 to n) {
-          dp(i)(j) = if (text1(i-1)== text2(j-1)) dp(i-1)(j-1)+1 else Math.max(dp(i-1)(j),dp(i)(j-1))
-        }
-      }
-      dp(m)(n)
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      println(Solution.longestCommonSubsequence("abcde", "ace") == 3)
-    }
-    val name = "1143 Longest common sequence"
-  }
-
-```
 
 
 ##  70. <a name='-1'></a>718. 最长重复子数组
@@ -5627,73 +4350,6 @@ class Solution:
         return DP[-1][-1]
 ```
 
-```py
-# class Solution:
-#     def minDistance(self, word1: str, word2: str) -> int:
-#         @cache
-#         def dp(i, j) -> int:
-#             if i == -1:
-#                 return j + 1
-#             if j == -1:
-#                 return i + 1
-#             # 做出选择
-#             if word1[i] == word2[j]:
-#                 return dp(i - 1, j - 1) # 什么都不做
-#             else:
-#                 return min(
-#                     dp(i, j-1) + 1,  # insert
-#                     dp(i-1, j) + 1,  # delete
-#                     dp(i-1, j-1) + 1 # replace
-#                 )
-#         return dp(len(word1)-1, len(word2)-1)
-```
-
-```scala
-/**
-* dynamic programming  - Levenshtein distance
-* memo
-*    1. dp(i)(j) represent the minimum edit distance from the length i substring from word1 to the length j substring from word2
-*    2. dp(i)(j) is solved by its sub-optimal problem 
-*         1, delete op: dp(i -1)(j)
-*         2. replacement op: dp(i -1)(j - 1)
-*         3. insertion op: dp(i)(j - 1)
-* time complexity: O(NM) N is the length of word1, N is the length of word2
-* space complexity: O(NM)
-*/
-object Solution1 {
-  def minDistance(word1: String, word2: String): Int = {
-    val m = word1.length
-    val n = word2.length
-    /* initial  Levenshtein distance table 
-    * dp(i)(j) represent the minimum distance transforming from length i of substring word1 to length j of substring word2
-    */
-    val dp = Array.tabulate(m + 1, n + 1) {
-      case (0, j) => j
-      case (i, 0) => i
-      case _ => 0
-    }
-
-    for (i <- 1 to m; j <- 1 to n) {
-      /* i-1 is word1 index, j-1 is word2 index */
-      if (word1(i - 1) == word2(j - 1)) {
-        // do nothing case
-        dp(i)(j) = dp(i - 1)(j - 1)
-      } else {
-        /**
-        *       i-1,    i
-        * j-1 replace  insertion     
-        *  j   delete  dp(i)(j)
-        */
-        val replace = dp(i - 1)(j - 1)
-        val insert = dp(i)(j - 1)
-        val delete = dp(i - 1)(j)
-        dp(i)(j) = (replace min insert min delete) + 1
-      }
-    }
-    dp(m)(n)
-  }
-}
-```
 
 
 ##  278. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
@@ -5997,32 +4653,6 @@ class Solution:
 
 空间复杂度：O(n)
 
-```py
-# class Solution:
-#     def uniquePaths(self, m: int, n: int) -> int:
-#         # 易错点：dp千万不要写错
-#         dp = [1] * n
-#         for i in range(1, m):
-#             for j in range(1, n):
-#                 dp[j] += dp[j - 1]
-#         return dp[-1]
-```
-
-```scala
-/**
-* fill dp array with 1
-*/
-object Solution2-1{
-    def uniquePaths(m: Int, n: Int): Int = {
-      val dp = Array.fill[Int](m, n)(1)
-      for (i <- 1 until m; j <- 1 until n) {
-        dp(i)(j) = dp(i - 1)(j) + dp(i)(j - 1)
-      }
-      
-      dp.last.last
-    }
-}
-```
 
 
 ##  190. <a name='UniquePathsII'></a>63 Unique Paths II
@@ -6238,49 +4868,6 @@ class Solution:
         return -1
 ```
 
-```py
-# 这道题简直是在跟我开玩笑（狗头）
-
-class Solution(object):
-    def search(self, nums, target):
-        return nums.index(target) if target in nums else -1
-```
-
-```scala
-
-/**
-* binary search - iterative version
-*/
-object Solution1-2 {
-    def search(nums: Array[Int], target: Int): Int = {
-      var left = 0
-      var right = nums.length - 1
-      
-      var ans = -1
-      while(ans == -1 && left <= right) {
-        val mid = left + (right - left) / 2
-
-        if (target == nums(mid) ){
-          ans = mid
-
-        } else if (nums(left) <= nums(mid)){ // left part is in order
-          if (nums(mid) > target && target >= nums(left)) { // target is in left part
-            right = mid - 1
-          } else {
-            left = mid + 1
-          }
-        } else { // right part is in order
-          if (nums(mid) < target && target <= nums(right)) { // target is in right part
-            left = mid + 1
-          } else {
-            right = mid - 1
-          }
-        } 
-      }
-      ans
-    }
-}
-```
 
 # 2 day (得分 = 15分) 45
 
@@ -6867,52 +5454,6 @@ class Solution:
 ```
 
 
-```scala
-/**
-* directly compare with char by char
-* if there are only one word should be checked in board, brute force is a more efficient method
-*/
-
-object Solution2 {
-  private val visitedLabel = '#'
-  def exist(board: Array[Array[Char]], word: String): Boolean = {
-    dfs(word, board)
-  }
-
-  def dfs(word: String, board: Array[Array[Char]]): Boolean = {
-
-    def _dfs(coord: (Int, Int), wordIdx: Int): Boolean = {
-      val char = board(coord._1)(coord._2)
-
-      if(wordIdx >= word.length || char != word.charAt(wordIdx)) false
-      else if(char == word.charAt(wordIdx) && wordIdx == word.length - 1) true
-      else {
-        board(coord._1)(coord._2) = visitedLabel
-        val exists = getNeighbors(coord, (board.length, board(0).length)) exists {
-          case (nr, nc) if board(nr)(nc) != visitedLabel => _dfs((nr, nc), wordIdx + 1)
-          case _ => false
-        }
-        board(coord._1)(coord._2) = char
-        exists
-      }
-    }
-    
-    val coords = for (i <- board.indices.view; j <- board(0).indices.view) yield (i ,j)
-    coords.exists(_dfs(_, 0))
-  }
-
-  val getNeighbors = (coord: (Int, Int), shape: (Int, Int)) => {
-    val (row, col) = coord
-    List(
-      (row + 1, col),
-      (row - 1, col),
-      (row, col + 1),
-      (row, col - 1)
-    ).filter{case (r, c) => 0 <= r && r < shape._1 && 0 <= c && c < shape._2}
-  }
-}
-
-```
 
 ##  139. <a name='dfsLongestIncreasingPathinaMatrix'></a>329. 【动态🚀规划 + dfs】Longest Increasing Path in a Matrix
 
@@ -6922,29 +5463,6 @@ object Solution2 {
 
 动态🚀规划
 
-```py
-# class Solution:
-#     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
-#         if not matrix or not matrix[0]:
-#             return 0
-#         m, n = len(matrix), len(matrix[0])
-#         lst = []
-#         for i in range(m):
-#             for j in range(n):
-#                 lst.append((matrix[i][j], i, j))
-#         lst.sort()
-# # 先预处理，对矩阵的值按从小到大排序，按大小顺序才能保证依赖的子问题都求解过了
-#         dp = [[1 for _ in range(n)] for _ in range(m)] # 注意：😁这里存的是结束位置，初始dp[i][j]都等于1
-# # 🌵 这里循环了 m*n 次
-#         for num, i, j in lst:
-#             for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-#                 prex, prey = i + di, j + dj
-# # 若matrix[i][j]四个方向有任意小于它，则可以更新dp[i][j] = max(dp[i][j], 1 + dp[r][c])
-#                 if 0 <= prex < m and 0 <= prey < n and matrix[i][j] > matrix[prex][prey]:
-#                     dp[i][j] = max(dp[i][j], 1 + dp[prex][prey])
-# # dp[i][j] 表示以 matrix[i][j] 结尾的最长递增长度
-#         return max([dp[i][j] for i in range(m) for j in range(n)])
-```
 
 ```py
 输入：matrix = [
@@ -7326,14 +5844,6 @@ def titleToNumber(self, columnTitle: str) -> int:
 ```
 
 
-```scala
-//Alternate solution
-object Solution {
-    def titleToNumber(s: String): Int = 
-        s.foldLeft(0)((acc, ch) => acc * 26 + (ch - 'A' + 1))
-}
-
-```
 
 
 ##  45. <a name='AddTwoNumbers'></a>2. Add Two Numbers
@@ -7388,35 +5898,6 @@ class Solution:
         return dummy.next
 ```
 
-```scala
-object Solution {
-    def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {
-      var cur1 = l1
-      var cur2 = l2
-      val dummy = ListNode(0)
-      var prev=dummy
-      var carry = 0
-      while (cur1!=null ||  cur2!=null || carry !=0) {
-        val (s1,next1) = cur1 match {
-          case null => (0,null)
-          case _=> (cur1.x, cur1.next)
-        }
-        val (s2,next2) = cur2 match {
-          case null => (0,null)
-          case _=> (cur2.x,cur2.next)
-        }
-        val s = s1+s2+carry
-        val node = ListNode(s % 10)
-        prev.next = node
-        prev=node
-        carry=s/10
-        cur1 = next1
-        cur2=next2
-      }
-      dummy.next
-    }
-  }
-```
 
 ##  154. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
 
@@ -7578,37 +6059,6 @@ class Solution:
         return res
 ```
 
-```scala
-object Solution {
-    var output = List.empty[List[Int]]
-    
-    def backtrack(nums: Array[Int], l: Int, r: Int): Unit = {
-        def swap(a: Int, b: Int) = {
-            val temp = nums(a)
-            nums(a) = nums(b)
-            nums(b) = temp
-        }
-        
-        if(l == r){
-            output = output :+ nums.toList
-        }else{
-            (l to r).map(i => {
-                swap(l, i)
-                backtrack(nums, l+1, r)
-                swap(l, i) //backtrack step
-            })
-        }
-    }
-    
-    def permute(nums: Array[Int]): List[List[Int]] = {
-        output = List.empty[List[Int]]
-        var input = nums
-        backtrack(input, 0, input.length - 1)
-        output
-    }
-}
-
-```
 
 
 ##  57. <a name='IP'></a>93. 复原 IP 地址
@@ -7879,24 +6329,6 @@ class Solution:
         return res
 ```
 
-```scala
-object Solution {
-    //We either use or don't use the current item at the given index and continue until we are at the end of the array.
-    
-    def subsets(nums: Array[Int]): List[List[Int]] = {
-        def backtrack(nums: List[Int], returnValue: List[Int]): List[List[Int]] = {
-            nums
-            .headOption
-            .map(currentElem => 
-                 backtrack(nums.tail, returnValue) ++ backtrack(nums.tail, currentElem +: returnValue))
-            .getOrElse(List(returnValue))
-        }
-        
-        backtrack(nums.toList, List.empty[Int])
-    }
-}
-
-```
 
 
 ##  76. <a name='CombinationSum39-'></a>39. Combination Sum 39-组合总和
@@ -7951,33 +6383,6 @@ class Solution:
         return res
 ```
 
-```scala
-
-/**
-* my first commitment: dfs - backtracking
-*/
-
-object Solution1-1 {
-    import collection.mutable
-    def combinationSum(candidates: Array[Int], target: Int): List[List[Int]] = {
-      
-      def dfs(combination: List[Int], ans: mutable.Set[List[Int]]): Unit = {
-        val currentSum = combination.sum
-        
-        if (currentSum == target) {
-          ans += combination.toList
-          
-        } else if (currentSum < target){
-          val diff = target - currentSum
-          candidates.filter(n => n <= diff).foreach{ case n => dfs(n :: combination, ans)}
-        }
-      }
-      val ans = mutable.Set.empty[List[Int]]
-      dfs(List.empty[Int], ans)
-      ans.map(l => l.groupBy(identity).mapValues(_.length).toMap -> l).toMap.values.toList // distinct 
-    }
-}
-```
 
 
 ##  131. <a name='II-'></a>47 - ★ 全排列 II-剪枝版
@@ -8290,86 +6695,6 @@ class Solution:
 
 
 
-##  232. <a name='K-1'></a>378-【最小堆🌵】有序矩阵中第K小的元素
-
-[哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1Zy4y127qr?spm_id_from=333.999.0.0)
-
-```py
-输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
-输出：13
-
-
-解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15], 第 8 小元素是 13
-```
-
-```py
-最小堆: 这里下一位的表示方法为 j + 1 和 if j != n - 1:
-
-时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
-
-空间复杂度：O(n)，堆的大小始终为 n。
-
-class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
-        n = len(matrix)
-        pq = [(matrix[i][0], i, 0) for i in range(n)] # 每行的 第一个元素
-        heapq.heapify(pq)
-
-        for _ in range(k - 1): # 这里 pop k - 1 次
-            # ↓ 这个 num, 没有用哦
-            num, i, j = heapq.heappop(pq)
-            if j != n - 1:
-                heapq.heappush(pq, (matrix[i][j + 1], i, j + 1)) # 每行的 下一个元素
-        
-        return heapq.heappop(pq)[0] # 这里  pop  1 次
-            # print(pq)
-            # [(5, 0, 1), (12, 2, 0), (10, 1, 0)]
-            # [(9, 0, 2), (12, 2, 0), (10, 1, 0)]
-            # [(10, 1, 0), (12, 2, 0)]
-            # [(11, 1, 1), (12, 2, 0)]
-            # [(12, 2, 0), (13, 1, 2)]
-            # [(13, 1, 2), (13, 2, 1)]
-            # [(13, 2, 1)]
-
-# 二分
-# 时间复杂度：O(nlog(r−l))，二分查找进行次数为 O(log(r−l))，每次操作时间复杂度为 O(n)。
-
-# 空间复杂度：O(1)。
-
-# [ 1, 5, 9]
-# [10,11,13]
-# [12,13,15]
-# k = 8
-# 1 + 15 一半 8
-# 9 + 15 一半 12
-# 13 + 15 一半 14
-# 13 + 13 一半 13
-# 13 和 12 溢出
-# 这里有很多易错点，要小心
-
-# '''
-# 这里一定是有返回值的， 不会找不到target
-# '''
-# import bisect
-# class Solution(object):
-#     def kthSmallest(self, matrix, k):
-#         l, r = matrix[0][0], matrix[-1][-1]
-#         while l <= r: # 😐 while 循环
-#             mid = (l + r) // 2
-#             '''
-#             l 返回值那侧，不包含 == 
-#             '''
-#             if sum(bisect.bisect_right(row, mid) for row in matrix) < k:
-#                 l = mid + 1
-#             else:
-#                 r = mid - 1
-#         return l
-```
-
-
-
 
 
 
@@ -8423,42 +6748,6 @@ class Solution:
         return res
 ```
 
-```scala
-/**
-* counterclockwise rotate matrix
-* step:
-*  1. add first line to list
-*  2. counter-clockwise rotate remaining matrix: transpose + entire reverse
-*  
-*  remaining:
-*  4 5 6
-*  7 8 9
-* 
-* transpose:
-*   4 7
-*   5 8
-*   6 9
-* 
-* reverse:
-*   6 9
-*   5 8
-*   4 7
-*/
-
-object Solution2-1 {
-    def spiralOrder(matrix: Array[Array[Int]]): List[Int] = { 
-        def dfs(mx: Array[Array[Int]]): List[Int] = mx match {
-            case mx if mx.isEmpty => List()
-            case mx if mx.length == 1 => mx.head.toList
-            case _ => mx.head.toList ::: spiralOrder(mx.tail.transpose.reverse)  // counter-clockwise
-        }
-        dfs(matrix)
-
-    }    
-}
-
-```
-
 
 
 ##  73. <a name='RotateImage'></a>48. 旋转图像 Rotate Image
@@ -8496,46 +6785,6 @@ class Solution:
         return matrix
 ```
 
-```scala
-/**
-* my first commitment
-* rotate 4 cell in each iteration
-*
-*   pattern:  (row, col) -> (col, n - 1- row)
-*       1. (i, j) - > (j, n - 1 -i)
-*       2. (j, n - 1 -i) -> (n - 1 - i, n - 1 - j)
-*       3. (n - 1 - i, n - 1 - j) -> (n -1 -j, n - 1 - (n -1 - i) ) =  (n - 1 -j, i)
-*       4. (n - 1 -j, i) -> (i, n - 1 - (n - 1 - j)) = (i, j)
-*
-* ((0,0) -> (0,3) -> (3,3) -> (3,0))
-* ((0,1) -> (1,3) -> (3,2) -> (2,0))
-* ((1,0) -> (0,2) -> (2,3) -> (3,1))
-* ((1,1) -> (1,2) -> (2,2) -> (2,1))
-* 
-*/
-object Solution1 {
-    def rotate(matrix: Array[Array[Int]]): Unit = {
-      val n = matrix.size
-      printMatrix(n)
-      
-      for (i <- 0 until (n / 2).toInt + n % 2; j <- 0 until (n / 2).toInt){      
-        val tmp = matrix(n - 1 -j)(i)
-        matrix(n - 1 - j)(i) = matrix(n - 1 - i)(n - j - 1)
-        matrix(n - 1 - i)(n - j - 1) = matrix(j)(n - 1 - i)
-        matrix(j)(n - 1 - i) = matrix(i)(j)
-        matrix(i)(j) = tmp
-      }
-    }
-
-    /**
-        (0, 0) (0, 1) (0, 2) (0, 3)  
-        (1, 0) (1, 1) (1, 2) (1, 3)  
-        (2, 0) (2, 1) (2, 2) (2, 3)  
-        (3, 0) (3, 1) (3, 2) (3, 3)  
-    */
-}
-
-```
 
 
 ##  105. <a name='-1'></a>498. 对角线遍历
@@ -8710,28 +6959,6 @@ class Solution:
 空间复杂度：O(N)
 ```
 
-```scala
-/**
-* dynamic programming 
-*  time complexity: O(N^2)
-*  space  complexity: O(N)
-*/
-
-object Solution0 {
-    def lengthOfLIS(nums: Array[Int]): Int = {
-        if(nums == null || nums.isEmpty) return 0
-        val dp = Array.fill[Int](nums.length)(1) // record the LIS of 0 to i sub-array in nums while select i
-        for(i <- nums.indices; j <- 0 until i) {
-            if(nums(i) > nums(j)) {
-                dp(i) = (dp(j) + 1) max dp(i)
-            }
-        }
-        dp.max
-        
-    }
-}
-
-```
 
 
 ##  198. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
@@ -8874,56 +7101,8 @@ class Solution:
                 return mid
         return -1
 
-（版本二）左闭右开区间，容易写错
-
-# class Solution:
-#     def search(self, nums: List[int], target: int) -> int:
-#         left, right = 0, len(nums)
-#         while left < right:
-#             mid = (left + right) // 2
-#             if nums[mid] < target:
-#                 left = mid+1
-#             elif nums[mid] > target:
-#                 right = mid
-#             else:
-#                 return mid
-#         return -1
 ```
 
-```scala
-object Solution {
-    def search(nums: Array[Int], target: Int): Int = {
-        nums.lastIndexOf(target)
-    }
-}
-
-/**
-* my first commitment:
-* time complexity: O(logn)
-*/
-
-object Solution1 {
-    def search(nums: Array[Int], target: Int): Int = {
-      var left = 0
-      var right = nums.length - 1
-      var ans = -1
-      while(ans == -1 && left <= right) {
-        println(left, right)
-        val mid: Int = left  + (right - left) / 2
-        if(nums(mid) == target){
-          ans = mid
-        } else if(target > nums(mid)) {
-          left = mid + 1
-        } else {
-          right = mid - 1
-        }
- 
-      }
-      ans
-    }
-}
-
-```
 
 ##  30. <a name='TrappingRainWater'></a>42. Trapping Rain Water
 
@@ -9049,38 +7228,6 @@ class Solution:
                 right -= 1
             maxRes = max(maxRes,res)
         return maxRes
-```
-
-```scala
-
-/**
-* two pointer version
-* memo
-*  1. fix left side,, the volume is bounded by left side if left side is shorter 
-*  2. fix right side. the volume is bounded by right side if right side is shorter
-*/
-
-object Solution2 {
-    def maxArea(height: Array[Int]): Int = {
-      
-      var left = 0
-      var right = height.length - 1
-      var volume = 0
-      
-      while(left < right) {
-        val current = (right - left) * (height(right) min height(left))
-        volume = volume max current
-        
-        if (height(left) < height(right)) // left is shorter
-          left += 1
-        else // right is shorter
-          right -= 1
-      }
-      volume
-    }
-         
-}
-
 ```
 
 
@@ -9384,85 +7531,6 @@ class Solution:
             return lower < node.val < upper and isBetween(node.left, lower, node.val) and isBetween(node.right, node.val, upper)
 
         return isBetween(root, float('-inf'), float('inf'))
-```
-
-```scala
-/**
-* chosen solution
-* inorder iterative version only keep pre node
-* this is also the inorder-iterative-template
-* 
-* time complexity: O(N)
-*/
-
-object Solution0 {
-   def isValidBST(root: TreeNode): Boolean = {
-    val stack = new collection.mutable.Stack[TreeNode]()
-    var node = root
-    var pre: TreeNode = null
-    var result = true
-    while ((node != null || stack.nonEmpty) && result) {
-      while (node != null) {
-        stack push node
-        node = node.left
-      }
-
-      node = stack.pop
-      if (pre != null && node.value <= pre.value) result = false
-      pre = node
-      node = node.right
-
-    }
-    result
-  }
-}
-
-/**
-* inorder recursive traversal
-* memo:
-*    1. recursive version with all element storing
-* Time complexity O(NlogN)  there are a distinct and sorted operation
-* space complexity O(N)
-*/
-object Solution1 {
-  def isValidBST(root: TreeNode): Boolean = {
-    val inorder = traversal(root)
-    inorder equals inorder.distinct.sorted // why distinct here? [1, 1] is not a BST because left tree should be smaller than root. 
-  }
-  def traversal(node: TreeNode): List[Int] = {
-    if(node == null){
-      List.empty[Int]
-    }else {
-      // (traversal(node.left) :+ node.value) ::: traversal(node.right) 
-      traversal(node.left) ::: List(node.value) ::: traversal(node.right)
-    }
-  }
-}
-
-
-
-/**
-* giving min max range when recursive
-* time complexity: O(N)
-*/
-
-object Solution4 {
-  def isValidBST(root: TreeNode): Boolean = {
-
-    def _isValidBST(node: TreeNode, min: TreeNode, max: TreeNode): Boolean = {
-
-      if(node == null) true
-      else {
-        if((min != null && node.value <= min.value) || (max != null  && node.value >= max.value)) false
-        else {
-          _isValidBST(node.lefmt, min, node) && _isValidBST(node.right, node, max)
-        }
-      }
-    }
-    _isValidBST(root, null, null)
-  }
-
-}
 ```
 
 
@@ -9847,63 +7915,6 @@ class Solution:
 ```
 
 
-```scala
-/**
-* my first commit
-* inorder iterative template
-* time complexity: O(H + K) => H is tree height, H + K = element in stack
-*/
-
-object Solution1 {
-    def kthSmallest(root: TreeNode, k: Int): Int = {
-        
-        val stack = collection.mutable.Stack[TreeNode]()
-        var node = root
-        var counter = 0
-        
-        
-        while(node != null || stack.nonEmpty) {
-            while(node != null) {
-                stack push node
-                node = node.left
-            }
-            node = stack.pop
-            counter += 1
-            if(counter == k) return node.value
-            else node = node.right
-            
-        }
-        -1
-    }
-}
-
-/**
-* inorder traversal - recursive version
-* time complexity: O(H + k)
-*/
-
-object Solution2-1 {
-    import scala.collection.mutable
-    def kthSmallest(root: TreeNode, k: Int): Int = {
-        val ret = _kthSmallest(root, k, mutable.ListBuffer.empty)
-
-        ret(k - 1)
-    }
-    
-    def _kthSmallest(node: TreeNode, k:Int, l: mutable.ListBuffer[Int]): mutable.ListBuffer[Int]  = {
-       if(node == null) l
-       else {
-           _kthSmallest(node.left, k, l)
-           l += node.value
-           if(l.size >= k) l  // shortcut
-           else  _kthSmallest(node.right, k, l)  
-       }
-    }
-}
-
-
-
-```
 
 ##  33. <a name='BinaryTreePreorderTraversal'></a>144-Binary Tree Preorder Traversal
 
@@ -9973,167 +7984,6 @@ class Solution:
         return res
 ```
 
-##  54. <a name='SlidingWindowMaximum'></a>239. ★【最小堆🌵 + 滑动窗口🔹单调队列】Sliding Window Maximum
-
-####  54.1. <a name='567567187'></a>不类似567，567类似187
-
-[花花酱](https://www.bilibili.com/video/BV1WW411C763?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Bf4y1v758?spm_id_from=333.999.0.0)
-
-```py
-# 思路：
-
-# 维护：最接近右边的最大值的pos
-        
-# # print(winpos)
-# # [1,3,-1,-3,5,3,6,7]
-# 保证窗口内的值是递减的即可
-# # []
-# # [0]
-# # [1]
-# # [1, 2]
-# # [1, 2, 3]
-# # [4]
-# # [4, 5]
-# # [6]
-
-# class Solution:
-#     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-#         winQ = deque()
-#         res = []
-#         for r, v in enumerate(nums):
-#             # 如果新来的数字更大, 所以最右边的数字是最大的
-#             while winQ and nums[winQ[-1]] < v: # 😐😐😐 while 循环 + pop + append
-#                 winQ.pop() # pop() 可能有多次
-#             winQ.append(r)
-#             # 如果出界
-#             l = winQ[0]
-#             if r - k == l:
-#                 winQ.popleft() # popleft() 顶多一个
-#             # 开始写入答案
-#             if r >= k - 1:
-#                 res.append(nums[winQ[0]])
-
-#         return res
-```
-
-```py
-输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
-输出：[3,3,5,5,6,7]
-
-
-
-解释：
-滑动窗口的位置                最大值
----------------               -----
-[1  3  -1] -3  5  3  6  7       3
- 1 [3  -1  -3] 5  3  6  7       3
- 1  3 [-1  -3  5] 3  6  7       5
- 1  3  -1 [-3  5  3] 6  7       5
- 1  3  -1  -3 [5  3  6] 7       6
- 1  3  -1  -3  5 [3  6  7]      7
-
-
-
-
-[(-3, 1), (-1, 0), (1, 2), (3, 3)]
-[(-5, 4), (-3, 1), (1, 2), (3, 3), (-1, 0)]
-[(-5, 4), (-3, 1), (-3, 5), (3, 3), (-1, 0), (1, 2)]
-[(-6, 6), (-3, 1), (-5, 4), (3, 3), (-1, 0), (1, 2), (-3, 5)]
-[(-7, 7), (-6, 6), (-5, 4), (-3, 1), (-1, 0), (1, 2), (-3, 5), (3, 3)]
-
-
-
-
-注意: 这个 heapq, 不仅需要在 [0] 的位置记录 [最大值], 而且需要在 [1] 的位置记录 [位置]
-
-class Solution:
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        n = len(nums)
-        # 注意 Python 默认的优先队列是小根堆，求最大值，则需要取复数
-        hp = [(-nums[i], i) for i in range(k)]
-        heapq.heapify(hp)
-
-        res = [-hp[0][0]]
-        for i in range(k, n):
-            heapq.heappush(hp, (- nums[i], i))
-            while hp[0][1] + k <= i: # 😐😐😐 while 循环 + pop + append
-                heapq.heappop(hp) # 把所有出界的最大值弹出，可能不小心攒了许多个
-            res.append(- hp[0][0]) # 最大值永远在 q[0]
-        
-        return res
-
-
-
-时间复杂度： O(nlogn)
-
-在最坏情况下，数组 nums 中的元素单调递增，那么最终优先队列中包含了所有元素，没有元素被移除。
-
-由于将一个元素放入优先队列的时间复杂度为 O(logn)，因此总时间复杂度为 O(nlogn)。
-
-空间复杂度： O(n)，即为优先队列需要使用的空间
-
-```
-
-```scala
-
-/**
-* using max heap, may not AC
-* pq = pq.filter{case (_v: Int, _idx: Int) => (_v >= v) && (_idx > idx - k)} : keep element's time complexity is O(K)
-* time complexity: O(N log K)
-*/
-
-object Solution1 {
-    def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
-        var pq = scala.collection.mutable.PriorityQueue.empty[(Int, Int)](Ordering.by(p  => p._1))
-        val rest = scala.collection.mutable.ArrayBuffer[Int]()
-        
-        nums.zipWithIndex.foreach{case (v: Int, idx: Int) => {
-     
-            pq += ((v, idx))
-            
-            /* keep the elements that is only larger than newest v and the nearest k */
-            pq = pq.filter{case (_v: Int, _idx: Int) => (_v >= v) && (_idx > idx - k)}       
-
-            if (idx + 1 >= k) {
-                rest += pq.head._1
-            }
-          
-        }}        
-        rest.toArray
-    }
-}
-
-/**
-* using scala vector, due to scala vector is immutable, any operation about add update remove is generate a new vector
-* so it's not a proper substitute for deque
-*/
-
-object Solution2 {
-  def maxSlidingWindow(nums: Array[Int], k: Int): Array[Int] = {
-    var windows = Vector.empty[Int]
-    val ret = scala.collection.mutable.ArrayBuffer.empty[Int]
-
-    nums.zipWithIndex.foreach { case (value: Int, index: Int) =>
-      if (index >= k && windows.head <= index - k)
-        windows = windows.drop(1)
-
-      while (windows.nonEmpty && nums(windows.last) <= value){
-        windows = windows.dropRight(1)
-      }
-      windows = windows :+ index
-      if (index + 1 >= k) {
-        ret += nums(windows.head)
-      }
-    }
-    ret.toArray
-  }
-}
-
-
-
-```
 
 ##  118. <a name='RemoveKDigits'></a>402 Remove K Digits
 
@@ -10545,41 +8395,6 @@ class Solution:
         return dp1
 ```
 
-```scala
-/**
-* dynamic programming
-*   1. dp(i) represent climb to i floor's distinct ways
-*   2. dp(i) could be calculate from dp(i - 1) + dp(i - 2)
-*           (1) taking a single step from dp(i - 1)
-*           (2) taking a step of two from dp(i - 2)
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-object Solution0 {
-    def climbStairs(n: Int): Int = {
-        val dp = Array.ofDim[Int](n + 1)
-        dp(0) = 1
-        dp(1) = 1
-        (2 to n).foreach(i => dp(i) = dp(i - 1) + dp(i - 2))
-        dp(n)
-    }
-}
-```
-
-```scala
-object Solution {
-    
-    def climbStairs(n: Int): Int = {
-        if(n==1){
-            1
-        }else if(n == 2){
-            2
-        }else{
-            climbStairs(n-1) + climbStairs(n-2)
-        }
-    }
-}
-```
 
 ##  38. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
 
@@ -10642,25 +8457,6 @@ class Solution:
  
 ```
 
-```scala
-object Solution1 {
-    def maxPathSum(root: TreeNode): Int = {
-        dfs(root)._1
-    }
-
-    def dfs(node: TreeNode): (Int, Int) = {
-      if (node == null) return (Int.MinValue, 0)
-      
-      val (leftSoFar, leftEndingHere) = dfs(node.left)
-      val (rightSoFar, rightEndingHere) = dfs(node.right)
-
-      val maxSoFar = leftSoFar max rightSoFar max (node.value + leftEndingHere + rightEndingHere)
-
-      val maxEndingHere = 0 max (node.value + (leftEndingHere max rightEndingHere))
-      (maxSoFar, maxEndingHere)
-    }
-}
-```
 ##  221. <a name='HouseRobberIII'></a>337 House Robber III
 
 [小明](https://www.bilibili.com/video/BV1WD4y1X7JQ?spm_id_from=333.999.0.0)
@@ -10838,86 +8634,6 @@ class Solution:
         return ans
 ```
 
-牛顿迭代法:
-
-时间复杂度：O(logN)
-
-空间复杂度：O(1)
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3g2xmodb40u0.png)
-
-```py
-# class Solution:
-#     def mySqrt(self, x: int) -> int:
-#         if x <= 1:
-#             return x
-#         res = x # 初始值
-#         c = x # 牛顿迭代法中的常数
-#         while res > c / res: # 😐😐 while 循环
-#             res = (res + c / res) // 2 # 这里必须用整除
-#         return int(res)
-        
-# class Solution:
-#     def mySqrt(self, num: int) -> int:
-#         x = 1 # 背一背这个套路
-#         while abs(x**2 - num) > 0.001: # 😐 while 循环
-#             x -= (x**2 - num) / (2 * x) # 注意这里是减号
-#         return floor(x)
-```
-
-```scala
-
-/**
-* Newton's method - iterative
-* y = x^2 => f(x) = x^2 - y
-* x_{k+1} = x_k - f(x_k) / f'(x_k)
-* x_{k+1} = x_k - (x_k^2 - y) / (2x_k) = (x_k + y / x_k) / 2
-* time complexity: O(logN)
-*/
-
-object Solution2 {
-     def mySqrt(x: Int): Int = {
-        val precision = math.pow(10, -5)
-        
-        var ans: Double = x
-        while(math.abs(ans * ans - x) > precision){
-            ans = (ans + x / ans) / 2
-            // println(ans)
-        }
-        ans.toInt
-    }
-}
-
-
-```
-
-```scala
-object Solution {
-    def mySqrt(x: Int): Int = {
-        if(x == 0){
-            0
-        }else if(x == 1){
-            1
-        }else{
-            var start = 1
-            var end = x
-            var result = 0
-            
-            while(start <= end){
-                var mid = start + (end - start)/2
-                if(mid <= x/mid){
-                    result = mid
-                    start = mid+1
-                }else{
-                    end = mid-1
-                }
-            }
-            result
-        }
-    }
-}
-
-```    
 
 # 3 day (得分 = 10分) 55
 
@@ -11193,23 +8909,6 @@ class Solution:
         return s
 ```
 
-```scala
-object Solution {
-    def reverseString(s: Array[Char]): Unit = {
-        var begin = 0
-        var end = s.length - 1
-        while(begin < end){
-            var temp = s(begin)
-            s(begin) = s(end)
-            s(end) = temp
-            
-            begin += 1
-            end -= 1
-        }
-    }
-}
-
-```
 
 ##  177. <a name='III-1'></a>557. 反转字符串中的单词 III
 
@@ -11530,22 +9229,6 @@ class Solution:
         return res
 ```
 
-```scala
-object Solution1 {
-    def maxDepth(root: TreeNode): Int = {
-        if (root == null) return 0
-        math.max(maxDepth(root.left), maxDepth(root.right)) + 1
-    }
-}
-
-object Solution {
-    def maxDepth(root: TreeNode): Int = root match {
-        case null => 0
-        case x: TreeNode => Math.max((1 + maxDepth(x.left)), (1 + maxDepth(x.right)))
-    }
-}
-
-```
 
 ##  185. <a name='MinimumDepthofBinaryTree'></a>111-Minimum Depth of Binary Tree
 
@@ -11625,58 +9308,6 @@ class Solution:
             if node.left:  que.append((node.left, depth + 1)) # 注意这个写法：(node.left, depth + 1) 的括号
             if node.right: que.append((node.right, depth + 1))
         
-```
-
-```scala
-
-object Solution1 {
-    def minDepth(root: TreeNode): Int = {
-        if (root == null) return 0
-        val left = minDepth(root.left) 
-        val right = minDepth(root.right) 
-
-        if (left == 0 || right == 0) left + right + 1 else math.min(left, right) + 1
-        
-    }
-}
-
-object Solution1_2 {
-    def minDepth(root: TreeNode): Int = {
-        if(root == null) 0
-        else if(root.left == null) minDepth(root.right) + 1
-        else if(root.right == null) minDepth(root.left) + 1
-        else minDepth(root.right) + 1 min minDepth(root.left) + 1
-    
-    }
-}
-```
-
-队列
-
-```scala
-object Solution {
-    def minDepth(root: TreeNode): Int = {
-        if(root == null) return 0
-        val que = scala.collection.mutable.Queue[TreeNode]()
-        var depth = 0
-        var flag = true
-        que.enqueue(root)
-        
-        while(que.nonEmpty && flag){
-            depth += 1
-            for(_ <- 0 until que.size; if flag){
-                val node = que.dequeue
-                if(node.left == null && node.right == null) flag = false
-                else {
-                    if(node.left != null) que.enqueue(node.left)
-                    if(node.right != null) que.enqueue(node.right)
-                } 
-            } 
-        }
-        depth
-        
-    }
-} 
 ```
 
 
@@ -11875,50 +9506,6 @@ class Solution:
     空间复杂度主要取决于递归调用的层数，递归调用的层数不会超过 n。
 ```
 
-```scala
-
-
-package lc0257 {
-
-  import scala.collection.mutable.ArrayBuffer
-
-  object Solution {
-    def binaryTreePaths(root: TreeNode): List[String] = {
-      val tmp = ArrayBuffer[Int]()
-      val ret =ArrayBuffer[ArrayBuffer[Int]]()
-      helper(root, tmp, ret)
-      ret.toList.map({
-        x=>x.mkString("->")
-      })
-    }
-
-    def helper(node:TreeNode,tmp:ArrayBuffer[Int],ret:ArrayBuffer[ArrayBuffer[Int]]): Unit = {
-      if (node==null) {
-        return
-      }
-
-      tmp += node.value
-
-      if (node.left == null && node.right==null) {
-          ret += tmp.clone()
-      } else {
-        helper(node.left, tmp, ret)
-        helper(node.right, tmp, ret)
-      }
-      tmp.remove(tmp.length-1)
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      val t1 = Tree.build(IndexedSeq("1","2 3","5 N N N"))
-      println(Solution.binaryTreePaths(t1))
-    }
-    val name = "257 binary tree path"
-  }
-}
-
-```
 
 ##  52. <a name='-1'></a>76-【滑动窗口🔹】最小覆盖子串
 
@@ -11976,52 +9563,6 @@ class Solution:
     则渐进时间复杂度为 O(52⋅∣s∣+∣t∣)
 ```
 
-```scala
-/**
-* chosen solution
-*   time complexity: O(|S| + |T|)
-*   space complexity: O(|s| + |T|)
-
-*/
-object Solution1 {
-  def minWindow(s: String, t: String): String = {
-
-    var left = 0
-    val tMap = t.groupBy(identity).mapValues(_.length).toMap
-
-    val budgetMap = scala.collection.mutable.Map() ++ tMap
-    var currentString = ""
-    var answer = ""
-
-    for (char <- s) {
-        budgetMap.get(char) match {
-
-          case Some(e) => budgetMap.update(char, e - 1)
-          case None =>
-        }
-      
-      currentString += char
-
-      while(!budgetMap.exists{case (_, v) => v > 0}) {
-
-        val tempChar = s(left)
-        if(tMap.contains(tempChar)){
-          budgetMap.update(tempChar, budgetMap.getOrElse(tempChar, 0) + 1)
-        }
-
-        if(answer.length > currentString.length || answer.isEmpty) {
-          answer = currentString
-        }
-        currentString = currentString.drop(1)
-        left += 1
-      }
-    }
-
-    answer
-  }
-}
-
-```
 
 ##  53. <a name='NextPermutation'></a>31 ★ Next Permutation
 
@@ -12074,53 +9615,6 @@ class Solution:
  
 ```
 
-```scala
-/**
-* my first commitment
-* memo
-* 1. find the first index i which breaks the increasing order
-* 2. find the last index  j which is larger than index i
-* 3. swap(i, j)
-* 4. sorting: reverse sequence from i + 1 to the end 
-* time complexity: O(n)
-*/
-
-object Solution1 {
-    def nextPermutation(nums: Array[Int]): Unit = {
-        /**
-        * find the first index i which breaks the increasing order
-        * 0 1 2 3 4 5 6
-        * 5 4 7 6 5 4 3
-        *   i     j 
-        */
-      ((nums.length - 2) to 0 by -1).find(idx => nums(idx) < nums(idx + 1)) match {
-        case Some(idx) => 
-          /* 
-          * find the last index  j which  is larger than index i
-          */
-          val j = ((idx + 1) until nums.length).findLast(i => nums(idx) < nums(i)).getOrElse(idx)
-          swap(nums, idx, j)
-          reverse(nums, idx + 1, nums.length - 1)
-        case None => reverse(nums, 0, nums.length - 1)
-      }
-    }
-    @annotation.tailrec
-    def reverse(nums: Array[Int], from: Int, to: Int) {
-      if (from < to) {
-        swap(nums, from, to)
-        reverse(nums, from + 1, to - 1)
-      }
-    }
-  
-    def swap(nums: Array[Int], index1: Int, index2: Int) {
-      val tmp = nums(index2)
-      nums(index2) = nums(index1)
-      nums(index1) = tmp
-    }
-}
-
-
-```
 
 ##  184. <a name='NextGreaterElementIII-31NextPermutation'></a>556 Next Greater Element III - 类似 31 ★ Next Permutation
 
@@ -12501,19 +9995,6 @@ class Solution:
 ```
 
 
-```scala
-//Removing foldLeft improved time
-object Solution {
-    def missingNumber(nums: Array[Int]): Int = {
-        val size = nums.size
-        var idealSum = (size * (size + 1))/2
-        for(num <- nums){
-            idealSum -= num
-        }
-        idealSum
-    }
-}
-```
 
 ##  240. <a name='SingleNumberII'></a>137 【位运算😜】Single Number II
 
@@ -12683,16 +10164,6 @@ class Solution:
         return n > 0 and (n & (n - 1)) == 0
 ```
 
-```scala
-/**
-* time complexity  O(1)
-*/
-object Solution {
-    def isPowerOfTwo(n: Int): Boolean = {
-        n > 0 && (n & (n - 1) ) == 0
-    }
-}
-```
 
 
 # 4 day (得分 = 8分) 63
@@ -13007,44 +10478,6 @@ class Solution:
 空间复杂度：  O(n)。
 ```
 
-> scala:
-
-```scala
-/**
- * Definition for a binary tree node.
- * class TreeNode(_value: Int = 0, _left: TreeNode = null, _right: TreeNode = null) {
- *   var value: Int = _value
- *   var left: TreeNode = _left
- *   var right: TreeNode = _right
- * }
- */
-object Solution {
-    
-    def symmetric(nodeA: TreeNode, nodeB: TreeNode): Boolean = {
-        if(nodeA == null && nodeB == null){
-            true
-        }else if(nodeA !=null && nodeB != null){
-            if(nodeA.value != nodeB.value){
-                false
-            }else{
-                symmetric(nodeA.left, nodeB.right) && symmetric(nodeA.right, nodeB.left)
-            }
-        }else{
-            false
-        }
-    }
-    
-    def isSymmetric(root: TreeNode): Boolean = {
-        if(root == null){
-            true
-        } else{
-            symmetric(root.left, root.right)
-        }
-    }
-}
-
-```
-
 
 ##  69. <a name='MinimumPathSum64-'></a>64. Minimum Path Sum 64-最小路径和
 
@@ -13131,63 +10564,7 @@ class Solution:
 时间复杂度： O(Sn)，其中 S 是金额，n 是面额数
 空间复杂度： O(S)。数组 dp 需要开长度为总金额 S 的空间。
 
-# import functools
-# class Solution:
-#     def coinChange(self, coins, amount):
-#         @functools.lru_cache(None)
-#         def helper(amount):
-#             tmp = float("inf")
-#             if amount == 0:
-#                 return 0
-#             for c in coins:
-#                 if amount - c >= 0:
-#                     tmp = min(tmp, helper(amount - c) + 1) # 这个 +1 一定要在大括号里面
-#             return tmp
-            
-#         res = helper(amount)
-#         return res if res != float("inf") else -1
 
-
-
-# class Solution:
-#     def coinChange(self, coins, amount):
-#         import functools
-
-#         @functools.lru_cache(None)
-#         def helper(amount):
-#             if amount == 0:
-#                 return 0
-#             return min(helper(amount - c) if amount - c >= 0 else float("inf") for c in coins) + 1
-
-#         res = helper(amount)
-#         return res if res != float("inf") else -1
-
-
-```
-
-```scala
-/**
-* dynamic programming: bottom up
-* time complexity: O(S * N), S is the amount, N is the coin denomination count
-* space complexity: O(S)
-*/
-
-object Solution {
-    def coinChange(coins: Array[Int], amount: Int): Int = {
-         
-        val dp = Array.fill[Int](amount + 1)(amount + 1) // record the minimum needed coins of each denominations
-
-        dp(0) = 0
-        for (i <- 1 to amount; denominations <- coins) {
-
-            if(denominations <= i) {
-                dp(i) = dp(i) min (dp(i - denominations) + 1)
-            }        
-        }
-    
-        if (dp.last > amount) -1 else dp.last
-    }
-}
 
 ```
 
@@ -13758,51 +11135,6 @@ class Solution:
 
 ```
 
-```scala
-/**
-* HashMap
-* time complexity: O(N)
-* space complexity: O(N)
-*/
-
-object Solution2 {
-    def majorityElement(nums: Array[Int]): Int = {
-        nums.groupBy(identity).mapValues(_.length).maxBy(_._2)._1  
-    }
-}
-
-
-/**
-* sorting array and pick middle element
-* time complexity O(NlogN)
-*/
-
-object Solution3 {
-    def majorityElement(nums: Array[Int]): Int = {
-        nums.sorted(Ordering.Int)(nums.length / 2)
-    }
-}
-
-//Alternate solution O(n) but NO EXTRA SPACE
-object Solution {
-    def majorityElement(nums: Array[Int]): Int = {     
-        var candidate = nums.head
-        var count = 0
-        nums.foreach(vot => {
-            if(count == 0) { 
-                candidate = vot
-                count = 0
-            }
-            if(vot == candidate) count+=1;
-            else count-=1;
-        })
-        
-        candidate
-    }
-}
-
-```
-
 
 
 ##  79. <a name='-1'></a>226-翻转二叉树
@@ -13993,45 +11325,6 @@ class Solution:
 ```
 
 
-```scala
-/**
-* modify binary search template
-* memo
-*  1. search first and last the the same function
-*  2. if nums(mid) == target we could move left to check if left part exists target number
-*  3. finding last by target + 1,  then we could get last position of target by first position of (target + 1) - 1
-* tricky:
-*  1. ans = nums.length
-*  2. first > last  means that target doesn't exists
-*
-* time complexity: O(2logN)
-*/
- 
- object Solution2 {
-    def searchRange(nums: Array[Int], target: Int): Array[Int] = {
-        val first = search(nums, target)
-        val last = search(nums, target + 1) - 1
-        if (first > last) Array(-1, -1) else Array(first, last)
-    }
-
-    def search(nums: Array[Int], target: Int): Int = {
-      var ans = nums.length
-      var left = 0
-      var right = nums.length - 1
-      while (left <= right) {
-        val mid = left + (right - left) / 2
-        if (nums(mid) >= target) {
-          ans = mid
-          right = mid - 1
-        }else {
-          left = mid + 1
-        } 
-      }
-      ans
-    }
-}
-
-```
 
  # 5 day (得分 = 6分) 69
 
@@ -14215,35 +11508,6 @@ class Solution:
                 l = mid + 1              # 比如 [4,5,6,7,0,1,2]
 ```
 
-```scala
-
-/**
-* my first commitment binary search
-*/
-object Solution1 {
-    def findMin(nums: Array[Int]): Int = {
-        search(nums, 0, nums.length - 1)
-    }
-  
-    def search(nums: Array[Int], left: Int, right: Int): Int = {
-      if (left > right) return nums(left)
-      val mid = left + (right - left) / 2
-      val leftAns = if (nums(mid) >= nums(left)){ // left part in order
-        nums(left)
-      } else {
-        search(nums, left, mid - 1)
-      }
-      
-      val rightAns = if (nums(mid) <= nums(right)) { // right part in order
-        nums(mid)
-      } else {
-        search(nums, mid + 1, right)
-      }
-      
-      leftAns min rightAns
-    }
-}
-```
 
 
 ##  86. <a name='SingleNumber'></a>136 【位运算😜】Single Number
@@ -14284,13 +11548,6 @@ class Solution:
         return reduce(lambda x, y: x ^ y, nums)
 ```
 
-```scala
-object Solution {
-    def singleNumber(nums: Array[Int]): Int = {
-        nums.reduce(_^_)
-    }
-}
-```
 
 
 ##  88. <a name='Searcha2DMatrix'></a>240. 二维数组的查找 - 74 Search a 2D Matrix
@@ -14369,60 +11626,6 @@ class Solution:
         return res
 ```
 
-```scala
-object Solution {
-    def longestCommonPrefix(strs: Array[String]): String = {
-        if(strs.isEmpty){
-            ""
-        }else{
-            var flag = true
-            var count = 1
-            var output = ""
-        
-            var minLength = strs.map(_.length).min
-        
-        while(flag && count <= minLength){
-            
-            /**
-            lst.forall(_ == lst.head)  // true  if empty or all the same
-            lst.exists(_ != lst.head)  // false if empty or all the same
-            */
-            
-            if(strs.map(s => s.substring(0, count)).distinct.length == 1){
-                output = strs(0).substring(0, count)
-                count += 1
-            }else{
-                flag = false
-            }
-        }
-        
-        output
-        }
-    }
-}
-
-//Alternate solution (better complexity)
-object Solution {
-    def longestCommonPrefix(strs: Array[String]): String = {
-        if(strs.isEmpty){
-            ""
-        }else{
-            var prefix = strs(0)
-            
-            (1 until strs.length).map(i => {
-                
-                while(strs(i).indexOf(prefix) != 0){
-                    prefix = prefix.substring(0, prefix.length - 1)
-                }
-                
-            })
-            
-            prefix
-        }
-    }
-}
-
-```
 
 ##  91. <a name='LargestNumber'></a>179 Largest Number
 
@@ -14558,47 +11761,6 @@ class Solution:
 ```
 
 
-```scala
-//While using DP: we try to store values of repetitive calculations
-object Solution {
-    def rob(nums: Array[Int]): Int = {
-        if(nums.length == 0){
-            0
-        }else{
-            var dp = Array.fill(nums.length+1)(0)
-            
-            dp(0) = 0
-            dp(1) = nums(0)
-            (1 to nums.length-1).map(i => {
-                dp(i+1) = Math.max(dp(i), dp(i-1) + nums(i))
-            })
-            
-            dp(nums.length)
-        }
-    }
-}
-
-//Another way to do the same
-object Solution {
-    def rob(nums: Array[Int]): Int = {
-        if(nums.isEmpty){
-            0
-        }else{
-            var rob = nums(0)
-            var no_rob = 0
-            var prev = rob
-            for(i <- 1 until nums.length){
-                prev = rob
-                rob = no_rob + nums(i)
-                no_rob = Math.max(prev, no_rob)
-                
-            }
-            Math.max(no_rob, rob)
-        }
-    }
-}
-
-```
 
 ##  155. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
 
@@ -14900,26 +12062,6 @@ class Solution:
 # 相乘后结果更大 Python
 ```
 
-```scala
-
-object Solution2-1 {
-    def maxProduct(nums: Array[Int]): Int = {
-        
-        val (_, _, ans) = (1 until nums.length).foldLeft((nums.head, nums.head, nums.head)){
-            case ((min, max, ans), idx) => 
-                val a = nums(idx) * min 
-                val b = nums(idx) * max
-                val newMin = a min b min nums(idx)
-                val newMax = a max b max nums(idx)
-                (newMin, newMax, ans max newMax)
-        }
-        ans
-    }
-}
-
-
-
-```
 
 
 ##  110. <a name='Offer10-I.'></a>剑指 Offer 10- I. 斐波那契数列
@@ -15010,25 +12152,6 @@ class Solution:
                 dic[n] = helper(n - 1) + helper(n - 2)
                 return dic[n]
         return helper(n)
-```
-
-```scala
-/**
-* recursive version - top-down
-* time complexity: O(2^N）
-* space complexity: O(N)
-*/
-
-object Solution3 {
-    def fib(N: Int): Int = {
-        if (N <= 1) N
-        else {
-           fib(N - 1) + fib(N - 2)
-        }
-    }
-}
-
-
 ```
 
 
@@ -15185,55 +12308,6 @@ class Solution:
         return len(que0) == numCourses
 ```
 
-```scala
-
-// new and apply
-// Use the new keyword when you want to refer to a class's own constructor:
-// 解法是 每个node(node)，1.它依赖的node个数(parent) 2.统计依赖它的node个数(son)，
-// 一个node没有依赖其它节点，放入zeroInDegree
-// 对zeroIndegree的node遍历，对每个依赖它的node都可以直接除去依赖
-
-
-  import scala.collection.mutable.ArrayBuffer
-
-  object Solution {
-    def canFinish(numCourses: Int, prerequisites: Array[Array[Int]]): Boolean = {
-      val inDegree = new Array[Int](numCourses)
-      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
-
-      prerequisites.foreach(p=> {
-        inDegree(p(0)) += 1
-        neighbour(p(1)) += p(0)
-      })
-
-      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
-      var canFinshNum = zeroInDegree.length
-      while (zeroInDegree.nonEmpty) {
-        val cur = zeroInDegree.head
-        zeroInDegree = zeroInDegree.tail
-        neighbour(cur).foreach(p=>{
-          inDegree(p)-=1
-          if (inDegree(p) == 0) {
-            zeroInDegree :+= p
-            canFinshNum+=1
-          }
-        })
-      }
-      canFinshNum == numCourses
-    }
-  }
-
-  class Test extends BaseExtension {
-    def init {
-      val input = Array(Array(0,1),Array(1,2))
-      println(Solution.canFinish(3,input) == true)
-      //println(lru.get(1) == 1)
-    }
-
-    val name = "207 course schedule"
-  }
-
-```
 
 ##  182. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
 
@@ -15291,44 +12365,6 @@ class Solution:
         return len(que0) == numCourses and que0 or []
 ```
 
-```scala
-
-import scala.collection.mutable.ArrayBuffer
-// 与lc207类似，不过要给出顺序
-
-  object Solution {
-    def findOrder(numCourses: Int, prerequisites: Array[Array[Int]]): Array[Int] = {
-      val inDegree = new Array[Int](numCourses)
-      val neighbour = new Array[ArrayBuffer[Int]](numCourses).map(_=>new ArrayBuffer[Int]()) //必须初始化
-
-      prerequisites.foreach(p=> {
-        inDegree(p(0)) += 1
-        neighbour(p(1)) += p(0)
-      })
-
-      val ans = ArrayBuffer[Int]()
-      var zeroInDegree = inDegree.zipWithIndex.filter(_._1 == 0).map(_._2).toList
-      var canFinshNum = zeroInDegree.length
-      while (zeroInDegree.nonEmpty) {
-        val cur = zeroInDegree.head
-        ans += cur
-        zeroInDegree = zeroInDegree.tail
-        neighbour(cur).foreach(p=>{
-          inDegree(p)-=1
-          if (inDegree(p) == 0) {
-            zeroInDegree :+= p
-            canFinshNum+=1
-          }
-        })
-      }
-      canFinshNum match {
-        case canFinshNum if canFinshNum == numCourses => ans.toArray
-        case _ => Array()
-      }
-    }
-  }
-
-```
 
 
 
@@ -15436,70 +12472,6 @@ class Solution:
 
 空间复杂度： O(1)。
 ```
-
-```scala
-
-/**
-* recursive version : bottom-up
-* memo
-*   1. n may be negative or positive
-*   2. n may be odd or even
-* O(logN) in time
-*/
-object Solution1 {
-  def myPow(x: Double, n: Int): Double = {
-    if (n == 0) 1
-    else if(n > 0) {
-      n % 2 match{
-        case 1 => myPow(x * x, n / 2) * x
-        case 0 => myPow(x * x, n / 2)
-      }
-    }else{
-      val t = myPow(x, n / 2)
-      math.abs(n % 2) match{
-        case 1 => t * t * (1 / x)
-        case 0 => t * t
-      }
-    }
-
-  }
-}
-
-/**
-* top-down - iterative version 
-* Binary Exponentiation with negative n
-*
-* each iteration is calculate pow(base, nn) * ans
-*   ex: input x = 2, n = 10
-*    0. base: 2.0, nn: 10 ans: 1.0 => pow(2, 10) * 1 =  1024
-*    1. base: 4.0, nn: 5, ans: 1.0  => pow(4, 5) * 1 = 1024
-*    2. base: 16.0, nn: 2, ans: 4.0 => pow(16, 2) * 4 = 1024
-*    3. base: 256.0, nn: 1, ans: 4.0 => pow(256, 1) * 4 = 1024
-*    4. base: 65536.0, nn: 0, ans: 1024.0 => pow(65536, 0) * 1024 = 1024
-*
-* time complexity: O(logN)
-*/
-
-object Solution2 {
-  def myPow(x: Double, n: Int): Double = {
-    if (n == 0) return 1
-    var ans = 1.0
-    var nn = n
-    var base = x
-
-    while (nn != 0) {
-     /* nn could be -1 if nn < 0 and run nn % 2, so using nn & 1 here */
-      if((nn & 1) == 1)  ans = ans * base
-      nn = nn / 2
-      base = base * base
-    }
-    // judge n to decide whether reverse ans
-    if (n < 0) 1.0 / ans else ans  
-  }
-}
-
-```
-
 
 
 
@@ -16003,23 +12975,6 @@ class Solution:
 
 
 
-> scala
-
-```scala
-object Solution {
-    def isSameTree(p: TreeNode, q: TreeNode): Boolean = {
-        if (p == null && q == null) {
-        true
-        } else if (p == null || q == null) {
-        false
-        } else if (p.value == q.value) {
-        isSameTree(p.left, q.left) && isSameTree(p.right, q.right)
-        } else {
-        false
-        }
-    }
-}
-```
 
 
 ##  151. <a name='JumpGame'></a>55 Jump Game
@@ -16055,28 +13010,6 @@ class Solution:
 
 ```
 
-```scala
-/**
-* Greedy: check max reach position
-* memo
-*  1. record max reach position: if current position is larger than max reach position, it means we couldn't jump to current position and it wouldn't be able to jump to last position
-* time complexity: O(N)
-*/
-
-object Solution3-1 {
-    def canJump(nums: Array[Int]): Boolean = {
-      var maxReachPos = nums(0)
-      nums.indices.forall { pos =>  
-          if (pos > maxReachPos) false  
-          else {
-            maxReachPos = maxReachPos max (pos + nums(pos))
-            true
-          }
-        }        
-    }
-}
-
-```
 
 
 ##  201. <a name='JumpGameII'></a>45 Jump Game II
@@ -16150,53 +13083,8 @@ class Solution:
 
 ```
 
-```scala
-/**
-* my first commitment dynamic programming
-* memo:
-* 1.subproblem dp(i) represents the decode ways of the sub-string which length is i 
-* 2. dp(i) could be sum from dp(i-1) or dp(i-2) if s(i -1, i) or s(i-2, i) are valid coding
-*  idx:   0 1 2 3 4 5 6 7
-*  length 1 2 3 4 5 6 7 8
-&  value  1 2 1 3 2 5 8 3
-*   
-*   dp(1) => "1"
-*   dp(2) => "12" :
-*            valid("12") + dp(0)
-*            valid("2") + dp(1)
-*   dp(3) => "121" :
-*           valid("21") + dp(1)
-*           valid("1) + dp(2)
-*
-* time complexity: O(2N)
-* space complexity: O(N)
-*/
-
-object Solution1 {
-    def numDecodings(s: String): Int = {
-      if(s == null || s.length == 0) return 0 
-      val dp = Array.ofDim[Int](s.length + 1)
-      dp(0) = 1
-      dp(1) = if (s(0) == '0') 0 else 1
-      (2 to s.length).foreach { idx =>
-        val single = s.slice(idx-1, idx).toInt
-        val tens = s.slice(idx-2, idx).toInt
-        if (0 < single && single <= 9)
-          dp(idx) += dp(idx-1)
-        if (10 <= tens && tens <= 26)
-          dp(idx) += dp(idx-2)
-      
-      }
-      dp.last
-    }
-}
-```
 
 # 9 day (得分 = 2分) 83
-
-
-
-
 
 ##  159. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
 
@@ -16279,20 +13167,6 @@ class Solution:
 
 ```
 
-```scala
-object Solution0 {
-    def hammingWeight(n: Int): Int = {
-        var counter = 0
-        var num = n         
-        while (num != 0) {
-            counter += 1
-            num &= (num-1)                
-        }
-        counter
-    }
-}
-
-```
 
 
 # 10 day (得分 = 2分) 85
@@ -16343,30 +13217,6 @@ class Solution:
 空间复杂度： O(S)，其中 S 为字符集大小，此处 S=26。
 ```
 
-```scala
-/**
-* my first commit
-* time complexity: O(N)
-*/
-object Solution1 {
-  def isAnagram(s: String, t: String): Boolean = {
-    charCounter(s) equals charCounter(t)
-  }
-  private def charCounter(str: String): Map[Char, Int] = {
-    str.foldLeft(collection.mutable.Map.empty[Char, Int]) {
-      (map, s) =>
-        map.get(s) match {
-          case Some(e) =>
-            map.update(s, e + 1)
-            map
-          case None =>
-            map.update(s, 1)
-            map
-        }
-    }.toMap
-  }
-}
-```
 
 
 
@@ -16433,18 +13283,6 @@ class Solution:
         return triangle[0][0]
 ```
 
-```scala
-object Solution {
-    def minimumTotal(triangle: List[List[Int]]): Int = {
-        val depth = triangle.size
-        val dp = triangle.last.toArray
-        for(i <- (depth - 2) to 0 by -1; j <- triangle(i).indices) {
-            dp(j) = triangle(i)(j) + (dp(j) min dp(j + 1)) 
-        }
-        dp(0)
-    }
-}
-```
 
 
 ##  176. <a name='SuperEggDrop'></a>887. Super Egg Drop
@@ -17383,31 +14221,6 @@ class Solution:
         return matrix
 ```
 
-```scala
-
-/**
-* my first commitment
-* time complexity: O(N * M)
-* space complexity: O(N + M)
-*/
-object Solution1 {
-    import collection.mutable
-    def setZeroes(matrix: Array[Array[Int]]): Unit = {
-      val cols = mutable.Set.empty[Int]
-      val rows = mutable.Set.empty[Int]
-      
-      for (i <- matrix.indices; j <- matrix(i).indices; if matrix(i)(j) == 0) {
-        rows += i
-        cols += j
-      }
-      
-      rows.foreach(row => matrix(row).indices.foreach(matrix(row)(_) = 0))
-      cols.foreach(col => matrix.indices.foreach(matrix(_)(col) = 0))
-    }
-}
-
-
-```
 
 ##  225. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
 
@@ -17494,30 +14307,6 @@ class Solution:
 空间复杂度： O(1)。
 ```
 
-```scala
-object Solution {
-    def trailingZeroes(n: Int): Int = {
-        var count5 = 0
-        var count2 = 0
-        
-        var temp = n
-        while(temp>=5){
-            count5 += temp/5
-            temp = temp/5
-        }
-        
-        temp = n
-        while(temp>=2){
-            count2 += temp/2
-            temp = temp/2
-        }
-        
-        if(count5 < count2) count5 else count2
-    }
-}
-
-```
-
 
 
 
@@ -17585,45 +14374,6 @@ class Solution:
 空间复杂度： O(1)。
 
 ```
-
-```scala
-
-package lc0012_integertoroman {
-  object Solution {
-    case class RomanNumber(s:String, i: Int)
-    def intToRoman(num: Int): String = {
-      val numbers:Seq[RomanNumber] = Seq(
-        RomanNumber("M",1000),
-        RomanNumber("CM",900),
-        RomanNumber("D",500),
-        RomanNumber("CD",400),
-        RomanNumber("C",100),
-        RomanNumber("XC",90),
-        RomanNumber("L",50),
-        RomanNumber("XL",40),
-        RomanNumber("X",10),
-        RomanNumber("IX",9),
-        RomanNumber("V",5),
-        RomanNumber("IV",4),
-        RomanNumber("I",1)
-      )
-      // 很巧妙 利用seq的head 和tail 递归调用
-      // :: 相当于拼接
-
-      def loop(num:Int, romans:Seq[RomanNumber]): String = {
-        romans match {
-          case RomanNumber(romanStr, v) :: lst if v == num => romanStr
-          case RomanNumber(romanStr, v) :: lst if v < num => romanStr+loop(num-v,romans)
-          case RomanNumber(romanStr, v) :: tail => loop(num,tail)
-        }
-      }
-      loop(num, numbers)
-    }
-  }
-}
-
-```
-
 
 
 
@@ -17715,34 +14465,6 @@ class Solution:
 
 ```
 
-```scala
-object Solution {
-    def strStr(haystack: String, needle: String): Int = {
-        if(needle.isEmpty){
-            0
-        }else if(haystack.isEmpty){
-            -1
-        }else{
-            var needleLength = needle.length
-            var head = 0
-            var end = head + needleLength
-            var flag = true
-            
-            while(flag && (end <= haystack.length)){
-                if(needle.equals(haystack.substring(head, end))){
-                    flag = false
-                }else{
-                    head += 1
-                    end += 1
-                }
-            }
-            
-            if(flag) -1 else head
-        }
-    }
-}
-
-```
 
 ##  263. <a name='CountPrimes'></a>204-Count Primes
 
@@ -17793,36 +14515,6 @@ class Solution(object):
         return sum(isPrime[2:])
 ```
 
-```scala
-object Solution {
-    def countPrimes(n: Int): Int = {
-        
-        //Sieve of Eratosthenes
-        
-        var primeArray = Array.fill(n)(false)
-        (2 until n).map(i => primeArray(i) = true)
-        
-        //We need to check for all numbers i, where i < sqrt(n)
-        //To avoid doing sqrt operation again & again (since its expensive)
-        //We can do i*i < n
-        
-        var i =2
-        while(i*i < n){
-            if(primeArray(i)){
-                var j = i*i
-                while(j < n){
-                    primeArray(j) = false
-                    j += i //because we are only checking multiple of i for each i in iteration
-                }
-            }
-            i+=1
-        }
-        
-        primeArray.filter(x => x).length
-    }
-}
-
-```
 
 
 ##  264. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
