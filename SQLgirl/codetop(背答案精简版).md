@@ -500,6 +500,988 @@ class Solution:
 [-4, [-3], [-2], -7, 8, 2, -3, -1] 
 ```
 
+##  276. <a name='RemoveDuplicateLetters'></a> removeDuplicateLetters
+
+```py
+去除字符串中重复的字母
+
+使得每个字母只出现一次
+
+返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+
+
+输入：s = "bcabc"
+输出："abc"
+a  小于 stack[-1]，并且 stack[-1] c 在s[i+1:]中，弹出 c
+a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
+
+
+
+
+输入：s = "cbacdcbc"
+输出："acdb"
+
+b  小于 stack[-1]，并且 stack[-1] c 在s[i+1:]中，弹出 c
+a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
+c  in stack
+c  in stack
+
+
+
+
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        stack = []
+        n = len(s)
+        for i in range(n):
+            if s[i] not in stack:
+                while stack and stack[-1] > s[i] and stack[-1] in s[i + 1: ]: # 😐😐😐 while 循环 + pop + append
+                # 如果数比栈顶小，而且栈顶在后面还有的话，
+                    stack.pop() # 就弹出栈顶。
+                stack.append(s[i])
+            
+        return "".join(stack)
+
+
+
+时间复杂度： O(N)。代码中虽然有双重循环，但是每个字符至多只会入栈、出栈各一次。
+
+空间复杂度： O(∣Σ∣)，其中 Σ 为字符集合，本题中字符均为小写字母，所以 ∣Σ∣= 26。
+
+由于栈中的字符不能重复，因此栈中最多只能有 ∣Σ∣ 个字符，
+
+另外需要维护两个数组，
+
+分别记录每个字符是否出现在栈中以及每个字符的剩余数量。
+```
+
+##  137. <a name='FindtheDuplicateNumber'></a> findDuplicate
+
+
+```py
+不修改 数组 nums 且只用常量级 O(1) 的额外空间。
+
+线性级时间复杂度 O(n)
+
+输入：nums = [1,3,4,2,2] 0 -> 1 -> 3 -> (2 -> 4) -> 2 -> 4  循环
+输出：2 
+
+
+输入：nums = [3,1,3,4,2] 0 -> (3 -> 4 -> 2) -> 3 -> 4 -> 2 
+输出：3
+
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        # node.next = nums[node]
+        # node.next.next = nums[nums[node]]
+        slow = nums[0]        
+        fast = nums[nums[0]] 
+        while slow != fast: # 😐😐 while 循环
+            slow = nums[slow]
+            fast = nums[nums[fast]] 
+        p = 0                    
+        q = slow  
+        while p != q: # 😐😐 while 循环
+            p = nums[p]
+            q = nums[q]
+        return p           
+
+```
+
+##  25. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
+
+![](https://s3.bmp.ovh/imgs/2022/02/5ca7ad17ae2ceeed.png)
+
+```py
+时间复杂度： O(N)，其中 N 为链表中节点的数目。slow 指针走过的距离不会超过链表的总长度；
+
+空间复杂度： O(1)。我们只使用了 slow,fast 三个指针。
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next: # 😐 while 循环
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast: # 如果相遇
+                p = head
+                q = slow
+                while p != q: # 😐 while 循环
+                    p = p.next
+                    q = q.next
+                return p    # 你也可以 return q
+        return None
+```
+
+##  11. <a name='LinkedListCycle'></a> hasCycle
+
+```py
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        fast = slow = head
+        
+        while fast and fast.next: # 😐 while 循环
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
+
+
+* 时间复杂度:O(n)
+* 空间复杂度:O(1)      
+```
+
+
+##  114. <a name='1.'></a> sortOddEvenList
+
+1. 按奇偶位置拆分链表，得 1->3->5->7->NULL 和 8->6->4->2->NULL  328. 奇偶链表
+2. 反转偶链表，得 1->3->5->7->NULL 和 2->4->6->8->NULL         206. 反转链表
+3. 合并两个有序链表，得 1->2->3->4->5->6->7->8->NULL           21. 合并两个有序链表
+
+https://mp.weixin.qq.com/s/0WVa2wIAeG0nYnVndZiEXQ
+
+```py
+输入: 1->8->3->6->5->4->7->2->NULL
+输出: 1->2->3->4->5->6->7->8->NULL
+
+
+
+class Solution:    
+    def sortOddEvenList(self,head):     
+        if not head or not head.next:      
+            return head 
+        # 第一步：分割    
+        oddList, evenList = self.partition(head)    
+        # 第二步：反转 
+        evenList = self.reverse(evenList)        
+        # 第三步：合并
+        return self.merge(oddList, evenList)    
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+    def partition(self, head: ListNode) -> ListNode:        
+        headnxt = head.next        
+        odd, even = head, headnxt        
+        while even and even.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
+            odd.next = even.next            
+            odd = odd.next            
+            even.next = odd.next            
+            even = even.next        
+        odd.next = None # 节点需要断开
+        return [head, headnxt]    
+
+
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+    def reverse(self,head):    
+        cur = None
+        while head: # 😐 while 循环, cur
+            headnxt = head.next
+            head.next = res
+            cur = head
+            head = headnxt
+        return cur    
+
+
+
+* 时间复杂度: O(min(n1,n2))
+* 空间复杂度: O(1)
+
+
+    def merge(self,p,q):        
+        dummy = ListNode(0)        
+        cur = dummy        
+        while p and q:    # 😐 while 循环        
+            if p.val <= q.val:               
+                cur.next = p                
+                p = p.next            
+            else:                
+                cur.next = q                
+                q = q.next            
+            cur = cur.next        
+        cur.next = p or q        
+        return dummy.next
+```
+
+##  161. <a name='PartitionList'></a> partition
+
+```py
+小于 x 的节点都出现在 大于或等于 x 的节点之前
+
+输入：head = [1,4,3,2,5,2], x = 3
+输出：[1,2,2,4,3,5]
+
+输入：head = [2,1], x = 2
+输出：[1,2]
+
+快慢指针 slow -> fast -> None
+链表中节点的数目在范围 [0, 200] 内
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+
+class Solution:
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        '''
+        这道题只要返回 dummy1.next -> dummy2.next -> None
+                      slow        -> fast        -> None
+        '''
+        dummy1 = ListNode(0)
+        dummy2 = ListNode(0)
+        slow, fast = dummy1, dummy2 
+
+        while head:    # 😐😐😐 while 循环 # 🌵 用 cur 指针
+            if head.val < x:
+                slow.next = head # dummy1 指向第一个小于x的node
+                slow = slow.next
+            else:
+                fast.next = head # dummy2 指向第一个大于x的node
+                fast = fast.next
+            head = head.next
+
+        slow.next = dummy2.next
+        fast.next = None
+        return dummy1.next
+```
+
+
+
+##  46. <a name='SortList'></a> sortList
+
+```py
+输入：head = [4,2,1,3]
+输出：[1,2,3,4]
+
+
+输入：head = [-1,5,3,4,0]
+输出：[-1,0,3,4,5]
+
+
+输入：head = []
+输出：[]
+
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        # 第一步：递归条件
+        if not head or not head.next:
+            return head
+            
+        # 第二步：左右切分
+        mid = self.findmid(head)
+        left = head # 指定左右
+        right = mid.next # 指定左右
+        mid.next = None # 断开链接
+        '''
+        归并排序，先排序，再归并
+        '''
+        l = self.sortList(left)
+        r = self.sortList(right)
+        return self.merge(l, r) 
+
+    def findmid(self,head):
+        slow, fast = head, head
+        while fast.next and fast.next.next: 
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def merge(self,l,r):
+        dummy = ListNode(0)
+        cur = dummy
+        while l and r: 
+            if l.val <= r.val:
+                cur.next = l
+                l = l.next 
+            else:
+                cur.next = r
+                r = r.next 
+            cur = cur.next 
+        cur.next = l or r
+        return dummy.next
+
+时间复杂度： O(nlogn)，其中 n 是链表的长度。
+
+空间复杂度： O(logn)，其中 n 是链表的长度。空间复杂度主要取决于递归调用的栈空间。
+
+```
+
+##  14. <a name='IntersectionofTwoLinkedLists'></a> getIntersectionNode
+
+
+```py
+输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+输出：Intersected at '8'
+
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if not headA or not headB:
+            return None
+        pa, pb = headA, headB
+        while pa != pb: # 😐 while 循环
+            pa = pa.next if pa else headB
+            pb = pb.next if pb else headA
+        return pa
+
+时间复杂度 O(M+N), 空间复杂度 O(1)
+```
+
+
+
+##  277. <a name='-1'></a> sortedListToBST
+
+当递归的是一个链表`头`时，需要切断
+
+当递归的是一个链表`头尾`时，不需要切断
+
+```py
+输入: head = [-10,-3,0,5,9]
+
+输出: [0,-3,9,-10,null,5]
+
+
+输入: head = []
+
+输出: []
+
+
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        def findmid(head: ListNode, tail: ListNode) -> ListNode:
+            fast = slow = head
+            # 和这种写法很像：while fast and fast.next:
+            '''
+            while fast.next != tail and fast.next.next != tail: # 😐 while 循环
+            也对
+            '''
+
+            while fast != tail and fast.next != tail: # 😐 while 循环
+                fast = fast.next.next
+                slow = slow.next
+            return slow
+        
+        def buildTree(left: ListNode, right: ListNode) -> TreeNode:
+            '''
+            归并，必须 left < right 
+            buildTree(left, mid) 和 buildTree(mid.next, right) 是连续的
+            '''
+            if left == right:
+                return None
+            mid = findmid(left, right)
+            root = TreeNode(mid.val)
+            root.left = buildTree(left, mid) # 从 head 到 mid-1，所以我们在 findMid 方程里面，需要对 List 进行切分
+            root.right = buildTree(mid.next, right) # 从 mid+1 到 tail
+            return root
+        
+        return buildTree(head, None)
+
+时间复杂度：O(nlogn)，其中 n 是链表的长度。
+
+设长度为 n 的链表构造二叉搜索树的时间为 T(n)，递推式为 T(n) = 2⋅T(n/2) + O(n)，根据主定理， T(n) = O(nlogn)。
+
+空间复杂度：O(logn)，这里只计算除了返回答案之外的空间。平衡二叉树的高度为 O(logn)，
+
+即为递归过程中栈的最大深度，也就是需要的空间。
+
+```
+
+
+##  189. <a name='MiddleoftheLinkedList'></a> middleNode
+
+```py
+输入：[1,2,3,4,5,6]
+输出：此列表中的结点 4 (序列化形式：[4,5,6])
+
+
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow = fast = head
+        while fast and fast.next: # 😐 while 循环
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+```
+
+## 归并排序:
+
+```py
+class Solution:
+    def merge_sort(self, nums, l, r):
+        if l < r:
+            mid = (l + r) // 2
+            # 先把子序列排序完成
+            self.merge_sort(nums, l, mid)
+            self.merge_sort(nums, mid + 1, r)
+            tmp = []
+            i1, i2 = l, mid + 1   # i1, i2 是两个起始点
+            while i1 <= mid and i2 <= r: # 😐 while 循环
+                # 如果 前半部部分结束了，或者后半部分没有结束
+                if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
+                    tmp.append(nums[i2])
+                    i2 += 1
+                else:
+                    tmp.append(nums[i1])
+                    i1 += 1
+            tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
+            nums[l: r + 1] = tmp
+
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.merge_sort(nums, 0, len(nums) - 1)
+        return nums
+
+时间复杂度：O(n log(n))
+空间复杂度：O(n)
+```
+
+
+##  219. <a name='8.'></a>补充题8. 计算数组的小和
+
+
+https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
+
+```py
+在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
+
+例子：
+
+[1,3,4,2,5]
+
+1左边比1小的数，没有；
+
+3左边比3小的数，1；
+
+4左边比4小的数，1、3；
+
+2左边比2小的数，1；
+
+5左边比5小的数，1、3、4、2；
+
+所以小和为1+1+3+1+1+3+4+2=16
+
+要求时间复杂度O(NlogN)，空间复杂度O(N)
+```
+
+
+```py
+
+
+# 这里有2个目的：
+# 1. 排序
+# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
+class Solution:
+    '''
+    在原地排序，不需要 return
+    '''
+    def merge(nums, l, mid, r):
+        tmp = []
+        sums = 0
+        i1, i2 = l, mid + 1
+        while i1 <= mid and i2 <= r: # 😐 while 循环
+            if nums[i1] <= nums[i2]:
+                sums += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+                tmp.append(nums[i1])
+                i1 += 1
+            else:
+                tmp.append(nums[i2])   # 把小的值先往res里面填写
+                i2 += 1
+        tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
+        nums[l: r + 1] = tmp   # 修改原 arr 的值
+        return sums
+
+    def mergesmallSum(arr, left, right):
+        '''
+        归并排序 left < right
+        '''
+        if left == right:
+            return 0
+        mid = (left + right) // 2
+        s1 = mergesmallSum(arr, left, mid)
+        s2 = mergesmallSum(arr, mid + 1, right)
+        s3 = merge(arr, left, mid, right)
+        return  s1 + s2 + s3 
+
+    
+N = int(input())
+nums = list(map(int, input().split()))
+print(mergesmallSum(nums, 0, N-1))
+```
+
+
+##  10. <a name='-1'></a>21. 合并两个有序链表
+
+https://leetcode-cn.com/problems/merge-two-sorted-lists/
+
+[哈哈哈](https://www.bilibili.com/video/BV1rJ41127ry?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1hb411i7D7?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1my4y127bK?spm_id_from=333.999.0.0)
+
+[洛阳](https://www.bilibili.com/video/BV1qZ4y1j7Jb?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1ck4y1k7J9?spm_id_from=333.999.0.0)
+
+暴力解法：
+
+* 时间复杂度:O(M+N)
+
+* 时间复杂度:O(1)
+
+```py
+输入：l1 = [1,2,4], l2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+
+
+
+
+
+输入：l1 = [], l2 = []
+输出：[]
+
+
+
+
+
+输入：l1 = [], l2 = [0]
+输出：[0]
+
+
+
+
+
+
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(0)
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 😐 while 循环 # 这里是and 
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
+        # 等效于：
+        # if list1:
+        #     cur.next = list1
+        # else:
+        #     cur.next = list2
+        return dummy.next
+```
+
+递归解法：
+
+* 时间复杂度:O(M+N)
+
+* 空间复杂度:O(M+N)
+
+```py
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        if not list1: return list2
+        elif not list2: return list1
+        elif list1.val < list2.val:
+            '''
+            list1 提取出来
+            返回 list1
+            '''
+            list1.next = self.mergeTwoLists(list1.next, list2) # 找到较小头结点，提取出来
+            return list1
+        else:
+            '''
+            list2 提取出来
+            返回 list2
+            '''
+            list2.next = self.mergeTwoLists(list1, list2.next) # 找到较小头结点，提取出来
+            return list2
+```
+
+```scala
+
+object Solution1 {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+        val headNode = new ListNode(-1, null)
+        var cur = headNode
+        
+        var no1 = l1;
+        var no2 = l2;
+        
+        while(no1 != null && no2 != null) {
+            if (no1.x >= no2.x){
+                
+                cur.next = no2
+                no2 = no2.next
+            }else {
+                cur.next = no1
+                no1 = no1.next
+            }
+            cur = cur.next
+        }
+        (no1, no2) match {
+            case (_, null) => cur.next = no1
+            case (null, _) => cur.next = no2
+            case _ => throw new RuntimeException()
+        }
+        
+        headNode.next
+    }
+}
+
+
+
+/**
+* recursive version
+*/
+
+object Solution1-2 {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+        (l1, l2) match {
+            case (null, _) => l2
+            case (_, null) => l1
+            case (a, b) => 
+                if (a.x >= b.x){
+                    b.next = mergeTwoLists(b.next, a)
+                    b
+                } else {
+                    a.next = mergeTwoLists(a.next, b)
+                    a   
+                }
+        }
+    }
+}
+
+object Solution {
+    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+    if(l1 == null) return l2
+    if(l2 == null) return l1
+
+    if (l1.x < l2.x) {
+      l1.next = mergeTwoLists(l1.next, l2)
+      l1
+    } else {
+      l2.next = mergeTwoLists(l1, l2.next)
+      l2
+    }
+  }
+}
+
+```
+
+
+##  15. <a name='Mergesortedarray'></a>88-Merge sorted array
+
+https://leetcode-cn.com/problems/merge-sorted-array/
+
+[哈哈哈](https://www.bilibili.com/video/BV14J411X7JE?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1Wb411e7bg?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1g54y1s7ZG?spm_id_from=333.999.0.0)
+
+直接合并后排序
+
+```py
+输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+输出：[1,2,2,3,5,6]
+
+
+
+解释：需要合并 [1,2,3] 和 [2,5,6] 。
+合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
+
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。
+        Do not return anything, modify nums1 in-place instead.
+        """
+        # 三个指针
+        cur1 = m - 1
+        cur2 = n - 1
+        i = m + n -1
+        # 从后往前遍历
+        while cur1 >= 0 and cur2 >= 0: # 😐 while 循环
+            if nums1[cur1] < nums2[cur2]:
+                nums1[i] = nums2[cur2]
+                cur2 -= 1
+            else:
+                nums1[i] = nums1[cur1]
+                cur1 -= 1
+            i -= 1
+        # 如果后面的那个n还有多余
+        if cur2 >= 0:
+            nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
+
+
+
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+
+
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        nums1[m:] = nums2
+        nums1.sort()
+```
+
+```scala
+object Solution {
+    def merge(nums1: Array[Int], m: Int, nums2: Array[Int], n: Int): Unit = {
+        var trail = m+n-1
+        
+        var t1 = m-1
+        var t2 = n-1
+        
+        while(t1 > -1 && t2 > -1){
+            val e1 = nums1(t1)
+            val e2 = nums2(t2)
+            
+            if(e1 > e2){
+                nums1(trail) = e1
+                t1 -= 1
+                trail -= 1
+            }else{
+                nums1(trail) = e2
+                t2 -= 1
+                trail -= 1
+            }
+        }
+        
+        if(t1 == -1){
+            while(t2 > -1){
+                nums1(trail) = nums2(t2)
+                t2 -= 1
+                trail -= 1
+            }
+        }else{
+            while(t1 > -1){
+                nums1(trail) = nums1(t1)
+                t1 -= 1
+                trail -= 1
+            }
+        }
+        
+    }
+}
+
+```
+
+##  26. <a name='MergekSortedLists'></a>23. 【最小堆🌵】Merge k Sorted Lists
+
+[花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1Ty4y1178e?spm_id_from=333.999.0.0)
+
+[官方](https://www.bilibili.com/video/BV1GK41157mu?spm_id_from=333.999.0.0)
+
+暴力求解法：
+
+* 时间复杂度: O(N) + O(N logN) + O(N)
+
+* 空间复杂度: O(N) + O(N)
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.65tcjjz2oy80.png" width="50%">
+
+```py
+# so easy，一遍过
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        vals = []
+        for listhead in lists:
+            while listhead: # 😐 while 循环
+                vals.append(listhead.val)
+                listhead = listhead.next
+        vals.sort()
+        dummy = ListNode(0)
+        cur = dummy
+        for value in vals:
+            cur.next = ListNode(value)
+            cur = cur.next
+        return dummy.next
+```
+
+优先队列：
+
+
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
+
+```py
+输入：lists = [[1,4,5],[1,3,4],[2,6]]
+输出：[1,1,2,3,4,4,5,6]
+解释：链表数组如下：
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+将它们合并到一个有序链表中得到。
+1->1->2->3->4->4->5->6
+
+* 时间复杂度: O(kn×logk)
+* 空间复杂度: O(k)
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        queue = []  
+        dummy = ListNode(0)
+        
+        for i in range(len(lists)):
+            '''
+            这里只 heappush 一次，并且必须把 i 序号，放入最小堆
+            '''
+            if lists[i]: # lists[i] 就是 head
+                heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
+                lists[i] = lists[i].next 
+
+        cur = dummy # cur 就是穿针引线的针
+        while queue: # 😐 while 循环
+            val, idx = heapq.heappop(queue)
+            cur.next = ListNode(val)
+            cur = cur.next
+            if lists[idx]: # 此时 lists[idx] 已经是 head 的下一位
+                heapq.heappush(queue, (lists[idx].val, idx)) # 再把每一项 push 上去
+                lists[idx] = lists[idx].next 
+        return dummy.next
+```
+
+两两合并：
+
+* 时间复杂度: O(kn×logk)
+
+* 空间复杂度: O(logk)空间代价的栈空间。
+
+<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
+
+```py
+class Solution:
+    def merge2Lists(self, list1, list2):
+        dummy = ListNode(0)
+        
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 😐 while 循环 # 这里是and
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
+        return dummy.next
+            # 0,1,2,3,4,5,6  7-1
+            # 0, ,2, ,4, ,6  7-2
+            # 0, , , ,4, ,   7-3
+            # 0, , , , , ,   7-4
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
+        n = len(lists)
+        interval = 1
+        while n > interval: # 😐😐😐 while 循环
+            for i in range(0, n - interval, 2 * interval):
+                lists[i] = self.merge2Lists(lists[i], lists[i + interval]) # 易错点：方括号和小括号不要用错
+            interval *= 2
+        return lists[0] if n else None
+```
+
+
+##  39. <a name='MergeIntervals'></a>56. Merge Intervals
+
+[花花酱](https://www.bilibili.com/video/BV11t411J7zV?spm_id_from=333.999.0.0)
+
+[小梦想家](https://www.bilibili.com/video/BV1w7411a7Wo?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1pV411a7t4?spm_id_from=333.999.0.0)
+
+```py
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+
+
+解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+
+
+
+
+
+输入：intervals = [[1,4],[4,5]]
+输出：[[1,5]]
+
+
+解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+
+
+
+
+时间复杂度： O(nlogn)，其中 n 为区间的数量。
+
+除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 O(nlogn)。
+
+
+
+空间复杂度： O(logn)，其中 n 为区间的数量。
+
+这里计算的是存储答案之外，使用的额外空间。 O(logn) 即为排序所需要的空间复杂度。
+
+
+
+ 
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort() # 等价于：intervals.sort(key = lambda x: x[0])
+        res = []
+        for interval in intervals: # res[-1] 和 interval 比较
+            if not res or res[-1][1] < interval[0]:
+                res.append(interval[:])
+            else:
+                res[-1][1] = max(res[-1][1], interval[1])
+                # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
+                # 比如，[[1,4],[2,3]]
+        return res
+```
+
+```scala
+
+/**
+*  time complexity: O(nlogn) + O(n) = O(nlogn) 
+*  space complexity: O(n): sorted array
+*/
+
+object Solution1-2 {
+    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
+      intervals.sortBy(_(0)).foldLeft(List.empty[Array[Int]]){
+        case (last::ans, arr) =>
+          if (last.last < arr.head) {
+            arr::last::ans
+          } else {
+            Array(last.head, last.last max arr.last)::ans
+          }
+        case (ans, arr) => arr::ans // for empty ans list
+      }.toArray
+    }
+}
+```
+
+
+
 
 ##  74. <a name='PalindromeLinkedList'></a>234. 【回文🌈】Palindrome Linked List
 
@@ -2059,36 +3041,7 @@ class Solution:
 空间复杂度：O(1)
 ```
 
-归并排序:
 
-```py
-class Solution:
-    def merge_sort(self, nums, l, r):
-        if l < r:
-            mid = (l + r) // 2
-            # 先把子序列排序完成
-            self.merge_sort(nums, l, mid)
-            self.merge_sort(nums, mid + 1, r)
-            tmp = []
-            i1, i2 = l, mid + 1   # i1, i2 是两个起始点
-            while i1 <= mid and i2 <= r: # 😐 while 循环
-                # 如果 前半部部分结束了，或者后半部分没有结束
-                if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
-                    tmp.append(nums[i2])
-                    i2 += 1
-                else:
-                    tmp.append(nums[i1])
-                    i1 += 1
-            tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
-            nums[l: r + 1] = tmp
-
-    def sortArray(self, nums: List[int]) -> List[int]:
-        self.merge_sort(nums, 0, len(nums) - 1)
-        return nums
-
-时间复杂度：O(n log(n))
-空间复杂度：O(n)
-```
 
 ```py
 排序问题各有各的招，我来说一个凑热闹的桶排序。反正所有数字在正负五万之间，你就拿100001个桶，遍历一遍把数字仍对应的桶里边，然后你就排好了。
@@ -2105,276 +3058,7 @@ class Solution:
 你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
 ```
 
-##  219. <a name='8.'></a>补充题8. 计算数组的小和
 
-
-https://mp.weixin.qq.com/s/rMsbcUf9ZPhvfRoyZGW6HA
-
-```py
-在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
-
-例子：
-
-[1,3,4,2,5]
-
-1左边比1小的数，没有；
-
-3左边比3小的数，1；
-
-4左边比4小的数，1、3；
-
-2左边比2小的数，1；
-
-5左边比5小的数，1、3、4、2；
-
-所以小和为1+1+3+1+1+3+4+2=16
-
-要求时间复杂度O(NlogN)，空间复杂度O(N)
-```
-
-
-```py
-
-
-# 这里有2个目的：
-# 1. 排序
-# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
-class Solution:
-    '''
-    在原地排序，不需要 return
-    '''
-    def merge(nums, l, mid, r):
-        tmp = []
-        sums = 0
-        i1, i2 = l, mid + 1
-        while i1 <= mid and i2 <= r: # 😐 while 循环
-            if nums[i1] <= nums[i2]:
-                sums += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
-                tmp.append(nums[i1])
-                i1 += 1
-            else:
-                tmp.append(nums[i2])   # 把小的值先往res里面填写
-                i2 += 1
-        tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
-        nums[l: r + 1] = tmp   # 修改原 arr 的值
-        return sums
-
-    def mergesmallSum(arr, left, right):
-        '''
-        归并排序 left < right
-        '''
-        if left == right:
-            return 0
-        mid = (left + right) // 2
-        s1 = mergesmallSum(arr, left, mid)
-        s2 = mergesmallSum(arr, mid + 1, right)
-        s3 = merge(arr, left, mid, right)
-        return  s1 + s2 + s3 
-
-    
-N = int(input())
-nums = list(map(int, input().split()))
-print(mergesmallSum(nums, 0, N-1))
-```
-
-##  46. <a name='SortList'></a>148. Sort List
-
-[花花酱](https://www.bilibili.com/video/BV1jW411d7z7?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1VK411A7Gm?spm_id_from=333.999.0.0)
-
-```py
-输入：head = [4,2,1,3]
-输出：[1,2,3,4]
-
-
-输入：head = [-1,5,3,4,0]
-输出：[-1,0,3,4,5]
-
-
-输入：head = []
-输出：[]
-
-
-
-class Solution:
-    def sortList(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        dummy = ListNode(-1, head)
-        sortlist = []
-        # 先把链表断开
-        while head: # 😐 while 循环, cur
-            tmp = head.next
-            head.next = None
-            sortlist.append(head)
-            head = tmp
-        # 排序
-        sortlist = sorted(sortlist, key = lambda x: x.val)
-        # 把链表串联起来
-        n = len(sortlist)
-        dummy.next = sortlist[0]
-        for i in range(n - 1):
-            sortlist[i].next = sortlist[i + 1]
-        return dummy.next
-```
-
-```py
-# 归并排序，递归实现。
-# 空间复杂度主要在递归栈深度：O( log(n) )，
-# 整个递归过程有点像 后序遍历
-
-class Solution:
-    '''
-    链表排序，需要 return
-    '''
-    def sortList(self, head: ListNode) -> ListNode:
-        # 第一步：递归条件
-        if not head or not head.next:
-            return head
-            
-        # 第二步：左右切分
-        mid = self.findmid(head)
-        left = head # 指定左右
-        right = mid.next # 指定左右
-        mid.next = None # 断开链接
-    '''
-    归并排序，先排序，再归并
-    '''
-        # 第三步：左右递归 + 两两合并
-        l = self.sortList(left)
-        r = self.sortList(right)
-        return self.merge(l, r) # 最初一定"两两合并"
-
-    '''
-    while fast.next and fast.next.next: # 😐 while 循环
-    如果有两个中间结点，则返回第 1 个中间结点。
-    '''
-    def findmid(self,head):
-        slow, fast = head, head
-        while fast.next and fast.next.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-    def merge(self,l,r):
-        dummy = ListNode(0)
-        cur = dummy
-        while l and r: # 😐 while 循环
-            if l.val <= r.val:
-                cur.next = l
-                l = l.next # 下一个
-            else:
-                cur.next = r
-                r = r.next # 下一个
-            cur = cur.next # 下一个
-        cur.next = l or r
-        return dummy.next
-
-        # 基本用法：
-        # v = p1 or p2
-
-        # 它完成的效果等同于：
-        # if p1:
-        #     v = p1
-        # else:
-        #     v = p2
-时间复杂度： O(nlogn)，其中 n 是链表的长度。
-
-空间复杂度： O(logn)，其中 n 是链表的长度。空间复杂度主要取决于递归调用的栈空间。
-
-```
-
-```py
-"""
-while fast 总结
-"""
-class Solution:
-    def partition(self, head: ListNode) -> ListNode:        
-        headnxt = head.next        
-        slow, fast = head, headnxt        
-        while fast and fast.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
-            slow.next = fast.next            
-            slow = slow.next            
-            fast.next = slow.next            
-            fast = fast.next        
-        slow.next = None # 节点需要断开
-        return [head,headnxt] 
-
-如果有两个中间结点，则返回第 2 个中间结点。
-
-class Solution:
-    def middleNode(self, head: ListNode) -> ListNode:
-        slow = fast = head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-其他写法：
-
-如果有两个中间结点，则返回第 1 个中间结点。
-
-class Solution:
-    def middleNode(self, head: ListNode) -> ListNode:
-        slow = fast = head
-        while fast.next and fast.next.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-class Solution:
-    def sortedListToBST(self, head: ListNode) -> TreeNode:
-        def getMedian(head: ListNode, tail: ListNode) -> ListNode:
-            fast = slow = head
-            # 和这种写法很像：while fast and fast.next:
-            '''
-            while fast.next != tail and fast.next.next != tail: # 😐 while 循环
-            也对
-            '''
-
-            while fast != tail and fast.next != tail: # 😐 while 循环
-                fast = fast.next.next
-                slow = slow.next
-            return slow
-
-class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        fast = slow = head
-        # 哈哈哈，这么写也对啦~~~ while fast and fast.next and fast.next.next: # 😐 while 循环
-        while fast and fast.next: # 😐 while 循环
-            fast = fast.next.next
-            slow = slow.next
-            if fast == slow:
-                return True
-        return False
-
-class Solution:
-    def detectCycle(self, head: ListNode) -> ListNode:
-        slow, fast = head, head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-            
-            if slow == fast: # 如果相遇
-                p = head
-                q = slow
-                while p != q: # 😐 while 循环
-                    p = p.next
-                    q = q.next
-                return p    # 你也可以 return q
-        return None
-
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        if not headA or not headB:
-            return None
-        pa, pb = headA, headB
-        while pa != pb: # 😐 while 循环
-            pa = pa.next if pa else headB
-            pb = pb.next if pb else headA
-        return pa
-```
 
 ##  49. <a name='-1'></a>105-从前序与中序遍历序列构
 
@@ -2474,73 +3158,6 @@ inorder: [] []
 postorder: [] []
 ```
 
-##  277. <a name='-1'></a>109题. 有序链表转换二叉搜索树
-
-https://www.bilibili.com/video/BV19a4y157U8?spm_id_from=333.999.0.0
-
-https://www.bilibili.com/video/BV1ff4y197dS?spm_id_from=333.999.0.0
-
-当递归的是一个链表`头`时，需要切断
-
-https://www.bilibili.com/video/BV19K411T73P?p=2&spm_id_from=pageDriver
-
-当递归的是一个链表`头尾`时，不需要切断
-
-```py
-输入: head = [-10,-3,0,5,9]
-输出: [0,-3,9,-10,null,5]
-解释: 一个可能的答案是[0，-3,9，-10,null,5]，它表示所示的高度平衡的二叉搜索树。
-
-
-
-
-输入: head = []
-输出: []
-
-
-
-
-
-
-class Solution:
-    def sortedListToBST(self, head: ListNode) -> TreeNode:
-        def getMedian(head: ListNode, tail: ListNode) -> ListNode:
-            fast = slow = head
-            # 和这种写法很像：while fast and fast.next:
-            '''
-            while fast.next != tail and fast.next.next != tail: # 😐 while 循环
-            也对
-            '''
-
-            while fast != tail and fast.next != tail: # 😐 while 循环
-                fast = fast.next.next
-                slow = slow.next
-            return slow
-        
-        def buildTree(left: ListNode, right: ListNode) -> TreeNode:
-            '''
-            归并，必须 left < right 
-            buildTree(left, mid) 和 buildTree(mid.next, right) 是连续的
-            '''
-            if left == right:
-                return None
-            mid = getMedian(left, right)
-            root = TreeNode(mid.val)
-            root.left = buildTree(left, mid) # 从 head 到 mid-1，所以我们在 findMid 方程里面，需要对 List 进行切分
-            root.right = buildTree(mid.next, right) # 从 mid+1 到 tail
-            return root
-        
-        return buildTree(head, None)
-
-时间复杂度：O(nlogn)，其中 n 是链表的长度。
-
-设长度为 n 的链表构造二叉搜索树的时间为 T(n)，递推式为 T(n) = 2⋅T(n/2) + O(n)，根据主定理， T(n) = O(nlogn)。
-
-空间复杂度：O(logn)，这里只计算除了返回答案之外的空间。平衡二叉树的高度为 O(logn)，
-
-即为递归过程中栈的最大深度，也就是需要的空间。
-
-```
 
 
 ##  204. <a name='ConvertSortedArraytoBinarySearchTree'></a>108 Convert Sorted Array to Binary Search Tree 
@@ -3312,347 +3929,8 @@ pre的append [79, 119, 214]
 ```
 
 
-##  10. <a name='-1'></a>21. 合并两个有序链表
 
-https://leetcode-cn.com/problems/merge-two-sorted-lists/
 
-[哈哈哈](https://www.bilibili.com/video/BV1rJ41127ry?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411i7D7?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1my4y127bK?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1qZ4y1j7Jb?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1ck4y1k7J9?spm_id_from=333.999.0.0)
-
-暴力解法：
-
-* 时间复杂度:O(M+N)
-
-* 时间复杂度:O(1)
-
-```py
-输入：l1 = [1,2,4], l2 = [1,3,4]
-输出：[1,1,2,3,4,4]
-
-
-
-
-
-输入：l1 = [], l2 = []
-输出：[]
-
-
-
-
-
-输入：l1 = [], l2 = [0]
-输出：[0]
-
-
-
-
-
-
-class Solution:
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        dummy = ListNode(0)
-        cur = dummy # dummy是固定节点，cur是移动指针
-        while list1 and list2: # 😐 while 循环 # 这里是and 
-            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
-                cur.next = list1
-                list1 = list1.next # 向后进一位
-            else:
-                cur.next = list2
-                list2 = list2.next # 向后进一位
-            cur = cur.next # 向后进一位
-        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
-        # 等效于：
-        # if list1:
-        #     cur.next = list1
-        # else:
-        #     cur.next = list2
-        return dummy.next
-```
-
-递归解法：
-
-* 时间复杂度:O(M+N)
-
-* 空间复杂度:O(M+N)
-
-```py
-class Solution:
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        if not list1: return list2
-        elif not list2: return list1
-        elif list1.val < list2.val:
-            '''
-            list1 提取出来
-            返回 list1
-            '''
-            list1.next = self.mergeTwoLists(list1.next, list2) # 找到较小头结点，提取出来
-            return list1
-        else:
-            '''
-            list2 提取出来
-            返回 list2
-            '''
-            list2.next = self.mergeTwoLists(list1, list2.next) # 找到较小头结点，提取出来
-            return list2
-```
-
-```scala
-
-object Solution1 {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-        val headNode = new ListNode(-1, null)
-        var cur = headNode
-        
-        var no1 = l1;
-        var no2 = l2;
-        
-        while(no1 != null && no2 != null) {
-            if (no1.x >= no2.x){
-                
-                cur.next = no2
-                no2 = no2.next
-            }else {
-                cur.next = no1
-                no1 = no1.next
-            }
-            cur = cur.next
-        }
-        (no1, no2) match {
-            case (_, null) => cur.next = no1
-            case (null, _) => cur.next = no2
-            case _ => throw new RuntimeException()
-        }
-        
-        headNode.next
-    }
-}
-
-
-
-/**
-* recursive version
-*/
-
-object Solution1-2 {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-        (l1, l2) match {
-            case (null, _) => l2
-            case (_, null) => l1
-            case (a, b) => 
-                if (a.x >= b.x){
-                    b.next = mergeTwoLists(b.next, a)
-                    b
-                } else {
-                    a.next = mergeTwoLists(a.next, b)
-                    a   
-                }
-        }
-    }
-}
-
-object Solution {
-    def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
-    if(l1 == null) return l2
-    if(l2 == null) return l1
-
-    if (l1.x < l2.x) {
-      l1.next = mergeTwoLists(l1.next, l2)
-      l1
-    } else {
-      l2.next = mergeTwoLists(l1, l2.next)
-      l2
-    }
-  }
-}
-
-```
-
-##  11. <a name='LinkedListCycle'></a>141-Linked List Cycle
-
-https://leetcode-cn.com/problems/linked-list-cycle/
-
-[哈哈哈](https://www.bilibili.com/video/BV1g7411a7ta?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411H7XP?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1KX4y157vh?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1PA411b7gq?spm_id_from=333.999.0.0)
-
-```py
-输入：head = [3,2,0,-4], pos = 1
-输出：true
-解释：链表中有一个环，其尾部连接到第二个节点。
-
-
-方法一：集合 如果发现节点已在集合内则说明存在环
-
-class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        visited = set()
-        while head: # 😐 while 循环, cur
-            visited.add(head)
-            head = head.next
-            if head in visited:
-                return True
-        return False
-
-
-* 时间复杂度:O(n)
-* 空间复杂度:O(n)
-
-
-感觉初始时把快慢指针都指向 head 反而更简洁：
-
-
-
-class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        fast = slow = head
-        # 哈哈哈，这么写也对啦~~~ while fast and fast.next and fast.next.next: # 😐 while 循环
-        while fast and fast.next: # 😐 while 循环
-            fast = fast.next.next
-            slow = slow.next
-            if fast == slow:
-                return True
-        return False
-
-
-* 时间复杂度:O(n)
-* 空间复杂度:O(1)      
-```
-
-
-```scala
-object Solution1 {
-    def hasCycle(head: ListNode): Boolean = {
-        
-        var cur = head
-        val visited = new scala.collection.mutable.HashSet[ListNode]()
-        
-        var res: Boolean = false
-        while (cur != null && res != true) {
-
-            if(visited.contains(cur))  
-                res = true
-            else {
-                visited += cur
-                cur = cur.next
-            }
-        }
-        res
-    }
-}
-
-
-object Solution3 {
-    def hasCycle(head: ListNode): Boolean = {
-        var fast = head
-        var slow = head
-        
-        
-        var result = false
-        while (fast != null && fast.next != null && result != true) {
-            fast = fast.next.next
-            slow = slow.next
-        
-            if(fast == slow) result = true
-        }
-        result
-    }
-}
-```
-
-
-##  14. <a name='IntersectionofTwoLinkedLists'></a>160-Intersection of Two Linked Lists
-
-https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
-
-[哈哈哈](https://www.bilibili.com/video/BV1n741187X6?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1eb411H7uq?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV18K4y1J7wx?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1np4y1y789?spm_id_from=333.999.0.0)
-
-```py
-输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
-输出：Intersected at '8'
-
-
-解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。
-
-从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。
-
-在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
-
-
-
-
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        visited = set()
-        while headA: # 😐 while 循环, cur
-            visited.add(headA)
-            headA = headA.next
-        while headB: # 😐 while 循环, cur
-            if headB in visited:
-                return headB
-            headB = headB.next
-        return None
-
-# > 时间复杂度 O(M+N), 空间复杂度 O(M)
-
-2. 双指针
-
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        if not headA or not headB:
-            return None
-        pa, pb = headA, headB
-        while pa != pb: # 😐 while 循环
-            pa = pa.next if pa else headB
-            pb = pb.next if pb else headA
-        return pa
-
-# > 时间复杂度 O(M+N), 空间复杂度 O(1)
-```
-
-
-```scala
-object Solution {
-    
-    def getIntersectionNode(headA: ListNode, headB: ListNode): ListNode = {
-        var ha = headA
-        var hb = headB
-        
-        while(ha != hb){
-            if(ha == null){
-                ha = headB
-            }else{
-                ha = ha.next
-            }
-            
-            if(hb == null){
-                hb = headA
-            }else{
-                hb = hb.next
-            }
-        }
-        
-        ha
-    }
-}
-
-```
 
 ##  12. <a name='BinaryTreeLevelOrderTraversal'></a>102-Binary Tree Level Order Traversal
 
@@ -4124,431 +4402,6 @@ object Solution1-3 {
         
     }
 }
-```
-
-
-##  15. <a name='Mergesortedarray'></a>88-Merge sorted array
-
-https://leetcode-cn.com/problems/merge-sorted-array/
-
-[哈哈哈](https://www.bilibili.com/video/BV14J411X7JE?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7bg?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1g54y1s7ZG?spm_id_from=333.999.0.0)
-
-直接合并后排序
-
-```py
-输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
-输出：[1,2,2,3,5,6]
-
-
-
-解释：需要合并 [1,2,3] 和 [2,5,6] 。
-合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
-
-
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        """
-        最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。
-        Do not return anything, modify nums1 in-place instead.
-        """
-        # 三个指针
-        cur1 = m - 1
-        cur2 = n - 1
-        i = m + n -1
-        # 从后往前遍历
-        while cur1 >= 0 and cur2 >= 0: # 😐 while 循环
-            if nums1[cur1] < nums2[cur2]:
-                nums1[i] = nums2[cur2]
-                cur2 -= 1
-            else:
-                nums1[i] = nums1[cur1]
-                cur1 -= 1
-            i -= 1
-        # 如果后面的那个n还有多余
-        if cur2 >= 0:
-            nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
-
-
-
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-
-
-
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        """
-        Do not return anything, modify nums1 in-place instead.
-        """
-        nums1[m:] = nums2
-        nums1.sort()
-```
-
-```scala
-object Solution {
-    def merge(nums1: Array[Int], m: Int, nums2: Array[Int], n: Int): Unit = {
-        var trail = m+n-1
-        
-        var t1 = m-1
-        var t2 = n-1
-        
-        while(t1 > -1 && t2 > -1){
-            val e1 = nums1(t1)
-            val e2 = nums2(t2)
-            
-            if(e1 > e2){
-                nums1(trail) = e1
-                t1 -= 1
-                trail -= 1
-            }else{
-                nums1(trail) = e2
-                t2 -= 1
-                trail -= 1
-            }
-        }
-        
-        if(t1 == -1){
-            while(t2 > -1){
-                nums1(trail) = nums2(t2)
-                t2 -= 1
-                trail -= 1
-            }
-        }else{
-            while(t1 > -1){
-                nums1(trail) = nums1(t1)
-                t1 -= 1
-                trail -= 1
-            }
-        }
-        
-    }
-}
-
-```
-
-##  26. <a name='MergekSortedLists'></a>23. 【最小堆🌵】Merge k Sorted Lists
-
-[花花酱](https://www.bilibili.com/video/BV1X4411u7xF?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Ty4y1178e?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1GK41157mu?spm_id_from=333.999.0.0)
-
-暴力求解法：
-
-* 时间复杂度: O(N) + O(N logN) + O(N)
-
-* 空间复杂度: O(N) + O(N)
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.65tcjjz2oy80.png" width="50%">
-
-```py
-# so easy，一遍过
-class Solution:
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        vals = []
-        for listhead in lists:
-            while listhead: # 😐 while 循环
-                vals.append(listhead.val)
-                listhead = listhead.next
-        vals.sort()
-        dummy = ListNode(0)
-        cur = dummy
-        for value in vals:
-            cur.next = ListNode(value)
-            cur = cur.next
-        return dummy.next
-```
-
-优先队列：
-
-
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3tftyqf2g4s0.png" width="50%">
-
-```py
-输入：lists = [[1,4,5],[1,3,4],[2,6]]
-输出：[1,1,2,3,4,4,5,6]
-解释：链表数组如下：
-[
-  1->4->5,
-  1->3->4,
-  2->6
-]
-将它们合并到一个有序链表中得到。
-1->1->2->3->4->4->5->6
-
-* 时间复杂度: O(kn×logk)
-* 空间复杂度: O(k)
-class Solution:
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        queue = []  
-        dummy = ListNode(0)
-        
-        for i in range(len(lists)):
-            '''
-            这里只 heappush 一次，并且必须把 i 序号，放入最小堆
-            '''
-            if lists[i]: # lists[i] 就是 head
-                heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
-                lists[i] = lists[i].next 
-
-        cur = dummy # cur 就是穿针引线的针
-        while queue: # 😐 while 循环
-            val, idx = heapq.heappop(queue)
-            cur.next = ListNode(val)
-            cur = cur.next
-            if lists[idx]: # 此时 lists[idx] 已经是 head 的下一位
-                heapq.heappush(queue, (lists[idx].val, idx)) # 再把每一项 push 上去
-                lists[idx] = lists[idx].next 
-        return dummy.next
-```
-
-两两合并：
-
-* 时间复杂度: O(kn×logk)
-
-* 空间复杂度: O(logk)空间代价的栈空间。
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.60itjgowwpo0.png" width="50%">
-
-```py
-class Solution:
-    def merge2Lists(self, list1, list2):
-        dummy = ListNode(0)
-        
-        cur = dummy # dummy是固定节点，cur是移动指针
-        while list1 and list2: # 😐 while 循环 # 这里是and
-            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
-                cur.next = list1
-                list1 = list1.next # 向后进一位
-            else:
-                cur.next = list2
-                list2 = list2.next # 向后进一位
-            cur = cur.next # 向后进一位
-        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
-        return dummy.next
-            # 0,1,2,3,4,5,6  7-1
-            # 0, ,2, ,4, ,6  7-2
-            # 0, , , ,4, ,   7-3
-            # 0, , , , , ,   7-4
-
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
-        n = len(lists)
-        interval = 1
-        while n > interval: # 😐😐😐 while 循环
-            for i in range(0, n - interval, 2 * interval):
-                lists[i] = self.merge2Lists(lists[i], lists[i + interval]) # 易错点：方括号和小括号不要用错
-            interval *= 2
-        return lists[0] if n else None
-```
-
-##  114. <a name='1.'></a>补充题1. 排序奇升偶降链表
-
-1. 按奇偶位置拆分链表，得 1->3->5->7->NULL 和 8->6->4->2->NULL  328. 奇偶链表
-2. 反转偶链表，得 1->3->5->7->NULL 和 2->4->6->8->NULL         206. 反转链表
-3. 合并两个有序链表，得 1->2->3->4->5->6->7->8->NULL           21. 合并两个有序链表
-
-https://mp.weixin.qq.com/s/0WVa2wIAeG0nYnVndZiEXQ
-
-```py
-输入: 1->8->3->6->5->4->7->2->NULL
-输出: 1->2->3->4->5->6->7->8->NULL
-
-
-
-class ListNode:    
-    def __init__(self, x):        
-        self.val = x        
-        self.next = None
-
-
-class Solution:    
-    def sortOddEvenList(self,head):     
-        if not head or not head.next:      
-            return head 
-        # 第一步：分割    
-        oddList, evenList = self.partition(head)    
-        # 第二步：反转 
-        evenList = self.reverse(evenList)        
-        # 第三步：合并
-        return self.merge(oddList, evenList)    
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-    def partition(self, head: ListNode) -> ListNode:        
-        headnxt = head.next        
-        slow, fast = head, headnxt        
-        while fast and fast.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
-            slow.next = fast.next            
-            slow = slow.next            
-            fast.next = slow.next            
-            fast = fast.next        
-        slow.next = None # 节点需要断开
-        return [head, headnxt]    
-
-
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-    def reverse(self,head):    
-        res = None
-        while head: # 😐 while 循环, cur
-            headnxt = head.next
-            head.next = res
-            res = head
-            head = headnxt
-        return res    
-
-
-
-* 时间复杂度: O(min(n1,n2))
-* 空间复杂度: O(1)
-
-
-    def merge(self,p,q):        
-        dummy = ListNode(0)        
-        cur = dummy        
-        while p and q:    # 😐 while 循环        
-            if p.val <= q.val:               
-                cur.next = p                
-                p = p.next            
-            else:                
-                cur.next = q                
-                q = q.next            
-            cur = cur.next        
-        cur.next = p or q        
-        return dummy.next
-```
-
-##  161. <a name='PartitionList'></a>86. 分隔链表(Partition List)
-
-[洛阳](https://www.bilibili.com/video/BV1t64y1u7Ei?spm_id_from=333.999.0.0)
-
-```py
-输入：head = [1,4,3,2,5,2], x = 3
-输出：[1,2,2,4,3,5]
-
-
-
-
-输入：head = [2,1], x = 2
-输出：[1,2]
-
-
-
-
-
-
-快慢指针 slow -> fast -> None
-链表中节点的数目在范围 [0, 200] 内
-
-
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-
-class Solution:
-    def partition(self, head: ListNode, x: int) -> ListNode:
-        '''
-        这道题只要返回 dummy1.next -> dummy2.next -> None
-                      slow        -> fast        -> None
-        '''
-        dummy1 = ListNode(0)
-        dummy2 = ListNode(0)
-        slow, fast, cur = dummy1, dummy2, head
-
-        while cur:    # 😐😐😐 while 循环 # 🌵 用 cur 指针
-            if cur.val < x:
-                slow.next = cur # dummy1 指向第一个小于x的node
-                slow = slow.next
-            else:
-                fast.next = cur # dummy2 指向第一个大于x的node
-                fast = fast.next
-            cur = cur.next
-
-        slow.next = dummy2.next
-        fast.next = None
-        return dummy1.next
-```
-
-##  189. <a name='MiddleoftheLinkedList'></a>876.Middle of the Linked List 链表的中间结点
-
-[图灵](https://www.bilibili.com/video/BV1Kv411p7vf?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1Pz41187WS?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1aK411T74X?spm_id_from=333.999.0.0)
-
-```py
-输入：[1,2,3,4,5]
-输出：此列表中的结点 3 (序列化形式：[3,4,5])
-
-
-
-返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。
-注意，我们返回了一个 ListNode 类型的对象 ans，这样：
-ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.
-
-
-
-
-
-输入：[1,2,3,4,5,6]
-输出：此列表中的结点 4 (序列化形式：[4,5,6])
-
-
-
-由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。
- 
-
-
-
-
-如果有两个中间结点，则返回第 2 个中间结点。
-
-
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-
-class Solution:
-    def middleNode(self, head: ListNode) -> ListNode:
-        slow = fast = head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-
-
-其他写法：
-
-如果有两个中间结点，则返回第 1 个中间结点。
-
-class Solution:
-    def middleNode(self, head: ListNode) -> ListNode:
-        slow = fast = head
-        while fast.next and fast.next.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-输入：
-[1,2,3,4,5,6]
-输出：
-[3,4,5,6]
-预期结果：
-[4,5,6]
 ```
 
 
@@ -8432,92 +8285,6 @@ class Solution:
 空间复杂度：O(n + k) = O(n) 
 ```
 
-##  25. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
-
-https://leetcode-cn.com/problems/merge-k-sorted-lists/
-
-[小明](https://www.bilibili.com/video/BV1W5411L7AF?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV15e41147EY?spm_id_from=333.999.0.0)
-
-![](https://s3.bmp.ovh/imgs/2022/02/5ca7ad17ae2ceeed.png)
-
-```py
-输入：head = [3,2,0,-4], pos = 1
-输出：返回索引为 1 的链表节点
-解释：链表中有一个环，其尾部连接到第二个节点。
-
-
-
-输入：head = [1,2], pos = 0
-输出：返回索引为 0 的链表节点
-解释：链表中有一个环，其尾部连接到第一个节点。
-
-
-
-输入：head = [1], pos = -1
-输出：返回 null
-解释：链表中没有环。
-
-
-
-
-时间复杂度： O(N)，其中 N 为链表中节点的数目。
-
-在最初判断快慢指针是否相遇时， slow 指针走过的距离不会超过链表的总长度；
-
-随后寻找入环点时，走过的距离也不会超过链表的总长度。
-
-因此，总的执行时间为 O(N)+O(N)=O(N)。
-
-
-
-
-空间复杂度： O(1)。我们只使用了 slow,fast,ptr 三个指针。
-
-
-
- 
-class Solution:
-    def detectCycle(self, head: ListNode) -> ListNode:
-        slow, fast = head, head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-            
-            if slow == fast: # 如果相遇
-                p = head
-                q = slow
-                while p != q: # 😐 while 循环
-                    p = p.next
-                    q = q.next
-                return p    # 你也可以 return q
-        return None
-```
-
-```scala
-object Solution {
-    def detectCycle(head: ListNode): ListNode = {
-        val visited = new scala.collection.mutable.HashSet[ListNode]()
-        var cur = head
-        
-        var result: ListNode = null
-
-        while (cur != null && result == null) {
-            // println(result)
-            if(visited.contains(cur))  
-                result = cur
-            else {
-                visited += cur
-                cur = cur.next
-            }
-        }
-        result
-        
-    }
-}
-
-```
 
 
 
@@ -10719,66 +10486,7 @@ print(stack)
 
 ```
 
-##  276. <a name='RemoveDuplicateLetters'></a>316 【贪心🧡】Remove Duplicate Letters
 
-[小明](https://www.bilibili.com/video/BV1x54y1R7y7?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Tz4y167pC?spm_id_from=333.999.0.0)
-
-```py
-去除字符串中重复的字母
-
-使得每个字母只出现一次
-
-返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
-
-
-输入：s = "bcabc"
-输出："abc"
-a  小于 stack[-1]，并且 c 在s[i+1:]中，弹出 c
-a  小于 stack[-1]，并且 b 在s[i+1:]中，弹出 b
-
-
-
-
-输入：s = "cbacdcbc"
-输出："acdb"
-
-b  小于 stack[-1]，并且 c 在s[i+1:]中，弹出 c
-a  小于 stack[-1]，并且 b 在s[i+1:]中，弹出 b
-c  in stack
-c  in stack
-
-
-
-
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        stack = []
-        n = len(s)
-        for i in range(n):
-            if s[i] in stack:
-                continue
-            else:
-                while stack and stack[-1] > s[i] and stack[-1] in s[i + 1: ]: # 😐😐😐 while 循环 + pop + append
-                # 如果数比栈顶小，而且栈顶在后面还有的话，
-                    stack.pop() # 就弹出栈顶。
-                stack.append(s[i])
-            
-        return "".join(stack)
-
-
-
-时间复杂度： O(N)。代码中虽然有双重循环，但是每个字符至多只会入栈、出栈各一次。
-
-空间复杂度： O(∣Σ∣)，其中 Σ 为字符集合，本题中字符均为小写字母，所以 ∣Σ∣= 26。
-
-由于栈中的字符不能重复，因此栈中最多只能有 ∣Σ∣ 个字符，
-
-另外需要维护两个数组，
-
-分别记录每个字符是否出现在栈中以及每个字符的剩余数量。
-```
 
 
 
@@ -10992,83 +10700,6 @@ class Solution:
 ```
 
 
-
-##  39. <a name='MergeIntervals'></a>56. Merge Intervals
-
-[花花酱](https://www.bilibili.com/video/BV11t411J7zV?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1w7411a7Wo?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1pV411a7t4?spm_id_from=333.999.0.0)
-
-```py
-输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
-输出：[[1,6],[8,10],[15,18]]
-
-
-解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
-
-
-
-
-
-输入：intervals = [[1,4],[4,5]]
-输出：[[1,5]]
-
-
-解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
-
-
-
-
-时间复杂度： O(nlogn)，其中 n 为区间的数量。
-
-除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 O(nlogn)。
-
-
-
-空间复杂度： O(logn)，其中 n 为区间的数量。
-
-这里计算的是存储答案之外，使用的额外空间。 O(logn) 即为排序所需要的空间复杂度。
-
-
-
- 
-class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        intervals.sort() # 等价于：intervals.sort(key = lambda x: x[0])
-        res = []
-        for interval in intervals: # res[-1] 和 interval 比较
-            if not res or res[-1][1] < interval[0]:
-                res.append(interval[:])
-            else:
-                res[-1][1] = max(res[-1][1], interval[1])
-                # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
-                # 比如，[[1,4],[2,3]]
-        return res
-```
-
-```scala
-
-/**
-*  time complexity: O(nlogn) + O(n) = O(nlogn) 
-*  space complexity: O(n): sorted array
-*/
-
-object Solution1-2 {
-    def merge(intervals: Array[Array[Int]]): Array[Array[Int]] = {
-      intervals.sortBy(_(0)).foldLeft(List.empty[Array[Int]]){
-        case (last::ans, arr) =>
-          if (last.last < arr.head) {
-            arr::last::ans
-          } else {
-            Array(last.head, last.last max arr.last)::ans
-          }
-        case (ans, arr) => arr::ans // for empty ans list
-      }.toArray
-    }
-}
-```
 
 
 
@@ -13063,106 +12694,6 @@ object Solution {
 }
 ```
 
-##  137. <a name='FindtheDuplicateNumber'></a>287 Find the Duplicate Number
-
-[小明](https://www.bilibili.com/video/BV1Ug4y1v7mF?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Pz4y1X7qR?spm_id_from=333.999.0.0)
-
-```py
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        #数组只能读 所以不能排序,不能swap数组下标
-        #时间复杂度小于 O(n^2) 不能暴力
-        #空间复杂度 O(1) 不能额外开辟数组
-        
-        ''' 1、暴力不符合题意
-        for i in nums:
-            count = 0
-            for num in nums:
-                if num == i:
-                    count += 1
-            if count > 1:
-                return i
-        return -1
-        '''
-        
-        '''2、小于O(n^2) 二分查找
-        我们不要考虑数组,只需要考虑 数字都在 1 到 n 之间
-        示例 1:
-        arr = [1,3,4,2,2] 此时数字在 1 — 5 之间
-
-        mid = (1 + 5) / 2 = 3 arr小于等于的3有4个(1,2,2,3)，1到3中肯定有重复的值
-        mid = (1 + 3) / 2 = 2 arr小于等于的2有3个(1,2,2)，1到2中肯定有重复的值    if cnt > mid:  right = mid
-        mid = (1 + 2) / 2 = 1 arr小于等于的1有1个(1)，2到2中肯定有重复的值        if cnt <= mid: left = mid + 1
-        所以重复的数是 2 
-        '''
-
-要求：
-
-只用常量级 O(1) 的额外空间
-
-
-输入：nums = [1,3,4,2,2] 0 -> 1 -> 3 -> (2 -> 4) -> 2 -> 4  循环
-输出：2 
-
-
-输入：nums = [3,1,3,4,2] 0 -> (3 -> 4 -> 2) -> 3 -> 4 -> 2 
-输出：3
-
-
-
-class Solution(object):
-    def findDuplicate(self, nums):
-        '''
-        这个写法很容易出错，最好别
-        '''
-        # low, high = 1, len(nums) - 1
-        # while low <= high:
-        #     mid = (low + high) // 1
-        #     cnt = sum(x <= mid for x in nums)
-        #     if cnt > mid:
-        #         high = mid - 1
-        #     else: # cnt <= mid:
-        #         low = mid + 1
-        # return low
-
-线性级时间复杂度 O(n)
-
-class Solution:
-    def findDuplicate(self, nums: List[int]) -> int:
-        # node.next = nums[node]
-        # node.next.next = nums[nums[node]]
-        slow = nums[0]        
-        fast = nums[nums[0]] 
-        while slow != fast: # 😐😐 while 循环
-            slow = nums[slow]
-            fast = nums[nums[fast]] 
-        p = 0                    
-        q = slow  
-        while p != q: # 😐😐 while 循环
-            p = nums[p]
-            q = nums[q]
-        return p           
-
-class Solution:
-    def detectCycle(self, head: ListNode) -> ListNode:
-        slow, fast = head, head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-            
-            if slow == fast: # 如果相遇
-                p = head
-                q = slow
-                while p != q: # 😐 while 循环
-                    p = p.next
-                    q = q.next
-                return p    # 你也可以 return q
-        return None
-```
 
 # 4 day (得分 = 8分) 63
 
