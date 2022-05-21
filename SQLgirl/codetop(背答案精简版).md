@@ -13880,9 +13880,7 @@ class Solution(object):
 
 
 
-##  210. <a name='ZigZagConversion'></a>6. ZigZag Conversion
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7uH?spm_id_from=333.999.0.0)
+##  210. <a name='ZigZagConversion'></a> convert
 
 ```py
 输入：s = "PAYPALISHIRING", numRows = 3
@@ -13901,15 +13899,8 @@ Y A   H R
 P     I
 
 
-
-
 输入：s = "A", numRows = 1
 输出："A"
-
-
-
-
-
 
 
 建立字典， key就是行index， value就是对应行的所有字母。
@@ -13925,9 +13916,7 @@ class Solution:
     def convert(self, s: str, numRows: int) -> str:
         if numRows == 1: return s
         dic = defaultdict(str)
-        '''
-        用 index 和 cycleCount 来定位 key
-        '''
+
         cycleCount = numRows * 2 - 2 # 循环为6
         for index, char in enumerate(s):
             key = index % cycleCount
@@ -13941,42 +13930,20 @@ class Solution:
         return res
 
 
-
-输入：s = "PAYPALISHIRING", numRows = 4
-输出："PINALSIGYAHRPI"
-解释：
-P0      I6       N12
-A1   L5 S7   I11 G13
-Y2 A4   H8 R10
-P3      I9
-
 ```
 
 
 
-##  213. <a name='UglyNumberII'></a>264. 【动态🚀规划 + 3指针】Ugly Number II
-
-[花花酱](https://www.bilibili.com/video/BV1yW411C7Sm?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1vT4y1775u?spm_id_from=333.999.0.0)
+##  213. <a name='UglyNumberII'></a> nthUglyNumber
 
 ```py
 输入：n = 10
 输出：12
 解释：[1, 2, 3, 4, 5, 6, 8, 9, 10, 12] 是由前 10 个丑数组成的序列。
 
-
-
-
 输入：n = 1
 输出：1
 解释：1 通常被视为丑数。
-
-
-
-
-
-
 
 # python 实习面试这道题挂了，但我就不懂了，第一次见这题目谁能想到3指针的方法？
 # [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
@@ -14001,16 +13968,7 @@ class Solution(object):
 
 时间复杂度： O(n)。需要计算数组 dp 中的 n 个元素，每个元素的计算都可以在 O(1) 的时间内完成。
 空间复杂度： O(n)。空间复杂度主要取决于数组 dp 的大小。
- 
-# 2 3 5 [1, 2]
-# 4 3 5 [1, 2, 3]
-# 4 6 5 [1, 2, 3, 4]
-# 6 6 5 [1, 2, 3, 4, 5]
-# 6 6 10 [1, 2, 3, 4, 5, 6]
-# 8 9 10 [1, 2, 3, 4, 5, 6, 8]
-# 10 9 10 [1, 2, 3, 4, 5, 6, 8, 9]
-# 10 12 10 [1, 2, 3, 4, 5, 6, 8, 9, 10]
-# 12 12 15 [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
+
 ```
 
 ##  214. <a name='-1'></a>97. 交错字符串
@@ -14175,10 +14133,6 @@ a c [False, False, False, True, False, True]
 
 ##  224. <a name='SetMatrixZeroes'></a>73. Set Matrix Zeroes
 
-[小梦想家](https://www.bilibili.com/video/BV1W7411T7rX?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1X64y1Y7kG?spm_id_from=333.999.0.0)
-
 ```py
 输入：matrix = [[1,1,1],[1,0,1],[1,1,1]]
 输出：[[1,0,1],[0,0,0],[1,0,1]]
@@ -14197,7 +14151,6 @@ a c [False, False, False, True, False, True]
 
         我们需要分别记录每一行或每一列是否有零出现。
  
-给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
@@ -14278,11 +14231,7 @@ class Solution:
 
 [花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
 
-##  248. <a name='FactorialTrailingZeroes'></a>172-Factorial Trailing Zeroes
-
-[哈哈哈](https://www.bilibili.com/video/BV1hE411n7TM?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7tS?spm_id_from=333.999.0.0)
+##  248. <a name='FactorialTrailingZeroes'></a> trailingZeroes
 
 ```py
 输入：n = 5
@@ -14314,49 +14263,51 @@ class Solution:
 
 ##  253. <a name='IntegertoRoman'></a>12. Integer to Roman
 
-[小梦想家](https://www.bilibili.com/video/BV1Lb411x7Wf?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1hN411Q7ka?spm_id_from=333.999.0.0)
-
 ```py
 输入: num = 3
 输出: "III"
 
-
-
 输入: num = 4
 输出: "IV"
-
-
 
 输入: num = 9
 输出: "IX"
 
-
-
 输入: num = 58
 输出: "LVIII"
 解释: L = 50, V = 5, III = 3.
-
-
 
 输入: num = 1994
 输出: "MCMXCIV"
 解释: M = 1000, CM = 900, XC = 90, IV = 4.
 
 
+class Solution:
+    def romanToint(self, s: str) -> int:
+        dic = ["M","D","C","L","X","V","I","O"]
+         = [1000,500,100,50,10,5,1,0]
+
+        res = 0
+        pre = None
+        s += 'O'
+        for char in s:
+            if pre:
+                if dic[pre] >= dic[char]:
+                    res += dic[pre]
+                else:
+                    res += -dic[pre] 
+            pre = char
+
+        return res
 
 
-
-# 这个写起来超级简单！
-# NO BUG
 class Solution:
     def intToRoman(self, num: int) -> str:
         strlist = ["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"]
         numlist = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
         res = ''
         for i in range(len(numlist)):
-            while num >= numlist[i]: # 😐😐😐 while 循环，注意还有 = 号
+            while num >= numlist[i]: # 注意还有 = 号
                 num -= numlist[i]
                 res = res + strlist[i]
         return res
@@ -14400,55 +14351,18 @@ class Solution:
 
 ##  261. <a name='k'></a>60. 第k个排列
 
-##  262. <a name='Implementstr'></a>28-Implement str
-
-[哈哈哈](https://www.bilibili.com/video/BV1eL411n7YS?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1BJ41117d6?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1UK411K7zB?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1hb411i7cG?spm_id_from=333.999.0.0)
-
-解法一：直接用.index()
+##  262. <a name='Implementstr'></a> strStr
 
 ```py
 输入：haystack = "hello", needle = "ll"
 输出：2
 
-
-
 输入：haystack = "aaaaa", needle = "bba"
 输出：-1
-
-
 
 输入：haystack = "", needle = ""
 输出：0
 
-
-
-
-
-给你两个字符串 haystack 和 needle ，
-
-请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。
-
-如果不存在，则返回  -1 
-
-class Solution:
-    def strStr(self, haystack: str, needle: str) -> int:
-        if needle == "":
-            return 0
-        if needle in haystack:
-            return haystack.index(needle)
-        else:
-            return -1
-```
-
-解法二：在对整个needle字符串比较
-
-```py
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         for i in range(len(haystack) - len(needle) + 1):
@@ -14457,53 +14371,32 @@ class Solution:
         return -1
 时间复杂度： O(n×m)，其中 n 是字符串 haystack 的长度，m 是字符串 needle 的长度。
 
-最坏情况下我们需要将字符串 needle 与字符串 haystack 的所有长度为 m 的子串均匹配一次。
-
 空间复杂度： O(1)。我们只需要常数的空间保存若干变量。
-
-
-
 ```
 
 
-##  263. <a name='CountPrimes'></a>204-Count Primes
-
-[哈哈哈](https://www.bilibili.com/video/BV167411w7Sf?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7cV?spm_id_from=333.999.0.0)
+##  263. <a name='CountPrimes'></a> countPrimes
 
 ```py
 输入：n = 10
 输出：4
 
 
-
-
 输入：n = 0
 输出：0
-
-
 
 
 输入：n = 1
 输出：0
 
-
-
-
-
 埃氏筛
 时间复杂度： O(nloglogn)
-空间复杂度：O(n) 
 class Solution(object):
     def countPrimes(self, n):
 
         isPrime = [1 for i in range(n)]
-
         i = 2
-        '''
-        😐😐😐 两层 while 循环, 将 i*i 至 n 之间的 i 倍数，都变成 isPrime[j] = 0
-        '''
+
         while i * i < n: # 😐😐😐 while 循环
         	if isPrime[i]:
         		j = i * i    # j 永远是 i 的倍数
