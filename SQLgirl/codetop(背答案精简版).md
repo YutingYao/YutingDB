@@ -13909,7 +13909,7 @@ P     I
 
 时间复杂度： O(n)。n 为字符串 s 的长度。
 
-空间复杂度： O(r)。其中 r = numRows
+空间复杂度： O(r)。其中 r = numRows 
 
 
 class Solution: 
