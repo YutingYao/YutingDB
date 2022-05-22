@@ -7260,7 +7260,7 @@ https://leetcode-cn.com/problems/binary--inorder-traversal/
 
 
 
-时间复杂度：O(n) ，其中 nn 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
+时间复杂度：O(n) ，其中 n 为二叉树节点的个数。二叉树的遍历中每个节点会被访问一次且只会被访问一次。
 
 空间复杂度：O(n) 。空间复杂度取决于递归的栈深度
  
@@ -8119,20 +8119,19 @@ class Solution:
 
 时间复杂度： O(mn)。 对每一列应用柱状图算法需要 O(m) 的时间，一共需要 O(mn) 的时间。
 
-空间复杂度： O(mn)，其中 m 和 n 分别是矩阵的行数和列数。
+空间复杂度： O(n)，其中 m 和 n 分别是矩阵的行数和列数。
 
-我们分配了一个与给定矩阵等大的数组，用于存储每个元素的左边连续 1 的数量。
 
 
 
 
 class Solution:
-    def maximalRectangle(self, matrix) -> int:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
         if len(matrix) == 0:
             return 0
         res = 0
         m, n = len(matrix), len(matrix[0])
-        heights = [0] * n 
+        heights = [0] * (n + 1)
         # heights = [0] * n，height需要补充一个0
         for i in range(m):
             for j in range(n):
@@ -8141,16 +8140,11 @@ class Solution:
                 else:
                     heights[j] += 1
             # 每行求一次 self.largestRectangleArea
-            heights.append(0)
             res = max(res, self.largestRectangleArea(heights))
         return res
 
     def largestRectangleArea(self, heights):
         # heights.append(0)
-        '''
-        stackI 放个 -1
-        heights 要append个 0
-        '''
         stackI = [-1]
         res = 0
         for i in range(len(heights)):
@@ -8768,28 +8762,28 @@ class Solution(object):
 
 
 
-class Solution:
-    def findMedianSortedArrays(self, A: List[int], B: List[int]) -> float:
-        lenA = len(A)
-        lenB = len(B) 
-        n = lenA + lenB
-        slow, fast = -1, -1
-        i, j = 0, 0
-        for _ in range(n//2 + 1) :
-            slow = fast  
-            # 每次循环前将 fast 的值赋给 slow
-            # A移动的条件: B遍历到最后 或 当前A<B,满足一个即可
-            if j >= lenB or (i < lenA and A[i] < B[j]):
-                fast = A[i]
-                i += 1
-            else :
-                fast = B[j]
-                j += 1
+# class Solution:
+#     def findMedianSortedArrays(self, A: List[int], B: List[int]) -> float:
+#         lenA = len(A)
+#         lenB = len(B) 
+#         n = lenA + lenB
+#         slow, fast = -1, -1
+#         i, j = 0, 0
+#         for _ in range(n//2 + 1) :
+#             slow = fast  
+#             # 每次循环前将 fast 的值赋给 slow
+#             # A移动的条件: B遍历到最后 或 当前A<B,满足一个即可
+#             if j >= lenB or (i < lenA and A[i] < B[j]):
+#                 fast = A[i]
+#                 i += 1
+#             else :
+#                 fast = B[j]
+#                 j += 1
             
-        if (n & 1) == 0: # 与1交,判断奇偶数,更快速
-            return (slow + fast) / 2.0
-        else:
-            return fast
+#         if (n & 1) == 0: # 与1交,判断奇偶数,更快速
+#             return (slow + fast) / 2.0
+#         else:
+#             return fast
 
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
@@ -8798,76 +8792,31 @@ class Solution:
 
         infinty = 2**40
         m, n = len(nums1), len(nums2)
-        left, right = 0, m
+        l1, r1 = 0, m
         # median1：前一部分的最大值
         # median2：后一部分的最小值
         median1, median2 = 0, 0
 
-        while left <= right:
+        while l1 <= r1:
             # 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
             # // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
-            i = (left + right) // 2
-            j = (m + n + 1) // 2 - i
+            mid1 = (l1 + r1) // 2
+            mid2 = (m + n + 1) // 2 - mid1
 
             # nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
-            nums_im1 = (-infinty if i == 0 else nums1[i - 1])
-            nums_i = (infinty if i == m else nums1[i])
-            nums_jm1 = (-infinty if j == 0 else nums2[j - 1])
-            nums_j = (infinty if j == n else nums2[j])
+            num1pre = (nums1[mid1 - 1] if mid1 != 0 else -infinty)
+            num1aft = (nums1[mid1] if mid1 != m else infinty)
+            num2pre = (nums2[mid2 - 1] if mid2 != 0 else -infinty)
+            num2aft = (nums2[mid2] if mid2 != n else infinty)
 
-            if nums_im1 <= nums_j:
-                median1, median2 = max(nums_im1, nums_jm1), min(nums_i, nums_j)
-                left = i + 1
+            if num1pre <= num2aft:
+                median1, median2 = max(num1pre, num2pre), min(num1aft, num2aft)
+                l1 = mid1 + 1
             else:
-                right = i - 1
+                r1 = mid1 - 1
 
         return (median1 + median2) / 2 if (m + n) % 2 == 0 else median1
 
-
-
-
-class Solution:
-    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        def getKthElement(k):
-            """
-            - 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
-            - 这里的 "/" 表示整除
-            - nums1 中小于等于 pivot1 的元素有 nums1[0 .. k/2-2] 共计 k/2-1 个
-            - nums2 中小于等于 pivot2 的元素有 nums2[0 .. k/2-2] 共计 k/2-1 个
-            - 取 pivot = min(pivot1, pivot2)，两个数组中小于等于 pivot 的元素共计不会超过 (k/2-1) + (k/2-1) <= k-2 个
-            - 这样 pivot 本身最大也只能是第 k-1 小的元素
-            - 如果 pivot = pivot1，那么 nums1[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums1 数组
-            - 如果 pivot = pivot2，那么 nums2[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums2 数组
-            - 由于我们 "删除" 了一些元素（这些元素都比第 k 小的元素要小），因此需要修改 k 的值，减去删除的数的个数
-            """
-            
-            index1, index2 = 0, 0
-            while True:
-                # 特殊情况
-                if index1 == m:
-                    return nums2[index2 + k - 1]
-                if index2 == n:
-                    return nums1[index1 + k - 1]
-                if k == 1:
-                    return min(nums1[index1], nums2[index2])
-
-                # 正常情况
-                newIndex1 = min(index1 + k // 2 - 1, m - 1)
-                newIndex2 = min(index2 + k // 2 - 1, n - 1)
-                pivot1, pivot2 = nums1[newIndex1], nums2[newIndex2]
-                if pivot1 <= pivot2:
-                    k -= newIndex1 - index1 + 1
-                    index1 = newIndex1 + 1
-                else:
-                    k -= newIndex2 - index2 + 1
-                    index2 = newIndex2 + 1
-        
-        m, n = len(nums1), len(nums2)
-        totalLength = m + n
-        if totalLength % 2 == 1:
-            return getKthElement((totalLength + 1) // 2)
-        else:
-            return (getKthElement(totalLength // 2) + getKthElement(totalLength // 2 + 1)) / 2
 
 
 
@@ -9459,8 +9408,8 @@ class Solution(object):
     def countNodes(self, root):
         if not root: 
             return 0
-        if root and not root.left and not root.right: 
-            return 1
+        # if root and not root.left and not root.right: 
+        #     return 1
         return 1 + self.countNodes(root.left) + self.countNodes(root.right) 
 时间复杂度为 O(n) 
 ```
@@ -9837,8 +9786,6 @@ class Solution:
             if node.right: que.append((node.right, path + [node.val], tsum - node.val))
         return res
 
-时间复杂度：O(N^2) ，其中 N 是树的节点数。
-空间复杂度： O(N)，其中 N 是树的节点数。
 ```
 
 
@@ -11912,24 +11859,22 @@ https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357
 class Solution:
     def calculate(self, s: str) -> int:
         stack = [1]
-        sign = 1
-        i = 0
+        num, op = 0, 1  # 这个"+", 在最前面,是因为算法符号具有滞后性
         res = 0
-        while i < len(s): # 😐😐😐 while 循环, i 从 0 开始
-            if s[i].isdigit():
+        for i, char in enumerate(s):
+            if char.isdigit():
+                num = 10 * num + int(char)
+            if char in "+-()" or i == len(s)-1:
+                res += num*op
                 num = 0
-                while i < len(s) and s[i].isdigit(): # 😐😐😐 while 循环, 是否存在连续 num
-                    num = 10 * num + int(s[i])
-                    i += 1
-                res += sign * num
-            else:
-                if s[i] == '+':   sign = stack[-1]
-                elif s[i] == '-': sign = -stack[-1]
-                # -(1-(4+5+2)-3) + (6+8)
-                # stack[-1] 是因为负负得正
-                elif s[i] == '(': stack.append(sign)
-                elif s[i] == ')': stack.pop()
-                i += 1
+                if char == "+":
+                    op = stack[-1]
+                elif char == "-":
+                    op = stack[-1]*(-1)
+                elif char == "(":
+                    stack.append(op)
+                elif char == ")":
+                    stack.pop()
         return res
 ```
 
@@ -11988,19 +11933,18 @@ class Solution:
 ```py
 时间复杂度：
 
-        序列化时做了一次遍历，渐进时间复杂度为 O(n)。
+        序列化时做了一次遍历, 为 O(n)。
 
-        反序列化时，在解析字符串的时候 ptr 指针对字符串做了一次顺序遍历，字符串长度为 O(n)，
+        反序列化时，字符串长度为 O(n)，
 
-        故这里的渐进时间复杂度为 O(n)。
 
 空间复杂度：
 
-        考虑递归使用的栈空间的大小，这里栈空间的使用和递归深度有关，
+        栈空间的使用和递归深度有关，
 
-        递归深度又和二叉树的深度有关，在最差情况下，二叉树退化成一条链，
-
-        故这里的渐进空间复杂度为 O(n)。
+        递归深度又和二叉树的深度有关，
+        
+        在最差情况下，二叉树退化成一条链，这里的渐进空间复杂度为 O(n)。
 
 
 class Codec:
@@ -12264,16 +12208,7 @@ class Solution:
 ```py
 时间复杂度:  O(n+m)，其中 n 为课程数，m 为先修课程的要求数。
 
-这其实就是对图进行广度优先搜索的时间复杂度。
-
 空间复杂度: O(n+m)。
-
-题目中是以列表形式给出的先修课程关系，为了对图进行广度优先搜索，我们需要存储成邻接表的形式，空间复杂度为 O(n+m)。
-
-在广度优先搜索的过程中，我们需要最多 O(n) 的队列空间（迭代）进行广度优先搜索。
-
-
-
 
 
 输入：
@@ -12320,15 +12255,12 @@ class Solution:
 [官方](https://www.bilibili.com/video/BV1kK411W7rL?spm_id_from=333.999.0.0)
 
 ```py
-时间复杂度: O(n+m)，其中 n 为课程数，m 为先修课程的要求数。
+广度优先搜索:
 
-这其实就是对图进行广度优先搜索的时间复杂度。
+时间复杂度: O(n+m)，其中 n 为课程数，m 为先修课程的要求数。
 
 空间复杂度: O(n+m)。
 
-题目中是以列表形式给出的先修课程关系，为了对图进行广度优先搜索，我们需要存储成邻接表的形式，空间复杂度为 O(n+m)。
-
-在广度优先搜索的过程中，我们需要最多 O(n) 的队列空间（迭代）进行广度优先搜索。
 
 
 
@@ -12763,16 +12695,16 @@ class Solution:
             return step
                 
         cur = 1
-        k -= 1 # k - 1 就可以与步长 比较
+        k -= 1 # 扣除掉第一个节点
         
         while k > 0: # 😐😐😐 while 循环
             steps = calSteps(n, cur, cur + 1)
             if steps <= k: # 第k个数不在以cur为根节点的树上
                 k -= steps 
-                cur += 1  # prefix在字典序数组中从左往右移动
+                cur += 1    从左往右移动
             else:  # 在子树中
-                k -= 1
-                cur *= 10 # prefix 在字典序数组中从上往下移动
+                k -= 1      刨除根节点
+                cur *= 10   从上往下移动
         
         return cur
 
@@ -12992,16 +12924,11 @@ class Solution:
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
         cover = 0
-
         n = len(nums)
         for i in range(n):
-            if cover >= i: # 易错点：在判断下一个cover前，先要判断i是否能够到达
-                cover = max(cover, i + nums[i])
-                # if cover == i:
-                    # return False # 易错点：应该考虑特殊情况[0,1,2]
-                if cover >= n - 1:
-                    return True
-        return False
+            if cover < i: return False
+            cover = max(cover, i + nums[i])
+            if cover >= n - 1: return True
 
 时间复杂度： O(n)，其中 n 为数组的大小。只需要访问 nums 数组一遍，共 n 个位置。
 
@@ -13073,6 +13000,7 @@ class Solution:
                 res += dp0
             dp1, dp0 = res, dp1
         return dp1
+        
 时间复杂度： O(n)，其中 n 是字符串 s 的长度。
 
 空间复杂度： O(n) 或 O(1)。
@@ -13445,10 +13373,6 @@ class Solution:
 
 ##  187. <a name='GasStation'></a>134. Gas Station
 
-[小梦想家](https://www.bilibili.com/video/BV1BC4y1472f?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1754y1176F?spm_id_from=333.999.0.0)
-
 ```py
 输入：
 [1,2,3,4,5]
@@ -13601,39 +13525,32 @@ https://leetcode-cn.com/problems/max-submatrix-lcci/solution/zhe-yao-cong-zui-da
 
 class Solution:
     def getMaxMatrix(self, matrix: List[List[int]]) -> List[int]:
-        n = len(matrix)
-        m = len(matrix[0])
-        height = [0] * m
+        rows = len(matrix)
+        cols = len(matrix[0])
+        height = [0] * cols
         maxArea = float('-inf')
         res = [0] * 4
-        for slowA in range(n):           
-            height = [0] * m
-            for fastA in range(slowA, n):
-                acc = 0
-                for fastB in range(m):
-                    '''
-                    由上往下累加
-                    '''
-                    height[fastB] += matrix[fastA][fastB]
-                    # print('sums[rightB] =', sums[fastB])
-                    if acc <= 0:
-                        acc = height[fastB]
-                        slowB = fastB
-                        # print('dp <= 0:', slowB)
+        for sttX in range(rows):           
+            height = [0] * cols
+            for r in range(sttX, rows):
+                sumHgt = 0
+                for c in range(cols):
+
+                    height[c] += matrix[r][c]
+                    
+                    if sumHgt <= 0:
+                        sumHgt = height[c]
+                        sttY = c
                     else:
-                    '''
-                    由左往右累加
-                    '''
-                        acc += height[fastB]
+                        sumHgt += height[c]
                     # 把答案存下来
-                    if acc > maxArea:
-                        maxArea = acc
-                        res[0] = slowA
-                        res[1] = slowB
-                        res[2] = fastA
-                        res[3] = fastB
-                    # print('4个顶点=', slowA, slowB, fastA, fastB)
-                    # print('dp=', dp, '最大值=', maxdp, res, '\n')
+                    if sumHgt > maxArea:
+                        maxArea = sumHgt
+                        res[0] = sttX
+                        res[1] = sttY
+                        res[2] = r
+                        res[3] = c
+
         return res
     
 [
@@ -13779,16 +13696,8 @@ dp= 1 最大值= 19 [0, 0, 2, 3]
 2,3,4 (使用第二个 2)
 2,2,3
 
-
-
-
 输入: nums = [4,2,3,4]
 输出: 4
-
-
-
-
-
 
 class Solution:
     def triangleNumber(self, nums: List[int]) -> int:
@@ -13980,27 +13889,28 @@ class Solution(object):
 
 class Solution:
     def isInterleave(self, string1: str, string2: str, stringtar: str) -> bool:
-        n1, n2, tar = len(string1), len(string2), len(stringtar)
-        if n1 + n2 != tar: return False
+        n1 = len(s1)
+        n2 = len(s2)
+        n3 = len(s3)
+        if(n1 + n2 != n3):
+            return False
 
-        dp = [False] * (n2 + 1)
-        dp[0] = True
-        for i1 in range(n1 + 1):
-            for i2 in range(n2 + 1):
-                '''
-                i1 为 1 ~ n1
-                i2 为 1 ~ n2
-                p 为 0 ~ n1 + n2 - 1
-                每次遍历：
-                i1 固定
-                i2 变化
-                '''
-                p = i1 + i2 - 1
-                if i1: # s1 和 s3 比较
-                    dp[i2] = dp[i2] and string1[i1 - 1] == stringtar[p]
-                if i2: # s2 和 s3 比较
-                    dp[i2] = dp[i2] or (dp[i2 - 1] and string2[i2 - 1] == stringtar[p])
-        return dp[n2]
+        dp=[[False]*(n2 + 1) for i in range(n1 + 1)]
+        dp[0][0] = True
+
+        for i in range(1, n1 + 1):
+            dp[i][0] = (dp[i-1][0] and s1[i-1] == s3[i-1])
+
+        for i in range(1, n2 + 1):
+            dp[0][i] = (dp[0][i-1] and s2[i-1] == s3[i-1])
+            
+        for i in range(1, n1 + 1):
+            for j in range(1, n2 + 1):
+                dp[i][j] = (dp[i][j-1] and s2[j-1] == s3[i+j-1]) or \ 
+                            (dp[i-1][j] and s1[i-1] == s3[i+j-1])
+        return dp[-1][-1]
+
+
 
 时间复杂度： O(nm)，两重循环的时间代价为 O(nm)。
 空间复杂度： O(m)，即 s2 的长度。
