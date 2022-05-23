@@ -2274,6 +2274,7 @@ class MyCircularQueue:
     # isFull(): 检查循环队列是否已满。
     def isFull(self) -> bool:
         return self.count == self.capacity
+        
 时间复杂度： O(1)。该数据结构中，所有方法都具有恒定的时间复杂度。
 
 空间复杂度： O(N)，其中 N 是队列的预分配容量。循环队列的整个生命周期中，都持有该预分配的空间。
