@@ -4735,55 +4735,7 @@ class Solution:
 
 ```
 
-##  22. <a name='AddStrings'></a>415-Add Strings
 
-[哈哈哈](https://www.bilibili.com/video/BV18E411n7Cy?spm_id_from=333.999.0.0)
-
-```py
-python
-输入：num1 = "456", num2 = "77"
-输出："533"
-
-class Solution:
-    def addStrings(self, num1: str, num2: str) -> str:
-        '''
-        从后往前 <--- 
-        i -= 1
-        j -= 1
-        '''
-        i, j, carry, tail = len(num1)-1, len(num2)-1, 0, 0
-        res = ''
-
-        while i >= 0 or j >= 0 or carry: # 😐 while 循环
-            val = carry
-
-            if i >= 0:
-                val += ord(num1[i]) - ord('0')
-                i -= 1
-            if j >= 0:
-                val += ord(num2[j]) - ord('0')
-                j -= 1
-
-            carry, tail = divmod(val, 10)
-            res = str(tail) + res
-
-        return res  
-
-时间复杂度：O(max(len1,len2))
-
-空间复杂度： 1
-
-
-警察叔叔，我没有用 int
-class Solution:
-    def addStrings(self, num1: str, num2: str) -> str:
-        equation = num1+'+'+num2
-        return str(eval(equation))
-
-class Solution(object):
-    def addStrings(self, num1, num2):
-        return str((eval(num1)+eval(num2)))
-```
 
 
 
@@ -4994,119 +4946,6 @@ def titleToNumber(self, columnTitle: str) -> int:
 ```
 
 
-
-
-##  45. <a name='AddTwoNumbers'></a>2. Add Two Numbers
-
-[花花酱](https://www.bilibili.com/video/BV1EJ411h72z?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1gJ411V7gJ?spm_id_from=333.999.0.0)
-
-[小梦想](https://www.bilibili.com/video/BV1Wb411e77s?spm_id_from=333.999.0.0)
-
-[洛阳](https://www.bilibili.com/video/BV1rZ4y1j7V3?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1DA411L7YQ?spm_id_from=333.999.0.0)
-
-* 时间复杂度:O(max(m,n))
-
-* 时间复杂度:O(1).注意返回值不计入空间复杂度。
-
-特殊情况：
-
-两个链表的长度不同。
-
-进位
-
-```py
-
-输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
-输出：[8,9,9,9,0,0,0,1]
-
-
-
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        dummy = cur = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
-        carry = 0 # 易错点：carry需要先赋值
-        '''
-        not 从后往前 <--- 
-        l1 = l1.next if l1 else None
-        l2 = l2.next if l2 else None
-        '''
-
-        while l1 or l2 or carry: # 易错点：carry要存在 # 😁 while 循环
-            # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
-            # 易错点：调用listnode要有.val
-            sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
-            carry, tail = divmod(sumNode,10) 
-
-            cur.next = ListNode(tail)
-            cur = cur.next
-            l1 = l1.next if l1 else None # # l1,l2不一定存在，所以不能写成：l1 = l1.next
-            l2 = l2.next if l2 else None
-        return dummy.next
-```
-
-
-##  154. <a name='AddTwoNumbersII'></a>445-Add Two Numbers II
-
-[哈哈哈](https://www.bilibili.com/video/BV1Qj411f7Qz?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Pt4y1m78o?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV17a4y1s7BG?spm_id_from=333.999.0.0)
-
-```py
-输入：l1 = [7,2,4,3], l2 = [5,6,4]
-输出：[7,8,0,7]
-
-
-
-
-时间复杂度： O(max(m,n))，其中 m 和 n 分别为两个链表的长度。
-
-我们需要遍历两个链表的全部位置，而处理每个位置只需要 O(1) 的时间。
-
-空间复杂度： O(m+n)，其中 m 和 n 分别为两个链表的长度。
-
-空间复杂度主要取决于我们把链表内容放入栈中所用的空间。
- 
-
-
-
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        '''
-        对比上一题，这里使用了stack
-        '''
-        stack1, stack2 = [], []
-        while l1: # 😐 while 循环
-            stack1.append(l1.val)
-            l1 = l1.next
-        while l2: # 😐 while 循环
-            stack2.append(l2.val)
-            l2 = l2.next
-        res = None
-        carry = 0
-        '''
-        not 从后往前 <--- 
-        val1 = stack1.pop() if stack1 else 0 
-        val1 = stack1.pop() if stack1 else 0 
-        '''
-        while stack1 or stack2 or carry: # 😐 while 循环
-            val1 = stack1.pop() if stack1 else 0 
-            val2 = stack2.pop() if stack2 else 0 
-
-            sumNode = val1 + val2 + carry
-            carry, tail = divmod(sumNode,10) 
-
-            tmp = ListNode(tail)
-            tmp.next = res
-            res = tmp
-        return res
-
-```
 
 ##  23. <a name='-1'></a>46- ★ 全排列
 
@@ -8980,13 +8819,7 @@ class Solution:
                 return 1 + idx % 10
 ```
 
-##  66. <a name='Symmetrictree'></a>101-Symmetric tree
-
-[哈哈哈](https://www.bilibili.com/video/BV1VJ41197KD?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7eb?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1xv41167z8?spm_id_from=333.999.0.0)
+##  66. <a name='Symmetrictree'></a> isSymmetric
 
 > Python 迭代：其实就是层序遍历，然后检查每一层是不是回文🌈数组
 
@@ -9069,48 +8902,32 @@ class Solution:
 空间复杂度：  O(n)。
 ```
 
-
-##  69. <a name='MinimumPathSum64-'></a>64. Minimum Path Sum 64-最小路径和
-
-[花花酱](https://www.bilibili.com/video/BV12W411679S?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Ka4y1i7Vu?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1JC4y1x7j1?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1vi4y1u7a6?spm_id_from=333.999.0.0)
+##  79. <a name='-1'></a> invertTree
 
 ```py
-输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
-输出：7
-
-解释：因为路径 1→3→1→1→1 的总和最小。
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
 
 
 
-
-输入：grid = [[1,2,3],[4,5,6]]
-输出：12
-
+输入：root = [2,1,3]
+输出：[2,3,1]
 
 
+输入：root = []
+输出：[]
 
 
-# 可以直接在原数组上进行记忆，不需要额外的空间
-# so easy,直接AC
+
 class Solution:
-    def minPathSum(self, grid: List[List[int]]) -> int:
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if i == j == 0:
-                    continue
-                if i == 0:
-                    grid[i][j] += grid[i][j-1]
-                if j == 0:
-                    grid[i][j] += grid[i-1][j]
-                if i > 0 and j > 0:
-                    grid[i][j] += min(grid[i-1][j],grid[i][j-1])
-        return grid[-1][-1]
+    def invertTree(self, root: TreeNode) -> TreeNode:
+        if not root: return root
+        # 先翻转
+        left = self.invertTree(root.left)
+        right = self.invertTree(root.right)
+        # 再交换
+        root.left, root.right = right, left
+        return root
 ```
 
 
@@ -9121,26 +8938,21 @@ class Solution:
 
 
 
-##  215. <a name='SplitArrayLargestSum'></a>410. Split Array Largest Sum
 
-[花花酱](https://www.bilibili.com/video/BV14W411d7D4?spm_id_from=333.999.0.0)
+##  215. <a name='SplitArrayLargestSum'></a> splitArray
 
 ```py
 输入：nums = [7,2,5,10,8], m = 2
 输出：18
 
-
-
 答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
-
 
 
 class Solution:
     def splitArray(self, nums: List[int], bagnum: int) -> int:
         def check(bagsize: int) -> bool:
             tmpsums, bagcnt = 0, 1
-            for num in nums:
-                # 如果超出了背包的尺寸，则 bagcnt += 1
+            for num in nums: # 如果超出了背包的尺寸，则 bagcnt += 1
                 if tmpsums + num > bagsize: 
                     bagcnt += 1
                     tmpsums = num   # 清空
@@ -9177,13 +8989,7 @@ class Solution:
 
 
 
-##  77. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element
-
-[花花酱](https://www.bilibili.com/video/BV1hb411c7bF?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7pW?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Ff4y1U7Vn?spm_id_from=333.999.0.0)
+##  77. <a name='MajorityElement'></a> majorityElement
 
 
 ```py
@@ -9191,32 +8997,10 @@ class Solution:
 输出：3
 
 
-
-
-
 输入：nums = [2,2,1,1,1,2,2]
 输出：2
 
 
-
-
-
-class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        return sorted(nums)[len(nums) // 2]
-
-class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        nums.sort()
-        return nums[len(nums) // 2]
-
-
-class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        counts = collections.Counter(nums)
-        return max(counts.keys(), key=counts.get)
-
-# 投票策略，半数以上获胜
 
 class Solution:
     def majorityElement(self, nums: List[int]) -> int:
@@ -9240,73 +9024,139 @@ class Solution:
 
 
 
-##  79. <a name='-1'></a>226-翻转二叉树
 
-[哈哈哈](https://www.bilibili.com/video/BV1Sh411R7B2?spm_id_from=333.999.0.0)
 
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H73E?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1FK411p7Co?spm_id_from=333.999.0.0)
+##  22. <a name='AddStrings'></a> addStrings
 
 ```py
-输入：root = [4,2,7,1,3,6,9]
-输出：[4,7,2,9,6,3,1]
-
-
-
-
-
-输入：root = [2,1,3]
-输出：[2,3,1]
-
-
-
-
-输入：root = []
-输出：[]
-
-
-
-
-
-时间复杂度：O(N)
-
-空间复杂度：
-
-在平均情况下，二叉树的高度与节点个数为对数关系，即 O(logN)。
-
-而在最坏情况下，树形成链状，空间复杂度为  O(N)。
+输入：num1 = "456", num2 = "77"
+输出："533"
 
 class Solution:
-    def invertTree(self, root: TreeNode) -> TreeNode:
-        if not root: return root
-        # 先翻转
-        left = self.invertTree(root.left)
-        right = self.invertTree(root.right)
-        # 再交换
-        root.left, root.right = right, left
-        return root
+    def addStrings(self, num1: str, num2: str) -> str:
+        '''
+        从后往前 <--- 
+        i -= 1
+        j -= 1
+        '''
+        i, j, carry, tail = len(num1)-1, len(num2)-1, 0, 0
+        res = ''
+
+        while i >= 0 or j >= 0 or carry: # 😐 while 循环
+            val = carry
+
+            if i >= 0:
+                val += ord(num1[i]) - ord('0')
+                i -= 1
+            if j >= 0:
+                val += ord(num2[j]) - ord('0')
+                j -= 1
+
+            carry, tail = divmod(val, 10)
+            res = str(tail) + res
+
+        return res  
+
+时间复杂度：O(max(len1,len2))
+
 ```
+
+
+
+
+##  45. <a name='AddTwoNumbers'></a> addTwoNumbers
+
+* 时间复杂度:O(max(m,n))
+
+* 时间复杂度:O(1).注意返回值不计入空间复杂度。
+
+特殊情况：
+
+两个链表的长度不同。
+
+进位
 
 ```py
+
+输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+输出：[8,9,9,9,0,0,0,1]
+
+
+
 class Solution:
-    def invertTree(self, root: TreeNode) -> TreeNode:
-        if not root: return root
-        que = [root]
-        while que: # 😐 while 循环
-            node = que.pop()
-            if node.left or node.right:
-                if node.left: que.append(node.left)
-                if node.right: que.append(node.right)
-                node.left, node.right = node.right, node.left
-        return root
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummy = cur = ListNode(0) # 易错点：定义一个dummy和一个pointer，都指向ListNode(0)
+        carry = 0 # 易错点：carry需要先赋值
+        '''
+        not 从后往前 <--- 
+        l1 = l1.next if l1 else None
+        l2 = l2.next if l2 else None
+        '''
+
+        while l1 or l2 or carry: # 易错点：carry要存在 # 😁 while 循环
+            # 易错点：l1,l2不一定存在，所以不能写成：sumNode = l1 + l2
+            # 易错点：调用listnode要有.val
+            sumNode = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            carry, tail = divmod(sumNode,10) 
+
+            cur.next = ListNode(tail)
+            cur = cur.next
+            l1 = l1.next if l1 else None # # l1,l2不一定存在，所以不能写成：l1 = l1.next
+            l2 = l2.next if l2 else None
+        return dummy.next
 ```
 
-##  80. <a name='CompareVersionNumbers'></a>165. Compare Version Numbers
 
-[小梦想家](https://www.bilibili.com/video/BV19K4y1C7L3?spm_id_from=333.999.0.0)
+##  154. <a name='AddTwoNumbersII'></a> addTwoNumbers
 
-[小明](https://www.bilibili.com/video/BV1Pk4y117dF?spm_id_from=333.999.0.0)
+```py
+输入：l1 = [7,2,4,3], l2 = [5,6,4]
+输出：[7,8,0,7]
+
+
+时间复杂度： O(max(m,n))，其中 m 和 n 分别为两个链表的长度。
+
+我们需要遍历两个链表的全部位置，而处理每个位置只需要 O(1) 的时间。
+
+空间复杂度： O(m+n)，其中 m 和 n 分别为两个链表的长度。
+
+空间复杂度主要取决于我们把链表内容放入栈中所用的空间。
+ 
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        '''
+        对比上一题，这里使用了stack
+        '''
+        stack1, stack2 = [], []
+        while l1: # 😐 while 循环
+            stack1.append(l1.val)
+            l1 = l1.next
+        while l2: # 😐 while 循环
+            stack2.append(l2.val)
+            l2 = l2.next
+        res = None
+        carry = 0
+        '''
+        not 从后往前 <--- 
+        val1 = stack1.pop() if stack1 else 0 
+        val1 = stack1.pop() if stack1 else 0 
+        '''
+        while stack1 or stack2 or carry: # 😐 while 循环
+            val1 = stack1.pop() if stack1 else 0 
+            val2 = stack2.pop() if stack2 else 0 
+
+            sumNode = val1 + val2 + carry
+            carry, tail = divmod(sumNode,10) 
+
+            tmp = ListNode(tail)
+            tmp.next = res
+            res = tmp
+        return res
+
+```
+
+##  80. <a name='CompareVersionNumbers'></a> compareVersion
 
 ```py
 输入：version1 = "1.01", version2 = "1.001"
@@ -9315,14 +9165,10 @@ class Solution:
 解释：忽略前导零，"01" 和 "001" 都表示相同的整数 "1"
 
 
-
-
 输入：version1 = "1.0", version2 = "1.0.0"
 输出：0
 
 解释：version1 没有指定下标为 2 的修订号，即视为 "0"
-
-
 
 
 输入：version1 = "0.1", version2 = "1.1"
@@ -9332,8 +9178,6 @@ class Solution:
 version2 中下标为 0 的修订号是 "1" 。
 0 < 1，所以 version1 < version2
  
-
-
 
 
 时间复杂度： O(n+m)（或 O(max(n,m))，这是等价的），
@@ -9366,31 +9210,21 @@ class Solution:
 
 
 
-##  86. <a name='SingleNumber'></a>136 【位运算😜】Single Number
-
-[哈哈哈](https://www.bilibili.com/video/BV1g7411a7bf?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Sp4y1D7M3?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Qb411e7PU?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1pa4y1t7tr?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1iC4y1a7Hz?spm_id_from=333.999.0.0)
+##  86. <a name='SingleNumber'></a> singleNumber
 
 ```py
 输入: [2,2,1]
 输出: 1
 
 
-
 输入: [4,1,2,1,2]
 输出: 4
 
 
-
 时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历一次。
 空间复杂度： O(1)。
+
+
 
 class Solution:
     def singleNumber(self, nums):
@@ -9399,17 +9233,12 @@ class Solution:
             a = a ^ num
         return a
 
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        return reduce(lambda x, y: x ^ y, nums)
+
 ```
 
 
 
-##  88. <a name='Searcha2DMatrix'></a>240. 二维数组的查找 - 74 Search a 2D Matrix
-
-[哈哈哈](https://www.bilibili.com/video/BV1dz411i7jC?spm_id_from=333.999.0.0)
-
+##  88. <a name='Searcha2DMatrix'></a> searchMatrix
 
 ```py
 输入：matrix = 
@@ -9428,9 +9257,9 @@ target = 5
 若目标小了就左移。若目标大了就下移！
 
 
-
 时间复杂度：O(m + n)
 空间复杂度：O(1)
+
 class Solution:
     def searchMatrix(self, matrix, target):
         # 从右上角开始找
@@ -9446,13 +9275,7 @@ class Solution:
 ```
 
 
-##  90. <a name='Longestcommonprefix'></a>14 - Longest common prefix
-
-[哈哈哈](https://www.bilibili.com/video/BV1cJ411D7qU?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Eb411i7QN?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1tV411k7GY?spm_id_from=333.999.0.0)
+##  90. <a name='Longestcommonprefix'></a> longestCommonPrefix
 
 * 时间复杂度: O(mn), m 是字符串最短长度, n 是字符串数量
 
@@ -9483,23 +9306,7 @@ class Solution:
 ```
 
 
-##  91. <a name='LargestNumber'></a>179 Largest Number
-
-[小明](https://www.bilibili.com/video/BV1mV411m7aN?spm_id_from=333.999.0.0)
-
-```py
-# from functools import cmp_to_key
-# class Solution(object):
-#     def largestNumber(self, nums):
-#         # 第一步：定义比较函数，把最大的放左边
-#         # 第二步：排序
-#         # 第三步：返回结果
-#         def compare(a, b):
-#             return int(b + a) - int(a + b)
-#         nums = sorted([str(x) for x in nums], key = cmp_to_key(compare))
-#         # nums = sorted(map(str, nums), key = cmp_to_key(compare))
-#         return str(int(''.join(nums)))
-```
+##  91. <a name='LargestNumber'></a> largestNumber
 
 ```py
 输入：nums = [3,30,34,5,9]
@@ -9507,6 +9314,8 @@ class Solution:
 
 时间复杂度： O(nlogn + n^2)
 空间复杂度： O(logn)，排序需要  O(logn) 的栈空间。
+
+
 class Solution:
     def largestNumber(self, nums: List[int]) -> str:
         # 按照字典序由大到小排序
@@ -9525,20 +9334,13 @@ class Solution:
 
 
 
-##  96. <a name='DecodeString'></a>394 Decode String
-
-[小明](https://www.bilibili.com/video/BV145411V75E?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1GZ4y1p7pE?spm_id_from=333.999.0.0)
+##  96. <a name='DecodeString'></a> decodeString
 
 ```py
-示例 1：
-
 输入：s = "3[a]2[bc]"
 输出："aaabcbc"
 
 
-示例 2：
 
 输入：s = "3[a2[c]]"
 输出："accaccacc"
@@ -9575,13 +9377,7 @@ class Solution:
 
 
 
-##  99. <a name='BasicCalculatorII-224.'></a>227 Basic Calculator II - 见 224. 基本计算器
-
-[小明](https://www.bilibili.com/video/BV1Qy4y167Ax?spm_id_from=333.999.0.0)
-
-https://www.bilibili.com/video/BV1t4411c7m6?from=search&seid=14354850983862729610&spm_id_from=333.337.0.0
-
-https://www.bilibili.com/video/BV1v54y1a74b?from=search&seid=14354850983862729610&spm_id_from=333.337.0.0
+##  99. <a name='BasicCalculatorII-224.'></a> calculate
 
 ```py
 输入：s = "3+2*2"
@@ -9617,20 +9413,9 @@ class Solution:
 
 ```
 
-```py
-# 本题不含括号和符号位，所以将 '/' 替换为 '//' 就可以直接调用 eval 了。
-class Solution(object):
-    def calculate(self, s):
-        return eval(s.replace('/', '//'))
-```
 
 
-
-##  117. <a name='BasicCalculatorII'></a>224. 基本计算器 - 见 227 Basic Calculator II 两道题完全不同
-
-https://www.bilibili.com/video/BV1Nb4y1z7hG?from=search&seid=1882841343164929357&spm_id_from=333.337.0.0
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.71qtf391s5w0.png" width="40%">
+##  117. <a name='BasicCalculatorII'></a> calculate
 
 ```py
 输入：s = "1 + 1"
@@ -9673,13 +9458,6 @@ class Solution:
                     stack.pop()
         return res
 ```
-
-
-
-# 6 day (得分 = 5分) 74
-
-
-
 
 
 
@@ -11898,6 +11676,37 @@ class Solution:
                 dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
         return dp[-1][-1]
 ```
+
+##  69. <a name='MinimumPathSum64-'></a> minPathSum
+
+```py
+输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+输出：7
+
+解释：因为路径 1→3→1→1→1 的总和最小。
+
+
+输入：grid = [[1,2,3],[4,5,6]]
+输出：12
+
+
+
+
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if i == j == 0:
+                    continue
+                if i == 0:
+                    grid[i][j] += grid[i][j-1]
+                if j == 0:
+                    grid[i][j] += grid[i-1][j]
+                if i > 0 and j > 0:
+                    grid[i][j] += min(grid[i-1][j],grid[i][j-1])
+        return grid[-1][-1]
+```
+
 
 ##  190. <a name='UniquePathsII'></a> uniquePathsWithObstacles
 
