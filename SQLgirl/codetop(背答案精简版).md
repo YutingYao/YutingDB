@@ -170,70 +170,6 @@ class Solution:
 ```
 
 
-##  44. <a name='RemoveNthNodeFromEndofList'></a> removeNthFromEnd
-
-
-```py
-输入：head = [1,2,3,4,5], n = 2
-输出：[1,2,3,5]
-
-
-输入：head = [1], n = 1
-输出：[]
-
-
-输入：head = [1,2], n = 1
-输出：[1]
-
-
-class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        dummy = ListNode(0,head)
-        slow = dummy # 慢指针需要指向前一个
-        fast = head
-
-        for _ in range(n):
-            fast = fast.next
-        while fast: 
-            fast = fast.next
-            slow = slow.next
-
-        slow.next = slow.next.next
-
-        return dummy.next
-
-时间复杂度：O(L)，其中 L 是链表的长度。
-
-空间复杂度：O(1)。
-```
-
-
-
-##  40. <a name='Offer22.k'></a> getKthFromEnd
-
-```py
-
-给定一个链表: 1->2->3->4->5, 和 k = 2.
-
-返回链表 4->5.
-
-class Solution:
-    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
-        # 上一问用 dummy
-        slow, fast = head, head
-        for i in range(k):
-            fast = fast.next
-        while fast: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next
-        return slow
-
-时间复杂度：O(N)
-
-空间复杂度：O(1)
-
-```
-
 
 ##  122. <a name='RotateList'></a> rotateRight
 
@@ -944,6 +880,49 @@ class Solution:
 空间复杂度：O(n)
 ```
 
+##  113. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
+
+[洛阳](https://www.bilibili.com/video/BV1v64y1u7AH?spm_id_from=333.999.0.0)
+
+[小明](https://www.bilibili.com/video/BV1ag4y1B78z?spm_id_from=333.999.0.0)
+
+```py
+
+输入: head = [1,2,3,4,5]
+输出: [1,3,5,2,4]
+
+
+输入: head = [2,1,3,5,6,4,7]
+输出: [2,3,6,7,1,5,4]
+
+
+时间复杂度： O(n)。
+空间复杂度： O(1)
+
+
+
+class Solution(object):
+    def oddEvenList(self, head):
+        if not head or not head.next:      
+            return head
+        # odd 和 even 都是移动指针
+        # evenHead 是固定的
+    
+        slow  = head
+        fast = headnxt = head.next
+        # 当 2 和 3 存在
+        while fast and fast.next: # 😐😐 while 循环
+            # 1 -> 2的后面
+            slow.next = fast.next
+            # 1 变成 3
+            slow = slow.next
+            # 2 -> 3的后面
+            fast.next = slow.next 
+            # 2 变成 4
+            fast = fast.next
+        slow.next = headnxt # 先奇数，后偶数
+        return head 
+```
 
 ##  219. <a name='8.'></a>补充题8. 计算数组的小和
 
@@ -1221,103 +1200,6 @@ class Solution:
 
 
 
-##  4. <a name='Kadd'></a> findKthLargest
-
-```py
-输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
-输出: 4
-[3]
-[2, 3]
-[2, 3, 3]
-[1, 2, 3, 3]
-[2, 2, 3, 3]
-[2, 3, 3, 4]
-[3, 3, 5, 4]
-[3, 4, 5, 5]
-[4, 5, 5, 6]
-
-
-输入: [3,2,1,5,6,4] 和 k = 2
-[3]
-[2, 3]
-[2, 3]
-[3, 5]
-[5, 6]
-[5, 6]
-```
-
-```py
-最小堆：时间复杂度就是nlogk
-if len(q) > k: 用于限制 q 的宽度
-            q:  q 里面 过滤掉了 太小的数
-
-
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        q = []
-        for num in nums:
-            heapq.heappush(q, num) # n * log(k + 1)
-            if len(q) > k: heapq.heappop(q)   # n * log(k)
-        return heapq.heappop(q)
-
-
-时间复杂度： O((NlogK)) 
-空间复杂度： O(K) 
-```
-
-
-
-##  115. <a name='Offer40.k'></a> getLeastNumbers
-
-```py
-输入：arr = [3,2,1], k = 2
-输出：[1,2] 或者 [2,1]
-hp：
-[-3, -2]
-[-2, -1]
-用 heapq 过滤掉较大值
-
-class Solution:
-    def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
-        q = []
-        for num in arr:
-            heapq.heappush(q, -num) # n * log(k + 1)
-            if len(q) > k: heapq.heappop(q)   # n * log(k)
-        return [-x for x in q]
-
-时间复杂度： O((NlogK)) 
-空间复杂度： O(K) 
-```
-
-##  165. <a name='TopKFrequentElements'></a> topKFrequent
-
-```py
-输入: nums = [1,1,1,2,2,3], k = 2
-输出: [1,2]
-
-hp 为：
-[(3, 1)]
-[(2, 2), (3, 1)]
-[(2, 2), (3, 1)]
-
-
-过滤较小值
-import heapq
-class Solution:
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        dic = collections.defaultdict(int)
-        for num in nums:
-            dic[num] += 1
-        hp = [] # 小顶堆
-        for key, freq in dic.items():
-            heapq.heappush(hp, (freq, key))
-            if len(hp) > k: heapq.heappop(hp)
-        return [x[1] for x in hp]
-
-时间复杂度： O((NlogK)) 
-空间复杂度： O(K) 
-```
-
 ##  104. <a name='MoveZeros'></a> moveZeroes
 
 ```py
@@ -1456,41 +1338,6 @@ class Solution:
 ```
 
 
-
-
-##  232. <a name='K-1'></a> kthSmallest
-
-[哈哈哈](https://www.bilibili.com/video/BV1mT4y1w7u2?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1Zy4y127qr?spm_id_from=333.999.0.0)
-
-```py
-输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
-输出：13
-
-
-解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15], 第 8 小元素是 13
-```
-
-```py
-时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
-
-空间复杂度：O(n)，堆的大小始终为 n。
-
-class Solution:
-    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
-        n = len(matrix)
-        pq = [(matrix[i][0], i, 0) for i in range(n)] # 每行的 第一个元素
-        heapq.heapify(pq)
-
-        for _ in range(k - 1): # 这里 pop k - 1 次
-            num, i, j = heapq.heappop(pq)
-            if j != n - 1:
-                heapq.heappush(pq, (matrix[i][j + 1], i, j + 1)) # 每行的 下一个元素
-        
-        return heapq.heappop(pq)[0] # 这里  pop  1 次
-
-```
 
 
 
@@ -4100,123 +3947,10 @@ class Solution:
 
 
 
-##  55. <a name='LongestCommonSubsequence'></a>1143 【二维动态🚀规划】Longest Common Subsequence
-
-####  55.1. <a name='516'></a>类似题目：516最长回文🌈子序列
-
-[小明](https://www.bilibili.com/video/BV19Z4y1W7Xi?spm_id_from=333.999.0.0)
-
-```py
-输入：text1 = "abcde", text2 = "ace" 
-输出：3  
-
-解释：最长公共子序列是 "ace" ，它的长度为 3 。
-
-         a   b   c   d   e
-         0   0   0   0   0
-  a  0   1   1   1   1   1
-  c  0   1   1   2   2   2
-  e  0   1   1   2   2   3
-
-
-
-* 时间复杂度: O(n2)
-* 空间复杂度: O(n2)
-
-
-
-class Solution:
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        dp = [[0] * (len(text2) + 1) for _ in range(len(text1) + 1)]
-        for i in range(1, len(text1) + 1): 
-            for j in range(1, len(text2) + 1): 
-                """
-                如果相等的话，同时删t1和t2 + 1 
-                """
-                if text1[i - 1] == text2[j - 1]: 
-                    dp[i][j] = dp[i - 1][j - 1] + 1 
-                """
-                如果 not 相等的话，继承 max(x,x)， 因为可以不连续
-                """
-                else: 
-                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
-        return dp[-1][-1]
-
-```
 
 
 
 
-##  70. <a name='-1'></a>718. 最长重复子数组
-
-```py
-输入：nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
-
-输出：3
-
-
-解释：长度最长的公共子数组是 [3,2,1] 。
-
-
-      3 2 1 4 7
-      0 0 0 0 0 
-
-1 0   0 0 1 0 0
-2 0   0 1 0 0 0
-3 0   1 0 0 0 0
-2 0   0 2 0 0 0
-1 0   0 0 3 0 0
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-class Solution:
-    def findLength(self, A: List[int], B: List[int]) -> int:
-        dp = [[0] * (len(B)+1) for _ in range(len(A)+1)]
-        result = 0
-        for i in range(1, len(A)+1):
-            for j in range(1, len(B)+1):
-                """
-                如果相等的话， 同时删t1和t2 + 1
-                """
-                if A[i-1] == B[j-1]:
-                    dp[i][j] = dp[i-1][j-1] + 1
-                """
-                如果 not 相等的话， 不能继承，因为与连续
-                """
-                result = max(result, dp[i][j])
-        return result
-
-
-
-这个方法时间复杂度讲不清楚了
-# 这个滑动窗口，用的是 left 和 lenth
-# * 时间复杂度: O(min(N,M))
-# * 空间复杂度: O(1)
-# class Solution:
-#     def findLength(self, nums1: List[int], nums2: List[int]) -> int:
-#         '''
-#         0 <= nums1[i], nums2[i] <= 100
-#         所以用chr，把数字转换成字符串
-#         '''
-
-#         length = left = 0
-#         if nums1 and nums2:
-#             # 将数字转换为字符串
-#             a, b = ''.join(map(chr, nums1)), ''.join(map(chr, nums2))
-#             n = len(nums1)
-#             while length + left < n: # 😐😐😐 while 循环
-#                 # 这里使用lenth保存结果，用left跳出循环
-#                 if a[left : left + length + 1] in b:
-#                     length += 1
-#                 else:
-#                     left += 1
-#         return length 
-```
 
 ##  84. <a name='LongestConsecutiveSequence'></a>128. 【🍒并查集】Longest Consecutive Sequence
 
@@ -4274,600 +4008,15 @@ class Solution:
 
 
 
-##  47. <a name='EditDistance72-'></a>72. Edit Distance 72-编辑距离
 
-[花花酱](https://www.bilibili.com/video/BV1cb411u7uX?spm_id_from=333.999.0.0)
 
-[哈哈哈](https://www.bilibili.com/video/BV1wv411P7aQ?spm_id_from=333.999.0.0)
 
-[小明](https://www.bilibili.com/video/BV13Z4y1W7UB?spm_id_from=333.999.0.0)
 
-[官方](https://www.bilibili.com/video/BV1ea4y147FK?spm_id_from=333.999.0.0)
 
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5kci5ryyi3k0.png)
 
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.7fq2ehol7rg0.png)
 
-```py
-输入：word1 = "intention", word2 = "execution"
-输出：5
 
 
-解释：
-intention -> inention (删除 't')
-inention  -> enention (将 'i' 替换为 'e')
-enention  -> exention (将 'n' 替换为 'x')
-exention  -> exection (将 'n' 替换为 'c')
-exection  -> execution (插入 'u')
-
-
-
- 
-         i   n   t   e   n   t   i   o   n
-     0   1   2   3   4   5   6   7   8   9
- e   1   1   n   t   3   n   t   i   o   n
- x   2   i   n   t   e   n   t   i   o   n
- e   3   i   n   t   e   n   t   i   o   n
- c   4   i   n   t   e   n   t   i   o   n
- u   5   i   n   t   e   n   t   i   o   n
- t   6   i   n   t   e   n   t   i   o   n
- i   7   i   n   t   e   n   t   i   o   n
- o   8   i   n   t   e   n   t   i   o   n
- n   9   i   n   t   e   n   t   i   o   n
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        len1 = len(word1)
-        len2 = len(word2)
-
-        DP = [[0 for _ in range(len2 + 1)] for _ in range(len1 + 1)]
-        
-        for i in range(0, len1 + 1):
-            for j in range(0, len2 + 1):
-                """
-                l1 和 l2 都能删干净
-                """
-                if i == 0:               # 初始化
-                    DP[i][j] = j
-                elif j == 0:             # 初始化
-                    DP[i][j] = i
-                """
-                如果相等的话，可以直接从 左上角 “继承”
-                """
-                elif word1[i - 1] == word2[j - 1]:
-                    DP[i][j] = DP[i - 1][j - 1]
-                """
-                如果 not 相等的话，一步操作min(x,x,x) + 计数
-                """
-                else:
-                    DP[i][j] = min(DP[i - 1][j], DP[i][j - 1], DP[i - 1][j - 1]) + 1
-                    
-        return DP[-1][-1]
-```
-
-
-
-##  278. <a name='DistinctSubsequences'></a>115. 【动态🚀规划】Distinct Subsequences
-
-[花花酱](https://www.bilibili.com/video/BV1EW411d7PC?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV185411G7F6?spm_id_from=333.999.0.0)
-
-```py
-字符串的一个 子序列 是指，通过 `删除` 一些（也可以 `不删除`）
-字符且不干扰剩余字符相对位置所组成的新字符串。
-
-输入：s = "rabbbit", t = "rabbit"
-
-ra-bbit
-rab-bit
-rabb-it
-
-
-输出：3
-
-
-输入：s = "babgbag", t = "bag"
-输出：5
-ba-g---
-ba----g
-b----ag
---b--ag
-----bag
-
-              b    a    b    g    b    a    g  【si】
-         -    1    1    1    1    1    1    1
-     b   0   [1]   1   [2]   2   [3]   3    3
-     a   0    0   [1]   1    1    1   [4]   4
-     g   0    0    0    0   [1]   1    1   [5]
-   【ti】
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-class Solution:
-    def numDistinct(self, s: str, t: str) -> int:
-        sN = len(s)
-        tN = len(t)
-        dp = [[0] * (tN + 1) for _ in range(sN + 1)]
-
-        for si in range(sN + 1):
-            for ti in range(tN + 1):
-                """
-                只有s能删，t不能删
-                """
-                if ti == 0:  
-                    dp[si][ti] = 1
-                elif si == 0:  
-                    dp[si][ti] = 0
-                """
-                如果相等的话：只删 s + st 同时删除
-                """
-                elif s[i - 1] == t[j - 1]:
-                    dp[si][ti] = dp[si - 1][ti - 1] + dp[si - 1][ti]
-                """
-                如果 not 相等的话：只删 s
-                """
-                else:
-                    dp[si][ti] = dp[si - 1][ti]
-        return dp[-1][-1]
-```
-
-##  150. <a name='-1'></a>10. 正则表达式匹配
-
-https://leetcode-cn.com/problems/regular-expression-matching/solution/
-
-```py
-输入：s = "aa", p = "a"
-输出：false
-
-
-解释："a" 无法匹配 "aa" 整个字符串。
-
-        """
-        思路：动态规划， 定义二维dp数组，其中dp[i][j]表示s的前i个字符和p的前j个字符是否匹配，
-        为了方便初始化，我们将s和p的长度均+1
-        考虑到P中可能出现三种字符：普通字母(a-z)、'*'或者是'.', 则其动态转移方程分别是：
-        1) 如果p[j]为普通字母，dp[i][j]==dp[i-1][j-1] and s[i]==p[j]
-        2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
-        3) 
-        """
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
-        # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
-        s = " " + s
-        p = " " + p
-        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
-        dp[0][0] = True  # 假定s和p都从空字符开始
-        
-        for si in range(len(s)):  # s的空字符需要额外初始化
-            for pi in range(1, len(p)):
-        '''
-        如果 p[j] 为 '*', 则情况比较复杂, 分以下两种情况讨论：
-           A. 以 s="c", p="ca*" 为例，此时 '*' 匹配0次，dp[si][pi] = dp[si][pi-2]
-           B. 以 s="caa", p="ca*", p="c.*" 为例，此时 '*' 匹配多次
-        '''
-                if p[pi] == '*' and dp[si][pi-2]:   # *可以出现0次或者多次
-                    dp[si][pi] = dp[si][pi-2]
-                elif p[pi] == '*' and p[pi-1] in ('.', s[si]):
-                    dp[si][pi] = dp[si-1][pi]
-                elif p[pi] in ('.', s[si]):
-                    dp[si][pi] = dp[si-1][pi-1]
-        return dp[-1][-1]
-
-
-```
-
-
-
-
-##  216. <a name='-1'></a>44. 通配符匹配
-
-```py
-输入:
-s = "aa"
-p = "a"
-输出: false
-
-解释: "a" 无法匹配 "aa" 整个字符串。
-
-
-
-
-输入:
-s = "aa"
-p = "*"
-输出: true
-
-解释: '*' 可以匹配任意字符串。
-
-
-
-
-
-输入:
-s = "cb"
-p = "?a"
-输出: false
-
-解释: '?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。
-
-
-
-
-
-输入:
-s = "adceb"
-p = "*a*b"
-输出: true
-
-解释: 第一个 '*' 可以匹配空字符串, 第二个 '*' 可以匹配字符串 "dce".
-
-
-
-
-
-输入:
-s = "acdcb"
-p = "a*c?b"
-
-输出: false
-
-
-
-
-
-给定一个 `字符串 (s)` 和一个 `字符模式 (p)` ，实现一个支持 '?' 和 '*' 的通配符匹配。
-
-'?' 可以匹配任何 `单个字符`。
-'*' 可以匹配 `任意字符串`（包括 `空字符串`）。
-两个字符串完全匹配才算匹配成功。
-
-
-
-说明:
-
-s 可能为空，且只包含从 `a-z` 的小写字母。
-p 可能为空，且只包含从 `a-z` 的小写字母，以及字符 ? 和 *。
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        m, n = len(s), len(p)
-
-        dp = [[False] * (n + 1) for _ in range(m + 1)]
-
-        dp[0][0] = True # dp[0][0]:什么都没有,所以为true
-        for pi in range(1, n + 1):
-            if p[pi - 1] == '*': 
-                dp[0][pi] = True
-            else:
-                break
-        # 也可以这么写
-        # for j in range(1, n + 1):
-        #     if p[j - 1] == "*":
-        #         dp[0][j] = dp[0][j - 1]
-        
-        for si in range(1, m + 1):
-            for pi in range(1, n + 1):
-                if p[pi - 1] == '*': # 如果p[j] == "*" && (dp[i-1][j] = true || dp[i][j-1] = true) 有dp[i][j] = true
-                    dp[si][pi] = dp[si][pi - 1] | dp[si - 1][pi] 
-                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
-                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
-                elif p[pi - 1] in ('?', s[si - 1]): # 如果(s[i] == p[j] || p[j] == "?") && dp[i-1][j-1] ,有dp[i][j] = true
-                    dp[si][pi] = dp[si - 1][pi - 1]
-                
-        return dp[m][n]
-
-```
-
-
-
-
-##  83. <a name='-1'></a>62-不同路径
-
-[哈哈哈](https://www.bilibili.com/video/BV1mC4y1W7Je?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1Sg4y1v7PM?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1cp4y167qx?spm_id_from=333.999.0.0)
-
-二维动态规划：
-
-时间复杂度：O(mn)
-
-空间复杂度：O(mn)
-
-```py
-输入：m = 3, n = 7
-输出：28
-
-
-
-
-输入：m = 3, n = 2
-输出：3
-
-解释：
-从左上角开始，总共有 3 条路径可以到达右下角。
-1. 向右 -> 向下 -> 向下
-2. 向下 -> 向下 -> 向右
-3. 向下 -> 向右 -> 向下
-
-
-
-
-
-输入：m = 7, n = 3
-输出：28
-
-
-
-
-
-输入：m = 3, n = 3
-输出：6
-
-
-
-
-
-class Solution:
-    def uniquePaths(self, m: int, n: int) -> int:
-        # 易错点：dp千万不要写错
-        # 其他写法：dp = [[1 for i in range(n)] for j in range(m)]
-        # 其他写法：dp = [[1]*n]*m
-        dp = [[1] * n] + [[1] + [0] * (n - 1) for _ in range(m - 1)]
-        for i in range(1, m): # 这里从 1 开始
-            for j in range(1, n): # 这里从 1 开始
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-        return dp[-1][-1]
-```
-
-一维动态规划：
-
-时间复杂度：O(mn)
-
-空间复杂度：O(n)
-
-
-
-##  190. <a name='UniquePathsII'></a>63 Unique Paths II
-
-[小明](https://www.bilibili.com/video/BV1Sv411L7qe?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Pp4y1v7KR?spm_id_from=333.999.0.0)
-
-```py
-输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
-输出：2
-
-
-解释：3x3 网格的正中间有一个障碍物。
-从左上角到右下角一共有 2 条不同的路径：
-1. 向右 -> 向右 -> 向下 -> 向下
-2. 向下 -> 向下 -> 向右 -> 向右
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-class Solution:
-    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
-        m = len(obstacleGrid)
-        n = len(obstacleGrid[0])
-        # 易错点：注意边界上也可能有obstacle
-        # 易错点：dp = [[0]*(n+1)]*(m+1)这些写法是错误的
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        # 易错点：dp[1][1] = 1,这个数字会被重新计算，所以应该写成：
-        dp[0][1] = 1
-        # 构建了一个大一圈的矩阵，但实际计算的时候，仍然是mn的大小
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if not obstacleGrid[i - 1][j - 1]:
-                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-        print(dp)
-        return dp[-1][-1]
-```
-
-
-
-##  89. <a name='-1'></a>221-【动态🚀规划】最大正方形
-
-[哈哈哈](https://www.bilibili.com/video/BV1XT4y137Gq?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV16K411575r?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1mA411q7Sw?spm_id_from=333.999.0.0)
-
-```py
-输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
-输出：4
-
-
-
-# 右下角的坐标为 (x, y)
-# 那么 (x - 1, y - 1) 一定需要是一个 square，
-# 并且该点的左边全为1，上边也为1，按照这个进行理解变长的增加。
-
-
-
-构建dp：
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-class Solution:
-    def maximalSquare(self, matrix):
-        m, n = len(matrix), len(matrix[0])
-        dp = [[0] * n for _ in range(m)]
-        maxEdge = 0
-        for i in range(m):
-            for j in range(n):
-                if matrix[i][j] == '1':
-                    # 当 i 和 j 等于0时，i-1 为 -1
-                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
-                    maxEdge = max(dp[i][j], res)
-        return maxEdge * maxEdge
-
-# 原地修改：
-# class Solution:
-#     def maximalSquare(self, matrix):
-#         maxEdge = 0
-#         for i in range(len(matrix)):
-#             for j in range(len(matrix[i])):
-#                 if i and j: # 这个写法妙啊，刚好就跳过了 i-1
-#                     if matrix[i][j] == "1":
-#                         matrix[i][j] = min(int(matrix[i-1][j-1]), int(matrix[i][j-1]), int(matrix[i-1][j])) + 1
-#                     else:
-#                         matrix[i][j] = 0
-#                 maxEdge = max(maxEdge, int(matrix[i][j]))
-#         return maxEdge**2       
-```
-
-
-
-##  127. <a name='2.'></a>补充题2. 圆环回原点问题
-
-```s
-圆环上有 10 个点，编号为 0 ~ 9。
-从`0点`出发，每次可以`逆时针`和`顺时针`走一步，问走`n步`回到`0点`共有多少种走法。
-
-输入: 2
-输出: 2
-
-
-解释：有 2 种方案。分别是 0->1->0 和 0->9->0
-```
-
-```py
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
-# 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
-class Solution:
-    def backToOrigin(self,n):
-        # 点的个数为 10
-        circle = 10
-        # step 在外面，site 在里面
-        dp = [[0 for site in range(circle)] for step in range(n + 1)]
-        dp[0][0] = 1
-        for step in range(1, n + 1): # 走 1 ~ n 步
-            for site in range(circle):
-                # dp[i][j] 表示从 0 出发，走 step 步到 site 的方案数
-                # ps:公式之所以`取余`是因为 site-1 或 site+1 可能会超过圆环 0~9 的范围
-                dp[step][site] = dp[step - 1][(site - 1 + circle) % circle] \
-                               + dp[step - 1][(site + 1) % circle]
-        return dp[n][0]
-```
-
-
-
-
-
-##  20. <a name='SearchinRotatedSortedArray'></a>33. Search in Rotated Sorted Array
-
-[小梦想家](https://www.bilibili.com/video/BV1gJ411V7Sq?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV14t4y127hK?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV16A41147Fp?spm_id_from=333.999.0.0)
-
-```py
-输入：nums = [4,5,6,7,0,1,2], target = 0
-输出：4
-
-
-
-
-输入：nums = [4,5,6,7,0,1,2], target = 3
-输出：-1
-
-
-
-
-输入：nums = [1], target = 0
-输出：-1
-
-
-
-
-
-# 我的模仿！啊😋
-时间复杂度： O(logn)，其中 n 为 nums 数组的大小。
-
-整个算法时间复杂度即为二分查找的时间复杂度 O(logn)。
-
-空间复杂度： O(1) 。我们只需要常数级别的空间存放变量。
- 
-
-
-class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        # 定义第一个元素和最后一个元素
-        l = 0
-        r = len(nums) - 1
-
-        while l <= r: # 😐 while 循环
-            mid = (l + r) // 2
-            '''
-            这道题 返回 mid
-            '''
-            if nums[mid] == target:
-                return mid
-            '''
-            输入：nums = [4,5,6,7,0,1,2], target = 0
-                  nums = [4,5,6]
-                  nums = [4]
-            输出：4
-            '''
-            # 只存在一个上升序列
-            if nums[l] <= nums[mid]:
-                if nums[l] <= target < nums[mid]:
-                    r = mid - 1
-                else: 
-                    l = mid + 1
-            # 只存在一个上升序列
-            else:
-                if nums[mid] < target <= nums[r]:
-                    l = mid + 1
-                else: 
-                    r = mid - 1
-        
-        return -1
-```
 
 
 # 2 day (得分 = 15分) 45
@@ -6332,58 +5481,6 @@ class Solution:
 
 
 
-##  76. <a name='CombinationSum39-'></a>39. Combination Sum 39-组合总和
-
-[花花酱](https://www.bilibili.com/video/BV1gb411u7dy?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Wz411e79d?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV12Z4y157nE?spm_id_from=333.999.0.0)
-
-```py
-输入：candidates = [2,3,6,7], target = 7
-输出：[[2,2,3],[7]]
-
-
-
-输入: candidates = [2,3,5], target = 8
-输出: [[2,2,2,2],[2,3,3],[3,5]]
-
-
-
-
-时间复杂度： O(S)，其中 S 为所有可行解的长度之和。O(n×2^n) 是一个比较松的上界.实际运行情况是远远小于这个上界的。
-
-从分析给出的搜索树我们可以看出时间复杂度取决于搜索树所有叶子节点的深度之和.
-
-即在这份代码中，n 个位置每次考虑选或者不选，如果符合条件，就加入答案的时间代价。
-
-
-
-空间复杂度： O(target)。除答案数组外，空间复杂度取决于递归的栈深度，在最差情况下需要递归 O(target) 层。
- 
-
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        res = []
-
-        def backtrack(firstIdx, path):
-            if sum(path) == target:
-                res.append(path[:]) 
-                # 易错点，这里是res.append(path[:])，而不是res.append(path)
-                return
-            if sum(path) > target:
-                return
-            if sum(path) < target:
-                for i in range(firstIdx, len(candidates)):
-                '''
-                每个数字能用 n 次, 所以 i
-                '''
-                    backtrack(i, path + [candidates[i]])
-        backtrack(0, [])
-        return res
-```
-
 
 
 ##  131. <a name='II-'></a>47 - ★ 全排列 II-剪枝版
@@ -6472,71 +5569,6 @@ class Solution:
 ```
 
 
-##  142. <a name='CombinationSumII40-II'></a>40. Combination Sum II 40-组合总和 II
-
-[花花酱](https://www.bilibili.com/video/BV1Pb411u7Yd?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1gT4y1J7JE?spm_id_from=333.999.0.0)
-
-```py
-输入: candidates = [10,1,2,7,6,1,5], target = 8,
-输出:
-[
-[1,1,6],
-[1,2,5],
-[1,7],
-[2,6]
-]
-
-
-
-
-输入: candidates = [2,5,2,1,2], target = 5,
-输出:
-[
-[1,2,2],
-[5]
-]
-
-
-
-
-时间复杂度： O(S)，其中 S 为所有可行解的长度之和。O(n×2^n) 是一个比较松的上界.实际运行情况是远远小于这个上界的。
-
-从分析给出的搜索树我们可以看出时间复杂度取决于搜索树所有叶子节点的深度之和.
-
-即在这份代码中，n 个位置每次考虑选或者不选，如果符合条件，就加入答案的时间代价。
-
-每得到一个满足要求的组合，需要 O(n) 的时间将其放入答案中，因此我们将 O(2^n) 与 O(n) 相乘，即可估算出一个宽松的时间复杂度上界。
-
-
-
-
-空间复杂度： O(n)。除了存储答案的数组外，我们需要 O(n) 的空间存储列表 freq、递归中存储当前选择的数的列表、以及递归需要的栈。
-
-class Solution:
-    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        res = []
-        candidates.sort()
-        # candidates.reverse()
-        def backtrack(firstIdx, path):
-            if sum(path) == target:
-                res.append(path[:])
-                return
-            if sum(path) > target:
-                return
-            if sum(path) < target:
-                for i in range(firstIdx, len(candidates)):
-                    # 易错点：需要剪枝
-                    if i > firstIdx and candidates[i] == candidates[i - 1]: continue
-                    # [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]会超时
-                    '''
-                    candidates 中的每个数字在每个组合中只能使用 一次, 所以 i+1
-                    '''
-                    backtrack(i + 1, path + [candidates[i]])
-        backtrack(0, [])
-        return res
-```
 
 
 ```py
@@ -6649,47 +5681,6 @@ G(n) 函数一共有 n 个值需要求解，每次求解需要 O(n) 的时间复
  
 ```
 
-##  234. <a name='-1'></a>77. 组合
-
-```py
-给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。
-
-你可以按 任何顺序 返回答案。
-
-输入：n = 4, k = 2
-
-
-输出：
-[
-  [2,4],
-  [3,4],
-  [2,3],
-  [1,2],
-  [1,3],
-  [1,4],
-]
-
-
-class Solution:
-    def combine(self, n, k):
-        res = []
-        def backtrack(StartIndex,path):
-            if len(path) == k:
-                res.append(path[:])
-                return
-            for i in range(StartIndex, n + 1):
-                '''
-                没有重复，所以 i + 1
-                '''
-                backtrack(i + 1,path + [i])
-        backtrack(1, [])
-        return res
-
-
-
-时间复杂度：O((kn的组合枚举)×k)，每次记录答案的复杂度为 O(k)
-空间复杂度：O(n + k) = O(n) 
-```
 
 
 
@@ -6880,170 +5871,8 @@ class Solution:
         return res
 ```
 
-##  28. <a name='LongestIncreasingSubsequence'></a>300 【动态🚀规划 + 二分】Longest Increasing Subsequence 最长上升子序列
-
-https://leetcode-cn.com/problems/longest-increasing-subsequence/
-
-[花花酱](https://www.bilibili.com/video/BV1Wf4y1y7ou?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1rT4y1ujV?spm_id_from=333.999.0.0)
-
-动态规划： 时间复杂度为 O(n2)
-
-```py
-输入：nums = [10,9,2,5,3,7,101,18]
-输出：4
-解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
 
 
-
-输入：nums = [0,1,0,3,2,3]
-输出：4
-
-
-
-
-输入：nums = [7,7,7,7,7,7,7]
-输出：1
-
-
-
-class Solution(object):
-    def lengthOfLIS(self, nums):
-        if not nums:
-            return 0
-
-        dp = [1 for i in range(len(nums))]
-        # [10,9,2,5,3,7,101,18]
-        # [1,1,1,1,1,1,1,1]
-        # [1,1, , , , , , ]
-        # [1,1,1, , , , , ]
-        # [1,1,1,2, , , , ]
-        # [1,1,1,2,1+1, , , ]
-        # [1,1,1,2,2,1+1或2+1或2+1, , ]
-        # [1,1,1,2,2,3,1+1或2+1或3+1, ]
-
-        for end in range(1, len(nums)): # 先确定结束，再确定开始
-            for stt in range(end):
-                if nums[end] > nums[stt]:
-                    dp[end] = max(dp[stt] + 1, dp[end])
-
-        return max(dp)
-
-
-
-时间复杂度：O(n^2) 
-
-空间复杂度：O(n) ，需要额外使用长度为 n 的 dp 数组。
-
-```
-
-
-贪心 + 二分查找
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.6wjfuj0uqvo0.webp)
-
-```py
-class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        res = []
-        for num in nums:
-            # bisect_left会把新的元素放在相等元素前面, 即原来值5的索引位置2
-            i = bisect_left(res, num)
-            if i == len(res):
-                res.append(num) # 如果新元素插入在最后面
-            else:
-                res[i] = num # 如果新元素代替旧元素
-        return len(res)
-时间复杂度：O(N logN) 
-
-空间复杂度：O(N)
-```
-
-
-
-##  198. <a name='NumberofLongestIncreasingSubse'></a>673 Number of Longest Increasing Subse
-
-[小明](https://www.bilibili.com/video/BV1gT4y1F7y3?spm_id_from=333.999.0.0)
-
-
-```py
-note：这道题返回序列个数
-
-输入: [1,3,5,4,7]
-输出: 2
-解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
-
-dp:   [1, 2, 1, 1, 1]
-cnt:  [1, 1, 1, 1, 1]
-
-dp:   [1, 2, 3, 1, 1]
-cnt:  [1, 1, 1, 1, 1]
-
-dp:   [1, 2, 3, 3, 1]
-cnt:  [1, 1, 1, 1, 1]
-
-dp:   [1, 2, 3, 3, 4]
-cnt:  [1, 1, 1, 1, 2]
-
-end,stt: 3 1 此时: 2 > 1
-end,stt: 5 1 此时: 2 > 1
-end,stt: 5 3 此时: 3 > 2
-end,stt: 4 1 此时: 2 > 1
-end,stt: 4 3 此时: 3 > 2
-end,stt: 7 1 此时: 2 > 1
-end,stt: 7 3 此时: 3 > 2
-end,stt: 7 5 此时: 4 > 3
-end,stt: 7 4 此时: 4 == 4
-
-i,j: 7 4 此时: 4 == 4
-
-
-
-
-输入: [2,2,2,2,2]
-输出: 5
-
-
-解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
-
-
-
-时间复杂度：O(N^2) 
-空间复杂度：O(N)
-
-
-
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        if n <= 1: return n
-
-        dp = [1 for _ in range(n)] # dp[i] 表示以 nums[i] 结尾的最长的子序列的长度
-        cnt = [1 for _ in range(n)]
-
-        maxCount = 0
-        for end in range(1, n):
-            for stt in range(end):
-                if nums[end] > nums[stt]:
-                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
-                        dp[end] = dp[stt] + 1
-                        cnt[end] = cnt[stt]
-                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
-                        cnt[end] += cnt[stt]
-                '''
-                输入: [2,2,2,2,2]
-                这种情况，cnt的每个1都是答案
-                '''
-                if dp[end] > maxCount:
-                    maxCount = dp[end] # 统计最长的序列的所有次数
-        res = 0
-        for end in range(n):
-            if maxCount == dp[end]: # 长度和个数一一对应
-                res += cnt[end]
-        return res
-
-```
 
 ##  29. <a name='BinarySearch'></a>704.Binary Search二分查找
 
@@ -7827,95 +6656,6 @@ class Solution:
 
 
 
-##  129. <a name='KthSmallestElementinaB-Offer54.k'></a>230 Kth Smallest Element in a B - 见 剑指 Offer 54. 二叉搜索树的第k大节点
-
-[小明](https://www.bilibili.com/video/BV1ha4y1i7dZ?spm_id_from=333.999.0.0)
-
-```py
-
-输入：root = [3,1,4,null,2], k = 1
-输出：1
-
-
-
-输入：root = [5,3,6,2,4,null,null,1], k = 3
-输出：3
-
-
-
-
-
-时间复杂度： O(H+k)，其中 H 是树的高度。
-
-在开始遍历之前，我们需要 O(H) 到达叶结点。
-当树是平衡树时，时间复杂度取得最小值 O(logN+k)
-当树是线性树（树中每个结点都只有一个子结点或没有子结点）时，时间复杂度取得最大值 O(N+k)。
-
-空间复杂度： O(H)，栈中最多需要存储 H 个元素。
-当树是`平衡树`时，空间复杂度取得`最小值` O(logN)；
-当树是`线性树`时，空间复杂度取得`最大值` O(N)O(N)。
-
-
-
-# 中序遍历
-class Solution:
-    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
-        def appendAllLeft(node):
-            while node: # 😐 while 循环
-                stack.append(node)
-                node = node.left
-
-        stack, res = [], []
-        appendAllLeft(root)
-        while stack: # 😐 while 循环 + pop + append
-            node = stack.pop()
-            k -= 1
-            if k == 0:
-                return node.val
-            appendAllLeft(node.right)
-
-
-
-
-
-kthLargest: 先右后左
-class Solution:
-    def kthLargest(self, root: TreeNode, k: int) -> int:
-        def inorder(root):
-            if root: 
-                inorder(root.right)
-                self.k -= 1
-                if self.k == 0: 
-                    self.res = root.val
-                    return
-                inorder(root.left)
-
-        self.k = k
-        inorder(root)
-        return self.res
-
-
-
-
-
-kthSmallest: 先左后右
-class Solution:
-    def kthSmallest(self, root, k: int) -> int:
-        def inorder(root):
-            if root: 
-                inorder(root.left)
-                self.k -= 1
-                if self.k == 0: 
-                    self.res = root.val
-                    return
-                inorder(root.right)
-
-        self.k = k
-        inorder(root)
-        return self.res
-```
-
-
 
 ##  33. <a name='BinaryTreePreorderTraversal'></a>144-Binary Tree Preorder Traversal
 
@@ -8337,60 +7077,6 @@ print(stack)
 
 
 
-
-
-##  37. <a name='ClimbingStairs'></a>70. Climbing Stairs （重要）
-
-https://leetcode-cn.com/problems/climbing-stairs/
-
-[5:32 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1gJ411R7X1?spm_id_from=333.999.0.0)
-
-[哈哈哈 70(重制版)](https://www.bilibili.com/video/BV1G54y197eZ?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7s9?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1DZ4y1H7k9?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ki4y1u7tn?spm_id_from=333.999.0.0)
-
-```py
-输入：n = 2
-输出：2
-解释：有两种方法可以爬到楼顶。
-1. 1 阶 + 1 阶
-2. 2 阶
-
-
-
-
-
-输入：n = 3
-输出：3
-解释：有三种方法可以爬到楼顶。
-1. 1 阶 + 1 阶 + 1 阶
-2. 1 阶 + 2 阶
-3. 2 阶 + 1 阶
-
-
-
-
-# 我的模仿
-时间复杂度：循环执行 n 次，每次花费常数的时间代价，故渐进时间复杂度为 O(n)。
-空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 O(1)。
-
- 
-class Solution:
-    def climbStairs(self, n: int) -> int:
-        dp0 = 1
-        dp1 = 1
-        for _ in range(n - 1):
-            dp1, dp0 = dp0 + dp1, dp1 # 用2个数字分别存储
-        return dp1
-```
-
-
 ##  38. <a name='BinaryTreeMaximumPathSum'></a>124. Binary Tree Maximum Path Sum
 
 [花花酱](https://www.bilibili.com/video/BV1ct411r7qw?spm_id_from=333.999.0.0)
@@ -8584,50 +7270,7 @@ class Solution:
 
 ```
 
-##  42. <a name='SqrtxHJ107'></a>69 Sqrt(x) 见 HJ107 求解立方根
 
-[花花酱](https://www.bilibili.com/video/BV1WW411C7YN?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1gJ411R7XR?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411i7TN?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1PK411s72g?spm_id_from=333.999.0.0)
-
-二分查找:
-
-时间复杂度：O(logN)
-
-空间复杂度：O(1)
-
-```py
-输入：x = 4
-输出：2
-
-
-
-
-输入：x = 8
-输出：2
-
-解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。
-
-
-
-
-class Solution:
-    def mySqrt(self, x: int) -> int:
-        l, r = 0, x
-        ans = -1
-        while l <= r: # 😐 while 循环
-            mid = (l + r) // 2
-            if mid * mid <= x: # 2 * 2 = 4
-                ans = mid # ans 必须放置在这个位置
-                l = mid + 1
-            else:
-                r = mid - 1
-        return ans
-```
 
 
 # 3 day (得分 = 10分) 55
@@ -10473,436 +9116,8 @@ class Solution:
 
 
 
-##  75. <a name='dfsCoinChange-518CoinChange'></a>322. 【动态🚀规划 + 背包 + dfs】Coin Change - 见 518 Coin Change
 
-https://leetcode-cn.com/problems/coin-change/
 
-[花花酱](https://www.bilibili.com/video/BV1SW411C7d1?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1tz4y1d7XM?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ty4y187dh?spm_id_from=333.999.0.0)
-
-```py
-输入：coins = [1, 2, 5], amount = 11
-输出：3 
-解释：11 = 5 + 5 + 1
-
-
-
-动态🚀规划
-'''
-求硬币数量
-'''
-import functools
-class Solution:
-    def coinChange(self, coins, amount):
-        dp = [10e9] * (amount + 1)
-        dp[0] = 0
-
-        for coin in coins:
-            for tar in range(coin, amount + 1):
-                # i 就是一个 target, 求出每个 target 的最小值
-                dp[tar] = min(dp[tar], dp[tar-coin] + 1)
-         # 这道题的难点在于：最后结果的输出
-        return dp[-1] if dp[-1] != 10e9 else -1
-
-
-
-时间复杂度： O(Sn)，其中 S 是金额，n 是面额数
-空间复杂度： O(S)。数组 dp 需要开长度为总金额 S 的空间。
-
-
-
-```
-
-
-
-##  236. <a name='PerfectSquares'></a>279 【动态🚀规划 + 背包】Perfect Squares
-
-[小明](https://www.bilibili.com/video/BV1r5411Y7MH?spm_id_from=333.999.0.0)
-
-```py
-'''
-求硬币数量
-'''
-输入：n = 12
-输出：3 
-解释：12 = 4 + 4 + 4
-
-输入：n = 13
-输出：2
-解释：13 = 4 + 9
-
-
-
-
-# 动态🚀规划
-        '''版本一，先遍历背包, 再遍历物品'''
-        '''版本二， 先遍历物品, 再遍历背包'''
-
-
-class Solution:
-    def numSquares(self, n: int) -> int:
-        dp = [10e5] * (n + 1)
-        dp[0] = 0
-        # 也可以 sqrt = floor(n**0.5) 
-        sqrt = ceil(n ** 0.5) 
-        for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
-            coin = i ** 2
-            for tar in range(coin, n + 1):
-                dp[tar] = min(dp[tar], dp[tar - coin] + 1) 
-        return dp[-1]
-
-
-
-
-
-时间复杂度：O(n sqrt{n}) ，其中 n 为给定的正整数。
-
-状态转移方程的时间复杂度为 O(sqrt{n}) ，共需要计算 n 个状态，因此总时间复杂度为 O(n sqrt{n}) 
-
-空间复杂度： O(n)。我们需要 O(n) 的空间保存状态。
-
-。
-```
-
-##  116. <a name='CoinChange2-322.dfsCoinChange'></a>518 Coin Change 2 - 见 322. 【动态🚀规划 + 背包 + dfs】Coin Change
-
-https://leetcode-cn.com/problems/coin-change-2/
-
-[小明](https://www.bilibili.com/video/BV1jC4y1a7YT?spm_id_from=333.999.0.0)
-
-```py
-'''
-求种类
-'''
-输入：amount = 5, coins = [1, 2, 5]
-输出：4
-
-
-
-解释：有四种方式可以凑成总金额：
-5=5
-5=2+2+1
-5=2+1+1+1
-5=1+1+1+1+1
-
-
-
-
-时间复杂度： O(amount × n) 
-空间复杂度： O(amount) 
-
-
-
-
-class Solution:
-    def change(self, amount: int, coins: List[int]) -> int:
-        # dp[i]代表金额为i的时候能凑成总金额的硬币组合数量
-        dp = [0] * (amount + 1)
-        dp[0] = 1
-        for coin in coins:
-            # 假如只有1个硬币，假如有2个硬币，假如有3个硬币~ ~ ~
-            for tar in range(coin, amount + 1):
-               dp[tar] += dp[tar - coin]
-        return dp[-1]
-```
-
-
-
-
-##  133. <a name='WordBreak'></a>139 【动态🚀规划 + 背包】Word Break
-
-[小明](https://www.bilibili.com/video/BV1p54y1k7vf?spm_id_from=333.999.0.0)
-
-```py
-输入: s = "leetcode", wordDict = ["leet", "code"]
-输出: true
-解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
-
-
-
-
-输入: s = "applepenapple", wordDict = ["apple", "pen"]
-输出: true
-解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
-     注意，你可以重复使用字典中的单词。
-
-
-
-
-
-输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
-输出: false
-
-
-
-
-
-# python 动态🚀规划
-
-# 从 i = 0 开始分析：i = 0， 遍历 j in range(1, n+1)， 
-
-# 即遍历所有以 s[0] 开头的组合，把第一个单词可能的情况全部找出来。
-
-# 此时相当于把打头的单词可能的情况全部找出来了。
-
-# 然后基于第一个单词一个单词一个单词地接上去。
-
-
-
-
-class Solution:
-    def wordBreak(self, s, wordDict):
-        n = len(s) 
-        dp = [True] + [False]*n
-
-        for end in range(1, n + 1):
-            for stt in range(end):
-                # 前提是 start 为 true, end 才为 true
-                if dp[stt] and s[stt: end] in wordDict:
-                    dp[end] = True # 说明 s[: i] 在 wordDict 中
-                    break # 优化部分：剩下的切分点 j 不用再寻找了，也可以不写，像下方一样
-        return dp[-1]
-
-
-
-
-
-时间复杂度：O(n^2)
-
-我们一共有 O(n) 个状态需要计算，每次计算需要枚举 O(n) 个分割点，
-
-哈希表判断一个字符串是否出现在给定的字符串列表需要 O(1) 的时间，因此总时间复杂度为 O(n^2) 
-
-
-
-
-空间复杂度：O(n) 
-
-```
-
-
-##  193. <a name='dfsstartIforTargetSum'></a>494. 【动态🚀规划 + 背包 + dfs(startI) 无 for 循环】Target Sum
-
-[花花酱](https://www.bilibili.com/video/BV1WW411C7Mp?spm_id_from=333.999.0.0)
-
-[花花酱 下](https://www.bilibili.com/video/BV1WW411C7Mr?spm_id_from=333.999.0.0)
-
-0 - 1 背包（二维动态规划）
-
-```py
-输入：nums = [1,1,1,1,1], target = 3
-输出：5
-
-解释：一共有 5 种方法让最终目标和为 3 。
--1 + 1 + 1 + 1 + 1 = 3
-+1 - 1 + 1 + 1 + 1 = 3
-+1 + 1 - 1 + 1 + 1 = 3
-+1 + 1 + 1 - 1 + 1 = 3
-+1 + 1 + 1 + 1 - 1 = 3
-
-
-
-
-
-输入：nums = [1], target = 1
-输出：1
-
-
-
-
-
-'''
-求种类
-'''
-
-时间复杂度： O(n × (sum − target))
-
-    sum 是数组 nums 的元素和
-    动态规划有 (n+1)×( (sum−target)/2 + 1 ) 个状态，需要计算每个状态的值
-
-空间复杂度： O(sum−target)
-
-    需要创建长度为 (sum−target)/2 + 1 的数组
-
-
-
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        # 求得新的目标
-        # 注意，需要排除掉一些特殊状况
-        # 也可以写成：bagSize = sums - target
-        n = len(nums)
-        sums = sum(nums)
-        bagSize = sums + target
-
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-        dp = [[0] * (bagSize + 1) for _ in range(n + 1)]  # 构建dp，numLen在外围
-        dp[0][0] = 1 # 赋值，dp的第一个元素
-
-        for i in range(1, n + 1):
-            num = nums[i - 1] # 易错点: num = nums[i-1]单独提出来写，不容易出错
-            for tar in range(bagSize + 1):
-                if tar - num >= 0: # 易错点: 这里必需要是>=
-                    dp[i][tar] = dp[i - 1][tar] + dp[i - 1][tar - num]
-                else:
-                    dp[i][tar] = dp[i - 1][tar]
-        return dp[-1][-1]
-
-
-
-#    [[1, 0, 0, 0, 0], 
-#     [1, 1, 0, 0, 0], 
-#     [1, 2, 1, 0, 0], 
-#     [1, 3, 3, 1, 0], 
-#     [1, 4, 6, 4, 1], 
-#     [1, 5, 10, 10, 5]]
-```
-
-0-1背包（一维动态规划）
-
-```py
-'''
-求种类，每个coin只能用1次
-'''
-
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        n = len(nums)
-        # 求得新的目标
-        sums = sum(nums)
-        # 注意，需要排除掉一些特殊状况
-        bagSize = sums + target
-        # 也可以写成：bagSize = sums - target
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-        # 构建dp，numLen在外围
-        dp = [0] * (bagSize+1)
-        # 赋值，dp的第一个元素
-        dp[0] = 1
-        for coin in nums:
-            for tar in range(bagSize, coin - 1, -1):
-                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        # 含义就是：
-        # 对于1个num，bagsize的填满情况
-        # 对弈2个num，bagsize的填满情况
-        return dp[-1]
-
-
-
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 1, 0, 0, 0]
---------------------
-数字： 1 dp: [1, 1, 0, 0, 0]
-数字： 1 dp: [1, 1, 0, 0, 0]
-数字： 1 dp: [1, 1, 1, 0, 0]
-数字： 1 dp: [1, 2, 1, 0, 0]
---------------------
-数字： 1 dp: [1, 2, 1, 0, 0]
-数字： 1 dp: [1, 2, 1, 1, 0]
-数字： 1 dp: [1, 2, 3, 1, 0]
-数字： 1 dp: [1, 3, 3, 1, 0]
---------------------
-数字： 1 dp: [1, 3, 3, 1, 1]
-数字： 1 dp: [1, 3, 3, 4, 1]
-数字： 1 dp: [1, 3, 6, 4, 1]
-数字： 1 dp: [1, 4, 6, 4, 1]
---------------------
-数字： 1 dp: [1, 4, 6, 4, 5]
-数字： 1 dp: [1, 4, 6, 10, 5]
-数字： 1 dp: [1, 4, 10, 10, 5]
-数字： 1 dp: [1, 5, 10, 10, 5]
---------------------
-
-
-
-# class Solution:
-#     def findTargetSumWays(self, nums: List[int], target) -> int:
-#         n = len(nums)
-#         sums = sum(nums)
-#         bagSize = sums + target
-#         if bagSize % 2 == 1 or bagSize < 0:
-#             return 0
-#         bagSize = bagSize // 2
-
-#         @cache
-#         def dfs(startI,total):
-#             # 如果要写递归，那么这个递归的结束条件一定要背出来
-#             if startI == len(nums):
-#                 return 1 if total == 0 else 0
-#             # 如果要写递归，那么这个递归的结束条件一定要背出来
-#             return dfs(startI + 1, total - nums[startI]) + dfs(startI + 1, total)
-
-#         return dfs(0, bagSize)
-
-```
-
-```py
-# 思路
-
-# 每个数，只有取正、取负数，这两种处理。因此可以做深度优先遍历，为了避免重复计算，加上记忆法。
-
-# DFS 到 nums[i] 时，取正数，则要求后面的数，处理后的 next_target = current_target - nums[i];
-# 取负数的处理同上，后续要处理的 next_target = current_target + nums[i]；
-# 用 python 语法糖简单演示下：
-
-# class Solution:
-#     def findTargetSumWays(self, nums: List[int], target) -> int:
-#         # @lru_cache(None)
-#         def dfs(startIdx, sum) -> int:
-#             if startIdx == len(nums):
-#                 return 1 if sum == 0 else 0
-#             return dfs(startIdx + 1, sum - nums[startIdx]) + dfs(startIdx + 1, sum + nums[startIdx])
-
-#         return dfs(0, target)
-
-# @lru_cache(None) 好神奇，瞬间提高效率
-# 如果不用@lru_cache(None)，用这种方式会超时，Java的就不会啊
-# 同样的解法，Java 不超时是因为 Java 运行速度比 Python 快得多。
-# 而 Python 如果不用 lru_cache 或者显式的记忆数组存储 dfs 的结果，
-# 大量重复计算会导致超时，因为 Python 运行速度慢
-
-
-
-# DFS
-输入：nums = [1,1,1,1,1], target = 3
-输出：5
-解释：一共有 5 种方法让最终目标和为 3 。
--1 + 1 + 1 + 1 + 1 = 3
-+1 - 1 + 1 + 1 + 1 = 3
-+1 + 1 - 1 + 1 + 1 = 3
-+1 + 1 + 1 - 1 + 1 = 3
-+1 + 1 + 1 + 1 - 1 = 3
-
-
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        def dfs(startIdx, sum):
-            if startIdx == len(nums):
-                return 1 if sum == 0 else 0
-            res = 0
-            res += dfs(startIdx + 1, sum - nums[startIdx])
-            res += dfs(startIdx + 1, sum + nums[startIdx])
-            return res
-        return dfs(0, target)
-
-时间复杂度：O(2^n) 回溯需要遍历所有不同的表达式，共有 2^n 种不同的表达式，
-
-每种表达式计算结果需要 O(1) 的时间 
-
-空间复杂度： O(n) 。空间复杂度主要取决于递归调用的栈空间，栈的深度不超过 n。
- 
-```
 
 
 
@@ -10960,67 +9175,7 @@ class Solution:
 ```
 
 
-##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a>416. 【动态🚀规划 + 背包 + dfs(startI)无for循环】Partition Equal Subset Sum
 
-####  265.1. <a name='494'></a>相似题目：494题
-
-[花花酱](https://www.bilibili.com/video/BV1AW411y7So?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1DD4y1X7Cp?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1oZ4y1G7QY?spm_id_from=333.999.0.0)
-
-“动态🚀规划” 的解法
-
-```py
-
-根据494题修改的动态规划：
-
-
-输入：nums = [1,5,11,5]
-输出：true
-
-
-
-解释：数组可以分割成 [1, 5, 5] 和 [11] 。
-
-
-'''
-求数量，每个coin只能用1次
-'''
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        n = len(nums)
-        
-        sums = sum(nums) 
-        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
-        bagSize = sums // 2 # 求得新的目标
-        
-        dp = [0] * (bagSize+1) # 构建dp，numLen在外围
-        dp[0] = 1 # 赋值，dp的第一个元素
-        
-        for coin in nums:
-            for tar in range(bagSize, coin - 1, -1):
-                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        # 含义就是：
-        # 对于1个num，bagsize的填满情况
-        # 对于2个num，bagsize的填满情况
-        return dp[-1] != 0
-
-
-
-
-时间复杂度： O(n × target)，其中 n 是数组的长度， target 是整个数组的元素和的一半。
-
-需要计算出所有的状态，每个状态在进行转移时的时间复杂度为 O(1)。
-
-空间复杂度： O(target)，其中 target 是整个数组的元素和的一半。
-
-空间复杂度取决于 dp 数组，在不进行空间优化的情况下，空间复杂度是 O(n × target)，
-
-在进行空间优化的情况下，空间复杂度可以降到 O(target)。
-
-```
 
 ##  77. <a name='MajorityElement'></a>169. 【位运算😜】Majority Element
 
@@ -11207,254 +9362,7 @@ class Solution:
         return 0
 ```
 
-##  81. <a name='offer53'></a>34-在排序数组中查找元素的第一个 - 类似剑指offer53
 
-https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/
-
-[哈哈哈](https://www.bilibili.com/video/BV1Zv411y71t?spm_id_from=333.999.0.0)
-
-[图灵](https://www.bilibili.com/video/BV1GU4y1j7dq?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1ef4y1v7Vz?spm_id_from=333.999.0.0)
-
-```py
-输入：nums = [5,7,7,8,8,10], target = 8
-输出：[3,4]
-
-
-
-输入：nums = [5,7,7,8,8,10], target = 6
-输出：[-1,-1]
-
-
-
-输入：nums = [], target = 0
-输出：[-1,-1]
-
-
-
-
-
-# Python 二分法
-时间复杂度：  O(logn) ，其中 n 为数组的长度。 一共会执行两次，因此总时间复杂度为 O(logn)。
-
-空间复杂度： O(1) 。只需要常数空间存放若干变量。
- 
-
-
-class Solution:
-    def searchRange(self, nums, target):
-        left = 0
-        right = len(nums)-1
-        res = [0,0]
-        if target not in nums:
-            return [-1,-1]
-
-        # 寻找左侧边界
-        while left <= right: # 😐 while 循环
-            mid = (right + left) // 2
-            if nums[mid] >= target:
-                right = mid - 1 # 结束条件, 因为保留 left，所以移动 right
-            elif nums[mid] < target:
-                left = mid + 1
-        res[0] = left
-
-        # 寻找右侧边界
-        right = len(nums)-1 # 只移动 right 端点
-        while left <= right: # 😐 while 循环
-            mid = (right + left) // 2
-            if nums[mid] <= target:
-                left = mid + 1 # 结束条件, 因为保留 right，所以移动 left
-            elif nums[mid] > target:
-                right = mid - 1
-        res[1] = right
-
-        return res
-```
-
-
-
- # 5 day (得分 = 6分) 69
-
-
-##  87. <a name='FindPeakElement'></a>162. Find Peak Element
-
-[小梦想家](https://www.bilibili.com/video/BV1Rb411n7dT?spm_id_from=333.999.0.0)
-
-```py
-
-输入：nums = [1,2,1,3,5,6,4]
-输出：1 或 5 
-
-解释：你的函数可以返回索引 1，其峰值元素为 2；
-     或者返回索引 5， 其峰值元素为 6。
-
-
-时间复杂度： O(logn)，其中 n 是数组 nums 的长度。
-空间复杂度： O(1)。
-
-
-class Solution:
-    def findPeakElement(self, nums: List[int]) -> int:
-        l, r = 0, len(nums) - 1 
-        res = 0
-        while l < r: # 😐😐 while 循环
-            mid = (l + r) // 2
-            '''
-            找到最大值，不能写成 while l <= r
-            '''
-            if nums[mid] < nums[mid + 1]:
-                res =  mid + 1
-                l = mid + 1
-            else:
-                r = mid
-        return res
-# [1,2,1,3,5,6,4]
-# 3 < 5, 向右移动，left 指向 5，right 指向 4，想较大值方向移动
-# 6 > 4, 向左移动，left 指向 5，right 指向 6 
-# 5 < 6, 向右移动，left 指向 6，right 指向 6 
-```
-
-##  180. <a name='FindinMountainArray'></a>1095. Find in Mountain Array
-
-[花花酱](https://www.bilibili.com/video/BV1m5411V7x7?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1GK4115778?spm_id_from=333.999.0.0)
-
-```py
-输入：array = [1,2,3,4,5,3,1], target = 3
-输出：2
-
-解释：3 在数组中出现了两次，下标分别为 2 和 5，我们返回最小的下标 2。
-
-
-
-
-输入：array = [0,1,2,4,2,1], target = 3
-输出：-1
-
-解释：3 在数组中没有出现，返回 -1。
-
-
-
-
-
-注意：这里用
-MountainArray.get(k) - 会返回数组中索引为k 的元素（下标从 0 开始）
-MountainArray.length() - 会返回该数组的长度
-
-"""
-This is MountainArray's API interface.
-You should not implement it, or speculate about its implementation
-"""
-class MountainArray:
-   def get(self, index: int) -> int:
-   def length(self) -> int:
-
-class Solution:
-    def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
-        l, r = 0, mountain_arr.length() - 1
-        '''
-        找到山峰
-        '''
-        while l < r: # 😐😐 while 循环
-            mid = (l + r) // 2
-            if mountain_arr.get(mid) < mountain_arr.get(mid + 1):
-                l = mid + 1
-                peak = l
-            else:
-                r = mid
-        
-        '''
-        找到左侧
-        '''
-        l, r = 0, peak
-        while l <= r: # 😐 while 循环
-            mid = (l + r) // 2
-            cur = mountain_arr.get(mid)
-            if cur == target:
-                return mid
-            elif cur < target:
-                l = mid + 1
-            else:
-                r = mid - 1
-        '''
-        找到右侧
-        '''
-        l, r = peak + 1, mountain_arr.length() - 1
-        while l <= r: # 😐 while 循环
-            mid = (l + r) // 2
-            cur = mountain_arr.get(mid)
-            if cur == target:
-                return mid
-            elif cur > target:
-                l = mid + 1
-            else:
-                r = mid - 1
-
-        return -1
-
-时间复杂度： O(logn)，我们进行了三次二分搜索，每次的时间复杂度都为 O(logn)。
-
-空间复杂度： O(1)，只需要常数的空间存放若干变量。
-
- 
-```
-
-##  82. <a name='-1'></a>153-寻找旋转排序数组中的最小值
-
-[哈哈哈](https://www.bilibili.com/video/BV1bT4y1w7yK?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1yK411L7rp?spm_id_from=333.999.0.0)
-
-```py
-输入：nums = [3,4,5,1,2]
-输出：1
-解释：原数组为 [1,2,3,4,5] ，旋转 3 次得到输入数组。
-
-
-
-输入：nums = [4,5,6,7,0,1,2]
-输出：0
-解释：原数组为 [0,1,2,4,5,6,7] ，旋转 4 次得到输入数组。
-
-
-
-
-输入：nums = [11,13,15,17]
-输出：11
-解释：原数组为 [11,13,15,17] ，旋转 4 次得到输入数组。
- 
-
-
-
-
-时间复杂度： O(logn)，其中 n 是数组 nums 的长度。
-
-在二分查找的过程中，每一步会忽略一半的区间，因此时间复杂度为  O(logn)。
-
-空间复杂度： O(1)。
-
-
-
-class Solution:
-    def findMin(self, nums):
-        l, r = 0, len(nums) - 1
-        # [4,5,6,7,0,1,2]
-        """
-        用 mid 和 right 比较
-        而不是用 mid 和 target 比较
-        """
-
-        while l <= r: # 😐 while 循环
-            mid = (r + l) // 2       
-            if  nums[mid] == nums[r]:    # 此时 left 和 right 相等，直接返回
-                return nums[r]
-            elif nums[mid] < nums[r]:   # 比右界小，nums[mid] 可能是最小值，不能去掉
-                r = mid                 # 比如 [5,6,7,0,1,2,4]
-            else:                           # 比右界大，nums[mid] 肯定不会是最小值     
-                l = mid + 1              # 比如 [4,5,6,7,0,1,2]
-```
 
 
 
@@ -11664,120 +9572,7 @@ class Solution:
 
 ```
 
-##  97. <a name='HouseRobber198-'></a>198. 【动态🚀规划】House Robber 198-打家劫舍
 
-[12:45 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
-
-[花花酱](https://www.bilibili.com/video/BV1tW411676f?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1u64y1M7PA?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7hu?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1gZ4y1N75c?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV18g4y1i7f9?spm_id_from=333.999.0.0)
-
-```py
-示例 1：
-
-输入：[1,2,3,1]
-输出：4
-解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
-     偷窃到的最高金额 = 1 + 3 = 4 。
-
-示例 2：
-
-输入：[2,7,9,3,1]
-输出：12
-解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
-     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
-
-
-
-时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历一次。
-空间复杂度： O(1)
-
-动态🚀规划，典型例题：
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        dp0 = 0
-        dp1 = 0
-        for num in nums:
-            dp0, dp1 = dp1, max(dp0 + num, dp1) # (隔一个的和+当前, 前一个的和)
-        return dp1
-```
-
-
-
-##  155. <a name='HouseRobberII213-II'></a>213.【动态🚀规划】 House Robber II 213-打家劫舍II
-
-[18:13 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Ea4y147oh?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1GD4y1d7DS?spm_id_from=333.999.0.0)
-
-```py
-输入：nums = [2,3,2]
-输出：3
-解释：你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
-
-
-输入：nums = [1,2,3,1]
-输出：4
-解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
-     偷窃到的最高金额 = 1 + 3 = 4 。
-
-
-输入：nums = [1,2,3]
-输出：3
- 
-
-房屋都 围成一圈 
-
-# dp[i] = max(dp[i-2] + nums[i], dp[i-1])
-# class Solution:
-#     def rob(self, nums: List[int]) -> int:
-#         n = len(nums)
-#         # 易错点：注意特殊情况
-#         if n <= 2:
-#             return max(nums)
-
-#         dp1 = [0] * (n - 1)
-#         dp1[0] = nums[0]
-#         dp1[1] = max(nums[1], nums[0])
-#         for i in range(2, n - 1):
-#             dp1[i] = max(dp1[i-2] + nums[i], dp1[i-1])
-
-#         dp2 = [0] * (n - 1)
-#         dp2[0] = nums[1]
-#         dp2[1] = max(nums[1], nums[2])
-#         # 易错点：注意，根据递推式，这里不是，dp2[1] = nums[2]
-#         for i in range(2, n - 1):
-#             dp2[i] = max(dp2[i-2] + nums[i + 1], dp2[i-1])
-
-#         return max(dp1[-1],dp2[-1])
-时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历2次。
-空间复杂度： O(1)
-降维以后：
-
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        n = len(nums)
-        # 易错点：注意特殊情况
-        if n <= 2:
-            return max(nums)
-
-        def robrange(start,end):
-            dp0 = 0
-            dp1 = 0
-            for num in nums[start:end]:
-                dp1, dp0 = max(dp0 + num, dp1), dp1
-            return dp1
-
-        return max(robrange(0, n - 1), robrange(1, n))
-```
 
 
 ##  99. <a name='BasicCalculatorII-224.'></a>227 Basic Calculator II - 见 224. 基本计算器
@@ -11886,50 +9681,11 @@ class Solution:
 
 
 
-##  103. <a name='Offer54.k-230KthSmallestElementinaB'></a>剑指 Offer 54. 二叉搜索树的第k大节点 - 230 Kth Smallest Element in a B
-
-```py
-输入: root = [3,1,4,null,2], k = 1
-   3
-  / \
- 1   4
-  \
-   2
-输出: 4
-
-输入: root = [5,3,6,2,4,null,null,1], k = 3
-       5
-      / \
-     3   6
-    / \
-   2   4
-  /
- 1
-输出: 4
 
 
 
-class Solution:
-    def kthLargest(self, root: TreeNode, k: int) -> int:
-        def inorder(root):
-            if root:
-                inorder(root.right)
-                self.k -= 1
-                if self.k == 0: 
-                    self.res = root.val
-                    return 注意，这里return的是【空】
-                inorder(root.left)
 
-        self.k = k
-        inorder(root)
-        return self.res
-```
-
-
-
-##  107. <a name='SerializeandDeserializeBinaryTree'></a>297. Serialize and Deserialize Binary Tree
-
-[花花酱](https://www.bilibili.com/video/BV1Hb411c7cr?spm_id_from=333.999.0.0)
+##  107. <a name='SerializeandDeserializeBinaryTree'></a> Codec-tree2str-str2tree
 
 ```py
 时间复杂度：
@@ -11965,11 +9721,7 @@ class Codec:
 
 ```
 
-##  108. <a name='-1'></a>152 【动态🚀规划】乘积最大子数组
-
-[哈哈哈](https://www.bilibili.com/video/BV12a4y1i76G?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1iK411K7yG?spm_id_from=333.999.0.0)
+##  108. <a name='-1'></a> maxProduct
 
 maxdp * num, mindp * num, num
 
@@ -12003,154 +9755,16 @@ class Solution:
         return res
 
 # 之所有存 [最小乘积和]，是因为 [最小乘积和] 如果是负数有可能遇到负数，
-
-# 相乘后结果更大 Python
 ```
 
 
 
-##  110. <a name='Offer10-I.'></a>剑指 Offer 10- I. 斐波那契数列
-
-```py
-输入：n = 2
-输出：1
-
-输入：n = 5
-输出：5
-# from functools import lru_cache
-# class Solution:
-#     @lru_cache(None)
-#     def fib(self, n: int) -> int:
-#         if n < 2:
-#             return n
-#         return (self.fib(n - 1) + self.fib(n - 2)) % 1000000007
-#         # 1 1 2 3 5
-class Solution:
-    def fib(self, n: int) -> int:
-        a, b = 0, 1
-        '''
-        遍历范围是 2 ~ n，遍历 n - 1 次
-        '''
-        for i in range(n): 
-            a, b = b, a + b # py的单行更新值
-    	return a
-
-
-class Solution:
-    def fib(self, n: int) -> int:
-        MOD = 10 ** 9 + 7
-        if n < 2:
-            return n
-        dp0, dp1 = 0, 1
-        '''
-        遍历范围是 2 ~ n，遍历 n - 1 次
-        '''
-        for _ in range(2, n + 1): # 注意：这里的边界
-            dp1, dp0 = (dp1 + dp0) % MOD, dp1
-        return dp1
-
-时间复杂度： O(n)。
-空间复杂度： O(1)
-```
-
-
-
-##  157. <a name='FibonacciNumber'></a>509. 【动态🚀规划 + 递归】Fibonacci Number
-
-[1:30 花花酱 DP](https://www.bilibili.com/video/BV1b34y1d7S8?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV15y4y147Re?spm_id_from=333.999.0.0)
-
-```py
-
-输入：n = 2
-输出：1
-
-输入：n = 3
-输出：2
-
-输入：n = 4
-输出：3
 
 
 
 
-    
-class Solution:
-    @cache
-    def fib(self, n: int) -> int:
-        if n < 2:
-            return n
-        return self.fib(n - 1) + self.fib(n - 2)
 
-# 记忆化递归
-class Solution:
-    def fib(self, n: int) -> int:
-        dic = {}
-        def helper(n):
-            # 这个写法是错误的：if n == 0 or 1:
-            if n < 2:
-                return n
-            elif n in dic:
-                return dic[n]
-            else:
-                dic[n] = helper(n - 1) + helper(n - 2)
-                return dic[n]
-        return helper(n)
-```
-
-
-
-##  113. <a name='OddEvenLinkedList'></a>328. 奇偶链表 (Odd Even Linked List)
-
-[洛阳](https://www.bilibili.com/video/BV1v64y1u7AH?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1ag4y1B78z?spm_id_from=333.999.0.0)
-
-```py
-
-输入: head = [1,2,3,4,5]
-输出: [1,3,5,2,4]
-
-
-输入: head = [2,1,3,5,6,4,7]
-输出: [2,3,6,7,1,5,4]
-
-
-时间复杂度： O(n)。
-空间复杂度： O(1)
-
-
-
-class Solution(object):
-    def oddEvenList(self, head):
-        if not head or not head.next:      
-            return head
-        # odd 和 even 都是移动指针
-        # evenHead 是固定的
-    
-        slow  = head
-        fast = headnxt = head.next
-        # 当 2 和 3 存在
-        while fast and fast.next: # 😐😐 while 循环
-            # 1 -> 2的后面
-            slow.next = fast.next
-            # 1 变成 3
-            slow = slow.next
-            # 2 -> 3的后面
-            fast.next = slow.next 
-            # 2 变成 4
-            fast = fast.next
-        slow.next = headnxt # 先奇数，后偶数
-        return head 
-```
-
-
-# 7 day (得分 = 4分) 78
-
-
-
-##  119. <a name='23.'></a>补充题23. 检测循环依赖
+##  119. <a name='23.'></a> haveCircularDependency
 
 ```s
 现有n个编译项，编号为 0 ~ n-1。给定一个二维数组，
@@ -12195,15 +9809,7 @@ class Solution:
 ```
 
 
-##  148. <a name='-1'></a>207-课程表
-
-[花花酱](https://www.bilibili.com/video/BV1Ut411a74a?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV19k4y1r76s?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1jz411B7UJ?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Xp4y1Y7FJ?spm_id_from=333.999.0.0)
+##  148. <a name='-1'></a> canFinish
 
 
 ```py
@@ -12220,10 +9826,8 @@ end, stt
 输出：false
 
 
-
 解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
 
-# python
 from collections import defaultdict 
 class Solution:
     def canFinish(self, numCourses, prerequisites):
@@ -12245,15 +9849,7 @@ class Solution:
 ```
 
 
-##  182. <a name='CourseScheduleII210-II'></a>210. Course Schedule II 210-课程表II
-
-[花花酱](https://www.bilibili.com/video/BV1gW411y7Kb?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1Ja4y147on?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1qt4y1X7oC?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1kK411W7rL?spm_id_from=333.999.0.0)
+##  182. <a name='CourseScheduleII210-II'></a> findOrder
 
 ```py
 广度优先搜索:
@@ -12301,15 +9897,12 @@ class Solution:
 
 
 
-##  220. <a name='AllNodesDistanceKinBinaryTree'></a>863. All Nodes Distance K in Binary Tree
-
-[花花酱](https://www.bilibili.com/video/BV14W411d7mz?spm_id_from=333.999.0.0)
+##  220. <a name='AllNodesDistanceKinBinaryTree'></a> distanceK
 
 ```py
 输入：root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
 输出：[7,4,1]
 解释：所求结点为与目标结点（值为 5）距离为 2 的结点，值分别为 7，4，以及 1
-
 
 这道题就是先把二叉树转化图,再用图的bfs,求得解
 
@@ -12319,7 +9912,7 @@ class Solution:
 class Solution:
     def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
         from collections import defaultdict
-        graph = defaultdict(set)
+        graph = defaultdict(set)  # 必须用set
         # 建图
         def dfs(root):
             if root.left :
@@ -12364,11 +9957,7 @@ class Solution:
 
 
 
-##  126. <a name='Powxn'></a>50 Pow(x, n)
-
-[小明](https://www.bilibili.com/video/BV1W54y1q7CV?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1Ai4y147kr?spm_id_from=333.999.0.0)
+##  126. <a name='Powxn'></a> myPow
 
 ```py
 输入：x = 2.00000, n = 10
@@ -12393,11 +9982,10 @@ class Solution:
             x = 1 / x
             n = - n
 
-        # 类似2分，速度更快
-        while n: # 😐😐 while 循环
+        while n: 
             if n % 2 == 1:
                 res *= x # 注意: res 这里, 同步发生变化
-            n >>= 1 # 等价于 n //= 2
+            n >>= 1 
             x *= x       # 注意: x 这里, 同步发生变化
         return res
 
@@ -12408,86 +9996,14 @@ class Solution:
 
 
 
-##  123. <a name='Offer62.'></a>剑指 Offer 62. 圆圈中最后剩下的数字
-
-```py
-输入: n = 5, m = 3
-输出: 3
-
-
-输入: n = 10, m = 17
-输出: 2
-
-https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/huan-ge-jiao-du-ju-li-jie-jue-yue-se-fu-huan-by-as/
-
-0个人时候游戏就不存在了， 1个人时候直接获胜， 
- 
-反推公式：
-
-f(n,m) = (f(n,m) + m) % i #i为当前人数
-
-f(8,3) = [f(7,3) + 3] % 8
-
-约瑟夫环：
-
-class Solution:
-    def lastRemaining(self, n: int, m: int) -> int:
-        res = 0
-        for i in range(2, n + 1):
-            res = (res + m) % i
-        return res
-
-
-时间复杂度： O(n)，需要求解的函数值有 n 个。
-
-空间复杂度： O(1)，只使用常数个变量。
-```
-
-##  124. <a name='Offer51.'></a>剑指 Offer 51. 数组中的逆序对
-
-```py
-时间复杂度：O(N logN) 
-空间复杂度：O(N)
-
-
-如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对：
-
-
-输入: [7,5,6,4]
-输出: 5
-
-
-class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
-        negUpQue = []
-        res = 0
-        for num in nums:
-            # 变负数插入，绝了-v，构成递增序列
-            i = bisect.bisect_left(negUpQue,-num) # bisect_left 返回的待插入位置分别是 0，1，1，3，
-            res += i # 前面有多少个比它大的，当前数就有多少个逆序对,加起来就是逆序对总数 5
-            negUpQue[i:i] = [-num]
-            # 这里也可以写：q.insert(i, -v)
-        return res
-# q[i:i] = [-v] 的效果如下，是一个排好序的数组：
-# [-7]
-# [-7, -5]
-# [-7, -6, -5]
-# [-7, -6, -5, -4]
-
-如果不用负数，就要用 res += len(q) - i 了，
-
-并且要改用 i = bisect.bisect(q, v)。
-
-```
 
 
 
 
-##  135. <a name='RotateArray'></a>189. Rotate Array 
 
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7Yy?spm_id_from=333.999.0.0)
 
-[小明](https://www.bilibili.com/video/BV1N541177Bk?spm_id_from=333.999.0.0)
+
+##  135. <a name='RotateArray'></a> rotate
 
 ```py
 输入: nums = [1,2,3,4,5,6,7], k = 3
@@ -12511,11 +10027,324 @@ class Solution:
 空间复杂度：O(1)
 ```
 
-# 8 day (得分 = 3分) 81
 
-##  136. <a name='Searcha2DMatrix-240.'></a>74 Search a 2D Matrix - 240. 二维数组的查找
+##  82. <a name='-1'></a> findMin
 
-[小明](https://www.bilibili.com/video/BV1aK4y1h7Bb?spm_id_from=333.999.0.0)
+```py
+输入：nums = [3,4,5,1,2]
+输出：1
+解释：原数组为 [1,2,3,4,5] ，旋转 3 次得到输入数组。
+
+
+
+输入：nums = [4,5,6,7,0,1,2]
+输出：0
+解释：原数组为 [0,1,2,4,5,6,7] ，旋转 4 次得到输入数组。
+
+
+
+
+输入：nums = [11,13,15,17]
+输出：11
+解释：原数组为 [11,13,15,17] ，旋转 4 次得到输入数组。
+ 
+
+
+
+
+时间复杂度： O(logn)，其中 n 是数组 nums 的长度。
+
+在二分查找的过程中，每一步会忽略一半的区间，因此时间复杂度为  O(logn)。
+
+空间复杂度： O(1)。
+
+
+
+class Solution:
+    def findMin(self, nums):
+        l, r = 0, len(nums) - 1
+        # [4,5,6,7,0,1,2]
+        """
+        用 mid 和 right 比较
+        而不是用 mid 和 target 比较
+        """
+
+        while l <= r: # 😐 while 循环
+            mid = (r + l) // 2       
+            if  nums[mid] == nums[r]:    # 此时 left 和 right 相等，直接返回
+                return nums[r]
+            elif nums[mid] < nums[r]:   # 比右界小，nums[mid] 可能是最小值，不能去掉
+                r = mid                 # 比如 [5,6,7,0,1,2,4]
+            else:                           # 比右界大，nums[mid] 肯定不会是最小值     
+                l = mid + 1              # 比如 [4,5,6,7,0,1,2]
+```
+
+
+##  81. <a name='offer53'></a> searchRange
+
+```py
+输入：nums = [5,7,7,8,8,10], target = 8
+输出：[3,4]
+
+
+
+输入：nums = [5,7,7,8,8,10], target = 6
+输出：[-1,-1]
+
+
+
+输入：nums = [], target = 0
+输出：[-1,-1]
+
+
+
+
+
+# Python 二分法
+时间复杂度：  O(logn) ，其中 n 为数组的长度。 一共会执行两次，因此总时间复杂度为 O(logn)。
+
+空间复杂度： O(1) 。只需要常数空间存放若干变量。
+ 
+
+
+class Solution:
+    def searchRange(self, nums, target):
+        left = 0
+        right = len(nums)-1
+        res = [0,0]
+        if target not in nums:
+            return [-1,-1]
+
+        # 寻找左侧边界
+        while left <= right: # 😐 while 循环
+            mid = (right + left) // 2
+            if nums[mid] >= target:
+                right = mid - 1 # 结束条件, 因为保留 left，所以移动 right
+            elif nums[mid] < target:
+                left = mid + 1
+        res[0] = left
+
+        # 寻找右侧边界
+        right = len(nums)-1 # 只移动 right 端点
+        while left <= right: # 😐 while 循环
+            mid = (right + left) // 2
+            if nums[mid] <= target:
+                left = mid + 1 # 结束条件, 因为保留 right，所以移动 left
+            elif nums[mid] > target:
+                right = mid - 1
+        res[1] = right
+
+        return res
+```
+
+
+##  87. <a name='FindPeakElement'></a> findInMountainArray
+
+```py
+
+输入：nums = [1,2,1,3,5,6,4]
+输出：1 或 5 
+
+解释：你的函数可以返回索引 1，其峰值元素为 2；
+     或者返回索引 5， 其峰值元素为 6。
+
+
+时间复杂度： O(logn)，其中 n 是数组 nums 的长度。
+空间复杂度： O(1)。
+
+
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1 
+        res = 0
+        while l < r: # 😐😐 while 循环
+            mid = (l + r) // 2
+            '''
+            找到最大值，不能写成 while l <= r
+            '''
+            if nums[mid] < nums[mid + 1]:
+                res =  mid + 1
+                l = mid + 1
+            else:
+                r = mid
+        return res
+
+```
+
+##  180. <a name='FindinMountainArray'></a> findInMountainArray
+
+```py
+输入：array = [1,2,3,4,5,3,1], target = 3
+输出：2
+
+解释：3 在数组中出现了两次，下标分别为 2 和 5，我们返回最小的下标 2。
+
+
+
+
+输入：array = [0,1,2,4,2,1], target = 3
+输出：-1
+
+解释：3 在数组中没有出现，返回 -1。
+
+
+
+
+
+注意：这里用
+MountainArray.get(k) - 会返回数组中索引为k 的元素（下标从 0 开始）
+MountainArray.length() - 会返回该数组的长度
+
+"""
+This is MountainArray's API interface.
+You should not implement it, or speculate about its implementation
+"""
+class MountainArray:
+   def get(self, index: int) -> int:
+   def length(self) -> int:
+
+class Solution:
+    def findInMountainArray(self, target: int, mountain_arr: 'MountainArray') -> int:
+        l, r = 0, mountain_arr.length() - 1
+        '''
+        找到山峰
+        '''
+        while l < r: # 😐😐 while 循环
+            mid = (l + r) // 2
+            if mountain_arr.get(mid) < mountain_arr.get(mid + 1):
+                l = mid + 1
+                peak = l
+            else:
+                r = mid
+        
+        '''
+        找到左侧
+        '''
+        l, r = 0, peak
+        while l <= r: # 😐 while 循环
+            mid = (l + r) // 2
+            cur = mountain_arr.get(mid)
+            if cur == target:
+                return mid
+            elif cur < target:
+                l = mid + 1
+            else:
+                r = mid - 1
+        '''
+        找到右侧
+        '''
+        l, r = peak + 1, mountain_arr.length() - 1
+        while l <= r: # 😐 while 循环
+            mid = (l + r) // 2
+            cur = mountain_arr.get(mid)
+            if cur == target:
+                return mid
+            elif cur > target:
+                l = mid + 1
+            else:
+                r = mid - 1
+
+        return -1
+
+时间复杂度： O(logn)，我们进行了三次二分搜索，每次的时间复杂度都为 O(logn)。
+
+空间复杂度： O(1)，只需要常数的空间存放若干变量。
+
+ 
+```
+
+##  42. <a name='SqrtxHJ107'></a> mySqrt
+
+二分查找:
+
+时间复杂度：O(logN)
+
+空间复杂度：O(1)
+
+```py
+输入：x = 4
+输出：2
+
+
+输入：x = 8
+输出：2
+
+解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。
+
+
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        l, r = 0, x
+        ans = -1
+        while l <= r: 
+            mid = (l + r) // 2
+            if mid * mid <= x: 
+                ans = mid 
+                l = mid + 1
+            else:
+                r = mid - 1
+        return ans
+```
+
+##  20. <a name='SearchinRotatedSortedArray'></a> search
+
+```py
+输入：nums = [4,5,6,7,0,1,2], target = 0
+输出：4
+
+
+输入：nums = [4,5,6,7,0,1,2], target = 3
+输出：-1
+
+
+输入：nums = [1], target = 0
+输出：-1
+
+
+时间复杂度： O(logn)，其中 n 为 nums 数组的大小。
+
+整个算法时间复杂度即为二分查找的时间复杂度 O(logn)。
+
+空间复杂度： O(1) 。我们只需要常数级别的空间存放变量。
+ 
+
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        # 定义第一个元素和最后一个元素
+        l = 0
+        r = len(nums) - 1
+
+        while l <= r: # 😐 while 循环
+            mid = (l + r) // 2
+            '''
+            这道题 返回 mid
+            '''
+            if nums[mid] == target:
+                return mid
+            '''
+            输入：nums = [4,5,6,7,0,1,2], target = 0
+                  nums = [4,5,6]
+                  nums = [4]
+            输出：4
+            '''
+            # 只存在一个上升序列
+            if nums[l] <= nums[mid]:
+                if nums[l] <= target < nums[mid]:
+                    r = mid - 1
+                else: 
+                    l = mid + 1
+            # 只存在一个上升序列
+            else:
+                if nums[mid] < target <= nums[r]:
+                    l = mid + 1
+                else: 
+                    r = mid - 1
+        
+        return -1
+```
+
+##  136. <a name='Searcha2DMatrix-240.'></a> searchMatrix
 
 ```py
 输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
@@ -12552,11 +10381,7 @@ class Solution:
 
 
 
-##  140. <a name='IntersectionofTwoArrays'></a>349. Intersection of Two Arrays
-
-https://leetcode-cn.com/problems/intersection-of-two-arrays/
-
-[小梦想家](https://www.bilibili.com/video/BV1zx411o7i1?spm_id_from=333.999.0.0)
+##  140. <a name='IntersectionofTwoArrays'></a> intersection
 
 ```py
 输入：nums1 = [1,2,2,1], nums2 = [2,2]
@@ -12582,20 +10407,12 @@ class Solution:
         set2 = set(nums2)
         return [x for x in set1 if x in set2]
 
-class Solution:
-    def intersection(self, nums1, nums2):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        """
-        return list(set(nums1) & set(nums2))
 
 ```
 
 
 
-##  254. <a name='386.'></a> 386. 字典序排数
+##  254. <a name='386.'></a>  lexicalOrder
 
 ```py
 输入：n = 13
@@ -12623,33 +10440,9 @@ class Solution:
         return res
 ```
 
-```py
-# class Solution:
-#     def lexicalOrder(self, n):
-#         return sorted(list(range(1, n+1)), key = lambda x: str(x))
-```
 
-```py
-# 输入：n = 13
-# 输出：[1,10,11,12,13,2,3,4,5,6,7,8,9]
-# class Solution:
-#     def lexicalOrder(self, n):
-#         ans = []
-#         num = 1
-#         while len(ans) < n: # 😐😐😐 while 循环
-#             while num <= n: # 😐😐😐 while 循环 # 不断进入下一层
-#                 ans.append(num)
-#                 num *= 10
-#             while num % 10 == 9 or num > n: # 😐😐😐 while 循环 # 不断返回上一层
-#                 num //= 10
-#             num += 1  # 遍历该层下一个数
-#         return ans
 
-```
-
-##  145. <a name='K'></a>440. 字典序的第K小数字
-
-https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/
+##  145. <a name='K'></a> findKthNumber
 
 ```py
 我们求字典序第k个就是上图`前序遍历`访问的第k节点！
@@ -12701,11 +10494,11 @@ class Solution:
         while k > 0: # 😐😐😐 while 循环
             steps = calSteps(n, cur, cur + 1)
             if steps <= k: # 第k个数不在以cur为根节点的树上
-                k -= steps 
                 cur += 1    从左往右移动
+                k -= steps 
             else:  # 在子树中
-                k -= 1      刨除根节点
                 cur *= 10   从上往下移动
+                k -= 1      刨除根节点
         
         return cur
 
@@ -12733,7 +10526,7 @@ print(ss.findKthNumber(23,15))
 空间复杂度：O(1) ，不需要开辟额外的空间，只需常数空间记录常量即可。
 ```
 
-##  169. <a name='N'></a>400. 第N个数字
+##  169. <a name='N'></a> findNthDigit
 
 ```py
 输入：n = 11
@@ -12769,55 +10562,369 @@ class Solution:
 ```
 
 
-##  147. <a name='-1'></a>135. 分发糖果
-
-https://leetcode-cn.com/problems/candy/
+##  103. <a name='Offer54.k-230KthSmallestElementinaB'></a> kthLargest
 
 ```py
-每个孩子至少分配到 1 个糖果。
-相邻两个孩子评分更高的孩子会获得更多的糖果。
+输入: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+输出: 4
 
+输入: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+输出: 4
 
-输入：ratings = [1,0,2]
-输出：5
-解释：你可以分别给第一个、第二个、第三个孩子分发 2、1、2 颗糖果。
-
-输入：ratings = [1,2,2]
-输出：4
-解释：你可以分别给第一个、第二个、第三个孩子分发 1、2、1 颗糖果。
-     第三个孩子只得到 1 颗糖果，这满足题面中的两个条件。
 
 
 class Solution:
-    def candy(self, ratings: List[int]) -> int:
-        n = len(ratings)
-        dp = [1] * n
-        # 从左往右
-        for i in range(1, n):
-            if ratings[i] > ratings[i - 1]:
-                dp[i] = dp[i - 1] + 1
-                # [1, 1, 2]
-        # 从右往左
-        for j in range(n - 2, -1, -1):
-            if ratings[j] > ratings[j + 1]:
-                dp[j] = max(dp[j], dp[j + 1] + 1)
-                # [2, 1, 2]
-        return sum(dp)
-# 输入: [1,0,2]
-# 输出: 5
+    def kthLargest(self, root: TreeNode, k: int) -> int:
+        def inorder(root):
+            if root:
+                inorder(root.right)
+                self.k -= 1
+                if self.k == 0: 
+                    self.res = root.val
+                    return 注意，这里return的是【空】
+                inorder(root.left)
 
-时间复杂度： O(n)。我们需要遍历两次数组以分别计算满足左规则或右规则的最少糖果数量。
+        self.k = k
+        inorder(root)
+        return self.res
+```
 
-空间复杂度： O(n)。我们需要保存所有的左规则对应的糖果数量。
 
+
+##  44. <a name='RemoveNthNodeFromEndofList'></a> removeNthFromEnd
+
+
+```py
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+
+
+输入：head = [1], n = 1
+输出：[]
+
+
+输入：head = [1,2], n = 1
+输出：[1]
+
+
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0,head)
+        slow = dummy # 慢指针需要指向前一个
+        fast = head
+
+        for _ in range(n):
+            fast = fast.next
+        while fast: 
+            fast = fast.next
+            slow = slow.next
+
+        slow.next = slow.next.next
+
+        return dummy.next
+
+时间复杂度：O(L)，其中 L 是链表的长度。
+
+空间复杂度：O(1)。
+```
+
+
+
+##  40. <a name='Offer22.k'></a> getKthFromEnd
+
+```py
+
+给定一个链表: 1->2->3->4->5, 和 k = 2.
+
+返回链表 4->5.
+
+class Solution:
+    def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
+        # 上一问用 dummy
+        slow, fast = head, head
+        for i in range(k):
+            fast = fast.next
+        while fast: # 😐 while 循环
+            slow = slow.next
+            fast = fast.next
+        return slow
+
+时间复杂度：O(N)
+
+空间复杂度：O(1)
 
 ```
 
-##  149. <a name='-1'></a>572-另一个树的子树
 
-[哈哈哈](https://www.bilibili.com/video/BV1cA411t7zD?spm_id_from=333.999.0.0)
 
-[官方](https://www.bilibili.com/video/BV1wt4y197aB?spm_id_from=333.999.0.0)
+##  4. <a name='Kadd'></a> findKthLargest
+
+```py
+输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+输出: 4
+[3]
+[2, 3]
+[2, 3, 3]
+[1, 2, 3, 3]
+[2, 2, 3, 3]
+[2, 3, 3, 4]
+[3, 3, 5, 4]
+[3, 4, 5, 5]
+[4, 5, 5, 6]
+
+
+输入: [3,2,1,5,6,4] 和 k = 2
+[3]
+[2, 3]
+[2, 3]
+[3, 5]
+[5, 6]
+[5, 6]
+```
+
+```py
+最小堆：时间复杂度就是nlogk
+if len(q) > k: 用于限制 q 的宽度
+            q:  q 里面 过滤掉了 太小的数
+
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        q = []
+        for num in nums:
+            heapq.heappush(q, num) # n * log(k + 1)
+            if len(q) > k: heapq.heappop(q)   # n * log(k)
+        return heapq.heappop(q)
+
+
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
+```
+
+
+
+##  115. <a name='Offer40.k'></a> getLeastNumbers
+
+```py
+输入：arr = [3,2,1], k = 2
+输出：[1,2] 或者 [2,1]
+hp：
+[-3, -2]
+[-2, -1]
+用 heapq 过滤掉较大值
+
+class Solution:
+    def getLeastNumbers(self, arr: List[int], k: int) -> List[int]:
+        q = []
+        for num in arr:
+            heapq.heappush(q, -num) # n * log(k + 1)
+            if len(q) > k: heapq.heappop(q)   # n * log(k)
+        return [-x for x in q]
+
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
+```
+
+##  165. <a name='TopKFrequentElements'></a> topKFrequent
+
+```py
+输入: nums = [1,1,1,2,2,3], k = 2
+输出: [1,2]
+
+hp 为：
+[(3, 1)]
+[(2, 2), (3, 1)]
+[(2, 2), (3, 1)]
+
+
+过滤较小值
+import heapq
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        dic = collections.defaultdict(int)
+        for num in nums:
+            dic[num] += 1
+        hp = [] # 小顶堆
+        for key, freq in dic.items():
+            heapq.heappush(hp, (freq, key))
+            if len(hp) > k: heapq.heappop(hp)
+        return [x[1] for x in hp]
+
+时间复杂度： O((NlogK)) 
+空间复杂度： O(K) 
+```
+
+
+##  232. <a name='K-1'></a> kthSmallest
+
+```py
+输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
+输出：13
+
+
+解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15], 第 8 小元素是 13
+```
+
+```py
+时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
+
+空间复杂度：O(n)，堆的大小始终为 n。
+
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+        n = len(matrix)
+        pq = [(matrix[i][0], i, 0) for i in range(n)] # 每行的 第一个元素
+        heapq.heapify(pq)
+
+        for _ in range(k - 1): # 这里 pop k - 1 次
+            num, i, j = heapq.heappop(pq)
+            if j != n - 1:
+                heapq.heappush(pq, (matrix[i][j + 1], i, j + 1)) # 每行的 下一个元素
+        
+        return heapq.heappop(pq)[0] # 这里  pop  1 次
+
+```
+
+
+
+##  129. <a name='KthSmallestElementinaB-Offer54.k'></a> kthSmallest- kthLargest
+
+```py
+
+输入：root = [3,1,4,null,2], k = 1
+输出：1
+
+
+
+输入：root = [5,3,6,2,4,null,null,1], k = 3
+输出：3
+
+
+
+
+
+时间复杂度： O(H+k)，其中 H 是树的高度。
+
+在开始遍历之前，我们需要 O(H) 到达叶结点。
+当树是平衡树时，时间复杂度取得最小值 O(logN+k)
+当树是线性树（树中每个结点都只有一个子结点或没有子结点）时，时间复杂度取得最大值 O(N+k)。
+
+空间复杂度： O(H)，栈中最多需要存储 H 个元素。
+当树是`平衡树`时，空间复杂度取得`最小值` O(logN)；
+当树是`线性树`时，空间复杂度取得`最大值` O(N)O(N)。
+
+
+
+# 中序遍历
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        def appendAllLeft(node):
+            while node: # 😐 while 循环
+                stack.append(node)
+                node = node.left
+
+        stack, res = [], []
+        appendAllLeft(root)
+        while stack: # 😐 while 循环 + pop + append
+            node = stack.pop()
+            k -= 1
+            if k == 0:
+                return node.val
+            appendAllLeft(node.right)
+
+
+
+
+
+kthLargest: 先右后左
+class Solution:
+    def kthLargest(self, root: TreeNode, k: int) -> int:
+        def inorder(root):
+            if root: 
+                inorder(root.right)
+                self.k -= 1
+                if self.k == 0: 
+                    self.res = root.val
+                    return
+                inorder(root.left)
+
+        self.k = k
+        inorder(root)
+        return self.res
+
+
+
+
+
+kthSmallest: 先左后右
+class Solution:
+    def kthSmallest(self, root, k: int) -> int:
+        def inorder(root):
+            if root: 
+                inorder(root.left)
+                self.k -= 1
+                if self.k == 0: 
+                    self.res = root.val
+                    return
+                inorder(root.right)
+
+        self.k = k
+        inorder(root)
+        return self.res
+```
+
+
+
+##  213. <a name='UglyNumberII'></a> nthUglyNumber
+
+```py
+输入：n = 10
+输出：12
+解释：[1, 2, 3, 4, 5, 6, 8, 9, 10, 12] 是由前 10 个丑数组成的序列。
+
+输入：n = 1
+输出：1
+解释：1 通常被视为丑数。
+
+# python 实习面试这道题挂了，但我就不懂了，第一次见这题目谁能想到3指针的方法？
+# [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
+class Solution(object):
+    def nthUglyNumber(self, n):
+        res = [1]
+        idx2 = 0
+        idx3 = 0
+        idx5 = 0
+        for _ in range(n-1):
+            # 根据指针，求得最小值
+            nxt = min(res[idx2] * 2, res[idx3] * 3, res[idx5] * 5)
+            res.append(nxt)
+            # 移动指针
+            if nxt == res[idx2] * 2:
+                idx2 += 1
+            if nxt == res[idx3] * 3:
+                idx3 += 1
+            if nxt == res[idx5] * 5:
+                idx5 += 1
+        return res[-1]
+
+时间复杂度： O(n)。需要计算数组 dp 中的 n 个元素，每个元素的计算都可以在 O(1) 的时间内完成。
+空间复杂度： O(n)。空间复杂度主要取决于数组 dp 的大小。
+
+```
+
+##  149. <a name='-1'></a> isSubtree
 
 ```py
 输入：root = [3,4,5,1,2], subRoot = [4,1,2]
@@ -12826,8 +10933,6 @@ class Solution:
 输入：root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
 输出：false
 
-
-这题不可能是简单题
 
 class Solution:
     def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
@@ -12845,19 +10950,11 @@ class Solution:
             return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
 
-时间复杂度为  O(∣s∣×∣t∣)。
+时间复杂度为  O(∣s∣×∣t∣)。最坏情况，大树的每个节点，都要搜索小树。
 空间复杂度为  O(max{s深度, t深度})
 ```
 
-##  171. <a name='SameTree'></a>100-Same Tree 
-
-[哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
-
-[哈哈哈](https://www.bilibili.com/video/BV1bJ411X7xH?spm_id_from=333.999.0.0)
-
-[小梦想家](https://www.bilibili.com/video/BV1Wb411e7ti?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1vf4y1R7Ue?spm_id_from=333.999.0.0)
+##  171. <a name='SameTree'></a> isSameTree
 
 > python:
 
@@ -12900,28 +10997,19 @@ class Solution:
             return False
 ```
 
-```py
-class Solution:
-    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
-        return str(p) == str(q)
-```
 
 
 
 
 
-##  151. <a name='JumpGame'></a>55 Jump Game
 
-[小明](https://www.bilibili.com/video/BV14K4y1b7Fw?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1be411s7XX?spm_id_from=333.999.0.0)
+##  151. <a name='JumpGame'></a> canJump
 
 ```py
 输入：nums = [2,3,1,1,4]
 输出：true
 解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
 
-# 精简一下的for循环😁
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
         cover = 0
@@ -12940,9 +11028,7 @@ class Solution:
 
 
 
-##  201. <a name='JumpGameII'></a>45 Jump Game II
-
-[小明](https://www.bilibili.com/video/BV1fb4y1Z77x?spm_id_from=333.999.0.0)
+##  201. <a name='JumpGameII'></a> jump
 
 ```py
 输入: nums = [2,3,1,1,4]
@@ -12975,11 +11061,33 @@ class Solution:
 
 
 
-##  153. <a name='DecodeWays'></a>91. Decode Ways
+##  110. <a name='Offer10-I.'></a> fib
 
-[花花酱](https://www.bilibili.com/video/BV1Lb411y7ec?spm_id_from=333.999.0.0)
+```py
+输入：n = 2
+输出：1
 
-[小明](https://www.bilibili.com/video/BV1Pf4y1G7M5?spm_id_from=333.999.0.0)
+输入：n = 5
+输出：5
+
+class Solution:
+    def fib(self, n: int) -> int:
+        a, b = 0, 1
+        '''
+        遍历范围是 2 ~ n，遍历 n - 1 次
+        '''
+        for i in range(n): 
+            a, b = b, a + b # py的单行更新值
+    	return a
+
+
+时间复杂度： O(n)。
+空间复杂度： O(1)
+```
+
+
+
+##  153. <a name='DecodeWays'></a> numDecodings
 
 ```py
 输入：s = "226"
@@ -13013,9 +11121,113 @@ class Solution:
 ```
 
 
-# 9 day (得分 = 2分) 83
 
-##  159. <a name='Offer61.'></a>剑指 Offer 61. 扑克牌中的顺子
+
+
+##  37. <a name='ClimbingStairs'></a> climbStairs
+
+```py
+输入：n = 2
+输出：2
+解释：有两种方法可以爬到楼顶。
+1. 1 阶 + 1 阶
+2. 2 阶
+
+
+
+
+
+输入：n = 3
+输出：3
+解释：有三种方法可以爬到楼顶。
+1. 1 阶 + 1 阶 + 1 阶
+2. 1 阶 + 2 阶
+3. 2 阶 + 1 阶
+
+
+
+
+时间复杂度：循环执行 n 次，每次花费常数的时间代价，故渐进时间复杂度为 O(n)。
+空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 O(1)。
+
+ 
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        dp0 = 1
+        dp1 = 1
+        for _ in range(n - 1):
+            dp1, dp0 = dp0 + dp1, dp1 # 用2个数字分别存储
+        return dp1
+```
+
+
+##  97. <a name='HouseRobber198-'></a> rob
+
+```py
+
+输入：[1,2,3,1]
+输出：4
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+
+
+输入：[2,7,9,3,1]
+输出：12
+解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+
+时间复杂度： O(n)，其中 n 是数组长度。只需要对数组遍历一次。
+空间复杂度： O(1)
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        dp0 = 0
+        dp1 = 0
+        for num in nums:
+            dp0, dp1 = dp1, max(dp0 + num, dp1) # (隔一个的和+当前, 前一个的和)
+        return dp1
+```
+
+
+##  155. <a name='HouseRobberII213-II'></a> rob
+
+```py
+输入：nums = [2,3,2]
+输出：3
+解释：你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+
+
+输入：nums = [1,2,3,1]
+输出：4
+解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+
+
+输入：nums = [1,2,3]
+输出：3
+ 
+
+降维以后：
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        # 易错点：注意特殊情况
+        if n <= 2:
+            return max(nums)
+
+        def robrange(start,end):
+            dp0 = 0
+            dp1 = 0
+            for num in nums[start:end]:
+                dp1, dp0 = max(dp0 + num, dp1), dp1
+            return dp1
+
+        return max(robrange(0, n - 1), robrange(1, n))
+```
+
+
+##  159. <a name='Offer61.'></a> isStraight
 
 ```py
 从若干副扑克牌中随机抽 5 张牌，判断是不是一个顺子
@@ -13050,9 +11262,7 @@ class Solution:
 
 
 
-##  167. <a name='Numberof1Bits'></a>191 Number of 1 Bits
-
-[小明](https://www.bilibili.com/video/BV1i5411J7SA?spm_id_from=333.999.0.0)
+##  167. <a name='Numberof1Bits'></a> hammingWeight
 
 ```py
 输入：00000000000000000000000000001011
@@ -13070,13 +11280,6 @@ class Solution:
 解释：输入的二进制串 11111111111111111111111111111101 中，共有 31 位为 '1'。
 
 
-
-# class Solution:
-#     def hammingWeight(self, n: int) -> int:
-#         res = sum(1 for i in range(32) if n & (1 << i)) 
-#         return res
-
-
 1111000
 1110111
 & 运算后，去掉最后的1
@@ -13090,6 +11293,7 @@ class Solution:
             n &= n - 1
             res += 1
         return res
+
 时间复杂度： O(logn)。循环次数等于 n 的二进制位中 1 的个数，最坏情况下 n 的二进制位全部为 1。我们需要循环 logn 次。
 
 空间复杂度： O(1)，我们只需要常数的空间保存若干变量。
@@ -13098,16 +11302,7 @@ class Solution:
 
 
 
-# 10 day (得分 = 2分) 85
-
-
-
-
-##  170. <a name='ValidAnagram'></a>242. Valid Anagram 
-
-[小梦想家](https://www.bilibili.com/video/BV1Db411s78v?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1hV411i73u?spm_id_from=333.999.0.0)
+##  170. <a name='ValidAnagram'></a> isAnagram
 
 ```py
 输入: s = "anagram", t = "nagaram"
@@ -13116,15 +11311,6 @@ class Solution:
 
 输入: s = "rat", t = "car"
 输出: false
-
-
-
-
-直接返回两个计数器是否相等即可
-
-class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
-        return Counter(s) == Counter(t) 
 ```
 
 ```py
@@ -13149,9 +11335,7 @@ class Solution:
 
 
 
-##  172. <a name='RepeatedSubstringPattern'></a>459 Repeated Substring Pattern
-
-[小明](https://www.bilibili.com/video/BV1Yt4y1S7XZ?spm_id_from=333.999.0.0)
+##  172. <a name='RepeatedSubstringPattern'></a> repeatedSubstringPattern
 
 ```py
 输入: s = "abab"
@@ -13183,9 +11367,7 @@ class Solution:
 
 
 
-##  174. <a name='Triangle'></a>120 【动态🚀规划】Triangle
-
-[小明](https://www.bilibili.com/video/BV1m54y1L7Af?spm_id_from=333.999.0.0)
+##  174. <a name='Triangle'></a> minimumTotal
 
 ```py
 输入：triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
@@ -13214,84 +11396,8 @@ class Solution:
 
 
 
-##  176. <a name='SuperEggDrop'></a>887. Super Egg Drop
 
-[花花酱](https://www.bilibili.com/video/BV1Tv411i7cP?spm_id_from=333.999.0.0)
-
-[官方](https://www.bilibili.com/video/BV1ri4y1t78d?spm_id_from=333.999.0.0)
-
-<img src="https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.3ld2gccb6ey0.webp" width="30%">
-
-```py
-输入：k = 1, n = 2
-输出：2
-
-
-解释：
-鸡蛋从 1 楼掉落。如果它碎了，肯定能得出 f = 0 。 
-否则，鸡蛋从 2 楼掉落。如果它碎了，肯定能得出 f = 1 。 
-如果它没碎，那么肯定能得出 f = 2 。 
-因此，在最坏的情况下我们需要移动 2 次以确定 f 是多少。 
-
-
-
-
-输入：k = 2, n = 6
-输出：3
-
-
-
-输入：k = 3, n = 14
-输出：4
-
-
-
-
-
-请你计算并返回要确定 f 确切的值 的 最小操作次数 是多少？
-
-dp[k][m] 的含义是 k 个鸡蛋 移动 m 次最多能够确定多少楼层
-这个角度思考
-dp[k][m] 最多能够确定的楼层数为 L
-
-那么我选定第一个扔的楼层之后，我要么碎，要么不碎
-
-这就是把 L 分成 3 段:
-左边：是碎的那段 长度是   dp[k][m - 1]
-右边：是没碎的那段 长度是 dp[k - 1][m - 1] 因为已经碎了一个了
-中间：是我选定扔的楼层 是 1
-
-所以递推公式是: dp[k][m] = dp[k - 1][m - 1] + dp[k][m - 1] + 1
-
-根据递推公式 如果采用 k 倒着从大到小计算 就可以只存一行的 dp[k] 直接原地更新 dp[k] 不影响后续计算 
-
-只需要 O(K) 空间复杂度 O(KlogN) 鸡蛋完全够用的时候 就是走 LogN 步 最差情况是 1 个鸡蛋走 N 步 O(KN)
-
-时间复杂度：O(eggs*log level) 
-空间复杂度：O(eggs)。
-
-class Solution:
-    def superEggDrop(self, eggs: int, level: int) -> int:
-            dp = [0] * (eggs + 1)
-            m = 0
-            while dp[eggs] < level: # 😐😐😐 while 循环
-                m += 1
-                for gg in range(eggs, 0, -1): # 从 eggs ~ 1
-                    # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层
-                    # 鸡蛋没碎，可以遍历的楼层数目
-                    dp[gg] = dp[gg - 1] + dp[gg] + 1
-            return m
-
-# 移动次数: 1 鸡蛋 0-3 对应楼层: [0, 1, 1, 1]
-# 移动次数: 2 鸡蛋 0-3 对应楼层: [0, 2, 3, 3]
-# 移动次数: 3 鸡蛋 0-3 对应楼层: [0, 3, 6, 7]
-# 移动次数: 4 鸡蛋 0-3 对应楼层: [0, 4, 10, 14]
-```
-
-
-
-
-##  178. <a name='14.'></a>补充题14. 阿拉伯数字转中文数字
+##  178. <a name='14.'></a> money
 
 ```py
 def money(l,r):
@@ -13330,7 +11436,7 @@ while 1:
 ```
 
 
-##  181. <a name='-1'></a>670. 最大交换
+##  181. <a name='-1'></a> maximumSwap
 
 ```py
 '''
@@ -13364,15 +11470,7 @@ class Solution:
         return num # 已是最大值就返回原数字
 ```
 
-
-
-
-
-# 11 day (得分 = 2分) 87
-
-
-
-##  187. <a name='GasStation'></a>134. Gas Station
+##  187. <a name='GasStation'></a> canCompleteCircuit
 
 ```py
 输入：
@@ -13402,17 +11500,143 @@ class Solution:
         return start
 ```
 
+##  234. <a name='-1'></a> combine
+
+```py
+给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。
+
+你可以按 任何顺序 返回答案。
+
+输入：n = 4, k = 2
 
 
-##  192. <a name='LetterCombinationsofaPhoneNumber'></a>17. Letter Combinations of a Phone Number 
+输出：
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
 
-[花花酱](https://www.bilibili.com/video/BV1PW411y7r2?spm_id_from=333.999.0.0)
 
-[小梦想家](https://www.bilibili.com/video/BV1Yb411H7sL?spm_id_from=333.999.0.0)
+class Solution:
+    def combine(self, n, k):
+        res = []
+        def backtrack(StartIndex,path):
+            if len(path) == k:
+                res.append(path[:])
+                return
+            for i in range(StartIndex, n + 1):
+                '''
+                没有重复，所以 i + 1
+                '''
+                backtrack(i + 1,path + [i])
+        backtrack(1, [])
+        return res
 
-[小明](https://www.bilibili.com/video/BV1Ti4y1A73M?spm_id_from=333.999.0.0)
 
-[官方](https://www.bilibili.com/video/BV1Sp4y1r7YP?spm_id_from=333.999.0.0)
+
+时间复杂度：O((kn的组合枚举)×k)，每次记录答案的复杂度为 O(k)
+空间复杂度：O(n + k) = O(n) 
+```
+
+##  142. <a name='CombinationSumII40-II'></a> combinationSum2
+
+```py
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+输出:
+[
+[1,1,6],
+[1,2,5],
+[1,7],
+[2,6]
+]
+
+
+
+输入: candidates = [2,5,2,1,2], target = 5,
+输出:
+[
+[1,2,2],
+[5]
+]
+
+
+
+
+时间复杂度： O(S)，其中 S 为所有可行解的长度之和。O(n×2^n) 是一个比较松的上界.实际运行情况是远远小于这个上界的。
+
+空间复杂度： O(n)。除了存储答案的数组外，我们需要 O(n) 的空间存储列表 freq、递归中存储当前选择的数的列表、以及递归需要的栈。
+
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        # candidates.reverse()
+        def backtrack(firstIdx, path):
+            if sum(path) == target:
+                res.append(path[:])
+                return
+            if sum(path) > target:
+                return
+            if sum(path) < target:
+                for i in range(firstIdx, len(candidates)):
+                    # 易错点：需要剪枝
+                    if i > firstIdx and candidates[i] == candidates[i - 1]: continue
+                    # [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]会超时
+                    '''
+                    candidates 中的每个数字在每个组合中只能使用 一次, 所以 i+1
+                    '''
+                    backtrack(i + 1, path + [candidates[i]])
+        backtrack(0, [])
+        return res
+```
+
+
+##  76. <a name='CombinationSum39-'></a> combinationSum
+
+```py
+输入：candidates = [2,3,6,7], target = 7
+输出：[[2,2,3],[7]]
+
+
+
+输入: candidates = [2,3,5], target = 8
+输出: [[2,2,2,2],[2,3,3],[3,5]]
+
+
+
+
+时间复杂度： O(S)，其中 S 为所有可行解的长度之和。
+
+空间复杂度： O(target)。除答案数组外，空间复杂度取决于递归的栈深度，在最差情况下需要递归 O(target) 层。
+ 
+
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+
+        def backtrack(firstIdx, path):
+            if sum(path) == target:
+                res.append(path[:]) 
+                # 易错点，这里是res.append(path[:])，而不是res.append(path)
+                return
+            if sum(path) > target:
+                return
+            if sum(path) < target:
+                for i in range(firstIdx, len(candidates)):
+                '''
+                每个数字能用 n 次, 所以 i
+                '''
+                    backtrack(i, path + [candidates[i]])
+        backtrack(0, [])
+        return res
+```
+
+
+##  192. <a name='LetterCombinationsofaPhoneNumber'></a> letterCombinations
 
 深度优先 or 广度优先
 
@@ -13434,9 +11658,7 @@ class Solution:
         return res
 ```
 
-##  194. <a name='Offer03.'></a>剑指 Offer 03. 数组中重复的数字
-
-https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/
+##  194. <a name='Offer03.'></a> findRepeatNumber
 
 ```py
 输入：
@@ -13454,15 +11676,6 @@ class Solution:
                 return num
 
 
-class Solution:
-    def findRepeatNumber(self, nums: List[int]) -> int:
-        tmp = set()
-        for i in range(len(nums)):
-            tmp.add(nums[i])
-            if len(tmp) < i + 1:
-                return nums[i]
-
-
 时间复杂度： O(n)。
 
 遍历数组一遍。使用哈希集合（HashSet），添加元素的时间复杂度为 O(1)，故总的时间复杂度是 O(n)。
@@ -13473,40 +11686,11 @@ class Solution:
 
 
 
-##  197. <a name='-1'></a>343-整数拆分
-
-[哈哈哈](https://www.bilibili.com/video/BV1Dp4y1U79P?spm_id_from=333.999.0.0)
-
-```py
-输入: n = 10
-输出: 36
-解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
-
-
-class Solution:
-    def integerBreak(self, n: int) -> int:
-        dp = [0] * (n + 1)
-        for end in range(2, n + 1):
-            for stt in range(end):
-                dp[end] = max(dp[end], stt * (end - stt), stt * dp[end - stt])
-        return dp[n]
-        # 假设对正整数 i 拆分出的第一个正整数是 j（1 <= j < i），则有以下两种方案：
-        # 1) 将 i 拆分成 j 和 i−j 的和，且 i−j 不再拆分成多个正整数，此时的乘积是 j * (i-j)
-        # 2) 将 i 拆分成 j 和 i−j 的和，且 i−j 继续拆分成多个正整数，此时的乘积是 j * dp[i-j]
 
 
 
-时间复杂度：O(n^2) ，其中 n 是给定的正整数。对于从 2 到 n 的每一个整数都要计算对应的 dp 值，
-空间复杂度： O(n)，其中 n 是给定的正整数。创建一个数组 dp，其长度为 n + 1。
 
-
-```
-
-
-
-##  199. <a name='17.24.'></a>面试题 17.24. 最大子矩阵
-
-https://leetcode-cn.com/problems/max-submatrix-lcci/solution/zhe-yao-cong-zui-da-zi-xu-he-shuo-qi-you-jian-dao-/
+##  199. <a name='17.24.'></a> getMaxMatrix
 
 ```py
 输入：
@@ -13554,140 +11738,10 @@ class Solution:
 
         return res
     
-[
-[ 9,-8, 1, 3,-2],
-[-3, 7, 6,-2, 4],
-[ 6,-4,-4, 8,-7]
-]
-
-预期结果: 
-[0,0,2,3]
-
-从第一行开始：
-sums[rightB] = 9
-sums[rightB] = -8
-sums[rightB] = 1
-sums[rightB] = 3
-sums[rightB] = -2
-# 由上往下累加
-sums[rightB] = 6
-sums[rightB] = -1
-sums[rightB] = 7
-sums[rightB] = 1
-sums[rightB] = 2
-# 由上往下累加
-sums[rightB] = 12
-sums[rightB] = -5
-sums[rightB] = 3
-sums[rightB] = 9
-sums[rightB] = -5
-
-
-从第二行开始：
-# 由上往下累加
-sums[rightB] = -3
-sums[rightB] = 7
-sums[rightB] = 6
-sums[rightB] = -2
-sums[rightB] = 4
-# 由上往下累加
-sums[rightB] = 3
-sums[rightB] = 3
-sums[rightB] = 2
-sums[rightB] = 6
-sums[rightB] = -3
-
-
-从第三行开始：
-# 由上往下累加
-sums[rightB] = 6
-sums[rightB] = -4
-sums[rightB] = -4
-sums[rightB] = 8
-sums[rightB] = -7
-
-
-4个顶点= 0 0 0 0
-4个顶点= 0 0 0 1
-4个顶点= 0 0 0 2
-4个顶点= 0 0 0 3
-4个顶点= 0 0 0 4
-
-4个顶点= 0 0 1 0
-4个顶点= 0 0 1 1
-4个顶点= 0 0 1 2
-4个顶点= 0 0 1 3
-4个顶点= 0 0 1 4
-
-4个顶点= 0 0 2 0
-4个顶点= 0 0 2 1
-4个顶点= 0 0 2 2
-4个顶点= 0 0 2 3
-4个顶点= 0 0 2 4
-
-4个顶点= 1 0 1 0
-# slowB = fastB
-4个顶点= 1 1 1 1
-4个顶点= 1 1 1 2
-4个顶点= 1 1 1 3
-4个顶点= 1 1 1 4 
-
-4个顶点= 1 0 2 0
-4个顶点= 1 0 2 1
-4个顶点= 1 0 2 2
-4个顶点= 1 0 2 3
-4个顶点= 1 0 2 4
-
-4个顶点= 2 0 2 0
-4个顶点= 2 0 2 1
-4个顶点= 2 0 2 2
-# slowB = fastB
-4个顶点= 2 3 2 3
-4个顶点= 2 3 2 4
-
-dp <= 0: 0
-dp <= 0: 0
-dp <= 0: 0
-dp <= 0: 0
-dp <= 0: 1
-dp <= 0: 0
-dp <= 0: 0
-dp <= 0: 3
-
-dp= 9 最大值= 9 [0, 0, 0, 0]
-dp= 1 最大值= 9 [0, 0, 0, 0]
-dp= 2 最大值= 9 [0, 0, 0, 0]
-dp= 5 最大值= 9 [0, 0, 0, 0]
-dp= 3 最大值= 9 [0, 0, 0, 0]
-dp= 6 最大值= 9 [0, 0, 0, 0]
-dp= 5 最大值= 9 [0, 0, 0, 0]
-dp= 12 最大值= 12 [0, 0, 1, 2]
-dp= 13 最大值= 13 [0, 0, 1, 3]
-dp= 15 最大值= 15 [0, 0, 1, 4]
-dp= 12 最大值= 15 [0, 0, 1, 4]
-dp= 7 最大值= 15 [0, 0, 1, 4]
-dp= 10 最大值= 15 [0, 0, 1, 4]
-dp= 19 最大值= 19 [0, 0, 2, 3]
-dp= 14 最大值= 19 [0, 0, 2, 3]
-dp= -3 最大值= 19 [0, 0, 2, 3]
-dp= 7 最大值= 19 [0, 0, 2, 3]
-dp= 13 最大值= 19 [0, 0, 2, 3]
-dp= 11 最大值= 19 [0, 0, 2, 3]
-dp= 15 最大值= 19 [0, 0, 2, 3]
-dp= 3 最大值= 19 [0, 0, 2, 3]
-dp= 6 最大值= 19 [0, 0, 2, 3]
-dp= 8 最大值= 19 [0, 0, 2, 3]
-dp= 14 最大值= 19 [0, 0, 2, 3]
-dp= 11 最大值= 19 [0, 0, 2, 3]
-dp= 6 最大值= 19 [0, 0, 2, 3]
-dp= 2 最大值= 19 [0, 0, 2, 3]
-dp= -2 最大值= 19 [0, 0, 2, 3]
-dp= 8 最大值= 19 [0, 0, 2, 3]
-dp= 1 最大值= 19 [0, 0, 2, 3]
 
 ```
 
-##  200. <a name='-1'></a>611. 有效三角形的个数
+##  200. <a name='-1'></a> triangleNumber
 
 ```py
 输入: nums = [2,2,3,4]
@@ -13706,45 +11760,25 @@ class Solution:
         res = 0
         for i3 in range(len(nums)):
             i1, i2 = 0, i3 - 1
+            # 如果满足条件，则 i1 到 i2 之间的，所有 i1，都满足条件
+            # 如果不满足条件，i1 才需要增大，否则 i1 可以一直躺平
             while i1 < i2: # 😐😐😐 while 循环
-                # 如果满足条件，则 i1 到 i2 之间的，所有 i1，都满足条件
                 if nums[i1] + nums[i2] > nums[i3]:
                     res += i2 - i1
                     i2 -= 1
-                # 如果不满足条件，i1 才需要增大，否则 i1 可以一直躺平
                 else:
                     i1 += 1
         return res
-        # 2,3,4,4
-        # 2,3,4,-
-        # 2,-,4,4 可以，则代表 -,3,4,4 也可以
-        # 2,3,-,4
-        # 2 + 3 > 4
-        # 2 + 4 > 4
-        # 2 + 3 > 4
 
-时间复杂度：O(n^2)，其中 n 是数组 nums 的长度。
 
-        我们需要 O(nlogn) 的时间对数组 nums 进行排序，
-
-        随后需要 O(n^2) 的时间使用一重循环枚举 a 的下标以及使用双指针维护 b, c 的下标。
+时间复杂度：O(nlogn) + O(n^2)，其中 n 是数组 nums 的长度。
 
 空间复杂度： O(logn)，即为排序需要的栈空间。
  
 ```
 
 
-
-# 12 day (得分 = 2分) 89
-
-##  203. <a name='-1'></a>679. 24 点游戏
-
-
-##  207. <a name='SimplifyPath'></a>71. Simplify Path
-
-[小梦想家](https://www.bilibili.com/video/BV1V7411w7jX?spm_id_from=333.999.0.0)
-
-[小明](https://www.bilibili.com/video/BV1D5411J72c?spm_id_from=333.999.0.0)
+##  207. <a name='SimplifyPath'></a> simplifyPath
 
 ```py
 输入：path = "/home/"
@@ -13830,8 +11864,7 @@ class Solution:
         cycleCount = numRows * 2 - 2 # 循环为6
         for index, char in enumerate(s):
             key = index % cycleCount
-            if key >= numRows: # 如果 >= 4, 则需要反过来
-                key  = cycleCount - key
+            key = key if key < numRows else cycleCount - key
             dic[key] += char
 
         res = ""
@@ -13844,40 +11877,1002 @@ class Solution:
 
 
 
-##  213. <a name='UglyNumberII'></a> nthUglyNumber
+##  83. <a name='-1'></a> uniquePaths
 
 ```py
-输入：n = 10
-输出：12
-解释：[1, 2, 3, 4, 5, 6, 8, 9, 10, 12] 是由前 10 个丑数组成的序列。
+输入：m = 3, n = 7
+输出：28
 
-输入：n = 1
+
+
+
+输入：m = 3, n = 2
+输出：3
+
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        其他写法：dp = [[1]*n]*m
+        dp = [[1] * n] + [[1] + [0] * (n - 1) for _ in range(m - 1)]
+        for i in range(1, m): # 这里从 1 开始
+            for j in range(1, n): # 这里从 1 开始
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        return dp[-1][-1]
+```
+
+##  190. <a name='UniquePathsII'></a> uniquePathsWithObstacles
+
+```py
+输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+输出：2
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+        # 易错点：注意边界上也可能有obstacle
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        # 易错点：dp[1][1] = 1,这个数字会被重新计算，所以应该写成：
+        dp[0][1] = 1
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if not obstacleGrid[i - 1][j - 1]:
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        return dp[-1][-1]
+```
+
+
+
+##  89. <a name='-1'></a> maximalSquare
+
+```py
+输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+输出：4
+
+
+
+构建dp：
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+class Solution:
+    def maximalSquare(self, matrix):
+        m, n = len(matrix), len(matrix[0])
+        dp = [[0] * n for _ in range(m)]
+        maxEdge = 0
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == '1':
+                    # 当 i 和 j 等于0时，i-1 为 -1
+                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
+                    maxEdge = max(dp[i][j], res)
+        return maxEdge * maxEdge
+    
+```
+
+
+##  70. <a name='-1'></a> findLength
+
+```py
+输入：nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
+
+输出：3
+
+
+解释：长度最长的公共子数组是 [3,2,1] 。
+
+
+      3 2 1 4 7
+      0 0 0 0 0 
+
+1 0   0 0 1 0 0
+2 0   0 1 0 0 0
+3 0   1 0 0 0 0
+2 0   0 2 0 0 0
+1 0   0 0 3 0 0
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+class Solution:
+    def findLength(self, A: List[int], B: List[int]) -> int:
+        dp = [[0] * (len(B)+1) for _ in range(len(A)+1)]
+        result = 0
+        for i in range(1, len(A)+1):
+            for j in range(1, len(B)+1):
+                """
+                如果相等的话， 同时删t1和t2 + 1
+                """
+                if A[i-1] == B[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + 1
+                """
+                如果 not 相等的话， 不能继承，因为与连续
+                """
+                result = max(result, dp[i][j])
+        return result
+
+```
+
+
+
+##  197. <a name='-1'></a> integerBreak 
+
+```py
+输入: n = 10
+输出: 36
+解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
+
+
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        dp = [0] * (n + 1)
+        for end in range(2, n + 1):
+            for stt in range(end):
+                dp[end] = max(dp[end], stt * (end - stt), stt * dp[end - stt])
+        return dp[n]
+
+
+时间复杂度：O(n^2) ，其中 n 是给定的正整数。对于从 2 到 n 的每一个整数都要计算对应的 dp 值，
+空间复杂度： O(n)，其中 n 是给定的正整数。创建一个数组 dp，其长度为 n + 1。
+
+
+```
+
+##  147. <a name='-1'></a> candy
+
+```py
+输入：ratings = [1,0,2]
+输出：5
+解释：你可以分别给第一个、第二个、第三个孩子分发 2、1、2 颗糖果。
+
+输入：ratings = [1,2,2]
+输出：4
+解释：你可以分别给第一个、第二个、第三个孩子分发 1、2、1 颗糖果。
+     第三个孩子只得到 1 颗糖果，这满足题面中的两个条件。
+
+
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        n = len(ratings)
+        dp = [1] * n
+        # 从左往右
+        for i in range(1, n):
+            if ratings[i] > ratings[i - 1]:
+                dp[i] = dp[i - 1] + 1
+                # [1, 1, 2]
+        # 从右往左
+        for j in range(n - 2, -1, -1):
+            if ratings[j] > ratings[j + 1]:
+                dp[j] = max(dp[j], dp[j + 1] + 1)
+                # [2, 1, 2]
+        return sum(dp)
+
+时间复杂度： O(n)。我们需要遍历两次数组以分别计算满足左规则或右规则的最少糖果数量。
+空间复杂度： O(n)。我们需要保存所有的左规则对应的糖果数量。
+```
+
+
+
+
+
+##  75. <a name='dfsCoinChange-518CoinChange'></a> coinChange
+
+```py
+输入：coins = [1, 2, 5], amount = 11
+输出：3 
+解释：11 = 5 + 5 + 1
+
+
+'''
+求硬币数量，硬币可以重复使用
+'''
+import functools
+class Solution:
+    def coinChange(self, coins, amount):
+        dp = [10e9] * (amount + 1)
+        dp[0] = 0
+
+        for coin in coins:
+            for tar in range(coin, amount + 1):
+                dp[tar] = min(dp[tar], dp[tar-coin] + 1)
+
+        return dp[-1] if dp[-1] != 10e9 else -1
+
+
+
+时间复杂度： O(Sn)，其中 S 是金额，n 是面额数
+空间复杂度： O(S)。数组 dp 需要开长度为总金额 S 的空间。
+
+
+
+```
+
+
+
+##  236. <a name='PerfectSquares'></a> numSquares
+```py
+'''
+求硬币数量，硬币可以重复使用
+'''
+输入：n = 12
+输出：3 
+解释：12 = 4 + 4 + 4
+
+输入：n = 13
+输出：2
+解释：13 = 4 + 9
+
+
+        '''版本一，先遍历背包, 再遍历物品'''
+        '''版本二， 先遍历物品, 再遍历背包'''
+
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [10e5] * (n + 1)
+        dp[0] = 0
+        sqrt = ceil(n ** 0.5) 
+
+        for i in range(sqrt + 1): # 易错点：必须要 sqrt+1 比如输入：n = 1
+
+            coin = i ** 2
+            for tar in range(coin, n + 1):
+                dp[tar] = min(dp[tar], dp[tar - coin] + 1) 
+        return dp[-1]
+
+
+时间复杂度：O(n sqrt{n}) ，其中 n 为给定的正整数。
+空间复杂度： O(n)。我们需要 O(n) 的空间保存状态。
+
+。
+```
+
+##  116. <a name='CoinChange2-322.dfsCoinChange'></a> change
+
+```py
+'''
+求种类, 硬币可以重复使用
+'''
+输入：amount = 5, coins = [1, 2, 5]
+输出：4
+
+
+
+解释：有四种方式可以凑成总金额：
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+
+
+
+
+时间复杂度： O(amount × n) 
+空间复杂度： O(amount) 
+
+
+
+
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        # dp[i]代表金额为i的时候能凑成总金额的硬币组合数量
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        for coin in coins:
+            # 假如只有1个硬币，假如有2个硬币，假如有3个硬币~ ~ ~
+            for tar in range(coin, amount + 1):
+               dp[tar] += dp[tar - coin]
+        return dp[-1]
+```
+
+
+
+
+##  133. <a name='WordBreak'></a> wordBreak
+
+```py
+输入: s = "leetcode", wordDict = ["leet", "code"]
+输出: true
+解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
+
+
+
+
+输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+     注意，你可以重复使用字典中的单词。
+
+
+
+
+
+输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+输出: false
+
+
+
+
+
+class Solution:
+    def wordBreak(self, s, wordDict):
+        n = len(s) 
+        dp = [True] + [False]*n
+
+        for end in range(1, n + 1):
+            for stt in range(end):
+                if dp[stt] and s[stt: end] in wordDict:
+                    dp[end] = True 
+                    break # 优化部分：剩下的切分点 j 不用再寻找了，也可以不写，像下方一样
+        return dp[-1]
+
+
+
+
+
+时间复杂度：O(n^2)
+空间复杂度：O(n) 
+
+```
+
+
+
+##  198. <a name='NumberofLongestIncreasingSubse'></a> findNumberOfLIS
+
+
+```py
+note：这道题返回序列个数
+
+输入: [1,3,5,4,7]
+输出: 2
+解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
+
+
+
+
+输入: [2,2,2,2,2]
+输出: 5
+
+
+解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
+
+
+
+时间复杂度：O(N^2) 
+空间复杂度：O(N)
+
+
+
+class Solution:
+    def findNumberOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 1: return n
+
+        dp = [1 for _ in range(n)] 
+        cnt = [1 for _ in range(n)]
+
+        maxCount = 0
+        for end in range(1, n):
+            for stt in range(end):
+                if nums[end] > nums[stt]:
+                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
+                        dp[end] = dp[stt] + 1
+                        cnt[end] = cnt[stt]
+                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
+                        cnt[end] += cnt[stt]
+                '''
+                输入: [2,2,2,2,2]
+                这种情况，cnt的每个1都是答案
+                '''
+                if dp[end] > maxCount:
+                    maxCount = dp[end] # 统计最长的序列的所有次数
+        res = 0
+        for end in range(n):
+            if maxCount == dp[end]: # 长度和个数一一对应
+                res += cnt[end]
+        return res
+
+
+dp:   [1, 2, 1, 1, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 1, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 3, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 3, 4]
+cnt:  [1, 1, 1, 1, 2]
+```
+
+
+
+##  28. <a name='LongestIncreasingSubsequence'></a> lengthOfLIS
+
+
+```py
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+
+
+
+输入：nums = [0,1,0,3,2,3]
+输出：4
+
+
+
+
+输入：nums = [7,7,7,7,7,7,7]
 输出：1
-解释：1 通常被视为丑数。
 
-# python 实习面试这道题挂了，但我就不懂了，第一次见这题目谁能想到3指针的方法？
-# [1, 2, 3, 4, 5, 6, 8, 9, 10, 12]
+
 class Solution(object):
-    def nthUglyNumber(self, n):
-        res = [1]
-        idx2 = 0
-        idx3 = 0
-        idx5 = 0
-        for _ in range(n-1):
-            # 根据指针，求得最小值
-            nxt = min(res[idx2] * 2, res[idx3] * 3, res[idx5] * 5)
-            res.append(nxt)
-            # 移动指针
-            if nxt == res[idx2] * 2:
-                idx2 += 1
-            if nxt == res[idx3] * 3:
-                idx3 += 1
-            if nxt == res[idx5] * 5:
-                idx5 += 1
-        return res[-1]
+    def lengthOfLIS(self, nums):
+        if not nums:
+            return 0
 
-时间复杂度： O(n)。需要计算数组 dp 中的 n 个元素，每个元素的计算都可以在 O(1) 的时间内完成。
-空间复杂度： O(n)。空间复杂度主要取决于数组 dp 的大小。
+        dp = [1 for i in range(len(nums))]
+
+        for end in range(1, len(nums)): # 先确定结束，再确定开始
+            for stt in range(end):
+                if nums[end] > nums[stt]:
+                    dp[end] = max(dp[stt] + 1, dp[end])
+
+        return max(dp)
+
+时间复杂度：O(n^2) 
+空间复杂度：O(n) ，需要额外使用长度为 n 的 dp 数组。
+```
+
+
+贪心 + 二分查找
+
+
+```py
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        res = []
+        for num in nums:
+            i = bisect_left(res, num)
+            if i == len(res):
+                res.append(num) 
+            else:
+                res[i] = num # 如果新元素代替旧元素
+        return len(res)
+时间复杂度：O(N logN) 
+空间复杂度：O(N)
+```
+
+##  124. <a name='Offer51.'></a> reversePairs
+
+```py
+时间复杂度：O(N logN) 
+空间复杂度：O(N)
+
+
+如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对：
+
+
+输入: [7,5,6,4]
+输出: 5
+
+
+class Solution:
+    def reversePairs(self, nums: List[int]) -> int:
+        negUpQue = []
+        res = 0
+        for num in nums:
+            # 变负数插入，绝了-v，构成递增序列
+            i = bisect.bisect_left(negUpQue,-num) # bisect_left 返回的待插入位置分别是 0，1，1，3，
+            res += i # 前面有多少个比它大的，当前数就有多少个逆序对,加起来就是逆序对总数 5
+            negUpQue.insert(i, -num)
+        return res
+
+效果如下：
+# [-7]
+# [-7, -5]
+# [-7, -6, -5]
+# [-7, -6, -5, -4]
+
+
+```
+
+##  55. <a name='LongestCommonSubsequence'></a> longestCommonSubsequence
+
+```py
+输入：text1 = "abcde", text2 = "ace" 
+输出：3  
+
+解释：最长公共子序列是 "ace" ，它的长度为 3 。
+
+         a   b   c   d   e
+         0   0   0   0   0
+  a  0   1   1   1   1   1
+  c  0   1   1   2   2   2
+  e  0   1   1   2   2   3
+
+
+
+* 时间复杂度: O(n2)
+* 空间复杂度: O(n2)
+
+
+
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        dp = [[0] * (len(text2) + 1) for _ in range(len(text1) + 1)]
+        for i in range(1, len(text1) + 1): 
+            for j in range(1, len(text2) + 1): 
+                """
+                如果相等的话，同时删t1和t2 + 1 
+                """
+                if text1[i - 1] == text2[j - 1]: 
+                    dp[i][j] = dp[i - 1][j - 1] + 1 
+                """
+                如果 not 相等的话，继承 max(x,x)， 因为可以不连续
+                """
+                else: 
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+        return dp[-1][-1]
+
+```
+
+##  47. <a name='EditDistance72-'></a> minDistance
+
+
+```py
+输入：word1 = "intention", word2 = "execution"
+输出：5
+
+
+解释：
+intention -> inention (删除 't')
+inention  -> enention (将 'i' 替换为 'e')
+enention  -> exention (将 'n' 替换为 'x')
+exention  -> exection (将 'n' 替换为 'c')
+exection  -> execution (插入 'u')
+
+
+
+ 
+         i   n   t   e   n   t   i   o   n
+     0   1   2   3   4   5   6   7   8   9
+ e   1   1   n   t   3   n   t   i   o   n
+ x   2   i   n   t   e   n   t   i   o   n
+ e   3   i   n   t   e   n   t   i   o   n
+ c   4   i   n   t   e   n   t   i   o   n
+ u   5   i   n   t   e   n   t   i   o   n
+ t   6   i   n   t   e   n   t   i   o   n
+ i   7   i   n   t   e   n   t   i   o   n
+ o   8   i   n   t   e   n   t   i   o   n
+ n   9   i   n   t   e   n   t   i   o   n
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        len1 = len(word1)
+        len2 = len(word2)
+
+        DP = [[0 for _ in range(len2 + 1)] for _ in range(len1 + 1)]
+        
+        for i in range(0, len1 + 1):
+            for j in range(0, len2 + 1):
+                """
+                l1 和 l2 都能删干净
+                """
+                if i == 0:               # 初始化
+                    DP[i][j] = j
+                elif j == 0:             # 初始化
+                    DP[i][j] = i
+                """
+                如果相等的话，可以直接从 左上角 “继承”
+                """
+                elif word1[i - 1] == word2[j - 1]:
+                    DP[i][j] = DP[i - 1][j - 1]
+                """
+                如果 not 相等的话，一步操作min(x,x,x) + 计数
+                """
+                else:
+                    DP[i][j] = min(DP[i - 1][j], DP[i][j - 1], DP[i - 1][j - 1]) + 1
+                    
+        return DP[-1][-1]
+```
+
+
+
+##  278. <a name='DistinctSubsequences'></a> numDistinct
+
+```py
+字符串的一个 子序列 是指，通过 `删除` 一些（也可以 `不删除`）
+字符且不干扰剩余字符相对位置所组成的新字符串。
+
+输入：s = "rabbbit", t = "rabbit"
+
+ra-bbit
+rab-bit
+rabb-it
+
+
+输出：3
+
+
+输入：s = "babgbag", t = "bag"
+输出：5
+ba-g---
+ba----g
+b----ag
+--b--ag
+----bag
+
+              b    a    b    g    b    a    g  【si】
+         -    1    1    1    1    1    1    1
+     b   0   [1]   1   [2]   2   [3]   3    3
+     a   0    0   [1]   1    1    1   [4]   4
+     g   0    0    0    0   [1]   1    1   [5]
+   【ti】
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        sN = len(s)
+        tN = len(t)
+        dp = [[0] * (tN + 1) for _ in range(sN + 1)]
+
+        for si in range(sN + 1):
+            for ti in range(tN + 1):
+                """
+                只有s能删，t不能删
+                """
+                if ti == 0:  
+                    dp[si][ti] = 1
+                elif si == 0:  
+                    dp[si][ti] = 0
+                """
+                如果相等的话：只删 s + st 同时删除
+                """
+                elif s[i - 1] == t[j - 1]:
+                    dp[si][ti] = dp[si - 1][ti - 1] + dp[si - 1][ti]
+                """
+                如果 not 相等的话：只删 s
+                """
+                else:
+                    dp[si][ti] = dp[si - 1][ti]
+        return dp[-1][-1]
+```
+
+##  150. <a name='-1'></a> isMatch
+
+```py
+输入：s = "aa", p = "a"
+输出：false
+
+
+解释："a" 无法匹配 "aa" 整个字符串。
+
+        """
+        思路：动态规划， 定义二维dp数组，其中dp[i][j]表示s的前i个字符和p的前j个字符是否匹配，
+        为了方便初始化，我们将s和p的长度均+1
+        考虑到P中可能出现三种字符：普通字母(a-z)、'*'或者是'.', 则其动态转移方程分别是：
+        1) 如果p[j]为普通字母，dp[i][j]==dp[i-1][j-1] and s[i]==p[j]
+        2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
+        3) 
+        """
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+        '''
+        如果 p[j] 为 '*', 则情况比较复杂, 分以下两种情况讨论：
+           A. 以 s="c", p="ca*" 为例，此时 '*' 匹配0次，dp[si][pi] = dp[si][pi-2]
+           B. 以 s="caa", p="ca*", p="c.*" 为例，此时 '*' 匹配多次
+        '''
+        # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
+        # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        s = " " + s
+        p = " " + p
+        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
+        dp[0][0] = True  # 假定s和p都从空字符开始
+        
+        for si in range(len(s)):  # s的空字符需要额外初始化
+            for pi in range(1, len(p)):
+                if p[pi] == '*':   # *可以出现0次或者多次
+                    dp[si][pi] = dp[si][pi-2] or \
+                                (p[pi-1] in ('.', s[si]) and dp[si-1][pi])
+                elif p[pi] in ('.', s[si]):
+                    dp[si][pi] = dp[si-1][pi-1]
+        return dp[-1][-1]
+
+
+```
+
+
+
+
+##  216. <a name='-1'></a> isMatch
+
+```py
+给定一个 `字符串 (s)` 和一个 `字符模式 (p)` ，实现一个支持 '?' 和 '*' 的通配符匹配。
+
+'?' 可以匹配任何 `单个字符`。
+'*' 可以匹配 `任意字符串`（包括 `空字符串`）。
+两个字符串完全匹配才算匹配成功。
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+
+        dp = [[False] * (n + 1) for _ in range(m + 1)]
+
+        dp[0][0] = True  
+
+        for pi in range(1, n + 1):
+            dp[0][pi] = dp[0][pi-1] and (p[pi - 1] == '*')
+
+        
+        for si in range(1, m + 1):
+            for pi in range(1, n + 1):
+                if p[pi - 1] == '*': 
+                    dp[si][pi] = dp[si][pi - 1] | dp[si - 1][pi] 
+                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
+                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
+                elif p[pi - 1] in ('?', s[si - 1]): 
+                    dp[si][pi] = dp[si - 1][pi - 1]
+                
+        return dp[m][n]
+
+```
+
+
+##  127. <a name='2.'></a> backToOrigin
+
+```s
+圆环上有 10 个点，编号为 0 ~ 9。
+从`0点`出发，每次可以`逆时针`和`顺时针`走一步，问走`n步`回到`0点`共有多少种走法。
+
+输入: 2
+输出: 2
+
+
+解释：有 2 种方案。分别是 0->1->0 和 0->9->0
+```
+
+```py
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
+# 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
+class Solution:
+    def backToOrigin(self,n):
+        circle = 10
+        # step 在外面，site 在里面
+        dp = [[0 for site in range(circle)] for step in range(n + 1)]
+        dp[0][0] = 1
+        for step in range(1, n + 1): # 走 1 ~ n 步
+            for site in range(circle):
+                # dp[i][j] 表示从 0 出发，走 step 步到 site 的方案数
+                dp[step][site] = dp[step - 1][(site - 1 + circle) % circle] \
+                               + dp[step - 1][(site + 1) % circle]
+        return dp[n][0]
+```
+
+##  176. <a name='SuperEggDrop'></a> superEggDrop
+
+
+```py
+输入：k = 1, n = 2
+输出：2
+
+
+输入：k = 2, n = 6
+输出：3
+
+
+
+输入：k = 3, n = 14
+输出：4
+
+
+
+时间复杂度：O(eggs*log level) 
+空间复杂度：O(eggs)。
+
+class Solution:
+    def superEggDrop(self, eggs: int, level: int) -> int:
+            dp = [0] * (eggs + 1)
+            m = 0
+            while dp[eggs] < level:
+                m += 1
+                for gg in range(eggs, 0, -1): # 从 eggs ~ 1
+                    # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层
+                    # 鸡蛋没碎，可以遍历的楼层数目
+                    dp[gg] = dp[gg - 1] + dp[gg] + 1
+            return m
+
+```
+
+##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a> canPartition
+
+```py
+
+输入：nums = [1,5,11,5]
+输出：true
+
+解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+
+
+'''
+求数量，每个coin只能用1次
+'''
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        
+        sums = sum(nums) 
+        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
+        bagSize = sums // 2 # 求得新的目标
+        
+        dp = [0] * (bagSize+1) # 构建dp，numLen在外围
+        dp[0] = 1 # 赋值，dp的第一个元素
+        
+        for coin in nums:
+            for tar in range(bagSize, coin - 1, -1):
+                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对于2个num，bagsize的填满情况
+        return dp[-1] != 0
+
+
+
+时间复杂度： O(n × target)，其中 n 是数组的长度， target 是整个数组的元素和的一半。
+
+空间复杂度： O(target)，其中 target 是整个数组的元素和的一半。
+
+
+```
+
+##  193. <a name='dfsstartIforTargetSum'></a> findTargetSumWays
+
+
+```py
+输入：nums = [1,1,1,1,1], target = 3
+输出：5
+
+解释：一共有 5 种方法让最终目标和为 3 。
+-1 + 1 + 1 + 1 + 1 = 3
++1 - 1 + 1 + 1 + 1 = 3
++1 + 1 - 1 + 1 + 1 = 3
++1 + 1 + 1 - 1 + 1 = 3
++1 + 1 + 1 + 1 - 1 = 3
+
+
+
+'''
+求种类
+'''
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        n = len(nums)
+        sums = sum(nums)
+        bagSize = sums + target
+
+        if bagSize % 2 == 1 or bagSize < 0:
+            return 0
+        bagSize = bagSize // 2
+        dp = [[0] * (bagSize + 1) for _ in range(n + 1)]  # 构建dp，numLen在外围
+        dp[0][0] = 1 # 赋值，dp的第一个元素
+
+        for i in range(1, n + 1):
+            coin = nums[i - 1] # 易错点: num = nums[i-1]单独提出来写，不容易出错
+            for tar in range(bagSize + 1):
+                if tar - coin >= 0: # 易错点: 这里必需要是>=
+                    dp[i][tar] = dp[i - 1][tar] + dp[i - 1][tar - coin]
+                else:
+                    dp[i][tar] = dp[i - 1][tar]
+        return dp[-1][-1]
+
+```
+
+0-1背包（一维动态规划）
+
+```py
+'''
+求种类，每个coin只能用1次
+'''
+
+
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        n = len(nums)
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        bagSize = sums + target
+        # 也可以写成：bagSize = sums - target
+        if bagSize % 2 == 1 or bagSize < 0:
+            return 0
+        bagSize = bagSize // 2
+        # 构建dp，numLen在外围
+        dp = [0] * (bagSize+1)
+        # 赋值，dp的第一个元素
+        dp[0] = 1
+        for coin in nums:
+            for tar in range(bagSize, coin - 1, -1):
+                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        # 含义就是：
+        # 对于1个num，bagsize的填满情况
+        # 对弈2个num，bagsize的填满情况
+        return dp[-1]
+
+
+
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 0, 0, 0, 0]
+数字： 1 dp: [1, 1, 0, 0, 0]
+--------------------
+数字： 1 dp: [1, 1, 0, 0, 0]
+数字： 1 dp: [1, 1, 0, 0, 0]
+数字： 1 dp: [1, 1, 1, 0, 0]
+数字： 1 dp: [1, 2, 1, 0, 0]
+--------------------
+数字： 1 dp: [1, 2, 1, 0, 0]
+数字： 1 dp: [1, 2, 1, 1, 0]
+数字： 1 dp: [1, 2, 3, 1, 0]
+数字： 1 dp: [1, 3, 3, 1, 0]
+--------------------
+数字： 1 dp: [1, 3, 3, 1, 1]
+数字： 1 dp: [1, 3, 3, 4, 1]
+数字： 1 dp: [1, 3, 6, 4, 1]
+数字： 1 dp: [1, 4, 6, 4, 1]
+--------------------
+数字： 1 dp: [1, 4, 6, 4, 5]
+数字： 1 dp: [1, 4, 6, 10, 5]
+数字： 1 dp: [1, 4, 10, 10, 5]
+数字： 1 dp: [1, 5, 10, 10, 5]
+--------------------
+
+
 
 ```
 
@@ -13902,8 +12897,8 @@ class Solution:
         for i in range(1, n1 + 1):
             dp[i][0] = (dp[i-1][0] and s1[i-1] == s3[i-1])
 
-        for i in range(1, n2 + 1):
-            dp[0][i] = (dp[0][i-1] and s2[i-1] == s3[i-1])
+        for j in range(1, n2 + 1):
+            dp[0][j] = (dp[0][j-1] and s2[j-1] == s3[j-1])
             
         for i in range(1, n1 + 1):
             for j in range(1, n2 + 1):
@@ -13915,118 +12910,6 @@ class Solution:
 
 时间复杂度： O(nm)，两重循环的时间代价为 O(nm)。
 空间复杂度： O(m)，即 s2 的长度。
-
-"aabcc"
-"dbbca"
-"aadbbcbcac"
-i1 和 i2 分别为:  0 0
-i1 和 i2 分别为:  0 1
-d a [True, False, False, False, False, False]
-i1 和 i2 分别为:  0 2
-b a [True, False, False, False, False, False]
-i1 和 i2 分别为:  0 3
-b d [True, False, False, False, False, False]
-i1 和 i2 分别为:  0 4
-c b [True, False, False, False, False, False]
-i1 和 i2 分别为:  0 5
-a b [True, False, False, False, False, False]
-
-
-i1 和 i2 分别为:  1 0
-a a [True, False, False, False, False, False]
-i1 和 i2 分别为:  1 1
-a a [True, False, False, False, False, False]
-d a [True, False, False, False, False, False]
-i1 和 i2 分别为:  1 2
-a d [True, False, False, False, False, False]
-b d [True, False, False, False, False, False]
-i1 和 i2 分别为:  1 3
-a b [True, False, False, False, False, False]
-b b [True, False, False, False, False, False]
-i1 和 i2 分别为:  1 4
-a b [True, False, False, False, False, False]
-c b [True, False, False, False, False, False]
-i1 和 i2 分别为:  1 5
-a c [True, False, False, False, False, False]
-a c [True, False, False, False, False, False]
-
-
-i1 和 i2 分别为:  2 0
-a a [True, False, False, False, False, False]
-i1 和 i2 分别为:  2 1
-a d [True, False, False, False, False, False]
-d d [True, True, False, False, False, False]
-i1 和 i2 分别为:  2 2
-a b [True, True, False, False, False, False]
-b b [True, True, True, False, False, False]
-i1 和 i2 分别为:  2 3
-a b [True, True, True, False, False, False]
-b b [True, True, True, True, False, False]
-i1 和 i2 分别为:  2 4
-a c [True, True, True, True, False, False]
-c c [True, True, True, True, True, False]
-i1 和 i2 分别为:  2 5
-a b [True, True, True, True, True, False]
-a b [True, True, True, True, True, False]
-
-
-i1 和 i2 分别为:  3 0
-b d [False, True, True, True, True, False]
-i1 和 i2 分别为:  3 1
-b b [False, True, True, True, True, False]
-d b [False, True, True, True, True, False]
-i1 和 i2 分别为:  3 2
-b b [False, True, True, True, True, False]
-b b [False, True, True, True, True, False]
-i1 和 i2 分别为:  3 3
-b c [False, True, True, False, True, False]
-b c [False, True, True, False, True, False]
-i1 和 i2 分别为:  3 4
-b b [False, True, True, False, True, False]
-c b [False, True, True, False, True, False]
-i1 和 i2 分别为:  3 5
-b c [False, True, True, False, True, False]
-a c [False, True, True, False, True, False]
-
-
-i1 和 i2 分别为:  4 0
-c b [False, True, True, False, True, False]
-i1 和 i2 分别为:  4 1
-c b [False, False, True, False, True, False]
-d b [False, False, True, False, True, False]
-i1 和 i2 分别为:  4 2
-c c [False, False, True, False, True, False]
-b c [False, False, True, False, True, False]
-i1 和 i2 分别为:  4 3
-c b [False, False, True, False, True, False]
-b b [False, False, True, True, True, False]
-i1 和 i2 分别为:  4 4
-c c [False, False, True, True, True, False]
-c c [False, False, True, True, True, False]
-i1 和 i2 分别为:  4 5
-c a [False, False, True, True, True, False]
-a a [False, False, True, True, True, True]
-
-
-i1 和 i2 分别为:  5 0
-c b [False, False, True, True, True, True]
-i1 和 i2 分别为:  5 1
-c c [False, False, True, True, True, True]
-d c [False, False, True, True, True, True]
-i1 和 i2 分别为:  5 2
-c b [False, False, False, True, True, True]
-b b [False, False, False, True, True, True]
-i1 和 i2 分别为:  5 3
-c c [False, False, False, True, True, True]
-b c [False, False, False, True, True, True]
-i1 和 i2 分别为:  5 4
-c a [False, False, False, True, False, True]
-c a [False, False, False, True, False, True]
-i1 和 i2 分别为:  5 5
-c c [False, False, False, True, False, True]
-a c [False, False, False, True, False, True]
-
-
 ```
 
 
@@ -14052,15 +12935,6 @@ a c [False, False, False, True, False, True]
 输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
 输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
 
-
-
-时间复杂度： O(mn)，其中 m 是矩阵的行数，n 是矩阵的列数。
-
-        我们至多只需要遍历该矩阵两次。
-
-空间复杂度： O(m+n)，其中 m 是矩阵的行数，n 是矩阵的列数。
-
-        我们需要分别记录每一行或每一列是否有零出现。
  
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
@@ -14069,13 +12943,11 @@ class Solution:
         """
         setrow = set()
         setcol = set()
-        # 记录含0的位置
         for i in range(len(matrix)):
             for j in range(len(matrix[0])):
                 if matrix[i][j] == 0:
                     setrow.add(i)
                     setcol.add(j)
-        # 将其所在行和列的所有元素都设为 0
         for r in setrow:
             for j in range(len(matrix[0])):
                 matrix[r][j] = 0
@@ -14086,61 +12958,6 @@ class Solution:
 ```
 
 
-##  225. <a name='Offer46.'></a>剑指 Offer 46. 把数字翻译成字符串
-
-
-
-##  227. <a name='PartitionLabels'></a>763 Partition Labels
-
-[小明](https://www.bilibili.com/video/BV1Ca4y177LW?spm_id_from=333.999.0.0)
-
-##  228. <a name='K-1'></a>340. 至多包含 K 个不同字符的最长子串
-
-
-
-
-##  231. <a name='Offer07.'></a>剑指 Offer 07. 重建二叉树
-
-
-
-
-##  233. <a name='Offer32-III.III'></a>剑指 Offer 32 - III. 从上到下打印二叉树 III
-
-
-
-##  235. <a name='RandomPickwithWeight'></a>528 Random Pick with Weight
-
-[小明](https://www.bilibili.com/video/BV1UV411r7MK?spm_id_from=333.999.0.0)
-
-
-
-
-##  238. <a name='TopKFrequentWords'></a>692. Top K Frequent Words
-
-[花花酱](https://www.bilibili.com/video/BV1Mt41137eL?spm_id_from=333.999.0.0)
-
-##  239. <a name='Offer50.'></a>剑指 Offer 50. 第一个只出现一次的字符
-
-
-
-##  241. <a name='21.'></a>补充题21. 字符串相减
-
-
-# 14 day (得分 = 1分) 91
-
-##  242. <a name='-1'></a>354. 俄罗斯套娃信封问题
-
-##  243. <a name='II'></a>253. 会议室 II
-
-##  244. <a name='-1'></a>628. 三个数的最大乘积
-
-##  245. <a name='-1'></a>674. 最长连续递增序列
-
-##  246. <a name='Offer57-II.s'></a>剑指 Offer 57 - II. 和为s的连续正数序列
-
-##  247. <a name='CountofSmallerNumbersAfterSelf'></a>315. Count of Smaller Numbers After Self
-
-[花花酱](https://www.bilibili.com/video/BV1BW411C7TM?spm_id_from=333.999.0.0)
 
 ##  248. <a name='FactorialTrailingZeroes'></a> trailingZeroes
 
@@ -14168,10 +12985,6 @@ class Solution:
 ```
 
 
-
-
-##  252. <a name='Offer35.'></a>剑指 Offer 35. 复杂链表的复制
-
 ##  253. <a name='IntegertoRoman'></a>12. Integer to Roman
 
 ```py
@@ -14195,9 +13008,7 @@ class Solution:
 
 class Solution:
     def romanToint(self, s: str) -> int:
-        dic = ["M","D","C","L","X","V","I","O"]
-         = [1000,500,100,50,10,5,1,0]
-
+        dic = {"M":1000,"D":500,"C":100,"L":50,"X":10,"V":5,"I":1,"O":0}
         res = 0
         pre = None
         s += 'O'
@@ -14227,40 +13038,12 @@ class Solution:
 
 时间复杂度： O(1)。
 
-        由于 valueSymbols 长度是固定的，且这 13 字符中的每个字符的出现次数均不会超过 3，
-
-        因此循环次数有一个确定的上限。对于本题给出的数据范围，循环次数不会超过 15 次。
-
-        计算量与输入数字的大小无关。
+        这 13 字符中的每个字符的出现次数均不会超过 3，
 
 空间复杂度： O(1)。
 
 ```
 
-
-
-##  255. <a name='OpentheLock'></a>752. Open the Lock
-
-[花花酱](https://www.bilibili.com/video/BV1NW411y74z?spm_id_from=333.999.0.0)
-
-##  256. <a name='LongestSubstringwithAtLeastK'></a>395 Longest Substring with At Least K
-
-[小明](https://www.bilibili.com/video/BV1hD4y1X7rq?spm_id_from=333.999.0.0)
-
-
-
-##  258. <a name='SquaresofaSortedArray'></a>977 Squares of a Sorted Array
-
-[小明](https://www.bilibili.com/video/BV1EX4y1u7Mb?spm_id_from=333.999.0.0)
-
-
-
-##  260. <a name='-1'></a>617. 合并二叉树
-
-
-# 15 day (得分 = 1分) 92
-
-##  261. <a name='k'></a>60. 第k个排列
 
 ##  262. <a name='Implementstr'></a> strStr
 
@@ -14310,10 +13093,10 @@ class Solution(object):
 
         while i * i < n: # 😐😐😐 while 循环
         	if isPrime[i]:
-        		j = i * i    # j 永远是 i 的倍数
-        		while j < n : # 😐😐😐 while 循环
-        			isPrime[j] = 0
-        			j += i   # j 永远是 i 的倍数
+        		j = i   
+        		while j * i < n : # 😐😐😐 while 循环
+        			isPrime[j * i] = 0
+        			j += 1   
         	i += 1
 
         return sum(isPrime[2:])
@@ -14321,35 +13104,36 @@ class Solution(object):
 
 
 
-##  264. <a name='Offer65.'></a>剑指 Offer 65. 不用加减乘除做加法
+##  123. <a name='Offer62.'></a> lastRemaining
+
+```py
+输入: n = 5, m = 3
+输出: 3
 
 
-##  266. <a name='N-1'></a>51. N皇后
+输入: n = 10, m = 17
+输出: 2
 
-##  267. <a name='24.'></a>补充题24. 双栈排序
+0个人时候游戏就不存在了， 1个人时候直接获胜， 
+ 
+反推公式：
 
+f(n,m) = (f(n,m) + m) % i #i为当前人数
 
-##  269. <a name='Offer38.'></a>剑指 Offer 38. 字符串的排列
+f(8,3) = [f(7,3) + 3] % 8
 
-##  270. <a name='InsertintoaBinarySearchTree'></a>701 Insert into a Binary Search Tree
+约瑟夫环：
 
-[小明](https://www.bilibili.com/video/BV1q54y1k76s?spm_id_from=333.999.0.0)
-
-
-##  272. <a name='k-1'></a>698. 划分为k个相等的子集
-
-
-
-
-
-##  274. <a name='-1'></a>836. 矩形重叠
-
-##  275. <a name='-1'></a>99. 恢复二叉搜索树
+class Solution:
+    def lastRemaining(self, n: int, m: int) -> int:
+        res = 0
+        for i in range(2, n + 1):
+            res = (res + m) % i
+        return res
 
 
-##  279. <a name='MinimumInsertionStepstoMakeaStringPalindrom'></a>1312. 【回文🌈】Minimum Insertion Steps to Make a String Palindrom
+时间复杂度： O(n)，需要求解的函数值有 n 个。
 
-[花花酱](https://www.bilibili.com/video/BV1HJ411L7b2?spm_id_from=333.999.0.0)
-
-
+空间复杂度： O(1)，只使用常数个变量。
+```
 
