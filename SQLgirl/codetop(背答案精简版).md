@@ -9176,7 +9176,7 @@ class Solution:
 
 
 
-##  199. <a name='17.24.'></a> getMaxMatrix
+##  199. <a name='17.24.'></a> 【hard】【hard】getMaxMatrix
 
 ```py
 输入：
@@ -9248,7 +9248,7 @@ class Solution:
             i1, i2 = 0, i3 - 1
             # 如果满足条件，则 i1 到 i2 之间的，所有 i1，都满足条件
             # 如果不满足条件，i1 才需要增大，否则 i1 可以一直躺平
-            while i1 < i2: # 😐😐😐 while 循环
+            while i1 < i2:
                 if nums[i1] + nums[i2] > nums[i3]:
                     res += i2 - i1
                     i2 -= 1
@@ -9540,7 +9540,7 @@ class Solution:
         return dp[n]
 
 
-时间复杂度：O(n^2) ，其中 n 是给定的正整数。对于从 2 到 n 的每一个整数都要计算对应的 dp 值，
+时间复杂度：O(n^2)，其中 n 是给定的正整数。对于从 2 到 n 的每一个整数都要计算对应的 dp 值，
 空间复杂度： O(n)，其中 n 是给定的正整数。创建一个数组 dp，其长度为 n + 1。
 
 
@@ -9583,7 +9583,7 @@ class Solution:
 
 
 
-##  75. <a name='dfsCoinChange-518CoinChange'></a> coinChange
+##  75. <a name='dfsCoinChange-518CoinChange'></a> coinChange - 求硬币min数量，硬币可以重复使用
 
 ```py
 输入：coins = [1, 2, 5], amount = 11
@@ -9592,7 +9592,7 @@ class Solution:
 
 
 '''
-求硬币数量，硬币可以重复使用
+
 '''
 import functools
 class Solution:
@@ -9617,11 +9617,9 @@ class Solution:
 
 
 
-##  236. <a name='PerfectSquares'></a> numSquares
+##  236. <a name='PerfectSquares'></a> numSquares - 求硬币min数量，硬币可以重复使用
 ```py
-'''
-求硬币数量，硬币可以重复使用
-'''
+
 输入：n = 12
 输出：3 
 解释：12 = 4 + 4 + 4
@@ -9630,9 +9628,6 @@ class Solution:
 输出：2
 解释：13 = 4 + 9
 
-
-        '''版本一，先遍历背包, 再遍历物品'''
-        '''版本二， 先遍历物品, 再遍历背包'''
 
 
 class Solution:
@@ -9655,12 +9650,10 @@ class Solution:
 。
 ```
 
-##  116. <a name='CoinChange2-322.dfsCoinChange'></a> change
+##  116. <a name='CoinChange2-322.dfsCoinChange'></a> change - 求种类, 硬币可以重复使用
 
 ```py
-'''
-求种类, 硬币可以重复使用
-'''
+
 输入：amount = 5, coins = [1, 2, 5]
 输出：4
 
@@ -9683,11 +9676,11 @@ class Solution:
 
 class Solution:
     def change(self, amount: int, coins: List[int]) -> int:
-        # dp[i]代表金额为i的时候能凑成总金额的硬币组合数量
+        # dp[i] 代表金额为 i 的时候能凑成总金额的硬币组合数量
         dp = [0] * (amount + 1)
         dp[0] = 1
         for coin in coins:
-            # 假如只有1个硬币，假如有2个硬币，假如有3个硬币~ ~ ~
+            # 假如只有 1 个硬币，假如有 2 个硬币，假如有 3 个硬币~ ~ ~
             for tar in range(coin, amount + 1):
                dp[tar] += dp[tar - coin]
         return dp[-1]
@@ -9770,8 +9763,7 @@ class Solution:
             return s
 
         dp = [[False for _ in range(lenStr)] for _ in range(lenStr)]
-        dp[1][1] = True 
-            # dp[1][1]是正确写法，dp[1,1]是错误写法
+
 
         for end in range(1, lenStr): # 把三角形画出来，先j，再i，
             for stt in range(end): # 先框定结束j，再框定开始i。
@@ -9788,7 +9780,7 @@ class Solution:
         return s[start: start + maxmaxlen]
 ```
 
-##  198. <a name='NumberofLongestIncreasingSubse'></a> findNumberOfLIS
+##  198. <a name='NumberofLongestIncreasingSubse'></a> 【hard】【hard】findNumberOfLIS
 
 
 ```py
@@ -9859,7 +9851,7 @@ cnt:  [1, 1, 1, 1, 2]
 
 
 
-##  28. <a name='LongestIncreasingSubsequence'></a> lengthOfLIS
+##  28. <a name='LongestIncreasingSubsequence'></a> 【hard】lengthOfLIS - 长度
 
 
 ```py
@@ -10123,7 +10115,7 @@ class Solution:
         return dp[-1][-1]
 ```
 
-##  150. <a name='-1'></a> isMatch
+##  150. <a name='-1'></a> 【hard】【hard】isMatch
 
 ```py
 输入：s = "aa", p = "a"
@@ -10165,8 +10157,8 @@ class Solution:
         for si in range(len(s)):  # s的空字符需要额外初始化
             for pi in range(1, len(p)):
                 if p[pi] == '*':   # *可以出现0次或者多次
-                    dp[si][pi] = dp[si][pi-2] or \
-                                (p[pi-1] in ('.', s[si]) and dp[si-1][pi])
+                    dp[si][pi] = dp[si][pi-2] or \ s="c", p="ca*"
+                                (p[pi-1] in ('.', s[si]) and dp[si-1][pi]) \ s="caa", p="ca*  c.*"
                 elif p[pi] in ('.', s[si]):
                     dp[si][pi] = dp[si-1][pi-1]
         return dp[-1][-1]
@@ -10177,7 +10169,7 @@ class Solution:
 
 
 
-##  216. <a name='-1'></a> isMatch
+##  216. <a name='-1'></a> 【hard】isMatch
 
 ```py
 给定一个 `字符串 (s)` 和一个 `字符模式 (p)` ，实现一个支持 '?' 和 '*' 的通配符匹配。
@@ -10219,7 +10211,7 @@ class Solution:
 ```
 
 
-##  127. <a name='2.'></a> backToOrigin
+##  127. <a name='2.'></a> 【hard】backToOrigin
 
 ```s
 圆环上有 10 个点，编号为 0 ~ 9。
@@ -10249,13 +10241,13 @@ class Solution:
         dp[0][0] = 1
         for step in range(1, n + 1): # 走 1 ~ n 步
             for site in range(circle):
-                # dp[i][j] 表示从 0 出发，走 step 步到 site 的方案数
+                # dp[step][site] 表示从 0 出发，走 step 步到 site 的方案数
                 dp[step][site] = dp[step - 1][(site - 1 + circle) % circle] \
                                + dp[step - 1][(site + 1) % circle]
         return dp[n][0]
 ```
 
-##  176. <a name='SuperEggDrop'></a> superEggDrop
+##  176. <a name='SuperEggDrop'></a> 【hard】superEggDrop
 
 
 ```py
@@ -10290,7 +10282,7 @@ class Solution:
 
 ```
 
-##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a> canPartition
+##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a> 【hard】canPartition - 求种类，每个coin只能用1次 - 从后往前
 
 ```py
 
@@ -10300,9 +10292,6 @@ class Solution:
 解释：数组可以分割成 [1, 5, 5] 和 [11] 。
 
 
-'''
-求数量，每个coin只能用1次
-'''
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
         n = len(nums)
@@ -10311,15 +10300,13 @@ class Solution:
         if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
         bagSize = sums // 2 # 求得新的目标
         
-        dp = [0] * (bagSize+1) # 构建dp，numLen在外围
-        dp[0] = 1 # 赋值，dp的第一个元素
+        dp = [0] * (bagSize+1) 
+        dp[0] = 1 
         
         for coin in nums:
             for tar in range(bagSize, coin - 1, -1):
                 dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        # 含义就是：
-        # 对于1个num，bagsize的填满情况
-        # 对于2个num，bagsize的填满情况
+
         return dp[-1] != 0
 
 
@@ -10331,7 +10318,7 @@ class Solution:
 
 ```
 
-##  193. <a name='dfsstartIforTargetSum'></a> findTargetSumWays
+##  193. <a name='dfsstartIforTargetSum'></a> 【hard】findTargetSumWays - 求种类，每个coin只能用1次 - 从后往前
 
 
 ```py
@@ -10345,42 +10332,6 @@ class Solution:
 +1 + 1 + 1 - 1 + 1 = 3
 +1 + 1 + 1 + 1 - 1 = 3
 
-
-
-'''
-求种类
-'''
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        n = len(nums)
-        sums = sum(nums)
-        bagSize = sums + target
-
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-        dp = [[0] * (bagSize + 1) for _ in range(n + 1)]  # 构建dp，numLen在外围
-        dp[0][0] = 1 # 赋值，dp的第一个元素
-
-        for i in range(1, n + 1):
-            coin = nums[i - 1] # 易错点: num = nums[i-1]单独提出来写，不容易出错
-            for tar in range(bagSize + 1):
-                if tar - coin >= 0: # 易错点: 这里必需要是>=
-                    dp[i][tar] = dp[i - 1][tar] + dp[i - 1][tar - coin]
-                else:
-                    dp[i][tar] = dp[i - 1][tar]
-        return dp[-1][-1]
-
-```
-
-0-1背包（一维动态规划）
-
-```py
-'''
-求种类，每个coin只能用1次
-'''
-
-
 class Solution:
     def findTargetSumWays(self, nums: List[int], target) -> int:
         n = len(nums)
@@ -10392,51 +10343,17 @@ class Solution:
         if bagSize % 2 == 1 or bagSize < 0:
             return 0
         bagSize = bagSize // 2
-        # 构建dp，numLen在外围
+        
         dp = [0] * (bagSize+1)
-        # 赋值，dp的第一个元素
         dp[0] = 1
         for coin in nums:
             for tar in range(bagSize, coin - 1, -1):
                 dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        # 含义就是：
-        # 对于1个num，bagsize的填满情况
-        # 对弈2个num，bagsize的填满情况
         return dp[-1]
-
-
-
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 0, 0, 0, 0]
-数字： 1 dp: [1, 1, 0, 0, 0]
---------------------
-数字： 1 dp: [1, 1, 0, 0, 0]
-数字： 1 dp: [1, 1, 0, 0, 0]
-数字： 1 dp: [1, 1, 1, 0, 0]
-数字： 1 dp: [1, 2, 1, 0, 0]
---------------------
-数字： 1 dp: [1, 2, 1, 0, 0]
-数字： 1 dp: [1, 2, 1, 1, 0]
-数字： 1 dp: [1, 2, 3, 1, 0]
-数字： 1 dp: [1, 3, 3, 1, 0]
---------------------
-数字： 1 dp: [1, 3, 3, 1, 1]
-数字： 1 dp: [1, 3, 3, 4, 1]
-数字： 1 dp: [1, 3, 6, 4, 1]
-数字： 1 dp: [1, 4, 6, 4, 1]
---------------------
-数字： 1 dp: [1, 4, 6, 4, 5]
-数字： 1 dp: [1, 4, 6, 10, 5]
-数字： 1 dp: [1, 4, 10, 10, 5]
-数字： 1 dp: [1, 5, 10, 10, 5]
---------------------
-
-
 
 ```
 
-##  214. <a name='-1'></a>97. 交错字符串
+##  214. <a name='-1'></a>【hard】isInterleave
 
 ```py
 给定三个字符串 s1、s2、s3，请你帮忙验证 s3 是否是由 s1 和 s2 交错 组成的。
@@ -10473,19 +10390,7 @@ class Solution:
 ```
 
 
-
-
-
-
-
-
-# 13 day (得分 = 1分) 90
-
-
-
-##  223. <a name='08.12.'></a>面试题 08.12. 八皇后
-
-##  224. <a name='SetMatrixZeroes'></a>73. Set Matrix Zeroes
+##  224. <a name='SetMatrixZeroes'></a> setZeroes
 
 ```py
 输入：matrix = [[1,1,1],[1,0,1],[1,1,1]]
@@ -10623,8 +10528,8 @@ class Solution:
             if haystack[i : i + len(needle)] == needle:
                 return i 
         return -1
-时间复杂度： O(n×m)，其中 n 是字符串 haystack 的长度，m 是字符串 needle 的长度。
 
+时间复杂度： O(n×m)，其中 n 是字符串 haystack 的长度，m 是字符串 needle 的长度。
 空间复杂度： O(1)。我们只需要常数的空间保存若干变量。
 ```
 
@@ -10664,7 +10569,7 @@ class Solution(object):
 
 
 
-##  123. <a name='Offer62.'></a> lastRemaining
+##  123. <a name='Offer62.'></a> 【hard】lastRemaining
 
 ```py
 输入: n = 5, m = 3
