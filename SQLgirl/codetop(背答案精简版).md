@@ -1876,7 +1876,7 @@ class Solution:
 
 
 
-##  277. <a name='-1'></a> sortedListToBST
+##  277. <a name='-1'></a> 【hard】sortedListToBST
 
 当递归的是一个链表`头`时，需要切断
 
@@ -1932,7 +1932,7 @@ class Solution:
 
 ```
 
-##  49. <a name='-1'></a> buildTree
+##  49. <a name='-1'></a> 【hard】buildTree
 
 ```py
 输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
@@ -2176,7 +2176,7 @@ class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         l, r = 0, len(numbers) - 1 
         while l < r: # 😐 while 循环
-            if numbers[l] + numbers[r] == tart:
+            if numbers[l] + numbers[r] == target:
                 return [l + 1, r + 1] # 给你一个下标从 1 开始的整数数组 numbers
             elif numbers[l] + numbers[r] < target:
                 l += 1
@@ -2282,12 +2282,12 @@ class Solution:
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        maxprofit = 0
-        minprice = 1e9
+        sell = 0
+        buy = 1e9
         for price in prices:
-            maxprofit = max(maxprofit,price - minprice)
-            minprice = min(minprice,price)
-        return maxprofit
+            buy = min(buy, price)
+            sell = max(sell, price - buy)
+        return sell
 ```
 
 
@@ -2359,7 +2359,7 @@ class Solution:
 ```
 
 
-##  251. <a name='BestTimetoBuyandSellStockIV'></a> maxProfit
+##  251. <a name='BestTimetoBuyandSellStockIV'></a> 【hard】maxProfit
 
 你最多可以完成 `k 笔` 交易。
 
@@ -2446,7 +2446,7 @@ class Solution:
 
 ```
 
-##  17. <a name='-1'></a> lowestCommonAncestor
+##  17. <a name='-1'></a> 【hard】lowestCommonAncestor
 
 ```py
 root = [3,5,1,6,2,0,8,null,null,7,4], 
@@ -2482,7 +2482,7 @@ class Solution:
 
 
 
-##  60. <a name='GenerateParentheses'></a> generateParenthesis
+##  60. <a name='GenerateParentheses'></a> 【hard】generateParenthesis
 
 ```py
 输入：n = 3
@@ -2603,7 +2603,7 @@ class Solution:
 
 
 
-##  134. <a name='ValidPalindrome'></a> isPalindrome
+##  134. <a name='ValidPalindrome'></a> 【hard】isPalindrome
 
 isalnum() 方法检测字符串是否由`字母`和`数字`组成。
 
@@ -2741,7 +2741,7 @@ class Solution:
 
 
 
-##  84. <a name='LongestConsecutiveSequence'></a> longestConsecutive
+##  84. <a name='LongestConsecutiveSequence'></a> 【hard】longestConsecutive
 
 ```py
 输入：nums = [100,4,200,1,3,2]
@@ -2890,7 +2890,8 @@ class Solution:
 
 空间复杂度： O(n)
 
-
+FPFP
+UPFF
 
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
@@ -2922,6 +2923,7 @@ class Solution:
 时间复杂度：O(n^2)，其中 n 是城市的数量。需要遍历矩阵 n 中的每个元素。
 空间复杂度：O(n)，其中 n 是城市的数量。调用栈的深度.
 
+注意：这里 🌵visit 是个 set()
 
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
@@ -2937,7 +2939,7 @@ class Solution:
 
         for stt in range(proN):
             if stt not in visited:
-                dfs(stt)
+                dfs(stt) 🌵dfs了 n次
                 res += 1
         
         return res
@@ -3000,7 +3002,7 @@ class Solution:
 ```
 
 
-##  109. <a name='WordSearch'></a> exist -> bool
+##  109. <a name='WordSearch'></a> 【hard】exist -> bool
 
 ```py
 输入：board = [
@@ -3034,6 +3036,9 @@ class Solution:
 因此，实际的时间复杂度会远远小于 Θ(MN⋅3^L )
 
 
+注意：这里 🌵visit 是个格子
+= [[False] * n for _ in range(m)]
+
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
@@ -3062,7 +3067,7 @@ class Solution:
         n = len(board[0])
         visit = [[False] * n for _ in range(m)]
         for i in range(m): # 遍历所有格子作为单词起点
-            for j in range(n):
+            for j in range(n): #  这里 🌵dfs了 m*n 次
                 if dfs(i, j, word): # dfs成功
                     return True
         return False
@@ -3094,19 +3099,18 @@ class Solution:
         
         @cache
         def dfs(x: int, y: int) -> int:
-            ans = 1
+            ans = 1 # 如果是最高点，直接返回1。如果周围有个点[nx][ny]高于[x][y]，则需要 “+1”
             for dx, dy in  [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                 nx, ny = x + dx, y + dy
                 if 0 <= nx < m and 0 <= ny < n and matrix[nx][ny] > matrix[x][y]:
-                    # 从 x, y 点出发, 可以到达的最远距离
-                    ans = max(ans, dfs(nx, ny) + 1)
+                    ans = max(ans, dfs(nx, ny) + 1) # 从 x, y 点出发, 可以到达的最远距离
             return ans
 
         res = 0
         m, n = len(matrix), len(matrix[0])
-# 🌵 这里循环了 m*n 次
+
         for i in range(m):
-            for j in range(n):
+            for j in range(n): #  这里 🌵dfs了 m*n 次
                 res = max(res, dfs(i, j)) # 注意：😁这里存的是从开始位置能到达多远
         return res
 
@@ -3149,6 +3153,7 @@ class Solution:
             x = int(num1[i])
             for j in range(n - 1, -1, -1):
                 ansArr[i + j + 1] += x * int(num2[j])
+                # 从 m+n-1 到 1，还保留了一位
         
         # 从后往前
         for i in range(m + n - 1, 0, -1):
@@ -3261,7 +3266,7 @@ class Solution:
 ```
 
 
-##  85. <a name='ValidateIPAddress'></a> validIPAddress
+##  85. <a name='ValidateIPAddress'></a> 【hard】validIPAddress
 
 ```py
 输入：queryIP = "172.16.254.1"
@@ -3319,10 +3324,19 @@ class Solution:
             return "IPv6"
 
 
+也可以这么写：
+                # 192.168.01.1 为无效IPv4地址
+                # 192.168@1.1 为无效IPv4地址
+                # 0 <= xi <= 255 
+                if  not num.isdigit()  \
+                    or (str(int(num)) != num)  \
+                    or (not 0 <= int(num) <= 255):
+                    return "Neither"
+
 ```
 
 
-##  71. <a name='Subsets'></a> subsets
+##  71. <a name='Subsets'></a> 【hard】subsets
 
 ```py
 输入：nums = [1,2,3]
@@ -3491,7 +3505,7 @@ G(n) 函数一共有 n 个值需要求解，每次求解需要 O(n) 的时间复
 ```
 
 
-##  27. <a name='SpiralMatrix'></a> spiralOrder
+##  27. <a name='SpiralMatrix'></a> 【hard】spiralOrder
 
 ```py
 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
@@ -3640,7 +3654,7 @@ class Solution:
 
 
 
-##  30. <a name='TrappingRainWater'></a> trap
+##  30. <a name='TrappingRainWater'></a> 【hard】trap
 
 ```py
 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
@@ -3680,7 +3694,7 @@ class Solution:
         return res
 ```
 
-##  132. <a name='ContainerWithMostWater'></a> maxArea
+##  132. <a name='ContainerWithMostWater'></a> 【hard】maxArea
 
 
 ```py
@@ -3845,6 +3859,7 @@ class Solution:
 class Solution:
     def treeToDoublyList(self, root: 'Node') -> 'Node':
         if not root: return
+
         path = []
         def inorder(root):
             if root: 
@@ -3852,6 +3867,7 @@ class Solution:
                 path.append(root)
                 inorder(root.right)    
         inorder(root)
+
         for i in range(len(path)): # 构成一个环
             path[i].left = path[i - 1]
             path[i].right = path[(i + 1) % len(path)] 
@@ -3895,7 +3911,7 @@ class Solution:
 ```
 
 
-##  164. <a name='DeleteNodeinaBST'></a> deleteNode
+##  164. <a name='DeleteNodeinaBST'></a> 【hard】deleteNode
 
 ```py
 class Solution:
@@ -4095,7 +4111,7 @@ class Solution:
 
 
 
-##  125. <a name='SubarraySumEqualsKK'></a> subarraySum
+##  125. <a name='SubarraySumEqualsKK'></a> 【hard】subarraySum
 
 ```py
 输入：nums = [1,2,3], k = 3
@@ -4123,7 +4139,7 @@ class Solution:
 ```
 
 
-##  54. <a name='SlidingWindowMaximum'></a> maxSlidingWindow
+##  54. <a name='SlidingWindowMaximum'></a> 【hard】maxSlidingWindow
 
 ```py
 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
@@ -4170,7 +4186,7 @@ class Solution:
 
 ```
 
-##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a> lengthOfLongestSubstring
+##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a> 【hard】lengthOfLongestSubstring
 
 ```py
 输入: s = "abcabcbb"
@@ -4202,7 +4218,7 @@ class Solution:
 我们需要用到哈希集合来存储出现过的字符，而字符最多有∣Σ∣ 个
 ```
 
-##  183. <a name='ContiguousArray'></a> findMaxLength
+##  183. <a name='ContiguousArray'></a> 【hard】findMaxLength
 
 ```py
 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
@@ -4241,7 +4257,7 @@ class Solution:
 ```
 
 
-##  67. <a name='LongestValidParentheses'></a> longestValidParentheses
+##  67. <a name='LongestValidParentheses'></a> 【hard】longestValidParentheses
 
 
 ```py
@@ -4272,7 +4288,7 @@ class Solution:
 
 ```
 
-##  18. <a name='Validparentheses'></a> isValid
+##  18. <a name='Validparentheses'></a> 【hard】isValid
 
 先进后出，所以用栈
 
@@ -4325,7 +4341,7 @@ class Solution:
 
 
 
-##  196. <a name='K-1'></a>862. 和至少为 K 的最短子数组
+##  196. <a name='K-1'></a> 【hard】【hard】shortestSubarray - 没头没尾 - presum
 
 ```py
 输入：nums = [2, -1, 2], k = 3
@@ -4371,7 +4387,7 @@ class Solution:
 
 ```
 
-##  276. <a name='RemoveDuplicateLetters'></a> removeDuplicateLetters
+##  276. <a name='RemoveDuplicateLetters'></a> 【hard】removeDuplicateLetters
 
 ```py
 去除字符串中重复的字母
@@ -4396,8 +4412,9 @@ a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
 c  in stack
 c  in stack
 
-
-
+stack[-1] 要满足 2个条件：
+😐 stack[-1] > s[i]
+😐 stack[-1] in s[i + 1: ]
 
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
@@ -4420,7 +4437,7 @@ class Solution:
 ```
 
 
-##  118. <a name='RemoveKDigits'></a> removeKdigits
+##  118. <a name='RemoveKDigits'></a> 【hard】removeKdigits
 
 形成一个新的最小的数字：
 
@@ -4457,7 +4474,7 @@ class Solution:
  
 ```
 
-##  121. <a name='DailyTemperatures'></a> dailyTemperatures
+##  121. <a name='DailyTemperatures'></a> 【hard】dailyTemperatures
 
 ```py
 输入: temperatures = [73,74,75,71,69,72,76,73]
@@ -4503,7 +4520,7 @@ class Solution:
  
 ```
 
-##  202. <a name='LargestRectangleinHistogram'></a> maximalRectangle
+##  202. <a name='LargestRectangleinHistogram'></a> 【hard】maximalRectangle
 
 ```py
 输入：matrix = 
@@ -4549,10 +4566,10 @@ class Solution:
         res = 0
         for i in range(len(heights)):
             # 新来的 heights[i] 更小
-            while stackI and heights[i] < heights[stackI[-1]]: # 😐 while 循环 + pop + append
-                # 算一下，heights[s] 上一个较大的 hight
-                s = stackI.pop()
-                res = max(res, heights[s] * ((i - stackI[-1] - 1)))
+            while heights[i] < heights[stackI[-1]]: # 😐 while 循环 + pop + append
+                h = heights[stackI.pop()]
+                w = i - stackI[-1] - 1
+                res = max(res, h * w)  
             stackI.append(i)
         return res
 
@@ -4580,7 +4597,7 @@ stack: [1, 2] res: 4 = 3 * ( 4 - 2 -1)
 
 
 
-##  206. <a name='LargestRectangleinHistogram-85.'></a> largestRectangleArea
+##  206. <a name='LargestRectangleinHistogram-85.'></a> 【hard】largestRectangleArea
 
 ```py
 输入：heights = [2,1,5,6,2,3]
@@ -4610,7 +4627,7 @@ class Solution:
 
 ```
 
-##  221. <a name='HouseRobberIII'></a> rob
+##  221. <a name='HouseRobberIII'></a> 【hard】rob
 
 ```py
 输入: root = [3,2,3,null,3,null,1]
@@ -4709,7 +4726,7 @@ class Solution:
 空间复杂度：O(N)
 ```
 
-##  50. <a name='ReverseWordsinaString'></a> reverseWords
+##  50. <a name='ReverseWordsinaString'></a> 【hard】reverseWords - appendleft
 
 ```py
 输入：s = "the sky is blue"
@@ -4803,7 +4820,7 @@ class Solution:
             return 0
 ```
 
-##  222. <a name='FractiontoRecurringDecimal'></a> fractionToDecimal
+##  222. <a name='FractiontoRecurringDecimal'></a> 【hard】fractionToDecimal
 
 ```py
 输入：numerator = 1, denominator = 2
@@ -4874,7 +4891,7 @@ class Solution:
 
 
 
-##  51. <a name='MaximumDepthofBinary'></a> maxDepth
+##  51. <a name='MaximumDepthofBinary'></a> 【hard】maxDepth
 
 ```py
 给定二叉树 [3,9,20,null,null,15,7]，
@@ -4900,41 +4917,10 @@ class Solution:
 时间复杂度：O(n) n 为二叉树节点的个数
 空间复杂度：O(height)，其中 height 表示二叉树的高度。
 
-
-
-class Solution:
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        if root:
-            L = self.maxDepth(root.left) + 1 if root.left else 1 # 注意：这里一定要用 if else 结构
-            R = self.maxDepth(root.right) + 1 if root.right else 1 # 注意：这里是边的条数
-            return max(L, R)
-        else:
-            return 0
-
-对比
-
-
-class Solution:
-    def diameterOfBinaryTree(self, root: TreeNode) -> int:
-        res = 0
-        def depth(node):
-            nonlocal res
-            if node:
-                """
-                当 node.left, 高度为 1, 否则为 0
-                当 node.right, 高度为 1, 否则为 0
-                """
-                L = depth(node.left) + 1 if node.left else 0 # 注意：这里一定要用 if else 结构
-                R = depth(node.right) + 1 if node.right else 0 # 注意：这里是边的条数
-                res = max(res, L + R)
-                return max(L, R)
-
-        depth(root)
-        return res
 ```
 
 
-##  185. <a name='MinimumDepthofBinaryTree'></a> minDepth
+##  185. <a name='MinimumDepthofBinaryTree'></a> 【hard】minDepth
 
 递归
 
@@ -4943,30 +4929,9 @@ class Solution:
 输出：2
 
 
-
-
 输入：root = [2,null,3,null,4,null,5,null,6]
 输出：5
-
-
-
-
-时间复杂度：O(n) n 为二叉树节点的个数
-空间复杂度：O(height)，其中 height 表示二叉树的高度。
-
-递归函数需要栈空间，而栈空间取决于递归的深度，因此空间复杂度等价于二叉树的高度。
-
-
-
-class Solution:
-    def minDepth(self, root: TreeNode) -> int:
-        if root:
-            L = self.minDepth(root.left) + 1 if root.left else 1 # 注意：这里一定要用 if else 结构
-            R = self.minDepth(root.right) + 1 if root.right else 1 # 注意：这里是边的条数
-            return L if R == 1 else R if L == 1 else min(L,R)
-        else:
-            return 0
-            
+     
 
 时间复杂度： O(N)，其中 N 是树的节点数。
 
@@ -4990,11 +4955,6 @@ class Solution:
             if node.right: que.append((node.right, depth + 1))
         
 ```
-
-
-
-
-
 
 
 
@@ -5151,146 +5111,19 @@ class Solution:
             长江大浪灭小浪
             '''
             while stackI and nums[stackI[-1]] < cur: # 😐 while 循环 + pop + append
-                res[stackI[-1]] = cur
-                stackI.pop()
+                res[stackI.pop()] = cur
             if idx < len(nums): # 易错点：append(idx)是有条件的
                 stackI.append(idx)
         return res
 
 ```
 
-##  72. <a name='PathSum'></a> hasPathSum
-
-
-```py
-输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
-输出：true
-
-解释：等于目标和的根节点到叶节点路径如上图所示。
 
 
 
 
 
-输入：root = [1,2,3], targetSum = 5
-输出：false
-
-
-解释：树中存在两条根节点到叶子节点的路径：
-(1 --> 2): 和为 3
-(1 --> 3): 和为 4
-不存在 sum = 5 的根节点到叶子节点的路径。
-
-
-
-
-
-dfs
-class Solution:
-    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
-        res = False
-
-        def dfs(node,tsum): # node.val == tsum 结束
-            nonlocal res
-            if node:
-                if node.val == tsum and not node.left and not node.right: # 结束条件
-                    res = True
-                dfs(node.left,  tsum - node.val) # 三个部分都需要状态转移
-                dfs(node.right, tsum - node.val)
-            
-        dfs(root, targetSum)
-        return res
-
-
-时间复杂度： O(N)，其中 N 是树的节点数。对每个节点访问一次。
-空间复杂度： O(H)，其中 H 是树的高度。
-
-
-class Solution:
-    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
-        if not root: 
-            return False
-        que = collections.deque([(root, targetSum)])
-        while que: # 😐 while 循环
-            node, tsum = que.popleft()
-            if not node.left and not node.right and node.val == tsum:
-                return True
-            if node.left:  que.append((node.left,  tsum - node.val))
-            if node.right: que.append((node.right, tsum - node.val))
-        return False
-
-
-```
-
-##  59. <a name='-1'></a> pathSum - 由头到尾
-
-```py
-           5
-       /      \
-      4        8
-    /   \    /   \
-  11   null 13    4
- /  \            / \
-7    2          5   1
-
-
-输入： targetSum = 22
-输出：[[5,4,11,2],[5,8,4,5]]
-
-
-
-class Solution:
-    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
-        res = []
-
-        def dfs(node, path, tsum): # node.val == tsum 结束
-            if node:
-                if node.val == tsum and not node.left and not node.right: # 结束条件
-                    res.append(path[:] + [node.val])  # 需要深拷贝
-                dfs(node.left,  path + [node.val], tsum - node.val) # 三个部分都需要状态转移
-                dfs(node.right, path + [node.val], tsum - node.val)
-            
-        dfs(root, [], targetSum)
-        return res
-
-
-
-时间复杂度：O(N^2) ，其中 N 是树的节点数。
-
-        在最坏情况下，树的上半部分为链状，下半部分为完全二叉树，
-
-        并且从根节点到每一个叶子节点的路径都符合题目要求。
-
-        此时，路径的数目为 O(N)，并且每一条路径的节点个数也为 O(N)，
-
-        因此要将这些路径全部添加进答案中，时间复杂度为 O(N^2) 。
-
-
-
-空间复杂度： O(N)，其中 N 是树的节点数。
-
-        空间复杂度主要取决于栈空间的开销，栈中的元素个数不会超过树的节点数。
-
-
-
-
-class Solution:
-    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
-        if not root: return []
-        res = []
-        que = collections.deque([(root, [], targetSum)])
-        while que: # 😐 while 循环
-            node, path, tsum = que.popleft()
-            if not node.left and not node.right and node.val == tsum:
-                res.append(path + [node.val])
-            if node.left:  que.append((node.left,  path + [node.val], tsum - node.val))
-            if node.right: que.append((node.right, path + [node.val], tsum - node.val))
-        return res
-
-```
-
-
-##  237. <a name='-1'></a> binaryTreePaths
+##  237. <a name='-1'></a> 【hard】binaryTreePaths
 
 
 ```py
@@ -5328,7 +5161,7 @@ class Solution:
     空间复杂度主要取决于递归调用的层数，递归调用的层数不会超过 n。
 ```
 
-##  62. <a name='DiameterofBinaryTree'></a> diameterOfBinaryTree
+##  62. <a name='DiameterofBinaryTree'></a>【hard】 diameterOfBinaryTree
 
 ```py
           1
@@ -5363,7 +5196,7 @@ class Solution:
 
 ```
 
-##  38. <a name='BinaryTreeMaximumPathSum'></a> maxPathSum - 叶子到叶子
+##  38. <a name='BinaryTreeMaximumPathSum'></a> 【hard】maxPathSum - 叶子到叶子
 
 ```py
 输入：
@@ -5420,7 +5253,7 @@ class Solution:
 
 
 
-##  259. <a name='PathSumIII'></a> pathSum - 没头没尾
+##  259. <a name='PathSumIII'></a> 【hard】pathSum - 没头没尾 - backtrack - preSums
 
 
 ```py
@@ -5492,7 +5325,102 @@ class Solution:
         return res 
 ```
 
-##  56. <a name='SumRoottoLeafNumbers'></a> sumNumbers
+##  72. <a name='PathSum'></a> hasPathSum
+
+
+```py
+输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+输出：true
+
+解释：等于目标和的根节点到叶节点路径如上图所示。
+
+
+输入：root = [1,2,3], targetSum = 5
+输出：false
+
+
+解释：树中存在两条根节点到叶子节点的路径：
+(1 --> 2): 和为 3
+(1 --> 3): 和为 4
+不存在 sum = 5 的根节点到叶子节点的路径。
+
+
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        res = False
+
+        def dfs(node,tsum): # node.val == tsum 结束
+            nonlocal res
+            if node:
+                if node.val == tsum and not node.left and not node.right: # 结束条件
+                    res = True
+                dfs(node.left,  tsum - node.val) # 三个部分都需要状态转移
+                dfs(node.right, tsum - node.val)
+            
+        dfs(root, targetSum)
+        return res
+
+
+时间复杂度： O(N)，其中 N 是树的节点数。对每个节点访问一次。
+空间复杂度： O(H)，其中 H 是树的高度。
+
+
+```
+
+##  59. <a name='-1'></a> 【hard】pathSum - 由头到尾
+
+```py
+           5
+       /      \
+      4        8
+    /   \    /   \
+  11   null 13    4
+ /  \            / \
+7    2          5   1
+
+
+输入： targetSum = 22
+输出：[[5,4,11,2],[5,8,4,5]]
+
+
+
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        res = []
+
+        def dfs(node, path, tsum): # node.val == tsum 结束
+            if node:
+                if node.val == tsum and not node.left and not node.right: # 结束条件
+                    res.append(path[:] + [node.val])  # 需要深拷贝
+                dfs(node.left,  path + [node.val], tsum - node.val) # 三个部分都需要状态转移
+                dfs(node.right, path + [node.val], tsum - node.val)
+            
+        dfs(root, [], targetSum)
+        return res
+
+
+
+时间复杂度：O(N^2) ，其中 N 是树的节点数。
+
+        在最坏情况下，树的上半部分为链状，下半部分为完全二叉树，
+
+        并且从根节点到每一个叶子节点的路径都符合题目要求。
+
+        此时，路径的数目为 O(N)，并且每一条路径的节点个数也为 O(N)，
+
+        因此要将这些路径全部添加进答案中，时间复杂度为 O(N^2) 。
+
+
+
+空间复杂度： O(N)，其中 N 是树的节点数。
+
+        空间复杂度主要取决于栈空间的开销，栈中的元素个数不会超过树的节点数。
+
+
+
+```
+
+##  56. <a name='SumRoottoLeafNumbers'></a> sumNumbers - 根节点到叶子节点 - acc
 
 ```py
 输入：
@@ -5545,7 +5473,7 @@ class Solution:
 
 
 
-##  61. <a name='FirstMissingPositive'></a> firstMissingPositive
+##  61. <a name='FirstMissingPositive'></a> 【hard】firstMissingPositive
 
 ```py
 给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
@@ -5585,7 +5513,7 @@ class Solution:
 ```
 
 
-##  175. <a name='MissingNumber'></a> missingNumber
+##  175. <a name='MissingNumber'></a> 【hard】missingNumber
 
 ```py
  [0, n] 中 n 个数的数组 nums
@@ -5623,7 +5551,7 @@ class Solution:
 
 
 
-##  240. <a name='SingleNumberII'></a> singleNumber
+##  240. <a name='SingleNumberII'></a> 【hard】singleNumber
 
 ```py
 给你一个整数数组 nums ，除某个元素仅出现 `一次` 外，其余每个元素都恰出现 `三次` 。请你找出并返回那个只出现了一次的元素。
@@ -5658,7 +5586,7 @@ class Solution:
 
 ```
 
-##  250. <a name='III-1'></a> singleNumber
+##  250. <a name='III-1'></a> 【hard】singleNumber
 
 难点在于只出现一次的数字不止一个，
 
@@ -5786,7 +5714,6 @@ class Solution:
 
 
 时间复杂度： O(1)。
-
 空间复杂度： O(1)。
 
 
@@ -5796,7 +5723,7 @@ class Solution:
 ```
 
 
-##  58. <a name='BalancedBinaryTree'></a> isBalanced
+##  58. <a name='BalancedBinaryTree'></a> 【hard】isBalanced
 
 ```py
 输入：root = [3,9,20,null,null,15,7]
@@ -5833,7 +5760,7 @@ class Solution:
 ```
 
 
-##  195. <a name='Offer33.'></a> verifyPostorder
+##  195. <a name='Offer33.'></a> 【hard】verifyPostorder
 
 ```py
 输入: [1,6,3,2,5]
@@ -5912,13 +5839,14 @@ class Solution:
         def isBetween(node, mi, ma):
             if not node: return True
             return mi < node.val < ma and \
-                isBetween(node.left, mi, node.val) and isBetween(node.right, node.val, ma)
+                isBetween(node.left, mi, node.val) and \
+                isBetween(node.right, node.val, ma)
 
         return isBetween(root, float('-inf'), float('inf'))
 ```
 
 
-##  100. <a name='-1'></a> isCompleteTree
+##  100. <a name='-1'></a> 【hard】isCompleteTree
 
 ```py
 输入：root = [1,2,3,4,5,6]
@@ -6208,7 +6136,7 @@ class Solution:
 
 
 
-##  52. <a name='-1'></a> minWindow
+##  52. <a name='-1'></a> 【hard】【hard】minWindow
 
 ```py
 输入：s = "ADOBECODEBANC", t = "ABC"
@@ -6258,7 +6186,7 @@ class Solution:
     则渐进时间复杂度为 O(52⋅∣s∣+∣t∣)
 ```
 
-##  98. <a name='-1'></a> minSubArrayLen 
+##  98. <a name='-1'></a> 【hard】【hard】minSubArrayLen 
 
 ```py
 输入：target = 7, nums = [2,3,1,2,4,3]
@@ -6312,25 +6240,26 @@ class Solution:
 
 
 
-##  215. <a name='SplitArrayLargestSum'></a> splitArray
+##  215. <a name='SplitArrayLargestSum'></a> 【hard】【hard】splitArray
 
 ```py
 输入：nums = [7,2,5,10,8], m = 2
 输出：18
 
 答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
+比如11，m=2一定是不够的，所以bagsize再加一加
 
 
 class Solution:
     def splitArray(self, nums: List[int], bagnum: int) -> int:
         def check(bagsize: int) -> bool:
-            tmpsums, bagcnt = 0, 1
+            presum, bagcnt = 0, 1
             for num in nums: # 如果超出了背包的尺寸，则 bagcnt += 1
-                if tmpsums + num > bagsize: 
+                if presum + num > bagsize: 
                     bagcnt += 1
-                    tmpsums = num   # 清空
+                    presum = num   # 清空
                 else:
-                    tmpsums += num  # 累加
+                    presum += num  # 累加
             return bagcnt <= bagnum
 
 
@@ -6397,7 +6326,7 @@ class Solution:
 
 
 
-##  43. <a name='StringtoIntegeratoi'></a> myAtoi
+##  43. <a name='StringtoIntegeratoi'></a> 【hard】myAtoi
 
 ```py
 输入：s = "   -42"
@@ -6477,7 +6406,7 @@ def titleToNumber(self, columnTitle: str) -> int:
 ```
 
 
-##  179. <a name='ExcelSheetColumnTitle'></a> convertToTitle
+##  179. <a name='ExcelSheetColumnTitle'></a> 【hard】convertToTitle
 
 ```py
 输入：columnNumber = 1
@@ -6524,7 +6453,7 @@ class Solution(object):
         return res
 ```
 
-##  218. <a name='ConvertaNumbertoHexadecimal'></a> toHex
+##  218. <a name='ConvertaNumbertoHexadecimal'></a> 【hard】toHex
 
 ```py
 输入:
@@ -6568,7 +6497,7 @@ class Solution:
 
 
 
-##  22. <a name='AddStrings'></a> addStrings
+##  22. <a name='AddStrings'></a> 【hard】addStrings
 
 ```py
 输入：num1 = "456", num2 = "77"
@@ -6606,7 +6535,7 @@ class Solution:
 
 
 
-##  45. <a name='AddTwoNumbers'></a> addTwoNumbers
+##  45. <a name='AddTwoNumbers'></a> 【hard】addTwoNumbers
 
 * 时间复杂度:O(max(m,n))
 
@@ -6876,7 +6805,7 @@ class Solution:
 
 
 
-##  96. <a name='DecodeString'></a> decodeString
+##  96. <a name='DecodeString'></a> 【hard】decodeString
 
 ```py
 输入：s = "3[a]2[bc]"
@@ -6901,6 +6830,8 @@ class Solution:
         for char in s:
             if char.isdigit():
                 num = num * 10 + int(char) # 3
+            elif char.isalpha():
+                tmpstr += char # abc def
             elif char == "[":
                 stack.append((tmpstr, num)) # 比如abc3[def], 当遇到第一个 "[" 的时候，压入栈中的是("abc", 3)
                 '''
@@ -6910,8 +6841,6 @@ class Solution:
             elif char == "]":
                 pre, cnt = stack.pop() # 然后遍历括号里面的字符串def, 当遇到 "]" 的时候, 从栈里面弹出一个元素(s1, n1)
                 tmpstr = pre + tmpstr * cnt # 得到新的字符串为 abc + def * 3
-            else:
-                tmpstr += char # abc def
         return tmpstr
 
 ```
@@ -6919,7 +6848,7 @@ class Solution:
 
 
 
-##  99. <a name='BasicCalculatorII-224.'></a> calculate
+##  99. <a name='BasicCalculatorII-224.'></a>【hard】 calculate - 先计算，后赋值
 
 ```py
 输入：s = "3+2*2"
@@ -6957,7 +6886,8 @@ class Solution:
 
 
 
-##  117. <a name='BasicCalculatorII'></a> calculate
+##  117. <a name='BasicCalculatorII'></a> 【hard】calculate - 先计算，后赋值
+
 
 ```py
 输入：s = "1 + 1"
@@ -7057,7 +6987,7 @@ class Solution:
 ```
 
 
-##  186. <a name='SudokuSolver'></a> solveSudoku
+##  186. <a name='SudokuSolver'></a> 【hard】solveSudoku -> None
 
 ```py
 # 一句都不能少
@@ -7847,7 +7777,7 @@ class Solution:
 
 
 
-##  48. <a name='MedianofTwoSortedArrays'></a> findMedianSortedArrays
+##  48. <a name='MedianofTwoSortedArrays'></a> 【hard】findMedianSortedArrays
 
 ```py
 输入：nums1 = [1,3], nums2 = [2]
@@ -7890,8 +7820,8 @@ class Solution:
 
             # nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
             num1pre = (nums1[mid1 - 1] if mid1 != 0 else -infinty)
-            num1aft = (nums1[mid1] if mid1 != m else infinty)
             num2pre = (nums2[mid2 - 1] if mid2 != 0 else -infinty)
+            num1aft = (nums1[mid1] if mid1 != m else infinty)
             num2aft = (nums2[mid2] if mid2 != n else infinty)
 
             if num1pre <= num2aft:
@@ -7967,7 +7897,7 @@ class Solution:
 
 
 
-##  145. <a name='K'></a> findKthNumber
+##  145. <a name='K'></a> 【hard】findKthNumber
 
 ```py
 我们求字典序第k个就是上图`前序遍历`访问的第k节点！
@@ -7991,6 +7921,8 @@ https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/solution
 
 目标值在`节点1`和`节点2`之间，我们要向下移动！即从`节点1`移动到`节点10`。
 
+
+
 输入: n = 13, k = 2
 输出: 10
 解释: 字典序的排列是 [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]，所以第二小的数字是 10。
@@ -7999,7 +7931,20 @@ https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/solution
 输入: n = 1, k = 1
 输出: 1
 
+😐用 n 计算：
+calSteps(n, cur, cur + 1)
+calSteps(n, cur, nxt)
+step += - cur +  min(nxt, n + 1) 
+          cur *= 10, nxt *= 10
 
+😐用 k 计算：
+从左往右移动：
+cur += 1
+k -= steps
+
+从上往下移动：
+cur *= 10
+k -= 1
 
 
 class Solution:
@@ -8018,7 +7963,7 @@ class Solution:
         
         while k > 0: # 😐😐😐 while 循环
             steps = calSteps(n, cur, cur + 1)
-            if steps <= k: # 第k个数不在以cur为根节点的树上
+            if k - steps >= 0 : # 第k个数不在以cur为根节点的树上
                 cur += 1    从左往右移动
                 k -= steps 
             else:  # 在子树中
@@ -8612,7 +8557,7 @@ class Solution:
 
 
 
-##  153. <a name='DecodeWays'></a> numDecodings
+##  153. <a name='DecodeWays'></a> numDecodings - dp0 和 dp1 都是 1 - 求有几种方法
 
 ```py
 输入：s = "226"
@@ -8649,7 +8594,7 @@ class Solution:
 
 
 
-##  37. <a name='ClimbingStairs'></a> climbStairs
+##  37. <a name='ClimbingStairs'></a> climbStairs - dp0 和 dp1 都是 1 - 求有几种方法
 
 ```py
 输入：n = 2
@@ -8971,6 +8916,7 @@ class Solution:
 
 时间复杂度： O(N)，其中 N 为数组的长度。我们对数组进行了单次遍历。
 空间复杂度： O(1)。
+
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         start = 0
@@ -9028,7 +8974,7 @@ class Solution:
 空间复杂度：O(n + k) = O(n) 
 ```
 
-##  142. <a name='CombinationSumII40-II'></a> combinationSum2
+##  142. <a name='CombinationSumII40-II'></a> combinationSum2 - i+1 - 剪枝
 
 ```py
 输入: candidates = [10,1,2,7,6,1,5], target = 8,
@@ -9081,7 +9027,7 @@ class Solution:
 ```
 
 
-##  76. <a name='CombinationSum39-'></a> combinationSum
+##  76. <a name='CombinationSum39-'></a> combinationSum - i - 无剪枝
 
 ```py
 输入：candidates = [2,3,6,7], target = 7
