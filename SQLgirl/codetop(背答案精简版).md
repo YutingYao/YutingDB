@@ -4841,6 +4841,9 @@ class Solution:
 时间复杂度：O(l) 其中 l 是答案字符串的长度
 空间复杂度：O(l)
 
+情况一：余数
+情况二：负数
+
 
 class Solution:
     def fractionToDecimal(self, numerator, denominator):
@@ -4866,19 +4869,19 @@ class Solution:
 
         # 小数部分
         indexMap = {}
-        remainder = numerator % denominator
+        tail = numerator % denominator
 
-        while remainder and remainder not in indexMap: # 😐😐😐 while 循环
-            indexMap[remainder] = len(s) 
-            remainder *= 10
+        while tail and tail not in indexMap: # 😐😐😐 while 循环
+            indexMap[tail] = len(s) 
+            tail *= 10
             '''
             余加除
             '''
-            s.append(str(remainder // denominator))
-            remainder %= denominator
+            s.append(str(tail // denominator))
+            tail %= denominator
 
-        if remainder:  # 有循环节，跳出循环时，remainde 不是 
-            insertIndex = indexMap[remainder]
+        if tail:  # 有循环节，跳出循环时，remainde 不是 
+            insertIndex = indexMap[tail]
             s.insert(insertIndex, '(') #左侧插入
             s.append(')')
 
@@ -5572,6 +5575,7 @@ class Solution:
     def singleNumber(self, nums: List[int]) -> int:
         ans = 0
         for i in range(32):
+            # (num >> i) & 1
             total = sum((num >> i) & 1 for num in nums)
             if total % 3:
                 # Python 这里对于最高位需要特殊判断
@@ -6193,12 +6197,8 @@ class Solution:
 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
 
 
-
-
 输入：target = 4, nums = [1,4,4]
 输出：1
-
-
 
 
 输入：target = 11, nums = [1,1,1,1,1,1,1,1]
@@ -6479,7 +6479,7 @@ class Solution(object):
 
 class Solution:
     def toHex(self, num):
-        num = num & 0xffffffff 
+        num &= 0xffffffff 
         res = ""
         lib = "0123456789abcdef"
         if num == 0: return "0"
@@ -9774,9 +9774,9 @@ class Solution:
                 if dp[end] > maxCount:
                     maxCount = dp[end] # 统计最长的序列的所有次数
         res = 0
-        for end in range(n):
-            if maxCount == dp[end]: # 长度和个数一一对应
-                res += cnt[end]
+        for i in range(n):
+            if maxCount == dp[i]: # 长度和个数一一对应
+                res += cnt[i]
         return res
 
 
@@ -10098,7 +10098,7 @@ class Solution:
         dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
         dp[0][0] = True  # 假定s和p都从空字符开始
         
-        for si in range(len(s)):  # s的空字符需要额外初始化
+        for si in range(0, len(s)):  # s的空字符需要额外初始化
             for pi in range(1, len(p)):
                 if p[pi] == '*':   # *可以出现0次或者多次
                     dp[si][pi] = dp[si][pi-2] or \ s="c", p="ca*"
@@ -10540,6 +10540,12 @@ class Solution:
             res = (res + m) % i
         return res
 
+class Solution:
+    def lastRemaining(self, n: int, m: int) -> int:
+        # 旧编号： 0     1   ...   m-1   m   m+1   ...   n-1
+        # 新编号：-m   -m+1   ...   -1   0   1   ...   n-1
+        if n == 1: return 0
+        return (self.lastRemaining(n-1,m) + m) % n
 
 时间复杂度： O(n)，需要求解的函数值有 n 个。
 
