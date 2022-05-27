@@ -4414,6 +4414,10 @@ stack[-1] 要满足 2个条件：
 😐 stack[-1] > s[i]
 😐 stack[-1] in s[i + 1: ]
 
+s[i] 要满足 2个条件：
+😐 s[i] not in stack
+😐 stack[-1] > s[i]
+
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
         stack = []
