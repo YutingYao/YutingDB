@@ -22,7 +22,7 @@ class Solution:
 ```
 
 
-##  5. <a name='Kadd-1'></a> reverseKGroup
+##  5. <a name='Kadd-1'></a> 【hard】reverseKGroup
 
 ```py
 输入：head = [1,2,3,4,5], k = 3
@@ -55,7 +55,7 @@ class Solution:
 ```
 
 
-##  95. <a name='SwapNodesinPairs'></a> swapPairs
+##  95. <a name='SwapNodesinPairs'></a> 【hard】swapPairs
 
 ```py
 输入：head = [1,2,3,4]
@@ -171,7 +171,7 @@ class Solution:
 
 
 
-##  122. <a name='RotateList'></a> rotateRight
+##  122. <a name='RotateList'></a> 【hard】rotateRight
 
 ```py
 输入：head = [1,2,3,4,5], k = 2
@@ -303,7 +303,7 @@ class Solution:
 空间复杂度：O(1)。只需要使用常数的额外空间。
 ```
 
-##  168. <a name='StringCompression'></a> compress
+##  168. <a name='StringCompression'></a> 【hard】compress
 
 
 ```py
@@ -393,9 +393,8 @@ class Solution(object):
 
 ```
 
-##  173. <a name='FindAllDuplicatesinanArray'></a> findDuplicates
+##  173. <a name='FindAllDuplicatesinanArray'></a> 【hard】findDuplicates
 
-[小明](https://www.bilibili.com/video/BV1Lh411d7AD?spm_id_from=333.999.0.0)
 
 ```py
 请你找出所有出现 两次 的整数，并以数组形式返回。
@@ -438,7 +437,7 @@ class Solution:
 
 
 
-##  137. <a name='FindtheDuplicateNumber'></a> findDuplicate
+##  137. <a name='FindtheDuplicateNumber'></a> 【hard】findDuplicate
 
 
 ```py
@@ -471,9 +470,8 @@ class Solution:
 
 ```
 
-##  25. <a name='LinkedListCycleII'></a>142 Linked List Cycle II
+##  25. <a name='LinkedListCycleII'></a> 【hard】detectCycle
 
-![](https://s3.bmp.ovh/imgs/2022/02/5ca7ad17ae2ceeed.png)
 
 ```py
 时间复杂度： O(N)，其中 N 为链表中节点的数目。slow 指针走过的距离不会超过链表的总长度；
@@ -634,7 +632,7 @@ class Solution:
 
 
 
-##  46. <a name='SortList'></a> sortList
+##  46. <a name='SortList'></a> 【hard】sortList
 
 ```py
 输入：head = [4,2,1,3]
@@ -793,7 +791,7 @@ class Solution(object):
         # odd 和 even 都是移动指针
         # evenHead 是固定的
     
-        slow  = head
+        slow = head
         fast = headnxt = head.next
         # 当 2 和 3 存在
         while fast and fast.next: # 😐😐 while 循环
@@ -956,7 +954,7 @@ class Solution:
 
 
 
-##  26. <a name='MergekSortedLists'></a> mergeKLists
+##  26. <a name='MergekSortedLists'></a> 【hard】mergeKLists
 
 
 优先队列：
@@ -1166,7 +1164,7 @@ class Solution:
 空间复杂度： O(1) 
 ```
 
-## 堆排序:
+## 【hard】【hard】堆排序:
 
 ```py
 
@@ -1224,7 +1222,7 @@ class Solution:
 
 
 
-## 希尔排序
+## 【hard】【hard】希尔排序
 
 ```py
 输入：nums = [5,2,3,1]
@@ -1251,13 +1249,13 @@ def shellSort(nums):
                 nums[j] = nums[j-gap]   # 把 nums[j-gap] 这个 bigger 往后面放
                 j -= gap 
             nums[j] = right  # 把 right 值 插入
-        gap = int(gap/2) # 设置一个更小的增量, 直到增量为1, 再排序
+        gap = gap//2 # 设置一个更小的增量, 直到增量为1, 再排序
 
 最坏时间复杂度：O(n2)
 空间复杂度：O(1)
 ```
 
-## 选择排序
+## 【hard】选择排序
 
 选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
 
@@ -1272,7 +1270,7 @@ for i in range(len(nums)):
     nums[i], nums[minpos] = nums[minpos], nums[i] 
 ```
 
-## 冒泡排序
+## 【hard】冒泡排序
 
 ```py
 把最大值移到最后一位上：
@@ -1286,7 +1284,7 @@ def bubble_sort(nums):
     return nums
 ```
 
-## 快速排序
+## 【hard】快速排序
 
 ```py
 class Solution:
@@ -1360,7 +1358,7 @@ class Solution:
 ```
 
 
-##  92. <a name='-1'></a> copyRandomList
+##  92. <a name='-1'></a> 【hard】copyRandomList
 
 ```py
 输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
@@ -1414,7 +1412,7 @@ dict.get(key, default = None)  -->  有key获取值，否则返回 default
 ```
 
 
-##  230. <a name='PopulatingNextRightPointersinEa'></a> connect
+##  230. <a name='PopulatingNextRightPointersinEa'></a> 【hard】connect
 
 ```py
 常数空间，从顶到下，逐层连接
@@ -1458,7 +1456,7 @@ class Solution:
 ```
 
 
-##  2. <a name='LRULRUCache'></a> LRUCache
+##  2. <a name='LRULRUCache'></a> 【hard】LRUCache
 
 ```py
 class LRUCache:
@@ -1561,7 +1559,7 @@ class CQueue:
 # param_2 = obj.deleteHead()
 ```
 
-##  128. <a name='ImplementStackusingQueues'></a> MyStack
+##  128. <a name='ImplementStackusingQueues'></a> 【hard】MyStack
 
 ```py
 q2当作缓存队列
@@ -1681,7 +1679,7 @@ class MinStack:
 ```
 
 
-##  138. <a name='-1'></a> shuffle
+##  138. <a name='-1'></a> 【hard】shuffle
 
 ```py
 class Solution:
@@ -1742,7 +1740,7 @@ class Trie:
 
 ```
 
-##  158. <a name='-1'></a> MedianFinder
+##  158. <a name='-1'></a> 【hard】MedianFinder
 
 ```py
 from heapq import *
@@ -1781,14 +1779,14 @@ class MedianFinder:
         max_len = len(self.maxhp)
         min_len = len(self.minhp)
         return self.minhp[0] if max_len != min_len else (- self.maxhp[0] + self.minhp[0]) / 2
-时间复杂度：O(1
+时间复杂度：O(1)
 
 空间复杂度：O(n)
 ```
 
 
 
-##  209. <a name='DesignCircularQueue'></a> MyCircularQueue
+##  209. <a name='DesignCircularQueue'></a> 【hard】MyCircularQueue
 
 
 ```py
