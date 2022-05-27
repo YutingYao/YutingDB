@@ -9149,9 +9149,9 @@ class Solution:
         height = [0] * cols
         maxArea = float('-inf')
         res = [0] * 4
-        for sttX in range(rows):           
+        for sttR in range(rows):           
             height = [0] * cols
-            for r in range(sttX, rows):
+            for r in range(sttR, rows):
                 sumHgt = 0
                 for c in range(cols):
 
@@ -9159,14 +9159,14 @@ class Solution:
                     
                     if sumHgt <= 0:
                         sumHgt = height[c]
-                        sttY = c
+                        sttC = c
                     else:
                         sumHgt += height[c]
                     # 把答案存下来
                     if sumHgt > maxArea:
                         maxArea = sumHgt
-                        res[0] = sttX
-                        res[1] = sttY
+                        res[0] = sttR
+                        res[1] = sttC
                         res[2] = r
                         res[3] = c
 
@@ -9752,8 +9752,6 @@ note：这道题返回序列个数
 时间复杂度：O(N^2) 
 空间复杂度：O(N)
 
-
-
 class Solution:
     def findNumberOfLIS(self, nums: List[int]) -> int:
         n = len(nums)
@@ -9762,7 +9760,6 @@ class Solution:
         dp = [1 for _ in range(n)] 
         cnt = [1 for _ in range(n)]
 
-        maxCount = 0
         for end in range(1, n):
             for stt in range(end):
                 if nums[end] > nums[stt]:
@@ -9775,13 +9772,13 @@ class Solution:
                 输入: [2,2,2,2,2]
                 这种情况，cnt的每个1都是答案
                 '''
-                if dp[end] > maxCount:
-                    maxCount = dp[end] # 统计最长的序列的所有次数
         res = 0
         for i in range(n):
-            if maxCount == dp[i]: # 长度和个数一一对应
+            if max(dp) == dp[i]: # 长度和个数一一对应
                 res += cnt[i]
         return res
+
+
 
 
 dp:   [1, 2, 1, 1, 1]
@@ -10111,7 +10108,9 @@ class Solution:
                     dp[si][pi] = dp[si-1][pi-1]
         return dp[-1][-1]
 
-
+dp[si][pi-2]
+或
+dp[si-1][pi] and p[pi-1] in ('.', s[si])
 ```
 
 
