@@ -3304,8 +3304,8 @@ class Solution:
                 # 192.168.01.1 为无效IPv4地址
                 # 192.168@1.1 为无效IPv4地址
                 # 0 <= xi <= 255 
-                if  (len(num) >= 2 and num[0] == "0")  \
-                    or not num.isdigit()  \
+                if  not num.isdigit()  \
+                    or (str(int(num)) != num)  \
                     or (not 0 <= int(num) <= 255):
                     return "Neither"
             return "IPv4"
@@ -3321,15 +3321,6 @@ class Solution:
                     return "Neither"
             return "IPv6"
 
-
-也可以这么写：
-                # 192.168.01.1 为无效IPv4地址
-                # 192.168@1.1 为无效IPv4地址
-                # 0 <= xi <= 255 
-                if  not num.isdigit()  \
-                    or (str(int(num)) != num)  \
-                    or (not 0 <= int(num) <= 255):
-                    return "Neither"
 
 ```
 
@@ -4879,7 +4870,7 @@ class Solution:
             indexMap[tail] = len(s) 
             tail *= 10
             '''
-            余加除
+            乘除余
             '''
             s.append(str(tail // denominator))
             tail %= denominator
@@ -6850,7 +6841,7 @@ class Solution:
 
 
 
-##  99. <a name='BasicCalculatorII-224.'></a>【hard】 calculate - 先计算，后赋值
+##  99. <a name='BasicCalculatorII-224.'></a>【hard】 calculate - 先计算，后num，op
 
 ```py
 输入：s = "3+2*2"
