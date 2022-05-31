@@ -1164,7 +1164,7 @@ class Solution:
 空间复杂度： O(1) 
 ```
 
-## 【hard】【hard】堆排序:
+## 【hard】【hard】堆排序: else: - return
 
 ```py
 
@@ -2357,7 +2357,7 @@ class Solution:
 ```
 
 
-##  251. <a name='BestTimetoBuyandSellStockIV'></a> 【hard】maxProfit
+##  251. <a name='BestTimetoBuyandSellStockIV'></a> 【hard】maxProfit - k =  min(k,len(prices))
 
 你最多可以完成 `k 笔` 交易。
 
@@ -3301,8 +3301,8 @@ class Solution:
             if len(ipv4) != 4:
                 return "Neither"
             for num in ipv4:
-                # 192.168.01.1 为无效IPv4地址
                 # 192.168@1.1 为无效IPv4地址
+                # 192.168.01.1 为无效IPv4地址
                 # 0 <= xi <= 255 
                 if  not num.isdigit()  \
                     or (str(int(num)) != num)  \
@@ -4100,7 +4100,7 @@ class Solution:
 
 
 
-##  125. <a name='SubarraySumEqualsKK'></a> 【hard】subarraySum
+##  125. <a name='SubarraySumEqualsKK'></a> 【hard】subarraySum - 累加、查表、更新表
 
 ```py
 输入：nums = [1,2,3], k = 3
@@ -4175,7 +4175,7 @@ class Solution:
 
 ```
 
-##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a> 【hard】lengthOfLongestSubstring
+##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a> 【hard】【hard】lengthOfLongestSubstring - dic每次都更新
 
 ```py
 输入: s = "abcabcbb"
@@ -4430,7 +4430,7 @@ class Solution:
 ```
 
 
-##  118. <a name='RemoveKDigits'></a> 【hard】removeKdigits
+##  118. <a name='RemoveKDigits'></a> 【hard】【hard】removeKdigits
 
 形成一个新的最小的数字：
 
