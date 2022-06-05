@@ -1,25 +1,670 @@
-# 1 day (得分 = 30分) 30
 
-##  1. <a name='ReverseLinkedList'></a> reverseList
+##  230. <a name='PopulatingNextRightPointersinEa'></a> 【hard】connect
 
 ```py
-输入：head = [1,2,3,4,5]
-输出：[5,4,3,2,1]
+常数空间，从顶到下，逐层连接
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+
+类似 ListNode
 
 class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
-        cur = None
-        while head: 
-            headnxt = head.next
-            head.next = cur
-            cur = head
-            head = headnxt
+    def connect(self, root: 'Node') -> 'Node':
+        first = root # first 表示当前层的最左边节点
+        while first: # 😐😐 while 循环 # 每次循环连接当前层的下一层
+            """
+            注意Note：dummy = nxtcur 必须写在一起
+            """
+            dummy = nxtcur = Node(0) # head表示下一层的虚拟头部
+
+            cur = first
+            while cur: # 😐😐 while 循环, cur #  cur遍历当前层，nxtcur将下一层连接 
+                if cur.left :
+                    nxtcur.next = cur.left
+                    nxtcur = nxtcur.next
+                if cur.right :
+                    nxtcur.next = cur.right
+                    nxtcur = nxtcur.next
+                cur = cur.next
+            
+            first = dummy.next
+        return root
+
+时间复杂度：O(N)。我们需要遍历这棵树上所有的点。
+空间复杂度：O(1)
+```
+
+
+##  48. <a name='MedianofTwoSortedArrays'></a> 【hard】findMedianSortedArrays
+
+```py
+输入：nums1 = [1,3], nums2 = [2]
+输出：2.00000
+解释：合并数组 = [1,2,3] ，中位数 2
+
+
+
+
+输入：nums1 = [1,2], nums2 = [3,4]
+输出：2.50000
+解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+
+
+
+
+给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+
+算法的时间复杂度应该为 O(log (m+n)) 。
+
+
+
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        if len(nums1) > len(nums2):
+            return self.findMedianSortedArrays(nums2, nums1)
+
+        infinty = 2**40
+        m, n = len(nums1), len(nums2)
+        l1, r1 = 0, m
+        # median1：前一部分的最大值
+        # median2：后一部分的最小值
+        median1, median2 = 0, 0
+
+        while l1 <= r1:
+            # 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
+            # // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
+            mid1 = (l1 + r1) // 2
+            mid2 = (m + n + 1) // 2 - mid1
+
+            # nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
+            num1pre = (nums1[mid1 - 1] if mid1 != 0 else -infinty)
+            num2pre = (nums2[mid2 - 1] if mid2 != 0 else -infinty)
+            num1aft = (nums1[mid1] if mid1 != m else infinty)
+            num2aft = (nums2[mid2] if mid2 != n else infinty)
+
+            if num1pre <= num2aft:
+                median1, median2 = max(num1pre, num2pre), min(num1aft, num2aft)
+                l1 = mid1 + 1
+            else:
+                r1 = mid1 - 1
+
+        return (median1 + median2) / 2 if (m + n) % 2 == 0 else median1
+
+```
+
+##  145. <a name='K'></a> 【hard】findKthNumber
+
+```py
+我们求字典序第k个就是上图`前序遍历`访问的第k节点！
+
+https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/solution/yi-tu-sheng-qian-yan-by-pianpianboy/
+
+
+但是不需要用`前序遍历`，如果我们能通过`数学方法`求出`节点1`和`节点2`之间需要走几步，减少很多没必要的移动。
+
+其实只需要按`层节点个数计算`即可，图中`节点1`和`节点2`在`第二层`，因为 n = 13，`节点1`可以移动到`节点2`（同一层）所以在第二层需要移动1步。
+
+第三层，移动个数就是 (13 - 10 + 1) = 4 （min（13 + 1， 20） - 10）
+
+所以`节点1`到`节点2`需要移动 1 + 4 = 5 步
+
+1. 当移动步数 <= k，说明: 
+
+需要向`右节点`移动，图中就是`节点1`移动到`节点2`。
+
+2. 当移动步数 > k，说明: 
+
+目标值在`节点1`和`节点2`之间，我们要向下移动！即从`节点1`移动到`节点10`。
+
+
+
+输入: n = 13, k = 2
+输出: 10
+解释: 字典序的排列是 [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]，所以第二小的数字是 10。
+
+
+输入: n = 1, k = 1
+输出: 1
+
+😐用 n 计算：
+calSteps(n, cur, cur + 1)
+calSteps(n, cur, nxt)
+step += - cur +  min(nxt, n + 1) 
+          cur *= 10, nxt *= 10
+
+😐用 k 计算：
+从左往右移动：
+cur += 1
+k -= steps
+
+从上往下移动：
+cur *= 10
+k -= 1
+
+
+class Solution:
+    def findKthNumber(self, n: int, k: int) -> int:
+        
+        def calSteps(n, cur, nxt):
+            step = 0
+            while cur <= n: # 😐😐😐 while 循环
+                step += min(nxt, n+1) - cur # 比如n是195的情况195到100有96个数
+                cur *= 10
+                nxt *= 10
+            return step
+                
+        cur = 1
+        k -= 1 # 扣除掉第一个节点
+        
+        while k > 0: # 😐😐😐 while 循环
+            steps = calSteps(n, cur, cur + 1)
+            if k - steps >= 0 : # 第k个数不在以cur为根节点的树上
+                cur += 1    从左往右移动
+                k -= steps 
+            else:  # 在子树中
+                cur *= 10   从上往下移动
+                k -= 1      刨除根节点
+        
         return cur
 
-时间复杂度：O(n)，其中 n 是链表的节点数量。
+# 当前值： 1 2
+# 当前值： 10 20
+# steps: 11 cur: 2 k: 3
+# 当前值： 2 3
+# 当前值： 20 30
+# steps: 5 cur: 20 k: 2
+# 当前值： 20 21
+# steps: 1 cur: 21 k: 1
+# 当前值： 21 22
+# steps: 1 cur: 22 k: 0
 
-空间复杂度：O(n)，
+
+ss = Solution()
+print(ss.findKthNumber(23,15))
+
+时间复杂度：O(log N)^2 ，其中 n 为 给定的 数值的大小。
+
+每次计算子树下的节点数目的搜索深度最大为 log 10 N，最多需要搜索 log 10 N
+​
+每一层最多需要计算 10 次，最多需要计算  10 × (log 10 n) ^ 2 次，因此时间复杂度为 O(log N)^2。
+
+空间复杂度：O(1) ，不需要开辟额外的空间，只需常数空间记录常量即可。
 ```
+
+##  199. <a name='17.24.'></a> 【hard】【hard】getMaxMatrix
+
+```py
+输入：
+[
+   [-1,0],
+   [0,-1]
+]
+输出：[0,1,0,1]
+解释：输入中标粗的元素即为输出所表示的矩阵
+
+
+
+翻译一个python版本
+
+1.时间复杂度：O(n^2*m)
+2.空间复杂度：O(m)
+
+class Solution:
+    def getMaxMatrix(self, matrix: List[List[int]]) -> List[int]:
+        rows = len(matrix)
+        cols = len(matrix[0])
+        height = [0] * cols
+        maxArea = float('-inf')
+        res = [0] * 4
+        for sttR in range(rows):           
+            height = [0] * cols
+            for r in range(sttR, rows):
+                sumHgt = 0
+                for c in range(cols):
+
+                    height[c] += matrix[r][c]
+                    
+                    if sumHgt <= 0:
+                        sumHgt = height[c]
+                        sttC = c
+                    else:
+                        sumHgt += height[c]
+                    # 把答案存下来
+                    if sumHgt > maxArea:
+                        maxArea = sumHgt
+                        res[0] = sttR
+                        res[1] = sttC
+                        res[2] = r
+                        res[3] = c
+
+        return res
+    
+
+```
+
+##  52. <a name='-1'></a> 【hard】【hard】minWindow
+
+```py
+输入：s = "ADOBECODEBANC", t = "ABC"
+输出："BANC"
+
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+    
+        def isContains(outerdic,innerdic):
+            for key in innerdic:
+                if outerdic[key] < innerdic[key]:
+                    return False # 只要有一个不满足，则不满足
+            return True
+
+        inndic = defaultdict(int) # 固定的
+        outdic = defaultdict(int) # 变动的
+        for char in t:
+            inndic[char] += 1 # 固定的
+
+        minlen = len(s)
+        l = 0
+        res = ''
+
+        for r in range(len(s)): # 扩展右边界
+            if s[r] in inndic:
+                outdic[s[r]] += 1  # 变动的
+            '''
+            等到 outdic 够大，才触发计算
+            第一步：先保存答案
+            第二步：收缩左边界
+            '''
+            while isContains(outdic, inndic): # 😐😐😐 while 循环
+                # 如果是 minWindow
+                if r - l + 1 <= minlen:
+                    minlen = r - l + 1
+                    res = s[l: r + 1]
+                # 收缩左边界
+                if s[l] in outdic:
+                    outdic[s[l]] -= 1  # 变动的
+                l += 1   
+        return res
+
+时间复杂度：
+    最坏情况下左右指针对 s 的每个元素各遍历一遍
+    每次检查是否可行会遍历整个 t 的哈希表
+    哈希表的大小与字符集的大小有关，设字符集大小为 C, s 和 t 由英文字母组成
+    则渐进时间复杂度为 O(52⋅∣s∣+∣t∣)
+```
+
+##  98. <a name='-1'></a> 【hard】【hard】minSubArrayLen 
+
+```py
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+
+
+输入：target = 4, nums = [1,4,4]
+输出：1
+
+
+输入：target = 11, nums = [1,1,1,1,1,1,1,1]
+输出：0
+
+
+时间复杂度: O(n log n) ，用二分
+空间复杂度: O(1)
+
+class Solution:
+    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+        def isWinEnough(size):
+            '''
+            加上新来的 nums[i], 减去旧的 nums[i - size]
+            '''
+            sums = 0
+            for i in range(len(nums)):
+                sums += nums[i]
+                # 固定大小的滑动窗口
+                if i >= size: sums -= nums[i - size]
+                # 然后判断是否满足要求
+                if sums >= s: return True
+            return False
+            
+        l, r = 0, len(nums)
+        res = 0
+        while l <= r: # 😐 while 循环
+            mid = (l + r) // 2  # 滑动窗口大小
+            if isWinEnough(mid):  # 如果这个大小的窗口可以那么就缩小
+                res = mid
+                r = mid - 1
+            else:  # 否则就增大窗口
+                l = mid + 1
+        return res
+
+```
+
+
+
+##  215. <a name='SplitArrayLargestSum'></a> 【hard】【hard】splitArray
+
+```py
+输入：nums = [7,2,5,10,8], m = 2
+输出：18
+
+答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
+比如11，m=2一定是不够的，所以bagsize再加一加
+
+
+class Solution:
+    def splitArray(self, nums: List[int], bagnum: int) -> int:
+        def check(bagsize: int) -> bool:
+            presum, bagcnt = 0, 1
+            for num in nums: # 如果超出了背包的尺寸，则 bagcnt += 1
+                if presum + num > bagsize: 
+                    bagcnt += 1
+                    presum = num   # 清空
+                else:
+                    presum += num  # 累加
+            return bagcnt <= bagnum
+
+
+        left = max(nums)  # 当 划分个数为 len(nums)
+        right = sum(nums) # 当 划分个数为 1
+        while left <= right: # 😐 while 循环
+            mid = (left + right) // 2
+            if check(mid): # 检查划分个数够不够
+                res = mid
+                right = mid - 1
+            else:
+                left = mid + 1
+
+        return res
+
+
+
+时间复杂度： O(n × log(sum−maxn))，
+
+        其中 sum 表示数组 nums 中所有元素的和， maxn 表示数组所有元素的最大值。
+
+        每次二分查找时，需要对数组进行一次遍历，时间复杂度为 O(n)，
+
+空间复杂度： O(1)。
+
+ 
+```
+
+
+
+##  19. <a name='LongestPalindromicSubstring-'></a> longestPalindrome
+
+
+```py
+输入：s = "babad"
+输出："bab"
+
+
+解释："aba" 同样是符合题意的答案。
+
+
+
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        lenStr = len(s)
+        maxlen = maxmaxlen = 1
+        start = 0
+
+        if lenStr == 0:
+            return ''
+
+        if lenStr == 1:
+            return s
+
+        dp = [[False for _ in range(lenStr)] for _ in range(lenStr)]
+
+
+        for end in range(1, lenStr): # 把三角形画出来，先j，再i，
+            for stt in range(end): # 先框定结束j，再框定开始i。
+                if s[stt] == s[end]:
+                    if end - stt < 3:
+                        dp[stt][end] = True
+                    else:
+                        dp[stt][end] = dp[stt + 1][end - 1]
+                if dp[stt][end]:
+                    maxlen = end - stt + 1
+                    if maxlen > maxmaxlen:
+                        maxmaxlen = maxlen
+                        start = stt
+        return s[start: start + maxmaxlen]
+```
+
+##  198. <a name='NumberofLongestIncreasingSubse'></a> 【hard】【hard】findNumberOfLIS
+
+
+```py
+note：这道题返回序列个数
+
+输入: [1,3,5,4,7]
+输出: 2
+解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
+
+
+
+
+输入: [2,2,2,2,2]
+输出: 5
+
+
+解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
+
+
+
+时间复杂度：O(N^2) 
+空间复杂度：O(N)
+
+class Solution:
+    def findNumberOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 1: return n
+
+        dp = [1 for _ in range(n)] 
+        cnt = [1 for _ in range(n)]
+
+        for end in range(1, n):
+            for stt in range(end):
+                if nums[end] > nums[stt]:
+                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
+                        dp[end] = dp[stt] + 1
+                        cnt[end] = cnt[stt]
+                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
+                        cnt[end] += cnt[stt]
+                '''
+                输入: [2,2,2,2,2]
+                这种情况，cnt的每个1都是答案
+                '''
+        res = 0
+        for i in range(n):
+            if max(dp) == dp[i]: # 长度和个数一一对应
+                res += cnt[i]
+        return res
+
+
+
+
+dp:   [1, 2, 1, 1, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 1, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 3, 1]
+cnt:  [1, 1, 1, 1, 1]
+
+dp:   [1, 2, 3, 3, 4]
+cnt:  [1, 1, 1, 1, 2]
+```
+
+
+
+##  28. <a name='LongestIncreasingSubsequence'></a> 【hard】lengthOfLIS - 长度
+
+
+```py
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+
+
+
+输入：nums = [0,1,0,3,2,3]
+输出：4
+
+
+
+
+输入：nums = [7,7,7,7,7,7,7]
+输出：1
+
+
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        if not nums:
+            return 0
+
+        dp = [1 for i in range(len(nums))]
+
+        for end in range(1, len(nums)): # 先确定结束，再确定开始
+            for stt in range(end):
+                if nums[end] > nums[stt]:
+                    dp[end] = max(dp[stt] + 1, dp[end])
+
+        return max(dp)
+
+时间复杂度：O(n^2) 
+空间复杂度：O(n) ，需要额外使用长度为 n 的 dp 数组。
+```
+
+
+贪心 + 二分查找
+
+
+```py
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        res = []
+        for num in nums:
+            i = bisect_left(res, num)
+            if i == len(res):
+                res.append(num) 
+            else:
+                res[i] = num # 如果新元素代替旧元素
+        return len(res)
+时间复杂度：O(N logN) 
+空间复杂度：O(N)
+```
+
+
+##  150. <a name='-1'></a> 【hard】【hard】isMatch
+
+```py
+输入：s = "aa", p = "a"
+输出：false
+
+
+解释："a" 无法匹配 "aa" 整个字符串。
+
+        """
+        思路：动态规划， 定义二维dp数组，其中dp[i][j]表示s的前i个字符和p的前j个字符是否匹配，
+        为了方便初始化，我们将s和p的长度均+1
+        考虑到P中可能出现三种字符：普通字母(a-z)、'*'或者是'.', 则其动态转移方程分别是：
+        1) 如果p[j]为普通字母，dp[i][j]==dp[i-1][j-1] and s[i]==p[j]
+        2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
+        3) 
+        """
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+        '''
+        如果 p[j] 为 '*', 则情况比较复杂, 分以下两种情况讨论：
+           A. 以 s="c", p="ca*" 为例，此时 '*' 匹配0次，dp[si][pi] = dp[si][pi-2]
+           B. 以 s="caa", p="ca*", p="c.*" 为例，此时 '*' 匹配多次
+        '''
+        # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
+        # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        s = " " + s
+        p = " " + p
+        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
+        dp[0][0] = True  # 假定s和p都从空字符开始
+        
+        for si in range(0, len(s)):  # s的空字符需要额外初始化
+            for pi in range(1, len(p)):
+                if p[pi] == '*':   # *可以出现0次或者多次
+                    dp[si][pi] = dp[si][pi-2] or \ s="c", p="ca*"
+                                (p[pi-1] in ('.', s[si]) and dp[si-1][pi]) \ s="caa", p="ca*  c.*"
+                elif p[pi] in ('.', s[si]):
+                    dp[si][pi] = dp[si-1][pi-1]
+        return dp[-1][-1]
+
+dp[si][pi-2]
+或
+dp[si-1][pi] and p[pi-1] in ('.', s[si])
+```
+
+
+
+
+##  216. <a name='-1'></a> 【hard】isMatch
+
+```py
+给定一个 `字符串 (s)` 和一个 `字符模式 (p)` ，实现一个支持 '?' 和 '*' 的通配符匹配。
+
+'?' 可以匹配任何 `单个字符`。
+'*' 可以匹配 `任意字符串`（包括 `空字符串`）。
+两个字符串完全匹配才算匹配成功。
+
+
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
+
+
+
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+
+        dp = [[False] * (n + 1) for _ in range(m + 1)]
+
+        dp[0][0] = True  
+
+        for pi in range(1, n + 1):
+            dp[0][pi] = dp[0][pi-1] and (p[pi - 1] == '*')
+
+        
+        for si in range(1, m + 1):
+            for pi in range(1, n + 1):
+                if p[pi - 1] == '*': 
+                    dp[si][pi] = dp[si][pi - 1] | dp[si - 1][pi] 
+                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
+                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
+                elif p[pi - 1] in ('?', s[si - 1]): 
+                    dp[si][pi] = dp[si - 1][pi - 1]
+                
+        return dp[m][n]
+
+```
+
 
 
 ##  5. <a name='Kadd-1'></a> 【hard】reverseKGroup
@@ -93,1367 +738,1493 @@ class Solution:
 ``` 
 
 
-##  24. <a name='ReverseLinkedListII'></a> reverseBetween
 
-
-```py
-输入：head = [1,2,3,4,5], left = 2, right = 4
-输出：[1,4,3,2,5]
-
-
-
-class Solution:
-    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
-        dummy = ListNode(0, head)
-        pre = dummy
-        # 这里用到3个指针，pre，first，second
-        for _ in range(left - 1):
-            pre = pre.next
-        # 因为需要保留 pre, 所以 left - 1
-        NOTE: first在FOR循环外面，second在FOR循环里面
-        first = pre.next
-        for _ in range(right - left):
-        # 易错点：顺序不能错: 2,1,2,pre
-            second = first.next
-            first.next = second.next
-            second.next = pre.next
-            pre.next = second
-        
-        return dummy.next
-
-
-
-时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
-
-空间复杂度：O(1)。
-```
-
-
-##  36. <a name='ReorderList'></a> reorderList
+##  123. <a name='Offer62.'></a> 【hard】lastRemaining
 
 ```py
-输入：head = [1,2,3,4]
-输出：[1,4,2,3]
+输入: n = 5, m = 3
+输出: 3
 
 
+输入: n = 10, m = 17
+输出: 2
 
-输入：head = [1,2,3,4,5]
-输出：[1,5,2,4,3]
-
-
-
-# 双向队列
-class Solution:
-    def reorderList(self, head: ListNode) -> None:
-        """
-        Do not return anything, modify head in-place instead.
-        """
-        que = collections.deque()
-        cur = head
-        #  链表除了首元素全部加入双向队列
-        while cur.next: 
-            que.append(cur.next)
-            cur = cur.next
-        cur = head
-        # 一后一前加入链表
-        while que: 
-            cur.next = que.pop()
-            cur = cur.next
-            if que:
-                cur.next = que.popleft()
-                cur = cur.next
-        cur.next = None # 尾部置空
+0个人时候游戏就不存在了， 1个人时候直接获胜， 
  
-时间复杂度：O(N)，其中 N 是链表中的节点数。
+反推公式：
 
-空间复杂度：O(N)，其中 N 是链表中的节点数。主要为线性表的开销。
-```
+f(n,m) = (f(n,m) + m) % i #i为当前人数
 
+f(8,3) = [f(7,3) + 3] % 8
 
-
-##  122. <a name='RotateList'></a> 【hard】rotateRight
-
-```py
-输入：head = [1,2,3,4,5], k = 2
-输出：[4,5,1,2,3]
-
-
-输入：head = [0,1,2], k = 4
-输出：[2,0,1]
-
-
+约瑟夫环：
 
 class Solution:
-    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        
-        if not head or not head.next:
-            return head
-            
-        lenth = 1
-        # 第一步：链接成一个环
-        cur = head
-        while cur.next:
-            cur = cur.next
-            lenth += 1
-        cur.next = head
-
-        # 第二步，cur指向的是head前一个节点
-        
-        steps = lenth - k % lenth
-        for _ in range(steps):
-            cur = cur.next
-
-        # 第三步：断开
-        res = cur.next
-        cur.next = None
+    def lastRemaining(self, n: int, m: int) -> int:
+        res = 0
+        for i in range(2, n + 1):
+            res = (res + m) % i
         return res
 
-时间复杂度：O(n)，最坏情况下，我们需要遍历该链表两次。
-
-空间复杂度：O(1)，我们只需要常数的空间存储若干变量。
-```
-
-##  41. <a name='IIRemoveDuplicatesfromSortedList'></a> deleteDuplicates
-
-```py
-输入：head = [1,2,3,3,4,4,5]
-输出：[1,2,5]
-
-
-
 class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        dummy = ListNode(0, head)
-        # 后一问，cur = head
-        cur = dummy
-        # 目的是删除cur的下一个节点
-        while cur.next and cur.next.next:  
-            if cur.next.val == cur.next.next.val:
-                # 把所有等于 x 的结点全部删除
-                x = cur.next.val
-                # while cur.next 不要漏
-                while cur.next and cur.next.val == x: 
-                    cur.next = cur.next.next
-            else:
-                cur = cur.next
-        return dummy.next
+    def lastRemaining(self, n: int, m: int) -> int:
+        # 旧编号： 0     1   ...   m-1   m   m+1   ...   n-1
+        # 新编号：-m   -m+1   ...   -1   0   1   ...   n-1
+        if n == 1: return 0
+        return (self.lastRemaining(n-1,m) + m) % n
 
+时间复杂度： O(n)，需要求解的函数值有 n 个。
 
-
-时间复杂度：O(n)，其中 n 是链表的长度。
-
-空间复杂度：O(1)。
+空间复杂度： O(1)，只使用常数个变量。
 ```
 
-##  78. <a name='Removeduplicatesfromsortedarray'></a> deleteDuplicates
+
+
+##  127. <a name='2.'></a> 【hard】backToOrigin
+
+```s
+圆环上有 10 个点，编号为 0 ~ 9。
+从`0点`出发，每次可以`逆时针`和`顺时针`走一步，问走`n步`回到`0点`共有多少种走法。
+
+输入: 2
+输出: 2
+
+
+解释：有 2 种方案。分别是 0->1->0 和 0->9->0
+```
 
 ```py
-输入：head = [1,1,2,3,3]
-输出：[1,2,3]
+
+* 时间复杂度: O(nm)
+* 空间复杂度: O(nm)
 
 
+
+# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
+# 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
 class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        # 前一问 cur = dummy
-        cur = head
-        while cur.next:  
-            if cur.val == cur.next.val:
-                cur.next = cur.next.next # 要么删除
-            else:
-                cur =  cur.next # 要么下一个
-        return head
+    def backToOrigin(self,n):
+        circle = 10
+        # step 在外面，site 在里面
+        dp = [[0 for site in range(circle)] for step in range(n + 1)]
+        dp[0][0] = 1
+        for step in range(1, n + 1): # 走 1 ~ n 步
+            for site in range(circle):
+                # dp[step][site] 表示从 0 出发，走 step 步到 site 的方案数
+                dp[step][site] = dp[step - 1][(site - 1 + circle) % circle] \
+                               + dp[step - 1][(site + 1) % circle]
+        return dp[n][0]
 ```
 
-##  141. <a name='Removeduplicatesfromsortedarray-1'></a> removeDuplicates
-
-```py
-不要使用额外的空间，你必须在 `原地` 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
-
-
-
-输入：nums = [1,1,2]
-输出：2, nums = [1,2,_]
-
-
-
-
-输入：nums = [0,0,1,1,1,2,2,3,3,4]
-输出：5, nums = [0,1,2,3,4]
-
-
-
-
-class Solution:
-    def removeDuplicates(self, nums: List[int]) -> int:
-        slow = 0 # 注意：count是从0开始的
-        for fast in range(len(nums)):
-            if nums[fast] != nums[slow]:
-                slow += 1
-                nums[slow] = nums[fast]
-        return slow + 1
-
-
-
-时间复杂度：O(n)，其中 n 是数组的长度。快指针和慢指针最多各移动 n 次。
-
-空间复杂度：O(1)。只需要使用常数的额外空间。
-```
-
-##  168. <a name='StringCompression'></a> 【hard】compress
+##  176. <a name='SuperEggDrop'></a> 【hard】superEggDrop
 
 
 ```py
-输入：chars = ["a","a","b","b","c","c","c"]
-输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
+输入：k = 1, n = 2
+输出：2
 
 
-
-
-输入：chars = ["a"]
-输出：返回 1 ，输入数组的前 1 个字符应该是：["a"]
-
-
-
-
-输入：chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
-输出：返回 4 ，输入数组的前 4 个字符应该是：["a","b","1","2"]。
-
-
-
-你必须设计并实现一个只使用`常量额外空间`的算法来解决此问题。
-
-
-
-'''
-slow += 1
-cnt += 1
-'''
-
-
-class Solution:
-    def compress(self, chars: List[str]) -> int:
-
-        n = len(chars)
-
-        slow = 0
-        cnt = 1
-        for fast in range(n):
-            # 在 aa，bb，ccc 的最后一位触发计算
-            # 这边不是比较 chars[fast] != chars[slow]
-            # fast == n - 1 不要漏
-            if fast == n - 1 or chars[fast] != chars[fast+1]:
-
-                chars[slow] = chars[fast] 
-                slow += 1
-
-                if cnt > 1: # cnt 重新置为 1 前，需要统计是几位数
-                    for digit in str(cnt):
-                        chars[slow] = digit
-                        slow += 1
-
-                cnt = 1 # cnt 重新置为 1
-            else:
-                cnt += 1
-        return slow 
-        # 前一问是 slow + 1
-
-
-时间复杂度：O(n)，其中 n 为字符串长度，我们只需要遍历该字符串一次。
-
-空间复杂度：O(1)。我们只需要常数的空间保存若干变量。
-
-```
-
-
-##  152. <a name='-1'></a> removeDuplicates
-
-类似消消看
-
-```py
-输入："abbaca"
-输出："ca"
-
-class Solution(object):
-    def removeDuplicates(self, S):
-        stack = []
-        for char in S:
-            if stack and stack[-1] == char:
-                stack.pop()
-            else:
-                stack.append(char)
-        return "".join(stack)
-
-时间复杂度：O(n)，其中 n 是字符串的长度。我们只需要遍历该字符串一次。
-
-空间复杂度：O(n)
-
-```
-
-##  173. <a name='FindAllDuplicatesinanArray'></a> 【hard】findDuplicates
-
-
-```py
-请你找出所有出现 两次 的整数，并以数组形式返回。
-
-输入：nums = [4,3,2,7,8,2,3,1]
-输出：[2,3]
-
-你必须设计并实现一个时间复杂度为 O(n) 且仅使用常量额外空间的算法解决此问题。
-
-一个长度为 n 的整数数组 nums ，其中 nums 的所有整数都在范围 [1, n] 内
-
-class Solution:
-    def findDuplicates(self, nums: List[int]) -> List[int]:
-        res = []
-        for num in nums:
-            # 取绝对值
-            num = abs(num)
-            # 把相应下标减1的值设为负数
-            if nums[num-1] > 0:
-                nums[num-1] *= -1
-            # 值为负的话，说明该值已经出现过，添加到输出列表l中
-            else:
-                res.append(num)
-                
-        return res
-
-时间复杂度： O(n) 
-常量额外空间
-
-[4, 3, 2, 7, 8, 2, 3, 1]
-[4, 3, 2, -7, 8, 2, 3, 1]   
-[4, 3, -2, -7, 8, 2, 3, 1]    
-[4, -3, -2, -7, 8, 2, 3, 1]
-[4, -3, -2, -7, 8, 2, -3, 1]
-[4, -3, -2, -7, 8, 2, -3, -1]
-[4, [-3], -2, -7, 8, 2, -3, -1] 
-[4, [-3], [-2], -7, 8, 2, -3, -1] 
-[-4, [-3], [-2], -7, 8, 2, -3, -1] 
-```
-
-
-
-##  137. <a name='FindtheDuplicateNumber'></a> 【hard】findDuplicate
-
-
-```py
-不修改 数组 nums 且只用常量级 O(1) 的额外空间。
-
-线性级时间复杂度 O(n)
-
-输入：nums = [1,3,4,2,2] 0 -> 1 -> 3 -> (2 -> 4) -> 2 -> 4  循环
-输出：2 
-
-
-输入：nums = [3,1,3,4,2] 0 -> (3 -> 4 -> 2) -> 3 -> 4 -> 2 
+输入：k = 2, n = 6
 输出：3
 
+
+
+输入：k = 3, n = 14
+输出：4
+
+
+
+时间复杂度：O(eggs*log level) 
+空间复杂度：O(eggs)。
+
 class Solution:
-    def findDuplicate(self, nums: List[int]) -> int:
-        # node.next = nums[node]
-        # node.next.next = nums[nums[node]]
-        slow = nums[0]        
-        fast = nums[nums[0]] 
-        while slow != fast: # 😐😐 while 循环
-            slow = nums[slow]
-            fast = nums[nums[fast]] 
-        p = 0                    
-        q = slow  
-        while p != q: # 😐😐 while 循环
-            p = nums[p]
-            q = nums[q]
-        return p           
+    def superEggDrop(self, eggs: int, level: int) -> int:
+            dp = [0] * (eggs + 1)
+            m = 0
+            while dp[eggs] < level:
+                m += 1
+                for gg in range(eggs, 0, -1): # 从 eggs ~ 1
+                    # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层
+                    # 鸡蛋没碎，可以遍历的楼层数目
+                    dp[gg] = dp[gg - 1] + dp[gg] + 1
+            return m
 
 ```
 
-##  25. <a name='LinkedListCycleII'></a> 【hard】detectCycle
-
-
-```py
-时间复杂度： O(N)，其中 N 为链表中节点的数目。slow 指针走过的距离不会超过链表的总长度；
-
-空间复杂度： O(1)。我们只使用了 slow,fast 三个指针。
-
-class Solution:
-    def detectCycle(self, head: ListNode) -> ListNode:
-        slow, fast = head, head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-            
-            if slow == fast: # 如果相遇
-                p = head
-                q = slow
-                while p != q: # 😐 while 循环
-                    p = p.next
-                    q = q.next
-                return p    # 你也可以 return q
-        return None
-```
-
-##  11. <a name='LinkedListCycle'></a> hasCycle
+##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a> 【hard】canPartition - 求种类，每个coin只能用1次 - 从后往前
 
 ```py
+
+输入：nums = [1,5,11,5]
+输出：true
+
+解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+
+
 class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        fast = slow = head
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
         
-        while fast and fast.next: # 😐 while 循环
-            fast = fast.next.next
-            slow = slow.next
-            if fast == slow:
-                return True
-        return False
+        sums = sum(nums) 
+        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
+        bagSize = sums // 2 # 求得新的目标
+        
+        dp = [0] * (bagSize+1) 
+        dp[0] = 1 
+        
+        for coin in nums:
+            for tar in range(bagSize, coin - 1, -1):
+                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+
+        return dp[-1] != 0
+
+
+
+时间复杂度： O(n × target)，其中 n 是数组的长度， target 是整个数组的元素和的一半。
+
+空间复杂度： O(target)，其中 target 是整个数组的元素和的一半。
+
+
+```
+
+##  193. <a name='dfsstartIforTargetSum'></a> 【hard】findTargetSumWays - 求种类，每个coin只能用1次 - 从后往前
+
+
+```py
+输入：nums = [1,1,1,1,1], target = 3
+输出：5
+
+解释：一共有 5 种方法让最终目标和为 3 。
+-1 + 1 + 1 + 1 + 1 = 3
++1 - 1 + 1 + 1 + 1 = 3
++1 + 1 - 1 + 1 + 1 = 3
++1 + 1 + 1 - 1 + 1 = 3
++1 + 1 + 1 + 1 - 1 = 3
+
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target) -> int:
+        n = len(nums)
+        # 求得新的目标
+        sums = sum(nums)
+        # 注意，需要排除掉一些特殊状况
+        bagSize = sums + target
+        # 也可以写成：bagSize = sums - target
+        if bagSize % 2 == 1 or bagSize < 0:
+            return 0
+        bagSize = bagSize // 2
+        
+        dp = [0] * (bagSize+1)
+        dp[0] = 1
+        for coin in nums:
+            for tar in range(bagSize, coin - 1, -1):
+                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
+        return dp[-1]
+
+```
+
+##  214. <a name='-1'></a>【hard】isInterleave
+
+```py
+给定三个字符串 s1、s2、s3，请你帮忙验证 s3 是否是由 s1 和 s2 交错 组成的。
+输入：s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+输出：true
+
+class Solution:
+    def isInterleave(self, string1: str, string2: str, stringtar: str) -> bool:
+        n1 = len(s1)
+        n2 = len(s2)
+        n3 = len(s3)
+        if(n1 + n2 != n3):
+            return False
+
+        dp=[[False]*(n2 + 1) for i in range(n1 + 1)]
+        dp[0][0] = True
+
+        for i in range(1, n1 + 1):
+            dp[i][0] = (dp[i-1][0] and s1[i-1] == s3[i-1])
+
+        for j in range(1, n2 + 1):
+            dp[0][j] = (dp[0][j-1] and s2[j-1] == s3[j-1])
+            
+        for i in range(1, n1 + 1):
+            for j in range(1, n2 + 1):
+                dp[i][j] = (dp[i][j-1] and s2[j-1] == s3[i+j-1]) or \ 
+                            (dp[i-1][j] and s1[i-1] == s3[i+j-1])
+        return dp[-1][-1]
+
+
+
+时间复杂度： O(nm)，两重循环的时间代价为 O(nm)。
+空间复杂度： O(m)，即 s2 的长度。
+```
+
+
+##  186. <a name='SudokuSolver'></a> 【hard】solveSudoku -> None
+
+```py
+# 一句都不能少
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        rows = [set() for _ in range(9)]
+        cols = [set() for _ in range(9)]
+        grids = [[set() for _ in range(3)] for _ in range(3)]
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    if  board[i][j] not in rows[i] and \
+                        board[i][j] not in cols[j] and \
+                        board[i][j] not in grids[i//3][j//3]:
+                        rows[i].add(board[i][j])
+                        cols[j].add(board[i][j])
+                        grids[i//3][j//3].add(board[i][j])
+
+        def dfs(i,j):
+            if board[i][j] != '.': # 被数字填满
+
+                if i == 8 and j == 8:
+                    self.flag = True
+                    return
+                if j < 8:    dfs(i, j + 1)
+                if j == 8:   dfs(i + 1, 0)
+                    
+            else: # not 被数字填满
+                for num in range(1,10):
+                    item = str(num)
+                    if  item not in rows[i] and \
+                        item not in cols[j] and \
+                        item not in grids[i//3][j//3]:
+                        board[i][j] = item
+                        rows[i].add(item)
+                        cols[j].add(item)
+                        grids[i//3][j//3].add(item)
+
+                        # 易错点: 注意缩进关系
+                        if i == 8 and j == 8:
+                            self.flag = True
+                            return
+                        if j < 8:      dfs(i, j + 1)
+                        if j == 8:     dfs(i + 1, 0)
+                        '''
+                        这一行至关重要
+                        '''
+                        if self.flag:  return
+                            
+                        board[i][j] = '.'
+                        rows[i].remove(item)
+                        cols[j].remove(item)
+                        grids[i//3][j//3].remove(item)
+
+        self.flag = False
+        dfs(0,0)
+
+```
+
+
+
+
+
+
+
+##  96. <a name='DecodeString'></a> 【hard】decodeString
+
+```py
+输入：s = "3[a]2[bc]"
+输出："aaabcbc"
+
+
+
+输入：s = "3[a2[c]]"
+输出："accaccacc"
+
+本题核心思路：是在`栈`里面每次存储两个信息, 
+
+(左括号前的`字符串`, 左括号前的`数字`)
+
+时间复杂度: O(S)
+空间复杂度: O(S)
+
+class Solution:
+    def decodeString(self, s: str) -> str:
+        stack = []  
+        tmpstr, num = "", 0 
+        for char in s:
+            if char.isdigit():
+                num = num * 10 + int(char) # 3
+            elif char.isalpha():
+                tmpstr += char # abc def
+            elif char == "[":
+                stack.append((tmpstr, num)) # 比如abc3[def], 当遇到第一个 "[" 的时候，压入栈中的是("abc", 3)
+                '''
+                遇到左括号，abc，3，都要被清空
+                '''
+                tmpstr, num = "", 0
+            elif char == "]":
+                pre, cnt = stack.pop() # 然后遍历括号里面的字符串def, 当遇到 "]" 的时候, 从栈里面弹出一个元素(s1, n1)
+                tmpstr = pre + tmpstr * cnt # 得到新的字符串为 abc + def * 3
+        return tmpstr
+
+```
+
+
+
+
+##  99. <a name='BasicCalculatorII-224.'></a>【hard】 calculate - 先计算，后num，op
+
+```py
+输入：s = "3+2*2"
+输出：7
+
+输入：s = " 3/2 "
+输出：1
+
+输入：s = " 3+5 / 2 "
+输出：5
+
+时间复杂度：O(n) 
+空间复杂度：O(n) 
+
+class Solution:
+    def calculate(self, s: str) -> int:
+        stack = []
+        num, op = 0, "+"  # 这个"+", 在最前面,是因为算法符号具有滞后性
+        for i, char in enumerate(s):
+            if char.isdigit():
+                num = 10 * num + int(char)
+            if char in "+-*/" or i == len(s)-1:
+                if op == "+":
+                    stack.append(num)
+                elif op == "-":
+                    stack.append(-num)
+                elif op == "*":
+                    stack.append(stack.pop()*num)
+                elif op == "/":
+                    stack.append(int(stack.pop()/float(num)))
+                num, op = 0, char # op 的赋值放在最后面, 是因为算法符号具有滞后性
+        return sum(stack)
+
+```
+
+
+
+##  117. <a name='BasicCalculatorII'></a> 【hard】calculate - 先计算，后赋值
+
+
+```py
+输入：s = "1 + 1"
+输出：2
+
+
+
+输入：s = " 2-1 + 2 "
+输出：3
+
+
+
+输入：s = "(1+(4+5+2)-3)+(6+8)"
+输出：23
+
+
+
+
+
+时间复杂度：O(n) 
+空间复杂度：O(n) 
+class Solution:
+    def calculate(self, s: str) -> int:
+        stack = [1]
+        num, op = 0, 1  # 这个"+", 在最前面,是因为算法符号具有滞后性
+        res = 0
+        for i, char in enumerate(s):
+            if char.isdigit():
+                num = 10 * num + int(char)
+            if char in "+-()" or i == len(s)-1:
+                res += num*op
+                num = 0
+                if char == "+":
+                    op = stack[-1]
+                elif char == "-":
+                    op = stack[-1]*(-1)
+                elif char == "(":
+                    stack.append(op)
+                elif char == ")":
+                    stack.pop()
+        return res
+```
+
+
+```py
+时间复杂度：O(1) 。一共有 9216 种可能性，对于每种可能性，各项操作的时间复杂度都是 O(1)，因此总时间复杂度是 O(1)。
+
+空间复杂度：O(1) 。空间复杂度取决于递归调用层数与存储中间状态的列表，
+
+因为一共有 4 个数，所以递归调用的层数最多为 4，存储中间状态的列表最多包含 4 个元素，因此空间复杂度为常数。
+
+class Solution:
+    def judgePoint24(self, nums: List[int]) -> bool:
+        TARGET = 24
+        EPSILON = 1e-6
+        ADD, MULTIPLY, SUBTRACT, DIVIDE = 0, 1, 2, 3
+
+        def backtrack(nums: List[float]) -> bool:
+            if not nums:
+                return False
+            if len(nums) == 1:
+                return abs(nums[0] - TARGET) < EPSILON
+            for i, x in enumerate(nums):
+                for j, y in enumerate(nums):
+                    if i != j:
+                        newNums = []
+                        # 把 x, y 之外的 2个nums 放到 newNums
+                        for k, z in enumerate(nums):
+                            if k != i and k != j:
+                                newNums.append(z)
+                        # 把 x y 进行加减乘除运算 
+                        for op in range(4):
+                            '''
+                            剪枝：op < 2 and i > j，其中 + 和 * 和计算次序无关 
+                            '''
+                            if op < 2 and i > j: continue
+                            if op == ADD:
+                                newNums.append(x + y)
+                            elif op == MULTIPLY:
+                                newNums.append(x * y)
+                            elif op == SUBTRACT:
+                                newNums.append(x - y)
+                            elif op == DIVIDE:
+                                if abs(y) < EPSILON:
+                                    continue
+                                newNums.append(x / y)
+                            '''
+                            backtrack 4 遍
+                            '''
+                            if backtrack(newNums):
+                                return True
+                            newNums.pop()
+            return False
+
+        return backtrack(nums)
+
+```
+
+
+##  179. <a name='ExcelSheetColumnTitle'></a> 【hard】convertToTitle
+
+```py
+输入：columnNumber = 1
+输出："A"
+
+
+
+
+输入：columnNumber = 28
+输出："AB"
+
+
+
+
+输入：columnNumber = 701
+输出："ZY"
+
+
+
+
+输入：columnNumber = 2147483647
+输出："FXSHRXW"
+
+
+
+
+
+时间复杂度： O(log26columnNumber)。
+
+空间复杂度：O(1)。
+
+
+
+class Solution(object):
+    def convertToTitle(self, columnNumber):
+        res = ''
+        '''
+        余加除
+        '''
+        while columnNumber: # 😐😐 while 循环
+            columnNumber -= 1                       # 又想了好久才知道在哪里减一。。
+            res = chr(columnNumber % 26 + 65) + res # A的ascii码为65
+            columnNumber = columnNumber // 26 
+        return res
+```
+
+##  218. <a name='ConvertaNumbertoHexadecimal'></a> 【hard】toHex
+
+```py
+输入:
+26
+
+输出:
+"1a"
+
+
+输入:
+-1
+
+输出:
+"ffffffff"
+
+
+
+0xffffffff = 1111 1111 1111 1111 1111 1111 1111 1111 # (8个F的二进制形式, 一个F占4个字节 )  # 2 ^ 32 - 1
+
+
+
+时间复杂度： O(k)，其中 k 是整数的十六进制数的位数，这道题中 k=8。
+空间复杂度： O(k)，其中 k 是整数的十六进制数的位数，这道题中 k=8。
+
+
+class Solution:
+    def toHex(self, num):
+        num &= 0xffffffff 
+        res = ""
+        lib = "0123456789abcdef"
+        if num == 0: return "0"
+        while num: # 😐 while 循环
+            '''
+            余加除
+            '''
+            res = lib[num % 16] + res # 一定要加在右边
+            num //= 16
+        return res
+```
+
+
+
+##  61. <a name='FirstMissingPositive'></a> 【hard】firstMissingPositive
+
+```py
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
+
+输入：nums = [1,2,0]
+输出：3
+
+输入：nums = [3,4,-1,1]
+输出：2
+
+输入：nums = [7,8,9,11,12]
+输出：1
+
+
+
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        for i in range(n):
+            while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]: # 😐😐😐 while 循环
+                nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]
+# nums[nums[i] - 1]
+# [-1, 4, 3, 1] 4 在 4 的位置↓
+# [-1, 1, 3, 4] 1 在 1 的位置↓
+# [1, -1, 3, 4]
+
+        for i in range(n):
+            if nums[i] != i + 1:
+                return i + 1
+
+        return n + 1
+
+时间复杂度： O(N)，其中 N 是数组的长度。
+
+空间复杂度： O(1)。
+```
+
+
+##  175. <a name='MissingNumber'></a> 【hard】missingNumber
+
+```py
+ [0, n] 中 n 个数的数组 nums
+
+
+输入：nums = [9,6,4,2,3,5,7,0,1]
+输出：8
+
+
+解释：n = 9，因为有 9 个数字，所以所有的数字都在范围 [0,9] 内。8 是丢失的数字，因为它没有出现在 nums 中。
+
+
+你能否实现`线性时间复杂度`、仅使用`额外常数空间`的算法解决此问题 ?
+
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        xor = len(nums) # 注意这里
+        for i, num in enumerate(nums):
+            xor ^= i
+            xor ^= num
+        return xor
+
+时间复杂度： O(n)，其中 n 是数组  nums 的长度。需要对 2n+1 个数字计算按位异或的结果。
+
+空间复杂度： O(1)。
+
+
+# class Solution:
+#     def missingNumber(self, nums: List[int]) -> int:
+#         xor = 0
+#         for i, num in enumerate(nums):
+#             xor ^= i ^ num
+#         return xor ^ len(nums) # 注意这里
+```
+
+
+
+##  240. <a name='SingleNumberII'></a> 【hard】singleNumber
+
+```py
+给你一个整数数组 nums ，除某个元素仅出现 `一次` 外，其余每个元素都恰出现 `三次` 。请你找出并返回那个只出现了一次的元素。
+
+
+输入：nums = [2,2,3,2]
+输出：3
+
+
+输入：nums = [0,1,0,1,0,1,99]
+输出：99
+
+
+
+时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
+
+空间复杂度：O(1)
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ans = 0
+        for i in range(32):
+            # (num >> i) & 1
+            total = sum((num >> i) & 1 for num in nums)
+            if total % 3:
+                # Python 这里对于最高位需要特殊判断
+                if i == 31:
+                    ans -= (1 << i)
+                else:
+                    ans |= (1 << i)
+        return ans
+
+
+```
+
+##  250. <a name='III-1'></a> 【hard】singleNumber
+
+难点在于只出现一次的数字不止一个，
+
+但是刚好有且只有两个
+
+```py
+输入：nums = [1,2,1,3,2,5]
+输出：[3,5]
+
+解释：[5, 3] 也是有效的答案。
+
+
+
+
+输入：nums = [-1,0]
+输出：[-1,0]
+
+
+
+输入：nums = [0,1]
+输出：[1,0]
+
+
+
+
+
+时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+
+空间复杂度：O(1)。
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        xorsum = 0
+        # 先全部异或一次, 得到的结果 # 找到这两个数的差异
+        for num in nums:
+            xorsum ^= num 
+        # 找到这两个数的差异的最后一位1, 在这个位上一个为0, 一个为1
+        diff = xorsum & (-xorsum) 
+        type1 = type2 = 0
+        for num in nums:
+            # 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
+            if num & diff: 
+                type1 ^= num
+            else:
+                type2 ^= num
+
+        return [type1, type2]
+
+```
+
+
+
+##  222. <a name='FractiontoRecurringDecimal'></a> 【hard】fractionToDecimal
+
+```py
+输入：numerator = 1, denominator = 2
+输出："0.5"
+
+
+
+输入：numerator = 2, denominator = 1
+输出："2"
+
+
+
+输入：numerator = 4, denominator = 333
+输出："0.(012)"
+
+
+
+
+
+时间复杂度：O(l) 其中 l 是答案字符串的长度
+空间复杂度：O(l)
+
+情况一：余数
+情况二：负数
+
+
+class Solution:
+    def fractionToDecimal(self, numerator, denominator):
+
+        # ----------情况一：没有余数----------
+        if numerator % denominator == 0:
+            return str(numerator // denominator)
+
+        # -----------情况二：有余数-----------
+        s = []
+        # ----------------得到负数----------------
+        if (numerator < 0) != (denominator < 0):
+            s.append('-')
+        # ----------------得到负数----------------
+
+
+        # 整数部分
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+        integerPart = numerator // denominator
+        s.append(str(integerPart))
+        s.append('.')
+
+        # 小数部分
+        indexMap = {}
+        tail = numerator % denominator
+
+        while tail and tail not in indexMap: # 😐😐😐 while 循环
+            indexMap[tail] = len(s) 
+            tail *= 10
+            '''
+            乘除余
+            '''
+            s.append(str(tail // denominator))
+            tail %= denominator
+
+        if tail:  # 有循环节，跳出循环时，remainde 不是 
+            insertIndex = indexMap[tail]
+            s.insert(insertIndex, '(') #左侧插入
+            s.append(')')
+
+        return ''.join(s)
+        # -----------情况二：有余数-----------
+        # -----------情况二：有余数-----------
+```
+
+##  221. <a name='HouseRobberIII'></a> 【hard】rob
+
+```py
+输入: root = [3,2,3,null,3,null,1]
+输出: 7 
+解释: 小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7
+
+
+
+输入: root = [3,4,5,1,3,null,1]
+输出: 9
+解释: 小偷一晚能够盗取的最高金额 4 + 5 = 9
+
+
+
+# 补充一个Python的：
+时间复杂度： O(n)。
+
+空间复杂度： O(n)。
+
+
+
+class Solution:
+    def rob(self, root: TreeNode) -> int:
+        def dfs(root):
+            if not root: return 0, 0
+            rob_L, no_rob_L = dfs(root.left)  # 前一项表示根节点偷，后一项表示根节点不偷
+            rob_R, no_rob_R = dfs(root.right) # 前一项表示根节点偷，后一项表示根节点不偷
+            return root.val + no_rob_L + no_rob_R, max(rob_L, no_rob_L) + max(rob_R, no_rob_R) 
+            # 前一项表示根节点偷，后一项表示根节点不偷
+            # 根节点偷 + (root.left的根节点no偷     +  root.right的根节点no偷) 
+            #           max(root.left的根节点all)  +  max(root.right的根节点all)
+        return max(dfs(root))
+
+```
+
+##  202. <a name='LargestRectangleinHistogram'></a> 【hard】maximalRectangle
+
+```py
+输入：matrix = 
+["1","0","1","0","0"],
+["1","0","1","1","1"],
+["1","1","1","1","1"],
+["1","0","0","1","0"]
+
+输出：6
+
+
+
+
+时间复杂度： O(mn)。 对每一列应用柱状图算法需要 O(m) 的时间，一共需要 O(mn) 的时间。
+
+空间复杂度： O(n)，其中 m 和 n 分别是矩阵的行数和列数。
+
+
+
+
+
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        if len(matrix) == 0:
+            return 0
+        res = 0
+        m, n = len(matrix), len(matrix[0])
+        heights = [0] * (n + 1)
+        # heights = [0] * n，height需要补充一个0
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == '0':
+                    heights[j] = 0
+                else:
+                    heights[j] += 1
+            # 每行求一次 self.largestRectangleArea
+            res = max(res, self.largestRectangleArea(heights))
+        return res
+
+    def largestRectangleArea(self, heights):
+        # heights.append(0)
+        stackI = [-1]
+        res = 0
+        for i in range(len(heights)):
+            # 新来的 heights[i] 更小
+            while heights[i] < heights[stackI[-1]]: # 😐 while 循环 + pop + append
+                h = heights[stackI.pop()]
+                w = i - stackI[-1] - 1
+                res = max(res, h * w)  
+            stackI.append(i)
+        return res
+
+''''
+s = stack.pop()后：
+✨表示pop
+'''
+
+heights: [1, 0, 1, ✨0, 0, 0]
+stack: [1]    res: 1 = 1 * ( 3 - 1 - 1)
+
+heights: [2, 0, 2, ✨1, 1, ✨0, 0]
+stack: [1]    res: 2 = 2 * ( 3 - 1 - 1)
+stack: [1, 3] res: 2 = 1 * ( 5 - 3 - 1)
+stack: [1]    res: 3 = 1 * ( 5 - 1 - 1)
+
+heights: [3, 1, 3, ✨2, 2, ✨✨0, 0, 0]
+stack: [1]    res: 3 = 3 * ( 3 - 1 -1)
+stack: [1, 3] res: 3 = 2 * ( 5 - 3 -1)
+stack: [1]    res: 6 = 2 * ( 5 - 1 -1)
+
+heights: [4, 0, 0, 3, ✨0, 0, 0, 0, 0]
+stack: [1, 2] res: 4 = 3 * ( 4 - 2 -1)
+```
+
+
+
+##  206. <a name='LargestRectangleinHistogram-85.'></a> 【hard】largestRectangleArea
+
+```py
+输入：heights = [2,1,5,6,2,3]
+输出：10
+
+
+解释：最大的矩形为图中红色区域，面积为 10
+
+
+时间复杂度： O(N)。
+空间复杂度： O(N)。
+
+
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        stack = [-1]
+        heights.append(0) # 最左边插个0，heights最后补充一个0可以很好的简化代码
+        n, res = len(heights), 0
+        for i in range(n):
+            while heights[stack[-1]] > heights[i]: # 😐😐😐 while 循环 + pop + append
+                h = heights[stack.pop()]
+                w = i - stack[-1] - 1
+                res = max(res, h * w)   
+     
+            stack.append(i)
+        return res
+
+```
+
+
+
+
+
+##  125. <a name='SubarraySumEqualsKK'></a> 【hard】subarraySum - 累加、查表、更新表
+
+```py
+输入：nums = [1,2,3], k = 3
+输出：2
+
 
 
 * 时间复杂度:O(n)
-* 空间复杂度:O(1)      
-```
-
-
-##  114. <a name='1.'></a> sortOddEvenList
-
-1. 按奇偶位置拆分链表，得 1->3->5->7->NULL 和 8->6->4->2->NULL  328. 奇偶链表
-2. 反转偶链表，得 1->3->5->7->NULL 和 2->4->6->8->NULL         206. 反转链表
-3. 合并两个有序链表，得 1->2->3->4->5->6->7->8->NULL           21. 合并两个有序链表
-
-https://mp.weixin.qq.com/s/0WVa2wIAeG0nYnVndZiEXQ
-
-```py
-输入: 1->8->3->6->5->4->7->2->NULL
-输出: 1->2->3->4->5->6->7->8->NULL
+* 空间复杂度:O(n)
 
 
 
-class Solution:    
-    def sortOddEvenList(self,head):     
-        if not head or not head.next:      
-            return head 
-        # 第一步：分割    
-        oddList, evenList = self.partition(head)    
-        # 第二步：反转 
-        evenList = self.reverse(evenList)        
-        # 第三步：合并
-        return self.merge(oddList, evenList)    
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-    def partition(self, head: ListNode) -> ListNode:        
-        headnxt = head.next        
-        odd, even = head, headnxt        
-        while even and even.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
-            odd.next = even.next            
-            odd = odd.next            
-            even.next = odd.next            
-            even = even.next        
-        odd.next = None # 节点需要断开
-        return [head, headnxt]    
-
-
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-    def reverse(self,head):    
-        cur = None
-        while head: # 😐 while 循环, cur
-            headnxt = head.next
-            head.next = res
-            cur = head
-            head = headnxt
-        return cur    
-
-
-
-* 时间复杂度: O(min(n1,n2))
-* 空间复杂度: O(1)
-
-
-    def merge(self,p,q):        
-        dummy = ListNode(0)        
-        cur = dummy        
-        while p and q:    # 😐 while 循环        
-            if p.val <= q.val:               
-                cur.next = p                
-                p = p.next            
-            else:                
-                cur.next = q                
-                q = q.next            
-            cur = cur.next        
-        cur.next = p or q        
-        return dummy.next
-```
-
-##  161. <a name='PartitionList'></a> partition
-
-```py
-小于 x 的节点都出现在 大于或等于 x 的节点之前
-
-输入：head = [1,4,3,2,5,2], x = 3
-输出：[1,2,2,4,3,5]
-
-输入：head = [2,1], x = 2
-输出：[1,2]
-
-快慢指针 slow -> fast -> None
-链表中节点的数目在范围 [0, 200] 内
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-
+查表法：
 class Solution:
-    def partition(self, head: ListNode, x: int) -> ListNode:
-        '''
-        这道题只要返回 dummy1.next -> dummy2.next -> None
-                      slow        -> fast        -> None
-        '''
-        dummy1 = ListNode(0)
-        dummy2 = ListNode(0)
-        slow, fast = dummy1, dummy2 
-
-        while head:    # 😐😐😐 while 循环 # 🌵 用 cur 指针
-            if head.val < x:
-                slow.next = head # dummy1 指向第一个小于x的node
-                slow = slow.next
-            else:
-                fast.next = head # dummy2 指向第一个大于x的node
-                fast = fast.next
-            head = head.next
-
-        slow.next = dummy2.next
-        fast.next = None
-        return dummy1.next
-```
-
-
-
-##  46. <a name='SortList'></a> 【hard】sortList
-
-```py
-输入：head = [4,2,1,3]
-输出：[1,2,3,4]
-
-
-输入：head = [-1,5,3,4,0]
-输出：[-1,0,3,4,5]
-
-
-输入：head = []
-输出：[]
-
-class Solution:
-    def sortList(self, head: ListNode) -> ListNode:
-        # 第一步：递归条件
-        if not head or not head.next:
-            return head
-            
-        # 第二步：左右切分
-        mid = self.findmid(head)
-        left = head # 指定左右
-        right = mid.next # 指定左右
-        mid.next = None # 断开链接
-        '''
-        归并排序，先排序，再归并
-        '''
-        l = self.sortList(left)
-        r = self.sortList(right)
-        return self.merge(l, r) 
-
-    def findmid(self,head):
-        slow, fast = head, head
-        while fast.next and fast.next.next: 
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-
-    def merge(self,l,r):
-        dummy = ListNode(0)
-        cur = dummy
-        while l and r: 
-            if l.val <= r.val:
-                cur.next = l
-                l = l.next 
-            else:
-                cur.next = r
-                r = r.next 
-            cur = cur.next 
-        cur.next = l or r
-        return dummy.next
-
-时间复杂度： O(nlogn)，其中 n 是链表的长度。
-
-空间复杂度： O(logn)，其中 n 是链表的长度。空间复杂度主要取决于递归调用的栈空间。
-
-```
-
-##  14. <a name='IntersectionofTwoLinkedLists'></a> getIntersectionNode
-
-
-```py
-输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
-输出：Intersected at '8'
-
-
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        if not headA or not headB:
-            return None
-        pa, pb = headA, headB
-        while pa != pb: # 😐 while 循环
-            pa = pa.next if pa else headB
-            pb = pb.next if pb else headA
-        return pa
-
-时间复杂度 O(M+N), 空间复杂度 O(1)
-```
-
-
-
-##  189. <a name='MiddleoftheLinkedList'></a> middleNode
-
-```py
-输入：[1,2,3,4,5,6]
-输出：此列表中的结点 4 (序列化形式：[4,5,6])
-
-
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-
-
-class Solution:
-    def middleNode(self, head: ListNode) -> ListNode:
-        slow = fast = head
-        while fast and fast.next: # 😐 while 循环
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-```
-
-## 归并排序 merge_sort
-
-```py
-class Solution:
-    def sortArray(self, nums: List[int]) -> List[int]:
-        def merge_sort(nums, l, r):
-            if l < r:
-                mid = (l + r) // 2
-                # 先把子序列排序完成
-                merge_sort(nums, l, mid)
-                merge_sort(nums, mid + 1, r)
-                tmp = []
-                i1, i2 = l, mid + 1   # i1, i2 是两个起始点
-                while i1 <= mid and i2 <= r: # 😐 while 循环
-                    # 如果 前半部部分结束了，或者后半部分没有结束
-                    if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
-                        tmp.append(nums[i2])
-                        i2 += 1
-                    else:
-                        tmp.append(nums[i1])
-                        i1 += 1
-                tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
-                nums[l: r + 1] = tmp
-
-
-        merge_sort(nums, 0, len(nums) - 1)
-        return nums
-
-时间复杂度：O(n log(n))
-空间复杂度：O(n)
-```
-
-##  113. <a name='OddEvenLinkedList'></a> oddEvenList
-
-```py
-
-输入: head = [1,2,3,4,5]
-输出: [1,3,5,2,4]
-
-
-输入: head = [2,1,3,5,6,4,7]
-输出: [2,3,6,7,1,5,4]
-
-
-时间复杂度： O(n)。
-空间复杂度： O(1)
-
-
-
-class Solution(object):
-    def oddEvenList(self, head):
-        if not head or not head.next:      
-            return head
-        # odd 和 even 都是移动指针
-        # evenHead 是固定的
-    
-        slow = head
-        fast = headnxt = head.next
-        # 当 2 和 3 存在
-        while fast and fast.next: # 😐😐 while 循环
-            # 1 -> 2的后面
-            slow.next = fast.next
-            # 1 变成 3
-            slow = slow.next
-            # 2 -> 3的后面
-            fast.next = slow.next 
-            # 2 变成 4
-            fast = fast.next
-        slow.next = headnxt # 先奇数，后偶数
-        return head 
-```
-
-##  219. <a name='8.'></a> mergesmallSum
-
-```py
-在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
-
-例子：
-
-[1,3,4,2,5]
-
-1左边比1小的数，没有；
-
-3左边比3小的数，1；
-
-4左边比4小的数，1、3；
-
-2左边比2小的数，1；
-
-5左边比5小的数，1、3、4、2；
-
-所以小和为 1+1+3+1+1+3+4+2=16
-
-要求时间复杂度O(NlogN)，空间复杂度O(N)
-```
-
-
-```py
-# 这里有2个目的：
-# 1. 排序
-# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
-class Solution:
-    '''
-    在原地排序，不需要 return
-    '''
-    def mergesmallSum(nums):
-        def merge(nums, l, r):
-            if l == r:
-                return 0
-            if l < r:
-                mid = (l + r) // 2
-                s1 = merge(nums, l, mid)
-                s2 = merge(nums, mid + 1, r)
-                tmp = []
-                s3 = 0
-                i1, i2 = l, mid + 1
-                while i1 <= mid and i2 <= r: # 😐 while 循环
-                    if nums[i1] <= nums[i2]:
-                        s3 += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
-                        tmp.append(nums[i1])
-                        i1 += 1
-                    else:
-                        tmp.append(nums[i2])   # 把小的值先往res里面填写
-                        i2 += 1
-                tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
-                nums[l: r + 1] = tmp   # 修改原 arr 的值
-                return s1 + s2 + s3
-        return merge(nums, 0, n-1)
-    
-N = int(input())
-nums = list(map(int, input().split()))
-print(mergesmallSum(nums, 0, N-1))
-```
-
-
-##  10. <a name='-1'></a> mergeTwoLists
-
-暴力解法：
-
-* 时间复杂度:O(M+N)
-
-* 时间复杂度:O(1)
-
-```py
-输入：l1 = [1,2,4], l2 = [1,3,4]
-输出：[1,1,2,3,4,4]
-
-
-输入：l1 = [], l2 = []
-输出：[]
-
-
-输入：l1 = [], l2 = [0]
-输出：[0]
-
-
-class Solution:
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        dummy = ListNode(0)
-        cur = dummy # dummy是固定节点，cur是移动指针
-        while list1 and list2: # 😐 while 循环 # 这里是and 
-            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
-                cur.next = list1
-                list1 = list1.next # 向后进一位
-            else:
-                cur.next = list2
-                list2 = list2.next # 向后进一位
-            cur = cur.next # 向后进一位
-        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
-        # 等效于：
-        # if list1:
-        #     cur.next = list1
-        # else:
-        #     cur.next = list2
-        return dummy.next
-```
-
-
-
-##  15. <a name='Mergesortedarray'></a> merge
-
-```py
-输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
-输出：[1,2,2,3,5,6]
-
-
-
-解释：需要合并 [1,2,3] 和 [2,5,6] 。
-合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
-
-
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        """
-        Do not return anything, modify nums1 in-place instead.
-        """
-        # 三个指针
-        cur1 = m - 1
-        cur2 = n - 1
-        i = m + n -1
-        # 从后往前遍历
-        while cur1 >= 0 and cur2 >= 0: # 😐 while 循环
-            if nums1[cur1] < nums2[cur2]:
-                nums1[i] = nums2[cur2]
-                cur2 -= 1
-            else:
-                nums1[i] = nums1[cur1]
-                cur1 -= 1
-            i -= 1
-        # 如果后面的那个n还有多余
-        if cur2 >= 0:
-            nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
-
-* 时间复杂度: O(n)
-* 空间复杂度: O(1)
-```
-
-
-
-##  26. <a name='MergekSortedLists'></a> 【hard】mergeKLists
-
-
-优先队列：
-
-
-```py
-输入：lists = [[1,4,5],[1,3,4],[2,6]]
-输出：[1,1,2,3,4,4,5,6]
-解释：链表数组如下：
-[
-  1->4->5,
-  1->3->4,
-  2->6
-]
-将它们合并到一个有序链表中得到。
-1->1->2->3->4->4->5->6
-
-* 时间复杂度: O(N logk) 一共有N个结点
-* 空间复杂度: O(k), 此外，新链表需要  O(N) 的空间
-class Solution:
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        queue = []  
-        dummy = ListNode(0)
-        
-        for i in range(len(lists)):
-            if lists[i]: # lists[i] 就是 head
-                heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
-                lists[i] = lists[i].next 
-
-        cur = dummy # cur 就是穿针引线的针
-        while queue: # 😐 while 循环
-            val, idx = heapq.heappop(queue)
-            cur.next = ListNode(val)
-            cur = cur.next
-            if lists[idx]: # 此时 lists[idx] 已经是 head 的下一位
-                heapq.heappush(queue, (lists[idx].val, idx)) # 再把每一项 push 上去
-                lists[idx] = lists[idx].next 
-        return dummy.next
-```
-
-两两合并：
-
-* 时间复杂度: O(N logk)
-
-* 空间复杂度: O(logk)空间代价的栈空间。
-
-```py
-class Solution:
-    def merge2Lists(self, list1, list2):
-        dummy = ListNode(0)
-        
-        cur = dummy # dummy是固定节点，cur是移动指针
-        while list1 and list2: # 😐 while 循环 # 这里是and
-            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
-                cur.next = list1
-                list1 = list1.next # 向后进一位
-            else:
-                cur.next = list2
-                list2 = list2.next # 向后进一位
-            cur = cur.next # 向后进一位
-        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
-        return dummy.next
-            # 0,1,2,3,4,5,6  7-1
-            # 0, ,2, ,4, ,6  7-2
-            # 0, , , ,4, ,   7-3
-            # 0, , , , , ,   7-4
-
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
-        n = len(lists)
-        interval = 1
-        while n > interval: # 😐😐😐 while 循环
-            for i in range(0, n - interval, 2 * interval):
-                lists[i] = self.merge2Lists(lists[i], lists[i + interval]) # 易错点：方括号和小括号不要用错
-            interval *= 2
-        return lists[0] if n else None
-```
-
-
-##  39. <a name='MergeIntervals'></a> merge
-
-```py
-输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
-输出：[[1,6],[8,10],[15,18]]
-
-
-输入：intervals = [[1,4],[4,5]]
-输出：[[1,5]]
-
-
-解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
-
-
-
-
-时间复杂度： O(nlogn)，其中 n 为区间的数量。
-
-除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 O(nlogn)。
-
-
-
-空间复杂度： O(logn)，其中 n 为区间的数量。
-
-这里计算的是存储答案之外，使用的额外空间。 O(logn) 即为排序所需要的空间复杂度。
-
-
-
- 
-class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        intervals.sort() # 等价于：intervals.sort(key = lambda x: x[0])
-        res = []
-        for interval in intervals: # res[-1] 和 interval 比较
-            if res and res[-1][1] >= interval[0]:
-                res[-1][1] = max(res[-1][1], interval[1])
-            else:
-                res.append(interval[:])
-                # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
-                # 比如，[[1,4],[2,3]]
-        return res
-```
-
-
-
-##  104. <a name='MoveZeros'></a> moveZeroes
-
-```py
-输入: nums = [0,1,0,3,12]
-输出: [1,3,12,0,0]
-
-
-输入: nums = [0]
-输出: [0]
-
-
-class Solution:
-    def moveZeroes(self, nums: List[int]) -> None:
-        slow = 0
-        for fast in range(len(nums)):
-            if nums[fast] != 0:
-                # 把 index 的位置变成不是 0, i 的位置变成是 0
-                nums[slow], nums[fast] = nums[fast], nums[slow]
-                # slow 的位置不是 0, 都在前面
-                slow += 1
-
-时间复杂度： O(N) 
-空间复杂度： O(1) 
-```
-
-##  111. <a name='Offer21.'></a> exchange
-
-```py
-输入：nums = [1,2,3,4]
-输出：[1,3,2,4] 
-注：[3,1,2,4] 也是正确的答案之一。
-
-调整数组顺序使`奇数`位于`偶数`前面
-
-类似前面的移动0
-
-class Solution:
-    def exchange(self, nums: List[int]) -> List[int]:
-        slow = 0
-        for fast in range(len(nums)):
-            if nums[fast] & 1 == 1:
-                # 把 [fast上的奇数] 移动到 [slow的位置] 上
-                nums[slow], nums[fast] = nums[fast], nums[slow]
-                slow += 1
-        return nums
-
-时间复杂度： O(N) 
-空间复杂度： O(1) 
-```
-
-
-##  130. <a name='SortColors'></a> sortColors
-
-![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5l1bfbznzwc0.png)
-
-```py
-输入：nums = [2,0,2,1,1,0]
-输出：[0,0,1,1,2,2]
-
-
-
-输入：nums = [2,0,1]
-输出：[0,1,2]
-
-
-class Solution:
-    def sortColors(self, nums: List[int]) -> None:
-        fast, slow, right = 0, 0, len(nums) - 1
-        while fast <= right: # 😐😐😐😐 while 循环
-            # 交换完位置后 idx 依旧在原位
-            if nums[fast] == 2 and fast < right:
-                nums[fast], nums[right] = nums[right], 2
-                right -= 1
-            # 交换完位置后 idx 依旧在原位
-            elif nums[fast] == 0 and fast > slow:
-                nums[fast], nums[slow] = nums[slow], 0
-                slow += 1
-            else:
-            # idx 为 1, 或者 idx 与 [right/left] 相交
-                fast += 1
-
-
-时间复杂度： O(N) 
-空间复杂度： O(1) 
-```
-
-## 【hard】【hard】堆排序: else: - return
-
-```py
-
-
-     0
-    / \
-   1   2
-  / \ / \
- 3  4 5  6
-
-class Solution:
-    def maxheapify(self, heap, root, heap_len):
-        p = root
-        while p * 2 + 2 <= heap_len: # 😐 while 循环 # 当不是叶子节点 
-            l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
-            if r < heap_len and heap[l] < heap[r]:
-                bigger = r
-            else:
-                bigger = l
-            # 把最大的元素往上提
-            if heap[p] < heap[bigger]:
-                heap[p], heap[bigger] = heap[bigger], heap[p]
-                p = bigger
-            else:
-                return
-        
-    def sortArray(self, nums: List[int]) -> List[int]:
-        # 时间复杂度O(N)
-        # 从叶子节点开始遍历
-        # 如果不是从叶子开始，可能白跑一遍
-        '''
-        把最大值放在 0 的位置
-        '''
-        for i in range(len(nums) - 1, -1, -1):
-            self.maxheapify(nums, i, len(nums))
-            
-        # 时间复杂度O(N logN)
-        for i in range(len(nums) - 1, -1, -1):
-            # 把最大的元素放到末尾
-        '''
-        把最大值 从 0 的位置，依次移到 i 的位置
-        '''
-            nums[i], nums[0] = nums[0], nums[i]
-            self.maxheapify(nums, 0, i)
-        return nums
-
-时间复杂度：O(n logn)
-空间复杂度：O(1)
-```
-
-
-
-
-
-
-
-
-## 【hard】【hard】希尔排序
-
-```py
-输入：nums = [5,2,3,1]
-输出：[1,2,3,5]
-示例 2：
-
-输入：nums = [5,1,1,2,0,0]
-输出：[0,0,1,1,2,5]
-
-
-
-def shellSort(nums): 
-  
-    n = len(nums)
-    gap = n//2 # 初始增量
-  
-    while gap > 0: 
-  
-        for i in range(gap,n):  # 对原始数列进行分组 对每一个分组进行排序
-  
-            right = nums[i] 
-            j = i 
-            while  j >= gap and nums[j-gap] > right: # nums[j-gap] 是 left
-                nums[j] = nums[j-gap]   # 把 nums[j-gap] 这个 bigger 往后面放
-                j -= gap 
-            nums[j] = right  # 把 right 值 插入
-        gap = gap//2 # 设置一个更小的增量, 直到增量为1, 再排序
-
-最坏时间复杂度：O(n2)
-空间复杂度：O(1)
-```
-
-## 【hard】选择排序
-
-选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
-
-```py
-for i in range(len(nums)): 
-      
-    minpos = i 
-    for j in range(i + 1, len(nums)): 
-        if nums[j] < nums[minpos]: 
-            minpos = j 
-                
-    nums[i], nums[minpos] = nums[minpos], nums[i] 
-```
-
-## 【hard】冒泡排序
-
-```py
-把最大值移到最后一位上：
-def bubble_sort(nums):
-    n = len(nums)
-
-    for i in range(n):
-        for j in range(1, n - i):
-            if nums[j - 1] > nums[j]:
-                nums[j - 1], nums[j] = nums[j], nums[j - 1]
-    return nums
-```
-
-## 【hard】快速排序
-
-```py
-class Solution:
-    # 这里需要用到 pivot
-    def randomized_partition(self, nums, l, r):
-        pivot = random.randint(l, r)
-        # 先把 nums[pivot] 靠边站
-        nums[pivot], nums[r] = nums[r], nums[pivot]
-        slow = l
-        for fast in range(l, r):
-            if nums[fast] < nums[r]: # nums[r] 就是 pivot
-                nums[fast], nums[slow] = nums[slow], nums[fast] # nums[i] 存的都是较小的数字
-                slow += 1
-        nums[slow], nums[r] = nums[r], nums[slow] # pivot 放到中间
-        return slow
-    # 这里需要用到 mid
-    def randomized_quicksort(self, nums, l, r):
-        if l < r:
-            mid = self.randomized_partition(nums, l, r)
-            self.randomized_quicksort(nums, l, mid - 1)
-            self.randomized_quicksort(nums, mid + 1, r)
-
-    def sortArray(self, nums: List[int]) -> List[int]:
-        self.randomized_quicksort(nums, 0, len(nums) - 1)
-        return nums
-
-时间复杂度：O(n log(n))
-空间复杂度：O(log n) ~ O(n)
-```
-
-## 桶排序
-
-```py
-class Solution:
-    def sortArray(self, nums: List[int]) -> List[int]:
-        bucket = collections.defaultdict(int)
+    def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
+        presum, res, dic = 0, 0, defaultdict(int)
+        dic[0] = 1 # 刚好前 n 个的和为 target
         for num in nums:
-            bucket[num] += 1
-        res = []
-        for i in range(-50000, 50001):
-            res += [i] * bucket[i]
+            presum += num
+            if presum - target in dic:
+                res += dic[presum - target]
+            dic[presum] += 1
         return res
-你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
+
 ```
 
 
-
-##  74. <a name='PalindromeLinkedList'></a> isPalindrome
+##  54. <a name='SlidingWindowMaximum'></a> 【hard】maxSlidingWindow
 
 ```py
-输入：head = [1,2,2,1]
+输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
+输出：[3,3,5,5,6,7]
+
+解释：
+滑动窗口的位置                最大值
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+
+
+[(-3, 1), (-1, 0), (1, 2), (3, 3)]
+[(-5, 4), (-3, 1), (1, 2), (3, 3), (-1, 0)]
+[(-5, 4), (-3, 1), (-3, 5), (3, 3), (-1, 0), (1, 2)]
+[(-6, 6), (-3, 1), (-5, 4), (3, 3), (-1, 0), (1, 2), (-3, 5)]
+[(-7, 7), (-6, 6), (-5, 4), (-3, 1), (-1, 0), (1, 2), (-3, 5), (3, 3)]
+
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        # 求最大值，则需要取复数
+        hp = [(-nums[i], i) for i in range(k-1)]
+        heapq.heapify(hp)
+        res = []
+
+        for i in range(k-1, len(nums)):
+            heapq.heappush(hp, (- nums[i], i))
+            while i - hp[0][1] >= k: # 😐😐😐 while 循环 + pop + append
+                heapq.heappop(hp) # 把所有出界的最大值弹出，可能不小心攒了许多个
+            res.append(- hp[0][0]) # 最大值永远在 q[0]
+        
+        return res
+
+
+
+时间复杂度： O((n-k)logk)
+
+空间复杂度： O(k)，即为优先队列需要使用的空间
+
+```
+
+##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a> 【hard】【hard】lengthOfLongestSubstring - dic每次都更新
+
+```py
+输入: s = "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+
+
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        dic = {}
+        leftI = 0
+        maxlen = 0
+        for rightI, char in enumerate(s):
+            # 含义为"tmmzuxt", start在m，当有新的t进来时，上一个t在start的前面，所以，此时的start不需要修改
+            if char in dic and leftI <= dic[char]:      # char 重复出现，并且 上一个出现 在窗口内部
+                leftI = dic[char] + 1                   # 易错点: 这里的dic[char]还是前一个,且 +1
+            else:
+                maxlen = max(maxlen, rightI - leftI + 1)      # 易错点: +1
+            dic[char] = rightI                          # 易错点: dic[char]滞后更新
+        return maxlen
+
+
+时间复杂度：O(N)，其中 N是字符串的长度。左指针和右指针分别会遍历整个字符串一次。
+
+空间复杂度：O(∣Σ∣)，其中 Σ 表示字符集（即字符串中可以出现的字符），
+∣Σ∣ 表示字符集的大小。
+默认为所有 ASCII 码在 [0, 128)内的字符，即∣Σ∣= 128。
+我们需要用到哈希集合来存储出现过的字符，而字符最多有∣Σ∣ 个
+```
+
+##  183. <a name='ContiguousArray'></a> 【hard】findMaxLength
+
+```py
+找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
+
+输入: nums = [0,1,0]
+输出: 2
+
+
+说明: [0, 1] (或 [1, 0]) 是具有相同数量0和1的最长连续子数组。
+
+
+
+0 变 -1 是精髓，sum_dct = {0:-1} 是细节。
+
+
+
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
+
+
+
+class Solution:
+    def findMaxLength(self, nums: List[int]) -> int:
+        presumDic = {}
+        presumDic[0] = -1
+        res = 0
+        s = 0
+        for i in range(len(nums)):
+            s += 1 if nums[i] == 1 else -1
+            if s in presumDic:
+                res = max(res, i - presumDic[s])
+            else:
+                presumDic[s] = i
+        return res
+
+```
+
+
+##  67. <a name='LongestValidParentheses'></a> 【hard】longestValidParentheses
+
+
+```py
+输入：s = ")()())"
+输出：4
+
+解释：最长有效括号子串是 "()()"
+
+* 时间复杂度: O(n) 
+* 空间复杂度: O(n)
+
+
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        stack = [-1]
+        length = maxlength = 0
+        for i, c in enumerate(s):
+            if c == '(':
+                stack.append(i)
+            if c == ')':
+                stack.pop()
+                if not stack:
+                    stack.append(i) # 记录一下stack[-1]为')'，断开区间
+                else:
+                    length = i - stack[-1] # stack[-1]为')'，断开区间
+                    maxlength = max(maxlength, length)
+        return maxlength
+
+```
+
+##  18. <a name='Validparentheses'></a> 【hard】isValid
+
+先进后出，所以用栈
+
+* 时间复杂度:O(n)
+
+* 时间复杂度:O(n)
+
+```py
+输入：s = "()"
 输出：true
 
 
-输入：head = [1,2]
+
+
+输入：s = "()[]{}"
+输出：true
+
+
+
+
+输入：s = "(]"
 输出：false
 
 
+
+
+输入：s = "([)]"
+输出：false
+
+
+
+
+输入：s = "{[]}"
+输出：true
+
+
 class Solution:
-    def isPalindrome(self, head: ListNode) -> bool:
-        vals = []
-        cur = head
-        while cur: # 😐 while 循环, cur
-            vals.append(cur.val)
-            cur = cur.next
-        return vals == vals[::-1]
-
-时间复杂度：O(n)
-
-空间复杂度：O(n)
+    def isValid(self, s: str) -> bool:
+        dic = {'{':'}','[':']','(':')'}
+        stack = [] # stack 要提前定义好
+        for char in s:
+            if char in dic: # 是 “key”
+                stack.append(char) # 一个 char 进来，要么被 append
+            elif not stack or dic[stack.pop()] != char: 
+                # 如果上一步不被append就是不对的
+                # 如果这一步不匹配也是不对
+                return False
+        return not stack # 如果append上了，但没有被完全pop也是不对的
 ```
 
 
-##  92. <a name='-1'></a> 【hard】copyRandomList
+
+##  196. <a name='K-1'></a> 【hard】【hard】shortestSubarray - 没头没尾 - presum
 
 ```py
-输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
-输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+输入：nums = [2, -1, 2], k = 3
+输出：3
 
 
 
+找出 nums 中和至少为 k 的 `最短非空子数组` ，
 
-"""
-class Node:
-    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
-        self.val = int(x)
-        self.next = next
-        self.random = random
-"""
+并返回该子数组的`长度`。如果不存在这样的 `子数组` ，返回 -1 。
 
-hash解法：
+`子数组` 是数组中 `连续` 的一部分。
+
+
 
 class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
-        if not head: return
-        hash = {}
+    def shortestSubarray(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        presums = [0]
+        for x in nums:
+            presums.append(presums[-1] + x)
 
-        cur = head
-        while cur: # 😐😐😐 while 循环, cur
-            hash[cur] = Node(cur.val)
-            cur = cur.next
+        res = n + 1 
+        deqI = collections.deque()  
+        for i, cursum in enumerate(presums):
+            # -105 <= nums[i] <= 105
+            # 1 <= k <= 109
+            # k为正数，如果算到复数，肯定是不满足的
+            while deqI and cursum - presums[deqI[-1]] <= 0: # 😐😐😐 while 循环, 排出所有的局部负值
+                deqI.pop()
+            # 找到 sum 至少为 k 的 `最短非空子数组`，则尽可能地缩短答案
+            while deqI and cursum - presums[deqI[0]] >= k: # 😐😐😐 while 循环
+                res = min(res, i - deqI.popleft())
+
+            deqI.append(i)
+
+        return res if res < n + 1 else -1
+
+
+
+* 时间复杂度:O(n)
+* 空间复杂度:O(n)
+
+```
+
+##  276. <a name='RemoveDuplicateLetters'></a> 【hard】removeDuplicateLetters
+
+```py
+去除字符串中重复的字母
+
+使得每个字母只出现一次
+
+返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+
+
+输入：s = "bcabc"
+输出："abc"
+a  小于 stack[-1]，并且 stack[-1] c 在s[i+1:]中，弹出 c
+a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
+
+
+
+输入：s = "cbacdcbc"
+输出："acdb"
+
+b  小于 stack[-1]，并且 stack[-1] c 在s[i+1:]中，弹出 c
+a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
+c  in stack
+c  in stack
+
+stack[-1] 要满足 2个条件：
+😐 stack[-1] > s[i]
+😐 stack[-1] in s[i + 1: ]
+
+s[i] 要满足 2个条件：
+😐 s[i] not in stack
+😐 stack[-1] > s[i]
+
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        stack = []
+        n = len(s)
+        for i in range(n):
+            if s[i] not in stack:
+                while stack and stack[-1] > s[i] and stack[-1] in s[i + 1: ]: # 😐😐😐 while 循环 + pop + append
+                # 如果数比栈顶小，而且栈顶在后面还有的话，
+                    stack.pop() # 就弹出栈顶。
+                stack.append(s[i])
+            
+        return "".join(stack)
+
+
+
+时间复杂度： O(N)。代码中虽然有双重循环，但是每个字符至多只会入栈、出栈各一次。
+
+空间复杂度： O(∣Σ∣)，其中 Σ 为字符集合，本题中字符均为小写字母，所以 ∣Σ∣= 26。
+```
+
+
+##  118. <a name='RemoveKDigits'></a> 【hard】【hard】removeKdigits
+
+形成一个新的最小的数字：
+
+```py
+输入：num = "1432219", k = 3
+输出："1219"
+
+
+
+解释：移除掉三个数字 4, 3, 和 2 形成一个新的最小的数字 1219 。
+
+
+class Solution:
+    def removeKdigits(self, num: str, k: int) -> str:
+        '''
+        长江后浪推前浪，前浪死在沙滩上
+        '''
+        numStack = []
         
-        cur = head 
-        while cur: # 😐😐😐 while 循环, cur
-            hash[cur].next = hash.setdefault(cur.next)
-            # hash[cur].next = hash.get(cur.next) 这里也可以用 get
-            hash[cur].random = hash.setdefault(cur.random)
-            cur = cur.next
-            
-        return hash[head]
+        for digit in num:
+            # 新来的数字更小，就 pop 掉
+            while k and numStack and numStack[-1] > digit: # 😐 while 循环 + pop + append + 3个条件
+                numStack.pop()
+                k -= 1
+        
+            numStack.append(digit)
+        
+        # 如果 K > 0，删除末尾的 K 个字符
+        finalStack = numStack[:-k] if k else numStack
+        
+        # 抹去前导零
+        return "".join(finalStack).lstrip('0') or "0"
 
-
-
-dict.setdefault(key, default = None)  -->  有key获取值，否则设置 default，并返回default
-dict.get(key, default = None)  -->  有key获取值，否则返回 default
-
-
-
-时间复杂度：O(n)，其中 n 是链表的长度。
-
-对于每个节点，我们至多访问其「后继节点」和「随机指针指向的节点」各一次，均摊每个点至多被访问两次。
-
-空间复杂度：O(n)，其中 n 是链表的长度。为哈希表的空间开销。
-
+ 
 ```
 
 
-##  230. <a name='PopulatingNextRightPointersinEa'></a> 【hard】connect
+
+##  164. <a name='DeleteNodeinaBST'></a> 【hard】deleteNode
 
 ```py
-常数空间，从顶到下，逐层连接
-
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
-        self.val = val
-        self.left = left
-        self.right = right
-        self.next = next
-"""
-
-类似 ListNode
-
 class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        first = root # first 表示当前层的最左边节点
-        while first: # 😐😐 while 循环 # 每次循环连接当前层的下一层
-            """
-            注意Note：dummy = nxtcur 必须写在一起
-            """
-            dummy = nxtcur = Node(0) # head表示下一层的虚拟头部
+    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+        if not root: return None
+        # 假如要删除的不是根节点
+        if root.val > key:
+            root.left = self.deleteNode(root.left, key)
+        elif root.val < key:
+            root.right = self.deleteNode(root.right, key)
 
-            cur = first
-            while cur: # 😐😐 while 循环, cur #  cur遍历当前层，nxtcur将下一层连接 
-                if cur.left :
-                    nxtcur.next = cur.left
-                    nxtcur = nxtcur.next
-                if cur.right :
-                    nxtcur.next = cur.right
-                    nxtcur = nxtcur.next
-                cur = cur.next
-            
-            first = dummy.next
+        # 假如删除的是根节点
+        elif not root.left:
+            root = root.right # 删除根节点
+        else:
+            '''
+            p = root.left
+            while p.right: # 😐😐 while 循环
+                p = p.right
+            p.right = root.right # 找到左子树中最大的节点，链接到 root.right
+            '''
+            root = root.left # 删除根节点
         return root
 
-时间复杂度：O(N)。我们需要遍历这棵树上所有的点。
-空间复杂度：O(1)
+
+找到left中的最大：
+            p = root.left
+            while p.right: # 😐 while 循环
+                p = p.right
+
+
+          5
+        /  \
+       3    6
+     /  \    \
+    2    4    7
+
+    2 链接到4  ->  p.right = root.right
+
+          5
+        /  \
+       3    6
+     /       \
+    2         7
+     \
+      4
+
+    删除3 -> root = root.left 
+
+          5
+        /  \
+       2    6
+        \    \
+         4    7
+    再删除3
+
+时间复杂度： O(logN)。在算法的执行过程中，我们一直在树上向左或向右移动。
+
+首先先用 O(H1) 的时间找到要删除的节点，H_1 是从根节点到要删除节点的高度。
+
+然后删除节点需要 O(H2) 的时间，H_2 是从要删除节点到替换节点的高度。
+
+由于 O(H_1 + H_2) = O(H)，H 值得是树的高度，若树是一个平衡树则 H =  logN。
+
+空间复杂度： O(H)，递归时堆栈使用的空间，H 是树的高度。
+
 ```
+
+
+
+##  57. <a name='IP'></a> restoreIpAddresses
+
+```py
+输入：s = "25525511135"
+输出：["255.255.11.135","255.255.111.35"]
+
+
+
+输入：s = "101023"
+输出：["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]
+
+
+
+class Solution:
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        res = []
+        def backtrack(s,path):
+            if len(path) == 4 and len(s) == 0:
+                res.append('.'.join(path))
+                return # 注意点：一定要返回
+            for i in range(len(s)):
+                left, right = s[:i+1], s[i+1:]
+                if 0 <= int(left) <= 255 and str(int(left)) == left:
+                    backtrack(right, path + [left])  
+        backtrack(s, [])    
+        return res
+
+
+
+时间复杂度： O(3^SEG_COUNT})
+
+由于 IP 地址的每一段的位数不会超过 3，因此在递归的每一层，我们最多只会深入到下一层的 3 种情况.
+
+由于 SEG_COUNT=4，对应着递归的最大层数，所以递归本身的时间复杂度为 O(3^SEG_COUNT}).
+
+空间复杂度：O(SEG_COUNT) 递归使用的空间与递归的最大深度 SEG_COUNT 成正比。
+```
+
+
+##  85. <a name='ValidateIPAddress'></a> 【hard】validIPAddress
+
+```py
+输入：queryIP = "172.16.254.1"
+输出："IPv4"
+解释：有效的 IPv4 地址，返回 "IPv4"
+
+
+
+
+输入：queryIP = "2001:0db8:85a3:0:0:8A2E:0370:7334"
+输出："IPv6"
+解释：有效的 IPv6 地址，返回 "IPv6"
+
+
+
+
+输入：queryIP = "256.256.256.256"
+输出："Neither"
+解释：既不是 IPv4 地址，又不是 IPv6 地址
+
+
+
+
+class Solution:
+    """
+    第1步：分割字符串
+    第2步：判断长度
+    第3步：分析其中的每个元素
+    """
+    def validIPAddress(self, IP: str) -> str:
+        if "." in IP:
+            # ipv4
+            ipv4 = IP.split(".")
+            if len(ipv4) != 4:
+                return "Neither"
+            for num in ipv4:
+                # 192.168@1.1 为无效IPv4地址
+                # 192.168.01.1 为无效IPv4地址
+                # 0 <= xi <= 255 
+                if  not num.isdigit()  \
+                    or (str(int(num)) != num)  \
+                    or (not 0 <= int(num) <= 255):
+                    return "Neither"
+            return "IPv4"
+        else:
+            ipv6 = IP.split(":")
+            if len(ipv6) != 8:
+                return "Neither"
+            for num in ipv6:
+                # 1 <= xi.length <= 4
+                # 可以包含数字、小写英文字母( 'a' 到 'f' )和大写英文字母( 'A' 到 'F' )。
+                if  (not 1 <= len(num) <= 4) \
+                    or not all(map(lambda x: x.lower() in "0123456789abcdef", num)):
+                    return "Neither"
+            return "IPv6"
+
+
+```
+
 
 
 ##  2. <a name='LRULRUCache'></a> 【hard】LRUCache
@@ -1836,6 +2607,1360 @@ class MyCircularQueue:
 
 空间复杂度： O(N)，其中 N 是队列的预分配容量。循环队列的整个生命周期中，都持有该预分配的空间。
 
+```
+
+
+##  92. <a name='-1'></a> 【hard】copyRandomList
+
+```py
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+
+
+
+"""
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+hash解法：
+
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        if not head: return
+        hash = {}
+
+        cur = head
+        while cur: # 😐😐😐 while 循环, cur
+            hash[cur] = Node(cur.val)
+            cur = cur.next
+        
+        cur = head 
+        while cur: # 😐😐😐 while 循环, cur
+            hash[cur].next = hash.setdefault(cur.next)
+            # hash[cur].next = hash.get(cur.next) 这里也可以用 get
+            hash[cur].random = hash.setdefault(cur.random)
+            cur = cur.next
+            
+        return hash[head]
+
+
+
+dict.setdefault(key, default = None)  -->  有key获取值，否则设置 default，并返回default
+dict.get(key, default = None)  -->  有key获取值，否则返回 default
+
+
+
+时间复杂度：O(n)，其中 n 是链表的长度。
+
+对于每个节点，我们至多访问其「后继节点」和「随机指针指向的节点」各一次，均摊每个点至多被访问两次。
+
+空间复杂度：O(n)，其中 n 是链表的长度。为哈希表的空间开销。
+
+```
+
+
+## 【hard】【hard】堆排序: else: - return
+
+```py
+
+
+     0
+    / \
+   1   2
+  / \ / \
+ 3  4 5  6
+
+class Solution:
+    def maxheapify(self, heap, root, heap_len):
+        p = root
+        while p * 2 + 2 <= heap_len: # 😐 while 循环 # 当不是叶子节点 
+            l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
+            if r < heap_len and heap[l] < heap[r]:
+                bigger = r
+            else:
+                bigger = l
+            # 把最大的元素往上提
+            if heap[p] < heap[bigger]:
+                heap[p], heap[bigger] = heap[bigger], heap[p]
+                p = bigger
+            else:
+                return
+        
+    def sortArray(self, nums: List[int]) -> List[int]:
+        # 时间复杂度O(N)
+        # 从叶子节点开始遍历
+        # 如果不是从叶子开始，可能白跑一遍
+        '''
+        把最大值放在 0 的位置
+        '''
+        for i in range(len(nums) - 1, -1, -1):
+            self.maxheapify(nums, i, len(nums))
+            
+        # 时间复杂度O(N logN)
+        for i in range(len(nums) - 1, -1, -1):
+            # 把最大的元素放到末尾
+        '''
+        把最大值 从 0 的位置，依次移到 i 的位置
+        '''
+            nums[i], nums[0] = nums[0], nums[i]
+            self.maxheapify(nums, 0, i)
+        return nums
+
+时间复杂度：O(n logn)
+空间复杂度：O(1)
+```
+
+
+
+
+
+
+
+
+## 【hard】【hard】希尔排序
+
+```py
+输入：nums = [5,2,3,1]
+输出：[1,2,3,5]
+示例 2：
+
+输入：nums = [5,1,1,2,0,0]
+输出：[0,0,1,1,2,5]
+
+
+
+def shellSort(nums): 
+  
+    n = len(nums)
+    gap = n//2 # 初始增量
+  
+    while gap > 0: 
+  
+        for i in range(gap,n):  # 对原始数列进行分组 对每一个分组进行排序
+  
+            right = nums[i] 
+            j = i 
+            while  j >= gap and nums[j-gap] > right: # nums[j-gap] 是 left
+                nums[j] = nums[j-gap]   # 把 nums[j-gap] 这个 bigger 往后面放
+                j -= gap 
+            nums[j] = right  # 把 right 值 插入
+        gap = gap//2 # 设置一个更小的增量, 直到增量为1, 再排序
+
+最坏时间复杂度：O(n2)
+空间复杂度：O(1)
+```
+
+## 【hard】选择排序
+
+选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
+
+```py
+for i in range(len(nums)): 
+      
+    minpos = i 
+    for j in range(i + 1, len(nums)): 
+        if nums[j] < nums[minpos]: 
+            minpos = j 
+                
+    nums[i], nums[minpos] = nums[minpos], nums[i] 
+```
+
+## 【hard】冒泡排序
+
+```py
+把最大值移到最后一位上：
+def bubble_sort(nums):
+    n = len(nums)
+
+    for i in range(n):
+        for j in range(1, n - i):
+            if nums[j - 1] > nums[j]:
+                nums[j - 1], nums[j] = nums[j], nums[j - 1]
+    return nums
+```
+
+## 【hard】快速排序
+
+```py
+class Solution:
+    # 这里需要用到 pivot
+    def randomized_partition(self, nums, l, r):
+        pivot = random.randint(l, r)
+        # 先把 nums[pivot] 靠边站
+        nums[pivot], nums[r] = nums[r], nums[pivot]
+        slow = l
+        for fast in range(l, r):
+            if nums[fast] < nums[r]: # nums[r] 就是 pivot
+                nums[fast], nums[slow] = nums[slow], nums[fast] # nums[i] 存的都是较小的数字
+                slow += 1
+        nums[slow], nums[r] = nums[r], nums[slow] # pivot 放到中间
+        return slow
+    # 这里需要用到 mid
+    def randomized_quicksort(self, nums, l, r):
+        if l < r:
+            mid = self.randomized_partition(nums, l, r)
+            self.randomized_quicksort(nums, l, mid - 1)
+            self.randomized_quicksort(nums, mid + 1, r)
+
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.randomized_quicksort(nums, 0, len(nums) - 1)
+        return nums
+
+时间复杂度：O(n log(n))
+空间复杂度：O(log n) ~ O(n)
+```
+
+## 桶排序
+
+```py
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        bucket = collections.defaultdict(int)
+        for num in nums:
+            bucket[num] += 1
+        res = []
+        for i in range(-50000, 50001):
+            res += [i] * bucket[i]
+        return res
+你一看这方法能行啊，复杂度也低！那为啥不经常用呢？你猜？你想想要有小数可咋整？
+```
+
+
+##  26. <a name='MergekSortedLists'></a> 【hard】mergeKLists
+
+
+优先队列：
+
+
+```py
+输入：lists = [[1,4,5],[1,3,4],[2,6]]
+输出：[1,1,2,3,4,4,5,6]
+解释：链表数组如下：
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+将它们合并到一个有序链表中得到。
+1->1->2->3->4->4->5->6
+
+* 时间复杂度: O(N logk) 一共有N个结点
+* 空间复杂度: O(k), 此外，新链表需要  O(N) 的空间
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        queue = []  
+        dummy = ListNode(0)
+        
+        for i in range(len(lists)):
+            if lists[i]: # lists[i] 就是 head
+                heapq.heappush(queue, (lists[i].val, i))     # 先把第一项 push 上去
+                lists[i] = lists[i].next 
+
+        cur = dummy # cur 就是穿针引线的针
+        while queue: # 😐 while 循环
+            val, idx = heapq.heappop(queue)
+            cur.next = ListNode(val)
+            cur = cur.next
+            if lists[idx]: # 此时 lists[idx] 已经是 head 的下一位
+                heapq.heappush(queue, (lists[idx].val, idx)) # 再把每一项 push 上去
+                lists[idx] = lists[idx].next 
+        return dummy.next
+```
+
+两两合并：
+
+* 时间复杂度: O(N logk)
+
+* 空间复杂度: O(logk)空间代价的栈空间。
+
+```py
+class Solution:
+    def merge2Lists(self, list1, list2):
+        dummy = ListNode(0)
+        
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 😐 while 循环 # 这里是and
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
+        return dummy.next
+            # 0,1,2,3,4,5,6  7-1
+            # 0, ,2, ,4, ,6  7-2
+            # 0, , , ,4, ,   7-3
+            # 0, , , , , ,   7-4
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:     
+        n = len(lists)
+        interval = 1
+        while n > interval: # 😐😐😐 while 循环
+            for i in range(0, n - interval, 2 * interval):
+                lists[i] = self.merge2Lists(lists[i], lists[i + interval]) # 易错点：方括号和小括号不要用错
+            interval *= 2
+        return lists[0] if n else None
+```
+
+
+
+##  46. <a name='SortList'></a> 【hard】sortList
+
+```py
+输入：head = [4,2,1,3]
+输出：[1,2,3,4]
+
+
+输入：head = [-1,5,3,4,0]
+输出：[-1,0,3,4,5]
+
+
+输入：head = []
+输出：[]
+
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        # 第一步：递归条件
+        if not head or not head.next:
+            return head
+            
+        # 第二步：左右切分
+        mid = self.findmid(head)
+        left = head # 指定左右
+        right = mid.next # 指定左右
+        mid.next = None # 断开链接
+        '''
+        归并排序，先排序，再归并
+        '''
+        l = self.sortList(left)
+        r = self.sortList(right)
+        return self.merge(l, r) 
+
+    def findmid(self,head):
+        slow, fast = head, head
+        while fast.next and fast.next.next: 
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def merge(self,l,r):
+        dummy = ListNode(0)
+        cur = dummy
+        while l and r: 
+            if l.val <= r.val:
+                cur.next = l
+                l = l.next 
+            else:
+                cur.next = r
+                r = r.next 
+            cur = cur.next 
+        cur.next = l or r
+        return dummy.next
+
+时间复杂度： O(nlogn)，其中 n 是链表的长度。
+
+空间复杂度： O(logn)，其中 n 是链表的长度。空间复杂度主要取决于递归调用的栈空间。
+
+```
+
+
+
+##  137. <a name='FindtheDuplicateNumber'></a> 【hard】findDuplicate
+
+
+```py
+不修改 数组 nums 且只用常量级 O(1) 的额外空间。
+
+线性级时间复杂度 O(n)
+
+输入：nums = [1,3,4,2,2] 0 -> 1 -> 3 -> (2 -> 4) -> 2 -> 4  循环
+输出：2 
+
+
+输入：nums = [3,1,3,4,2] 0 -> (3 -> 4 -> 2) -> 3 -> 4 -> 2 
+输出：3
+
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        # node.next = nums[node]
+        # node.next.next = nums[nums[node]]
+        slow = nums[0]        
+        fast = nums[nums[0]] 
+        while slow != fast: # 😐😐 while 循环
+            slow = nums[slow]
+            fast = nums[nums[fast]] 
+        p = 0                    
+        q = slow  
+        while p != q: # 😐😐 while 循环
+            p = nums[p]
+            q = nums[q]
+        return p           
+
+```
+
+##  25. <a name='LinkedListCycleII'></a> 【hard】detectCycle
+
+
+```py
+时间复杂度： O(N)，其中 N 为链表中节点的数目。slow 指针走过的距离不会超过链表的总长度；
+
+空间复杂度： O(1)。我们只使用了 slow,fast 三个指针。
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next: # 😐 while 循环
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast: # 如果相遇
+                p = head
+                q = slow
+                while p != q: # 😐 while 循环
+                    p = p.next
+                    q = q.next
+                return p    # 你也可以 return q
+        return None
+```
+
+
+##  173. <a name='FindAllDuplicatesinanArray'></a> 【hard】findDuplicates
+
+
+```py
+请你找出所有出现 两次 的整数，并以数组形式返回。
+
+输入：nums = [4,3,2,7,8,2,3,1]
+输出：[2,3]
+
+你必须设计并实现一个时间复杂度为 O(n) 且仅使用常量额外空间的算法解决此问题。
+
+一个长度为 n 的整数数组 nums ，其中 nums 的所有整数都在范围 [1, n] 内
+
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        res = []
+        for num in nums:
+            # 取绝对值
+            num = abs(num)
+            # 把相应下标减1的值设为负数
+            if nums[num-1] > 0:
+                nums[num-1] *= -1
+            # 值为负的话，说明该值已经出现过，添加到输出列表l中
+            else:
+                res.append(num)
+                
+        return res
+
+时间复杂度： O(n) 
+常量额外空间
+
+[4, 3, 2, 7, 8, 2, 3, 1]
+[4, 3, 2, -7, 8, 2, 3, 1]   
+[4, 3, -2, -7, 8, 2, 3, 1]    
+[4, -3, -2, -7, 8, 2, 3, 1]
+[4, -3, -2, -7, 8, 2, -3, 1]
+[4, -3, -2, -7, 8, 2, -3, -1]
+[4, [-3], -2, -7, 8, 2, -3, -1] 
+[4, [-3], [-2], -7, 8, 2, -3, -1] 
+[-4, [-3], [-2], -7, 8, 2, -3, -1] 
+```
+
+
+##  168. <a name='StringCompression'></a> 【hard】compress
+
+
+```py
+输入：chars = ["a","a","b","b","c","c","c"]
+输出：返回 6 ，输入数组的前 6 个字符应该是：["a","2","b","2","c","3"]
+
+
+
+
+输入：chars = ["a"]
+输出：返回 1 ，输入数组的前 1 个字符应该是：["a"]
+
+
+
+
+输入：chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+输出：返回 4 ，输入数组的前 4 个字符应该是：["a","b","1","2"]。
+
+
+
+你必须设计并实现一个只使用`常量额外空间`的算法来解决此问题。
+
+
+
+'''
+slow += 1
+cnt += 1
+'''
+
+
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+
+        n = len(chars)
+
+        slow = 0
+        cnt = 1
+        for fast in range(n):
+            # 在 aa，bb，ccc 的最后一位触发计算
+            # 这边不是比较 chars[fast] != chars[slow]
+            # fast == n - 1 不要漏
+            if fast == n - 1 or chars[fast] != chars[fast+1]:
+
+                chars[slow] = chars[fast] 
+                slow += 1
+
+                if cnt > 1: # cnt 重新置为 1 前，需要统计是几位数
+                    for digit in str(cnt):
+                        chars[slow] = digit
+                        slow += 1
+
+                cnt = 1 # cnt 重新置为 1
+            else:
+                cnt += 1
+        return slow 
+        # 前一问是 slow + 1
+
+
+时间复杂度：O(n)，其中 n 为字符串长度，我们只需要遍历该字符串一次。
+
+空间复杂度：O(1)。我们只需要常数的空间保存若干变量。
+
+```
+
+
+
+
+##  1. <a name='ReverseLinkedList'></a> reverseList
+
+```py
+输入：head = [1,2,3,4,5]
+输出：[5,4,3,2,1]
+
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        cur = None
+        while head: 
+            headnxt = head.next
+            head.next = cur
+            cur = head
+            head = headnxt
+        return cur
+
+时间复杂度：O(n)，其中 n 是链表的节点数量。
+
+空间复杂度：O(n)，
+```
+
+
+
+##  24. <a name='ReverseLinkedListII'></a> reverseBetween
+
+
+```py
+输入：head = [1,2,3,4,5], left = 2, right = 4
+输出：[1,4,3,2,5]
+
+
+
+class Solution:
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        dummy = ListNode(0, head)
+        pre = dummy
+        # 这里用到3个指针，pre，first，second
+        for _ in range(left - 1):
+            pre = pre.next
+        # 因为需要保留 pre, 所以 left - 1
+        NOTE: first在FOR循环外面，second在FOR循环里面
+        first = pre.next
+        for _ in range(right - left):
+        # 易错点：顺序不能错: 2,1,2,pre
+            second = first.next
+            first.next = second.next
+            second.next = pre.next
+            pre.next = second
+        
+        return dummy.next
+
+
+
+时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
+
+空间复杂度：O(1)。
+```
+
+
+##  36. <a name='ReorderList'></a> reorderList
+
+```py
+输入：head = [1,2,3,4]
+输出：[1,4,2,3]
+
+
+
+输入：head = [1,2,3,4,5]
+输出：[1,5,2,4,3]
+
+
+
+# 双向队列
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        que = collections.deque()
+        cur = head
+        #  链表除了首元素全部加入双向队列
+        while cur.next: 
+            que.append(cur.next)
+            cur = cur.next
+        cur = head
+        # 一后一前加入链表
+        while que: 
+            cur.next = que.pop()
+            cur = cur.next
+            if que:
+                cur.next = que.popleft()
+                cur = cur.next
+        cur.next = None # 尾部置空
+ 
+时间复杂度：O(N)，其中 N 是链表中的节点数。
+
+空间复杂度：O(N)，其中 N 是链表中的节点数。主要为线性表的开销。
+```
+
+
+
+##  122. <a name='RotateList'></a> 【hard】rotateRight
+
+```py
+输入：head = [1,2,3,4,5], k = 2
+输出：[4,5,1,2,3]
+
+
+输入：head = [0,1,2], k = 4
+输出：[2,0,1]
+
+
+
+class Solution:
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        
+        if not head or not head.next:
+            return head
+            
+        lenth = 1
+        # 第一步：链接成一个环
+        cur = head
+        while cur.next:
+            cur = cur.next
+            lenth += 1
+        cur.next = head
+
+        # 第二步，cur指向的是head前一个节点
+        
+        steps = lenth - k % lenth
+        for _ in range(steps):
+            cur = cur.next
+
+        # 第三步：断开
+        res = cur.next
+        cur.next = None
+        return res
+
+时间复杂度：O(n)，最坏情况下，我们需要遍历该链表两次。
+
+空间复杂度：O(1)，我们只需要常数的空间存储若干变量。
+```
+
+##  41. <a name='IIRemoveDuplicatesfromSortedList'></a> deleteDuplicates
+
+```py
+输入：head = [1,2,3,3,4,4,5]
+输出：[1,2,5]
+
+
+
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        dummy = ListNode(0, head)
+        # 后一问，cur = head
+        cur = dummy
+        # 目的是删除cur的下一个节点
+        while cur.next and cur.next.next:  
+            if cur.next.val == cur.next.next.val:
+                # 把所有等于 x 的结点全部删除
+                x = cur.next.val
+                # while cur.next 不要漏
+                while cur.next and cur.next.val == x: 
+                    cur.next = cur.next.next
+            else:
+                cur = cur.next
+        return dummy.next
+
+
+
+时间复杂度：O(n)，其中 n 是链表的长度。
+
+空间复杂度：O(1)。
+```
+
+##  78. <a name='Removeduplicatesfromsortedarray'></a> deleteDuplicates
+
+```py
+输入：head = [1,1,2,3,3]
+输出：[1,2,3]
+
+
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        # 前一问 cur = dummy
+        cur = head
+        while cur.next:  
+            if cur.val == cur.next.val:
+                cur.next = cur.next.next # 要么删除
+            else:
+                cur =  cur.next # 要么下一个
+        return head
+```
+
+##  141. <a name='Removeduplicatesfromsortedarray-1'></a> removeDuplicates
+
+```py
+不要使用额外的空间，你必须在 `原地` 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+
+
+输入：nums = [1,1,2]
+输出：2, nums = [1,2,_]
+
+
+
+
+输入：nums = [0,0,1,1,1,2,2,3,3,4]
+输出：5, nums = [0,1,2,3,4]
+
+
+
+
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        slow = 0 # 注意：count是从0开始的
+        for fast in range(len(nums)):
+            if nums[fast] != nums[slow]:
+                slow += 1
+                nums[slow] = nums[fast]
+        return slow + 1
+
+
+
+时间复杂度：O(n)，其中 n 是数组的长度。快指针和慢指针最多各移动 n 次。
+
+空间复杂度：O(1)。只需要使用常数的额外空间。
+```
+
+
+##  152. <a name='-1'></a> removeDuplicates
+
+类似消消看
+
+```py
+输入："abbaca"
+输出："ca"
+
+class Solution(object):
+    def removeDuplicates(self, S):
+        stack = []
+        for char in S:
+            if stack and stack[-1] == char:
+                stack.pop()
+            else:
+                stack.append(char)
+        return "".join(stack)
+
+时间复杂度：O(n)，其中 n 是字符串的长度。我们只需要遍历该字符串一次。
+
+空间复杂度：O(n)
+
+```
+
+
+
+##  11. <a name='LinkedListCycle'></a> hasCycle
+
+```py
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        fast = slow = head
+        
+        while fast and fast.next: # 😐 while 循环
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
+
+
+* 时间复杂度:O(n)
+* 空间复杂度:O(1)      
+```
+
+
+##  114. <a name='1.'></a> sortOddEvenList
+
+1. 按奇偶位置拆分链表，得 1->3->5->7->NULL 和 8->6->4->2->NULL  328. 奇偶链表
+2. 反转偶链表，得 1->3->5->7->NULL 和 2->4->6->8->NULL         206. 反转链表
+3. 合并两个有序链表，得 1->2->3->4->5->6->7->8->NULL           21. 合并两个有序链表
+
+https://mp.weixin.qq.com/s/0WVa2wIAeG0nYnVndZiEXQ
+
+```py
+输入: 1->8->3->6->5->4->7->2->NULL
+输出: 1->2->3->4->5->6->7->8->NULL
+
+
+
+class Solution:    
+    def sortOddEvenList(self,head):     
+        if not head or not head.next:      
+            return head 
+        # 第一步：分割    
+        oddList, evenList = self.partition(head)    
+        # 第二步：反转 
+        evenList = self.reverse(evenList)        
+        # 第三步：合并
+        return self.merge(oddList, evenList)    
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+    def partition(self, head: ListNode) -> ListNode:        
+        headnxt = head.next        
+        odd, even = head, headnxt        
+        while even and even.next: # 😐😐 while 循环  # 🌵 while fast and fast.next:
+            odd.next = even.next            
+            odd = odd.next            
+            even.next = odd.next            
+            even = even.next        
+        odd.next = None # 节点需要断开
+        return [head, headnxt]    
+
+
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+    def reverse(self,head):    
+        cur = None
+        while head: # 😐 while 循环, cur
+            headnxt = head.next
+            head.next = res
+            cur = head
+            head = headnxt
+        return cur    
+
+
+
+* 时间复杂度: O(min(n1,n2))
+* 空间复杂度: O(1)
+
+
+    def merge(self,p,q):        
+        dummy = ListNode(0)        
+        cur = dummy        
+        while p and q:    # 😐 while 循环        
+            if p.val <= q.val:               
+                cur.next = p                
+                p = p.next            
+            else:                
+                cur.next = q                
+                q = q.next            
+            cur = cur.next        
+        cur.next = p or q        
+        return dummy.next
+```
+
+##  161. <a name='PartitionList'></a> partition
+
+```py
+小于 x 的节点都出现在 大于或等于 x 的节点之前
+
+输入：head = [1,4,3,2,5,2], x = 3
+输出：[1,2,2,4,3,5]
+
+输入：head = [2,1], x = 2
+输出：[1,2]
+
+快慢指针 slow -> fast -> None
+链表中节点的数目在范围 [0, 200] 内
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+
+class Solution:
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        '''
+        这道题只要返回 dummy1.next -> dummy2.next -> None
+                      slow        -> fast        -> None
+        '''
+        dummy1 = ListNode(0)
+        dummy2 = ListNode(0)
+        slow, fast = dummy1, dummy2 
+
+        while head:    # 😐😐😐 while 循环 # 🌵 用 cur 指针
+            if head.val < x:
+                slow.next = head # dummy1 指向第一个小于x的node
+                slow = slow.next
+            else:
+                fast.next = head # dummy2 指向第一个大于x的node
+                fast = fast.next
+            head = head.next
+
+        slow.next = dummy2.next
+        fast.next = None
+        return dummy1.next
+```
+
+
+
+
+##  14. <a name='IntersectionofTwoLinkedLists'></a> getIntersectionNode
+
+
+```py
+输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+输出：Intersected at '8'
+
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if not headA or not headB:
+            return None
+        pa, pb = headA, headB
+        while pa != pb: # 😐 while 循环
+            pa = pa.next if pa else headB
+            pb = pb.next if pb else headA
+        return pa
+
+时间复杂度 O(M+N), 空间复杂度 O(1)
+```
+
+
+
+##  189. <a name='MiddleoftheLinkedList'></a> middleNode
+
+```py
+输入：[1,2,3,4,5,6]
+输出：此列表中的结点 4 (序列化形式：[4,5,6])
+
+
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+
+
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow = fast = head
+        while fast and fast.next: # 😐 while 循环
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+```
+
+## 归并排序 merge_sort
+
+```py
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        def merge_sort(nums, l, r):
+            if l < r:
+                mid = (l + r) // 2
+                # 先把子序列排序完成
+                merge_sort(nums, l, mid)
+                merge_sort(nums, mid + 1, r)
+                tmp = []
+                i1, i2 = l, mid + 1   # i1, i2 是两个起始点
+                while i1 <= mid and i2 <= r: # 😐 while 循环
+                    # 如果 前半部部分结束了，或者后半部分没有结束
+                    if nums[i2] < nums[i1]: # 因为前面是or，所以这里必须是对i进行约束
+                        tmp.append(nums[i2])
+                        i2 += 1
+                    else:
+                        tmp.append(nums[i1])
+                        i1 += 1
+                tmp += nums[i1: mid + 1] or nums[i2: r + 1] # 注意，这里要+1
+                nums[l: r + 1] = tmp
+
+
+        merge_sort(nums, 0, len(nums) - 1)
+        return nums
+
+时间复杂度：O(n log(n))
+空间复杂度：O(n)
+```
+
+##  113. <a name='OddEvenLinkedList'></a> oddEvenList
+
+```py
+
+输入: head = [1,2,3,4,5]
+输出: [1,3,5,2,4]
+
+
+输入: head = [2,1,3,5,6,4,7]
+输出: [2,3,6,7,1,5,4]
+
+
+时间复杂度： O(n)。
+空间复杂度： O(1)
+
+
+
+class Solution(object):
+    def oddEvenList(self, head):
+        if not head or not head.next:      
+            return head
+        # odd 和 even 都是移动指针
+        # evenHead 是固定的
+    
+        slow = head
+        fast = headnxt = head.next
+        # 当 2 和 3 存在
+        while fast and fast.next: # 😐😐 while 循环
+            # 1 -> 2的后面
+            slow.next = fast.next
+            # 1 变成 3
+            slow = slow.next
+            # 2 -> 3的后面
+            fast.next = slow.next 
+            # 2 变成 4
+            fast = fast.next
+        slow.next = headnxt # 先奇数，后偶数
+        return head 
+```
+
+##  219. <a name='8.'></a> mergesmallSum
+
+```py
+在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。
+
+例子：
+
+[1,3,4,2,5]
+
+1左边比1小的数，没有；
+
+3左边比3小的数，1；
+
+4左边比4小的数，1、3；
+
+2左边比2小的数，1；
+
+5左边比5小的数，1、3、4、2；
+
+所以小和为 1+1+3+1+1+3+4+2=16
+
+要求时间复杂度O(NlogN)，空间复杂度O(N)
+```
+
+
+```py
+# 这里有2个目的：
+# 1. 排序
+# 2. 求出 [1,3,4] [2,5,6] 之间的smallsum
+class Solution:
+    '''
+    在原地排序，不需要 return
+    '''
+    def mergesmallSum(nums):
+        def merge(nums, l, r):
+            if l == r:
+                return 0
+            if l < r:
+                mid = (l + r) // 2
+                s1 = merge(nums, l, mid)
+                s2 = merge(nums, mid + 1, r)
+                tmp = []
+                s3 = 0
+                i1, i2 = l, mid + 1
+                while i1 <= mid and i2 <= r: # 😐 while 循环
+                    if nums[i1] <= nums[i2]:
+                        s3 += nums[i1] * (r - i2 + 1)   # j 后面的部分比 j 都要大， 所以小和有right-j+1个arr[i]
+                        tmp.append(nums[i1])
+                        i1 += 1
+                    else:
+                        tmp.append(nums[i2])   # 把小的值先往res里面填写
+                        i2 += 1
+                tmp += nums[i1: mid + 1] or nums[i2: r + 1]   # 全都排完之后，左半部分有剩余
+                nums[l: r + 1] = tmp   # 修改原 arr 的值
+                return s1 + s2 + s3
+        return merge(nums, 0, n-1)
+    
+N = int(input())
+nums = list(map(int, input().split()))
+print(mergesmallSum(nums, 0, N-1))
+```
+
+
+##  10. <a name='-1'></a> mergeTwoLists
+
+暴力解法：
+
+* 时间复杂度:O(M+N)
+
+* 时间复杂度:O(1)
+
+```py
+输入：l1 = [1,2,4], l2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+
+
+输入：l1 = [], l2 = []
+输出：[]
+
+
+输入：l1 = [], l2 = [0]
+输出：[0]
+
+
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(0)
+        cur = dummy # dummy是固定节点，cur是移动指针
+        while list1 and list2: # 😐 while 循环 # 这里是and 
+            if list1.val < list2.val: # 易错点：这里是list.val，而不是list
+                cur.next = list1
+                list1 = list1.next # 向后进一位
+            else:
+                cur.next = list2
+                list2 = list2.next # 向后进一位
+            cur = cur.next # 向后进一位
+        cur.next = list1 or list2 # 易错点：这里是cur.next，而不是cur。这里是or
+        # 等效于：
+        # if list1:
+        #     cur.next = list1
+        # else:
+        #     cur.next = list2
+        return dummy.next
+```
+
+
+
+##  15. <a name='Mergesortedarray'></a> merge
+
+```py
+输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+输出：[1,2,2,3,5,6]
+
+
+
+解释：需要合并 [1,2,3] 和 [2,5,6] 。
+合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
+
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        # 三个指针
+        cur1 = m - 1
+        cur2 = n - 1
+        i = m + n -1
+        # 从后往前遍历
+        while cur1 >= 0 and cur2 >= 0: # 😐 while 循环
+            if nums1[cur1] < nums2[cur2]:
+                nums1[i] = nums2[cur2]
+                cur2 -= 1
+            else:
+                nums1[i] = nums1[cur1]
+                cur1 -= 1
+            i -= 1
+        # 如果后面的那个n还有多余
+        if cur2 >= 0:
+            nums1[:cur2+1] = nums2[:cur2+1] # 易错点：不包括右边界
+
+* 时间复杂度: O(n)
+* 空间复杂度: O(1)
+```
+
+
+
+
+
+##  39. <a name='MergeIntervals'></a> merge
+
+```py
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+
+
+输入：intervals = [[1,4],[4,5]]
+输出：[[1,5]]
+
+
+解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+
+
+
+
+时间复杂度： O(nlogn)，其中 n 为区间的数量。
+
+除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 O(nlogn)。
+
+
+
+空间复杂度： O(logn)，其中 n 为区间的数量。
+
+这里计算的是存储答案之外，使用的额外空间。 O(logn) 即为排序所需要的空间复杂度。
+
+
+
+ 
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort() # 等价于：intervals.sort(key = lambda x: x[0])
+        res = []
+        for interval in intervals: # res[-1] 和 interval 比较
+            if res and res[-1][1] >= interval[0]:
+                res[-1][1] = max(res[-1][1], interval[1])
+            else:
+                res.append(interval[:])
+                # 易错点：不是interval[1]，而是max(res[-1][1],interval[1])
+                # 比如，[[1,4],[2,3]]
+        return res
+```
+
+
+
+##  104. <a name='MoveZeros'></a> moveZeroes
+
+```py
+输入: nums = [0,1,0,3,12]
+输出: [1,3,12,0,0]
+
+
+输入: nums = [0]
+输出: [0]
+
+
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] != 0:
+                # 把 index 的位置变成不是 0, i 的位置变成是 0
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                # slow 的位置不是 0, 都在前面
+                slow += 1
+
+时间复杂度： O(N) 
+空间复杂度： O(1) 
+```
+
+##  111. <a name='Offer21.'></a> exchange
+
+```py
+输入：nums = [1,2,3,4]
+输出：[1,3,2,4] 
+注：[3,1,2,4] 也是正确的答案之一。
+
+调整数组顺序使`奇数`位于`偶数`前面
+
+类似前面的移动0
+
+class Solution:
+    def exchange(self, nums: List[int]) -> List[int]:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] & 1 == 1:
+                # 把 [fast上的奇数] 移动到 [slow的位置] 上
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                slow += 1
+        return nums
+
+时间复杂度： O(N) 
+空间复杂度： O(1) 
+```
+
+
+##  130. <a name='SortColors'></a> sortColors
+
+![image](https://raw.githubusercontent.com/YutingYao/DailyJupyter/main/imageSever/image.5l1bfbznzwc0.png)
+
+```py
+输入：nums = [2,0,2,1,1,0]
+输出：[0,0,1,1,2,2]
+
+
+
+输入：nums = [2,0,1]
+输出：[0,1,2]
+
+
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        fast, slow, right = 0, 0, len(nums) - 1
+        while fast <= right: # 😐😐😐😐 while 循环
+            # 交换完位置后 idx 依旧在原位
+            if nums[fast] == 2 and fast < right:
+                nums[fast], nums[right] = nums[right], 2
+                right -= 1
+            # 交换完位置后 idx 依旧在原位
+            elif nums[fast] == 0 and fast > slow:
+                nums[fast], nums[slow] = nums[slow], 0
+                slow += 1
+            else:
+            # idx 为 1, 或者 idx 与 [right/left] 相交
+                fast += 1
+
+
+时间复杂度： O(N) 
+空间复杂度： O(1) 
+```
+
+
+
+##  74. <a name='PalindromeLinkedList'></a> isPalindrome
+
+```py
+输入：head = [1,2,2,1]
+输出：true
+
+
+输入：head = [1,2]
+输出：false
+
+
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        vals = []
+        cur = head
+        while cur: # 😐 while 循环, cur
+            vals.append(cur.val)
+            cur = cur.next
+        return vals == vals[::-1]
+
+时间复杂度：O(n)
+
+空间复杂度：O(n)
 ```
 
 
@@ -3225,105 +5350,6 @@ class Solution:
 
 
 
-##  57. <a name='IP'></a> restoreIpAddresses
-
-```py
-输入：s = "25525511135"
-输出：["255.255.11.135","255.255.111.35"]
-
-
-
-输入：s = "101023"
-输出：["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]
-
-
-
-class Solution:
-    def restoreIpAddresses(self, s: str) -> List[str]:
-        res = []
-        def backtrack(s,path):
-            if len(path) == 4 and len(s) == 0:
-                res.append('.'.join(path))
-                return # 注意点：一定要返回
-            for i in range(len(s)):
-                left, right = s[:i+1], s[i+1:]
-                if 0 <= int(left) <= 255 and str(int(left)) == left:
-                    backtrack(right, path + [left])  
-        backtrack(s, [])    
-        return res
-
-
-
-时间复杂度： O(3^SEG_COUNT})
-
-由于 IP 地址的每一段的位数不会超过 3，因此在递归的每一层，我们最多只会深入到下一层的 3 种情况.
-
-由于 SEG_COUNT=4，对应着递归的最大层数，所以递归本身的时间复杂度为 O(3^SEG_COUNT}).
-
-空间复杂度：O(SEG_COUNT) 递归使用的空间与递归的最大深度 SEG_COUNT 成正比。
-```
-
-
-##  85. <a name='ValidateIPAddress'></a> 【hard】validIPAddress
-
-```py
-输入：queryIP = "172.16.254.1"
-输出："IPv4"
-解释：有效的 IPv4 地址，返回 "IPv4"
-
-
-
-
-输入：queryIP = "2001:0db8:85a3:0:0:8A2E:0370:7334"
-输出："IPv6"
-解释：有效的 IPv6 地址，返回 "IPv6"
-
-
-
-
-输入：queryIP = "256.256.256.256"
-输出："Neither"
-解释：既不是 IPv4 地址，又不是 IPv6 地址
-
-
-
-
-class Solution:
-    """
-    第1步：分割字符串
-    第2步：判断长度
-    第3步：分析其中的每个元素
-    """
-    def validIPAddress(self, IP: str) -> str:
-        if "." in IP:
-            # ipv4
-            ipv4 = IP.split(".")
-            if len(ipv4) != 4:
-                return "Neither"
-            for num in ipv4:
-                # 192.168@1.1 为无效IPv4地址
-                # 192.168.01.1 为无效IPv4地址
-                # 0 <= xi <= 255 
-                if  not num.isdigit()  \
-                    or (str(int(num)) != num)  \
-                    or (not 0 <= int(num) <= 255):
-                    return "Neither"
-            return "IPv4"
-        else:
-            ipv6 = IP.split(":")
-            if len(ipv6) != 8:
-                return "Neither"
-            for num in ipv6:
-                # 1 <= xi.length <= 4
-                # 可以包含数字、小写英文字母( 'a' 到 'f' )和大写英文字母( 'A' 到 'F' )。
-                if  (not 1 <= len(num) <= 4) \
-                    or not all(map(lambda x: x.lower() in "0123456789abcdef", num)):
-                    return "Neither"
-            return "IPv6"
-
-
-```
-
 
 ##  71. <a name='Subsets'></a> 【hard】subsets
 
@@ -3900,77 +5926,6 @@ class Solution:
 ```
 
 
-##  164. <a name='DeleteNodeinaBST'></a> 【hard】deleteNode
-
-```py
-class Solution:
-    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
-        if not root: return None
-        # 假如要删除的不是根节点
-        if root.val > key:
-            root.left = self.deleteNode(root.left, key)
-        elif root.val < key:
-            root.right = self.deleteNode(root.right, key)
-
-        # 假如删除的是根节点
-        elif not root.left:
-            root = root.right # 删除根节点
-        else:
-            '''
-            p = root.left
-            while p.right: # 😐😐 while 循环
-                p = p.right
-            p.right = root.right # 找到左子树中最大的节点，链接到 root.right
-            '''
-            root = root.left # 删除根节点
-        return root
-
-
-找到left中的最大：
-            p = root.left
-            while p.right: # 😐 while 循环
-                p = p.right
-
-
-          5
-        /  \
-       3    6
-     /  \    \
-    2    4    7
-
-    2 链接到4  ->  p.right = root.right
-
-          5
-        /  \
-       3    6
-     /       \
-    2         7
-     \
-      4
-
-    删除3 -> root = root.left 
-
-          5
-        /  \
-       2    6
-        \    \
-         4    7
-    再删除3
-
-时间复杂度： O(logN)。在算法的执行过程中，我们一直在树上向左或向右移动。
-
-首先先用 O(H1) 的时间找到要删除的节点，H_1 是从根节点到要删除节点的高度。
-
-然后删除节点需要 O(H2) 的时间，H_2 是从要删除节点到替换节点的高度。
-
-由于 O(H_1 + H_2) = O(H)，H 值得是树的高度，若树是一个平衡树则 H =  logN。
-
-空间复杂度： O(H)，递归时堆栈使用的空间，H 是树的高度。
-
-```
-
-
-
 
 ##  271. <a name='MinimumAbsoluteDifferenceinBST-Offer36.'></a> getMinimumDifference
 
@@ -4100,373 +6055,6 @@ class Solution:
 
 
 
-##  125. <a name='SubarraySumEqualsKK'></a> 【hard】subarraySum - 累加、查表、更新表
-
-```py
-输入：nums = [1,2,3], k = 3
-输出：2
-
-
-
-* 时间复杂度:O(n)
-* 空间复杂度:O(n)
-
-
-
-查表法：
-class Solution:
-    def subarraySum(self, nums: 'List[int]', target: 'int') -> 'int':
-        presum, res, dic = 0, 0, defaultdict(int)
-        dic[0] = 1 # 刚好前 n 个的和为 target
-        for num in nums:
-            presum += num
-            if presum - target in dic:
-                res += dic[presum - target]
-            dic[presum] += 1
-        return res
-
-```
-
-
-##  54. <a name='SlidingWindowMaximum'></a> 【hard】maxSlidingWindow
-
-```py
-输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
-输出：[3,3,5,5,6,7]
-
-解释：
-滑动窗口的位置                最大值
----------------               -----
-[1  3  -1] -3  5  3  6  7       3
- 1 [3  -1  -3] 5  3  6  7       3
- 1  3 [-1  -3  5] 3  6  7       5
- 1  3  -1 [-3  5  3] 6  7       5
- 1  3  -1  -3 [5  3  6] 7       6
- 1  3  -1  -3  5 [3  6  7]      7
-
-
-[(-3, 1), (-1, 0), (1, 2), (3, 3)]
-[(-5, 4), (-3, 1), (1, 2), (3, 3), (-1, 0)]
-[(-5, 4), (-3, 1), (-3, 5), (3, 3), (-1, 0), (1, 2)]
-[(-6, 6), (-3, 1), (-5, 4), (3, 3), (-1, 0), (1, 2), (-3, 5)]
-[(-7, 7), (-6, 6), (-5, 4), (-3, 1), (-1, 0), (1, 2), (-3, 5), (3, 3)]
-
-
-class Solution:
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        # 求最大值，则需要取复数
-        hp = [(-nums[i], i) for i in range(k-1)]
-        heapq.heapify(hp)
-        res = []
-
-        for i in range(k-1, len(nums)):
-            heapq.heappush(hp, (- nums[i], i))
-            while i - hp[0][1] >= k: # 😐😐😐 while 循环 + pop + append
-                heapq.heappop(hp) # 把所有出界的最大值弹出，可能不小心攒了许多个
-            res.append(- hp[0][0]) # 最大值永远在 q[0]
-        
-        return res
-
-
-
-时间复杂度： O((n-k)logk)
-
-空间复杂度： O(k)，即为优先队列需要使用的空间
-
-```
-
-##  3. <a name='LongestSubstringWithoutRepeatingCharacters'></a> 【hard】【hard】lengthOfLongestSubstring - dic每次都更新
-
-```py
-输入: s = "abcabcbb"
-输出: 3 
-解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
-
-
-
-class Solution:
-    def lengthOfLongestSubstring(self, s: str) -> int:
-        dic = {}
-        leftI = 0
-        maxlen = 0
-        for rightI, char in enumerate(s):
-            # 含义为"tmmzuxt", start在m，当有新的t进来时，上一个t在start的前面，所以，此时的start不需要修改
-            if char in dic and leftI <= dic[char]:      # char 重复出现，并且 上一个出现 在窗口内部
-                leftI = dic[char] + 1                   # 易错点: 这里的dic[char]还是前一个,且 +1
-            else:
-                maxlen = max(maxlen, rightI - leftI + 1)      # 易错点: +1
-            dic[char] = rightI                          # 易错点: dic[char]滞后更新
-        return maxlen
-
-
-时间复杂度：O(N)，其中 N是字符串的长度。左指针和右指针分别会遍历整个字符串一次。
-
-空间复杂度：O(∣Σ∣)，其中 Σ 表示字符集（即字符串中可以出现的字符），
-∣Σ∣ 表示字符集的大小。
-默认为所有 ASCII 码在 [0, 128)内的字符，即∣Σ∣= 128。
-我们需要用到哈希集合来存储出现过的字符，而字符最多有∣Σ∣ 个
-```
-
-##  183. <a name='ContiguousArray'></a> 【hard】findMaxLength
-
-```py
-找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
-
-输入: nums = [0,1,0]
-输出: 2
-
-
-说明: [0, 1] (或 [1, 0]) 是具有相同数量0和1的最长连续子数组。
-
-
-
-0 变 -1 是精髓，sum_dct = {0:-1} 是细节。
-
-
-
-* 时间复杂度:O(n)
-* 空间复杂度:O(n)
-
-
-
-class Solution:
-    def findMaxLength(self, nums: List[int]) -> int:
-        presumDic = {}
-        presumDic[0] = -1
-        res = 0
-        s = 0
-        for i in range(len(nums)):
-            s += 1 if nums[i] == 1 else -1
-            if s in presumDic:
-                res = max(res, i - presumDic[s])
-            else:
-                presumDic[s] = i
-        return res
-
-```
-
-
-##  67. <a name='LongestValidParentheses'></a> 【hard】longestValidParentheses
-
-
-```py
-输入：s = ")()())"
-输出：4
-
-解释：最长有效括号子串是 "()()"
-
-* 时间复杂度: O(n) 
-* 空间复杂度: O(n)
-
-
-class Solution:
-    def longestValidParentheses(self, s: str) -> int:
-        stack = [-1]
-        length = maxlength = 0
-        for i, c in enumerate(s):
-            if c == '(':
-                stack.append(i)
-            if c == ')':
-                stack.pop()
-                if not stack:
-                    stack.append(i) # 记录一下stack[-1]为')'，断开区间
-                else:
-                    length = i - stack[-1] # stack[-1]为')'，断开区间
-                    maxlength = max(maxlength, length)
-        return maxlength
-
-```
-
-##  18. <a name='Validparentheses'></a> 【hard】isValid
-
-先进后出，所以用栈
-
-* 时间复杂度:O(n)
-
-* 时间复杂度:O(n)
-
-```py
-输入：s = "()"
-输出：true
-
-
-
-
-输入：s = "()[]{}"
-输出：true
-
-
-
-
-输入：s = "(]"
-输出：false
-
-
-
-
-输入：s = "([)]"
-输出：false
-
-
-
-
-输入：s = "{[]}"
-输出：true
-
-
-class Solution:
-    def isValid(self, s: str) -> bool:
-        dic = {'{':'}','[':']','(':')'}
-        stack = [] # stack 要提前定义好
-        for char in s:
-            if char in dic: # 是 “key”
-                stack.append(char) # 一个 char 进来，要么被 append
-            elif not stack or dic[stack.pop()] != char: 
-                # 如果上一步不被append就是不对的
-                # 如果这一步不匹配也是不对
-                return False
-        return not stack # 如果append上了，但没有被完全pop也是不对的
-```
-
-
-
-##  196. <a name='K-1'></a> 【hard】【hard】shortestSubarray - 没头没尾 - presum
-
-```py
-输入：nums = [2, -1, 2], k = 3
-输出：3
-
-
-
-找出 nums 中和至少为 k 的 `最短非空子数组` ，
-
-并返回该子数组的`长度`。如果不存在这样的 `子数组` ，返回 -1 。
-
-`子数组` 是数组中 `连续` 的一部分。
-
-
-
-class Solution:
-    def shortestSubarray(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        presums = [0]
-        for x in nums:
-            presums.append(presums[-1] + x)
-
-        res = n + 1 
-        deqI = collections.deque()  
-        for i, cursum in enumerate(presums):
-            # -105 <= nums[i] <= 105
-            # 1 <= k <= 109
-            # k为正数，如果算到复数，肯定是不满足的
-            while deqI and cursum - presums[deqI[-1]] <= 0: # 😐😐😐 while 循环, 排出所有的局部负值
-                deqI.pop()
-            # 找到 sum 至少为 k 的 `最短非空子数组`，则尽可能地缩短答案
-            while deqI and cursum - presums[deqI[0]] >= k: # 😐😐😐 while 循环
-                res = min(res, i - deqI.popleft())
-
-            deqI.append(i)
-
-        return res if res < n + 1 else -1
-
-
-
-* 时间复杂度:O(n)
-* 空间复杂度:O(n)
-
-```
-
-##  276. <a name='RemoveDuplicateLetters'></a> 【hard】removeDuplicateLetters
-
-```py
-去除字符串中重复的字母
-
-使得每个字母只出现一次
-
-返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
-
-
-输入：s = "bcabc"
-输出："abc"
-a  小于 stack[-1]，并且 stack[-1] c 在s[i+1:]中，弹出 c
-a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
-
-
-
-输入：s = "cbacdcbc"
-输出："acdb"
-
-b  小于 stack[-1]，并且 stack[-1] c 在s[i+1:]中，弹出 c
-a  小于 stack[-1]，并且 stack[-1] b 在s[i+1:]中，弹出 b
-c  in stack
-c  in stack
-
-stack[-1] 要满足 2个条件：
-😐 stack[-1] > s[i]
-😐 stack[-1] in s[i + 1: ]
-
-s[i] 要满足 2个条件：
-😐 s[i] not in stack
-😐 stack[-1] > s[i]
-
-class Solution:
-    def removeDuplicateLetters(self, s: str) -> str:
-        stack = []
-        n = len(s)
-        for i in range(n):
-            if s[i] not in stack:
-                while stack and stack[-1] > s[i] and stack[-1] in s[i + 1: ]: # 😐😐😐 while 循环 + pop + append
-                # 如果数比栈顶小，而且栈顶在后面还有的话，
-                    stack.pop() # 就弹出栈顶。
-                stack.append(s[i])
-            
-        return "".join(stack)
-
-
-
-时间复杂度： O(N)。代码中虽然有双重循环，但是每个字符至多只会入栈、出栈各一次。
-
-空间复杂度： O(∣Σ∣)，其中 Σ 为字符集合，本题中字符均为小写字母，所以 ∣Σ∣= 26。
-```
-
-
-##  118. <a name='RemoveKDigits'></a> 【hard】【hard】removeKdigits
-
-形成一个新的最小的数字：
-
-```py
-输入：num = "1432219", k = 3
-输出："1219"
-
-
-
-解释：移除掉三个数字 4, 3, 和 2 形成一个新的最小的数字 1219 。
-
-
-class Solution:
-    def removeKdigits(self, num: str, k: int) -> str:
-        '''
-        长江后浪推前浪，前浪死在沙滩上
-        '''
-        numStack = []
-        
-        for digit in num:
-            # 新来的数字更小，就 pop 掉
-            while k and numStack and numStack[-1] > digit: # 😐 while 循环 + pop + append + 3个条件
-                numStack.pop()
-                k -= 1
-        
-            numStack.append(digit)
-        
-        # 如果 K > 0，删除末尾的 K 个字符
-        finalStack = numStack[:-k] if k else numStack
-        
-        # 抹去前导零
-        return "".join(finalStack).lstrip('0') or "0"
-
- 
-```
-
 ##  121. <a name='DailyTemperatures'></a> 【hard】dailyTemperatures
 
 ```py
@@ -4512,150 +6100,6 @@ class Solution:
 空间复杂度： O(n)，其中 n 是温度列表的长度。需要维护一个单调栈存储温度列表中的下标。
  
 ```
-
-##  202. <a name='LargestRectangleinHistogram'></a> 【hard】maximalRectangle
-
-```py
-输入：matrix = 
-["1","0","1","0","0"],
-["1","0","1","1","1"],
-["1","1","1","1","1"],
-["1","0","0","1","0"]
-
-输出：6
-
-
-
-
-时间复杂度： O(mn)。 对每一列应用柱状图算法需要 O(m) 的时间，一共需要 O(mn) 的时间。
-
-空间复杂度： O(n)，其中 m 和 n 分别是矩阵的行数和列数。
-
-
-
-
-
-class Solution:
-    def maximalRectangle(self, matrix: List[List[str]]) -> int:
-        if len(matrix) == 0:
-            return 0
-        res = 0
-        m, n = len(matrix), len(matrix[0])
-        heights = [0] * (n + 1)
-        # heights = [0] * n，height需要补充一个0
-        for i in range(m):
-            for j in range(n):
-                if matrix[i][j] == '0':
-                    heights[j] = 0
-                else:
-                    heights[j] += 1
-            # 每行求一次 self.largestRectangleArea
-            res = max(res, self.largestRectangleArea(heights))
-        return res
-
-    def largestRectangleArea(self, heights):
-        # heights.append(0)
-        stackI = [-1]
-        res = 0
-        for i in range(len(heights)):
-            # 新来的 heights[i] 更小
-            while heights[i] < heights[stackI[-1]]: # 😐 while 循环 + pop + append
-                h = heights[stackI.pop()]
-                w = i - stackI[-1] - 1
-                res = max(res, h * w)  
-            stackI.append(i)
-        return res
-
-''''
-s = stack.pop()后：
-✨表示pop
-'''
-
-heights: [1, 0, 1, ✨0, 0, 0]
-stack: [1]    res: 1 = 1 * ( 3 - 1 - 1)
-
-heights: [2, 0, 2, ✨1, 1, ✨0, 0]
-stack: [1]    res: 2 = 2 * ( 3 - 1 - 1)
-stack: [1, 3] res: 2 = 1 * ( 5 - 3 - 1)
-stack: [1]    res: 3 = 1 * ( 5 - 1 - 1)
-
-heights: [3, 1, 3, ✨2, 2, ✨✨0, 0, 0]
-stack: [1]    res: 3 = 3 * ( 3 - 1 -1)
-stack: [1, 3] res: 3 = 2 * ( 5 - 3 -1)
-stack: [1]    res: 6 = 2 * ( 5 - 1 -1)
-
-heights: [4, 0, 0, 3, ✨0, 0, 0, 0, 0]
-stack: [1, 2] res: 4 = 3 * ( 4 - 2 -1)
-```
-
-
-
-##  206. <a name='LargestRectangleinHistogram-85.'></a> 【hard】largestRectangleArea
-
-```py
-输入：heights = [2,1,5,6,2,3]
-输出：10
-
-
-解释：最大的矩形为图中红色区域，面积为 10
-
-
-时间复杂度： O(N)。
-空间复杂度： O(N)。
-
-
-class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        stack = [-1]
-        heights.append(0) # 最左边插个0，heights最后补充一个0可以很好的简化代码
-        n, res = len(heights), 0
-        for i in range(n):
-            while heights[stack[-1]] > heights[i]: # 😐😐😐 while 循环 + pop + append
-                h = heights[stack.pop()]
-                w = i - stack[-1] - 1
-                res = max(res, h * w)   
-     
-            stack.append(i)
-        return res
-
-```
-
-##  221. <a name='HouseRobberIII'></a> 【hard】rob
-
-```py
-输入: root = [3,2,3,null,3,null,1]
-输出: 7 
-解释: 小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7
-
-
-
-输入: root = [3,4,5,1,3,null,1]
-输出: 9
-解释: 小偷一晚能够盗取的最高金额 4 + 5 = 9
-
-
-
-# 补充一个Python的：
-时间复杂度： O(n)。
-
-空间复杂度： O(n)。
-
-
-
-class Solution:
-    def rob(self, root: TreeNode) -> int:
-        def dfs(root):
-            if not root: return 0, 0
-            rob_L, no_rob_L = dfs(root.left)  # 前一项表示根节点偷，后一项表示根节点不偷
-            rob_R, no_rob_R = dfs(root.right) # 前一项表示根节点偷，后一项表示根节点不偷
-            return root.val + no_rob_L + no_rob_R, max(rob_L, no_rob_L) + max(rob_R, no_rob_R) 
-            # 前一项表示根节点偷，后一项表示根节点不偷
-            # 根节点偷 + (root.left的根节点no偷     +  root.right的根节点no偷) 
-            #           max(root.left的根节点all)  +  max(root.right的根节点all)
-        return max(dfs(root))
-
-```
-
 
 
 
@@ -4813,77 +6257,6 @@ class Solution:
             return 0
 ```
 
-##  222. <a name='FractiontoRecurringDecimal'></a> 【hard】fractionToDecimal
-
-```py
-输入：numerator = 1, denominator = 2
-输出："0.5"
-
-
-
-输入：numerator = 2, denominator = 1
-输出："2"
-
-
-
-输入：numerator = 4, denominator = 333
-输出："0.(012)"
-
-
-
-
-
-时间复杂度：O(l) 其中 l 是答案字符串的长度
-空间复杂度：O(l)
-
-情况一：余数
-情况二：负数
-
-
-class Solution:
-    def fractionToDecimal(self, numerator, denominator):
-
-        # ----------情况一：没有余数----------
-        if numerator % denominator == 0:
-            return str(numerator // denominator)
-
-        # -----------情况二：有余数-----------
-        s = []
-        # ----------------得到负数----------------
-        if (numerator < 0) != (denominator < 0):
-            s.append('-')
-        # ----------------得到负数----------------
-
-
-        # 整数部分
-        numerator = abs(numerator)
-        denominator = abs(denominator)
-        integerPart = numerator // denominator
-        s.append(str(integerPart))
-        s.append('.')
-
-        # 小数部分
-        indexMap = {}
-        tail = numerator % denominator
-
-        while tail and tail not in indexMap: # 😐😐😐 while 循环
-            indexMap[tail] = len(s) 
-            tail *= 10
-            '''
-            乘除余
-            '''
-            s.append(str(tail // denominator))
-            tail %= denominator
-
-        if tail:  # 有循环节，跳出循环时，remainde 不是 
-            insertIndex = indexMap[tail]
-            s.insert(insertIndex, '(') #左侧插入
-            s.append(')')
-
-        return ''.join(s)
-        # -----------情况二：有余数-----------
-        # -----------情况二：有余数-----------
-```
 
 
 
@@ -5416,6 +6789,9 @@ class Solution:
 
 ```
 
+
+
+
 ##  56. <a name='SumRoottoLeafNumbers'></a> sumNumbers - 根节点到叶子节点 - acc
 
 ```py
@@ -5468,171 +6844,6 @@ class Solution:
 
 
 
-
-##  61. <a name='FirstMissingPositive'></a> 【hard】firstMissingPositive
-
-```py
-给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
-
-输入：nums = [1,2,0]
-输出：3
-
-输入：nums = [3,4,-1,1]
-输出：2
-
-输入：nums = [7,8,9,11,12]
-输出：1
-
-
-
-class Solution:
-    def firstMissingPositive(self, nums: List[int]) -> int:
-        n = len(nums)
-
-        for i in range(n):
-            while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]: # 😐😐😐 while 循环
-                nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]
-# nums[nums[i] - 1]
-# [-1, 4, 3, 1] 4 在 4 的位置↓
-# [-1, 1, 3, 4] 1 在 1 的位置↓
-# [1, -1, 3, 4]
-
-        for i in range(n):
-            if nums[i] != i + 1:
-                return i + 1
-
-        return n + 1
-
-时间复杂度： O(N)，其中 N 是数组的长度。
-
-空间复杂度： O(1)。
-```
-
-
-##  175. <a name='MissingNumber'></a> 【hard】missingNumber
-
-```py
- [0, n] 中 n 个数的数组 nums
-
-
-输入：nums = [9,6,4,2,3,5,7,0,1]
-输出：8
-
-
-解释：n = 9，因为有 9 个数字，所以所有的数字都在范围 [0,9] 内。8 是丢失的数字，因为它没有出现在 nums 中。
-
-
-你能否实现`线性时间复杂度`、仅使用`额外常数空间`的算法解决此问题 ?
-
-class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        xor = len(nums) # 注意这里
-        for i, num in enumerate(nums):
-            xor ^= i
-            xor ^= num
-        return xor
-
-时间复杂度： O(n)，其中 n 是数组  nums 的长度。需要对 2n+1 个数字计算按位异或的结果。
-
-空间复杂度： O(1)。
-
-
-# class Solution:
-#     def missingNumber(self, nums: List[int]) -> int:
-#         xor = 0
-#         for i, num in enumerate(nums):
-#             xor ^= i ^ num
-#         return xor ^ len(nums) # 注意这里
-```
-
-
-
-##  240. <a name='SingleNumberII'></a> 【hard】singleNumber
-
-```py
-给你一个整数数组 nums ，除某个元素仅出现 `一次` 外，其余每个元素都恰出现 `三次` 。请你找出并返回那个只出现了一次的元素。
-
-
-输入：nums = [2,2,3,2]
-输出：3
-
-
-输入：nums = [0,1,0,1,0,1,99]
-输出：99
-
-
-
-时间复杂度：O(nlogC)，其中 n 是数组的长度，C 是元素的数据范围
-
-空间复杂度：O(1)
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        ans = 0
-        for i in range(32):
-            # (num >> i) & 1
-            total = sum((num >> i) & 1 for num in nums)
-            if total % 3:
-                # Python 这里对于最高位需要特殊判断
-                if i == 31:
-                    ans -= (1 << i)
-                else:
-                    ans |= (1 << i)
-        return ans
-
-
-```
-
-##  250. <a name='III-1'></a> 【hard】singleNumber
-
-难点在于只出现一次的数字不止一个，
-
-但是刚好有且只有两个
-
-```py
-输入：nums = [1,2,1,3,2,5]
-输出：[3,5]
-
-解释：[5, 3] 也是有效的答案。
-
-
-
-
-输入：nums = [-1,0]
-输出：[-1,0]
-
-
-
-输入：nums = [0,1]
-输出：[1,0]
-
-
-
-
-
-时间复杂度：O(n)，其中 n 是数组 nums 的长度。
-
-空间复杂度：O(1)。
-
-class Solution:
-    def singleNumber(self, nums: List[int]) -> List[int]:
-        xorsum = 0
-        # 先全部异或一次, 得到的结果 # 找到这两个数的差异
-        for num in nums:
-            xorsum ^= num 
-        # 找到这两个数的差异的最后一位1, 在这个位上一个为0, 一个为1
-        diff = xorsum & (-xorsum) 
-        type1 = type2 = 0
-        for num in nums:
-            # 由此可以将数组中的元素分成两部分,重新遍历, 求两个异或值
-            if num & diff: 
-                type1 ^= num
-            else:
-                type2 ^= num
-
-        return [type1, type2]
-
-```
 
 
 ##  167. <a name='Numberof1Bits'></a> hammingWeight
@@ -5720,7 +6931,7 @@ class Solution:
 ```
 
 
-##  58. <a name='BalancedBinaryTree'></a> 【hard】isBalanced
+##  58. <a name='BalancedBinaryTree'></a> isBalanced
 
 ```py
 输入：root = [3,9,20,null,null,15,7]
@@ -5757,7 +6968,7 @@ class Solution:
 ```
 
 
-##  195. <a name='Offer33.'></a> 【hard】verifyPostorder
+##  195. <a name='Offer33.'></a> verifyPostorder
 
 ```py
 输入: [1,6,3,2,5]
@@ -5843,7 +7054,7 @@ class Solution:
 ```
 
 
-##  100. <a name='-1'></a> 【hard】isCompleteTree
+##  100. <a name='-1'></a> isCompleteTree
 
 ```py
 输入：root = [1,2,3,4,5,6]
@@ -6133,155 +7344,6 @@ class Solution:
 
 
 
-##  52. <a name='-1'></a> 【hard】【hard】minWindow
-
-```py
-输入：s = "ADOBECODEBANC", t = "ABC"
-输出："BANC"
-
-class Solution:
-    def minWindow(self, s: str, t: str) -> str:
-    
-        def isContains(outerdic,innerdic):
-            for key in innerdic:
-                if outerdic[key] < innerdic[key]:
-                    return False # 只要有一个不满足，则不满足
-            return True
-
-        inndic = defaultdict(int) # 固定的
-        outdic = defaultdict(int) # 变动的
-        for char in t:
-            inndic[char] += 1 # 固定的
-
-        minlen = len(s)
-        l = 0
-        res = ''
-
-        for r in range(len(s)): # 扩展右边界
-            if s[r] in inndic:
-                outdic[s[r]] += 1  # 变动的
-            '''
-            等到 outdic 够大，才触发计算
-            第一步：先保存答案
-            第二步：收缩左边界
-            '''
-            while isContains(outdic, inndic): # 😐😐😐 while 循环
-                # 如果是 minWindow
-                if r - l + 1 <= minlen:
-                    minlen = r - l + 1
-                    res = s[l: r + 1]
-                # 收缩左边界
-                if s[l] in outdic:
-                    outdic[s[l]] -= 1  # 变动的
-                l += 1   
-        return res
-
-时间复杂度：
-    最坏情况下左右指针对 s 的每个元素各遍历一遍
-    每次检查是否可行会遍历整个 t 的哈希表
-    哈希表的大小与字符集的大小有关，设字符集大小为 C, s 和 t 由英文字母组成
-    则渐进时间复杂度为 O(52⋅∣s∣+∣t∣)
-```
-
-##  98. <a name='-1'></a> 【hard】【hard】minSubArrayLen 
-
-```py
-输入：target = 7, nums = [2,3,1,2,4,3]
-输出：2
-
-解释：子数组 [4,3] 是该条件下的长度最小的子数组。
-
-
-输入：target = 4, nums = [1,4,4]
-输出：1
-
-
-输入：target = 11, nums = [1,1,1,1,1,1,1,1]
-输出：0
-
-
-时间复杂度: O(n log n) ，用二分
-空间复杂度: O(1)
-
-class Solution:
-    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
-        def isWinEnough(size):
-            '''
-            加上新来的 nums[i], 减去旧的 nums[i - size]
-            '''
-            sums = 0
-            for i in range(len(nums)):
-                sums += nums[i]
-                # 固定大小的滑动窗口
-                if i >= size: sums -= nums[i - size]
-                # 然后判断是否满足要求
-                if sums >= s: return True
-            return False
-            
-        l, r = 0, len(nums)
-        res = 0
-        while l <= r: # 😐 while 循环
-            mid = (l + r) // 2  # 滑动窗口大小
-            if isWinEnough(mid):  # 如果这个大小的窗口可以那么就缩小
-                res = mid
-                r = mid - 1
-            else:  # 否则就增大窗口
-                l = mid + 1
-        return res
-
-```
-
-
-
-##  215. <a name='SplitArrayLargestSum'></a> 【hard】【hard】splitArray
-
-```py
-输入：nums = [7,2,5,10,8], m = 2
-输出：18
-
-答案在 max(nums) 和 sum(nums) 之间，也就是在 10 ~ 32 之间
-比如11，m=2一定是不够的，所以bagsize再加一加
-
-
-class Solution:
-    def splitArray(self, nums: List[int], bagnum: int) -> int:
-        def check(bagsize: int) -> bool:
-            presum, bagcnt = 0, 1
-            for num in nums: # 如果超出了背包的尺寸，则 bagcnt += 1
-                if presum + num > bagsize: 
-                    bagcnt += 1
-                    presum = num   # 清空
-                else:
-                    presum += num  # 累加
-            return bagcnt <= bagnum
-
-
-        left = max(nums)  # 当 划分个数为 len(nums)
-        right = sum(nums) # 当 划分个数为 1
-        while left <= right: # 😐 while 循环
-            mid = (left + right) // 2
-            if check(mid): # 检查划分个数够不够
-                res = mid
-                right = mid - 1
-            else:
-                left = mid + 1
-
-        return res
-
-
-
-时间复杂度： O(n × log(sum−maxn))，
-
-        其中 sum 表示数组 nums 中所有元素的和， maxn 表示数组所有元素的最大值。
-
-        每次二分查找时，需要对数组进行一次遍历，时间复杂度为 O(n)，
-
-空间复杂度： O(1)。
-
- 
-```
-
-
 
 
 ##  77. <a name='MajorityElement'></a> majorityElement
@@ -6319,7 +7381,7 @@ class Solution:
 
 
 
-##  43. <a name='StringtoIntegeratoi'></a> 【hard】myAtoi
+##  43. <a name='StringtoIntegeratoi'></a> myAtoi
 
 ```py
 输入：s = "   -42"
@@ -6372,6 +7434,8 @@ class Solution(object):
 空间复杂度： O(1)。
 
 ```
+
+
 ##  191. <a name='ExcelSheetColumnNumber'></a> titleToNumber
 
 ```py
@@ -6399,98 +7463,10 @@ def titleToNumber(self, columnTitle: str) -> int:
 ```
 
 
-##  179. <a name='ExcelSheetColumnTitle'></a> 【hard】convertToTitle
-
-```py
-输入：columnNumber = 1
-输出："A"
 
 
 
-
-输入：columnNumber = 28
-输出："AB"
-
-
-
-
-输入：columnNumber = 701
-输出："ZY"
-
-
-
-
-输入：columnNumber = 2147483647
-输出："FXSHRXW"
-
-
-
-
-
-时间复杂度： O(log26columnNumber)。
-
-空间复杂度：O(1)。
-
-
-
-class Solution(object):
-    def convertToTitle(self, columnNumber):
-        res = ''
-        '''
-        余加除
-        '''
-        while columnNumber: # 😐😐 while 循环
-            columnNumber -= 1                       # 又想了好久才知道在哪里减一。。
-            res = chr(columnNumber % 26 + 65) + res # A的ascii码为65
-            columnNumber = columnNumber // 26 
-        return res
-```
-
-##  218. <a name='ConvertaNumbertoHexadecimal'></a> 【hard】toHex
-
-```py
-输入:
-26
-
-输出:
-"1a"
-
-
-输入:
--1
-
-输出:
-"ffffffff"
-
-
-
-0xffffffff = 1111 1111 1111 1111 1111 1111 1111 1111 # (8个F的二进制形式, 一个F占4个字节 )  # 2 ^ 32 - 1
-
-
-
-时间复杂度： O(k)，其中 k 是整数的十六进制数的位数，这道题中 k=8。
-空间复杂度： O(k)，其中 k 是整数的十六进制数的位数，这道题中 k=8。
-
-
-class Solution:
-    def toHex(self, num):
-        num &= 0xffffffff 
-        res = ""
-        lib = "0123456789abcdef"
-        if num == 0: return "0"
-        while num: # 😐 while 循环
-            '''
-            余加除
-            '''
-            res = lib[num % 16] + res # 一定要加在右边
-            num //= 16
-        return res
-```
-
-
-
-
-##  22. <a name='AddStrings'></a> 【hard】addStrings
+##  22. <a name='AddStrings'></a> addStrings
 
 ```py
 输入：num1 = "456", num2 = "77"
@@ -6528,7 +7504,7 @@ class Solution:
 
 
 
-##  45. <a name='AddTwoNumbers'></a> 【hard】addTwoNumbers
+##  45. <a name='AddTwoNumbers'></a> addTwoNumbers
 
 * 时间复杂度:O(max(m,n))
 
@@ -6792,256 +7768,6 @@ class Solution:
         return str(int(''.join(nums)))
 ```
 
-
-
-
-
-
-
-##  96. <a name='DecodeString'></a> 【hard】decodeString
-
-```py
-输入：s = "3[a]2[bc]"
-输出："aaabcbc"
-
-
-
-输入：s = "3[a2[c]]"
-输出："accaccacc"
-
-本题核心思路：是在`栈`里面每次存储两个信息, 
-
-(左括号前的`字符串`, 左括号前的`数字`)
-
-时间复杂度: O(S)
-空间复杂度: O(S)
-
-class Solution:
-    def decodeString(self, s: str) -> str:
-        stack = []  
-        tmpstr, num = "", 0 
-        for char in s:
-            if char.isdigit():
-                num = num * 10 + int(char) # 3
-            elif char.isalpha():
-                tmpstr += char # abc def
-            elif char == "[":
-                stack.append((tmpstr, num)) # 比如abc3[def], 当遇到第一个 "[" 的时候，压入栈中的是("abc", 3)
-                '''
-                遇到左括号，abc，3，都要被清空
-                '''
-                tmpstr, num = "", 0
-            elif char == "]":
-                pre, cnt = stack.pop() # 然后遍历括号里面的字符串def, 当遇到 "]" 的时候, 从栈里面弹出一个元素(s1, n1)
-                tmpstr = pre + tmpstr * cnt # 得到新的字符串为 abc + def * 3
-        return tmpstr
-
-```
-
-
-
-
-##  99. <a name='BasicCalculatorII-224.'></a>【hard】 calculate - 先计算，后num，op
-
-```py
-输入：s = "3+2*2"
-输出：7
-
-输入：s = " 3/2 "
-输出：1
-
-输入：s = " 3+5 / 2 "
-输出：5
-
-时间复杂度：O(n) 
-空间复杂度：O(n) 
-
-class Solution:
-    def calculate(self, s: str) -> int:
-        stack = []
-        num, op = 0, "+"  # 这个"+", 在最前面,是因为算法符号具有滞后性
-        for i, char in enumerate(s):
-            if char.isdigit():
-                num = 10 * num + int(char)
-            if char in "+-*/" or i == len(s)-1:
-                if op == "+":
-                    stack.append(num)
-                elif op == "-":
-                    stack.append(-num)
-                elif op == "*":
-                    stack.append(stack.pop()*num)
-                elif op == "/":
-                    stack.append(int(stack.pop()/float(num)))
-                num, op = 0, char # op 的赋值放在最后面, 是因为算法符号具有滞后性
-        return sum(stack)
-
-```
-
-
-
-##  117. <a name='BasicCalculatorII'></a> 【hard】calculate - 先计算，后赋值
-
-
-```py
-输入：s = "1 + 1"
-输出：2
-
-
-
-输入：s = " 2-1 + 2 "
-输出：3
-
-
-
-输入：s = "(1+(4+5+2)-3)+(6+8)"
-输出：23
-
-
-
-
-
-时间复杂度：O(n) 
-空间复杂度：O(n) 
-class Solution:
-    def calculate(self, s: str) -> int:
-        stack = [1]
-        num, op = 0, 1  # 这个"+", 在最前面,是因为算法符号具有滞后性
-        res = 0
-        for i, char in enumerate(s):
-            if char.isdigit():
-                num = 10 * num + int(char)
-            if char in "+-()" or i == len(s)-1:
-                res += num*op
-                num = 0
-                if char == "+":
-                    op = stack[-1]
-                elif char == "-":
-                    op = stack[-1]*(-1)
-                elif char == "(":
-                    stack.append(op)
-                elif char == ")":
-                    stack.pop()
-        return res
-```
-
-
-```py
-时间复杂度：O(1) 。一共有 9216 种可能性，对于每种可能性，各项操作的时间复杂度都是 O(1)，因此总时间复杂度是 O(1)。
-
-空间复杂度：O(1) 。空间复杂度取决于递归调用层数与存储中间状态的列表，
-
-因为一共有 4 个数，所以递归调用的层数最多为 4，存储中间状态的列表最多包含 4 个元素，因此空间复杂度为常数。
-
-class Solution:
-    def judgePoint24(self, nums: List[int]) -> bool:
-        TARGET = 24
-        EPSILON = 1e-6
-        ADD, MULTIPLY, SUBTRACT, DIVIDE = 0, 1, 2, 3
-
-        def backtrack(nums: List[float]) -> bool:
-            if not nums:
-                return False
-            if len(nums) == 1:
-                return abs(nums[0] - TARGET) < EPSILON
-            for i, x in enumerate(nums):
-                for j, y in enumerate(nums):
-                    if i != j:
-                        newNums = []
-                        # 把 x, y 之外的 2个nums 放到 newNums
-                        for k, z in enumerate(nums):
-                            if k != i and k != j:
-                                newNums.append(z)
-                        # 把 x y 进行加减乘除运算 
-                        for op in range(4):
-                            '''
-                            剪枝：op < 2 and i > j，其中 + 和 * 和计算次序无关 
-                            '''
-                            if op < 2 and i > j: continue
-                            if op == ADD:
-                                newNums.append(x + y)
-                            elif op == MULTIPLY:
-                                newNums.append(x * y)
-                            elif op == SUBTRACT:
-                                newNums.append(x - y)
-                            elif op == DIVIDE:
-                                if abs(y) < EPSILON:
-                                    continue
-                                newNums.append(x / y)
-                            '''
-                            backtrack 4 遍
-                            '''
-                            if backtrack(newNums):
-                                return True
-                            newNums.pop()
-            return False
-
-        return backtrack(nums)
-
-```
-
-
-##  186. <a name='SudokuSolver'></a> 【hard】solveSudoku -> None
-
-```py
-# 一句都不能少
-class Solution:
-    def solveSudoku(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
-        rows = [set() for _ in range(9)]
-        cols = [set() for _ in range(9)]
-        grids = [[set() for _ in range(3)] for _ in range(3)]
-        for i in range(9):
-            for j in range(9):
-                if board[i][j] != '.':
-                    if  board[i][j] not in rows[i] and \
-                        board[i][j] not in cols[j] and \
-                        board[i][j] not in grids[i//3][j//3]:
-                        rows[i].add(board[i][j])
-                        cols[j].add(board[i][j])
-                        grids[i//3][j//3].add(board[i][j])
-
-        def dfs(i,j):
-            if board[i][j] != '.': # 被数字填满
-
-                if i == 8 and j == 8:
-                    self.flag = True
-                    return
-                if j < 8:    dfs(i, j + 1)
-                if j == 8:   dfs(i + 1, 0)
-                    
-            else: # not 被数字填满
-                for num in range(1,10):
-                    item = str(num)
-                    if  item not in rows[i] and \
-                        item not in cols[j] and \
-                        item not in grids[i//3][j//3]:
-                        board[i][j] = item
-                        rows[i].add(item)
-                        cols[j].add(item)
-                        grids[i//3][j//3].add(item)
-
-                        # 易错点: 注意缩进关系
-                        if i == 8 and j == 8:
-                            self.flag = True
-                            return
-                        if j < 8:      dfs(i, j + 1)
-                        if j == 8:     dfs(i + 1, 0)
-                        '''
-                        这一行至关重要
-                        '''
-                        if self.flag:  return
-                            
-                        board[i][j] = '.'
-                        rows[i].remove(item)
-                        cols[j].remove(item)
-                        grids[i//3][j//3].remove(item)
-
-        self.flag = False
-        dfs(0,0)
-
-```
 
 
 ##  107. <a name='SerializeandDeserializeBinaryTree'></a> Codec-tree2str-str2tree
@@ -7770,62 +8496,6 @@ class Solution:
 
 
 
-##  48. <a name='MedianofTwoSortedArrays'></a> 【hard】findMedianSortedArrays
-
-```py
-输入：nums1 = [1,3], nums2 = [2]
-输出：2.00000
-解释：合并数组 = [1,2,3] ，中位数 2
-
-
-
-
-输入：nums1 = [1,2], nums2 = [3,4]
-输出：2.50000
-解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
-
-
-
-
-给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
-
-算法的时间复杂度应该为 O(log (m+n)) 。
-
-
-
-class Solution:
-    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        if len(nums1) > len(nums2):
-            return self.findMedianSortedArrays(nums2, nums1)
-
-        infinty = 2**40
-        m, n = len(nums1), len(nums2)
-        l1, r1 = 0, m
-        # median1：前一部分的最大值
-        # median2：后一部分的最小值
-        median1, median2 = 0, 0
-
-        while l1 <= r1:
-            # 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
-            # // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
-            mid1 = (l1 + r1) // 2
-            mid2 = (m + n + 1) // 2 - mid1
-
-            # nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
-            num1pre = (nums1[mid1 - 1] if mid1 != 0 else -infinty)
-            num2pre = (nums2[mid2 - 1] if mid2 != 0 else -infinty)
-            num1aft = (nums1[mid1] if mid1 != m else infinty)
-            num2aft = (nums2[mid2] if mid2 != n else infinty)
-
-            if num1pre <= num2aft:
-                median1, median2 = max(num1pre, num2pre), min(num1aft, num2aft)
-                l1 = mid1 + 1
-            else:
-                r1 = mid1 - 1
-
-        return (median1 + median2) / 2 if (m + n) % 2 == 0 else median1
-
-```
 
 
 
@@ -7890,104 +8560,6 @@ class Solution:
 
 
 
-##  145. <a name='K'></a> 【hard】findKthNumber
-
-```py
-我们求字典序第k个就是上图`前序遍历`访问的第k节点！
-
-https://leetcode-cn.com/problems/k-th-smallest-in-lexicographical-order/solution/yi-tu-sheng-qian-yan-by-pianpianboy/
-
-
-但是不需要用`前序遍历`，如果我们能通过`数学方法`求出`节点1`和`节点2`之间需要走几步，减少很多没必要的移动。
-
-其实只需要按`层节点个数计算`即可，图中`节点1`和`节点2`在`第二层`，因为 n = 13，`节点1`可以移动到`节点2`（同一层）所以在第二层需要移动1步。
-
-第三层，移动个数就是 (13 - 10 + 1) = 4 （min（13 + 1， 20） - 10）
-
-所以`节点1`到`节点2`需要移动 1 + 4 = 5 步
-
-1. 当移动步数 <= k，说明: 
-
-需要向`右节点`移动，图中就是`节点1`移动到`节点2`。
-
-2. 当移动步数 > k，说明: 
-
-目标值在`节点1`和`节点2`之间，我们要向下移动！即从`节点1`移动到`节点10`。
-
-
-
-输入: n = 13, k = 2
-输出: 10
-解释: 字典序的排列是 [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]，所以第二小的数字是 10。
-
-
-输入: n = 1, k = 1
-输出: 1
-
-😐用 n 计算：
-calSteps(n, cur, cur + 1)
-calSteps(n, cur, nxt)
-step += - cur +  min(nxt, n + 1) 
-          cur *= 10, nxt *= 10
-
-😐用 k 计算：
-从左往右移动：
-cur += 1
-k -= steps
-
-从上往下移动：
-cur *= 10
-k -= 1
-
-
-class Solution:
-    def findKthNumber(self, n: int, k: int) -> int:
-        
-        def calSteps(n, cur, nxt):
-            step = 0
-            while cur <= n: # 😐😐😐 while 循环
-                step += min(nxt, n+1) - cur # 比如n是195的情况195到100有96个数
-                cur *= 10
-                nxt *= 10
-            return step
-                
-        cur = 1
-        k -= 1 # 扣除掉第一个节点
-        
-        while k > 0: # 😐😐😐 while 循环
-            steps = calSteps(n, cur, cur + 1)
-            if k - steps >= 0 : # 第k个数不在以cur为根节点的树上
-                cur += 1    从左往右移动
-                k -= steps 
-            else:  # 在子树中
-                cur *= 10   从上往下移动
-                k -= 1      刨除根节点
-        
-        return cur
-
-# 当前值： 1 2
-# 当前值： 10 20
-# steps: 11 cur: 2 k: 3
-# 当前值： 2 3
-# 当前值： 20 30
-# steps: 5 cur: 20 k: 2
-# 当前值： 20 21
-# steps: 1 cur: 21 k: 1
-# 当前值： 21 22
-# steps: 1 cur: 22 k: 0
-
-
-ss = Solution()
-print(ss.findKthNumber(23,15))
-
-时间复杂度：O(log N)^2 ，其中 n 为 给定的 数值的大小。
-
-每次计算子树下的节点数目的搜索深度最大为 log 10 N，最多需要搜索 log 10 N
-​
-每一层最多需要计算 10 次，最多需要计算  10 × (log 10 n) ^ 2 次，因此时间复杂度为 O(log N)^2。
-
-空间复杂度：O(1) ，不需要开辟额外的空间，只需常数空间记录常量即可。
-```
 
 ##  169. <a name='N'></a> findNthDigit
 
@@ -9115,57 +9687,6 @@ class Solution:
 
 
 
-##  199. <a name='17.24.'></a> 【hard】【hard】getMaxMatrix
-
-```py
-输入：
-[
-   [-1,0],
-   [0,-1]
-]
-输出：[0,1,0,1]
-解释：输入中标粗的元素即为输出所表示的矩阵
-
-
-
-翻译一个python版本
-
-1.时间复杂度：O(n^2*m)
-2.空间复杂度：O(m)
-
-class Solution:
-    def getMaxMatrix(self, matrix: List[List[int]]) -> List[int]:
-        rows = len(matrix)
-        cols = len(matrix[0])
-        height = [0] * cols
-        maxArea = float('-inf')
-        res = [0] * 4
-        for sttR in range(rows):           
-            height = [0] * cols
-            for r in range(sttR, rows):
-                sumHgt = 0
-                for c in range(cols):
-
-                    height[c] += matrix[r][c]
-                    
-                    if sumHgt <= 0:
-                        sumHgt = height[c]
-                        sttC = c
-                    else:
-                        sumHgt += height[c]
-                    # 把答案存下来
-                    if sumHgt > maxArea:
-                        maxArea = sumHgt
-                        res[0] = sttR
-                        res[1] = sttC
-                        res[2] = r
-                        res[3] = c
-
-        return res
-    
-
-```
-
 ##  200. <a name='-1'></a> triangleNumber
 
 ```py
@@ -9677,173 +10198,6 @@ class Solution:
 
 
 
-##  19. <a name='LongestPalindromicSubstring-'></a> longestPalindrome
-
-
-```py
-输入：s = "babad"
-输出："bab"
-
-
-解释："aba" 同样是符合题意的答案。
-
-
-
-class Solution:
-    def longestPalindrome(self, s: str) -> str:
-        lenStr = len(s)
-        maxlen = maxmaxlen = 1
-        start = 0
-
-        if lenStr == 0:
-            return ''
-
-        if lenStr == 1:
-            return s
-
-        dp = [[False for _ in range(lenStr)] for _ in range(lenStr)]
-
-
-        for end in range(1, lenStr): # 把三角形画出来，先j，再i，
-            for stt in range(end): # 先框定结束j，再框定开始i。
-                if s[stt] == s[end]:
-                    if end - stt < 3:
-                        dp[stt][end] = True
-                    else:
-                        dp[stt][end] = dp[stt + 1][end - 1]
-                if dp[stt][end]:
-                    maxlen = end - stt + 1
-                    if maxlen > maxmaxlen:
-                        maxmaxlen = maxlen
-                        start = stt
-        return s[start: start + maxmaxlen]
-```
-
-##  198. <a name='NumberofLongestIncreasingSubse'></a> 【hard】【hard】findNumberOfLIS
-
-
-```py
-note：这道题返回序列个数
-
-输入: [1,3,5,4,7]
-输出: 2
-解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
-
-
-
-
-输入: [2,2,2,2,2]
-输出: 5
-
-
-解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
-
-
-
-时间复杂度：O(N^2) 
-空间复杂度：O(N)
-
-class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        if n <= 1: return n
-
-        dp = [1 for _ in range(n)] 
-        cnt = [1 for _ in range(n)]
-
-        for end in range(1, n):
-            for stt in range(end):
-                if nums[end] > nums[stt]:
-                    if dp[stt] + 1 > dp[end] : # 更长，则更新最长的长度和个数
-                        dp[end] = dp[stt] + 1
-                        cnt[end] = cnt[stt]
-                    elif dp[stt] + 1 == dp[end] : # 相等时，把个数加上去
-                        cnt[end] += cnt[stt]
-                '''
-                输入: [2,2,2,2,2]
-                这种情况，cnt的每个1都是答案
-                '''
-        res = 0
-        for i in range(n):
-            if max(dp) == dp[i]: # 长度和个数一一对应
-                res += cnt[i]
-        return res
-
-
-
-
-dp:   [1, 2, 1, 1, 1]
-cnt:  [1, 1, 1, 1, 1]
-
-dp:   [1, 2, 3, 1, 1]
-cnt:  [1, 1, 1, 1, 1]
-
-dp:   [1, 2, 3, 3, 1]
-cnt:  [1, 1, 1, 1, 1]
-
-dp:   [1, 2, 3, 3, 4]
-cnt:  [1, 1, 1, 1, 2]
-```
-
-
-
-##  28. <a name='LongestIncreasingSubsequence'></a> 【hard】lengthOfLIS - 长度
-
-
-```py
-输入：nums = [10,9,2,5,3,7,101,18]
-输出：4
-解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
-
-
-
-输入：nums = [0,1,0,3,2,3]
-输出：4
-
-
-
-
-输入：nums = [7,7,7,7,7,7,7]
-输出：1
-
-
-class Solution(object):
-    def lengthOfLIS(self, nums):
-        if not nums:
-            return 0
-
-        dp = [1 for i in range(len(nums))]
-
-        for end in range(1, len(nums)): # 先确定结束，再确定开始
-            for stt in range(end):
-                if nums[end] > nums[stt]:
-                    dp[end] = max(dp[stt] + 1, dp[end])
-
-        return max(dp)
-
-时间复杂度：O(n^2) 
-空间复杂度：O(n) ，需要额外使用长度为 n 的 dp 数组。
-```
-
-
-贪心 + 二分查找
-
-
-```py
-class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        res = []
-        for num in nums:
-            i = bisect_left(res, num)
-            if i == len(res):
-                res.append(num) 
-            else:
-                res[i] = num # 如果新元素代替旧元素
-        return len(res)
-时间复杂度：O(N logN) 
-空间复杂度：O(N)
-```
-
 ##  124. <a name='Offer51.'></a> reversePairs
 
 ```py
@@ -10051,282 +10405,6 @@ class Solution:
         return dp[-1][-1]
 ```
 
-##  150. <a name='-1'></a> 【hard】【hard】isMatch
-
-```py
-输入：s = "aa", p = "a"
-输出：false
-
-
-解释："a" 无法匹配 "aa" 整个字符串。
-
-        """
-        思路：动态规划， 定义二维dp数组，其中dp[i][j]表示s的前i个字符和p的前j个字符是否匹配，
-        为了方便初始化，我们将s和p的长度均+1
-        考虑到P中可能出现三种字符：普通字母(a-z)、'*'或者是'.', 则其动态转移方程分别是：
-        1) 如果p[j]为普通字母，dp[i][j]==dp[i-1][j-1] and s[i]==p[j]
-        2) 如果p[j]为'.', dp[i][j]==dp[i-1][j-1]
-        3) 
-        """
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-        '''
-        如果 p[j] 为 '*', 则情况比较复杂, 分以下两种情况讨论：
-           A. 以 s="c", p="ca*" 为例，此时 '*' 匹配0次，dp[si][pi] = dp[si][pi-2]
-           B. 以 s="caa", p="ca*", p="c.*" 为例，此时 '*' 匹配多次
-        '''
-        # 为了解决s="a", p="c*a"中*组合在p开头0次匹配的问题，
-        # 我们需要额外初始化dp[0][:], 为此，在s前加一特殊字符，以方便操作
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        s = " " + s
-        p = " " + p
-        dp = [[False] * len(p) for _ in range(len(s))]   # [len(s)+1, len(s)+1]
-        dp[0][0] = True  # 假定s和p都从空字符开始
-        
-        for si in range(0, len(s)):  # s的空字符需要额外初始化
-            for pi in range(1, len(p)):
-                if p[pi] == '*':   # *可以出现0次或者多次
-                    dp[si][pi] = dp[si][pi-2] or \ s="c", p="ca*"
-                                (p[pi-1] in ('.', s[si]) and dp[si-1][pi]) \ s="caa", p="ca*  c.*"
-                elif p[pi] in ('.', s[si]):
-                    dp[si][pi] = dp[si-1][pi-1]
-        return dp[-1][-1]
-
-dp[si][pi-2]
-或
-dp[si-1][pi] and p[pi-1] in ('.', s[si])
-```
-
-
-
-
-##  216. <a name='-1'></a> 【hard】isMatch
-
-```py
-给定一个 `字符串 (s)` 和一个 `字符模式 (p)` ，实现一个支持 '?' 和 '*' 的通配符匹配。
-
-'?' 可以匹配任何 `单个字符`。
-'*' 可以匹配 `任意字符串`（包括 `空字符串`）。
-两个字符串完全匹配才算匹配成功。
-
-
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        m, n = len(s), len(p)
-
-        dp = [[False] * (n + 1) for _ in range(m + 1)]
-
-        dp[0][0] = True  
-
-        for pi in range(1, n + 1):
-            dp[0][pi] = dp[0][pi-1] and (p[pi - 1] == '*')
-
-        
-        for si in range(1, m + 1):
-            for pi in range(1, n + 1):
-                if p[pi - 1] == '*': 
-                    dp[si][pi] = dp[si][pi - 1] | dp[si - 1][pi] 
-                    # ​ dp[i-1][j],表示*代表是空字符,例如ab,ab*
-                    # ​ dp[i][j-1],表示*代表非空任何字符,例如abcd,ab*
-                elif p[pi - 1] in ('?', s[si - 1]): 
-                    dp[si][pi] = dp[si - 1][pi - 1]
-                
-        return dp[m][n]
-
-```
-
-
-##  127. <a name='2.'></a> 【hard】backToOrigin
-
-```s
-圆环上有 10 个点，编号为 0 ~ 9。
-从`0点`出发，每次可以`逆时针`和`顺时针`走一步，问走`n步`回到`0点`共有多少种走法。
-
-输入: 2
-输出: 2
-
-
-解释：有 2 种方案。分别是 0->1->0 和 0->9->0
-```
-
-```py
-
-* 时间复杂度: O(nm)
-* 空间复杂度: O(nm)
-
-
-
-# 走 n 步到 0 的方案数 = 走 n-1 步到 1 的方案数 + 走 n-1 步到 9 的方案数。
-# 公式之所以取余是因为 j-1 或 j+1 可能会超过圆环 0~9 的范围
-class Solution:
-    def backToOrigin(self,n):
-        circle = 10
-        # step 在外面，site 在里面
-        dp = [[0 for site in range(circle)] for step in range(n + 1)]
-        dp[0][0] = 1
-        for step in range(1, n + 1): # 走 1 ~ n 步
-            for site in range(circle):
-                # dp[step][site] 表示从 0 出发，走 step 步到 site 的方案数
-                dp[step][site] = dp[step - 1][(site - 1 + circle) % circle] \
-                               + dp[step - 1][(site + 1) % circle]
-        return dp[n][0]
-```
-
-##  176. <a name='SuperEggDrop'></a> 【hard】superEggDrop
-
-
-```py
-输入：k = 1, n = 2
-输出：2
-
-
-输入：k = 2, n = 6
-输出：3
-
-
-
-输入：k = 3, n = 14
-输出：4
-
-
-
-时间复杂度：O(eggs*log level) 
-空间复杂度：O(eggs)。
-
-class Solution:
-    def superEggDrop(self, eggs: int, level: int) -> int:
-            dp = [0] * (eggs + 1)
-            m = 0
-            while dp[eggs] < level:
-                m += 1
-                for gg in range(eggs, 0, -1): # 从 eggs ~ 1
-                    # 鸡蛋碎了，剩下的鸡蛋可以遍历多少楼层
-                    # 鸡蛋没碎，可以遍历的楼层数目
-                    dp[gg] = dp[gg - 1] + dp[gg] + 1
-            return m
-
-```
-
-##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a> 【hard】canPartition - 求种类，每个coin只能用1次 - 从后往前
-
-```py
-
-输入：nums = [1,5,11,5]
-输出：true
-
-解释：数组可以分割成 [1, 5, 5] 和 [11] 。
-
-
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        n = len(nums)
-        
-        sums = sum(nums) 
-        if sums % 2 == 1: return False # 注意，需要排除掉一些特殊状况
-        bagSize = sums // 2 # 求得新的目标
-        
-        dp = [0] * (bagSize+1) 
-        dp[0] = 1 
-        
-        for coin in nums:
-            for tar in range(bagSize, coin - 1, -1):
-                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-
-        return dp[-1] != 0
-
-
-
-时间复杂度： O(n × target)，其中 n 是数组的长度， target 是整个数组的元素和的一半。
-
-空间复杂度： O(target)，其中 target 是整个数组的元素和的一半。
-
-
-```
-
-##  193. <a name='dfsstartIforTargetSum'></a> 【hard】findTargetSumWays - 求种类，每个coin只能用1次 - 从后往前
-
-
-```py
-输入：nums = [1,1,1,1,1], target = 3
-输出：5
-
-解释：一共有 5 种方法让最终目标和为 3 。
--1 + 1 + 1 + 1 + 1 = 3
-+1 - 1 + 1 + 1 + 1 = 3
-+1 + 1 - 1 + 1 + 1 = 3
-+1 + 1 + 1 - 1 + 1 = 3
-+1 + 1 + 1 + 1 - 1 = 3
-
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target) -> int:
-        n = len(nums)
-        # 求得新的目标
-        sums = sum(nums)
-        # 注意，需要排除掉一些特殊状况
-        bagSize = sums + target
-        # 也可以写成：bagSize = sums - target
-        if bagSize % 2 == 1 or bagSize < 0:
-            return 0
-        bagSize = bagSize // 2
-        
-        dp = [0] * (bagSize+1)
-        dp[0] = 1
-        for coin in nums:
-            for tar in range(bagSize, coin - 1, -1):
-                dp[tar] += dp[tar - coin] # 对于没有当前num时的case + 有了num时bagSize-num的cas
-        return dp[-1]
-
-```
-
-##  214. <a name='-1'></a>【hard】isInterleave
-
-```py
-给定三个字符串 s1、s2、s3，请你帮忙验证 s3 是否是由 s1 和 s2 交错 组成的。
-输入：s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
-输出：true
-
-class Solution:
-    def isInterleave(self, string1: str, string2: str, stringtar: str) -> bool:
-        n1 = len(s1)
-        n2 = len(s2)
-        n3 = len(s3)
-        if(n1 + n2 != n3):
-            return False
-
-        dp=[[False]*(n2 + 1) for i in range(n1 + 1)]
-        dp[0][0] = True
-
-        for i in range(1, n1 + 1):
-            dp[i][0] = (dp[i-1][0] and s1[i-1] == s3[i-1])
-
-        for j in range(1, n2 + 1):
-            dp[0][j] = (dp[0][j-1] and s2[j-1] == s3[j-1])
-            
-        for i in range(1, n1 + 1):
-            for j in range(1, n2 + 1):
-                dp[i][j] = (dp[i][j-1] and s2[j-1] == s3[i+j-1]) or \ 
-                            (dp[i-1][j] and s1[i-1] == s3[i+j-1])
-        return dp[-1][-1]
-
-
-
-时间复杂度： O(nm)，两重循环的时间代价为 O(nm)。
-空间复杂度： O(m)，即 s2 的长度。
-```
-
 
 ##  224. <a name='SetMatrixZeroes'></a> setZeroes
 
@@ -10503,46 +10581,5 @@ class Solution(object):
         	i += 1
 
         return sum(isPrime[2:])
-```
-
-
-
-##  123. <a name='Offer62.'></a> 【hard】lastRemaining
-
-```py
-输入: n = 5, m = 3
-输出: 3
-
-
-输入: n = 10, m = 17
-输出: 2
-
-0个人时候游戏就不存在了， 1个人时候直接获胜， 
- 
-反推公式：
-
-f(n,m) = (f(n,m) + m) % i #i为当前人数
-
-f(8,3) = [f(7,3) + 3] % 8
-
-约瑟夫环：
-
-class Solution:
-    def lastRemaining(self, n: int, m: int) -> int:
-        res = 0
-        for i in range(2, n + 1):
-            res = (res + m) % i
-        return res
-
-class Solution:
-    def lastRemaining(self, n: int, m: int) -> int:
-        # 旧编号： 0     1   ...   m-1   m   m+1   ...   n-1
-        # 新编号：-m   -m+1   ...   -1   0   1   ...   n-1
-        if n == 1: return 0
-        return (self.lastRemaining(n-1,m) + m) % n
-
-时间复杂度： O(n)，需要求解的函数值有 n 个。
-
-空间复杂度： O(1)，只使用常数个变量。
 ```
 
