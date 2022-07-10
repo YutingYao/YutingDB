@@ -378,6 +378,48 @@ class Solution:
             head = cur # 易错点: 这一步不能漏
         return head # head 进来，head 返回
 
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if not head: 
+            return None
+        cur = head
+        cnt = 0
+        while cur and cnt != k:
+            cur = cur.next
+            cnt += 1
+        cur = self.reverseKGroup(cur,k)
+        if cnt == k:
+            while cnt:
+                headnxt = head.next
+                head.next = cur
+                cur = head
+                head =  headnxt
+                cnt -= 1
+            head = cur
+        return head
+
+
+不足k个也要反转的话，这么写：
+
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if not head: 
+            return None
+        cur = head
+        cnt = 0
+        while cur and cnt != k:
+            cur = cur.next
+            cnt += 1
+        cur = self.reverseKGroup(cur,k)
+        while cnt:
+            headnxt = head.next
+            head.next = cur
+            cur = head
+            head =  headnxt
+            cnt -= 1
+        head = cur
+        return head
+
 时间复杂度：O(n)，其中 n 是链表的长度。需要遍历链表一次。
 
 空间复杂度：O(1)。
@@ -1323,7 +1365,7 @@ class LRUCache:
 
 
     def put(self, key: int, value: int) -> None:
-        if key in self.cache:
+        if key in self.cache: 
             self.cache.pop(key)
         if len(self.cache) == self.capacity:
             self.cache.popitem(last = False)
@@ -2576,14 +2618,23 @@ for i in range(len(nums)):
 
 ```py
 把最大值移到最后一位上：
-def bubble_sort(nums):
-    n = len(nums)
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        for end in range(len(nums)-1, 0, -1):
+            for stt in range(end):
+                if nums[stt] > nums[stt + 1]:
+                    nums[stt], nums[stt + 1] = nums[stt + 1], nums[stt]
+        return nums
 
-    for i in range(n):
-        for j in range(1, n - i):
-            if nums[j - 1] > nums[j]:
-                nums[j - 1], nums[j] = nums[j], nums[j - 1]
-    return nums
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+
+        for i in range(n):
+            for j in range(1, n - i):
+                if nums[j - 1] > nums[j]:
+                    nums[j - 1], nums[j] = nums[j], nums[j - 1]
+        return nums
 ```
 
 快速排序:
@@ -2629,40 +2680,31 @@ class Solution:
  3  4 5  6
 
 class Solution:
-    def max_heapify(self, heap, root, heap_len):
-        p = root
-        while p * 2 + 2 <= heap_len: # 😐 while 循环 # 当不是叶子节点 
-            l, r = p * 2 + 1, p * 2 + 2 # 代表左右结点
-            if r < heap_len and heap[l] < heap[r]:
+    def heapSort(self, nums, p, heaplen):
+        while 2 * p + 1 < heaplen:
+            l = 2 * p + 1
+            r = 2 * p + 2
+            if 2 * p + 2 < heaplen and nums[r] > nums[l]:
                 bigger = r
             else:
                 bigger = l
-            # 把最大的元素往上提
-            if heap[p] < heap[bigger]:
-                heap[p], heap[bigger] = heap[bigger], heap[p]
+            if nums[p] < nums[bigger]:
+                nums[p], nums[bigger] = nums[bigger], nums[p]
                 p = bigger
             else:
                 break
-        
+
+
     def sortArray(self, nums: List[int]) -> List[int]:
-        # 时间复杂度O(N)
-        # 从叶子节点开始遍历
-        # 如果不是从叶子开始，可能白跑一遍
-        '''
-        把最大值放在 0 的位置
-        '''
-        for i in range(len(nums) - 1, -1, -1):
-            self.max_heapify(nums, i, len(nums))
-            
-        # 时间复杂度O(N logN)
-        for i in range(len(nums) - 1, -1, -1):
-            # 把最大的元素放到末尾
-        '''
-        把最大值 从 0 的位置，依次移到 i 的位置
-        '''
-            nums[i], nums[0] = nums[0], nums[i]
-            self.max_heapify(nums, 0, i)
+        for i in range(len(nums)-1, -1, -1):
+            self.heapSort(nums, i, len(nums))
+
+        for i in range(len(nums)-1, -1, -1):
+            nums[0], nums[i] = nums[i], nums[0]
+            self.heapSort(nums, 0, i)
         return nums
+
+
 
 时间复杂度：O(n logn)
 空间复杂度：O(1)
