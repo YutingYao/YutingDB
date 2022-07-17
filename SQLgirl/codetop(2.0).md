@@ -849,6 +849,10 @@ class Solution:
                     dp[gg] = dp[gg - 1] + dp[gg] + 1
             return m
 
+# 移动次数: 1 鸡蛋 0-3 对应楼层: [0, 1, 1, 1]
+# 移动次数: 2 鸡蛋 0-3 对应楼层: [0, 2, 3, 3]
+# 移动次数: 3 鸡蛋 0-3 对应楼层: [0, 3, 6, 7]
+# 移动次数: 4 鸡蛋 0-3 对应楼层: [0, 4, 10, 14]
 ```
 
 ##  265. <a name='dfsstartIforPartitionEqualSubsetSum'></a> 【hard】canPartition - 求种类，每个coin只能用1次 - 从后往前
