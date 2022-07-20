@@ -485,7 +485,7 @@ cd /opt/kafka/bin
 ```s
 ./kafka-topics.sh --create --bootstrap-server ubuntu01:9092,node01:9092,node02:9092 --replication-factor 3 --partitions 1 --topic test6
 ```
-
+ 
 查看详细描述
 
 ```s

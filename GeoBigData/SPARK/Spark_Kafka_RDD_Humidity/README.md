@@ -23,16 +23,24 @@ start-master.sh
 start-workers.sh
 ```
 
-
+启动kafka：
 
 ```sh
-./bin/kafka-­server-­start.sh
+./kafka-server-start.sh -daemon /opt/kafka/config/server.properties
+```
+
+创建topics
+
+```sh
+./kafka-topics.sh --create --bootstrap-server ubuntu01:9092, node01:9092, node02:9092 --replication-factor 3 --partitions 3 --topic DHT11
 ```
 
 ### 02 - 温湿度数据读入 kafka
 
+把DHT的数据读入producer
+
 ```sh
-python DHT2producer.py
+python DHT2.py
 ```
 
 读入数据的格式为
@@ -40,17 +48,10 @@ python DHT2producer.py
 ```py
 message = {
  'time': time.time(), 
- 'device': socket.gethostname(), 
  'temperature': temperature, 
  'humidity': humidity, 
- 'experiment': EXPERIMENT
  }
 
-简化版：
-
-message = {
- 'temperature': temperature,
- 'humidity':humidity}
 ```
 
 关键语法为：
@@ -62,9 +63,14 @@ producer.flush()
 
 ### 03 - 温湿度数据传输到 spark streaming
 
+
 ```sh
-python consumer2spark.py
+./spark­1.6.1 ­bin ­hadoop2.6/bin/spark ­submit ­­packages org.apache.spark:spark­streaming ­kafka_2.10:1.6.1 spark_consumer.py
 ```
+
+每隔半小时，对之前半小时的数据求平均值
+
+保留60个最近的数据
 
 关键语法为：
 
@@ -72,178 +78,118 @@ python consumer2spark.py
 import json
 from pyspark import SparkConf, SparkContext
 from pyspark.streaming import StreamingContext
-from pyspark.streaming.kafka import KafkaUtils
+from pyspark.streaming.kafka import KafkaUtils, TopicAndPartition
 
 self.sc   = SparkContext(conf=self.conf)
+# creat the Streaming Context from the above spark context with window size n seconds
+interval = 60*30
 self.ssc = StreamingContext(self.sc, batchDuration=interval)
 
-messages = KafkaUtils.createStream(self.ssc, self.zookeeper, "spark-streaming-consumer", {self.topic: 1})
+topics = ["DHT11"]
+offsets = {TopicAndPartition(topic, 0): 0 for topic in topics}
+
+kafkaParams = {"metadata.broker.list": "ubuntu01:9092,node01:9092,node02:9092"}
+
+messages = KafkaUtils.createDirectStream(self.ssc, topics, kafkaParams, offsets)
+
 lines = messages.map(lambda x: x[1])
 
 rows = lines.map(lambda x: { 
+ 'time': json.loads(x)['time'], 
  "temperature": json.loads(x)['temperature'],
  "humidity": json.loads(x)['humidity']
 })
 
-def check_and_write(self, x):
-    try:
-        x.toDF().write.format("org.apache.spark.sql.cassandra").options(table="test1", keyspace = "mykeyspace").save(mode ="append") 
-    except ValueError:
-        print "No rdd found!"
+model = tf.keras.models.load_model("trained_lstm_mod.h5")
+xs = getpre_data(sonsers, prev_day, target_min=30, seq_len=30, feats=['Close', 'Volume'])
+
+
+
 
 rows.foreachRDD(lambda x: {
- self.check_and_write(x)
+ self.predictTemperature(x)
 })
 
 self.ssc.start()
 self.ssc.awaitTermination()
 ```
 
-### 04 - 接下来，运行spark rdd machine，进行预测
-
-参考项目：
-
-- <https://github.com/sarath96kumarh/Real-time-Weather-Prediction>
-
-```sh
-./spark­1.6.1 ­bin ­hadoop2.6/bin/spark ­submit ­­packages org.apache.spark:spark­streaming ­kafka_2.10:1.6.1 spark_consumer.py
-```
-
-将2天的温度、湿度data分别在两台executor机器上计算
-
 ```py
-from pyspark.ml import Pipeline
-df.show(2)
-df.printSchema()
-train, test = df.randomSplit([0.93,0.07])
+# this method gets the previous day data of the stocks, as we need this to construct the data sequence for the LSTM model prediction
+def getpre_data(tickers, start_date, target_min=5, seq_len=60, feats=['Close', 'Volume']):
+    # gets the last 60min of the previous day. Additional minutes taken as we are taking several minutes ahead
+    last_60min = data_all.iloc[-67:-1,:]
+    # initialize xs as empty dictionary
+    xs = {}
+    for t in tickers:
+        if len(tickers) > 1:
+            data_sub = last_60min[t]
+        else:
+            data_sub = last_60min
+        # generate the past day's data as a data sequence in the same dimensions required by the trained LSTM model
+        x_seq = generate_sequences(data_sub, target_min=target_min, seq_len=seq_len, feats=feats)
+        x_seq = x_seq.tolist()
+        xs[t] = x_seq
+    return xs
 
-```
+# this method generates the data sequence in the dimensions needed by the LSTM model
+def generate_sequences(data, target_min=30, seq_len=30, feats=['Close', 'Volume']):
+    if ((len(data)-seq_len) - target_min ) > 0:
+        for i, v in enumerate(range(target_min, len(data)-seq_len)):
+            if i == 0:
+                x = np.expand_dims(data[feats].values[i:i+seq_len, :], axis=0)
+            else:
+                z = np.expand_dims(data[feats].values[i:i+seq_len, :], axis=0)
+                x = np.concatenate((x, z), axis=0)
+    else:
+        x = np.ones((1, seq_len, len(feats)))
+    
+    #print(x.shape)
+    return x
 
-构建 pipeline：
-
-case1:
-
-```py
-stage_1 = RegexTokenizer(inputCol= 'tweet' , outputCol= 'tokens', pattern= '\\W')
-stage_2 = StopWordsRemover(inputCol= 'tokens', outputCol= 'filtered_words')
-stage_3 = Word2Vec(inputCol= 'filtered_words', outputCol= 'vector', vectorSize= 100)
-model = LogisticRegression(featuresCol= 'vector', labelCol= 'label') 
-
-pipeline = Pipeline(stages= [stage_1, stage_2, stage_3, model])
-```
-
-case2:
-
-```py
-indexers = []
-target_indexer = StringIndexer().fit(df_new)
-assembler = VectorAssembler()
-rf = RandomForestClassifier()
-pipeline = Pipeline(stages=indexers+[target_indexer,assembler,rf])
-model = pipeline.fit(train)
-model.save("")
-```
-
-```py
-# Make predictions on test documents and print columns of interest.
-prediction = model.transform(test)
-selected = prediction.select("id", "text", "probability", "prediction")
-for row in selected.collect():
-rid, text, prob, prediction = row
-print("(%d, %s) --> prob=%s, prediction=%f" % (rid, text, str(prob),
-                                    prediction))
-```
-
-```py
-    sc = SparkContext(appName="PythonLinearRegressionWithSGDExample")
-
-    # $example on$
-    # Load and parse the data
-    def parsePoint(line):
-        values = [float(x) for x in line.replace(',', ' ').split(' ')]
-        return LabeledPoint(values[0], values[1:])
-
-    data = sc.textFile("data/mllib/ridge-data/lpsa.data")
-    parsedData = data.map(parsePoint)
-
-    # Build the model
-    model = LinearRegressionWithSGD.train(parsedData, iterations=100, step=0.00000001)
-
-    # Evaluate the model on training data
-    valuesAndPreds = parsedData.map(lambda p: (p.label, model.predict(p.features)))
-    MSE = valuesAndPreds \
-        .map(lambda vp: (vp[0] - vp[1])**2) \
-        .reduce(lambda x, y: x + y) / valuesAndPreds.count()
-    print("Mean Squared Error = " + str(MSE))
-
-    # Save and load model
-    model.save(sc, "target/tmp/pythonLinearRegressionWithSGDModel")
-    sameModel = LinearRegressionModel.load(sc, "target/tmp/pythonLinearRegressionWithSGDModel")
-```
-
-```py
-def predict(df: DataFrame) -> DataFrame:
-    # necessario per i dati che arrivano da kafka
-    df = df.selectExpr("CAST(value AS STRING)") \
-           .select(from_json("value", schema=schema).alias("data")) \
-           .select("data.*")
-    df = pipelineFit.transform(df)  # passo spark df perchè transform vuole un spark df
-    # aggiunge la colonna timestamp e sistema la colonna probability. Poi seleziona solo le colonne utili
-    df = df.withColumn("@timestamp", current_timestamp()) \
-            .withColumn("probability", vector_to_array("probability")) \
-            .select("@timestamp", "title", "polarity", "prediction", "probability")
-    return df
+def predictTemperature(self, rdd):
+    rddDic = rdd.collectAsMap()
+    for key, values in rddDic.items():
+        for main_key, main_values in past_data_seq.items():
+            if key == main_key:
+                # 将最近一分钟的更新值从字符串转换为 dict 类型
+                dic = eval(rddDic[key])
+                # 重新打包为列表项以附加到股票代码的 past_data_seq
+                newVal = [dic['Close'], dic['Volume']]
+                # 删除代码的 past_data_seq 中最旧的元素
+                pastSeq = past_data_seq[main_key][0][1:]
+                # 将来自 spark rdd 流的最新分钟更新附加到股票代码的 past_data_seq
+                pastSeq.append(newVal)
+                past_data_seq[main_key][0] = pastSeq
+                # change the type of the single ticker sequence into a numpy array
+                pastSeq = (np.array(pastSeq) - x_min)/(x_max - x_min)
+                pastSeq = np.reshape(pastSeq, (1,60,2))
+                pred = (model.predict(pastSeq))*(y_max - y_min) + y_min
+                print('The predicted '+  key + ' is '+ str(pred[0][0]))
+        self.kafkaSink({key : pred})
 
 
-dataStream = spark\
-            .readStream \
-            .format('kafka') \
-            .option('kafka.bootstrap.servers', 'kafkaserver:9092') \
-            .option('subscribe', 'news_topic') \
-            .option('startingOffsets', 'earliest')\
-            .load()
-
-dataStream = predict(dataStream)
-
-dataStream.writeStream\
-          .option("checkpointLocation", "./checkpoints") \
-          .format("es") \
-          .start(elastic_index + "/_doc")\
-          .awaitTermination()
-```
-
-### 05 - 将预测结果输出到 kafka
-
-```py
-def kafkaSink(matched_stats, sink_driver):
-    # producer = KafkaProducer(bootstrap_servers="localhost:9092")
-    producer = KafkaProducer(bootstrap_servers = "10.0.0.4:9092, 10.0.0.5:9092, 10.0.0.10:9092")
-    # print(matched_stats)
-    producer.send('hash_matched_stats', matched_stats.encode('utf8'))
+def kafkaSink(self, message):
+    producer = KafkaProducer(bootstrap_servers = "ubuntu01:9092,node01:9092,node02:9092")
 
     for i in range (0, len(sink_driver)):
-        producer.send("driver_topic",sink_driver[i].encode('utf8'))
+        producer.send("predicData",message[i].encode('utf8'))
     producer.flush()
 ```
 
-```py
-message = {
- 'temperature': temperature,
- 'humidity':humidity}
-```
+
 
 ### 06 - 将 kafka 结果输出到 thingsboard
 
 ```py
-camera_access_token = "<insert the access token here for thingsboard device camera>"
-counter_access_token = "<insert the access token here for thingsboard device counter>"
-parking_access_token = "<insert the access token here for thingsboard device counter>"
+access_token = "DHT_DEMO_TOKEN"
 
 consumer = KafkaConsumer(auto_offset_reset='latest',
                         bootstrap_servers=[init_object.kafka_host], 
                         api_version=(0, 10), 
                         consumer_timeout_ms=1000)
 consumer.subscribe(pattern='')    # Subscribe to a pattern
+
 while True:
       for message in consumer:
       #print (message.topic)
@@ -256,16 +202,13 @@ while True:
             data = float(row[2])
             data_json = {} # To sent to Thingsboard
             access_token = ""
-            sensor_id = row[0]
-            if sensor_id == "S1":
-                data_json["camera_count"] = data
-                access_token = camera_access_token
-            elif sensor_id == "S11":
-                data_json["counter"] = data
-                access_token = counter_access_token
-            elif sensor_id == "S12":
-                data_json["parking_space"] = data
-                access_token =  parking_access_token
+            key = row[0]
+            if key == "temperature":
+                data_json["temperature"] = data
+                access_token = access_token
+            elif key == "humidity":
+                data_json["humidity"] = data
+                access_token = access_token
 
             thingsboard_host = init_object.things_host
             post_url = thingsboard_host.replace("$ACCESS_TOKEN", access_token)
