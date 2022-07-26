@@ -6615,6 +6615,41 @@ class Solution:
         return dp[-1][-1]
 
 
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+    #   ''  a a
+    # '' 1  0 0
+    # a  0  1 0
+    # *  1  1 1
+    #   ''  a a
+    # '' 1  0 0
+    # a  0  1 0
+    # .  0  0 1
+    #   ''  a b
+    # '' 1  0 0
+    # a  0  1 0
+    # *  1  1 0
+    # .  0  1 1
+        s = ' ' + s
+        p = ' ' + p
+        sn = len(s)
+        pn = len(p)
+        dp = [[False] * sn for i in range(pn)]
+        dp[0][0] = True
+        for pi in range(pn):
+            for si in range(sn):
+                if p[pi] == '*':
+                    if (pi >= 2) and dp[pi-2][si]:
+                        dp[pi][si] = True
+                        # '*' 前面的一项对得上
+                    elif (pi >= 1) and (si >= 1) and (p[pi-1] in (s[si],'.')) and dp[pi][si-1]:
+                        dp[pi][si] = True
+                elif p[pi] in ('.', s[si]):
+                    if (pi >= 1) and (si >= 1) and dp[pi-1][si-1]:
+                        dp[pi][si] =  True
+        return dp[-1][-1]
+
+
 ```
 
 
@@ -17260,6 +17295,17 @@ class Solution:
                 res += dp0
             dp1, dp0 = res, dp1
         return dp1
+
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        dp = [0]*(len(s) + 1)
+        dp[0] = 1
+        for i in range(len(s)):
+            if '1' <= s[i] <= '9':
+                dp[i+1] = dp[i] 
+            if i > 0 and '10' <= s[i-1:i+1] <= '26':
+                dp[i+1] += dp[i-1]
+        return dp[-1]
 时间复杂度： O(n)，其中 n 是字符串 s 的长度。
 
 空间复杂度： O(n) 或 O(1)。
