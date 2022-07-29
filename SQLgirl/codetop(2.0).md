@@ -3943,19 +3943,18 @@ class Solution:
 
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
-        fast, slow, right = 0, 0, len(nums) - 1
-        while fast <= right: # 😐😐😐😐 while 循环
-            # 交换完位置后 idx 依旧在原位
-            if nums[fast] == 2 and fast < right:
-                nums[fast], nums[right] = nums[right], 2
+        left = 0
+        right = len(nums) - 1
+        idx = 0
+        while idx <= right:
+            if nums[idx] == 2 and idx < right:
+                nums[idx], nums[right] = nums[right], nums[idx]
                 right -= 1
-            # 交换完位置后 idx 依旧在原位
-            elif nums[fast] == 0 and fast > slow:
-                nums[fast], nums[slow] = nums[slow], 0
-                slow += 1
+            elif nums[idx] == 0 and left < idx:
+                nums[idx], nums[left] = nums[left], nums[idx]
+                left += 1
             else:
-            # idx 为 1, 或者 idx 与 [right/left] 相交
-                fast += 1
+                idx += 1
 
 
 时间复杂度： O(N) 
