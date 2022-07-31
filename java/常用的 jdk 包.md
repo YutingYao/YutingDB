@@ -16,7 +16,14 @@
 
 这个是`系统辅助类`，特别是集合类 `Collection,List,Map` 等。
 
+```java
+import java.util.Arrays;
+        Arrays.sort(array);
+        Arrays.equals(array,array1);
+```
+
 ## java.sql:
 
 这个是`数据库操作`的类，`Connection, Statememt，ResultSet` 等
+
 

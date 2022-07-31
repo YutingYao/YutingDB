@@ -472,6 +472,55 @@ Map<String,List<Object>> listMap;
 
 ###  11.5. <a name='-'></a>泛型类-复杂约定好难学
 
+既保证了**通用性**，又保证了**独特性**
+
+原本繁杂的代码：
+
+```java
+public class StringArrayList {
+    private ArrayList list = new ArrayList();
+
+    public boolean add(String value) {
+        return list.add(value);
+    }
+    public String get(int index) {
+        return (String) list.get(index);
+    }
+}
+
+public class PersonArrayList {
+    private ArrayList list = new ArrayList();
+
+    public boolean add(Person value) {
+        return list.add(value);
+    }
+    public Person get(int index) {
+        return (Person) list.get(index);
+    }
+}
+```
+
+使用了`泛型`以后就变得简单，用`符号`代替`具体的类型`
+
+```java
+public class PersonArrayList<E> {
+    private ArrayList list = new ArrayList();
+
+    public boolean add(E value) {
+        return list.add(value);
+    }
+    public E get(int index) {
+        return (E) list.get(index);
+    }
+}
+```
+
+作用：
+
+- 将`运行`时的错误，转到了`编译时期`，以免造成`严重后果`
+- 在获取`元素`时，就不需要`类型转换`了，获取到的`元素`就是`指定类型`
+- 只需要`编写一套代码`，就可以运用`所有类型`
+
 在书写泛型类时，通常做以下的约定：
 
 `E`表示Element，通常用在`集合`中；
@@ -504,7 +553,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>{
 public class ThreadLocal<T>{
 
 }
-public interface Functor<T,X extends Throwable>{
+public interface Functor<T, X extends Throwable>{
     T val() throws X;
 }
 public class Container<K,V>{
