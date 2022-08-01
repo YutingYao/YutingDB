@@ -8,13 +8,346 @@
 
 [码农小g](https://space.bilibili.com/567670)
 
-[RudeCrab](https://space.bilibili.com/1924876999)
+[RudeCrab](https://space.bilibili.com/1924876999) J
 
 [杨博士Java学院](https://space.bilibili.com/389032749)
 
 ## 你的项目中有什么亮点？
 
 https://www.bilibili.com/video/BV1NZ4y1e7ux
+
+## hashCode() + equals()
+
+| hashCode()  | equals()  |
+|---|---|
+| 用于确定对象在`hash表`中的`索引位置` | 用于比较出现`哈希冲突`的两个值  |
+| 用于`快速比较数值`，容易出现`哈希冲突` | 用于比较出现`哈希冲突`的两个值  |
+
+## BigDecimal
+
+用于：金融场景，防止精度丢失
+
+参考：
+https://www.bilibili.com/video/BV1RS4y1P7f5
+
+## 引用拷贝、浅拷贝、深拷贝
+
+| 引用拷贝  | 浅拷贝  | 深拷贝  |
+|---|---|---|
+| only复制【地址】  | 创建新的对象，但仍然复制【引用类型的地址】  | 创建totally新的对象  |
+
+```java
+不建议直接使用 clone(), 容易抛出异常，可以自己编写其他的方法来实现。
+
+public class Person implements Cloneable {
+    public int age;
+    public int[] arr = {1,2,3}; // 调用引用类型的clone
+
+    public Person(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public Person clone() {
+        try {
+            Person person = (Person) super.clone();
+            person.arr = this.arr.clone(); // 调用引用类型的clone
+            return person;
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
+}
+
+Person p1 = new Person(18);
+Person p2 = p1.clone();
+System.out.println(p1 == p2) // false
+System.out.println(p1.equals(p2)) // false
+```
+
+## 异常
+
+```java
+抛出异常：
+
+public static void main(String[] args) throws Exception{
+    // 如果发生异常，则程序终止
+}
+```
+
+```java
+异常捕获：
+
+try{
+    process();
+} catch (IOException e) {
+    // 发生IO异常，才会执行
+} catch (ClassNotFoundException e) {
+    // 发生异常，才会执行
+} catch (Exception e) {
+    // 发生异常，才会执行
+} finally {
+    // 无论是否异常，都会执行
+}
+// 上面发生异常，这里也能执行
+xxx();
+```
+
+```java
+自定义异常：
+
+public class MyException extends RuntimeException {
+    // 非受检异常
+}
+```
+
+```java
+public static void process() throws IOException, ClassNotFoundException {
+    ////////////////////////////////
+}
+
+正确写法：最好用这个：
+public static void fun1() {
+    try {
+        process(); // 编译成功
+    } catch (IOException | ClassNotFoundException e) {
+        ////////////////////////////////
+    }
+}
+正确写法：其次用这个：
+public static void fun2() throws IOException, ClassNotFoundException {
+        process(); // 编译成功
+}
+错误写法：❌
+public static void fun3() {
+        process(); // 编译成功
+}
+```
+
+
+
+## java 中 就`基本类型`不是`对象`
+
+| 基本类型  | 包装类型  |
+|---|---|
+| byte  | Byte  |
+| short  | Short  |
+| int  | Integer  |
+| long  | Long  |
+| float  | Float  |
+| double  | Double  |
+| boolean  | Boolean  |
+| char  | Character  |
+
+
+## main 方法可以被其它方法调用吗
+
+of course！
+
+```java
+class Main {
+    public static void main(String[] args) {
+        A.main(args);
+        B.main(args);
+    }
+}
+
+class A {
+    public static void main(String[] args) {
+        System.out.println("A");
+    }
+}
+
+class B {
+    public static void main(String[] args) {
+        System.out.println("B");
+    }
+}
+
+```
+
+## 内部类（静态、成员、局部、匿名）
+
+作用的范围不同：
+
+- 程序（public class）
+- 包  （class）
+- 静态（静态内部类）
+- 成员（成员内部类）
+- 局部（局部内部类、匿名内部类）
+
+```java
+静态内部类：不需要实例化
+public class Outer {
+    // 要有static final
+    private static final String a = "static final 静态属性";
+    public static class StaticClass {
+        public void fun() {
+            System.out.println(b);
+        }
+    }
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        // 访问成员内部类
+        outer.StaticClass().fun()
+    }
+}
+```
+
+```java
+成员内部类：需要实例化
+public class Outer {
+    private String b = "成员属性";
+    public class MemberClass {
+        public void fun() {
+            System.out.println(b);
+        }
+    }
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        // 访问成员内部类
+        outer.new MemberClass().fun()
+    }
+}
+```
+
+```java
+局部内部类：
+public static void fun() {
+    String c = "局部变量"
+    class LocalClass{
+        public void run() {
+            System.out.println(c);
+        }
+    }
+    new LocalClass().run();
+}
+
+public static void fun() {
+    String c = "局部变量"
+    class LocalClass implements Runnable {
+        @Override
+        public void run() {
+            System.out.println(c);
+        }
+    }
+    LocalClass localClass = new LocalClass();
+    localClass.run();
+}
+
+完全等价于 →
+```
+
+```java
+匿名内部类：
+public static void fun() {
+    String c = "局部变量"
+    Runnable anonymousClass = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println(c);
+        }
+    }
+    anonymousClass.run();
+}
+完全等价于 →
+```
+
+```java
+lambda 表达式：
+public static void fun() {
+    String c = "局部变量"
+    Runnable anonymousClass = () -> System.out.println(c);
+    anonymousClass.run();
+}
+```
+
+## final 关键字
+
+```java
+final 指向【引用对象】：
+
+final User user = new User(); 不能变更对象指向的对象
+❌ user = new User();         不能变更对象指向的对象
+⭕ user.id = 1;               对象的【成员属性】是可以修改的
+```
+
+```java
+final 指向【基本类型】：
+
+final int num = 0; 
+❌ num = 1;
+```
+
+```java
+final 指向【类】：
+
+final class Father {}
+❌ class Son extends Father {}
+```
+
+```java
+final 指向【方法】,该【方法】不能被子类override：
+
+class Father {
+    public final void foo() {
+        // ...
+    }
+}
+class Son extends Father {
+    ❌ @Override
+    ❌ public final void foo() {
+        // ...
+    ❌ }
+}
+```
+
+## CopyOnWriteArrayList
+
+写时复制：适合 → 读多写少, 高并发场景, 线程安全, 读写分离
+
+缺点：
+
+- 增删操作时，会复制多分数据，内存占用大，容易引发GC
+
+- 读数据时，存在数据一致性问题
+
+[线程安全](https://www.bilibili.com/video/BV1Hu411r748)
+
+## java 8 改进了之前的 DATE 的烂设计
+
+```java
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+```
+
+## java 的 字符串 拼接
+
+```java
+String[] names = {"A", "B", "C", "D"};
+StringJoiner sj = new StringJoiner(",", "[", "]");
+for (String name : names) {
+    sj.add(name);
+}
+System.out.println(sj); // 输出：[A,B,C,D]
+```
+
+## 数组是不是对象？
+
+yes！
+
+```java
+引用后，变量也会同步改变。
+int[] arr1 = {1, 2, 3, 4, 5};
+int[] arr2 = arr1;
+arr2[0] = 5;
+System.out.println(arr1[0]); 
+// 输出5
+System.out.println(arr1 instanceof Object); 
+// 输出true
+```
 
 ## Java到底是值传递还是引用传递？
 
@@ -77,10 +410,18 @@ s.value = "点赞也行";
 
 ## 接口
 
+java 提倡：面向接口开发
+
+接口：更精简
+
+抽象类：当需要让`子类`继承`成员变量`，or 需要控制`子类的实例化`时
+
 | 接口  | 抽象类  | 子类 |
 |---|---|---|
-|   | 继承`接口`  | 继承`抽象类` |
+| 少了`成员属性`和`构造器`，只留下`静态常量`和`方法`  | 实现`n个接口`  | 继承`抽象类`, 实现`n个接口` |
 | abstract 方法 | abstract 方法 + 属性  | 重写 方法  |
+| extends | implements  | |
+| extends | implements  | |
 
 
 ```java
@@ -107,6 +448,43 @@ public class Main {
         printCollection(new ArrayList())
         printCollection(new HashSet())
     }
+}
+```
+
+```java
+定义private方法
+
+public interface Runnable {
+    public static final String CONST = "常量"
+    public abstract void fun();
+    void run();
+
+    default void defaultMethod() {
+        System.out.println("default 方法");
+        privateMethod();
+        privateMethod();
+        privateMethod();
+    }
+
+    static void staticMethod() {
+        System.out.println("静态方法");
+    }
+
+    private void privateMethod() {
+        System.out.println("私有方法");
+    }
+}
+
+public class Thread implements Runnable {
+    // 实现【接口】
+}
+
+public class Dog extends Animal {
+    // 实现【抽象类】
+}
+
+public abstract class Pet extends Animal implements A, B, C{
+
 }
 ```
 
@@ -155,6 +533,45 @@ public class Main {
         System.out.println(Arrays.equals(array,array2));
     }
 }
+```
+
+## `==` 和 `equals`
+
+```java
+`==`比较的是【值】：
+int a = 8;
+int b = 8;
+System.out.println(a == b); // ✌true
+
+Long a = 8L;
+System.out.println(a.equals(8)); // ❌false
+System.out.println(a == 8);      // ✌true
+
+
+-------------------------------------
+`==`比较的是【对象的内存地址】：
+`equals`比较的是【对象的内容】：
+Person p1 = new Person("张三");
+Person p2 = p1;
+System.out.println(p1 == p2); // ✌true
+
+-------------------------------------
+Person p3 = new Person("张三");
+Person p4 = new Person("张三");
+System.out.println(p3 == p4);      // ❌false
+System.out.println(p3.equals(p4)); // ✌true
+```
+
+如何避免`空指针`异常?
+
+`Objects.equals`可以有效避免`空指针异常`
+
+```java
+String s1 = null;
+String s2 = new String("螃蟹哥");
+System.out.println("螃蟹哥".equals(s1));     // ✌ 正常运行
+System.out.println(Objects.equals(s1, s2)); // ✌ 正常运行 
+System.out.println(s1.equals(s2));          // 空指针异常
 ```
 
 ## 数组 删除
@@ -257,6 +674,106 @@ public class Main {
 }
 ```
 
+## 可变参数
+
+```java
+【方法重载】时，首先，匹配【固定参数】：
+
+public static void printNames(String name1) {
+    System.out.println("方法 1");
+}
+
+public static void printNames(String name1, String name2) {
+    System.out.println("方法 2");
+}
+
+public static void printNames(String... names) {
+    System.out.println("方法 3");
+}
+
+public static void main(String[] args) {
+    printNames("张三"); // 方法 1
+    printNames("张三", "李四"); // 方法 2
+    printNames("张三", "李四", "王五"); // 方法 3
+}
+```
+
+```java
+【可变参数】必须放在【固定参数】的后面：
+public static void printNames(String name1, String... names) {
+    //...
+}
+```
+
+【可变参数】 与 【数组】 的区别：
+
+```java
+【可变参数】：
+
+public static void printNames(String... names) {
+    for (String name : names) {
+        System.out.println(name + "");
+    }
+}
+
+public static void main(String[] args) {
+    printNames(); // 可以不传参
+    printNames("张三"); // 传参 1 个
+    printNames("张三", "李四"); // 传参 n 个
+}
+
+【数组】：
+
+public static void printNames(String[] names) {
+    for (String name : names) {
+        System.out.println(name + "");
+    }
+}
+
+public static void main(String[] args) {
+    printNames(null); // 可以传 【null】
+    printNames({"张三"}); // 需要构建 【数组】
+    printNames({"张三", "李四"}); 
+    printNames(new String[] {"张三"}); // 需要构建 【数组】
+    printNames(new String[] {"张三", "李四"}); 
+}
+```
+
+## is-a 和 has-a 继承
+
+- is-a：判断【父子类】的关系
+- has-a：判断【类】与【成员】的关系
+
+```java
+定义一个【成员变量】为【翅膀】：
+public class Bird extends Animal {
+    private String wings;
+}
+```
+
+```java
+如何判断是否是继承关系？
+
+Dog is a Animal? ( •̀ ω •́ )yes
+Cat is a Animal? ( •̀ ω •́ )yes
+
+Dog dog = new Dog(); //✌ 成功
+Cat cat = new Cat(); //✌ 成功
+Animal animal1 = new Dog(); //✌ 成功
+Animal animal2 = new Cat(); //✌ 成功
+Dog dog =  new  animal; // ❌ 【编译】报错
+Dog dog =  new  animal; // ❌ 【编译】报错
+
+Animal animal = new Dog();
+Dog dog = animal; //❌ 【编译】报错
+
+Animal animal = new Dog();
+Dog dog = (Dog) animal; //✌ 成功
+
+Animal animal = new Dog();
+Cat cat = (Cat) animal; //❌ 【运行】报错
+```
+
 ## 面向对象的【三大特性】
 
 封装、继承、多态
@@ -317,8 +834,28 @@ System.out.println(user.getPhone()); // 打印 137****1234
 ## abstract
 
 1、抽象类的修饰符必须为`public`或者`protected`, 不能是private, 因为抽象类需要`其子类去实现抽象方法`，private修饰就不能被子类继承，因此子类就不能实现改方法。
-2、抽象类不能直接实例化，需要通过普通子类进行实例化。
+2、抽象类不能直接`实例化`，需要通过普通子类进行实例化。
 3、如果子类`只实现了抽象父类中的一些方法`，那么该子类`任然是抽象类`（不能被实例化）。
+
+```java
+public abstract class Animal {
+    protected String name;
+    protected Animal(String name) {
+        this.name = name;
+    }
+    public abstract void eat();
+}
+
+class Dog extends Animal {
+    public Dog(String name) {
+        super(name);
+    }
+    @Override
+    public void eat() {
+        System.out.println(name + "要开吃了~")
+    }
+}
+```
 
 
 ## enum 和 switch 语句使用
@@ -378,6 +915,49 @@ public final class Season extends Enum {
     public static final Season WINTER = new Season();
     private Season() {} // 防止外部实例化
 }
+```
+
+## 多态
+
+多态的必要条件：
+1. 要有引用
+2. 父类引用指向子类对象
+
+```java
+class Animal {
+    public void eat() {
+        System.out.println("宠物吃东西啦~");
+    }
+}
+
+class 哈士奇 extends Animal {
+    @Override
+    public void eat() {
+        System.out.println("哈士奇吃东西啦~");
+    }
+}
+
+class 东北虎 extends Animal {
+    @Override
+    public void eat() {
+        System.out.println("东北虎吃东西啦~");
+    }
+}
+
+class 加菲猫 extends Animal {
+    @Override
+    public void eat() {
+        System.out.println("加菲猫吃东西啦~");
+    }
+}
+
+public void helpEat(Animal a) {
+    a.eat();
+}
+
+helpEat(哈士奇);
+helpEat(东北虎);
+helpEat(加菲猫);
 ```
 
 ## void 
