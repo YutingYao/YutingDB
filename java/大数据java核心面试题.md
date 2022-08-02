@@ -2,13 +2,9 @@
 
 [起点编程](https://space.bilibili.com/507861978)
 
-[奇葩人鉴定大师](https://space.bilibili.com/1449091145)
-
 [大黄奔跑](https://space.bilibili.com/35654218)
 
 [andjiawei](https://space.bilibili.com/396770061)
-
-[没油感情滴杀手](https://space.bilibili.com/423995623)
 
 [IT简明](https://space.bilibili.com/1400081125)
 
@@ -37,9 +33,19 @@ Java的内存分为5个部分：
   - 本地方法栈 🔸 native语言
   - 程序计数器(pc register) 🔸【当前线程】执行到的【字节码行号】
 
+https://www.bilibili.com/video/BV1Vt4y1V7cz
+
 [2分钟学会对象和引用如何存储在JVM内存](https://www.bilibili.com/video/BV1S5411Q78u)
 
 ## java内存模型
+
+
+
+## Java 中有多少种引用类型？它们的都有什么使用场景？
+
+https://www.bilibili.com/video/BV1e94y1D7ug
+
+
 
 并发编程2个问题：线程间如何通信？消息如何同步？
 
@@ -86,6 +92,10 @@ Java 语言在遵循内存模型的基础上推出了 JMM 规范，目的是解�
 
 为了更精准控制工作内存和主内存间的交互，JMM 还定义了八种操作：lock, unlock, read, load,use,assign, store, write。
 
+## 项目中哪些位置用到了多线程呢？
+
+https://www.bilibili.com/video/BV1nr4y1L7Pj
+
 ## 为了更好的控制主内存和本地内存的交互，Java 内存模型定义了八种操作来实现：
 
 lock：锁定。作用于主内存的变量，把一个变量标识为一条线程独占状态。
@@ -125,9 +135,23 @@ Major GC / Full GC: 指发生新生代的垃圾收集动作
 
 ## java集合有哪些？
 
-## equals和==区别？为什么重写equals要重写hashcode？
+## 内存溢出
+
+https://www.bilibili.com/video/BV1gW411r7By
+
+## equals和==区别？
+
+https://www.bilibili.com/video/BV1cW411Z7XB
+
+https://www.bilibili.com/video/BV13q4y1d7kg
+
+## 为什么重写equals要重写hashcode？
+
+https://www.bilibili.com/video/BV1o34y127Pm
 
 ## ArrayList和LinkedList的区别？
+
+https://www.bilibili.com/video/BV1QW41167Gn
 
 ## ArrayList默认大小，扩容机制？扩容的时候如何将旧数组转化为新数组？
 
@@ -146,7 +170,26 @@ Major GC / Full GC: 指发生新生代的垃圾收集动作
 
 ## equals()和hashcode()了解吗？
 
+## 排序算法和时间复杂度
+
+https://www.bilibili.com/video/BV1Sg411M7Cr
+
 ## 其中hashCode方法的返回值是什么？
+
+https://www.bilibili.com/video/BV1WR4y1J7T4
+
+## 【Java面试题】类加载器
+
+https://www.bilibili.com/video/BV1JW411r758
+
+
+## 我们自己定义的java.lang.String类是否可以被类加载器加载
+
+https://www.bilibili.com/video/BV1MF411e7zY
+
+## String类是否可以被继承
+
+https://www.bilibili.com/video/BV1ev411g7Xk
 
 ## 重写hashCode或equals方法需要注意什么？
 
@@ -162,7 +205,11 @@ Major GC / Full GC: 指发生新生代的垃圾收集动作
 
 ## arraylist 和linkedlist 区别，为什么arrylist查询快
 
+https://www.bilibili.com/video/BV1xe4y1973f
+
 ## 线程 & 进程的区别
+
+https://www.bilibili.com/video/BV1xS4y1t7mR
 
 ## 怎么实现多线程顺序输出下面这，ABC是三个不同的线程
 
@@ -170,7 +217,7 @@ Major GC / Full GC: 指发生新生代的垃圾收集动作
 
 [2分钟记住final的使用](https://www.bilibili.com/video/BV19A4y1o7ET)
 
-线程安全的单例模式
+## 线程安全的单例模式
 
 java集合
 
@@ -178,39 +225,114 @@ java集合
 
 ClassA a=new Class(1) 在jvm中怎么存储
 
-int和integer有什么区别
+## int和integer有什么区别
+
+https://www.bilibili.com/video/BV1ZP4y187Tk
+
+## java方法是值传递还是对象传递
+
+https://www.bilibili.com/video/BV1xL4y1w7jy
 
 
-
-java方法是值传递还是对象传递
-
-
-说一下你对多线程的理解
+## 说一下你对多线程的理解
 
 threadlocal oom是为什么
 
 java sout（0.1+0.2）输出什么，为什么
 
-Java面向对象三大特性
-什么时候用多态
-Java中的反射（不了解，没问）
+## Java面向对象三大特性
+
+https://www.bilibili.com/video/BV1rf4y1E7u9
+
+## 面向对象的【三大特性】
+
+封装、继承、多态
+
+## 说下对象完整创建流程
+
+https://www.bilibili.com/video/BV1J3411G7wA
+
+## 什么时候用多态
+
+https://www.bilibili.com/video/BV18W411C7TC
+
+## Java中的反射（不了解，没问）
+
+https://www.bilibili.com/video/BV1L34y1S7a1
+
+## 隐含的强制类型转换
+
+https://www.bilibili.com/video/BV1Fb4y1Y7wX
+
+
+
 Java集合的框架体系图
 Hashmap和Treemap的区别
 
 2.
-4.g1回收器、cms的回收过程，场景
+## 4.g1回收器、cms的回收过程，场景
+
+[CMS比较严重的问题并发收集阶段再次触发Full gc怎么处理](https://www.bilibili.com/video/BV1BA4y1R7W7)
+
+[G1垃圾收集器最大停顿时间是如何实现的](https://www.bilibili.com/video/BV1TB4y1s7rh)
+
+
 5.遇到oom怎么排查（有jvm提供的工具查看堆栈使用情况，具体不太了解只在跑spark遇到过、分享了下spark里的排查经验和参数调整）
 
 12.用过多线程吗（了解，没具体使用过，就不问了？？八股我都准备输出了）
-13.常用哪些数据集合，介绍hashset
 
-1. threadlocal原理，应用场景
-2. 线程池
-3. java的锁原理
-4. 手写单例模式
+## java中类和对象的关系
 
+https://www.bilibili.com/video/BV1GR4y1p7qw
 
-3.这几个分区在gc里都有什么处理，不同分区的gc策略
+## 访问修饰符
+
+https://www.bilibili.com/video/BV1bf4y1c7Pu
+
+## 常用哪些数据集合，介绍hashset
+
+[HashSet内部是如何工作的](https://www.bilibili.com/video/BV1sq4y1971k)
+
+## threadlocal原理，应用场景
+
+## 线程池的工作原理
+
+https://www.bilibili.com/video/BV1T34y1p7ih
+
+https://www.bilibili.com/video/BV19L411n7mL
+
+## 垃圾回收
+
+https://www.bilibili.com/video/BV1aW41167rS
+
+https://www.bilibili.com/video/BV1xK4y197SH
+
+[什么样的对象会被老年代回收](https://www.bilibili.com/video/BV13K4y1G7Bs)
+
+## Volatile 关键字原理
+
+https://www.bilibili.com/video/BV1SW411U7QM
+
+https://www.bilibili.com/video/BV1KU4y1q7yF
+
+https://www.bilibili.com/video/BV1Ny4y1u7L6
+
+https://www.bilibili.com/video/BV1x3411B7GE
+
+## java的锁原理
+
+## 手写单例模式
+
+https://www.bilibili.com/video/BV1834y1m7Eq
+
+https://www.bilibili.com/video/BV1Fo4y127zN
+
+https://www.bilibili.com/video/BV1iW411S76k
+
+## 这几个分区在gc里都有什么处理，不同分区的gc策略
+
+[GC是什么时候都能做吗？知道GC安全点与安全区域是怎么回事吗？](https://www.bilibili.com/video/BV1oZ4y1q7tu)
+
 hashmap put过程
 
 浏览器从url输入到返回的流程
@@ -242,7 +364,9 @@ java基本数据类型
 
 为什么我们一般都用线程来接收请求（好像是这样问的）
 
-如何保证线程安全
+## 如何保证线程安全
+
+[List的线程安全实现有哪些](https://www.bilibili.com/video/BV1ag41177nn)
 
 如何进行etl链路优化
 
@@ -258,13 +382,27 @@ java基本数据类型
 
 1.1 数据库锁表的相关处理
 1.2 索引失效场景
-1.3 高并发下如何做到安全的修改同一行数据，乐观锁和悲观锁是什么，INNODB的行级锁有哪2种，解释其含义
+
+## Mysql锁有哪些，如何理解
+
+https://www.bilibili.com/video/BV1ff4y1Z7VQ
+
+## 高并发下如何做到安全的修改同一行数据，乐观锁和悲观锁是什么，INNODB的行级锁有哪2种，解释其含义
+
+[并发编程没你想得那么难学，并发学习指南|附学习资料](https://www.bilibili.com/video/BV1br4y1C72X)
+
+
+
 1.4 数据库会死锁吗，举一个死锁的例子，mysql怎么解决死锁
 
 
 
 
-堆和栈的关系
+## 堆和栈的关系
+
+https://www.bilibili.com/video/BV1RW411C7yb
+
+
 
 1.1 hash算法的有哪几种，优缺点，使用场景
 1.2 什么是一致性hash
@@ -284,22 +422,46 @@ mvcc知道吗
 
 1.3 增加一个维度后发现查询的速度变得非常慢，是什么原因导致的？
 
-1.4 大的log文件中，统计异常出现的次数、排序，或者指定输出多少行多少列的内容。
+## 大的log文件中，统计异常出现的次数、排序，或者指定输出多少行多少列的内容。
 
-1.5 linux下的调查问题思路：内存、CPU、句柄数、过滤、查找、模拟POST和GET请求等等场景
+https://www.bilibili.com/video/BV1sr4y127b7
+
+## linux下的调查问题思路：内存、CPU、句柄数、过滤、查找、模拟POST和GET请求等等场景
 
 1.6 分表之后想让一个id多个表是自增的，效率实现
 
 
 1.7 事物的四个特性，以及各自的特点（原子、隔离）等等，项目怎么解决这些问题
 
-一条sql语句运行慢，如何做。（慢查询，看索引，看orderby和groupby）
+## 一条sql语句运行慢，如何做。（慢查询，看索引，看orderby和groupby）
+
+https://www.bilibili.com/video/BV1N34y17715
+
+## 索引的设计原则
+
+https://www.bilibili.com/video/BV1WB4y1s7kD
+
+
 innodb和myisam区别。
 事务的特性，隔离的级别。
 
 分布式session中用的是什么数据结构
 
 # MySQL
+
+## zk的watch机制实现原理
+
+https://www.bilibili.com/video/BV1D3411w7wK
+
+## 简述zk的命名服务、配置管理、集群管理
+
+https://www.bilibili.com/video/BV1r3411F7id
+
+## explain sql 执行计划的各列参数
+
+https://www.bilibili.com/video/BV1mh411q7u5
+
+[Explain语句结果中各个字段分表表示什么](https://www.bilibili.com/video/BV1gt4y1a7sE)
 
 
 数据库视图
@@ -309,7 +471,9 @@ innodb和myisam区别。
 
 数据库引擎mysaim和innoDB的区别
 
-innodb的索引结构
+## innodb的索引结构
+
+https://www.bilibili.com/video/BV1pS4y1v7ew
 
 4.为什么 选用mongo
 
@@ -318,8 +482,14 @@ innodb的索引结构
 
 2. 数据库有哪些类型
 - SQL和NoSQL区别
-- 什么是事务
 
+## 分布式ID有哪些解决方案？
+
+https://www.bilibili.com/video/BV1ea411H7RR
+
+## 什么是事务
+
+https://www.bilibili.com/video/BV1RS4y1d7kr
 
 ## mysql索引是什么结构，索引存储int和字符串有什么区别（不会）
 
@@ -335,9 +505,13 @@ mysql的引擎
 
 mysql的引擎和innodb这类数据库的区别
 
-mysql索引相关的问题，b+树
+## mysql索引相关的问题，b+树
 
-聚簇索引和非聚簇索引
+[讲讲mysql的索引及B树和B+树](https://www.bilibili.com/video/BV1Dq4y1S7GZ)
+
+https://www.bilibili.com/video/BV18U4y197Dx
+
+## 聚簇索引和非聚簇索引
 
 1.1 你们 ADS 层的数据量每天的数据量有多大？ADS 层再 MySQL 中的表是怎么创建的？有什么注意事项？索引怎么创建的？
 
@@ -355,11 +529,15 @@ mysql索引相关的问题，b+树
 
 1.1 mySQL里有2000w数据，redis中只存20w的数据，如何保证redis中的数据都是热点数据
 
-mysql事务ACID特性，隔离级别
+## mysql事务ACID特性，隔离级别
+
+## oracle和mysql的默认事务隔离级别为什么不同
+
+https://www.bilibili.com/video/BV11U4y1J7v7
 
 项目中MySQL的部署方式是什么，怎么保证数据库数据是高可用的
 有考虑过数据库比如MySQL和MongoDB数据库数据丢失问题吗
-mysql隔离机制 默认的是什么
+## mysql隔离机制 默认的是什么
 mysql执行引擎
 
 说一下mysql常用的引擎
@@ -370,281 +548,9 @@ B+树是二叉树吗 平衡树吗
 
 B+树的特点。
 
+
+
 b+树底层是双向链表还是单向
 
  红黑树和跳表的区别
-
-#  redis
-
-## 项目中为什么要用redis，他和其他数据库的比较，和mongodb的比较
-
-redis value类型，日常使用是命令行还是封装的
-
-## redis的持久化方式，以及项目中用的哪种，为什么？aof和rdb的区别，可以共存吗？redis两种持久化方式分别有什么问题？
-
-| RDB  |  AOF |
-|---|---|
-|  Redis DataBase |  Append Only File |
-|  持久化【内存数据】到 → 磁盘(dump.rdb) |  client 发起 → 持久化【修改数据】的命令(appendonly.aof) |
-|  可能丢数据 | 混合持久化：RDB全量 + AOF增量 → 写入AOF文件 |
-
-## redis持久化策略如何设置？
-
-如果对性能要求比较高：
-
-- master: 最好 not 持久化
-- 某个slave: 开启AOF, 每秒1次
-
-## 【非常重要】redis有哪些数据结构？
-
-String 💚 简单动态字符串
-
-List 💚 双向链表、压缩列表
-
-Hash 💚 压缩列表、哈希表
-
-Set 💚 哈希表、整数数组
-
-zset、Sorted Set 💚 压缩列表、跳表
-
-其他：
-
-GeoHash：坐标，借助 Sorted Set 实现
-
-HyperLogLog：统计【不重复数据】
-
-Stream：内存版本的kafka
-
-
-## 跳表底层数据结构？
-
-跳表：将【有序链表】改造为【近似“折半查找”】算法，从而加快增删改查操作
-
-增加了【多级索引】，通过【多级索引位置】的跳转，实现了【快速查找】
-
-## redis 中 hashtable进行rehash的触发机制
-
-## redis的zset是怎么实现的？底层数据结构？
-
-（哈希表＋跳表）
-
-## 【压缩列表】的结构？
-
-列表长度 + 尾部偏移量 + 列表元素个数
-
-`元素1、元素2 。。。元素N`
-
-列表结束标识
-
-## 什么时候用压缩列表？
-
-1. 【有序集合】保存的【元素数量】小于 128 个
-2. 【有序集合】保存的【all 元素长度】小于 64 字节
-
-## 什么时候采用跳表？
-
-## 跳表的时间复杂度
-
-## 跳表如何查找某个元素？描述一下
-
-## zset 为什么用【跳表】而不用【二叉树】or【红黑树】？
-
-1. 【跳表】的实现更【简单】
-2. 便于【范围查找】
-
-## 跳表的节点有什么内容？
-
-## 跳表的查询过程是什么样的？
-
-## 复杂度是多少？
-
-## redis的跳表是双向的，这样设计是为什么？
-
-
-## Redis集群为什么至少需要3个master节点
-
-因为master的选举需要【大于半数节点同意】才能选举成功。
-
-如果只有2个master，其中1个挂了，则无法满足选举条件。
-
-1.1 为什么用缓存，用过哪些缓存，redis和memcache的区别
-
-
-## hash 分片算法
-
-redis集群 将【所有数据】划分为【16384 个 slots】，每个节点负责一部分 slots。
-
-当 client 来连接集群时，它会得到【slots 配置信息】，并将其缓存在 【client 本地】。
-
-这样，当 client 要查找【某个key】时，可以根据【slots 定位算法】定位到 【目标 node】
-
-**【slots 定位算法】：**
-
-```java
-对key使用【CRC16算法】进行hash，再对16384取模
-
-HASH_SLOT = CRC16(key) mod 16384
-
-master1 (0-5000)       master2 (5001-10000)       master3 (10001-16383)
-```
-
-## redis集群的理解，怎么动态增加或者删除一个节点，而保证数据不丢失。
-
-（一致性哈希问题）
-
-## 什么是【主从复制风暴】？
-
-如果Redis有很多【从节点】，【all从节点】在同一时刻，同时连接【主节点】
-
-那么【主节点】会同时把【内存快照RDB】发给多个【从节点】，
-
-这样【主节点压力】very big ！！！
-
-## 如何解决【主从复制风暴】？
-
-【主从架构】优化一下，比如【树形结构】
-
-## Redis主从切换 & 缓存雪崩
-
-要确保【主从 Redis】【机器时钟的一致性】
-
-如果主从切换时，slave 与 master 机器时钟不一致。
-
-从 slave 看来，master 中【没过期的数据】，已经过期了。
-
-slave 开始大量清理【过期的数据】
-
-导致：
-
-1. 【主线程】发生【阻塞】，无法及时处理【client】请求
-
-## Redis集群【网络抖动】导致【频繁主从切换】怎么处理？
-
-网络抖动非常常见。导致【频繁主从切换】会影响集群的性能。
-
-修改`cluster-node-timeout`。可以减少【网络抖动】导致【频繁主从切换】
-
-## 删除 key 命令会阻塞 Redis 吗？
-
-可能会。
-
-1. 删除【单个字符串】的 key，时间复杂度为 O(1)
-2. 删除【list、set、有序set、HashTable类型】的 key，时间复杂度为 O(M)
-
-可能会阻塞 Redis
-
-```java
-DEL key
-```
-
-## Redis的并发竞争问题如何解决了解Redis事务的CAS操作吗
-
-1.1 缓存机器增删如何对系统影响最小，一致性哈希的实现
-1.2 Redis持久化的几种方式，优缺点是什么，怎么实现的
-1.3 Redis的缓存失效策略
-
-## 缓存穿透的解决办法
-
-[Redis缓存穿透是什么？](https://www.bilibili.com/video/BV1YF41157g9)
-
-1.5 redis集群，高可用，原理
-1.6 用Redis和任意语言实现一段恶意登录保护的代码，限制1小时内每用户Id最多只能登录5次
-
-
-
-
-## Redis Key 过期了，为什么内存没有释放？redis怎么设置过期的？
-
-`SET`除了设置`key-value`之外，还可以设置key的`过期时间`，就像下面这样:
-
-```java
-SET tuling zhuge EX 120
-```
-
-而如果，在修改时，没有设置`过期时间`的参数
-
-```java
-SET tuling zhuge666
-```
-
-那么这个key的`过期时间`就会被`擦除`。
-
-```java
-TTL tuling // key 永不过时
-```
-
-如果发现 ① Redis 的内存持续增长；② 很多 key 的过期时间丢失
-
-很有可能就是上述原因导致的。
-
-
-## Redis Key 过期了，为什么内存没有释放？怎么检查？
-
-（周期检查，惰性检查）。
-
-Redis 对于过期 key 的处理一般有`惰性删除`和`定时删除`两种策略
-
-1. 惰性删除：当【读写】一个过期的【key】，发现这个key【已经过期】，就直接删除掉这个key。
-   - Redis 淘汰 Key 的算法：
-   - (1) LRU: 淘汰【很久】没有访问的数据 💨 适用于：绝大多数情况
-   - (2) LFU: 淘汰【访问最少】的数据 💨 适用于：存在大量的缓存热点数据
-2. 定时删除：【惰性删除】无法保障【冷数据】被及时地删掉，所以，Redis会定期【默认100ms】删掉【部分过期的key】，
-3. 仍然有【部分过期的key】没有被清理掉。。。。
-
-## redis的数据【淘汰策略】
-
-一共8种：
-
-(1) 针对【设置了过期时间】的key做处理：
-
-   1. volatile-ttl：根据【过期时间】的先后
-   2. volatile-random：随机删除
-   3. volatile-lru：LRU算法
-   4. volatile-lfu：LFU算法
-
-(2) 针对【所有】的key做处理：
-
-   1. allkeys-random：随机删除
-   2. allkeys-lru：LRU算法
-   3. allkeys-lfu：LFU算法
-
-(3) not 处理：
-
-   1. noeviction：不删除任何数据：只读，不写
-
-## Redis 单线程为什么还能那么快？
-
-1. 基于【内存】
-2. 单线程，没有【线程切换】开销
-3. 基于【IO多路复用机制】，提高了【IO利用率】
-4. 高效的【数据存储结构】，【全局 hash表】 & 【跳表等】
-
-## Redis 单线程 or 多线程？
-
-Redis 6.0 是指的是：
-
-- 【网络请求】采用了【多线程】
-- 【键值对-读写】仍然是【单线程】
-- so 是【并发安全】的
-
-## redis是单线程的，为什么这么设计呢？
-
-（基于内存，瓶颈不在cpu， 加锁反而会带来性能损失）。 
-
-## 单线程一定比多线程好吗？为什么新版本的redis还要变成多线程的？
-
-（答 读多写少的时候，加共享锁多线程性能更好）， 
-
-## 那不考虑这种场景，读写差不多的情况下呢？
-
-结合项目，问我elasticsearch和redis，然后redis会问到一些实现的经过，redis缓存到期后的问题。
-
-
-
-
-
- redis使用的是集群还是单机
-
-redis为什么可以承载那么高的并发量
-
 

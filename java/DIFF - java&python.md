@@ -91,6 +91,8 @@ public class Student extends Person {
 
 ## && 和 & 的区别
 
+https://www.bilibili.com/video/BV1sQ4y1B74C
+
 `A && B` 为短路运算，只要 A 为 false，那么 B 就不要算了，所以效率更高
 
 ## hashCode() + equals()
@@ -108,6 +110,8 @@ public class Student extends Person {
 https://www.bilibili.com/video/BV1RS4y1P7f5
 
 ## 引用拷贝、浅拷贝、深拷贝
+
+https://www.bilibili.com/video/BV1Sf4y1g75Q
 
 | 引用拷贝  | 浅拷贝  | 深拷贝  |
 |---|---|---|
@@ -250,6 +254,10 @@ public static void fun3() {
 
 
 ## java 中 就`基本类型`不是`对象`
+
+[java中的数据类型](https://www.bilibili.com/video/BV1Gr4y127G4)
+
+[八种基本类型包装类的常量池是如何实现的](https://www.bilibili.com/video/BV1d94y127YA)
 
 | 基本类型  | 包装类型  |
 |---|---|
@@ -593,7 +601,15 @@ Map:
 
 - HashMap (LinkedHashMap)
 
+[java中LinkedHashMap和TreeMap是如何保证顺序的？](https://www.bilibili.com/video/BV1e44y1x7GS)
+
 ## 接口
+
+[抽象类和接口的区别](https://www.bilibili.com/video/BV19r4y127HR)
+
+[abstract修饰符的作用](https://www.bilibili.com/video/BV19f4y1j7x3)
+
+https://www.bilibili.com/video/BV1WP4y187PG
 
 java 提倡：面向接口开发
 
@@ -841,6 +857,8 @@ System.out.println(a.equals(b)); // ✌true
 
 ## 字符串 常量池
 
+https://www.bilibili.com/video/BV1VW411y72d
+
 使得`字符串资源`能够复用，减少资源的浪费
 
 ```java
@@ -900,6 +918,10 @@ public class Main {
     }
 }
 ```
+
+## 方法重载和方法重写
+
+https://www.bilibili.com/video/BV1V3411C7MA
 
 ## method overload 方法重载
 
@@ -1059,9 +1081,7 @@ if (animal instance of Dog dog) {
 }
 ```
 
-## 面向对象的【三大特性】
 
-封装、继承、多态
 
 ## private 封装
 
@@ -1331,6 +1351,10 @@ public class Main{
 
 ## static
 
+https://www.bilibili.com/video/BV1nW41167o1
+
+https://www.bilibili.com/video/BV1zL411s7h9
+
 静态修饰符，代表这个类`固有的`，在这个类里面共享，不需要`new一个实例`
 
 `non-static method 非静态方法` = `instance method 实例方法` = new一个实例
@@ -1472,6 +1496,8 @@ public test(String args...){
 
 ## - java异常:
 
+[java中异常的分类](https://www.bilibili.com/video/BV1dv411g7sU)
+
 [![vAh68U.png](https://s1.ax1x.com/2022/08/01/vAh68U.png)](https://imgtu.com/i/vAh68U)
 
 ```java
@@ -1500,7 +1526,17 @@ import java.util.HashMap
 
 ## synchronized 关键字
 
+https://www.bilibili.com/video/BV1q54y1G75e
+
+https://www.bilibili.com/video/BV18y4y1V79v
+
+
+
 ## String、StringBuffer 与 StringBuilder 之间区别
+
+https://www.bilibili.com/video/BV1KQ4y1z76p
+
+https://www.bilibili.com/video/BV1G3411c7cV
 
 `String`:
 
@@ -1520,8 +1556,18 @@ import java.util.HashMap
 
 ## HashMap、Hashtable、ConcurrentHashMap、LinkedHashMap、TreeMap
 
+https://www.bilibili.com/video/BV1Dh411J72Y
+
+[java8的ConcurrentHashMap放弃分段锁](https://www.bilibili.com/video/BV1pq4y157sa)
+
+## Java中的序列化和反序列化
+
+https://www.bilibili.com/video/BV1wL4y1q7z5
+
 ## 线程的创建方式
 
 ## 线程的状态转化
+
+https://www.bilibili.com/video/BV1G44y117rH
 
 ## 接口的幂等性

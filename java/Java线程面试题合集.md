@@ -82,6 +82,7 @@ CountdownLatch 不能`重新使用`。
 
 ## volatile和synchronized区别
 
+[lock与synchronized区别](https://www.bilibili.com/video/BV17W411S7jH)
 
 | volatile关键字  |  synchronized关键字 |
 |---|---|
@@ -179,6 +180,8 @@ Lock接口解决这些问题:
 - 它拥有与 `synchronized 相同 の 并发性`和`内存语义`且它还具有`可扩展性`。
 
 ## `sleep`方法和wait方法有什么区别
+
+https://www.bilibili.com/video/BV1rq4y1X7VC
 
 都会造成某种形式 の 暂停
 
@@ -362,15 +365,6 @@ Runnable接口中的run()方法的返回值是void，它做的事情只是纯粹
 
 
 
-6、volatile关键字的作用
-
-一个非常重要的问题，是每个学习、应用多线程的Java程序员都必须掌握的。理解volatile关键字的作用的前提是要理解Java内存模型，这里就不讲Java内存模型了，可以参见第31点，volatile关键字的作用主要有两个：
-
-1）多线程主要围绕可见性和原子性两个特性而展开，使用volatile关键字修饰的变量，保证了其在多线程之间的可见性，即每次读取到volatile变量，一定是最新的数据。
-
-2）代码底层执行不像我们看到的高级语言----Java程序这么简单，它的执行是Java代码-->字节码-->根据字节码执行对应的C/C++代码-->C/C++代码被编译成汇编语言-->和硬件电路交互，现实中，为了获取更好的性能JVM可能会对指令进行重排序，多线程下可能会出现一些意想不到的问题。使用volatile则会对禁止语义重排序，当然这也一定程度上降低了代码执行效率。
-
-从实践角度而言，volatile的一个重要作用就是和CAS结合，保证了原子性，详细的可以参见java.util.concurrent.atomic包下的类，比如AtomicInteger，更多详情请点击这里进行学习。
 
  
 
@@ -739,6 +733,7 @@ Runnable可以作为Thread构造器的参数，通过开启新的线程来执行
 这里要注意审题,是系统线程状态还是Java中线程的状态?
 
 Java中线程的状态
+
 java.lang.Thread类
 
 public enum State {
@@ -894,7 +889,7 @@ monitorexit指令出现了两次，第1次为同步正常退出释放锁；第2�
 
 总的来说，synchronized的底层原理是通过monitor对象来完成的
 
-17.synchronized和volatile的区别是什么？
+## 17.synchronized和volatile的区别是什么？
 作用：
 
 synchronized 表示只有一个线程可以获取作用对象的锁，执行代码，阻塞其他线程。
@@ -904,8 +899,21 @@ volatile 表示变量在 CPU 的寄存器中是不确定的，必须从主存中
 synchronized 可以作用于变量、方法、对象；volatile 只能作用于变量。
 synchronized 可以保证线程间的有序性、原子性和可见性；volatile 只保证了可见性和有序性，无法保证原子性。
 synchronized 线程阻塞，volatile 线程不阻塞。
-18.synchronized和Lock的区别是什么？
+
+## 18.synchronized和Lock的区别是什么？
+
 在多线程情况下，锁是线程控制的重要途径。Java为此也提供了2种锁机制，synchronized和lock。
+
+## volatile关键字的作用
+
+一个非常重要的问题，是每个学习、应用多线程的Java程序员都必须掌握的。理解volatile关键字的作用的前提是要理解Java内存模型，这里就不讲Java内存模型了，可以参见第31点，volatile关键字的作用主要有两个：
+
+1）多线程主要围绕可见性和原子性两个特性而展开，使用volatile关键字修饰的变量，保证了其在多线程之间的可见性，即每次读取到volatile变量，一定是最新的数据。
+
+2）代码底层执行不像我们看到的高级语言----Java程序这么简单，它的执行是Java代码-->字节码-->根据字节码执行对应的C/C++代码-->C/C++代码被编译成汇编语言-->和硬件电路交互，现实中，为了获取更好的性能JVM可能会对指令进行重排序，多线程下可能会出现一些意想不到的问题。使用volatile则会对禁止语义重排序，当然这也一定程度上降低了代码执行效率。
+
+从实践角度而言，volatile的一个重要作用就是和CAS结合，保证了原子性，详细的可以参见java.util.concurrent.atomic包下的类，比如AtomicInteger，更多详情请点击这里进行学习。
+
 
 我们这里不讨论具体的实现原理和细节,只讨论它们的区别
 
@@ -1915,7 +1923,15 @@ public class XKDaemon {
 
 结果：
 没有任何的输出，说明没有执行finally。
-26.设置线程上下文类加载器
+
+## 设置线程上下文类加载器
+
+[类加载机制和类加载器 双亲委派](https://www.bilibili.com/video/BV17M4y1G7W7)
+
+[类加载机制](https://www.bilibili.com/video/BV1e34y177YY)
+
+https://www.bilibili.com/video/BV1ja411L7k1
+
 获取线程上下文类加载器
 public ClassLoader getContextClassLoader()
 
@@ -2954,7 +2970,7 @@ ConcurrentHashMap中则是一次锁住一个桶。ConcurrentHashMap默认将hash
 另外ConcurrentHashMap使用了一种不同的迭代方式。在这种迭代方式中，当iterator被创建后集合再发生改变就不再是抛出
 ConcurrentModificationException，取而代之的是在改变时new新的数据从而不影响原有的数据 ，iterator完成后再将头指针替换为新的数据 ，这样iterator线程可以使用原来老的数据，而写线程也可以并发的完成改变。
 
-69、CopyOnWriteArrayList可以用于什么应用场景？
+## CopyOnWriteArrayList可以用于什么应用场景？
 
 
 CopyOnWriteArrayList(免锁容器)的好处之一是当多个迭代器同时遍历和修改这个列表时，不会抛出ConcurrentModificationException。在CopyOnWriteArrayList中，写入将导致创建整个底层数组的副本，而源数组将保留在原地，使得复制的数组在被修改时，读取操作可以安全地执行。
