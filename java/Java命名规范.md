@@ -580,6 +580,79 @@ public static <T> List<T> methodName(Class<T> clz){
 }
 ```
 
+### 什么情况用`泛型类`？
+
+当`泛型参数`需要在多个`方法`or`成员属性`间扭转，自然就要用到`泛型类`
+
+```java
+public class ArrayList<E> {
+    静态方法：无法访问泛型类的泛型参数
+    private static E data;              //❌编译错误
+    private static void set(E data) {   //❌编译错误
+        this.data = data;               //❌编译错误
+    };
+    transient Object[] elementData;
+    public E get(int index) {
+        return (E) elementData[index];
+    }
+    public boolean add(E e) {
+        ...
+        return true;
+    }
+}
+
+泛型类中的 泛型参数：
+需要在【实例化】该类时，指定【具体类型】：
+ArrayList<String> strList = new ArrayList<>();
+ArrayList<Integer> intList = new ArrayList<>();
+ArrayList<int> intList = new ArrayList<>(); // 编译错误
+
+在【泛型】中使用【基本类型】时，会自动装箱成【包装类】
+intList.add(123);
+Interger num = intList.get(0);
+
+```
+
+注意：泛型之类型，在运行时被擦除，也就是说，没有 `ArrayList<String>`, `ArrayList<Integer>`。只有 `ArrayList`。
+
+## 泛型方法
+
+`泛型方法`会根据`调用`进行`类型推导`
+
+```java
+普通类：
+public class GenericMethod {
+    静态方法：要使用泛型，必须定义成【泛型方法】
+    public static <T> T get(T t) {
+        return t;
+    }
+}
+
+GenericMethod gm = new GenericMethod();
+String s = gm.get("一键三连")
+Person p = gm.get(new Person())
+编译器，会将其推导为【包装类】
+Integer s = gm.get(666)
+Double s = gm.get(123.0)
+```
+
+### 泛型接口
+
+```java
+public interface Generic<T> {
+    void process(T t);
+}
+```
+
+### 泛型类和泛型方法
+
+|泛型类   |泛型方法   |
+|---|---|
+| 需要在【实例化】该类时，指定【具体类型】  |  会根据`调用`进行`类型推导` |
+| 静态方法：不能访问【泛型参数】  |  静态方法：可以访问【泛型参数】 |
+| 适用于：泛型参数需要在多个`方法`or`成员属性`间扭转  | 适用于：只需作用于某个方法  |
+
+
 ###  11.6. <a name='-Impl'></a>接口实现类-Impl后缀
 
 为了便于阅读，在通常情况下，

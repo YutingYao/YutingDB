@@ -16,6 +16,83 @@
 
 https://www.bilibili.com/video/BV1NZ4y1e7ux
 
+## super和this
+
+```java
+class Person {
+    【属性】
+    private String name;
+    private Interger age;
+
+    【构造方法】
+    public Person() {
+        this("匿名"，18)
+    }
+
+    public Person(Integer age) {
+        this("匿名"，age)
+    }
+
+    public Person(String name) {
+        this(name，18)
+    }
+
+    public Person(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    【方法】
+    public void introduce() {
+        System.out.println("我的名字是%s, 今年%d岁", name, age);
+    }
+
+    public void introduceTwo() {
+        introduce();
+        this.introduce();
+    }
+
+    public void setName(String inputName) {
+        // 省去 this 关键字
+        name = inputName;
+        this.name = inputName;
+    }
+    public void setAge(String inputAge) {
+        // 省去 this 关键字
+        age = inputAge;
+        this.age = inpuAge;
+    }
+}
+```
+
+```java
+public class Student extends Person {
+    public Student(String name) {
+        this(name, 18);
+    }
+    public Student(String name, Integer age) {
+        super(name, age);
+    }
+    @Override
+    public void introduce() {
+        // 复用父类逻辑
+        super.introduce();
+        System.out.println("我是一名学生。");
+    }
+
+    public static void main(String[] args) {
+        Student student = new Student("张三", 16);
+        student.introduce();
+        打印结果为：我的名字是张三, 今年16岁。我是一名学生。
+    }
+
+}
+```
+
+## && 和 & 的区别
+
+`A && B` 为短路运算，只要 A 为 false，那么 B 就不要算了，所以效率更高
+
 ## hashCode() + equals()
 
 | hashCode()  | equals()  |
@@ -68,10 +145,62 @@ System.out.println(p1.equals(p2)) // false
 ## 异常
 
 ```java
+public static void process(String arg) {
+    if (arg = null) {
+        arg = "默认值";
+    }
+    ...继续执行业务逻辑
+}
+
+public static boolean process(String arg) {
+    if (arg = null) {
+        return false;
+    }
+    ...继续执行业务逻辑
+    return true;
+}
+
+public static void process(String arg) {
+    if (arg = null) {
+        throw new MyException();
+    }
+    ...继续执行业务逻辑
+}
+```
+
+```java
+自定义异常：😀照着父类学习
+
+public class MyException extends RuntimeException {
+    // 非受检异常
+    public MyException() {
+        // ...
+    }
+
+    public MyException(String message) {
+        super(message);
+    }
+
+    public MyException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public MyException(Throwable cause) {
+        super(cause);
+    }
+}
+```
+
+```java
+
 抛出异常：
 
 public static void main(String[] args) throws Exception{
     // 如果发生异常，则程序终止
+    throw new MyException();                           // 直接抛出异常
+    throw new MyException("没有一键三连，程序崩溃");     // 抛出异常的同时，传递异常信息
+    throw new MyException(new NullPointerException()); // 抛出异常的同时，传递其他异常的堆栈信息
+    throw 只能在代码块中
 }
 ```
 
@@ -93,13 +222,7 @@ try{
 xxx();
 ```
 
-```java
-自定义异常：
 
-public class MyException extends RuntimeException {
-    // 非受检异常
-}
-```
 
 ```java
 public static void process() throws IOException, ClassNotFoundException {
@@ -302,6 +425,54 @@ class Son extends Father {
 }
 ```
 
+## 迭代器 - 迭代器 之间 具有 独立性 和 隔离性
+
+`迭代器-集合`的关系：
+
+`集合`不直接访问 `iterator()`，而是先访问 `Iterable()` 这样是为了保证`独立性`和`隔离性`
+
+```java
+public interface Iterable {
+    Iterator iterator();
+}
+
+public interface Collection extends Iterable {
+    // ...
+}
+
+迭代器的使用：col.iterator()
+Collection col = new ArrayList();
+Iterator iterator = col.iterator();
+while (iterator.hasNext()) {
+    System.out.println(iterator.next());
+}
+```
+
+如果没有迭代器：
+
+- 一个进程遍历完
+- 另一个进程，没有数据了
+
+可以用于 `for 循环`:
+
+```java
+String[] names = {"A", "B", "C", "D"};
+StringJoiner sj = new StringJoiner(",", "[", "]");
+for (String name : names) {
+    sj.add(name);
+}
+System.out.println(sj); // 输出：[A,B,C,D]
+```
+
+`for 循环` 底层 就是 `迭代器`:
+
+```java
+public interface Iterator {
+    boolean hasNext();
+    Object next();
+}
+```
+
 ## CopyOnWriteArrayList
 
 写时复制：适合 → 读多写少, 高并发场景, 线程安全, 读写分离
@@ -313,6 +484,8 @@ class Son extends Father {
 - 读数据时，存在数据一致性问题
 
 [线程安全](https://www.bilibili.com/video/BV1Hu411r748)
+
+[迭代器之：fail-fast](https://www.bilibili.com/video/BV1MU4y1U71B)
 
 ## java 8 改进了之前的 DATE 的烂设计
 
@@ -408,6 +581,18 @@ set.add(s);
 s.value = "点赞也行";
 ```
 
+## 集合
+
+Collection:
+
+- List (ArrayList)
+- Queue (LinkedList)(ArrayDeque)
+- Set (HashSet)
+
+Map:
+
+- HashMap (LinkedHashMap)
+
 ## 接口
 
 java 提倡：面向接口开发
@@ -485,6 +670,41 @@ public class Dog extends Animal {
 
 public abstract class Pet extends Animal implements A, B, C{
 
+}
+```
+
+## 接口`method名称`冲突
+
+`类`的优先级比`接口`高
+
+`子类`的优先级比`父类`高
+
+一言以蔽之！！！就是越具体的越优先
+
+```java
+当无法区分时，必须重写方法：A.super.run()
+
+public interface A {
+    default void run() {
+        System.out.println("A RUN")
+    }
+}
+
+public interface B {
+    default void run() {
+        System.out.println("B RUN")
+    }
+}
+
+public class Son implements A, B {
+    public static void main(String[] args) {
+        new Son().run();
+    }
+
+    @Override
+    public void run() {
+        A.super.run(); // 打印 A Run
+    }
 }
 ```
 
@@ -595,6 +815,47 @@ public class Main {
         System.out.println(array);
         System.out.println(newArray);
     }
+}
+```
+
+## 包装类型 缓存池
+
+如果【缓存池】有，直接返回【缓存对象】
+如果【缓存池】没有，在【堆空间】创建新的对象
+
+```java
+Integer a = 8;
+Integer b = 8;
+Integer c = Integer.valueOf(8);
+Integer d = new Integer(8);
+System.out.println(a == b); // ✌true
+System.out.println(a == c); // ✌true
+System.out.println(a == d); // ❌false
+
+a = 128;
+b = 128;
+System.out.println(a == b);      // ❌false
+System.out.println(a.equals(b)); // ✌true
+
+```
+
+## 字符串 常量池
+
+使得`字符串资源`能够复用，减少资源的浪费
+
+```java
+String s1 = "abc";
+String s2 = "abc";
+System.out.println(s1 == s2);//✌true
+```
+
+```java
+public static final Person PERSON = new Person(18);
+
+public static void main(String[] args) {
+    Person p1 = PERSON;
+    Person p2 = PERSON;
+    System.out.println(p1 == p2);
 }
 ```
 
@@ -772,6 +1033,30 @@ Dog dog = (Dog) animal; //✌ 成功
 
 Animal animal = new Dog();
 Cat cat = (Cat) animal; //❌ 【运行】报错
+
+public static void shower(Animal animal) {
+    // ...
+}
+
+public static void main(String[] args) {
+    shower(new Dog());
+    shower(new Cat());
+}
+```
+
+```java
+java14 在 instanceof 之后，直接声明变量:
+
+
+Animal animal = new Dog();
+// Java 14 之前
+if (animal instance of Dog) {
+    Dog dog = (Dog) animal; //✌ 成功
+}
+
+// Java 14 直接声明变量:
+if (animal instance of Dog dog) {
+}
 ```
 
 ## 面向对象的【三大特性】
@@ -1185,7 +1470,9 @@ public test(String args...){
 }
 ```
 
-- java异常:
+## - java异常:
+
+[![vAh68U.png](https://s1.ax1x.com/2022/08/01/vAh68U.png)](https://imgtu.com/i/vAh68U)
 
 ```java
 try{
@@ -1214,6 +1501,22 @@ import java.util.HashMap
 ## synchronized 关键字
 
 ## String、StringBuffer 与 StringBuilder 之间区别
+
+`String`:
+
+- 不可变
+- 操作少量数据，或者不操作数据时使用
+
+`StringBuilder`:(优先选择)
+
+- 可变
+- 线程不安全
+
+`StringBuffer`:
+
+- 可变
+- 线程安全
+- 性能较低
 
 ## HashMap、Hashtable、ConcurrentHashMap、LinkedHashMap、TreeMap
 
