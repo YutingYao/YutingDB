@@ -1524,11 +1524,6 @@ import java.util.HashMap
 - java中`伴生对象`：`static关键字`
 - java中的`trait`：接口`interface`
 
-## synchronized 关键字
-
-https://www.bilibili.com/video/BV1q54y1G75e
-
-https://www.bilibili.com/video/BV18y4y1V79v
 
 
 
@@ -1554,11 +1549,7 @@ https://www.bilibili.com/video/BV1G3411c7cV
 - 线程安全
 - 性能较低
 
-## HashMap、Hashtable、ConcurrentHashMap、LinkedHashMap、TreeMap
 
-https://www.bilibili.com/video/BV1Dh411J72Y
-
-[java8的ConcurrentHashMap放弃分段锁](https://www.bilibili.com/video/BV1pq4y157sa)
 
 ## Java中的序列化和反序列化
 
