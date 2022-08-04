@@ -1920,11 +1920,6 @@ public class XKDaemon {
 根据【包名、class名】首先判断自己是否已经加装，然后【委托给】父加载器加装
 
 
-[类加载机制和类加载器 双亲委派](https://www.bilibili.com/video/BV17M4y1G7W7)
-
-[类加载机制](https://www.bilibili.com/video/BV1e34y177YY)
-
-https://www.bilibili.com/video/BV1ja411L7k1
 
 获取线程上下文类加载器
 public ClassLoader getContextClassLoader()

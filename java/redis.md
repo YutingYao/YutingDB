@@ -2,6 +2,14 @@
 
 [Redis学到什么程度，面试不虚心](https://www.bilibili.com/video/BV1Jm4y197xG)
 
+## 什么是Redis
+
+https://www.bilibili.com/video/BV1Th411b7fN
+
+## Redis和Mysql如何保证数据一致性，如何高分回答？
+
+https://www.bilibili.com/video/BV1y44y1N7X3
+
 ## 项目中为什么要用redis，他和其他数据库的比较，和mongodb的比较
 
 redis value类型，日常使用是命令行还是封装的
