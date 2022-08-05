@@ -1,36 +1,1023 @@
-https://www.bilibili.com/video/BV1KL4y1K7Ry
-
 # java
 
+[经典鸡翅](https://space.bilibili.com/386498238) 这些视频比较高级，没有工作经验，看不太懂
+
+[设计源于生活中](https://space.bilibili.com/484405397) 代码题
+
+## 强平衡⼆叉树和弱平衡⼆叉树有什么区别
+
+https://www.bilibili.com/video/BV1oF411M78u
+
+## Maven中Package和Install的区别
+
+https://www.bilibili.com/video/BV1PT4y1a7A1
+
+## K8S
+
+https://www.bilibili.com/video/BV1vP4y1J7EQ
+
+## 系统保护机制
+
+https://www.bilibili.com/video/BV1UY411b7W8
+
+## ES的理解
+
+https://www.bilibili.com/video/BV16h41147jy
+
+## Docker
+
+https://www.bilibili.com/video/BV1xR4y1W7Nh
+
+## ArrayBlockQueue
+
+https://www.bilibili.com/video/BV17A4y197em
+
+## 说一下你熟悉的设计模式？
+
+创、结、行
+
+按照模式的【应用目标】分类：
+
+1. 创建型：对【对象创建过程】的各种问题 and 解决方案 の 一个总结。
+2. 结构型：对【软件设计结构】的总结。重点关注【类、对象继承、组合方式】的实践经验的总结
+3. 行为型：【从类】or【对象】之间的【交互】，【职责划分】等角度，总结的模式
+
+## 在学习【框架】或【中间件】底层源码遇到的设计模式？
+
+[【23种设计模式全解析】终于有人用一个项目将23中设计模式全部讲清楚了](https://www.bilibili.com/video/BV19g411N7yx)
+
+1. 创建型：
+      1. 工厂模式
+      2. 单例模式
+      3. 建造者模式
+      4. 原型模式
+2. 结构型：
+      1. 适配器模式
+      2. 桥接模式
+      3. 过滤器模式
+      4. 组合模式
+      5. 装饰器模式
+      6. 外观模式
+      7. 享元模式
+      8. 代理模式
+3. 行为型：
+      1. 责任链模式
+      2. 命令模式
+      3. 解释器模式
+      4. 迭代器模式
+      5. 中介者模式
+      6. 备忘录模式
+      7. 观察者模式
+      8. 状态模式
+      9. 空对象模式
+      10. 策略模式
+      11. 模板模式
+      12. 访问者模式
+
+https://www.bilibili.com/video/BV1M44y137oe
+
+https://www.bilibili.com/video/BV1UF411u7pm
+
+https://www.bilibili.com/video/BV1zg411Z7AH
+
+1. `单例模式`：保证被创建一次，节省系统开销。
+2. `工厂模式`（简单工厂、抽象工厂）：解耦代码。
+3. `观察者模式`：定义了对象之间的一对多的依赖，这样一来，当一个对象改变时，它的所有的依赖者都会收到通知并自动更新。
+4. `外观模式`：提供一个统一的接口，用来访问子系统中的一群接口，外观定义了一个高层的接口，让子系统更容易使用。
+5. `模版方法模式`：定义了一个算法的骨架，而将一些步骤延迟到`子类`中，模版方法使得`子类`可以在不改变算法结构的情况下，重新定义算法的步骤。
+6. `状态模式`：允许对象在内部状态改变时改变它的行为，对象看起来好像修改了它的类。
+
+## 时间轮
+
+https://www.bilibili.com/video/BV1uv4y1u7Xm
+
+## 对网络四元组的理解
+
+https://www.bilibili.com/video/BV1GT4y1i7T2
+
+## 什么是服务网格？
+
+https://www.bilibili.com/video/BV1nS4y1N7Ax
+
+## 你的项目中有什么亮点？
+
+https://www.bilibili.com/video/BV1NZ4y1e7ux
+
+
+
+## && 和 & 的区别
+
+https://www.bilibili.com/video/BV1sQ4y1B74C
+
+`A && B` 为短路运算，只要 A 为 false，那么 B 就不要算了，所以效率更高
+
+
+
+## BigDecimal
+
+用于：金融场景，防止精度丢失
+
+参考：
+https://www.bilibili.com/video/BV1RS4y1P7f5
+
+
+
+
+
+
+## main 方法可以被其它方法调用吗
+
+of course！
+
+```java
+class Main {
+    public static void main(String[] args) {
+        A.main(args);
+        B.main(args);
+    }
+}
+
+class A {
+    public static void main(String[] args) {
+        System.out.println("A");
+    }
+}
+
+class B {
+    public static void main(String[] args) {
+        System.out.println("B");
+    }
+}
+
+```
+
+
+
+
+
+## final 关键字
+
+```java
+final 指向【引用对象】：
+
+final User user = new User(); 不能变更对象指向的对象
+❌ user = new User();         不能变更对象指向的对象
+⭕ user.id = 1;               对象的【成员属性】是可以修改的
+```
+
+```java
+final 指向【基本类型】：
+
+final int num = 0; 
+❌ num = 1;
+```
+
+```java
+final 指向【类】：
+
+final class Father {}
+❌ class Son extends Father {}
+```
+
+```java
+final 指向【方法】,该【方法】不能被子类override：
+
+class Father {
+    public final void foo() {
+        // ...
+    }
+}
+class Son extends Father {
+    ❌ @Override
+    ❌ public final void foo() {
+        // ...
+    ❌ }
+}
+```
+
+## 迭代器 - 迭代器 之间 具有 独立性 和 隔离性
+
+`迭代器-集合`的关系：
+
+`集合`不直接访问 `iterator()`，而是先访问 `Iterable()` 这样是为了保证`独立性`和`隔离性`
+
+```java
+public interface Iterable {
+    Iterator iterator();
+}
+
+public interface Collection extends Iterable {
+    // ...
+}
+
+迭代器的使用：col.iterator()
+Collection col = new ArrayList();
+Iterator iterator = col.iterator();
+while (iterator.hasNext()) {
+    System.out.println(iterator.next());
+}
+```
+
+如果没有迭代器：
+
+- 一个进程遍历完
+- 另一个进程，没有数据了
+
+可以用于 `for 循环`:
+
+```java
+String[] names = {"A", "B", "C", "D"};
+StringJoiner sj = new StringJoiner(",", "[", "]");
+for (String name : names) {
+    sj.add(name);
+}
+System.out.println(sj); // 输出：[A,B,C,D]
+```
+
+`for 循环` 底层 就是 `迭代器`:
+
+```java
+public interface Iterator {
+    boolean hasNext();
+    Object next();
+}
+```
+
+
+## Java里遍历集合出现并发修改异常, 迭代器 iterator
+
+https://www.bilibili.com/video/BV1xf4y1i7xS
+
+## CopyOnWriteArrayList
+
+写时复制：适合 → 读多写少, 高并发场景, 线程安全, 读写分离
+
+缺点：
+
+- 增删操作时，会复制多分数据，内存占用大，容易引发GC
+
+- 读数据时，存在数据一致性问题
+
+[线程安全](https://www.bilibili.com/video/BV1Hu411r748)
+
+[迭代器之：fail-fast](https://www.bilibili.com/video/BV1MU4y1U71B)
+
+## SimpleDateFormat 是线程安全的吗
+
+https://www.bilibili.com/video/BV1zS4y1x7qD
+
+## java 8 改进了之前的 DATE 的烂设计
+
+```java
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+```
+
+## java 的 字符串 拼接
+
+```java
+String[] names = {"A", "B", "C", "D"};
+StringJoiner sj = new StringJoiner(",", "[", "]");
+for (String name : names) {
+    sj.add(name);
+}
+System.out.println(sj); // 输出：[A,B,C,D]
+```
+
+## 数组是不是对象？
+
+yes！
+
+```java
+引用后，变量也会同步改变。
+int[] arr1 = {1, 2, 3, 4, 5};
+int[] arr2 = arr1;
+arr2[0] = 5;
+System.out.println(arr1[0]); 
+// 输出5
+System.out.println(arr1 instanceof Object); 
+// 输出true
+```
+
+## Java到底是值传递还是引用传递？
+
+Java 只有`值传递`
+
+```java
+public static void main(String[] args) {
+    Person p =  new Person("张三");
+    fun(p);
+    System.out.println("实参：" + p);
+}
+
+public static void fun(Person p) {
+    p =  new Person("李四");
+    System.out.println("形参：" + p);
+}
+
+打印结果：
+形参：Person{name='李四'}
+实参：Person{name='张三'}
+```
+
+```java
+
+public static void main(String[] args) {
+    Person p =  new Person("张三");
+    fun(p);
+    System.out.println("实参：" + p);
+}
+
+public static void fun(Person p) {
+    p.name("李四");
+    System.out.println("形参：" + p);
+}
+
+打印结果：
+形参：Person{name='李四'}
+实参：Person{name='李四'}
+```
+
+## string 是不可变的
+
+```java
+// Person 是可变的
+Person P = new Person(18);
+p.setAge(20);
+
+// String 是不可变的, 所以是【线程安全的】
+String s = "RudeCrab";
+```
+
+```java
+String s = "一键三连";
+HashSet<String> set = new HashSet<>();
+set.add(s);
+
+假设可以修改，那么此时，set中的“一键三连”就找不到了
+s.value = "点赞也行";
+```
+
+## 集合
+
+Collection:
+
+- List (ArrayList)
+- Queue (LinkedList)(ArrayDeque)
+- Set (HashSet)
+
+Map:
+
+- HashMap (LinkedHashMap)
+
+[java中LinkedHashMap和TreeMap是如何保证顺序的？](https://www.bilibili.com/video/BV1e44y1x7GS)
+
+
+## instanceof
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int[] array = {2,5,-2};
+
+        if (array instanceof int[]){
+            System.out.println("这个对象是 int[] ");
+        } else {
+            System.out.println("这个对象不是 int[] ");
+        }
+    }
+}
+```
+
+## 数组 排序
+
+```java
+import java.util.Arrays;
+public class Main {
+    public static void main(String[] args) {
+        int[] array = {2,5,-2};
+        Arrays.sort(array);
+
+        for (int i = 0; i < array.length; i++){
+            System.out.print(array[i] + "");
+        }
+    }
+}
+```
+
+
+## 数组 删除
+
+```java
+import java.util.Arrays;
+public class Main {
+    public static void main(String[] args) {
+        int[] array = {2,5,-2};
+        int[] newArray = new int[array.length - 1];
+        int deleteIdx = 2 
+
+        for (int i = 0; i < newArray.length; i++) {
+            if (i < deleteIdx) {
+                newArray[i] = array[i];
+            } else {
+                newArray[i] = array[i + 1];
+            }
+        }
+
+        System.out.println(array);
+        System.out.println(newArray);
+    }
+}
+```
+
+## 项目中如何规划常量？
+
+https://www.bilibili.com/video/BV1ua4y1a7CT
+
+## 字符串 常量池
+
+https://www.bilibili.com/video/BV1VW411y72d
+
+使得`字符串资源`能够复用，减少资源的浪费
+
+```java
+String s1 = "abc";
+String s2 = "abc";
+System.out.println(s1 == s2);//✌true
+```
+
+```java
+public static final Person PERSON = new Person(18);
+
+public static void main(String[] args) {
+    Person p1 = PERSON;
+    Person p2 = PERSON;
+    System.out.println(p1 == p2);
+}
+```
+
+## 字符串 劈开
+
+```java
+public class Main {
+    public static void main(string[] args) {
+        String str = "www-java-com";
+        String[] tmp = str.split("-");
+        for (int i = 0; i < tmp.length; i++) {
+            System.out.println(tmp[i])
+        }
+    }
+}
+```
+
+## 字符串 删除
+
+```java
+public class Main {
+    public static void main(string[] args) {
+        String str = "www-java-com";
+        System.out.println(str.substring(0,3) + " " + str.substring(4))
+
+    }
+}
+```
+
+## 字符串 查找
+
+```java
+public class Main {
+    public static void main(string[] args) {
+        String str = "www-java-com";
+        int idx = str.indexOf("j")
+        if (idx == -1){
+            System.out.println("No Find")
+        } else {
+            System.out.println("Index: " + idx)
+        }
+    }
+}
+```
+
+
+
+## private 封装
+
+`封装`的好处：
+
+- 它可以对`成员`进行 更精准的控制
+- 让 `对象` & `调用者` 解耦
+
+```java
+public class User {
+    private Long id;
+    public Long getID() {
+        return id;
+    }
+    public void setID(Long id) {
+        this.id = id;
+    }
+
+
+    private String phone;
+    public String getPhone() {
+        if (phone == null){
+            return ""
+        }
+        return phone.substring(0,3) + "****" + phone.substring(7,11);
+    }
+    public void setPhone(String phone) {
+        if (phone == null || phone.length() != 11){
+            System.err.println("手机号必须为11位")
+        } else {
+            this.phone = phone;
+        }
+    }
+}
+
+主程序中：
+User user = new User();
+user.setPhone("123");         // 打印错误提示
+user.setPhone("13700001234"); // 设置成功
+System.out.println(user.getPhone()); // 打印 137****1234
+```
+
+## public
+
+如果a包下的`A类`是`public`的，它的字段和方法都是private的。
+
+→ 在`b包`下的`B类`可以创建`A类`的对象，但是无法访问`A类对象的字段和方法`。
+
+如果a包下的`A类``没有修饰符`，它的字段和方法都是private的。
+
+→ 在`a包`下的B类可以创建`A类`的对象，但无法访问A类对象的字段和方法。
+
+→ 在`b包`下的B类无法创建A类的对象。
+
+
+
+
+
+## enum 和 switch 语句使用
+
+enum枚举的优势：
+
+- 能够在 `编译阶段`，就检查 `每个值的合理性`，并且
+- 可以用于 `switch判断`
+
+```java
+举个椰子🥥：
+
+public enum Season {
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER
+}
+
+public static void fun(Season season){
+    switch (season) {
+        case SPRING:
+            break;
+        case SUMMER: 
+            break;
+        case AUTUMN: 
+            break;
+        case WINTER: 
+            break;
+        default:
+            break;
+    }
+}
+
+public static void main(String[] args){
+    fun(Season.SPRING);
+    fun(Season.WINTER);
+    fun(1); // 编译出错
+    fun("SUMMER"); // 编译出错
+}
+```
+
+```java
+public enum Season {
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER
+}
+
+-- 反编译后代码大体如下：
+
+public final class Season extends Enum {
+    public static final Season SPRING = new Season();
+    public static final Season SUMMER = new Season();
+    public static final Season AUTUMN = new Season();
+    public static final Season WINTER = new Season();
+    private Season() {} // 防止外部实例化
+}
+```
+
+
+
+## void 
+
+表示`method`不返回任何值。
+
+## non-void 的 method
+
+```java
+public static void main(String[] args) {
+    double c1 = 6, c2 = 18, c3 = 32;
+    double res1 = convert(c1);
+    double res2 = convert(c2);
+    double res3 = convert(c3);
+
+    System.out.println(res1);
+    System.out.println(res2);
+    System.out.println(res3);
+}
+
+static double convert(double c){
+    double res;
+    res = 1.8 * c + 32;
+    return res;
+}
+```
+
+## Class中的method - class名称.method名
+
+```java
+定义一个 class：
+public class Keng{
+    static double convert(double c){
+        return 1.8 * c + 32;
+    }
+    static void printTwo(){
+        System.out.println(2);
+    }
+}
+
+Main 部分：
+public class Main{
+    public static void main(string args[]){
+        double f = Keng.convert(40);
+        System.out.println(f);
+        Keng.printTwo();
+
+        有两种写法：
+        printThree();
+        Main.printThree();
+    }
+
+    static void printThree(){
+        System.out.println(3);
+    }
+
+}
+```
+
+```java
+public class Main{
+    public static void main(string args[]){
+        System.out.println(getTwo());
+        int two = getTwo();
+        System.out.println(two);
+
+        int attack1 = getAttack(50, 10, 1);
+        int attack20 = getAttack(50, 10, 20);
+        System.out.println(attack1);
+        System.out.println(attack20);
+    }
+    static int getAttack(int level, int attackGrowth, int initialAttack){
+        return level * attackGrowth + initialAttack;
+    }
+    static int getTwo(){
+        return 2;
+    }
+}
+```
+
+## 为什么Java中的main方法必须是 public static void？
+
+必须通过`main方法`才能启动java虚拟机
+
+`main方法`没有被`实例化`过，这时候必须使用`静态方法`，才能被`调用`
+
+## static
+
+https://www.bilibili.com/video/BV1nW41167o1
+
+https://www.bilibili.com/video/BV1zL411s7h9
+
+静态修饰符，代表这个类`固有的`，在这个类里面共享，不需要`new一个实例`
+
+`non-static method 非静态方法` = `instance method 实例方法` = new一个实例
+
+## i++ 和 ++i 的区别
+
+j = i++ - 2 是先算 j 再算 i
+j = ++i - 2 是先算 i 再算 j
+
+## 引用类型
+
+自定的class 
+
+数组
+
+## Java 中都有哪些引用类型？
+
+https://www.bilibili.com/video/BV1ST411J7Bk
+
+强引用：发生 gc 的时候不会被回收。
+软引用：有用但不是必须的对象，在发生内存溢出之前会被回收。
+弱引用：有用但不是必须的对象，在下一次GC时会被回收。
+虚引用（幽灵引用/幻影引用）：无法通过虚引用获得对象，用 PhantomReference 现虚引用，虚引用的用途是在 gc 时返回一个通知。
+
+## constructor 是一种特殊的 method, static变量是class内部的共享变量
+
+constructor 没有返回
+
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    static int cnt; 不属于instance，属于整个class共享
+    ListNode(int x) {
+        val = x;
+        next = null;
+        cnt ++
+    }
+}
+
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+
+        ListNode node1 = new ListNode(0)
+        ListNode node2 = new ListNode(0)
+        
+    }
+}
+```
+
+```py
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+```
+
+## `instance方法` 中 可以直接调用 `instance变量`
+
+```java
+public class Dish {
+    instance变量：
+    double salt;
+
+    constructor：
+    Dish(double inputSalt){
+        salt = inputSalt;
+    }
+
+    instance方法：
+    void taste(double inputTolerance) {
+        if (salt > inputTolerance) {
+            System.out.println("太咸了")
+        } else if (salt < inputTolerance) {
+            System.out.println("太淡了")
+        } else {
+            System.out.println("太好吃了")
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dish d1 = new Dish(0.1);
+        Dish d2 = new Dish(0.4);
+        Dish d3 = new Dish(0.8);
+        d3.taste(0.5);
+    }
+
+}
+```
+
+## 字符类型转换 - 小写转大写
+
+```java
+public class Main {
+    public static void main(string arg[]){
+        char c = 'a'
+        int encoding = (int) c;
+        char capital = (char) (encoding - 32);
+        System. out. println(capital)
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        char[] charArray = {'a','b','c','e'};
+        for (int i = 0; i < charArray.length; i++) {
+            int encoding = (int) charArray[i];
+            if (encoding >= 97 && encoding < 110) {
+                encoding = encoding + 13;
+            } else if (encoding >= 110 && encoding < 122) {
+                encoding = encoding - 13;
+            }
+            char secret = (char) encoding;
+            charArray[i] = secret;
+        }
+        System.out.println(charArray);
+    }
+}
+```
+
+## java的特点：
+
+- java要求`文件名`和`公共类名`必须要求一致
+
+```java
+比如：`文件名` test.java -> `公共类名` public class test{}
+```
+
+- java的参数声明放在前面
+
+```java
+public String test(String param){
+}
+```
+
+- 在传递多参数的时候，java用...
+
+```java
+public test(String args...){
+  
+}
+```
+
+
+## String、StringBuffer 与 StringBuilder 之间区别
+
+https://www.bilibili.com/video/BV1b3411G7gr
+
+https://www.bilibili.com/video/BV1KQ4y1z76p
+
+https://www.bilibili.com/video/BV1G3411c7cV
+
+`String`:
+
+- 不可变
+- 操作少量数据，或者不操作数据时使用
+
+`StringBuilder`:(优先选择)
+
+- 可变
+- 线程不安全
+
+`StringBuffer`:
+
+- 可变
+- 线程安全
+- 性能较低
+
+
+
+
+
+## 线程的创建方式
+
+
+
+
+## 序列化和反序列化的理解?
+
+https://www.bilibili.com/video/BV1Ma411A7n2
+
+https://www.bilibili.com/video/BV1f54y1W7Js
+
+https://www.bilibili.com/video/BV1q5411X7DG
+
+## 什么是 Java 序列化？什么情况下需要序列化？
+
+Java 序列化是为了保存各种对象在内存中的状态，并且可以把保存的对象状态再读出来。
+以下情况需要使用 Java 序列化：
+
+想把的内存中的对象状态保存到一个文件中或者数据库中时候；
+想用套接字在网络上传送对象的时候；
+想通过RMI（远程方法调用）传输对象的时候。
+
+## 什么是序列化？
+
+•序列化：序列化是将对象转化为字节流。
+
+•反序列化：反序列化是将字节流转化为对象。
+
+## 序列化的用途？
+
+•序列化可以将对象的字节序列持久化-保存在内存、文件、数据库中。
+
+•在网络上传送对象的字节序列。
+
+•RMI(远程方法调用)
+
+## 序列化和反序列化
+
+•序列化：java.io.ObjectOutputStream 类的 writeObject() 方法可以实现序列化
+
+•反序列化：java.io.ObjectInputStream 类的 readObject() 方法用于实现反序列化。
+
+## 什么是java序列化，如何实现java序列化？
+
+序列化就是一种用来处理对象流的机制，所谓对象流也就是将对象的内容进行流化。可以对流化后的对象进行读写操作，也可将流化后的对象传输于网络之间。序列化是为了解决在对对象流进行读写操作时所引发的问题。序列化的实现：将需要被序列化的类实现Serializable接口，该接口没有需要实现的方法，implements Serializable只是为了标注该对象是可被序列化的，然后使用一个输出流(如：FileOutputStream)来构造一个ObjectOutputStream(对象流)对象，接着，使用ObjectOutputStream对象的writeObject(Object obj)方法就可以将参数为obj的对象写出(即保存其状态)，要恢复的话则用输入流。
+
+## Java中的序列化和反序列化
+
+https://www.bilibili.com/video/BV1wL4y1q7z5
+
+
+
+## 连接池
+
+https://www.bilibili.com/video/BV1yR4y1K7Z7
+
+## Netty
+
+https://www.bilibili.com/video/BV1GN4y1g7Wi
+
+https://www.bilibili.com/video/BV1xq4y1g73f
+
+## 请说一下对象的创建过程？
+
+https://www.bilibili.com/video/BV1c44y1P7Xx
+
+## SPI
+
+https://www.bilibili.com/video/BV1MB4y1X7Dy
+
+## seata
+
+https://www.bilibili.com/video/BV18Y411g7kP
+
+## Kafka如何保证消息不丢失？
+
+https://www.bilibili.com/video/BV1W34y1x7tY
+
+## Kafka 怎么避免重复消费？
+
+https://www.bilibili.com/video/BV1XS4y1B7Mk
+
+## kafka的零拷贝原理
+
+https://www.bilibili.com/video/BV1tu411B7p9
+
+
+## 接口的幂等性？什么是幂等、如何解决幂等性问题？
+
+https://www.bilibili.com/video/BV14a411a7SH
+
+## zk の watch机制实现原理
+
+https://www.bilibili.com/video/BV1sY4y1Y71P
+
+https://www.bilibili.com/video/BV1D3411w7wK
+
+## 简述zk の 命名服务、配置管理、集群管理
+
+https://www.bilibili.com/video/BV1r3411F7id
+
 ## zookeeper的应用场景
+
+https://www.bilibili.com/video/BV1Uq4y137Vh
 
 1. 分布式锁
 2. master选举
 3. 集群管理
 
-## 什么是【死锁】？
+## 阻塞队列被异步消费怎么保持顺序吗？
 
-【死锁】是一组【互相竞争资源】的线程，因为互相等待，导致【永久阻塞】
+https://www.bilibili.com/video/BV1PN4y1L7cd
 
-## 发生死锁的原因？
+## 生产环境服务器变慢，如何诊断处理？
 
-原因有4个：
+https://www.bilibili.com/video/BV1Xt4y1t7Vw
 
-1. ① 互斥条件。共享资源X和Y，只能被【一个线程】占用。
-2. ② 占有且等待。【线程1】已经取得了【共享资源X】，在等待【共享资源Y】时，不释放【共享资源X】
-3. ③ 不可抢占。其他线程不能抢占【线程1】占有的资源
-4. ④ 循环等待。【线程1】等待【线程2】占有的资源，【线程2】等待【线程1】占有的资源
+## 关于Synchronized锁升级的原理
 
-## 如何去避免死锁？
+https://www.bilibili.com/video/BV1wt4y147dQ
 
-只要打破，上述任一条件，就能避免死锁。
+## sychronized的⾃旋锁、偏向锁、轻量级锁、重量级锁
 
-而在这4个条件中，
+https://www.bilibili.com/video/BV1US4y187rT
 
-1. ① 互斥条件。是无法被破坏的。因为【锁】本身就是通过【互斥】来解决【线程安全性】问题。所以对于剩下3个，
-2. ② 占有且等待。我们可以一次性申请【all资源】，这样就不存在等待了
-3. ③ 不可抢占。占有【部分资源】的线程，进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。这样【不可抢占】这个条件，就被破坏掉了。
-4. ④ 循环等待。可以按照【顺序】申请资源，来进行预防。也就是说，资源是【线性顺序】的，申请时，先申请【资源序号】小的，再申请【资源序号】大的。
+## java中的锁机制
+
+https://www.bilibili.com/video/BV1t54y1r7EX
+
+
+
 
 ## 负载均衡的背景？
 
@@ -66,6 +1053,14 @@ https://www.bilibili.com/video/BV1KL4y1K7Ry
 如Nginx。互联网企业采用
 
 优点：免费、开源、灵活性高
+
+## 什么是Java虚拟机为什么要使用？
+
+https://www.bilibili.com/video/BV1Fg411278C
+
+## Jvm垃圾回收器:serial
+
+https://www.bilibili.com/video/BV1rK411u7bk
 
 ## JVM 的理解
 
@@ -139,6 +1134,10 @@ JVM的运行流程：
 - 线程池不够用
 - CPU负载过高
 
+## CPU飙高系统反应慢怎么排查？
+
+https://www.bilibili.com/video/BV1nF41147yu
+
 ## JVM性能优化 - 如何排查问题？
 
 1. 打印出 `GC log`，查看 minor GC 和 major GC
@@ -154,8 +1153,23 @@ JVM的运行流程：
 5. 代码优化，及时释放【资源】
 6. 增加集群节点数量
 
+## 分布式锁的理解和实现？
+
+https://www.bilibili.com/video/BV1nS4y1K7n4
+
+https://www.bilibili.com/video/BV1GF411373W
+
+## 栈和栈桢
+
+https://www.bilibili.com/video/BV1YA411J7wE
+
+## JVM中，哪些是共享区，哪些可以作为gc root
+
+https://www.bilibili.com/video/BV1Uq4y1e7Kq
 
 ## jvm内存结构介绍
+
+https://www.bilibili.com/video/BV1jY4y1b7n1
 
 Java の 内存分为5个部分：
 
@@ -230,6 +1244,10 @@ java内存模型，通过控制【主内存】和【本地内存】之间 の �
 
 Java 内存模型定义了八种操作来实现
 
+## CompletableFuture
+
+https://www.bilibili.com/video/BV1hA4y1d7gU
+
 ## 【pass💦】为了更好 の 控制【主内存】和【本地内存】 の 交互，Java 内存模型定义了八种操作来实现：
 
 lock：锁定。 主内存 の 变量，把一个变量标识为一条线程独占状态。
@@ -293,6 +1311,10 @@ https://www.bilibili.com/video/BV1Dh411J72Y
 | hash算法不同：增长方式是 2的指数  | hash算法不同：增长方式是 2*old + 1 |
 | 继承 AbstractMap类  | 继承 Dictionary类，Dictionary类 已经被废弃  |
 
+## HashMap的Put方法
+
+https://www.bilibili.com/video/BV1MR4y1F7Jf
+
 ## HashMap 有哪些【线程安全】的方式
 
 方式一：通过 Collections.synchronizedMap() 返回一个新的 Map
@@ -308,15 +1330,25 @@ https://www.bilibili.com/video/BV1Dh411J72Y
 
 ## hashmap 是如何解决hash冲突的？
 
+https://www.bilibili.com/video/BV1Y341137uj
+
 ## HashTable是如何保证线程安全的？
 
 HashTable 给整张表添加一把【大锁】，把整张表锁起来，大幅度降低了效率。
 
 为了提高效率，引入 ConcurrentHashMap
 
+## 谈谈你对线程安全的理解？
 
+https://www.bilibili.com/video/BV1ei4y1U7HW
+
+## ConcurrentHashMap的扩容机制
+
+https://www.bilibili.com/video/BV16S4y1P7AB
 
 ## ConcurrentHashMap 是如何提高效率的？
+
+https://www.bilibili.com/video/BV1QS4y1u7gG
 
 HashTable 给整张表添加一把【大锁】
 
@@ -346,6 +1378,10 @@ CAS，全称为Compare and Swap，
 
 这样才能保证每次拿到的变量是`主内存`中`最新的那个值`
 
+## 请你谈一下CAS机制？
+
+https://www.bilibili.com/video/BV1X34y1t75r
+
 ## voliate是怎么保证可见性的
 
 Java 内存模型定义了八种操作，来控制【主内存】和【本地内存】 の 交互：
@@ -369,25 +1405,11 @@ Java 内存模型定义了八种操作，来控制【主内存】和【本地内
 |  目的: 变量 在`多个线程`之间的 可见性 | 目的: `多个线程`之间`访问资源`的 同步性 |
 |  作用于: 变量 | 作用于: 方法 + 代码块 |
 
-## lock与synchronized区别
 
-```java
-lock.lock();
-// ...
-lock.unlock();
-
-sychronized{
-  // ...
-}
-```
-
-| lock  | synchronized  |
-|---|---|
-| 接口  | 关键字  |
-| 【手动】获得锁，释放锁  | 【自动】获得锁，释放锁     |
-| 适用于：线程方程多   |  适用于：线程少  |
 
 ## synchronized 的作用
+
+https://www.bilibili.com/video/BV1mf4y1B7RR
 
 作用在：静态方法、实例方法、this代码块、class代码块
 
@@ -401,6 +1423,12 @@ https://www.bilibili.com/video/BV17W411S7jH
 
 ## Volatile 关键字原理
 
+[volatile关键字，他是如何保证可⻅性，有序性](https://www.bilibili.com/video/BV1A5411d7FM)
+
+[DCL单例模式设计为什么需要volatile修饰【实例对象】](https://www.bilibili.com/video/BV11r4y1M7bC)
+
+[volatile关键字有什么用？它的实现原理是什么](https://www.bilibili.com/video/BV1bY41177H3)？
+
 https://www.bilibili.com/video/BV1SW411U7QM
 
 https://www.bilibili.com/video/BV1KU4y1q7yF
@@ -410,11 +1438,6 @@ https://www.bilibili.com/video/BV1Ny4y1u7L6
 https://www.bilibili.com/video/BV1x3411B7GE
 
 
-## synchronized 关键字
-
-https://www.bilibili.com/video/BV1q54y1G75e
-
-https://www.bilibili.com/video/BV18y4y1V79v
 
 
 ## 如何在不加锁的情况下解决线程安全问题？
@@ -433,6 +1456,8 @@ https://www.bilibili.com/video/BV18y4y1V79v
 2. 乐观锁： 给每个数据增加一个【版本号】，一旦数据发生变化，则去修改这个版本号。CAS的机制，可以完成【乐观锁】的功能。
 3. 在程序设计中，尽量去减少【共享对象】的使用。从业务上去实现【隔离】避免【并发】。
 
+
+
 ## HashMap、Hashtable、ConcurrentHashMap、LinkedHashMap、TreeMap
 
 
@@ -442,9 +1467,16 @@ https://www.bilibili.com/video/BV18y4y1V79v
 
 ## HashMap默认大小，扩容机制？
 
+https://www.bilibili.com/video/BV15N4y1T7Mn
+
+
 ## 追问：HashMap在哪个jdk版本使用红黑树，之前 の 实现方法是什么？
 
 ## hashmap put过程
+
+## JVM如何判断一个对象可以被回收？
+
+https://www.bilibili.com/video/BV1RB4y117ne
 
 ## 如何确定一个对象是【垃圾】？
 
@@ -525,7 +1557,11 @@ https://www.bilibili.com/video/BV1h64y1x7SF
 
 ## spark那些外部资源 还有第三方jar包之类 の 都放在哪（应该是这么问 の ，不太会，说了下内存结构，告诉我是java classloader相关 の 机制）
 
-## java掌握到什么程度；
+## java掌握到什么程度
+
+
+
+
 
 ## java集合有哪些？
 
@@ -553,31 +1589,24 @@ https://www.bilibili.com/video/BV1h64y1x7SF
 
 https://www.bilibili.com/video/BV1gW411r7By
 
-## equals和==区别？
 
-https://www.bilibili.com/video/BV1cW411Z7XB
 
-https://www.bilibili.com/video/BV13q4y1d7kg
+## 一个空Object对象的占多大空间
 
-## 为什么两个 Integer对象 不能用 == 来判断？
+https://www.bilibili.com/video/BV1SG411h7ju
 
-Integer 是一个【封装类型】。它对应的是一个【int类型】的包装，在java里面，之所以要提供 Interger，是因为 Java 是一个【面向对象】的语言，而【基本类型】不具备【对象】的特征，所以在【基本类型】之上，做了一层【对象】的包装，从而能够完成【基本类型】的一些操作。
 
-在【封装类型】里面，除了【int类型的操作】以外，还包括【享元模式】的设计，对于【-128 到 127之间】的数据做了一层缓存。
 
-也就是说，Integer 在【-128 到 127之间】，就直接在缓存里面获取【Integer 对象的实例】并且返回。
+##  ArrayList 和 LinkedList 的区别是什么？
 
-否则，会创建一个【new的integer对象】，从而减少【频繁创建】带来的内存消耗，从而提升性能。
+https://www.bilibili.com/video/BV1Vu411z7ws
 
-如果，两个Integer 对象，都在【-128 到 127之间】，并且，我们使用【==】判断，返回的结果必然是TRUE。因为，这两个Integer 对象，指向的【内存地址】是同一个。
+数据结构实现：ArrayList 是动态数组的数据结构实现，而 LinkedList 是双向链表的数据结构实现。
+随机访问效率：ArrayList 比 LinkedList 在随机访问的时候效率要高，因为 LinkedList 是线性的数据存储方式，所以需要移动指针从前往后依次查找。
+增加和删除效率：在非首尾的增加和删除操作，LinkedList 要比 ArrayList 效率要高，因为 ArrayList 增删操作要影响数组内的其他数据的下标。
+综合来说，在需要频繁读取集合中的元素时，更推荐使用 ArrayList，而在插入和删除操作较多时，更推荐使用 LinkedList。
 
-注意：在【测试环境】数据是有限的，正好在【Integer 的缓存区间】，导致测试通过。但在【生存环境】，数据量超出了【缓存区间】，所以会导致【生产事故】
-
-## 为什么重写equals要重写hashcode？
-
-https://www.bilibili.com/video/BV1o34y127Pm
-
-## ArrayList和LinkedList の 区别？
+https://www.bilibili.com/video/BV1uA411J7gK
 
 |  ArrayList | LinkedList   |
 |---|---|
@@ -606,15 +1635,11 @@ ArrayList 是一个【数组结构】的【存储容器】，默认情况下，�
 
 ## Objects类中有哪些方法？
 
-## equals()和hashcode()了解吗？
-
 ## 排序算法和时间复杂度
 
 https://www.bilibili.com/video/BV1Sg411M7Cr
 
-## 其中hashCode方法 の 返回值是什么？
 
-https://www.bilibili.com/video/BV1WR4y1J7T4
 
 ## 类加载机制
 
@@ -639,6 +1664,12 @@ https://www.bilibili.com/video/BV1JW411r758
 
 ## 双亲委派机制：
 
+[请介绍类加载过程，什么是双亲委派？](https://www.bilibili.com/video/BV1g94y1d787)
+
+https://www.bilibili.com/video/BV19F411g7B1
+
+https://www.bilibili.com/video/BV1vf4y1B7eQ
+
 自底向上地查看，是否加载过这个类
 
 如果没有，再自顶向下，尝试去加载这个类
@@ -658,7 +1689,6 @@ https://www.bilibili.com/video/BV1MF411e7zY
 
 https://www.bilibili.com/video/BV1ev411g7Xk
 
-## 重写hashCode或equals方法需要注意什么？
 
 ## 如何创建一个线程？
 
@@ -666,17 +1696,11 @@ https://www.bilibili.com/video/BV1ev411g7Xk
 
 ## jvm存在 の 意义
 
-## 8大基本类型
- 
-## string list set map数据结构 和基本类型有什么区别
 
 ## arraylist 和linkedlist 区别，为什么arrylist查询快
 
 https://www.bilibili.com/video/BV1xe4y1973f
 
-## 线程 & 进程 の 区别
-
-https://www.bilibili.com/video/BV1xS4y1t7mR
 
 ## 怎么实现多线程顺序输出下面这，ABC是三个不同 の 线程
 
@@ -692,9 +1716,7 @@ java集合
 
 ClassA a=new Class(1) 在jvm中怎么存储
 
-## int和integer有什么区别
 
-https://www.bilibili.com/video/BV1ZP4y187Tk
 
 ## java方法是值传递还是对象传递
 
@@ -718,6 +1740,10 @@ https://www.bilibili.com/video/BV1rf4y1E7u9
 ## 说下对象完整创建流程
 
 https://www.bilibili.com/video/BV1J3411G7wA
+
+## new String("abc")到底创建了几个对象？
+
+https://www.bilibili.com/video/BV1MS4y1b75Q
 
 ## 什么时候用多态
 
@@ -743,6 +1769,8 @@ Java集合 の 框架体系图
 
 ## java中类和对象 の 关系
 
+https://www.bilibili.com/video/BV1YZ4y1G7JR
+
 https://www.bilibili.com/video/BV1GR4y1p7qw
 
 ## 访问修饰符
@@ -753,13 +1781,17 @@ https://www.bilibili.com/video/BV1bf4y1c7Pu
 
 [HashSet内部是如何工作 の ](https://www.bilibili.com/video/BV1sq4y1971k)
 
+## ThreadLocal 是什么？有哪些使用场景？
+
+https://www.bilibili.com/video/BV1Yb4y1s7RG
+
+ThreadLocal 为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
+ThreadLocal 的经典使用场景是数据库连接和 session 管理等。
+
 ## threadlocal原理，应用场景
 
-## 线程池 の 工作原理
+https://www.bilibili.com/video/BV1iZ4y127wm
 
-https://www.bilibili.com/video/BV1T34y1p7ih
-
-https://www.bilibili.com/video/BV19L411n7mL
 
 ## 垃圾收集器分类
 
@@ -821,8 +1853,7 @@ java基本数据类型
 
 
 
-
- spark executor内 の task是怎么彼此隔离 の （从线程池 の 角度，还有切分stage）
+##  spark executor内 の task是怎么彼此隔离 の （从线程池 の 角度，还有切分stage）
 
  进程和线程区别，线程和进程切换过程
 
@@ -859,17 +1890,32 @@ java基本数据类型
 死锁 の 产生条件还有如何避免
 
 1.1 数据库锁表 の 相关处理
-1.2 索引失效场景
+
+## 索引失效场景
+
+https://www.bilibili.com/video/BV1yr4y1E7Xu
+
+https://www.bilibili.com/video/BV1pr4y1p7Ak
 
 ## Mysql锁有哪些，如何理解
 
 https://www.bilibili.com/video/BV1ff4y1Z7VQ
 
+## 并发编程三要素？
+
+https://www.bilibili.com/video/BV1tS4y1e7Yr
+
+## 面试被问到并发编程中，如何中断一个正在运行中的线程？
+
+https://www.bilibili.com/video/BV1554y1Z7w5
+
 ## 高并发下如何做到安全 の 修改同一行数据，乐观锁和悲观锁是什么，INNODB の 行级锁有哪2种，解释其含义
 
 [并发编程没你想得那么难学，并发学习指南|附学习资料](https://www.bilibili.com/video/BV1br4y1C72X)
 
+##  如何保证MySQL数据库的高可用性？ 
 
+https://www.bilibili.com/video/BV1aL4y1G7jT
 
 1.4 数据库会死锁吗，举一个死锁 の 例子，mysql怎么解决死锁
 
@@ -881,12 +1927,15 @@ https://www.bilibili.com/video/BV1ff4y1Z7VQ
 
 
 1.1 hash算法 の 有哪几种，优缺点，使用场景
-1.2 什么是一致性hash
+
+## 什么是一致性hash
+
+https://www.bilibili.com/video/BV193411u7Lq
 
 Hash表是怎么实现 の 。
 
 去重如果不用 set 还有多少种方式，有没有更高效 の 方式？
-hashcode()方法原理
+
 怎么解决幻读 具体在sql是怎么实现 の 
 
 ## mvcc知道吗
@@ -945,9 +1994,6 @@ MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【
 
 1.3 增加一个维度后发现查询 の 速度变得非常慢，是什么原因导致 の ？
 
-## 大 の log文件中，统计异常出现 の 次数、排序，或者指定输出多少行多少列 の 内容。
-
-https://www.bilibili.com/video/BV1sr4y127b7
 
 ## linux下 の 调查问题思路：内存、CPU、句柄数、过滤、查找、模拟POST和GET请求等等场景
 
@@ -1013,232 +2059,30 @@ D：持久性。也就是说，只要事务【提交成功】，那么，对于�
 
 ## 分布式session中用 の 是什么数据结构
 
-# MySQL
+## 简述 tcp 和 udp的区别？
 
-## MySQL性能优化
+tcp 和 udp 是 OSI 模型中的运输层中的协议。tcp 提供可靠的通信传输，而 udp 则常被用于让广播和细节控制交给应用的通信传输。
+两者的区别大致如下：
 
-https://www.bilibili.com/video/BV1C3411x7yU
+tcp 面向连接，udp 面向非连接即发送数据前不需要建立链接；
+tcp 提供可靠的服务（数据传输），udp 无法保证；
+tcp 面向字节流，udp 面向报文；
+tcp 数据传输慢，udp 数据传输快；
 
-## zk の watch机制实现原理
+## TCP的三次握手和四次挥手
 
-https://www.bilibili.com/video/BV1D3411w7wK
+https://www.bilibili.com/video/BV1GT4y1r74W
 
-## 简述zk の 命名服务、配置管理、集群管理
+## tcp 为什么要三次握手，两次不行吗？为什么？
 
-https://www.bilibili.com/video/BV1r3411F7id
+https://www.bilibili.com/video/BV1xL4y1F7wL
 
-## explain sql 执行计划 の 各列参数
+　我们假设A和B是通信的双方。我理解的握手实际上就是通信，发一次信息就是进行一次握手。
 
-最重要的几个参数
+第一次握手：A给B打电话说，你可以听到我说话吗？
+第二次握手：B收到了A的信息，然后对A说：我可以听得到你说话啊，你能听得到我说话吗？
+第三次握手：A收到了B的信息，然后说可以的，我要给你发信息啦！
+在三次握手之后，A和B都能确定这么一件事：我说的话，你能听到；你说的话，我也能听到。这样，就可以开始正常通信了。
+注意：HTTP是基于TCP协议的，所以每次都是客户端发送请求，服务器应答，但是TCP还可以给其他应用层提供服务，即可能A、B在建立链接之后，谁都可能先开始通信。
 
-| 参数  |  含义 |
-|---|---|
-|  id | select 查询的序列号  |
-| table  |   |
-|  type | 访问类型  |
-|  key |   |
-| rows  | 行数的预估值  |
-| extra  | 其他信息   |
-
-type 访问类型：效率由【好】到【坏】依次是
-
-system > eq_ref > range > all
-
-- system: 表只有一行记录，平时不出现
-- eq_ref: 使用【唯一索引】进行【数据查找】
-- range: 范围查询
-- all: 全表扫描
-
-
-https://www.bilibili.com/video/BV1mh411q7u5
-
-[Explain语句结果中各个字段分表表示什么](https://www.bilibili.com/video/BV1gt4y1a7sE)
-
-
-## 数据库视图
-
-## 数据库 の 三大范式，都有哪些区别，举例说明
-
-
-## 数据库引擎mysaim和innoDB の 区别
-
-| mysaim  | innoDB  |
-|---|---|
-| OLAP  | OLTP  |
-| 不支持【事务】  |  支持【事务】 |
-| 支持【表锁】【全文索引】  | 支持【行锁】【外键】【自增】【MVCC模式的读写】 |
-| 非聚簇索引  | 非聚簇索引 + 聚簇索引  |
-|   | 读慢，写快  |
-|   | 【一行一行】删除  |
-
-
-## innodb の 索引结构
-
-https://www.bilibili.com/video/BV1pS4y1v7ew
-
-4.为什么 选用mongo
-
-7.为什么用mongo
-
-
-2. 数据库有哪些类型
-- SQL和NoSQL区别
-
-## 分布式ID有哪些解决方案？
-
-https://www.bilibili.com/video/BV1ea411H7RR
-
-## 什么是事务
-
-https://www.bilibili.com/video/BV1RS4y1d7kr
-
-## mysql索引是什么结构，索引存储int和字符串有什么区别（不会）
-
-mysql索引设计原则
-
-说说 MySQL  の 索引？b树与b+树 の 区别？
-
-## mysql索引
-
-hash索引 + B+树
-
-## mysql の 引擎
-
-innoDB
-
-mysql の 引擎和innodb这类数据库 の 区别
-
-## mysql索引相关 の 问题，b+树
-
-[讲讲mysql の 索引及B树和B+树](https://www.bilibili.com/video/BV1Dq4y1S7GZ)
-
-https://www.bilibili.com/video/BV18U4y197Dx
-
-## MySQL 索引，存数据库，还是存磁盘
-
-## 【聚簇索引】和【非聚簇索引】如何区别？
-
-只需要判断【数据】和【索引】是否存在一起
-
-## mySQL是【聚簇索引】，还是【非聚簇索引】？
-
-与【存储引擎】相关
-
-innoDB：都有。
-
-- `xxx.ibd`包含【数据】 + 【索引】
-- 建立【聚簇索引】占用的空间更大，一旦【聚簇索引】改变，那么【非聚簇索引】也要跟着变
-
-myisam：只有【非聚簇索引】
-
-- `xxx.myd`包含【数据】
-- `xxx.myi`包含【索引】
-
-## 你们 ADS 层 の 数据量每天 の 数据量有多大？ADS 层再 MySQL 中 の 表是怎么创建 の ？有什么注意事项？索引怎么创建 の ？
-
-1.1 MySql の 存储引擎 の 不同
-
-1.2 Mysql怎么分表，以及分表后如果想按条件分页查询怎么办(如果不是按分表字段来查询 の 话，几乎效率低下，无解)
-
-## MySql の 主从实时备份同步 の 配置，以及原理(从库读主库 の binlog)，读写分离
-
-## MySQL 为什么要主从同步？
-
-1. 主从同步：主库写，从库读，即使主库【锁表】，【从库】仍然可以正常运行
-2. 做【数据的备份】
-3. 架构扩展：当业务量越来越大，多库存储，可以提高单个机器的IO性能
-
-1.1 MySQL InnoDB存储 の 文件结构
-1.2 索引树是如何维护 の ？
-1.3 数据库自增主键可能 の 问题
-1.4 MySQL の 几种优化
-1.5 mysql索引为什么使用B+树
-
-1.1 mySQL里有2000w数据，redis中只存20w の 数据，如何保证redis中 の 数据都是热点数据
-
-## mysql事务ACID特性，隔离级别
-
-A 原子性：一个【事务】的【所有操作】要么全部完成，要么全部失败
-C 一致性：比如，一次转账。某一账户扣除的金额，必须与另一个账户存入的金额，相等
-I 隔离性：【事务】与【事务】之间互不影响
-D 持久性：对数据的【修改】，必须在事务【结束】前，保存至某种【物理存储设备】。
-
-## oracle和mysql の 默认事务隔离级别为什么不同
-
-https://www.bilibili.com/video/BV11U4y1J7v7
-
-项目中MySQL の 部署方式是什么，怎么保证数据库数据是高可用 の 
-有考虑过数据库比如MySQL和MongoDB数据库数据丢失问题吗
-
-## mysql隔离机制 默认 の 是什么
-
-mysql【执行引擎】
-
-说一下mysql常用 の 引擎
-
-hash和数组分别作为mysql索引 の 结果。
-
-## B+树是二叉树吗 平衡树吗
-
-是【平衡】的【多叉树】
-
-## B+树 の 特点。
-
-从【根节点】到【叶子节点】的【高度差】 不超过1
-
-同一层级：有指针连接
-
-## 哈希索引
-
-采用【哈希算法】，将【键值】换算成【哈希值】，检索时，不需要像【b+树】一样【逐级查找】。
-
-所以，只要【一次哈希】就能定位到【响应的位置】，速度非常快。
-
-如果key不唯一，则需要再根据【链表】，往后扫描
-
-适合：
-
-- 【等值查询】
-
-不适合：
-
-- 范围查询
-- 无法排序
-- like这样的模糊查询
-- 多列联合索引的【最左匹配原则】
-
-## b+树底层是双向链表还是单向
-
-双向链表有2个指针，一个指针指向【前驱节点】，一个指针指向【后驱节点】，支持常量级别的时间复杂度，找到【前驱节点】。所以【双向链表】【插入、删除】比【单向链表】更加高效。
-
-
-
-##  红黑树和跳表 の 区别
-
-对于一个【数据库】来说，存储【数据的量】比较多的情况下，会导致【索引】很大，因此，需要将【索引】存储到【磁盘】，但磁盘的【IO操作】又非常低，所以，提高【索引效率】在于减少【磁盘IO】的次数。
-
-举个椰子🥥：
-
-对于 31 个节点的 tree。
-
-一个 【5 阶的 b+ 树】的高度是 3。
-
-一个 【红黑树】的【最小高度】是 5。
-
-【树的高度】基本决定了【磁盘IO次数】，所以，使用【b+树】性能要高很多。
-
-b+树中【相邻数据】在物理上，也是【相邻】的。因为【b+树】的【node大小】设为【一个页】，而每个【节点】存储多个【相邻关键字】和【分支信息】。所以每次查询，只需要【一次IO】就能完全载入【相邻信息】和【目标信息】。而【红黑树】不具有这个特征。
-
-红黑树中，大小相邻的数据，在【物理结构】上，可能差距非常大。由于程序的【局部性原理】，我们在索引中采用了【预加载】技术，每次【磁盘访问】的时候，除了去访问【目标数据】以外，我们还可以基于【局部性原理】加载【几页相邻】的数据到内存。而这个加载，是不需要消耗多余的【磁盘IO】的。
-
-因此，基于【局部性原理】和【b+树】存储结构物理上的特征，所以【b+树】的索引性能比【红黑树】好很多
-
-##  mysql的【索引类型】有哪些？
-
-- 普通索引
-- 唯一索引
-- 逐渐索引
-- 联合索引
-- 全文索引
-
-
+如果采用两次握手，那么只要服务器发出确认数据包就会建立连接，但由于客户端此时并未响应服务器端的请求，那此时服务器端就会一直在等待客户端，这样服务器端就白白浪费了一定的资源。若采用三次握手，服务器端没有收到来自客户端的再此确认，则就会知道客户端并没有要求建立请求，就不会浪费服务器的资源。

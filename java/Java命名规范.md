@@ -20,9 +20,8 @@
 	* 11.2. [列表](#-1)
 	* 11.3. [表述复数或者集合-复数形式s](#-s)
 	* 11.4. [Map数据-后缀Map](#Map-Map)
-	* 11.5. [泛型类-复杂约定好难学](#-)
-	* 11.6. [接口实现类-Impl后缀](#-Impl)
-	* 11.7. [测试类和测试方法+“Test”](#Test)
+	* 11.5. [接口实现类-Impl后缀](#-Impl)
+	* 11.6. [测试类和测试方法+“Test”](#Test)
 * 12. [扩展：速记 Java 开发中的各种O](#JavaO)
 
 <!-- vscode-markdown-toc-config
@@ -470,190 +469,7 @@ Map<String,User> userMap;
 Map<String,List<Object>> listMap;
 ```
 
-###  11.5. <a name='-'></a>泛型类-复杂约定好难学
-
-既保证了**通用性**，又保证了**独特性**
-
-原本繁杂的代码：
-
-```java
-public class StringArrayList {
-    private ArrayList list = new ArrayList();
-
-    public boolean add(String value) {
-        return list.add(value);
-    }
-    public String get(int index) {
-        return (String) list.get(index);
-    }
-}
-
-public class PersonArrayList {
-    private ArrayList list = new ArrayList();
-
-    public boolean add(Person value) {
-        return list.add(value);
-    }
-    public Person get(int index) {
-        return (Person) list.get(index);
-    }
-}
-```
-
-使用了`泛型`以后就变得简单，用`符号`代替`具体的类型`
-
-```java
-public class PersonArrayList<E> {
-    private ArrayList list = new ArrayList();
-
-    public boolean add(E value) {
-        return list.add(value);
-    }
-    public E get(int index) {
-        return (E) list.get(index);
-    }
-}
-```
-
-作用：
-
-- 将`运行`时的错误，转到了`编译时期`，以免造成`严重后果`
-- 在获取`元素`时，就不需要`类型转换`了，获取到的`元素`就是`指定类型`
-- 只需要`编写一套代码`，就可以运用`所有类型`
-
-在书写泛型类时，通常做以下的约定：
-
-`E`表示Element，通常用在`集合`中；
-
-`ID`用于表示`对象的唯一标识符类型`
-
-`T`表示Type(类型)，通常指`代类`；
-
-`K`表示Key(键),通常用于Map中；
-
-`V`表示Value(值),通常用于Map中，与K结对出现；
-
-`N`表示Number,通常用于表示数值类型；
-
-`？`表示不确定的Java类型；
-
-`X`用于表示`异常`；
-
-`U,S`表示任意的类型。
-
-下面时泛型类的书写示例：
-
-```java
-public class HashSet<E> extends AbstractSet<E>{
-
-}
-public class HashMap<K,V> extends AbstractMap<K,V>{
-
-}
-public class ThreadLocal<T>{
-
-}
-public interface Functor<T, X extends Throwable>{
-    T val() throws X;
-}
-public class Container<K,V>{
-    private K key;
-    private V value;
-    Container(K key,V value){
-        this.key = key;
-        this.value = value;
-    }
-
-}
-
-public interface BaseRepository<T,ID>{
-    T findById(ID id);
-
-    void update(T t);
-
-    List<T> findByIds(ID...ids);
-}
-
-public static <T> List<T> methodName(Class<T> clz){
-    List<T> dataList = getByClz(clz);
-    return dataList;
-}
-```
-
-### 什么情况用`泛型类`？
-
-当`泛型参数`需要在多个`方法`or`成员属性`间扭转，自然就要用到`泛型类`
-
-```java
-public class ArrayList<E> {
-    静态方法：无法访问泛型类的泛型参数
-    private static E data;              //❌编译错误
-    private static void set(E data) {   //❌编译错误
-        this.data = data;               //❌编译错误
-    };
-    transient Object[] elementData;
-    public E get(int index) {
-        return (E) elementData[index];
-    }
-    public boolean add(E e) {
-        ...
-        return true;
-    }
-}
-
-泛型类中的 泛型参数：
-需要在【实例化】该类时，指定【具体类型】：
-ArrayList<String> strList = new ArrayList<>();
-ArrayList<Integer> intList = new ArrayList<>();
-ArrayList<int> intList = new ArrayList<>(); // 编译错误
-
-在【泛型】中使用【基本类型】时，会自动装箱成【包装类】
-intList.add(123);
-Interger num = intList.get(0);
-
-```
-
-注意：泛型之类型，在运行时被擦除，也就是说，没有 `ArrayList<String>`, `ArrayList<Integer>`。只有 `ArrayList`。
-
-## 泛型方法
-
-`泛型方法`会根据`调用`进行`类型推导`
-
-```java
-普通类：
-public class GenericMethod {
-    静态方法：要使用泛型，必须定义成【泛型方法】
-    public static <T> T get(T t) {
-        return t;
-    }
-}
-
-GenericMethod gm = new GenericMethod();
-String s = gm.get("一键三连")
-Person p = gm.get(new Person())
-编译器，会将其推导为【包装类】
-Integer s = gm.get(666)
-Double s = gm.get(123.0)
-```
-
-### 泛型接口
-
-```java
-public interface Generic<T> {
-    void process(T t);
-}
-```
-
-### 泛型类和泛型方法
-
-|泛型类   |泛型方法   |
-|---|---|
-| 需要在【实例化】该类时，指定【具体类型】  |  会根据`调用`进行`类型推导` |
-| 静态方法：不能访问【泛型参数】  |  静态方法：可以访问【泛型参数】 |
-| 适用于：泛型参数需要在多个`方法`or`成员属性`间扭转  | 适用于：只需作用于某个方法  |
-
-
-###  11.6. <a name='-Impl'></a>接口实现类-Impl后缀
+###  11.5. <a name='-Impl'></a>接口实现类-Impl后缀
 
 为了便于阅读，在通常情况下，
 
@@ -683,7 +499,7 @@ public class OrderService implements IOrderService{
 }
 ```
 
-###  11.7. <a name='Test'></a>测试类和测试方法+“Test”
+###  11.6. <a name='Test'></a>测试类和测试方法+“Test”
 
 在项目中，测试类采用被`测试业务模块名/被测试接口/被测试类+“Test”`的方法进行书写，测试类中的`测试函数`采用`“test”+用例操作_状态`的组合方式进行书写，例如：
 
