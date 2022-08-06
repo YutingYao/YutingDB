@@ -1004,17 +1004,6 @@ https://www.bilibili.com/video/BV1PN4y1L7cd
 
 https://www.bilibili.com/video/BV1Xt4y1t7Vw
 
-## 关于Synchronized锁升级的原理
-
-https://www.bilibili.com/video/BV1wt4y147dQ
-
-## sychronized的⾃旋锁、偏向锁、轻量级锁、重量级锁
-
-https://www.bilibili.com/video/BV1US4y187rT
-
-## java中的锁机制
-
-https://www.bilibili.com/video/BV1t54y1r7EX
 
 
 
@@ -1382,60 +1371,11 @@ CAS，全称为Compare and Swap，
 
 https://www.bilibili.com/video/BV1X34y1t75r
 
-## voliate是怎么保证可见性的
-
-Java 内存模型定义了八种操作，来控制【主内存】和【本地内存】 の 交互：
-
-除了 lock 和 unlock，还有read、load、use、assign、store、write
-
-- read、load、use 作为一个原子
-- assign、store、write作为后一种原子操作
-
-从而避免了在操作过程中，被【打断】，从而保证【工作内存】和【主内存】中的数据都是【相等的】。
-
-应用场景：变量赋值 flag = true，而不适用于 a++
-
-## volatile和synchronized区别
-
-| volatile关键字  |  synchronized关键字 |
-|---|---|
-|  轻量，无锁 |  有锁 |
-|  性能好，不会发生阻塞 |  开发中使用更多，可能会发生阻塞 |
-|  保证: 有序性，可见性，不能保证 原子性 ✖ |  保证: 三大性，原子性，有序性，可见性 |
-|  目的: 变量 在`多个线程`之间的 可见性 | 目的: `多个线程`之间`访问资源`的 同步性 |
-|  作用于: 变量 | 作用于: 方法 + 代码块 |
 
 
 
-## synchronized 的作用
-
-https://www.bilibili.com/video/BV1mf4y1B7RR
-
-作用在：静态方法、实例方法、this代码块、class代码块
-
-## synchronized 的执行流程：
-
-`start` + `acc_synchronized` + `moniter enter指令` + `计数器加一` + 执行方法 + `计数器减一` + `monitor exit指令` + end
 
 
-
-https://www.bilibili.com/video/BV17W411S7jH
-
-## Volatile 关键字原理
-
-[volatile关键字，他是如何保证可⻅性，有序性](https://www.bilibili.com/video/BV1A5411d7FM)
-
-[DCL单例模式设计为什么需要volatile修饰【实例对象】](https://www.bilibili.com/video/BV11r4y1M7bC)
-
-[volatile关键字有什么用？它的实现原理是什么](https://www.bilibili.com/video/BV1bY41177H3)？
-
-https://www.bilibili.com/video/BV1SW411U7QM
-
-https://www.bilibili.com/video/BV1KU4y1q7yF
-
-https://www.bilibili.com/video/BV1Ny4y1u7L6
-
-https://www.bilibili.com/video/BV1x3411B7GE
 
 
 

@@ -1,3 +1,5 @@
+参考：[设计源于生活中](https://space.bilibili.com/484405397)
+
 ## 泛型中extends和super的区别
 
 `< ? extends T >` 表示包括 T 在内的任何T的子类
@@ -734,23 +736,180 @@ public abstract class Pet extends Animal implements A, B, C{
 
 线程的6种状态：
 
-`初始(NEW)`：新创建了一个【线程对象】，但还没有调用start()方法。
+`初始(NEW)`：新创建了一个【线程对象】，但还没有调用`start()方法`。
 
-`运行(RUNNABLE)`：Java线程中将【就绪（ready）】和【运行中（running）】两种状态笼统的称为“运行”。
+`运行(RUNNABLE)`：这个状态下，线程可能【就绪（ready）】或者【运行中（running）】
 
-【线程对象】创建后，其他线程(比如main线程）调用了【该对象的start()方法】。
+- 【线程对象】创建后，该状态的线程位于【可运行线程池】中，等待被【线程调度】选中，从而获取【CPU的使用权】，此时处于【就绪状态（ready）】。
 
-该状态的线程位于【可运行线程池】中，等待被【线程调度】选中，获取【CPU的使用权】，此时处于【就绪状态（ready）】。
+- 【就绪状态】的线程在获得【CPU时间片】后变为运行中【状态（running）】。
 
-【就绪状态】的线程在获得【CPU时间片】后变为运行中【状态（running）】。
+`阻塞(BLOCKED)`：【线程】阻塞于【锁】，处于锁等待状态。
 
-`阻塞(BLOCKED)`：表示【线程】阻塞于锁。
+`等待(WAITING)`：需要等待【其他线程】触发条件后【唤醒】，如 wait & notify。
 
-`等待(WAITING)`：【进入该状态的线程】需要等待【其他线程】做出一些特定动作（通知或中断）。
-
-`超时等待(TIMED_WAITING)`：该状态不同于WAITING，它可以在指定的时间后【自行返回】。
+`超时等待(TIMED_WAITING)`：该状态不同于`WAITING`的是，它可以在指定的时间后【自行返回】。
 
 `终止(TERMINATED)`：表示该线程已经【执行完毕】。
+
+## 线程的状态转化
+
+1. 【new】 → start →【Runnable】
+
+- 【Runnable】→ sleep、join(T)、wait(T)、locksupport.parkNanos(T)、locksupport.parkUntil(T)→ 【Timed Waiting】→ 时间到、unpark→【Runnable】
+
+- 【Runnable】→ join、wait、locksupport.park→ 【Waiting】→ notify、notifyAll → 【Blocked】 → 获得monitor锁 → 【Runnable】
+
+- Synchronized  → 没有获得monitor锁 → 【Blocked】 → 获得monitor锁 → 【Runnable】
+
+2. 【Runnable】 → 【terminated】
+
+
+## wait和notify 为什么要在synchronized代码块中
+
+<https://www.bilibili.com/video/BV1xr4y1p7w6>
+
+wait 和 notify 用于【多个线程】之间的【协调】，
+wait 表示让【线程】进入【阻塞状态】，
+notify 表示让【阻塞的线程】被【唤醒】
+两种通常同时出现。
+
+在jvm中对象被分成：对象头，实例数据(存放类的属性数据信息)，对齐填充(要求对象起始地址必须是8字节的整数倍，对齐填充仅仅是为了使字节对齐)。 实例数据和对齐填充与synchronized无关。
+
+对象头主要结构时Mark Word 和 类元指针 组成，Mark Word存储了对象的hashCode，锁信息，gc分代年龄，gc标志等。
+Class Metadata Address，JVM通过这个类元指针确定对象是哪个类的实例。
+每个锁都对应一个monitor对象，在jvm中它是由ObjectMonitor实现。monitor对象中有Owner(锁拥有者)，WaitSet等待队列，EntryList 阻塞队列。
+
+实现原理：
+当多个线程同时访问synchronized修饰的代码时，首先这些线程会进入EntryList 中。
+当线程获取到对象的monitor后进入Owner区域，并将monitor中的owner变量设置为当前线程同时monitor的计数器加1。
+如果其他线程调用wait方法，将释放当前线程的monitor，owner变量恢复成null，monitor计数器减1，同时该线程进入WaitSet等待调用notify()被唤醒。 
+如果持有锁的线程执行完程序后也会释放monitor对象锁并复位owner变量的值，以便其他线程获取monitor。
+
+首先抛开synchronized前期的锁粗化过程不谈，在重量级锁状态下，锁对象的对象头，实际会产生一个指针，指向objectMonitor对象，我们所谓的wait notify其实也是objectMonitor对象的方法，这个对象在【jvm源码】中，要搞清楚两个方法怎么用，就必须搞清楚他们【方法的功能】和【monitor的模型】。
+monitor对象包含owner，waitSet，entryList和cxq等部分，这些部分的操作都必须由【锁的持有线程】或【jvm本身】来实现，
+比如
+
+- wait方法的意思就是将本线程置入waitSet并释放锁，
+- notify的意思就是把某个在waitSet中的线程放入entryList或cxq队列并唤醒。
+
+不管是哪个方法，都要求执行的线程为【锁的持有线程】。基于此种功能，在开发环境下，如果不把两个方法写在同步代码中，会在编译期就提示错误。
+
+最关键的点，是为了避免资源竞争和发生“幻读”一样的问题。等待线程的写法都是
+while (!condition) {wait()}。假设此时有多个线程都在等待。再假设使用notify/wait不需要锁。那么当一个线程唤醒了当前等待的所有线程，所有的等待检查了condition都认为满足了可以继续执行，那么所有线程都会执行下一步。但是如果其中一个线程执行完之后把condition又变成了false，那么其他被唤醒的线程不会再次检查，因为已经检查过了。就出现类似幻读一样的情况。
+
+举个例子就是消息队列。如果不需要锁，等待消息的所有消费者都会被唤醒然后都会去检查是否有消息。刚好所有消费者都检查完，认为可以执行。一个消费者把队列里唯一的消息拿走了，顺利执行。但是别的消费者因为之前检查过了，所以并不会再次检查，就会出现问题。
+
+还有一点是基本不会用notify()去唤醒, 推荐使用notifyAll(),因为notify是唤醒某个指定线程，你不知道这个线程到底是哪个，在多线程情况下，使用推荐使用notifyAll()方法.
+
+
+
+## BLOCKED 和 WAITING 有什么区别？
+
+BLOCKED 和 WAITING 都属于【线程等待】状态。
+
+BLOCKED 是指，线程在等待【监视器锁】的时候的【阻塞状态】。也就是说，在【多个线程】去竞争【synchronized同步锁】，没有竞争到【锁】的线程会被【阻塞等待】，而这个时候，这个线程状态，叫做 blocked。在【线程】的整个生命周期里面，只有【synchronized同步锁】的等待，才会存在这个状态
+
+WAITING 是指，线程需要等待【某一线程】的【特定操作】，才会被唤醒。我们可以使用【Object.join() Object,wait() LockSupport.park()】这样一些方法，使得【线程】进入到一个【Waiting 状态】，那么，在这个状态下，我们必须要等待【特定方法】来唤醒。比如，【Object.notify() LockSupport.unpark()】去唤醒【阻塞】的线程.
+
+| BLOCKED  | WAITING   |
+|---|---|
+| 【锁竞争失败】后【被动触发】的状态   |  【人为】的【主动触发】的状态  |
+| 唤醒是【自动触发】的，【获得锁的线程】在【释放锁】之后，会触发唤醒  | 通过【特定方法】【主动唤醒】 |
+
+等待ReentrantLock的线程是waiting，
+
+等待synchronized锁的线程是blocked
+
+`阻塞(BLOCKED)`：表示【线程】阻塞于锁。
+`等待(WAITING)`：【进入该状态的线程】需要等待【其他线程】做出一些特定动作（通知或中断）。
+
+## sleep() 和 wait() 有什么区别？
+
+| Object.wait()  | Thread.sleep()  |
+|---|---|
+| 会释放【锁资源】以及【CPU资源】  | 不会释放【锁资源】，但会释放【CPU资源】  |
+| 来自 Object | 来自 Thread  |
+| wait() 可以使用 notify()/notifyAll()直接唤醒  | sleep() 时间到会自动恢复  |
+| Object.wait()  | Thread.sleep()  |
+
+
+## wait和sleep是否会触发锁的释放以及CPU资源的释放？
+
+首先，【wait方法】让一个线程，进入【阻塞状态】，这个方法，必须写在【Synchronized同步代码块】里面。
+
+因为【wait & notify】是基于【共享内存】来实现【线程】与【线程】之间【通信】。所以，在调用【wait & notify】之前，它必须要【竞争锁资源】，从而去实现条件的【互斥】。所以，wait 方法 必须要要释放锁，否则就会【死锁】。
+
+Thread.sleep()方法，只是让一个线程，单纯地进入到一个睡眠状态。这个方法，没有强制要求加【synchronized同步锁】。而且，从它的功能和语义上来说，也没有这个必要。即使在【synchronized同步代码块】里面去调用【Thread.sleep方法】也并不会触发【锁的释放】。
+
+此外，凡是那些让线程进入【阻塞状态】的方法，操作系统层面都会去【重新调度】，从而实现【CPU时间片】的切换，从而提升【CPU】的利用率。
+
+## notify()和 notifyAll()有什么区别？
+
+| `notifyAll()` | `notify()`  |
+|---|---|
+| 唤醒所有的线程  | 唤醒一个线程  |
+
+`notifyAll()` 调用后，会将【all线程】由`等待池`移到`锁池`，然后参与`锁`的竞争，
+
+- if 竞争成功 then 继续执行，
+
+- if 不成功 then 留在`锁池` then 等待`锁`被`释放`后, 再次参与竞争。
+
+`notify()`只会唤醒一个线程，具体唤醒哪一个线程由虚拟机控制。
+
+## 如果一个线程两次调用start()，会出现什么？
+
+如果一个线程两次调用start()，会出现什么？
+
+当我们第一次调用【start()方法】的时候，线程状态可能会处于【终止状态】or【非new状态】下的一个【其他状态】。
+
+再调用一次【start()方法】的时候，相当于，让这个正在运行的【线程】重新运行一遍。
+
+不论从【线程安全性】角度，还是从【线程本身执行逻辑】来看，它都是不合理的。
+
+因此，为避免这样一个问题，在线程运行的时候，会先去判断当前【线程】的一个【运行状态】。
+
+以上，就是我对这个问题的理解。
+
+## Files线程的 run() 和 start() 有什么区别？
+
+| start() 方法  | run() 方法  |
+|---|---|
+|  启动线程 | 执行线程的运行时代码  |
+|  只能调用一次 | 可以重复调用  |
+
+## 线程之间如何进行通讯
+
+1. 线程之间可以通过【共享内存】or【网络】来进行【通信】
+2. if 通过【共享内存】:
+   - 需要考虑并发问题。什么时候阻塞？什么时候唤醒？如 wait() 和 notify()
+3. if 通过【网络】：
+   - 同样需要考虑【并发问题】
+
+## 守护线程是什么？
+
+是专门为【用户线程】提供服务的【线程】。
+
+【生命周期】依赖于【用户线程】，只有【用户线程】正在运行的情况下，【守护线程】才会有【存在的意义】。
+
+【守护线程】不会阻止【JVM的退出】，但【用户线程】会阻止【JVM的退出】。
+
+【守护线程】创建方式，和【用户线程】是一样的，只需要调用【用户线程】的 setDaemon 方法，设置成 True 就好了。表示，这个线程是【守护线程】。
+
+基于【守护线程】的特性，它更适合【后台】的【通用型服务】的一些场景。比如，JVM里面的【垃圾回收】。
+
+不能用在【线程池】或者【IO场景】，因为JVM 一旦退出，【守护线程】也会直接退出，那么就会导致——【任务没有执行完 、资源没有正确释放】等问题
+
+守护线程是运行在`后台`的一种`特殊进程`。
+
+`周期性`地执行`某种任务`。
+
+在 Java 中`垃圾回收线程`就是特殊的守护线程。
+
+## Java多线程的Future模式
+
+<https://www.bilibili.com/video/BV1ov41167vH>
 
 ## 线程 & 进程 の 区别
 
@@ -895,7 +1054,7 @@ so，线程池的【工作线程】通过同步调用任务的【run方法】，
 
 2. 从线程池的外部：
 
-- isTerminated() 方法：可以去判断线程池的【运行状态】 ，可以【循环】判断该方法的【返回值】，to 了解线程的【运行状态】。一旦显示为 Terminated，意味着线程池中的【all 任务】都已经执行完成了。但需要主动在程序中调用线程池的【shutdown() 方法】，在实际业务中，不会主动去关闭【线程池】。so，这个方法在【使用性、灵活性】方面，都不是很好。
+- `isTerminated() 方法`：可以去判断线程池的【运行状态】 ，可以【循环】判断该方法的【返回值】，to 了解线程的【运行状态】。一旦显示为 Terminated，意味着线程池中的【all 任务】都已经执行完成了。但需要主动在程序中调用线程池的【shutdown() 方法】，在实际业务中，不会主动去关闭【线程池】。so，这个方法在【使用性、灵活性】方面，都不是很好。
 - submit() 方法：它提供了一个【Future 的返回值】，我们可以通过【Future.get() 方法】去获得【任务的执行结果】。当任务没有完成之前，【Future.get() 方法】将一直阻塞，直到任务执行结束。只要【Future.get() 方法】正常返回，则说明任务完成。
 - CountDownLatch计数器：通过初始化指定的【计数器】去进行倒计时，其中，它提供了两个方法：分别是：
   
@@ -906,15 +1065,355 @@ so，线程池的【工作线程】通过同步调用任务的【run方法】，
 
 总的来说，想要知道【线程是否结束】，必须获得【线程结束】之后的【状态】，而线程本身没有【返回值】，所以只能通过【阻塞-唤醒】的方式实现，Future.get() 和 CountDownLatch，都是采用这种方法
 
-## synchronized 关键字
+## synchronized 和 Lock 有什么区别？
 
-<https://www.bilibili.com/video/BV1q54y1G75e>
+| synchronized  |  lock |
+|---|---|
+| 有个【锁升级】的过程  |  lock |
+| 原理：锁住【对象头】  |  原理： |
+| 非公平锁  | 【公平锁、非公平锁】，可选择 |
+| 是【方法关键字】  |  适用于【接口】 |
+| 底层是【JVM层面】的锁  |  底层是【API层面】的锁 |
+| 适用于【线程少，竞争不激烈】  |  适用于【线程多，竞争激烈】 |
+| 无法终端  |  可以中断 |
+|  可以给【类、方法、代码块】加锁  | 只能给代码块加锁  |
+| 【手动】获得锁，释放锁  | 【自动】获得锁，释放锁     |
+| 【发生异常】会自动释放锁，不会造成死锁  |  如果使用不当，没有 unLock()去释放锁就会造成【死锁】 |
 
-<https://www.bilibili.com/video/BV18y4y1V79v>
+```java
+lock.lock();
+// ...
+lock.unlock();
 
-## 线程的状态转化
+sychronized{
+  // ...
+}
 
-<https://www.bilibili.com/video/BV1G44y117rH>
+sychronized作用在：静态方法、实例方法、this代码块、class代码块
+
+sychronized 修饰 方法：
+
+public static synchronized void func(){
+  // ...静态方法
+}
+
+public synchronized void func(){
+  // ...实例方法
+}
+
+sychronized 修饰 代码块：
+
+public void func() {
+    sychronized (obj) {
+        System.out.println("代码块")
+    }
+}
+```
+
+## lock 几次，就要 unlock 几次
+
+
+```java
+private static final Lock lock = new ReentrantLock();
+
+public static void a() {
+    lock. lock();
+
+    try {
+        System.out.println(Thread.currentThread().getName())
+        Thread.sleep(millis: 2*1000);
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        lock.unlock();
+    }
+}
+
+public static void main(String[] args) {
+    // 定义线程任务
+    Runnable runnable = () -> {
+        a();
+    };
+
+    Thread t1 = new Thread(runnable, name:"t1");
+    Thread t2 = new Thread(runnable, name:"t2");
+
+    t1.start();
+    t2.start();
+}
+```
+
+```java
+public static void func() {
+    System.out.println(Thread.currentThread().getName())
+    lock. lock();
+    // 再锁一次
+    lock. lock();
+
+    try {
+        Thread.sleep(millis: 2*1000);
+        System.out.println(Thread.currentThread().getName())
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        // 释放2次锁
+        lock.unlock();
+        lock.unlock();
+    }
+}
+
+public static void main(String[] args) {
+    // Lock 连续运行多次的情况
+    new Thread (
+        () -> {
+            a();
+        },
+        name: "t1"
+    ).start();
+
+    new Thread (
+        () -> {
+            a();
+        },
+        name: "t2"
+    ).start();
+}
+
+返回结果：
+t1 run() begin
+t2 run() begin
+t1 run() end
+t2 run() end
+
+如果only unlock 一次，就会造成【死锁】，【死锁】情况下，显示结果如下：
+t1 run() begin
+t2 run() begin
+t1 run() end
+```
+
+## 说一下 synchronized 底层实现原理？
+
+synchronized 就是锁住【对象头】中【两个锁】【标志位】的【数值】
+
+## 多线程中 synchronized 锁升级的原理是什么？
+
+synchronized 锁升级原理：
+
+在`锁对象`的`对象头`里面有一个 `threadid 字段`，
+
+在第一次访问的时候 `threadid 为空`，jvm 让其持有`偏向锁`，
+
+并将 threadid 设置为其`线程 id`，
+
+再次进入的时候会先判断 `threadid` 是否与其`线程 id` 一致，
+
+如果一致,则可以直接使用此对象，
+
+如果不一致，则升级`偏向锁`为`轻量级锁`，通过`自旋`循环一定次数来获取锁，
+
+执行一定次数之后，如果还没有正常获取到要使用的对象，
+
+此时就会把锁从轻量级升级为`重量级锁`，此过程就构成了 synchronized 锁的升级。
+
+锁的升级的目的：
+
+为了减低了锁带来的`性能消耗`。
+
+在 Java 6 之后优化 synchronized 的实现方式，
+
+使用了`偏向锁`升级为`轻量级锁`再升级到`重量级锁`的方式，
+
+从而减低了锁带来的性能消耗。
+
+
+## synchronized 的执行流程：
+
+`start` + `acc_synchronized` + `moniter enter指令` + `计数器加一` + 执行方法 + `计数器减一` + `monitor exit指令` + end
+
+在进入 有 synchronized 修饰的方法时：
+
+1. 判断，有没有 【acc_synchronized 标记】，如果有的话：
+2. 先获得【monitor对象】，再执行【moniter enter 指令】。进来之后，
+3. 将【计数器+1】，然后执行【方法】。退出【方法】时：
+4. 先释放【monitor对象】，再执行【moniter exit 指令】。最后：
+5. 将【计数器-1】
+
+synchronized 是由一对 `monitorenter/monitorexit 指令`实现的，
+
+`monitor 对象`是同步的基本实现单元。
+
+在 Java 6 之前，monitor 的实现完全是依靠【操作系统】内部的`互斥锁`，性能也很低: 因为
+
+- `互斥锁`是【系统方法】，需要进行`用户态`到`内核态`的切换，所以`同步操作`是一个无差别的`重量级操作`。
+
+但在 Java 6 的时候，Java 虚拟机提供了三种不同的 monitor 实现，也就是【锁升级机制】：
+
+[Synchronized锁升级的原理](https://www.bilibili.com/video/BV1wt4y147dQ)
+
+- 偏向锁: 最轻量。线程会通过【CAS】获取一个预期的标记，在【一个线程】进行【同步代码】，减少【获取锁】的代价
+  - 如果存在【多线程竞争】，就会膨胀为【轻量级锁】。 
+- 轻量级锁：【多线程】【交替执行】【同步代码】，而不是【阻塞】
+  - 自旋锁：线程在获取【锁】的过程中，不会去【阻塞线程】，也就无所谓【唤醒线程】。【阻塞-唤醒】是需要【操作系统】去执行的，比较【耗时】。线程会通过【CAS】获取一个预期的标记，如果没有获取到，就会循环获取，会先自己循环【50~100次】
+  - 如果超过【循环次数】，就会膨胀为【重量级锁】
+- 重量级锁：在【多线程竞争阻塞】时，线程处于【blocked】，处于【锁等待】状态下的线程，需要等待【获得锁】的线程【释放】锁以后，才能【触发唤醒】，会进行`用户态`到`内核态`的切换
+
+总的来说，Synchronized锁升级，是尽可能减少`用户态`到`内核态`的切换
+
+## Synchronized 的锁消除
+
+在JIT阶段，如果检测出【不可能有】【资源竞争的锁】，会直接消除
+
+## java中的锁机制
+
+- lock
+- synchronized
+- 分布式锁
+
+## synchronized 的作用
+
+实现【同步】
+
+## synchronized 和 ReentrantLock 区别是什么？
+
+ReentrantLock 是一种【可重入】的【排他锁】，它主要是解决【多线程】对于【共享资源】竞争的问题，它的核心特性有：
+
+1. 它支持【重入】： 也就是，获得【锁】的【线程】在【释放锁】之前，再次去竞争【同一把锁】的时候，不需要【加锁】，就可以【直接访问】
+2. 它支持【公平】和【非公平】特性
+3. 它提供了【阻塞竞争锁】和【非阻塞竞争锁】的两种方法，分别为 lock() 和 tryLock()
+
+它的底层实现有几个非常关键的技术：
+
+1. 锁的竞争：通过【互斥变量】，使用【CAS机制】来实现
+2. 没有竞争到锁的线程：使用【AbstractQueuedSynchronizer】这样一个【队列同步器】来存储，底层是通过【双向链表】来实现的。当【锁】被释放之后，会从【AQS队列】里面的head，去唤醒下一个【等待线程】。
+3. 公平和非公平：主要体现在【竞争的时候】，判断【AQS队列】里面，是否有【等待】的线程。而【非公平锁】是不需要判断的。关于【锁的重入性】，在AQS里面，有一个【成员变量】来保存【当前获取锁】的线程。【同一个线程】再次来竞争【同一把锁】的时候，不会走【锁的竞争逻辑】，而是直接去增加【重复次数】
+
+## ReentrantLock 是如何实现锁公平和非公平性的？
+
+定义：
+
+- 公平：竞争【锁资源】的线程，严格按照请求的顺序，来分配锁。
+- 非公平：竞争【锁资源】的线程，允许插队，来抢占【锁资源】
+
+synchronized 和 ReentrantLock 默认：
+
+- 非公平锁
+
+ReentrantLock 内部使用【AQS】来实现【锁资源】的一个竞争，没有竞争到【锁资源】的【线程】会加入到【AQS】的【同步队列】里面，这个队列是一个【FIFO】的【双向链表】。
+
+这样，
+
+【公平】的实现方式就是，【线程】在【竞争锁资源】的时候，会判断【AQS队列】里面有没有【等待线程】，如果有，就加入到【队列尾部】进行等待。
+
+【非公平】的实现方式就是，不管【队列】里面有没有【线程】等待，它都会先去 try 抢占【锁资源】。if 抢占失败，就会再加入【AQS 队列】里面等待。
+
+【公平】性能差的原因在于，【AQS】还需要将【队列】里面的线程【唤醒】，就会导致【内核态】的切换，对性能的影响比较大。
+
+【非公平】性能好的原因在于，【当前线程】正好在【上一个线程】释放的临界点，抢占到了锁。那么意味着，这个线程不需要切换到【内核态】，从而提升了【锁竞争】的效率。
+
+## volatile关键字有什么用？它的实现原理是什么？
+
+volatile关键字有什么用？
+
+1. 保证在【多线程环境】下【共享变量】的【可见性】
+2. 通过增加【内存屏障】防止【多个指令】之间的【重排序】
+
+【可见性】是指：一个线程对【共享变量】的修改，其他线程可以立刻看到【修改后的值】。可见性问题，本质上，是由几个方面造成的：
+
+1. CPU层面的高速缓存：在CPU里面设计了【三级缓存】去解决【CPU运算效率】和【内存IO效率】的问题。但是，他带来的就是【缓存一致性】的问题，而在【多线程并行执行】的情况下，【缓存一致性】的问题就会导致【可见性问题】，所以，对于一个增加了【volatile关键字】修饰的【共享变量】，JVM会自动增加一个【Lock汇编指令】，而这个指令，会根据不同的CPU型号，会自动添加【总线锁、缓存锁】：
+
+- 总线锁：它锁定的是【CPU的前端总线】，从而导致在【同一时刻】只能有【一个线程】和【内存】通信，这样就避免了【多线程并发】造成的【可见性问题】
+- 缓存锁：【缓存锁】是对【总线锁】的一个优化，因为【总线锁】导致【CPU使用效率】大幅度下降。它只针对【CPU三级缓存】中的【目标数据】去加锁
+
+2. 指令重排序：所谓重排序，就是指，指令在【编写顺序】和【执行顺序】的不一致。从而在【多线程环境】下，导致【可见性问题】。它本质上，是一种【性能优化】的手段。这种【性能优化】体现在如下几个层面：
+
+- 首先，第一个方面是CPU层面。引入StoreBuffer的机制，这种机制会导致【CPU的乱序执行】，为了避免这样的问题，CPU提供了【内存屏障指令】。【上层应用】可以在【合适的地方】去插入【内存屏障】从而去避免CPU【指令重排序】的问题。
+
+3. 编译器层面的优化。【编译器】在【编译过程】中，在不改变【单线程语义】的前提下，对指令进行合理的【重排序】从而去优化整体的性能。
+
+如果对【共享变量】增加了【volatile关键字】，那么【编译器层面】就不会触发【编译器优化】，同时在JVM里面，他会插入【内存屏障指令】来避免【重排序】问题。
+
+此外，JMM使用了一种 Happens-Before 的模型去描述【多线程】之间【可见性】的关系。也就是说，如果【两个操作】之间具备【 Happens-Before 关系】，那么意味着，这两个操作，具备【可见性】的关系，不需要再额外去考虑增加【volatile关键字】，来提供可见性的保障
+
+## Volatile 的作用
+
+volatile 用于将【变量的更新操作】通知到【其他线程】。
+
+1. 保证变量的可见性。也就是说，一个【线程】修改的变量的值，那么【新的值】对于【其他线程】是可以【立即可见的】。
+
+2. 禁止【指令重排序】。volatile 比 synchronized 更轻量级的【同步锁】，在访问【volatile变量】时，不会执行【加锁操作】，因此，也就不会执行【线程阻塞】。因此【volatile变量】是一种比【synchronized 关键字】更轻量级的【同步机制】。
+
+volatile 适合使用在一个变量被多个【线程】共享，线程直接给这个【变量赋值】的场景。当声明变量是【volatile 】的时候，JVM保证了每次 【读变量 】都从【内存】读，跳过了【CPU缓存】这一步。
+
+需要注意的是：
+
+- 对volatile变量的【单次读写操作】是可以保证【原子性】的
+- 不能保证 i++ 这种操作的原子性
+
+volatile 在某些情况下，可以替代 synchronized ，但不能完全取代 synchronized 
+
+## volatile 必须满足哪些条件，才能保证在【并发环境】的【线程安全】？
+
+1. 首先，对变量的【写操作】不依赖于像【i++】这样的当前值。
+2. 其次，【该变量】没有包含在【具有其他变量】的【不变式】中，也就是说，不同的【volatile变量】不能【相互依赖】，只有在【状态】真正独立于程序内的其他内容的时候，才能使用 volatile。
+
+## voliate是怎么保证可见性的
+
+Volatile 保证可见性的原理：
+
+如果【工作线程1】中有变量修改，会直接同步到【主内存】中；【其余工作线程】在【主内存中】有一个【监听】，当监听到【主内存】中对应的数据修改时，就会去通知【其余工作线程】【缓存内容已经失效】，此时，会从【主内存】中重新获取一份数据来更新【本地缓存】。
+
+在【工作内存】去【监听】【主内存】中的数据，用的是【总线嗅探机制】。但如果大量使用 volatile，就会不断地去监听【总线】，引起【总线风暴】
+
+Java 内存模型定义了八种操作，来控制【主内存】和【本地内存】 の 交互：
+
+除了 lock 和 unlock，还有read、load、use、assign、store、write
+
+- read、load、use 作为一个原子
+- assign、store、write作为后一种原子操作
+
+从而避免了在操作过程中，被【打断】，从而保证【工作内存】和【主内存】中的数据都是【相等的】。
+
+应用场景：变量赋值 flag = true，而不适用于 a++
+
+## 【指令重排】背后的思想是：
+
+如果能确保【执行的结果】相同，那么就可通过【更改顺序】来提高性能。
+
+## 【指令重排】有三种形式：
+
+1. 【编译器】重排序
+2. 【指令集并行】重排序：在多线程环境下，可能会【结果不同】，有了 volatile 就会有【内存屏障】，从而【阻止重排】。
+   - 在读和读之间，会有【读读屏障】
+   - 在读和写之间，会有【读写屏障】
+   - 在写和读之间，会有【写读屏障】
+   - 在写和写之间，会有【写写屏障】
+3. 【内存系统】重排序
+
+## 【DCL单例模式】设计为什么需要volatile修饰【实例变量】？
+
+当我们使用
+
+instance = new DCLExample() 构建一个【实例对象】的时候，new这个操作并不是【原子】的，这段代码最终会被编译成 3 条指令：
+
+1. 第一条指令是，为了【对象】分配【内存空间】
+2. 第二条指令是， 初始化对象
+3. 第三条指令是，  把【instance 对象】赋值给【instance 引用】
+
+由于这三个指令并不是【原子的】，按照重排序的规则——在不影响【单线程执行结果】的情况下，两个不存在【依赖关系】的【指令】是允许【重排序】的。也就是说，不一定会按照我们代码的【编写顺序】来执行。这样一来，就会导致其他线程，可能会拿到一个不完整的对象。
+
+解决这个问题的办法就是：
+
+- 在这个在【instance变量】上，增加一个 volatile 关键字进行修饰。而volatile底层，使用了一个【内存屏障机制】去避免【指令重排序】
+
+## volatile 和 synchronized区别
+
+| volatile关键字  |  synchronized关键字 |
+|---|---|
+|  轻量，无锁 |  有锁 |
+|  性能好，不会发生阻塞 |  开发中使用更多，可能会发生阻塞 |
+|  保证: 有序性，可见性，不能保证 原子性 ✖ |  保证: 三大性，原子性，有序性，可见性 |
+|  目的: 变量 在`多个线程`之间的 `可见性` | 目的: `多个线程`之间`访问资源`的 `同步性` |
+|  作用于: 变量 | 作用于: 类 + 方法 + 代码块 |
 
 ## JVM中如何查看线程死锁
 
@@ -971,10 +1470,7 @@ try {
 }
 ```
 
-## 多线程中 synchronized 锁升级的原理是什么？
 
-synchronized 锁升级原理：在锁对象的对象头里面有一个 threadid 字段，在第一次访问的时候 threadid 为空，jvm 让其持有偏向锁，并将 threadid 设置为其线程 id，再次进入的时候会先判断 threadid 是否与其线程 id 一致，如果一致则可以直接使用此对象，如果不一致，则升级偏向锁为轻量级锁，通过自旋循环一定次数来获取锁，执行一定次数之后，如果还没有正常获取到要使用的对象，此时就会把锁从轻量级升级为重量级锁，此过程就构成了 synchronized 锁的升级。
-锁的升级的目的：锁升级是为了减低了锁带来的性能消耗。在 Java 6 之后优化 synchronized 的实现方式，使用了偏向锁升级为轻量级锁再升级到重量级锁的方式，从而减低了锁带来的性能消耗。
 
 ## 什么是死锁？
 
@@ -989,113 +1485,12 @@ synchronized 锁升级原理：在锁对象的对象头里面有一个 threadid 
 尽量降低锁的使用粒度，尽量不要几个功能用同一把锁。
 尽量减少同步的代码块。
 
-## 说一下 synchronized 底层实现原理？
 
-synchronized 是由一对 monitorenter/monitorexit 指令实现的，monitor 对象是同步的基本实现单元。在 Java 6 之前，monitor 的实现完全是依靠操作系统内部的互斥锁，因为需要进行用户态到内核态的切换，所以同步操作是一个无差别的重量级操作，性能也很低。但在 Java 6 的时候，Java 虚拟机 对此进行了大刀阔斧地改进，提供了三种不同的 monitor 实现，也就是常说的三种不同的锁：偏向锁（Biased Locking）、轻量级锁和重量级锁，大大改进了其性能。
-
-## synchronized 和 volatile 的区别是什么？
-
-volatile 是变量修饰符；synchronized 是修饰类、方法、代码段。
-volatile 仅能实现变量的修改可见性，不能保证原子性；而 synchronized 则可以保证变量的修改可见性和原子性。
-volatile 不会造成线程的阻塞；synchronized 可能会造成线程的阻塞。
-
-## synchronized 和 Lock 有什么区别？
-
-synchronized 可以给类、方法、代码块加锁；而 lock 只能给代码块加锁。
-synchronized 不需要手动获取锁和释放锁，使用简单，发生异常会自动释放锁，不会造成死锁；而 lock 需要自己加锁和释放锁，如果使用不当没有 unLock()去释放锁就会造成死锁。
-通过 Lock 可以知道有没有成功获取锁，而 synchronized 却无法办到。
-
-## synchronized 和 ReentrantLock 区别是什么？
-
-<https://www.bilibili.com/video/BV12a411Y7hn>
-
-<https://www.bilibili.com/video/BV1kF411T7os>
-
-synchronized 早期的实现比较低效，对比 ReentrantLock，大多数场景性能都相差较大，但是在 Java 6 中对 synchronized 进行了非常多的改进。
-主要区别如下：
-
-ReentrantLock 使用起来比较灵活，但是必须有释放锁的配合动作；
-ReentrantLock 必须手动获取与释放锁，而 synchronized 不需要手动释放和开启锁；
-ReentrantLock 只适用于代码块锁，而 synchronized 可用于修饰方法、代码块等。
-ReentrantLock 标记的变量不会被编译器优化；synchronized 标记的变量可以被编译器优化。
-
-## ReentrantLock 是如何实现锁公平和非公平性的？
-
-<https://www.bilibili.com/video/BV1y5411D7Jj>
 
 ## 说一下 atomic 的原理？
 
 atomic 主要利用 CAS (Compare And Swap) 和 volatile 和 native 方法来保证原子操作，从而避免 synchronized 的高开销，执行效率大为提升。
 
-## wait和notify 为什么要在synchronized代码块中
-
-<https://www.bilibili.com/video/BV1xr4y1p7w6>
-
-## BLOCKED和WAITING有什么区别？
-
-[](https://www.bilibili.com/video/BV14a411j7c1)
-
-`阻塞(BLOCKED)`：表示【线程】阻塞于锁。
-`等待(WAITING)`：【进入该状态的线程】需要等待【其他线程】做出一些特定动作（通知或中断）。
-
-## sleep() 和 wait() 有什么区别？
-
-[wait和sleep是否会触发锁的释放以及CPU资源的释放？](https://www.bilibili.com/video/BV1u3411u7fQ)
-
-类的不同：sleep() 来自 Thread，wait() 来自 Object。
-释放锁：sleep() 不释放锁；wait() 释放锁。
-用法不同：sleep() 时间到会自动恢复；wait() 可以使用 notify()/notifyAll()直接唤醒。
-
-42.notify()和 notifyAll()有什么区别？
-notifyAll()会唤醒所有的线程，notify()之后唤醒一个线程。notifyAll() 调用后，会将全部线程由等待池移到锁池，然后参与锁的竞争，竞争成功则继续执行，如果不成功则留在锁池等待锁被释放后再次参与竞争。而 notify()只会唤醒一个线程，具体唤醒哪一个线程由虚拟机控制。
-
-## 如果一个线程两次调用start()，会出现什么？
-
-<https://www.bilibili.com/video/BV1yg411Z7qd>
-
-## Files线程的 run() 和 start() 有什么区别？
-
-start() 方法用于启动线程，run() 方法用于执行线程的运行时代码。run() 可以重复调用，而 start() 只能调用一次。
-
-## 线程之间如何进行通讯
-
-<https://www.bilibili.com/video/BV16T4y1i7VL>
-
-## 线程和进程的区别？
-
-一个程序下至少有一个进程，一个进程下至少有一个线程，一个进程下也可以有多个线程来增加程序的执行速度。
-
-## 守护线程是什么？
-
-<https://www.bilibili.com/video/BV1i34y1E7Ge>
-
-守护线程是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。在 Java 中垃圾回收线程就是特殊的守护线程。
-
-## Java多线程的Future模式
-
-<https://www.bilibili.com/video/BV1ov41167vH>
-
-## lock与synchronized区别
-
-[使用lock锁的坑，千万要小心死锁的问题](https://www.bilibili.com/video/BV1ch411d7Rq)
-
-[Lock锁的使用](https://www.bilibili.com/video/BV1kK4y1s75N)
-
-```java
-lock.lock();
-// ...
-lock.unlock();
-
-sychronized{
-  // ...
-}
-```
-
-| lock  | synchronized  |
-|---|---|
-| 接口  | 关键字  |
-| 【手动】获得锁，释放锁  | 【自动】获得锁，释放锁     |
-| 适用于：线程方程多   |  适用于：线程少  |
 
 ## 接口`method名称`冲突
 
