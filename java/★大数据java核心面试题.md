@@ -195,72 +195,8 @@ class Son extends Father {
 }
 ```
 
-## 迭代器 - 迭代器 之间 具有 独立性 和 隔离性
-
-`迭代器-集合`的关系：
-
-`集合`不直接访问 `iterator()`，而是先访问 `Iterable()` 这样是为了保证`独立性`和`隔离性`
-
-```java
-public interface Iterable {
-    Iterator iterator();
-}
-
-public interface Collection extends Iterable {
-    // ...
-}
-
-迭代器的使用：col.iterator()
-Collection col = new ArrayList();
-Iterator iterator = col.iterator();
-while (iterator.hasNext()) {
-    System.out.println(iterator.next());
-}
-```
-
-如果没有迭代器：
-
-- 一个进程遍历完
-- 另一个进程，没有数据了
-
-可以用于 `for 循环`:
-
-```java
-String[] names = {"A", "B", "C", "D"};
-StringJoiner sj = new StringJoiner(",", "[", "]");
-for (String name : names) {
-    sj.add(name);
-}
-System.out.println(sj); // 输出：[A,B,C,D]
-```
-
-`for 循环` 底层 就是 `迭代器`:
-
-```java
-public interface Iterator {
-    boolean hasNext();
-    Object next();
-}
-```
 
 
-## Java里遍历集合出现并发修改异常, 迭代器 iterator
-
-https://www.bilibili.com/video/BV1xf4y1i7xS
-
-## CopyOnWriteArrayList
-
-写时复制：适合 → 读多写少, 高并发场景, 线程安全, 读写分离
-
-缺点：
-
-- 增删操作时，会复制多分数据，内存占用大，容易引发GC
-
-- 读数据时，存在数据一致性问题
-
-[线程安全](https://www.bilibili.com/video/BV1Hu411r748)
-
-[迭代器之：fail-fast](https://www.bilibili.com/video/BV1MU4y1U71B)
 
 ## SimpleDateFormat 是线程安全的吗
 
@@ -1304,18 +1240,7 @@ https://www.bilibili.com/video/BV1Dh411J72Y
 
 https://www.bilibili.com/video/BV1MR4y1F7Jf
 
-## HashMap 有哪些【线程安全】的方式
 
-方式一：通过 Collections.synchronizedMap() 返回一个新的 Map
-
-- 优点：代码简单
-- 缺点：用了【锁】的方法，性能较差
-
-方式二：通过java.util.concurrent.ConcurrentHashMap
-
-- 将代码拆分成独立的segment，并调用【CAS指定】保证了【原子性】和【互斥性】
-- 缺点：代码繁琐
-- 优点：【锁碰撞】几率低，性能较好
 
 ## hashmap 是如何解决hash冲突的？
 
@@ -1331,83 +1256,22 @@ HashTable 给整张表添加一把【大锁】，把整张表锁起来，大幅�
 
 https://www.bilibili.com/video/BV1ei4y1U7HW
 
-## ConcurrentHashMap的扩容机制
 
-https://www.bilibili.com/video/BV16S4y1P7AB
-
-## ConcurrentHashMap 是如何提高效率的？
-
-https://www.bilibili.com/video/BV1QS4y1u7gG
-
-HashTable 给整张表添加一把【大锁】
-
-而 ConcurrentHashMap 采用【分段锁】
 
 ## 什么是【分段锁】？
 
 就是将数据【分段】，每段加一把锁
 
-## java8的ConcurrentHashMap放弃分段锁，采用node锁。why？
-
-node锁，粒度更细，提高了性能，并使用 `CAS 算法`保证原子性
-
-## 什么是CAS
-
-CAS，全称为Compare and Swap，
-
-即比较-替换。
-
-假设有三个操作数：`内存值V`、旧的`预期值A`、要`修改的值B`
-
-当且仅当`预期值A`和`内存值V`相同时，才会将`内存值V`修改为B并返回true，否则什么都不做并返回false。
-
-只要某次CAS操作失败，永远都不可能成功
-
-当然CAS一定要`volatile变量`配合，
-
-这样才能保证每次拿到的变量是`主内存`中`最新的那个值`
-
-## 请你谈一下CAS机制？
-
-https://www.bilibili.com/video/BV1X34y1t75r
 
 
 
 
 
 
-
-
-
-
-## 如何在不加锁的情况下解决线程安全问题？
-
-这个问题有3个方面：
-
-① 所谓的【线程安全】问题，其实是指【多个线程】，同时对【某个共享资源】的访问，导致的【原子性、可见性、有序性】的问题。
-
-而这些问题，会导致【共享数据】存在一个【不可预测性】，使得程序在执行过程中，出现一些超出预期的结果。
-
-② 解决【线程安全】问题的方式是【增加同步锁】，常见的是像【synchronized、lock】等。对【共享资源】加锁以后，多个【线程】在访问这个资源的时候，必须要先获得【锁】，也就是说，要先获得【访问资格】，而【同步锁】的特征是：在同一个时刻，只允许一个线程，访问一个资源，直到【锁】被释放，虽然这种方式，可以解决【线程安全性】的一个问题，但同时带来了【加锁】和【释放锁】所带来的一个【性能开销】
-
-③ 如何在【性能】和【安全性】之间取得一个balance。这就引出了一个【无锁并发】的概念，一般来说，会有以下几种方法：
-
-1. 自旋锁：指篇【线程】在没有【抢占的锁】的情况下，先【自旋】指定的次数，去尝试获得【锁】。
-2. 乐观锁： 给每个数据增加一个【版本号】，一旦数据发生变化，则去修改这个版本号。CAS的机制，可以完成【乐观锁】的功能。
-3. 在程序设计中，尽量去减少【共享对象】的使用。从业务上去实现【隔离】避免【并发】。
-
-
-
-## HashMap、Hashtable、ConcurrentHashMap、LinkedHashMap、TreeMap
-
-
-[](https://www.bilibili.com/video/BV1pq4y157sa)
 
 ## Hashmap和Treemap の 区别
 
-## HashMap默认大小，扩容机制？
 
-https://www.bilibili.com/video/BV15N4y1T7Mn
 
 
 ## 追问：HashMap在哪个jdk版本使用红黑树，之前 の 实现方法是什么？
@@ -1503,26 +1367,6 @@ https://www.bilibili.com/video/BV1h64y1x7SF
 
 
 
-## java集合有哪些？
-
-第一代线程【安全】类：
-
-- Vector Hashtable (通过synchronized方法，保证线程安全)
-  - 缺点：效率低下
-
-第二代线程【非安全】类：
-
-- ArrayList HashMap
-  - 线程不安全，但是性能好
-  - 当需要【线程安全】，可以使用`Collections.synchronizedList(list)`;`Collections.synchronizedMap(m)`;
-
-第三代线程【安全】类：
-
-- 兼顾【性能安全】和【性能】
-- java.util.concurrent.*
-- ConcurrentHashMap
-- CopyOnWriteArrayList
-- CopyOnWriteArraySet
 
 
 ## 内存溢出
@@ -1557,15 +1401,7 @@ https://www.bilibili.com/video/BV1uA411J7gK
 
 https://www.bilibili.com/video/BV1QW41167Gn
 
-## ArrayList默认大小，扩容机制？扩容 の 时候如何将旧数组转化为新数组？
 
-ArrayList 是一个【数组结构】的【存储容器】，默认情况下，数组的长度是 10 个。默认情况下，数组的长度是10。随着 程序不断往【ArrayList】里面添加数据，当添加的数据达到10个的时候，ArrayList 会触发【自动扩容】。
-
-首先，创建一个新的数组。这个新数组的长度是原来的1.5倍
-
-然后，使用Arrays.copyOf方法，把老数组里面的数据copy到新数组里面。
-
-然后，把当前需要添加的元素，加入到新的数组里面，从而去完成【动态扩容】的过程。
 
 ## 线程 の 创建方式？
 
