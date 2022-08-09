@@ -330,6 +330,14 @@ Redis 6.0 是指的是：
 - 【键值对-读写】仍然是【单线程】
 - so 是【并发安全】的
 
+## MySQL和Redis的双写一致性？
+
+https://www.bilibili.com/video/BV1CD4y1X75a
+
+## bind到底绑定的是什么
+
+https://www.bilibili.com/video/BV1eD4y1o7np
+
 ## redis是单线程的，为什么这么设计呢？
 
 1. 基于内存，瓶颈不在cpu，加锁反而会带来性能损失
@@ -342,6 +350,8 @@ Redis 6.0 是指的是：
 （答 读多写少的时候，加共享锁多线程性能更好）， 
 
 ## 学习下分布式锁 mysql redis zookeeper
+
+[Redis实现分布式锁](https://www.bilibili.com/video/BV1da4y1p7my)
 
 https://www.bilibili.com/video/BV1YZ4y1k7pC
 
