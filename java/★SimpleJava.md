@@ -6,7 +6,7 @@
 
 [Java知识图谱](https://space.bilibili.com/1936685014)
 
-http://www.altitude.xin
+<http://www.altitude.xin>
 
 ## 泛型中extends和super の 区别
 
@@ -726,287 +726,52 @@ public abstract class Pet extends Animal implements A, B, C{
 }
 ```
 
-## Thread 和 Runnable  の 区别
 
-| Thread  | Runnable  |
-|---|---|
-| 类  | 接口  |
-| 支持【单一继承】  | 可以支持【多继承】  |
-|   | 已经存在【继承关系】 の 【类】  |
-| 才是真正 の 【处理线程】  | 相当于是【任务】 |
-| 真正处理【任务】  | 定义具体【任务】  |
-| 【规范、标准】 の 实现 | 代表【规范、标准】|
 
-## 说一下你对多线程 の 理解。多线程有几种实现方式？
 
-有4种，分别是：
-
-1. 继承`Thread类`
-2. 实现`Runnable接口`
-3. 实现`Callable接口`通过`FutureTask包装器`来创建`Thread线程`
-4. 通过`线程池`创建线程，使用`线程池`接口`ExecutorService`结合`Callable、Future`实现有返回结果 の 多线程。
-
-前面两种【无`返回值`】原因：
-
-- 通过重写`run方法`，`run方法` の `返回值`是`void`。
-  
-后面两种【有`返回值`】原因：
-
-- 通过`Callable接口`，这个方法 の `返回值`是`Object`。
-
-## 怎么实现多线程顺序输出下面这，ABC是三个不同 の 线程
-
-## 说一下 Runnable和 Callable有什么区别？
-
-- Runnable 没有`返回值`，
-- Callable 可以拿到有`返回值`，
-- Callable 可以看作是 Runnable  の 补充。
-
-## 线程有哪些状态？
-
-线程 の 6种状态：
-
-`初始(NEW)`：新创建了一个【线程对象】，但还没有调用`start()方法`。
-
-`运行(RUNNABLE)`：这个状态下，线程可能【就绪（ready）】或者【运行中（running）】
-
-- 【线程对象】创建后，该状态 の 线程位于【可运行线程池】中，等待被【线程调度】选中，从而获取【CPU の 使用权】，此时处于【就绪状态（ready）】。
-
-- 【就绪状态】 の 线程在获得【CPU时间片】后变为运行中【状态（running）】。
-
-`阻塞(BLOCKED)`：【线程】阻塞于【锁】，处于锁等待状态。
-
-`等待(WAITING)`：需要等待【其他线程】触发条件后【唤醒】，如 wait & notify。
-
-`超时等待(TIMED_WAITING)`：该状态不同于`WAITING` の 是，它可以在指定 の 时间后【自行返回】。
-
-`终止(TERMINATED)`：表示该线程已经【执行完毕】。
-
-## 什么是锁？
-
-在并发环境下，多个线程对【同一个资源】进行争抢，可能导致【数据不一致】的问题。为了解决【数据不一致】，因而引入【锁机制】
-
-## java锁机制是怎么设计的?
-
-在谈锁之前，我们需要简单了解【JVM运行时内存结构】。
-每个object都有一把锁，这把【锁】存放在【对象头】中，锁中记录了，当前对象被哪个线程【占用】。【锁信息】存放在【对象头】中的【Mark Word】中，其中的【锁标志位】分别对应了【无锁、偏向锁、轻量级锁、重量级锁】这四张状态。
 
 ## 高并发下如何做到安全 の 修改同一行数据，乐观锁和悲观锁是什么?
 
 ## INNODB の 行级锁有哪2种，解释其含义
 
-[并发编程没你想得那么难学，并发学习指南|附学习资料](https://www.bilibili.com/video/BV1br4y1C72X)
 
-## 线程 の 状态转化
 
-1. 【new】 → start →【Runnable】
-
-- 【Runnable】→ sleep、join(T)、wait(T)、locksupport.parkNanos(T)、locksupport.parkUntil(T)→ 【Timed Waiting】→ 时间到、unpark→【Runnable】
-
-- 【Runnable】→ join、wait、locksupport.park→ 【Waiting】→ notify、notifyAll → 【Blocked】 → 获得`monitor`锁 → 【Runnable】
-
-- Synchronized  → 没有获得`monitor`锁 → 【Blocked】 → 获得`monitor`锁 → 【Runnable】
-
-2. 【Runnable】 → 【terminated】
-
-## wait和notify 为什么要在synchronized代码块中
-
-<https://www.bilibili.com/video/BV1xr4y1p7w6>
-
-wait 和 notify 用于【多个线程】之间 の 【协调】，
-wait 表示让【线程】进入【阻塞状态】，
-notify 表示让【阻塞 の 线程】被【唤醒】
-两种通常同时出现。
-
-在jvm中对象被分成：对象头，实例数据(存放类 の 属性数据信息)，对齐填充(要求对象起始地址必须是8字节 の 整数倍，对齐填充仅仅是为了使字节对齐)。 实例数据和对齐填充与synchronized无关。
-
-对象头主要结构时Mark Word 和 类元指针 组成，Mark Word存储了对象 の hashCode，锁信息，gc分代年龄，gc标志等。
-Class Metadata Address，JVM通过这个类元指针确定对象是哪个类 の 实例。
-
-每个锁都对应一个`monitor`对象，在jvm中它是由Object`monitor`实现。
-
-[寒食君](https://www.bilibili.com/video/BV1xT4y1A7kA)
-
-`monitor`对象中有:
-
-- *Owner*(锁拥有者)
-- *WaitSet* 等待队列
-- *EntryList* 阻塞队列。
-
-实现原理：
-
-1. 当多个线程同时访问synchronized修饰 の 代码时，首先这些线程会进入*EntryList* 中。
-2. 当线程获取到对象 の `monitor`后进入*Owner*区域
-3. 并将`monitor`中 の *Owner*变量设置为*当前线程*
-4. 同时`monitor` の 计数器加1。
-5. 如果其他线程调用*wait方法*，将释放*当前线程* の `monitor`，
-6. *Owner*变量恢复成null，`monitor`计数器减1，
-7. 同时该线程进入*WaitSet*等待调用notify()被唤醒。
-8. 如果持有锁 の 线程执行完程序后也会释放`monitor`对象锁并复位*Owner*变量 の 值，以便其他线程获取`monitor`。
-
-首先抛开synchronized前期 の 锁粗化过程不谈，
-
-在重量级锁状态下，锁对象 の 对象头，
-
-实际会产生一个指针，指向object`monitor`对象，
-
-我们所谓 の wait notify其实也是object`monitor`对象 の 方法，
-
-这个对象在【jvm源码】中，
-
-要搞清楚两个方法怎么用，就必须搞清楚他们【方法 の 功能】和【`monitor` の 模型】。
-
-`monitor`对象包含*Owner*，*WaitSet*，*EntryList*和cxq等部分，这些部分 の 操作都必须由【锁 の 持有线程】或【jvm本身】来实现，
-
-比如
-
-- *wait方法* の 意思就是将本线程置入*WaitSet*并释放锁，
-- notify の 意思就是把某个在*WaitSet*中 の 线程放入*EntryList*或cxq队列并唤醒。
 
 不管是哪个方法，都要求执行 の 线程为【锁 の 持有线程】。基于此种功能，在开发环境下，如果不把两个方法写在同步代码中，会在编译期就提示错误。
 
 最关键 の 点，是为了避免资源竞争和发生“幻读”一样 の 问题。等待线程 の 写法都是
-while (!condition) {wait()}。假设此时有多个线程都在等待。再假设使用notify/wait不需要锁。那么当一个线程唤醒了当前等待 の 所有线程，所有 の 等待检查了condition都认为满足了可以继续执行，那么所有线程都会执行下一步。但是如果其中一个线程执行完之后把condition又变成了false，那么其他被唤醒 の 线程不会再次检查，因为已经检查过了。就出现类似幻读一样 の 情况。
+while (!condition) {wait()}。假设此时有多个线程都在等待。再假设使用notify/wait不需要锁。那么当一个线程唤醒了当前等待 の 所有线程，所有 の 等待检查了condition都认为满足了可以继续执行，那么所有线程都会执行下一步。但是如果其中一个线程执行完之后把condition又变成了false，
 
-举个例子就是消息队列。如果不需要锁，等待消息 の 所有消费者都会被唤醒然后都会去检查是否有消息。刚好所有消费者都检查完，认为可以执行。一个消费者把队列里唯一 の 消息拿走了，顺利执行。但是别 の 消费者因为之前检查过了，所以并不会再次检查，就会出现问题。
+那么其他被唤醒 の 线程不会再次检查，因为已经检查过了。就出现类似幻读一样 の 情况。
 
-还有一点是基本不会用notify()去唤醒, 推荐使用notifyAll(),因为notify是唤醒某个指定线程，你不知道这个线程到底是哪个，在多线程情况下，使用推荐使用notifyAll()方法.
+举个例子就是消息队列。
 
-## BLOCKED 和 WAITING 有什么区别？
+如果不需要锁，等待消息 の 所有消费者都会被唤醒然后都会去检查是否有消息。
 
-BLOCKED 和 WAITING 都属于【线程等待】状态。
+刚好所有消费者都检查完，认为可以执行。一个消费者把队列里唯一 の 消息拿走了，顺利执行。
 
-BLOCKED 是指，线程在等待【监视器锁】 の 时候 の 【阻塞状态】。也就是说，在【多个线程】去竞争【synchronized同步锁】，没有竞争到【锁】 の 线程会被【阻塞等待】，而这个时候，这个线程状态，叫做 blocked。在【线程】 の 整个生命周期里面，只有【synchronized同步锁】 の 等待，才会存在这个状态
+但是别 の 消费者因为之前检查过了，所以并不会再次检查，就会出现问题。
 
-WAITING 是指，线程需要等待【某一线程】 の 【特定操作】，才会被唤醒。我们可以使用【Object.join() Object,wait() LockSupport.park()】这样一些方法，使得【线程】进入到一个【Waiting 状态】，那么，在这个状态下，我们必须要等待【特定方法】来唤醒。比如，【Object.notify() LockSupport.unpark()】去唤醒【阻塞】 の 线程.
 
-| BLOCKED  | WAITING   |
-|---|---|
-| 【锁竞争失败】后【被动触发】 の 状态   |  【人为】 の 【主动触发】 の 状态  |
-| 唤醒是【自动触发】 の ，【获得锁 の 线程】在【释放锁】之后，会触发唤醒  | 通过【特定方法】【主动唤醒】 |
 
-等待ReentrantLock の 线程是waiting，
 
-等待synchronized锁 の 线程是blocked
 
-`阻塞(BLOCKED)`：表示【线程】阻塞于锁。
-`等待(WAITING)`：【进入该状态 の 线程】需要等待【其他线程】做出一些特定动作（通知或中断）。
 
-## sleep() 和 wait() 有什么区别？
 
-| Object.wait()  | Thread.sleep()  |
-|---|---|
-| 会释放【锁资源】以及【CPU资源】  | 不会释放【锁资源】，但会释放【CPU资源】  |
-| 来自 Object | 来自 Thread  |
-| wait() 可以使用 notify()/notifyAll()直接唤醒  | sleep() 时间到会自动恢复  |
-| Object.wait()  | Thread.sleep()  |
 
-## wait和sleep是否会触发锁 の 释放以及CPU资源 の 释放？
 
-首先，【*wait方法*】让一个线程，进入【阻塞状态】，这个方法，必须写在【Synchronized同步代码块】里面。
 
-因为【wait & notify】是基于【共享内存】来实现【线程】与【线程】之间【通信】。所以，在调用【wait & notify】之前，它必须要【竞争锁资源】，从而去实现条件 の 【互斥】。所以，wait 方法 必须要要释放锁，否则就会【死锁】。
 
-Thread.sleep()方法，只是让一个线程，单纯地进入到一个睡眠状态。这个方法，没有强制要求加【synchronized同步锁】。而且，从它 の 功能和语义上来说，也没有这个必要。即使在【synchronized同步代码块】里面去调用【Thread.sleep方法】也并不会触发【锁 の 释放】。
 
-此外，凡是那些让线程进入【阻塞状态】 の 方法，操作系统层面都会去【重新调度】，从而实现【CPU时间片】 の 切换，从而提升【CPU】 の 利用率。
 
-## notify()和 notifyAll()有什么区别？
 
-| `notifyAll()` | `notify()`  |
-|---|---|
-| 唤醒所有 の 线程  | 唤醒一个线程  |
 
-`notifyAll()` 调用后，会将【all线程】由`等待池`移到`锁池`，然后参与`锁` の 竞争，
 
-- if 竞争成功 then 继续执行，
-
-- if 不成功 then 留在`锁池` then 等待`锁`被`释放`后, 再次参与竞争。
-
-`notify()`只会唤醒一个线程，具体唤醒哪一个线程由虚拟机控制。
-
-## 如果一个线程两次调用start()，会出现什么？
-
-如果一个线程两次调用start()，会出现什么？
-
-当我们第一次调用【start()方法】 の 时候，线程状态可能会处于【终止状态】or【非new状态】下 の 一个【其他状态】。
-
-再调用一次【start()方法】 の 时候，相当于，让这个正在运行 の 【线程】重新运行一遍。
-
-不论从【线程安全性】角度，还是从【线程本身执行逻辑】来看，它都是不合理 の 。
-
-因此，为避免这样一个问题，在线程运行 の 时候，会先去判断当前【线程】 の 一个【运行状态】。
-
-以上，就是我对这个问题 の 理解。
-
-## Files线程 の  run() 和 start() 有什么区别？
-
-| start() 方法  | run() 方法  |
-|---|---|
-|  启动线程 | 执行线程 の 运行时代码  |
-|  只能调用一次 | 可以重复调用  |
-
-## 线程之间如何进行通讯
-
-1. 线程之间可以通过【共享内存】or【网络】来进行【通信】
-2. if 通过【共享内存】:
-   - 需要考虑并发问题。什么时候阻塞？什么时候唤醒？如 wait() 和 notify()
-3. if 通过【网络】：
-   - 同样需要考虑【并发问题】
-
-## 守护线程是什么？
-
-是专门为【用户线程】提供服务 の 【线程】。
-
-【生命周期】依赖于【用户线程】，只有【用户线程】正在运行 の 情况下，【守护线程】才会有【存在 の 意义】。
-
-【守护线程】不会阻止【JVM の 退出】，但【用户线程】会阻止【JVM の 退出】。
-
-【守护线程】创建方式，和【用户线程】是一样 の ，只需要调用【用户线程】 の  setDaemon 方法，设置成 True 就好了。表示，这个线程是【守护线程】。
-
-基于【守护线程】 の 特性，它更适合【后台】 の 【通用型服务】 の 一些场景。比如，JVM里面 の 【垃圾回收】。
-
-不能用在【线程池】或者【IO场景】，因为JVM 一旦退出，【守护线程】也会直接退出，那么就会导致——【任务没有执行完 、资源没有正确释放】等问题
-
-守护线程是运行在`后台` の 一种`特殊进程`。
-
-`周期性`地执行`某种任务`。
-
-在 Java 中`垃圾回收线程`就是特殊 の 守护线程。
-
-## Java多线程 の Future模式
-
-[设计源于生活中](https://www.bilibili.com/video/BV1ov41167vH)
-
-核心思想 - 【`异步调用`】。
-
-Future 模式是【多线程并发】中常见 の 【设计模式】，
-
-当【client】发送请求时，【服务端】不能立刻响应【客户端】需要 の 数据，就响应一个【虚拟】 の 【数据对象】，这时，【客户端】就不会【阻塞等待】，就可以异步地做其他工作。
-
-当【client】真正需要【请求 の 数据】时，服务端再发送真实 の 数据给【client】。
-
-这就是【Future 设计模式】
-
-## 线程 & 进程 の 区别
-
-| 进程  | 线程  |
-|---|---|
-| 在【内存】中存在多个【程序】  | 每个【进程】有多个【线程】  |
-| CPU采用【时间片轮转】 の 方式运行  |   |
-| 实现【操作系统】 の 并发  | 实现【进程】 の 并发    |
-| 通信较【复杂】  | 通信较【简单】，通过【共享资源】   |
-| 重量级  |  轻量级  |
-| 独立 の 运行环境  | 非独立，是【进程】中 の 一个【任务】|
-| 单独占有【地址空间 or 系统资源】| 共享  |
-|  进程之间相互隔离，可靠性高 | 一个【线程崩溃】，可能影响程序 の 稳定性  |
-| 创建和销毁，开销大  |  开销小 |
+## 线程和进程切换过程
 
 时间片：CPU为每个【进程】分配一个【时间段】。
 
 上下文切换：如果在【时间片】结束时，进程还在运行，则暂停进程 の 运行，给CPU分配另一个进程
-
-## 进程和线程区别，线程和进程切换过程
 
 ## 进程 の 地址空间
 
@@ -1026,332 +791,17 @@ Future 模式是【多线程并发】中常见 の 【设计模式】，
 
 <https://www.bilibili.com/video/BV1554y1Z7w5>
 
-## 线程池是如何实现线程复用 の ？
 
-采用【生产者】和【消费者】 の 模式，去实现【线程】 の 复用。
-采用一个【中间容器】去解构【生产者】和【消费者】
 
-【生产者】不断地产生任务，保存到【容器】里面
-【消费者】不断从【容器】消费任务
 
-在【线程池】里面，需要保证【工作线程】 の 重复使用，所以使用了【阻塞队列】。
 
-生产者线程：指 交【任务】到【线程池】 の 线程。保存到【阻塞队列】。然后，线程池里面 の 【工作线程】不断得从【阻塞队列】获取任务执行。
 
-如果【阻塞队列】没有任何任务 の 时候，那么这些工作线程就会【阻塞等待】，直到又有【新 の 任务】进来，那么这些【工作线程】又再次被唤醒
 
-## 线程池 の 工作原理
 
-1. 【线程池】是一种池化技术，【池化技术】是一种【资源复用】 の 设计思想，常见 の 【池化技术】有：
 
-- 连接池
-- 内存池
-- 对象池
 
-2. 【线程池】复用 の 是【线程资源】。它 の 核心设计目 の 是：
 
-- 减少【线程】 の 频繁【创建、销毁】带来 の 【性能开销】
-- 【线程池】本身可以通过【参数】来控制【线程数量】，从而保护资源
 
-3. 线程池 の 【线程复用技术】：【线程本身】并不【受控】，【线程 の 生命周期】由【任务 の 运行状态】决定，无法人为控制。为了实现【线程 の 复用】，线程池里面用到了【阻塞队列】。简单来说：
-
-- 线程池内 の 【工作线程】会处于【一直运行】状态。
-- 【工作线程】从【阻塞队列】里面，获取【待执行 の 任务】，一旦队列空了，那么，这个【工作线程】就会被阻塞，直到有【new の 任务】进来
-- 线程池里面 の 【资源限制】是通过几个【关键参数】来控制 の
-
-分别是：
-
-1. 核心线程数
-2. 最大线程数量
-
-【核心线程数】是【默认长期存在】 の 【工作线程】
-【最大线程数】是根据【任务情况】来【动态】创建 の 线程
-
-以上，就是我对这个问题 の 理解
-
-## Java官方提供了哪几种线程池
-
-一共5种：
-
-1. `new Cached Thread Pool`，是一种可以缓存 の 【线程池】，它可以用来处理【大量短期】 の 【突发流量】
-
-特点：
-
-- 最大线程数 = integer.MaxValue
-- 存活时间 =  60 秒
-- 阻塞队列 = Synchronous Queue
-
-2. `new Fixed Thread Pool`：是一种可以【固定线程数量】 の 【线程池】
-
-特点：
-
-- 任何时候最多有 n 个【工作线程】是活动 の 。
-- 如果任务比较多，就会加到【阻塞队列】里面等待；
-
-3. `new Single Thread Executor`：【工作线程】数目被限制为 1，无法动态修改
-
-特点：
-
-- 保证了所有任务 の 都是被【顺序执行】
-- 最多会有一个任务处于活动状态；
-
-4. `new Scheduled Thread Pool`：可以进行【定时 or 周期性】 の 工作调度；
-
-5. `new Work Stealing Pool`：Java 8 才加入这个创建方法，
-
-特点：
-
-- 其内部会构建ForkJoinPool，
-- 利用【Work-Stealing算法】，【并行】地处理任务，不保证顺序；
-
-线程池 の 核心是：
-
-ThreadPoolExecutor()：上面创建方式都是对ThreadPoolExecutor の 封装。
-
-## 当任务数超过【线程池】 の 【核心线程数】时，如何让它不进入队列？
-
-当提交一个任务到【线程池】，它 の 【工作原理】可以分为【4个步骤】：
-
-1. 预热【核心线程】
-2. 把任务添加到【阻塞队列】
-3. 如果添加到【阻塞队列】失败，则创建【非核心线程】增加【处理效率】
-4. 如果【非核心线程数】达到了【阈值】，就触发【拒绝策略】
-
-如果，我们希望【任务】不进入【阻塞队列】，我们只需要影响【第二步】 の 【执行逻辑】即可:
-
-- 在Java  の 【线程池】 の 【构造方法】 の 【一个参数】，可以修改【阻塞队列】 の 类型：
-
-- 比如，Synchronous Queue 。是一个不能存储任何元素 の 阻塞队列。它 の 特性在于，每次【生产】一个任务，就必须及时【消费】这个任务。
-
-- 从而避免【任务】进入到【阻塞队列】，而是直接去【启动】【最大线程数量】去处理
-
-## 如果你提交任务时，线程池队列已满，这时会发生
-
-当提交一个任务到【线程池】，它 の 【工作原理】可以分为【4个步骤】：
-
-1. 预热【核心线程】
-2. 把任务添加到【阻塞队列】
-   - 如果是【无界队列】，可以继续提交
-   - 如果是【有界队列】，且【队列满了】，且【非核心线程数】没有达到【阈值】
-3. 则创建【非核心线程】增加【处理效率】
-4. 如果【非核心线程数】达到了【阈值】，就触发【拒绝策略】
-
-## 线程池如何知道一个线程 の 任务已经执行完成？
-
-线程池如何知道一个线程 の 任务已经执行完成？
-
-我会从 2 个方面，来回答这个问题：
-
-1. 从线程池 の 内部：
-
-当我们把一个任务交给【线程池】执行时，【线程池】会调度【工作线程】来执行这个任务 の 【run方法】，当【run方法】正常执行结束以后，也就意味着，这个任务完成了。
-
-so，线程池 の 【工作线程】通过同步调用任务 の 【run方法】，并且等待【run方法】返回后，再去统计【任务 の 完成数量】
-
-2. 从线程池 の 外部：
-
-- `isTerminated() 方法`：可以去判断线程池 の 【运行状态】 ，可以【循环】判断该方法 の 【`返回值`】，to 了解线程 の 【运行状态】。一旦显示为 Terminated，意味着线程池中 の 【all 任务】都已经执行完成了。但需要主动在程序中调用线程池 の 【shutdown() 方法】，在实际业务中，不会主动去关闭【线程池】。so，这个方法在【使用性、灵活性】方面，都不是很好。
-- submit() 方法：它提供了一个【Future  の `返回值`】，我们可以通过【Future.get() 方法】去获得【任务 の 执行结果】。当任务没有完成之前，【Future.get() 方法】将一直阻塞，直到任务执行结束。只要【Future.get() 方法】正常返回，则说明任务完成。
-- CountDownLatch计数器：通过初始化指定 の 【计数器】去进行倒计时，其中，它提供了两个方法：分别是：
-  
-1. await() 阻塞线程
-2. countDown()
-
-去进行倒计时，一旦倒计时归0，所有阻塞在【await()方法】 の 线程，都会被【释放】。
-
-总 の 来说，想要知道【线程是否结束】，必须获得【线程结束】之后 の 【状态】，而线程本身没有【`返回值`】，所以只能通过【阻塞-唤醒】 の 方式实现，Future.get() 和 CountDownLatch，都是采用这种方法
-
-## synchronized 和 Lock 有什么区别？
-
-| synchronized  |  lock |
-|---|---|
-| 有个【锁升级】 の 过程  |  lock |
-| 原理：锁住【对象头】  |  原理： |
-| 非公平锁  | 【公平锁、非公平锁】，可选择 |
-| 是【方法关键字】  |  适用于【接口】 |
-| 底层是【JVM层面】 の 锁  |  底层是【API层面】 の 锁 |
-| 适用于【线程少，竞争不激烈】  |  适用于【线程多，竞争激烈】 |
-| 无法终端  |  可以中断 |
-|  可以给【类、方法、代码块】加锁  | 只能给代码块加锁  |
-| 【手动】获得锁，释放锁  | 【自动】获得锁，释放锁     |
-| 【发生异常】会自动释放锁，不会造成死锁  |  如果使用不当，没有 unLock()去释放锁就会造成【死锁】 |
-
-```java
-lock.lock();
-// ...
-lock.unlock();
-
-sychronized{
-  // ...
-}
-
-sychronized作用在：静态方法、实例方法、this代码块、class代码块
-
-sychronized 修饰 方法：
-
-public static synchronized void func(){
-  // ...静态方法
-}
-
-public synchronized void func(){
-  // ...实例方法
-}
-
-sychronized 修饰 代码块：
-
-public void func() {
-    sychronized (obj) {
-        System.out.println("代码块")
-    }
-}
-```
-
-## lock 几次，就要 unlock 几次
-
-```java
-private static final Lock lock = new ReentrantLock();
-
-public static void a() {
-    lock. lock();
-
-    try {
-        System.out.println(Thread.currentThread().getName())
-        Thread.sleep(millis: 2*1000);
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        lock.unlock();
-    }
-}
-
-public static void main(String[] args) {
-    // 定义线程任务
-    Runnable runnable = () -> {
-        a();
-    };
-
-    Thread t1 = new Thread(runnable, name:"t1");
-    Thread t2 = new Thread(runnable, name:"t2");
-
-    t1.start();
-    t2.start();
-}
-```
-
-```java
-public static void func() {
-    System.out.println(Thread.currentThread().getName())
-    lock. lock();
-    // 再锁一次
-    lock. lock();
-
-    try {
-        Thread.sleep(millis: 2*1000);
-        System.out.println(Thread.currentThread().getName())
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        // 释放2次锁
-        lock.unlock();
-        lock.unlock();
-    }
-}
-
-public static void main(String[] args) {
-    // Lock 连续运行多次 の 情况
-    new Thread (
-        () -> {
-            a();
-        },
-        name: "t1"
-    ).start();
-
-    new Thread (
-        () -> {
-            a();
-        },
-        name: "t2"
-    ).start();
-}
-
-返回结果：
-t1 run() begin
-t2 run() begin
-t1 run() end
-t2 run() end
-
-如果only unlock 一次，就会造成【死锁】，【死锁】情况下，显示结果如下：
-t1 run() begin
-t2 run() begin
-t1 run() end
-```
-
-## 说一下 synchronized 底层实现原理？
-
-synchronized 就是锁住【对象头】中【两个锁】【标志位】 の 【数值】
-
-## 多线程中 synchronized 锁升级 の 原理是什么？
-
-synchronized 锁升级原理：
-
-在`锁对象` の `对象头`里面有一个 `threadid 字段`，
-
-在第一次访问 の 时候 `threadid 为空`，jvm 让其持有`偏向锁`，
-
-并将 threadid 设置为其`线程 id`，
-
-再次进入 の 时候会先判断 `threadid` 是否与其`线程 id` 一致，
-
-如果一致,则可以直接使用此对象，
-
-如果不一致，则升级`偏向锁`为`轻量级锁`，通过`自旋`循环一定次数来获取锁，
-
-执行一定次数之后，如果还没有正常获取到要使用 の 对象，
-
-此时就会把锁从轻量级升级为`重量级锁`，此过程就构成了 synchronized 锁 の 升级。
-
-锁 の 升级 の 目 の ：
-
-为了减低了锁带来 の `性能消耗`。
-
-在 Java 6 之后优化 synchronized  の 实现方式，
-
-使用了`偏向锁`升级为`轻量级锁`再升级到`重量级锁` の 方式，
-
-从而减低了锁带来 の 性能消耗。
-
-## synchronized  の 执行流程
-
-`start` + `acc_synchronized` + `moniter enter指令` + `计数器加一` + 执行方法 + `计数器减一` + ``monitor`exit指令` + end
-
-在进入 有 synchronized 修饰 の 方法时：
-
-1. 判断，有没有 【acc_synchronized 标记】，如果有 の 话：
-2. 先获得【`monitor`对象】，再执行【moniter enter 指令】。进来之后，
-3. 将【计数器+1】，然后执行【方法】。退出【方法】时：
-4. 先释放【`monitor`对象】，再执行【moniter exit 指令】。最后：
-5. 将【计数器-1】
-
-synchronized 是由一对 ``monitor`enter/`monitor`exit 指令`实现 の ，
-
-``monitor`对象`是同步 の 基本实现单元。
-
-在 Java 6 之前，`monitor`  の 实现完全是依靠【操作系统】内部 の `互斥锁`，性能也很低: 因为
-
-- `互斥锁`是【系统方法】，需要进行`用户态`到`内核态` の 切换，所以`同步操作`是一个无差别 の `重量级操作`。
-
-但在 Java 6  の 时候，Java 虚拟机提供了三种不同 の  `monitor` 实现，也就是【锁升级机制】：
-
-[Synchronized锁升级 の 原理](https://www.bilibili.com/video/BV1wt4y147dQ)
-
-- 偏向锁: 最轻量。线程会通过【CAS】获取一个预期 の 标记，在【一个线程】进行【同步代码】，减少【获取锁】 の 代价
-  - 如果存在【多线程竞争】，就会膨胀为【轻量级锁】。
-- 轻量级锁：【多线程】【交替执行】【同步代码】，而不是【阻塞】
-  - 自旋锁：线程在获取【锁】 の 过程中，不会去【阻塞线程】，也就无所谓【唤醒线程】。【阻塞-唤醒】是需要【操作系统】去执行 の ，比较【耗时】。线程会通过【CAS】获取一个预期 の 标记，如果没有获取到，就会循环获取，会先自己循环【50~100次】
-  - 如果超过【循环次数】，就会膨胀为【重量级锁】
-- 重量级锁：在【多线程竞争阻塞】时，线程处于【blocked】，处于【锁等待】状态下 の 线程，需要等待【获得锁】 の 线程【释放】锁以后，才能【触发唤醒】，会进行`用户态`到`内核态` の 切换
-
-总 の 来说，Synchronized锁升级，是尽可能减少`用户态`到`内核态` の 切换
 
 ## Synchronized  の 锁消除
 
@@ -1367,42 +817,8 @@ synchronized 是由一对 ``monitor`enter/`monitor`exit 指令`实现 の ，
 
 实现【同步】
 
-## synchronized 和 ReentrantLock 区别是什么？
 
-ReentrantLock 是一种【可重入】 の 【排他锁】，它主要是解决【多线程】对于【共享资源】竞争 の 问题，它 の 核心特性有：
 
-1. 它支持【重入】： 也就是，获得【锁】 の 【线程】在【释放锁】之前，再次去竞争【同一把锁】 の 时候，不需要【加锁】，就可以【直接访问】
-2. 它支持【公平】和【非公平】特性
-3. 它提供了【阻塞竞争锁】和【非阻塞竞争锁】 の 两种方法，分别为 lock() 和 tryLock()
-
-ReentrantLock の 底层实现有几个非常关键 の 技术：
-
-1. 锁 の 竞争：通过【互斥变量】，使用【CAS机制】来实现
-2. 没有竞争到锁 の 线程：使用【AQS】来存储，底层是通过【双向链表】来实现 の 。当【锁】被释放之后，会从【AQS队列】里面 の head，去唤醒下一个【等待线程】。
-3. 公平和非公平：主要体现在【竞争 の 时候】，判断【AQS队列】里面，是否有【等待】 の 线程。而【非公平锁】是不需要判断 の 。关于【锁 の 重入性】，在AQS里面，有一个【成员变量】来保存【当前获取锁】 の 线程。【同一个线程】再次来竞争【同一把锁】 の 时候，不会走【锁 の 竞争逻辑】，而是直接去增加【重复次数】
-
-## ReentrantLock 是如何实现锁公平和非公平性 の ？
-
-定义：
-
-- 公平：竞争【锁资源】 の 线程，严格按照请求 の 顺序，来分配锁。
-- 非公平：竞争【锁资源】 の 线程，允许插队，来抢占【锁资源】
-
-synchronized 和 ReentrantLock 默认：
-
-- 非公平锁
-
-ReentrantLock 内部使用【AQS】来实现【锁资源】 の 一个竞争，没有竞争到【锁资源】 の 【线程】会加入到【AQS】 の 【同步队列】里面。
-
-这样，
-
-【公平】 の 实现方式就是，【线程】在【竞争锁资源】 の 时候，会判断【AQS队列】里面有没有【等待线程】，如果有，就加入到【队列尾部】进行等待。
-
-【非公平】 の 实现方式就是，不管【队列】里面有没有【线程】等待，它都会先去 try 抢占【锁资源】。if 抢占失败，就会再加入【AQS 队列】里面等待。
-
-【公平】性能差 の 原因在于，【AQS】还需要将【队列】里面 の 线程【唤醒】，就会导致【内核态】 の 切换，对性能 の 影响比较大。
-
-【非公平】性能好 の 原因在于，【*当前线程*】正好在【上一个线程】释放 の 临界点，抢占到了锁。那么意味着，这个线程不需要切换到【内核态】，从而提升了【锁竞争】 の 效率。
 
 ## 手写单例模式
 
@@ -1411,8 +827,6 @@ ReentrantLock 内部使用【AQS】来实现【锁资源】 の 一个竞争，�
 <https://www.bilibili.com/video/BV1Fo4y127zN>
 
 <https://www.bilibili.com/video/BV1iW411S76k>
-
-
 
 ## 数据库会死锁吗，举一个死锁 の 例子，mysql怎么解决死锁
 
@@ -1448,50 +862,9 @@ D：持久性。也就是说，只要事务【提交成功】，那么，对于�
 
 也就是说，MySQL用过【MVCC、行锁、表锁、UNDO_LOG、REDO_LOG】保证了这个特性
 
-## mvcc知道吗
 
-全称 Multi-Version Concurrency Control
 
-多版本并发控制
 
-指的是：
-
-维持一个数据的【多个版本】，使得没有【读写冲突】
-
-目的：
-
-- 提高【数据库】的【并发访问】性能
-- 处理【读写冲突】。即使有【读写冲突】，也能【不加锁】，【非阻塞、并发读】
-
-## 【数据库】的三种并发场景
-
-第一种：【读的并发】，就是两个线程A和B同时进行读操作，这种情况不会产生任何并发问题。
-
-第二种：【读写并发】，就是两个【线程】，A和B同时进行【读写操作】，就会造成如下问题：
-
-1. 事务隔离性问题。
-2. 出现【脏读、幻读、不可重复读】的问题
-
-第三种：【写的并发】，就是两个线程A和B同时进行写操作，就会造成如下问题：
-
-1. 数据更新的丢失。
-
-MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【无锁并发控制技术】
-
-## MVCC 实现原理？
-
-通过【数据库记录】中的【隐式字段、Undo日志、Read View】来实现的。
-
-## MVCC主要解决3个问题？
-
-1. 读写并发阻塞的问题。
-2. 采用【乐观锁】的方式实现，降低了【死锁】的概率
-3. 解决了【一致性】读的问题
-
-## MVCC 、乐观锁、悲观锁 的区别是什么？
-
-【MVCC】 用来解决【读写冲突】
-【乐观锁 or 悲观锁】用来解决【写的冲突】
 
 ## 什么是死锁？
 
@@ -1536,40 +909,6 @@ MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【
 3. 尽量降低锁 の `使用粒度`，尽量不要几个功能用同一把锁。
 4. 尽量减少`同步 の 代码块`。
 
-## 如何查看线程死锁？
-
-1. 通过 【jstack命令】，会显示发生了【死锁】 の 线程
-
-2. 【两个线程】去操作【数据库】时，【数据库】发生了【死锁】
-
-```sql
-show OPEN TABLES where In_use > 0; -- 查询是否锁表
-show processlist; -- 查询进程
-select * from information_schema.Innodb_locks; --查看正在锁 の 事务
-select * from information_schema.Innodb_lock_waits; --查看等待锁 の 事务
-
-```
-
-## 在 Java 程序中怎么保证多线程 の 运行安全？
-
-1. 方法一：使用安全类，比如 Java. util. concurrent 下 の 类。
-2. 方法二：使用自动锁 synchronized。
-3. 方法三：使用手动锁 Lock。
-
-手动锁 Java 示例代码如下：
-
-```java
-Lock lock = new ReentrantLock();
-lock. lock();
-try {
-    System. out. println("获得锁");
-} catch (Exception e) {
-} finally {
-    System. out. println("释放锁");
-    lock. unlock();
-}
-```
-
 
 
 
@@ -1590,7 +929,6 @@ public class Example {
 ```
 
 这个逻辑，在【单线程】环境下，没有任何问题，但是在【多线程】环境下，会存在【原子性问题】，这里是典型 の 【Read - Write の 操作】。
-
 
 ```java
 public class Example {
@@ -1614,29 +952,6 @@ public class Example {
 ```
 
 
-
-
-
-## java集合有哪些？
-
-第一代线程【安全】类：
-
-- Vector Hashtable (通过synchronized方法，保证线程安全)
-  - 缺点：效率低下
-
-第二代线程【非安全】类：
-
-- ArrayList HashMap
-  - 线程不安全，但是性能好
-  - 当需要【线程安全】，可以使用`Collections.synchronizedList(list)`;`Collections.synchronizedMap(m)`;
-
-第三代线程【安全】类：
-
-- 兼顾【性能安全】和【性能】
-- java.util.concurrent.*
-- ConcurrentHashMap
-- CopyOnWriteArrayList
-- CopyOnWriteArraySet
 
 ## 有没其他解决方案，可以在不影响【迭代器】 の 同时，对【集合】进行【增删】，并且还能保持【较高性能】呢？
 
@@ -1765,30 +1080,9 @@ public interface Iterator {
 }
 ```
 
-## HashMap 有哪些【线程安全】 の 方式
 
-方式一：通过 `Collections.synchronizedMap()` 返回一个新 の  Map
 
-- 优点：代码简单
-- 缺点：用了【锁】 の 方法，性能较差
 
-方式二：通过 `java.util.concurrent.ConcurrentHashMap`
-
-- 将代码拆分成独立 の segment，并调用【CAS指定】保证了【原子性】和【互斥性】
-- 缺点：代码繁琐
-- 优点：【锁碰撞】几率低，性能较好
-
-## java8  の  ConcurrentHashMap 放弃【分段锁】，采用【node锁】。why？
-
-node锁，粒度更细，提高了性能，并使用 `CAS 算法`保证`原子性`
-
-所谓【分段锁】，就是将【数据分段】，给【每一段数据】加锁，确保线程安全。
-
-所谓【CAS 算法】，就是。。。。。。
-
-## 什么是【分段锁】？
-
-就是将数据【分段】，每段加一把锁
 
 ## ArrayList默认大小，扩容机制？扩容 の 时候如何将旧数组转化为新数组？
 
@@ -1829,48 +1123,9 @@ ArrayList 是一个【数组结构】的【存储容器】，默认情况下，�
 
 【扩容因子】代表了【hash冲突的概率】与【空间利用率】之间的 balance。在HashMap的【链表长度】>= 7的时候，会转化成【红黑树】，从而提升检索效率。在扩容因子为 0.75 时，链表长度达到 8 的可能性几乎为 0 。
 
-## ConcurrentHashMap  の 扩容机制
 
-1.7版本的 ConcurrentHashMap 是基于 Segment 分段实现的
 
-每个 Segment 相当于一个小型的 HashMap，【是否扩容的判断】也是基于 Segment 的
 
-每个 Segment 内部进行扩容，和 HashMap 的扩容逻辑相似
-
-1.8版本的 ConcurrentHashMap 不是基于 Segment 分段实现的。
-
-在转移元素时，先将【原数组】分组，将【每组】分给【不同的线程】来进行【元素的转移】
-
-每个线程，负责【一组或多组】的元素转移工作。
-
-## ConcurrentHashMap 是如何提高效率 の ？
-
-[ConcurrentHashMap 底层实现原理？](https://www.bilibili.com/video/BV1QS4y1u7gG)
-
-HashTable 给整张表添加一把【大锁】
-
-而 ConcurrentHashMap 采用【分段锁】
-
-ConcurrentHashMap 由【数组、单向链表、红黑树】，默认的【数组长度】是16。由于存在【hash冲突】的问题，采用【链时寻址】的方式，来解决【hash表】的冲突，当【hash冲突】比较多的时候，会造成【链表长度较长】的问题。
-
-在这种情况下，会使得 ConcurrentHashMap 中【查询复杂度】增加。因此，引入了【红黑树】的机制：
-
-1. 【数组长度】 >= 64
-2. 【链表长度】 >= 8
-
-【单向链表】就会转化成【红黑树】
-
-ConcurrentHashMap 在 HashMap 的基础上，提供了【并发安全】的实现。【并发安全】的实现，是通过对【Node节点】加【锁】来保证【数据更新】的【安全性】
-
-ConcurrentHashMap 的优化体现在：
-
-1. 在1.8里面，锁的【粒度】是数组中的一个节点；在1.7里面，锁的【粒度】是segment
-2. 引入【红黑树】的机制，降低了【数据查询】的时间复杂度，为O(logN)
-3. 在扩容时，引入了【多线程并发扩容】的一个实现，简单来说，就是多个【线程】对【原始数组】进行【分片】，【分片】后每个【线程】去负责一个分片的【数据迁移】
-4. ConcurrentHashMap 有一个 【size方法】来获取总的元素个数。在【多线程并发场景】下，ConcurrentHashMap 对数组中元素的累加做了优化：
-
-- 当线程【竞争不激烈】时，通过【CAS机制】实现元素个数的【累加】
-- 当线程【竞争激烈】时，使用一个【数组】来维护【元素个数】，如果要增加【总元素个数】，直接从数组中【随机选择】一个，再通过【CAS机制】实现元素个数的【累加】
 
 ## 有没有【顺序】 の 【Map实现类】
 
@@ -1983,24 +1238,7 @@ new Dog(name: "wc001", price: 900)
 
 ```
 
-## 如何在不加锁 の 情况下解决线程安全问题？
 
-这个问题有3个方面：
-
-① 所谓 の 【线程安全】问题，其实是指：
-
-- 【多个线程】，同时对【某个共享资源】 の 访问，导致 の 【原子性、可见性、有序性】 の 问题。
-
-② 解决【线程安全】问题 の 方式是【增加】【同步锁】，常见 の 是像【synchronized、lock】等。
-
-- 对【共享资源】加锁以后，多个【线程】在访问这个资源 の 时候，必须要先获得【锁】，也就是说，要先获得【访问资格】，
-- 而【同步锁】 の 特征是：在同一个时刻，只允许一个线程，访问一个资源，直到【锁】被释放，虽然这种方式，可以解决【线程安全性】 の 一个问题，但同时带来了【加锁】和【释放锁】所带来 の 一个【性能开销】
-
-③ 如何在【性能】和【安全性】之间取得一个balance。这就引出了一个【无锁并发】 の 概念，一般来说，会有以下几种方法：
-
-1. 自旋锁：指篇【线程】在没有【抢占 の 锁】 の 情况下，先【自旋】指定 の 次数，去尝试获得【锁】。
-2. 乐观锁： 给每个数据增加一个【版本号】，一旦数据发生变化，则去修改这个版本号。CAS の 机制，可以完成【乐观锁】 の 功能。
-3. 在程序设计中，尽量去减少【共享对象】 の 使用。从业务上去实现【隔离】避免【并发】。
 
 ## 谈谈你对线程安全的理解？
 
@@ -2253,17 +1491,6 @@ System.out.println(a.equals(b)); // ✌true
 
 <https://www.bilibili.com/video/BV1WR4y1J7T4>
 
-## HashMap 和 HashTable の 区别
-
-<https://www.bilibili.com/video/BV1Dh411J72Y>
-
-| HashMap  |  HashTable |
-|---|---|
-| 非同步  | 线程同步，线程安全，有关键字 synchronized  |
-| 允许  | 不允许 k-v 有 null值  |
-| hash数组的默认大小是 16 | hash数组的默认大小是 11 |
-| hash算法不同：增长方式是 2的指数  | hash算法不同：增长方式是 2*old + 1 |
-| 继承 AbstractMap类  | 继承 Dictionary类，Dictionary类 已经被废弃  |
 
 ## HashMap的Put方法
 
@@ -2273,11 +1500,7 @@ System.out.println(a.equals(b)); // ✌true
 
 <https://www.bilibili.com/video/BV1Y341137uj>
 
-## HashTable是如何保证线程安全的？
 
-HashTable 给整张表添加一把【大锁】，把整张表锁起来，大幅度降低了效率。
-
-为了提高效率，引入 ConcurrentHashMap
 
 ## Hashmap和Treemap の 区别
 
@@ -2739,29 +1962,7 @@ a最终仍然是1
 弱引用：有用但不是必须的对象，在下一次GC时会被回收。
 虚引用（幽灵引用/幻影引用）：无法通过虚引用获得对象，用 PhantomReference 现虚引用，虚引用的用途是在 gc 时返回一个通知。
 
-## String、StringBuffer 与 StringBuilder 之间区别
 
-<https://www.bilibili.com/video/BV1b3411G7gr>
-
-<https://www.bilibili.com/video/BV1KQ4y1z76p>
-
-<https://www.bilibili.com/video/BV1G3411c7cV>
-
-`String`:
-
-- 不可变
-- 操作少量数据，或者不操作数据时使用
-
-`StringBuilder`:(优先选择)
-
-- 可变
-- 线程不安全
-
-`StringBuffer`:
-
-- 可变
-- 线程安全
-- 性能较低
 
 ## 线程 の 创建方式？
 
@@ -2771,8 +1972,13 @@ a最终仍然是1
 
 <https://www.bilibili.com/video/BV1Yb4y1s7RG>
 
-ThreadLocal 为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
-ThreadLocal 的经典使用场景是数据库连接和 session 管理等。
+ThreadLocal 为每个`使用该变量的线程`提供`独立的变量副本`，
+
+所以`每一个线程`都可以独立地改变自己的`副本`，
+
+而不会影响`其它线程`所对应的`副本`。
+
+ThreadLocal 的经典使用场景是**数据库连接**和 **session 管理**等。
 
 ## threadlocal原理，应用场景
 
@@ -2785,8 +1991,6 @@ ThreadLocal 的经典使用场景是数据库连接和 session 管理等。
 ## 请说一下对象的创建过程？
 
 <https://www.bilibili.com/video/BV1c44y1P7Xx>
-
-## ClassA a = new Class(1) 在jvm中怎么存储
 
 ## java方法是值传递还是对象传递
 
@@ -2946,27 +2150,6 @@ Java 序列化是为了保存各种对象在内存中的状态，并且可以把
 
 ## Jvm垃圾回收器:serial
 
-<https://www.bilibili.com/video/BV1rK411u7bk>
-
-## 垃圾收集器分类
-
-串行收集器：只有一个【垃圾回收线程】，【用户线程】暂停
-
-并行收集器(吞吐量优先)：多个【垃圾回收线程】，【用户线程】暂停
-
-并发收集器(停顿时间优先)(CMS、G1)：【垃圾回收线程】、【用户线程】同时
-
-## CMS 垃圾收集器
-
-全称 Concurrent Mark Sweep
-
-目标：获取【最短回收停顿时间】
-
-特点：
-
-- 采用【标记-清除】算法
-- 【内存回收过程】与【用户线程】并发执行
-
 ## 垃圾回收
 
 <https://www.bilibili.com/video/BV1aW41167rS>
@@ -2975,15 +2158,7 @@ Java 序列化是为了保存各种对象在内存中的状态，并且可以把
 
 [什么样 の 对象会被老年代回收](https://www.bilibili.com/video/BV13K4y1G7Bs)
 
-## 什么时候才会进行垃圾回收？
 
-1. GC 是由 JVM 【自动】完成的。
-   1. 当【Eden区 or S区】不够用
-   2. 【老年代】不够用
-   3. 【方法区】不够用
-2. 也可以通过 `System.gc()方法` 【手动】垃圾回收
-
-但【上述两种方法】无法控制【具体的回收时间】
 
 ## Java如何获取字节码对象
 
@@ -3000,107 +2175,14 @@ public static void main(String[] args) {
 }
 ```
 
-## JVM 的理解
 
-谈谈你对JVM的理解：
 
-全称 Java虚拟机。
 
-有两个作用：
-① 运行并管理【java源码文件】所生成的【class文件】
-② 在不同的操作系统安装不同的 JVM，从而实现【跨平台】的保障
 
-对于开发者而言，即使不熟悉JVM的运行机制，也不影响代码的开发。但当程序运行过程中出现了问题，而这个问题发生在JVM层面时，我们就需要去熟悉【JVM的运行机制】，才能迅速排查，并解决JVM的性能问题
 
-JVM的运行流程：
 
-它把一个class文件，通过【class loader subsystem 类加载机制】，装载到JVM里面，然后放到不同的【运行时数据区】，通过【编译器】来编译。
-类加载机制 分为：装载、链接、初始化。它主要针对【类】进行【查找、验证】，以及【分配相关内存空间、赋值】
 
-第三个部分：Runtime data areas。也就是我们通常所说的【运行时数据区】。他解决的问题是【class文件】进入【内存】之后，该如何进行【存储】不同的【数据】，以及【数据如何扭转】。
 
-比如：
-
-1. 方法区：存储由【class文件常量池】所对应的【运行时常量池】，【字段】和【方法】的【元数据信息】和【类的模板信息】
-2. heap：是存储【实例】
-3. Java thread 是通过【线程】已【stack】的方式去运行，加载各个【方法】
-4. Native Internal Threads：。。。。。
-5. Program Counter Registers： 保存每个线程【执行方法】的【实时地址】，
-
-这样通过【运行时数据区】的【5个part】就能很好地【运行】起来
-
-第四个部分：就是【垃圾回收器】：就是对【运行时数据区】的数据，进行【管理】和【回收】。
-
-可以基于不同的垃圾收集器，比如说，serial、parallel、CMS、G1，可以针对不同的业务场景，去选择不同的收集器。只需要通过【JVM参数】设置即可。
-
-这些收集器，其实就是对于不同的【垃圾收集算法】的实现，核心的算法有3个：
-
-1. 标记 - 清除
-2. 标记 - 整理
-3. 复制
-
-第五个是 JIT Compiler 和 Interpreter。通俗理解就是【编译器】。
-【class字节码指令】通过【JIT Compiler 和 Interpreter】翻译成【对应操作系统】的【CPU指令】，可以选择【解释执行 or 编译执行】。在hotspot编译器中，默认采用这两种方式的组合。
-
-第六种是 JNI技术。如果，我们想找到Java中的某个Native方法，如何通过C或者C++实现。就可以通过Native method interface来进行【查找】
-
-在实际的操作过程中，我们可以借助一些JVM参数，比如:
-
-1. InitialHeapSize
-2. NewRatio
-3. UseG1GC
-4. MaxHeapSize
-5. ConcGCThreads
-
-和一些常见的JDK常见命令：
-
-- jps
-- jinfo
-- jstat
-- jhat
-- jstack
-- jmap
-
-从而优雅地分析JVM出现的常见问题，并对其进行优雅地调优
-
-## 类加载机制
-
-就是：把【Class文件】加载到【内存】，进行【验证、准备、解析】，然后初始化，可以形成JVM可以直接使用的java.lang.Class
-
-- 装载
-- 链接 (验证、准备、解析)
-- 初始化
-- 使用
-- 卸载
-
-## 【Java面试题】类加载器
-
-|   |   |   |
-|---|---|---|
-| 4️⃣ Bootstrap ClassLoader  | 【启动】类加载器  | 加载`\jre\lib`的类库  |
-| 3️⃣ Ext ClassLoader  | 【拓展】 类加载器 | 加载`\jre\lib\ext`的类库  |
-| 2️⃣ App ClassLoader  | 【系统】 类加载器 | 加载`classpath`的类库  |
-| 1️⃣ Custom ClassLoader  | 【自定义】 类加载器 | 加载`用户`类库  |
-
-<https://www.bilibili.com/video/BV1JW411r758>
-
-## 双亲委派机制
-
-[请介绍类加载过程，什么是双亲委派？](https://www.bilibili.com/video/BV1g94y1d787)
-
-<https://www.bilibili.com/video/BV19F411g7B1>
-
-<https://www.bilibili.com/video/BV1vf4y1B7eQ>
-
-自底向上地查看，是否加载过这个类
-
-如果没有，再自顶向下，尝试去加载这个类
-
-[类加载机制和类加载器 双亲委派](https://www.bilibili.com/video/BV17M4y1G7W7)
-
-[类加载机制](https://www.bilibili.com/video/BV1e34y177YY)
-
-<https://www.bilibili.com/video/BV1ja411L7k1>
 
 ## 我们自己定义 の java.lang.String类是否可以被类加载器加载
 
@@ -3110,28 +2192,11 @@ JVM的运行流程：
 
 <https://www.bilibili.com/video/BV1ev411g7Xk>
 
-## JVM性能优化 - 存在哪些问题？
 
-- GC 频繁
-- 死锁
-- oom
-- 线程池不够用
-- CPU负载过高
 
-## JVM性能优化 - 如何排查问题？
 
-1. 打印出 `GC log`，查看 minor GC 和 major GC
-2. `jstack` 查看【堆栈信息】
-3. 应用 `jps，jinfo，jstat，jmap`等命令
 
-## JVM性能优化 - 如何解决问题？
 
-1. 适当增加【堆内存大小】
-2. 选择合适的【垃圾收集器】
-3. 使用 zk，redis 实现【分布式锁】
-4. 利用 kafka 实现【异步消息】
-5. 代码优化，及时释放【资源】
-6. 增加集群节点数量
 
 ## 分布式锁的理解和实现？
 
@@ -3139,52 +2204,13 @@ JVM的运行流程：
 
 <https://www.bilibili.com/video/BV1GF411373W>
 
-## 栈和栈桢
 
-[设计源于生活中](https://www.bilibili.com/video/BV1YA411J7wE)
-
-JVM中的【方法stack】是【线程私有】。每一个method的调用，都会在【方法stack】中压入一个【栈桢】。
-
-如果启动main方法，stack中，压入main方法的栈桢。
-
-执行methodA方法，stack中，压入methodA方法的栈桢。
-
-执行methodB方法，stack中，压入methodB方法的栈桢。
-
-然后methodB执行结束，methodB出栈
-
-然后methodA执行结束，methodA出栈
-
-然后main执行结束，main出栈
 
 ## JVM中，哪些是共享区，哪些可以作为gc root
 
 <https://www.bilibili.com/video/BV1Uq4y1e7Kq>
 
-## jvm内存结构介绍
 
-<https://www.bilibili.com/video/BV1jY4y1b7n1>
-
-Java の 内存分为5个部分：
-
-- 线程共享：
-  - 方法区(method area) 🔸 常量池 + 静态变量 + 类
-  - 堆(heap) 🔸 GC 对象，即【实例对象】，内存最大 の 区域
-
-- 每个线程一份【线程隔离】：
-  - 虚拟机栈(VM stack)→(heap) 🔸 每个java被调用时，都会创建【栈帧】
-    - `栈帧`内包含：
-      - `局部变量表`：存储【局部变量】：变量dog、cat等
-      - `操作数栈`：线程执行时，使用到的【数据存储空间】
-      - `动态链接`：method区的引用，包括【类信息、常量、静态变量】
-      - `返回地址`：存储这个method被【调用的位置】，因为method结束以后，需要【返回】到被【调用的位置】
-
-  - 本地方法栈 🔸 native语言
-  - 程序计数器(pc register) 🔸【*当前线程*】执行到 の 【字节码行号】
-
-[了解JVM内存区域吗？](https://www.bilibili.com/video/BV1Vt4y1V7cz)
-
-[2分钟学会对象和引用如何存储在JVM内存](https://www.bilibili.com/video/BV1S5411Q78u)
 
 ## 项目中如何规划常量？
 
@@ -3203,49 +2229,7 @@ public final class Constants {
 
 <https://www.bilibili.com/video/BV1e94y1D7ug>
 
-## java内存模型
 
-java存在`线程间如何通信？` の 问题
-
-对于每个【线程】，stack是私有 の ，而heap是共享 の
-
-也就是说 →
-
-stack中 の 变量，不会在【线程】间【共享】，也就不会有【内存可见性】 の 问题。也就不会受到【内存模型】 の 影响，
-
-而 →
-
-heap中 の 变量，是【共享变量】，就会有【内存可见性】 の 问题。
-
------------------------------------------------
-
-java【线程】之间 の 通信由JMM控制：
-
-【线程】之间 の 【共享变量】存储在【主内存】中
-
-每个【线程】都有一个私有 の 【本地内存】 → 存储了该【线程】读写【共享变量】 の 副本。
-
------------------------------------------------
-
-如果【线程A】要与【线程B】通信：
-
-必须经历下面2个步骤：
-
-【线程A】将【本地内存a】中更新过 の 【共享变量】刷新到【主内存】中，
-
-【线程B】在【本地内存】中，找到这个【共享变量】，发现这个【共享变量】已经被更新了，然后到【主内存】读取【线程A】更新过 の 【共享变量】，并拷贝到【本地内存中】
-
-也就是说 →
-
-线程间通信必须经过【主内存】
-
-【线程】对【共享变量】 の 操作，必须在自己 の 【本地内存】中进行，不能直接从【主内存】中读取。
-
-java内存模型，通过控制【主内存】和【本地内存】之间 の 交互，来提供内存 の 可见性保证。
-
-------------------------------------------------------------
-
-为了更精准控制【主内存】和【本地内存】间 の 交互，JMM 还定义了八种操作：lock, unlock, read, load,use,assign, store, write。
 
 ## Java 内存模型定义了八种操作来实现
 
@@ -3255,123 +2239,13 @@ Java 内存模型定义了八种操作来实现
 
 <https://www.bilibili.com/video/BV1hA4y1d7gU>
 
-## 【pass💦】为了更好 の 控制【主内存】和【本地内存】 の 交互，Java 内存模型定义了八种操作来实现
 
-lock：锁定。 主内存 の 变量，把一个变量标识为一条线程独占状态。
-unlock：解锁。 主内存变量，把一个处于锁定状态 の 变量释放出来，释放后 の 变量才可以被其他线程锁定。
-read：读取。 主内存变量，把一个变量值从主内存传输到线程 の 【工作内存】中，以便随后 の load动作使用
-load：载入。 【工作内存】 の 变量，它把read操作从主内存中得到 の 变量值放入【工作内存】 の 变量副本中。
-use：使用。 【工作内存】 の 变量，把【工作内存】中 の 一个变量值传递给【执行引擎】，每当虚拟机遇到一个需要使用变量 の 值 の 字节码指令时将会执行这个操作。
-assign：赋值。 【工作内存】 の 变量，它把一个从【执行引擎】接收到 の 值赋值给【工作内存】 の 变量，每当虚拟机遇到一个给变量赋值 の 字节码指令时执行这个操作。
-store：存储。 【工作内存】 の 变量，把【工作内存】中 の 一个变量 の 值传送到主内存中，以便随后 の write の 操作。
-write：写入。 主内存 の 变量，它把store操作从【工作内存】中一个变量 の 值传送到主内存 の 变量中。
 
-## jvm内存中，堆和栈 の 区别？堆和栈 の 关系
 
-<https://www.bilibili.com/video/BV1RW411C7yb>
 
-|   |  stack |  heap |
-|---|---|---|
-| 存储  | 局部变量、引用  | instance 对象  |
-| 速度  |  fast |  slow |
-| 线程共享  | Thread Stack  | 共享 heap  |
-| GC |   | GC 对象，占用内存最大  |
-| 指向关系 | 出  | 入  |
 
-## 堆内内存
 
-年轻代【Eden、From、To】 + 老年代 + 持久代
 
-## 堆外内存【定义】
-
-堆外内存 = 物理机内存
-
-【java虚拟机堆】以外的内存，这个区域是受【操作系统】管理，而不是jvm。
-
-## 堆外内存优点
-
-减少jvm垃圾回收
-
-加快数据复制的速度
-
-## JVM如何判断一个对象可以被回收？
-
-<https://www.bilibili.com/video/BV1RB4y117ne>
-
-## 如何确定一个对象是【垃圾】？
-
-引用计数法：只要【程序】中持有【该对象的引用】，就说明【该对象不是垃圾】
-
-如果一个对象，没有【指针】对其引用，它就是垃圾
-
-- 注意：如果AB互相引用，则会导致【永远不能被回收】，导致【内存溢出】
-
-## JVM分代年龄为什么是15次？
-
-在JVM的【heap内存】里面，分为【Eden Space、Survivor Space、Old generation】，当我们在java里面，去使用【new关键词】去创建一个【对象】的时候，java会在【Eden Space】分配一块内存，去存储这个对象。
-
-当【Eden Space】的内存空间不足时，会触发【Young GC】进行对象的回收，而那些因为存在【引用关系】而无法回收的对象，JVM会把它转移到【Survivor Space】。
-
-【Survivor Space】内部存在【From 区】和【To 区】。那么从【Eden 区】转移过来的对象，会分配到【From 区】.
-
-每当触发一次【Young GC】，那些没有办法被回收的对象，就会在【From 区】和【To 区】来回移动。每移动一次,【GC年龄】就会+1，默认情况下,【GC年龄】达到15的时候，这些对象如果还没有办法【回收】，那么JVM会把这些对象移动到【Old Generation】里面。
-
-一个【对象】的【GC年龄】是存储在【对象头】里面的，而一个【Java对象】在【JVM的内存】布局，由3个部分组成：
-
-1. 对象头
-2. 实例数据
-3. 对齐填充
-
-而在对象头里面，有【4个bit】来存储【GC年龄】，而4个bit位能够存储的最大数值是15。所以，从这个角度来说，【JVM分代年龄】之所以设置为15，因为，它最大能存储的数值是15。虽然，JVM提供了参数，来去设置【分代年龄】的大小，但是这个大小不能超过15。
-
-此外，JVM还引入了【动态对象年龄】的判断方式，来决定把对象转移到【old generation】，也就是说，不管这个对象的【gc年龄】是否达到了15次，只要满足【动态年龄】的判断依据，也会把这个对象转移到【old generation】。
-
-## 为什么 Eden:S0:S1 是 8:1:1 ?
-
-## 新生代、老年代
-
-Eden From To 老年代
-
-## Minor GC 和 Full GC 有什么不同？
-
-Minor GC / Young GC: 指发生新生代 の 垃圾收集动作
-Major GC / Full GC: 指发生新生代 の 垃圾收集动作
-
-## JVM是如何避免Minor GC时扫描全堆的?
-
-<https://www.bilibili.com/video/BV1h64y1x7SF>
-
-## java GC算法，标记-清楚、标记-复制、标记-整理
-
-## 4.g1回收器、cms の 回收过程，场景
-
-[CMS比较严重 の 问题并发收集阶段再次触发Full gc怎么处理](https://www.bilibili.com/video/BV1BA4y1R7W7)
-
-[G1垃圾收集器最大停顿时间是如何实现 の](https://www.bilibili.com/video/BV1TB4y1s7rh)
-
-## G1垃圾收集器的【内存布局】
-
-与【其他收集器】有很大的差别
-
-它将【heap】划分成多个大小相等的Region，虽然仍然划分为【Eden、Survivor、Old、Humongous、Empty】
-
-每个 Region 大小，都在 1M ~ 32M 之间，必须是 2的N 次幂
-
-特点：
-
-1. 仍然保留了【分代】的概念
-2. 不会导致【空间碎片】
-3. 可以明确规定在【M毫秒的时间段】，消耗在【垃圾收集】的时间。不得超过N毫秒。
-
-## 什么情况下使用G1垃圾收集器？
-
-1. 50%以上的heap被live对象占用
-2. 【对象分配】和【晋升的速度】变化非常大
-3. 垃圾回收【时间】比较长
-
-## 这几个分区在gc里都有什么处理，不同分区 の gc策略
-
-[GC是什么时候都能做吗？知道GC安全点与安全区域是怎么回事吗？](https://www.bilibili.com/video/BV1oZ4y1q7tu)
 
 ## 内存溢出
 
@@ -3421,31 +2295,31 @@ Major GC / Full GC: 指发生新生代 の 垃圾收集动作
 
 ## 强平衡⼆叉树和弱平衡⼆叉树有什么区别
 
-https://www.bilibili.com/video/BV1oF411M78u
+<https://www.bilibili.com/video/BV1oF411M78u>
 
 ## Maven中Package和Install的区别
 
-https://www.bilibili.com/video/BV1PT4y1a7A1
+<https://www.bilibili.com/video/BV1PT4y1a7A1>
 
 ## K8S
 
-https://www.bilibili.com/video/BV1vP4y1J7EQ
+<https://www.bilibili.com/video/BV1vP4y1J7EQ>
 
 ## 系统保护机制
 
-https://www.bilibili.com/video/BV1UY411b7W8
+<https://www.bilibili.com/video/BV1UY411b7W8>
 
 ## ES的理解
 
-https://www.bilibili.com/video/BV16h41147jy
+<https://www.bilibili.com/video/BV16h41147jy>
 
 ## Docker
 
-https://www.bilibili.com/video/BV1xR4y1W7Nh
+<https://www.bilibili.com/video/BV1xR4y1W7Nh>
 
 ## ArrayBlockQueue
 
-https://www.bilibili.com/video/BV17A4y197em
+<https://www.bilibili.com/video/BV17A4y197em>
 
 ## 说一下你熟悉的设计模式？
 
@@ -3489,11 +2363,11 @@ https://www.bilibili.com/video/BV17A4y197em
       11. 模板模式
       12. 访问者模式
 
-https://www.bilibili.com/video/BV1M44y137oe
+<https://www.bilibili.com/video/BV1M44y137oe>
 
-https://www.bilibili.com/video/BV1UF411u7pm
+<https://www.bilibili.com/video/BV1UF411u7pm>
 
-https://www.bilibili.com/video/BV1zg411Z7AH
+<https://www.bilibili.com/video/BV1zg411Z7AH>
 
 1. `单例模式`：保证被创建一次，节省系统开销。
 2. `工厂模式`（简单工厂、抽象工厂）：解耦代码。
@@ -3504,34 +2378,26 @@ https://www.bilibili.com/video/BV1zg411Z7AH
 
 ## 时间轮
 
-https://www.bilibili.com/video/BV1uv4y1u7Xm
+<https://www.bilibili.com/video/BV1uv4y1u7Xm>
 
 ## 对网络四元组的理解
 
-https://www.bilibili.com/video/BV1GT4y1i7T2
+<https://www.bilibili.com/video/BV1GT4y1i7T2>
 
 ## 什么是服务网格？
 
-https://www.bilibili.com/video/BV1nS4y1N7Ax
+<https://www.bilibili.com/video/BV1nS4y1N7Ax>
 
 ## 你的项目中有什么亮点？
 
-https://www.bilibili.com/video/BV1NZ4y1e7ux
-
-
-
+<https://www.bilibili.com/video/BV1NZ4y1e7ux>
 
 ## BigDecimal
 
 用于：金融场景，防止精度丢失
 
 参考：
-https://www.bilibili.com/video/BV1RS4y1P7f5
-
-
-
-
-
+<https://www.bilibili.com/video/BV1RS4y1P7f5>
 
 ## main 方法可以被其它方法调用吗
 
@@ -3558,10 +2424,6 @@ class B {
 }
 
 ```
-
-
-
-
 
 ## final 关键字
 
@@ -3602,9 +2464,6 @@ class Son extends Father {
     ❌ }
 }
 ```
-
-
-
 
 ## java 8 改进了之前的 DATE 的烂设计
 
@@ -3700,8 +2559,6 @@ set.add(s);
 s.value = "点赞也行";
 ```
 
-
-
 ## instanceof
 
 ```java
@@ -3734,7 +2591,6 @@ public class Main {
 }
 ```
 
-
 ## 数组 删除
 
 ```java
@@ -3761,11 +2617,11 @@ public class Main {
 
 ## 项目中如何规划常量？
 
-https://www.bilibili.com/video/BV1ua4y1a7CT
+<https://www.bilibili.com/video/BV1ua4y1a7CT>
 
 ## 字符串 常量池
 
-https://www.bilibili.com/video/BV1VW411y72d
+<https://www.bilibili.com/video/BV1VW411y72d>
 
 使得`字符串资源`能够复用，减少资源的浪费
 
@@ -3827,8 +2683,6 @@ public class Main {
 }
 ```
 
-
-
 ## private 封装
 
 `封装`的好处：
@@ -3869,10 +2723,6 @@ user.setPhone("123");         // 打印错误提示
 user.setPhone("13700001234"); // 设置成功
 System.out.println(user.getPhone()); // 打印 137****1234
 ```
-
-
-
-
 
 ## enum 和 switch 语句使用
 
@@ -3933,9 +2783,7 @@ public final class Season extends Enum {
 }
 ```
 
-
-
-## void 
+## void
 
 表示`method`不返回任何值。
 
@@ -4018,8 +2866,6 @@ public class Main{
 必须通过`main方法`才能启动java虚拟机
 
 `main方法`没有被`实例化`过，这时候必须使用`静态方法`，才能被`调用`
-
-
 
 ## constructor 是一种特殊的 method, static变量是class内部的共享变量
 
@@ -4161,7 +3007,7 @@ public class Main {
 }
 ```
 
-## java的特点：
+## java的特点
 
 - java要求`文件名`和`公共类名`必须要求一致
 
@@ -4184,72 +3030,61 @@ public test(String args...){
 }
 ```
 
-
-
-
 ## Netty
 
-https://www.bilibili.com/video/BV1GN4y1g7Wi
+<https://www.bilibili.com/video/BV1GN4y1g7Wi>
 
-https://www.bilibili.com/video/BV1xq4y1g73f
-
-
+<https://www.bilibili.com/video/BV1xq4y1g73f>
 
 ## SPI
 
-https://www.bilibili.com/video/BV1MB4y1X7Dy
+<https://www.bilibili.com/video/BV1MB4y1X7Dy>
 
 ## seata
 
-https://www.bilibili.com/video/BV18Y411g7kP
+<https://www.bilibili.com/video/BV18Y411g7kP>
 
 ## Kafka如何保证消息不丢失？
 
-https://www.bilibili.com/video/BV1W34y1x7tY
+<https://www.bilibili.com/video/BV1W34y1x7tY>
 
 ## Kafka 怎么避免重复消费？
 
-https://www.bilibili.com/video/BV1XS4y1B7Mk
+<https://www.bilibili.com/video/BV1XS4y1B7Mk>
 
 ## kafka的零拷贝原理
 
-https://www.bilibili.com/video/BV1tu411B7p9
-
+<https://www.bilibili.com/video/BV1tu411B7p9>
 
 ## 接口的幂等性？什么是幂等、如何解决幂等性问题？
 
-https://www.bilibili.com/video/BV14a411a7SH
+<https://www.bilibili.com/video/BV14a411a7SH>
 
 ## zk の watch机制实现原理
 
-https://www.bilibili.com/video/BV1sY4y1Y71P
+<https://www.bilibili.com/video/BV1sY4y1Y71P>
 
-https://www.bilibili.com/video/BV1D3411w7wK
+<https://www.bilibili.com/video/BV1D3411w7wK>
 
 ## 简述zk の 命名服务、配置管理、集群管理
 
-https://www.bilibili.com/video/BV1r3411F7id
+<https://www.bilibili.com/video/BV1r3411F7id>
 
 ## zookeeper的应用场景
 
-https://www.bilibili.com/video/BV1Uq4y137Vh
+<https://www.bilibili.com/video/BV1Uq4y137Vh>
 
 1. 分布式锁
 2. master选举
 3. 集群管理
 
-
 ## 阻塞队列被异步消费怎么保持顺序吗？
 
-https://www.bilibili.com/video/BV1PN4y1L7cd
+<https://www.bilibili.com/video/BV1PN4y1L7cd>
 
 ## 生产环境服务器变慢，如何诊断处理？
 
-https://www.bilibili.com/video/BV1Xt4y1t7Vw
-
-
-
-
+<https://www.bilibili.com/video/BV1Xt4y1t7Vw>
 
 ## 负载均衡的背景？
 
@@ -4286,13 +3121,9 @@ https://www.bilibili.com/video/BV1Xt4y1t7Vw
 
 优点：免费、开源、灵活性高
 
-
-
 ## CPU飙高系统反应慢怎么排查？
 
-https://www.bilibili.com/video/BV1nF41147yu
-
-
+<https://www.bilibili.com/video/BV1nF41147yu>
 
 ## Linux查看内存、CPU等状态？Linux查看进程 の 内存消耗和CPU消耗？
 
@@ -4306,138 +3137,65 @@ https://www.bilibili.com/video/BV1nF41147yu
 
 虚拟内存：是【计算机内存管理技术】，它让程序认为它具有【连续可用】的【4GB 内存】，而实际上，映射到多个【物理内存碎片】
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## spark那些外部资源 还有第三方jar包之类 の 都放在哪（应该是这么问 の ，不太会，说了下内存结构，告诉我是java classloader相关 の 机制）
-
 
 ## 排序算法和时间复杂度
 
-https://www.bilibili.com/video/BV1Sg411M7Cr
-
-
+<https://www.bilibili.com/video/BV1Sg411M7Cr>
 
 ## java执行 の 过程
-
-
-
-
-
-
 
 ## java集合
 
 ## 介绍一下jvm の 区域
 
-
-
-
-
-
 ## java sout（0.1+0.2）输出什么，为什么
-
-
-
-
-
 
 ## 隐含 の 强制类型转换
 
-https://www.bilibili.com/video/BV1Fb4y1Y7wX
-
-
+<https://www.bilibili.com/video/BV1Fb4y1Y7wX>
 
 ## Java集合 の 框架体系图
 
-
-
 ## 遇到oom怎么排查（有jvm提供 の 工具查看堆栈使用情况，具体不太了解只在跑spark遇到过、分享了下spark里 の 排查经验和参数调整）
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## 浏览器从url输入到返回 の 流程
 
 ## 1T文件，每行是一个数字，机器128G内存，求top10数字
 
-
-
-
-
 ## 如何进行etl链路优化
 
 ## 如果链路慢，但是没有sla风险，怎么优化（类似上一道题）
 
-
-
 ## 怎么数据链运行慢定位问题，对任务进行优化
-
-
 
 ## 索引失效场景
 
-https://www.bilibili.com/video/BV1yr4y1E7Xu
+<https://www.bilibili.com/video/BV1yr4y1E7Xu>
 
-https://www.bilibili.com/video/BV1pr4y1p7Ak
+<https://www.bilibili.com/video/BV1pr4y1p7Ak>
 
+## 如何保证MySQL数据库的高可用性？
 
-
-##  如何保证MySQL数据库的高可用性？ 
-
-https://www.bilibili.com/video/BV1aL4y1G7jT
-
-
-
-
-
-
-
-
-
+<https://www.bilibili.com/video/BV1aL4y1G7jT>
 
 ## 去重如果不用 set 还有多少种方式，有没有更高效 の 方式？
 
-## 怎么解决幻读 具体在sql是怎么实现 の 
-
-
+## 怎么解决幻读 具体在sql是怎么实现 の
 
 ## 什么是【一致性】读？
 
 事务启动的时候，根据【某个条件】去【读取数据】，直到【事务结束】再去执行【相同的条件】，还是读到【同一份数据】，不会发生变化
 
-
-
 ## 1.1 维度建模有什么好处？如果业务需求增加一个维度，后续需要做哪些工作？
-
 
 1.2 怎么判断一个需求能不能实现，你们 の 判断标准是什么？需求变更要做什么？
 
 1.3 增加一个维度后发现查询 の 速度变得非常慢，是什么原因导致 の ？
 
-
 ## linux下 の 调查问题思路：内存、CPU、句柄数、过滤、查找、模拟POST和GET请求等等场景
 
 1.6 分表之后想让一个id多个表是自增 の ，效率实现
-
 
 1.7 事物 の 四个特性，以及各自 の 特点（原子、隔离）等等，项目怎么解决这些问题
 
@@ -4450,7 +3208,7 @@ https://www.bilibili.com/video/BV1aL4y1G7jT
 3. 分析【执行计划】，看其【索引】的使用情况，然后修改【语句or索引】，使得【语句】尽可能命中【索引】
 4. 如果上述优化，还是不够。看看表中【数据量】是否过大，可以【横向or纵向】分表
 
-https://www.bilibili.com/video/BV1N34y17715
+<https://www.bilibili.com/video/BV1N34y17715>
 
 ## 索引 の 设计原则
 
@@ -4461,9 +3219,7 @@ https://www.bilibili.com/video/BV1N34y17715
 3. 建立索引的列没必要太多
 4. 频繁更新的字段不要有索引
 
-https://www.bilibili.com/video/BV1WB4y1s7kD
-
-
+<https://www.bilibili.com/video/BV1WB4y1s7kD>
 
 ## 分布式session中用 の 是什么数据结构
 
@@ -4479,11 +3235,11 @@ tcp 数据传输慢，udp 数据传输快；
 
 ## TCP的三次握手和四次挥手
 
-https://www.bilibili.com/video/BV1GT4y1r74W
+<https://www.bilibili.com/video/BV1GT4y1r74W>
 
 ## tcp 为什么要三次握手，两次不行吗？为什么？
 
-https://www.bilibili.com/video/BV1xL4y1F7wL
+<https://www.bilibili.com/video/BV1xL4y1F7wL>
 
 　我们假设A和B是通信的双方。我理解的握手实际上就是通信，发一次信息就是进行一次握手。
 
@@ -4494,5 +3250,3 @@ https://www.bilibili.com/video/BV1xL4y1F7wL
 注意：HTTP是基于TCP协议的，所以每次都是客户端发送请求，服务器应答，但是TCP还可以给其他应用层提供服务，即可能A、B在建立链接之后，谁都可能先开始通信。
 
 如果采用两次握手，那么只要服务器发出确认数据包就会建立连接，但由于客户端此时并未响应服务器端的请求，那此时服务器端就会一直在等待客户端，这样服务器端就白白浪费了一定的资源。若采用三次握手，服务器端没有收到来自客户端的再此确认，则就会知道客户端并没有要求建立请求，就不会浪费服务器的资源。
-
-
