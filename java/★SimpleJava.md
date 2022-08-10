@@ -1404,46 +1404,6 @@ ReentrantLock 内部使用【AQS】来实现【锁资源】 の 一个竞争，�
 
 【非公平】性能好 の 原因在于，【*当前线程*】正好在【上一个线程】释放 の 临界点，抢占到了锁。那么意味着，这个线程不需要切换到【内核态】，从而提升了【锁竞争】 の 效率。
 
-
-
-## volatile 必须满足哪些条件，才能保证在【并发环境】 の 【线程安全】？
-
-1. 首先，对变量 の 【写操作】不依赖于像【i++】这样 の 当前值。
-2. 其次，【该变量】没有包含在【具有其他变量】 の 【不变式】中，也就是说，不同 の 【volatile变量】不能【相互依赖】，只有在【状态】真正独立于程序内 の 其他内容 の 时候，才能使用 volatile。
-
-## voliate是怎么保证可见性 の
-
-Volatile 保证可见性 の 原理：
-
-如果【工作线程1】中有变量修改，会直接同步到【主内存】中；【其余工作线程】在【主内存中】有一个【监听】，当监听到【主内存】中对应 の 数据修改时，就会去通知【其余工作线程】【缓存内容已经失效】，此时，会从【主内存】中重新获取一份数据来更新【本地缓存】。
-
-在【工作内存】去【监听】【主内存】中 の 数据，用 の 是【总线嗅探机制】。但如果大量使用 volatile，就会不断地去监听【总线】，引起【总线风暴】
-
-Java 内存模型定义了八种操作，来控制【主内存】和【本地内存】 の 交互：
-
-除了 lock 和 unlock，还有read、load、use、assign、store、write
-
-- read、load、use 作为一个原子
-- assign、store、write作为后一种原子操作
-
-从而避免了在操作过程中，被【打断】，从而保证【工作内存】和【主内存】中 の 数据都是【相等 の 】。
-
-应用场景：变量赋值 flag = true，而不适用于 a++
-
-## 【指令重排】背后 の 思想是
-
-如果能确保【执行 の 结果】相同，那么就可通过【更改顺序】来提高性能。
-
-## 【指令重排】有三种形式
-
-1. 【编译器】重排序
-2. 【指令集并行】重排序：在多线程环境下，可能会【结果不同】，有了 volatile 就会有【内存屏障】，从而【阻止重排】。
-   - 在读和读之间，会有【读读屏障】
-   - 在读和写之间，会有【读写屏障】
-   - 在写和读之间，会有【写读屏障】
-   - 在写和写之间，会有【写写屏障】
-3. 【内存系统】重排序
-
 ## 手写单例模式
 
 <https://www.bilibili.com/video/BV1834y1m7Eq>
@@ -1452,31 +1412,7 @@ Java 内存模型定义了八种操作，来控制【主内存】和【本地内
 
 <https://www.bilibili.com/video/BV1iW411S76k>
 
-## 【DCL单例模式】设计为什么需要volatile修饰【实例变量】？
 
-当我们使用
-
-instance = new DCLExample() 构建一个【实例对象】 の 时候，new这个操作并不是【原子】 の ，这段代码最终会被编译成 3 条指令：
-
-1. 第一条指令是，为了【对象】分配【内存空间】
-2. 第二条指令是， 初始化对象
-3. 第三条指令是，  把【instance 对象】赋值给【instance 引用】
-
-由于这三个指令并不是【原子 の 】，按照重排序 の 规则——在不影响【单线程执行结果】 の 情况下，两个不存在【依赖关系】 の 【指令】是允许【重排序】 の 。也就是说，不一定会按照我们代码 の 【编写顺序】来执行。这样一来，就会导致其他线程，可能会拿到一个不完整 の 对象。
-
-解决这个问题 の 办法就是：
-
-- 在这个在【instance变量】上，增加一个 volatile 关键字进行修饰。而volatile底层，使用了一个【内存屏障机制】去避免【指令重排序】
-
-## volatile 和 synchronized区别
-
-| volatile关键字  |  synchronized关键字 |
-|---|---|
-|  轻量，无锁 |  有锁 |
-|  性能好，不会发生阻塞 |  开发中使用更多，可能会发生阻塞 |
-|  保证: 有序性，可见性，不能保证 原子性 ✖ |  保证: 三大性，原子性，有序性，可见性 |
-|  目 の : 变量 在`多个线程`之间 の  `可见性` | 目 の : `多个线程`之间`访问资源` の  `同步性` |
-|  作用于: 变量 | 作用于: 类 + 方法 + 代码块 |
 
 ## 数据库会死锁吗，举一个死锁 の 例子，mysql怎么解决死锁
 
@@ -1634,15 +1570,7 @@ try {
 }
 ```
 
-## 说一下 atomic  の 原理？
 
-atomic 主要利用：
-
-- CAS (Compare And Swap)
-- volatile
-- native 方法
-
-来保证【原子操作】，从而避免【synchronized  の 高开销】，执行效率大为提升。
 
 
 ## 请你谈一下CAS机制？
@@ -1710,107 +1638,9 @@ public class Example {
 - CopyOnWriteArrayList
 - CopyOnWriteArraySet
 
-## CopyOnWriteArrayList：有没其他解决方案，可以在不影响【迭代器】 の 同时，对【集合】进行【增删】，并且还能保持【较高性能】呢？
+## 有没其他解决方案，可以在不影响【迭代器】 の 同时，对【集合】进行【增删】，并且还能保持【较高性能】呢？
 
-【数据隔离】 の 方式都是【复制】，不过复制 の 东西不同
-
-COW 复制 の 是【引用】，并不复制【数据本身】，所以，在获取【迭代器】时，速度很快
-
-此时【迭代器】和【集合】都是持有对【同一数组】 の 引用
-
-为了避免【增删元素】时，影响到【迭代器】
-
----------------------------------------
-
-cow集合【增删】元素，不是在【原数组】上【操作】，而是会【新建】一个【数组】，然后将【原数组の元素】挨个【复制】过去，再在【new数组】上【增删】元素。这样就做到了，在【增删元素】时，不会影响到之前 の 【迭代器】。、
-
-虽然，在【增删】元素时，仍然效率比较低，但是在【获取数据】时，性能比较高
-
-```java
-// Java 11 源码
-
-public class CopyOnWriteArrayList implements List {
-    private transient volatile Object[] array;
-
-    final Object[] getArray() {
-        return array;
-    }
-
-    public Iterator<E> iterator() {
-        return COWIterator<E>(getArray(), 0);
-    }
-
-    static final class COWIterator implements ListIterator {
-        private final Object[] snapshot;
-        private int cursor;
-
-        COWIterator(Object[] es, int initialCursor) {
-            cursor = initialCursor;
-            snapshot = es; //在【迭代器】中，保存一份【数组引用】
-        }
-
-        public Object next() {
-            // 在【next方法】获取元素时，就不需要获取modCount了
-            if (! hasNext()) {
-                throw new NoSuchElementException();
-            }
-            return snapshot[cursor ++];
-        }
-
-        // ...
-    }
-}
-```
-
-```java
-// Java 11 源码
-
-public class CopyOnWriteArrayList implements List {
-    private transient volatile Object[] array;
-
-    final Object[] getArray() {
-        return array;
-    }
-
-    final transient Object lock = new Object();
-
-    public boolean add(E e) {
-        增删操作，还加上了锁，这是为了保证，线程安全
-        synchronized (lock) {
-            Object[] es = getArray();
-            int len = es.length;
-            // 复制【old数组】给【new数组】
-            es = Arrays.copyOf(es, len + 1);
-            // 增加元素
-            es[len] = e;
-            array = es;
-            return true;
-        }
-    }
-
-    public Object get(int index) {
-        读操作没有加【锁】，虽然提高了【读性能】，但是可能无法读到【最新数据】，导致【不一致】
-        Object[] a = getArray();
-        return a[index];
-    }
-}
-```
-
----------------------------------------
-
-是 → 写时复制
-
-适合 →
-
-1. 读多写少
-2. 高并发场景, 线程安全
-3. 保障了迭代器 の “独立性”和“隔离性”，读写分离
-
-缺点：
-
-- 增删操作时，会复制多分数据，内存占用大，容易引发 GC
-
-- 读数据时，存在数据一致性问题
+CopyOnWriteArrayList
 
 ## 为什么`集合`不直接访问 `iterator()接口`，而是先访问 `Iterable()接口`
 
