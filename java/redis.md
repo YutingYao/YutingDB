@@ -322,6 +322,8 @@ https://www.bilibili.com/video/BV1194y1Q7Rn
 
 https://www.bilibili.com/video/BV1vT4y1f7T2
 
+## 分布式session中用 の 是什么数据结构
+
 ## Redis 单线程 or 多线程？
 
 Redis 6.0 是指的是：
