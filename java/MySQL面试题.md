@@ -46,6 +46,8 @@ https://www.bilibili.com/video/BV1mh411q7u5
 
 [Explain语句结果中各个字段分表表示什么](https://www.bilibili.com/video/BV1gt4y1a7sE)
 
+## 
+
 
 ## 【两个线程】去操作【数据库】时，【数据库】发生了【死锁】
 
@@ -74,6 +76,8 @@ MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【
 
 ## mvcc知道吗
 
+https://www.bilibili.com/video/BV1iZ4y1a7QZ
+
 全称 Multi-Version Concurrency Control
 
 多版本并发控制
@@ -86,6 +90,7 @@ MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【
 
 - 提高【数据库】的【并发访问】性能
 - 处理【读写冲突】。即使有【读写冲突】，也能【不加锁】，【非阻塞、并发读】
+- 解决【脏读、幻读、不可重复读】等【事务隔离】问题，但不能解决【更新丢失】问题
 
 ## MVCC 实现原理？
 
@@ -104,7 +109,15 @@ MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【
 
 ## 高并发下如何做到安全 の 修改同一行数据，乐观锁和悲观锁是什么?
 
+## 什么是乐观锁，什么悲观锁？
+
+https://www.bilibili.com/video/BV1nY4y1Y7G5
+
 ## INNODB の 行级锁有哪2种，解释其含义
+
+## SQL相应的排查思路
+
+https://www.bilibili.com/video/BV1WY411T79A
 
 ## 一条sql语句运行慢，如何做。怎么处理MySQL的慢查询？
 
@@ -128,7 +141,13 @@ MVCC 就是为了解决【事务操作】过程中【并发安全问题】的【
 
 <https://www.bilibili.com/video/BV1WB4y1s7kD>
 
+## 为什么要有索引？
 
+为了提高查询性能
+
+## 什么是索引？
+
+是一种“key”。相当于字典中的【音序表】
 
 ## 分表之后想让一个id多个表是自增 の ，效率实现
 
@@ -201,7 +220,9 @@ https://www.bilibili.com/video/BV1pS4y1v7ew
 
 
 2. 数据库有哪些类型
-- SQL和NoSQL区别
+## SQL和NoSQL区别
+
+https://www.bilibili.com/video/BV1HB4y1D7pL
 
 ## 分布式ID有哪些解决方案？
 
@@ -228,6 +249,10 @@ https://www.bilibili.com/video/BV1TF411u7f8
 https://www.bilibili.com/video/BV1534y1a7bq
 
 https://www.bilibili.com/video/BV1oP4y1M7ib
+
+## B树和B+树的区别是什么？
+
+https://www.bilibili.com/video/BV1gB4y1q7dQ
 
 ## Mysql数据库中，什么情况下设置了索引但⽆法使用
 
@@ -265,8 +290,23 @@ D：持久性。也就是说，只要事务【提交成功】，那么，对于�
 
 也就是说，MySQL用过【MVCC、行锁、表锁、UNDO_LOG、REDO_LOG】保证了这个特性
 
+## ACID 靠什么来保证？
 
+A：由 undolog 来保证：在事务回滚时，撤销已经执行成功的SQL
 
+C：由于其他三大特性保证
+
+I: 由 MVCC 保证
+
+D：由 redolog 来保证。mysql在修改数据时，会在redolog中，记录一份【日志数据】，就算【数据】没有保存成功，只有【log】保存成功了，数据仍然不会丢失
+
+## 为什么数据量大了，就一定要分库分表？
+
+https://www.bilibili.com/video/BV1Ja411e7dG
+
+## 想用数据库“读写分离” 请先明白“读写分离”解决什么问题？
+
+https://www.bilibili.com/video/BV1bA4y1D72W
 
 ## mysql索引
 
@@ -284,6 +324,8 @@ mysql の 引擎和innodb这类数据库 の 区别
 
 ## mysql索引相关 の 问题，b+树
 
+https://www.bilibili.com/video/BV1a341137my
+
 [讲讲mysql の 索引及B树和B+树](https://www.bilibili.com/video/BV1Dq4y1S7GZ)
 
 https://www.bilibili.com/video/BV18U4y197Dx
@@ -291,6 +333,8 @@ https://www.bilibili.com/video/BV18U4y197Dx
 ## MySQL 索引，存数据库，还是存磁盘
 
 ## 【聚簇索引】和【非聚簇索引】如何区别？
+
+https://www.bilibili.com/video/BV1Er4y1572y
 
 https://www.bilibili.com/video/BV1o3411J7Mh
 
@@ -310,13 +354,42 @@ myisam：只有【非聚簇索引】
 - `xxx.myd`包含【数据】
 - `xxx.myi`包含【索引】
 
+## MyISAM和InnoDB的区别？
+
+| InnoDB  |  MyISAM |
+|---|---|
+| OLTP，支持事务  | OLAP，不支持事务  |
+| 支持【行锁】，支持【外键】  | 支持【表锁】和全文索引  |
+| 写快  |   |
+| 读慢  |   |
+
+
+https://www.bilibili.com/video/BV1Ba411J7TP
+
 ## 你们 ADS 层 の 数据量每天 の 数据量有多大？ADS 层再 MySQL 中 の 表是怎么创建 の ？有什么注意事项？索引怎么创建 の ？
 
 1.1 MySql の 存储引擎 の 不同
 
 1.2 Mysql怎么分表，以及分表后如果想按条件分页查询怎么办(如果不是按分表字段来查询 の 话，几乎效率低下，无解)
 
-## MySql の 主从实时备份同步 の 配置，以及原理(从库读主库 の binlog)，读写分离
+## MySql の 主从实时备份同步 の 配置，以及原理()，读写分离
+
+1. 当【主库】上的数据发生改变时，将其改变写入【二进制binlog】中
+2. 【从库】每隔一段时间对【二进制binlog】探测，如果发生改变，则开始一个【IO线程】请求【二进制binlog】的【events】
+3. 同时，【主库】为每个【从库IO线程】启动一个【主库dump线程】，用于发送【二进制Event】，并保存至【从节点 本地relay-log】
+4. 【从库SQL线程】读取【本地relay-log】，使得数据和【主库】保持一致。
+5. 最后【从库IO线程】和【从库SQL线程】将进入【睡眠状态】，等待下一次被唤醒
+
+
+## 从库读主库 の binlog
+
+1. 【从库】通过【手动执行】【change master to 语句】连接【主库】
+2. 【主库dump线程】 & 【从库IO线程】建立连接
+3. 【从库】根据【change master to 语句】提供的【File名称、position号】，【从库IO线程】向【主库】发起【binlog请求】
+4. 【主库】的【dump线程】根据【从库】的【请求】，将【本地binlog】以【events的方式】发给【从库IO线程】
+5. 【从库IO线程】接收【binlog】，并放在【本地relay-log】中
+6. 【从库SQL线程】应用【本地relay-log】，并记录到【relay-log.info】中，默认情况下，已经应用过的relay会被自动清理。
+
 
 ## MySQL 为什么要主从同步？
 
@@ -324,7 +397,8 @@ myisam：只有【非聚簇索引】
 2. 做【数据的备份】
 3. 架构扩展：当业务量越来越大，多库存储，可以提高单个机器的IO性能
 
-1.1 MySQL InnoDB存储 の 文件结构
+## MySQL InnoDB存储 の 文件结构
+
 1.2 索引树是如何维护 の ？
 1.3 数据库自增主键可能 の 问题
 1.4 MySQL の 几种优化
@@ -339,9 +413,66 @@ C 一致性：比如，一次转账。某一账户扣除的金额，必须与另
 I 隔离性：【事务】与【事务】之间互不影响
 D 持久性：对数据的【修改】，必须在事务【结束】前，保存至某种【物理存储设备】。
 
+## 隔离级别是什么？
+
+包括：
+
+- 具体规则，用于限定【事务】内外，哪些改变是可见的？哪些改变是不可见的？
+- 低级别的隔离支持【更 high 的并发处理】
+
 ## Mysql的事务隔离级别
 
+MySQL定义了4种隔离级别：
+
+1. Read uncommitted 读取未提交的内容：不常用
+   - 可以看到【未提交事务】的执行结果，称为“脏读”
+   - 可能会产生很多问题
+2. Read committed 读取提交的内容：大多数数据库的默认级别，但不是MySQL默认级别
+   - 只能看见【已提交】事务所做的改变
+   - 也支持所谓的“不可重复读”——意味着，运行同一个语句2次，看到的结果是不同的
+3. Repeatable read 可重复读：MySQL默认级别
+   - 优点：
+     - 解决了Read uncommitted导致的问题
+     - 保证【并发读取】时，看到【相同数据行】
+   - 缺点：
+     - 导致“幻读”，可以通过MVCC解决
+4. Serializable 可串行化：最高级别隔离
+   - 强制【事务排序】，使之不可能【相互冲突】，从而解决【幻读问题】
+   - Serializable 是在每个读的【数据行】上加锁。
+   - 缺点：
+     - 导致大量【超时】【锁竞争】
+
+https://www.bilibili.com/video/BV13t4y1p7Ht
+
 https://www.bilibili.com/video/BV1Za411Y7SF
+
+## 脏读、幻读、不可重复读
+
+脏读：
+
+- 可以读取【未提交事务】的结果
+
+不可重复读：
+
+- 读取了【another】【已提交】的事务
+- 查询的是【同一个数据项】
+- 多次查询，返回不同结果
+- 原因是：事务执行过程中，【another事务】提交并修改了【当前事务】正在读取的数据。
+
+幻读：
+
+- 读取了【another】【已提交】的事务
+- 查询的是【一批数据】
+- 例如：
+  - 事务1批量将【value为1】的数据修改为2，
+  - 而事务2此时【插入】了一条【value为1】的数据，并完成提交
+  - 事务1，发现，居然还有一条【value为1】的数据，没有修改
+
+
+
+## 基于Redis和MySQL的架构，如何保证数据一致性
+
+https://www.bilibili.com/video/BV1sV4y1n73t
 
 ## oracle和mysql の 默认事务隔离级别为什么不同
 
@@ -351,6 +482,10 @@ https://www.bilibili.com/video/BV11U4y1J7v7
 
 项目中MySQL の 部署方式是什么，怎么保证数据库数据是高可用 の 
 有考虑过数据库比如MySQL和MongoDB数据库数据丢失问题吗
+
+## 为什么SQL语句命中索引比不命中索引要快？
+
+https://www.bilibili.com/video/BV1jB4y1D7rt
 
 ## mysql隔离机制 默认 の 是什么
 
@@ -425,4 +560,17 @@ b+树中【相邻数据】在物理上，也是【相邻】的。因为【b+树�
 - 联合索引
 - 全文索引
 
+## 实际项目中，我们选择【唯一索引】还是【普通索引】？
 
+【唯一索引】和【普通索引】的不同点在于：
+
+- 【唯一索引】：一旦找到【满足条件】的记录，就立即停止继续检索
+- 【普通索引】：查找到满足条件的第一个记录后，还会继续查找下一个记录，until碰到第一个不满足条件的记录
+
+这个差别对性能的影响极小。
+
+真正能区分【唯一索引】和【普通索引】的是【Insert Buffer 和 Change Buffer】，他们只适用于【非唯一索引】：
+
+- 当需要新【插入】一个数据的时候，先将这个【操作】存储到【Insert Buffer】，在下一次查询，需要访问这个数据的时候，【存储引擎】才会将其合并到【索引】中。也就是说——
+- 多个【叶子节点】的插入操作，合并到一起，这就大大提高了【辅助索引】的【插入性能】
+- 这个时候【非唯一索引】的性能，要优于唯一索引。

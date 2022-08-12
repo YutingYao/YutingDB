@@ -41,6 +41,8 @@ https://www.bilibili.com/video/BV1H541187UH
 
 ## 面试被问到并发编程中，如何中断一个正在运行中的线程？
 
+https://www.bilibili.com/video/BV1yt4y1h7MW
+
 <https://www.bilibili.com/video/BV1554y1Z7w5>
 
 
@@ -70,6 +72,8 @@ https://www.bilibili.com/video/BV1H541187UH
 
 
 ## 如何保证线程安全
+
+https://www.bilibili.com/video/BV1NF41157t1
 
 [List の 线程安全实现有哪些](https://www.bilibili.com/video/BV1ag41177nn)
 
@@ -176,6 +180,25 @@ Map:
 ## Hash表是怎么实现 の
 
 
+
+
+## Java中 の 反射（不了解，没问）
+
+<https://www.bilibili.com/video/BV1L34y1S7a1>
+
+## 什么是反射？
+
+就是根据【对象】找到【对象所属的Class】
+
+也就是，通过getClass()方法，我们就获得了这个Class对应的`Class对象`。
+
+这个`Class对象`就可以认为是这个class的【字节码对象】
+
+反射机制就是通过这个【字节码对象】
+
+看到了这个Class的结构。
+
+
 ## Java如何获取字节码对象
 
 ```java
@@ -191,11 +214,69 @@ public static void main(String[] args) {
 }
 ```
 
+## 反射创建【class实例】的三种方式
 
+```java
+[1] 类名.class
+[2] 对象名.getClass()
+[3] Class.forName("类的全限定类名")
+```
 
-## Java中 の 反射（不了解，没问）
+## 反射具有以下4大功能：
 
-<https://www.bilibili.com/video/BV1L34y1S7a1>
+1. 在【运行时】，**获知**，【any Object】所属的【Class】
+2. 在【运行时】，**构造**，【any Class】的【Object】
+3. 在【运行时】，**获知**，【any Class】所具有的【成员变量、method】
+4. 在【运行时】，**调用**，【any Object】的【属性、method】
+
+这种**动态获取信息**、**动态调用对象**的方法的功能，就称为**Java语言的反射机制**
+
+## 反射的优缺点
+
+优点：
+
+- 比较灵活
+- 能够在【运行时】，动态获取Class的Instance
+
+缺点：
+
+- 安全问题：反射机制【破坏】了【封装性】，因为通过【反射】可以获取并【调用】类的【private method】
+- 性能：比直接运行java代码要慢得多
+
+## 反射的原理
+
+1. 首先，JVM会将代码编译成一个`.class字节码`文件，
+2. 然后被`类加载器ClassLoader`加载进`JVM内存`中，
+3. 同时，创建`Class对象`到`heap`中
+4. 这样，`heap的方法区`就产生了一个`Class对象`
+5. `Class对象`包含了这个class的完整结构信息，我们可以通过这个`Class对象`看到【类的结构】
+
+## 反射的实际应用
+
+- 动态代理
+- JDBC链接数据库
+
+## 为什么【进程切换】比【线程切换】慢？
+
+为什么要用【虚拟地址】去取代【物理地址】？
+
+- 物理地址：就是真实的地址，这种【寻址方式】使得【操作系统】中同时运行【>=2个】的【进程】几乎是不可能的，容易崩溃
+- 所以，需要有个机制，对【进程】使用的【地址】进行保护，因此，引入了一个新的【内存模型】，就是【虚拟地址】
+- 有了【虚拟地址】，CPU就能通过【虚拟地址】转换为【物理地址】，来间接访问【物理内存】
+
+【虚拟地址】的原理？
+
+1. 地址转化需要2个东西：
+   - CPU上的【内存管理单元MMU】
+   - 内存中的【页表】，【页表】中存的是【虚拟地址】到【物理地址】的映射
+   - 所以，每次进行【虚实转换】都需要访问【页表】，页表访问次数太多，就会成为【性能瓶颈】
+2. 引入【转换检测缓冲区TLB】，也就是【快表】，将【经常访问的内存地址映射】存在【TLB】中
+   - TLB位于【CPU的MMU】中，所以访问非常快
+
+因为TLB这个东西，导致【进程切换】比【线程切换】慢
+
+1. 一个【进程】对应一个【页表】，【进程切换】导致【页表切换】，导致【TLB失效】，这样【虚拟地址】转换为【物理地址】就会变慢。表现为，程序运行变慢。
+2. 【线程】切换，不涉及【虚拟地址映射】的切换，所以，不存在这个问题
 
 
 
@@ -203,23 +284,139 @@ public static void main(String[] args) {
 
 ## 多线程了解吗？（当时脑子一抽，我以为要写多线程代码，回答了不熟悉，他就没多问了）
 
-## ThreadLocal 是什么？有哪些使用场景？
+## 并发场景中，ThreadLocal会造成内存泄漏吗？
 
-<https://www.bilibili.com/video/BV1Yb4y1s7RG>
+https://www.bilibili.com/video/BV1q94y1d7gL
 
-ThreadLocal 为每个`使用该变量的线程`提供`独立的变量副本`，
+https://space.bilibili.com/22492579
 
-所以`每一个线程`都可以独立地改变自己的`副本`，
+https://www.bilibili.com/video/BV1q94y1d7gL
+
+https://www.bilibili.com/video/BV1FU4y1S7bh
+
+```java
+public class ThreadLocal<T> {
+      数据结构采用数组
+      static class ThreadLocalMap {
+            private Entry[] table;
+            Entry继承了弱引用WeakReference.
+            可能导致OOM
+            static class Entry extends WeakReference<ThreadLocal<?>> {
+                  Object value;
+                  key就是ThreadLocal，value就是【变量副本值】
+                  Entry(ThreadLocal<?> k, Object v) {
+                        super(k);
+                        value = v;
+                  }
+            }
+      }
+
+      通过 key 拿到 value值
+      public T get() {
+            获取当前线程
+            Thread t = Thread.currentThread();
+
+            获取当前线程的ThreadLocalMap
+            ThreadLocalMap map = getMap(t);
+
+            if (map != null) {
+                  this是当前的 ThreadLocalMap(key), getEntry是通过key拿到value
+                  ThreadLocalMap.Entry e = map.getEntry(this);
+
+                  if (e != null) {
+                        @SuppressWarnings("unchecked")
+                        T result = (T) e.value;
+                        返回获取到的value
+                        return result;
+                  }
+            }
+            return setInitialValue();
+      }
+
+      public void set (T value) {
+            获取当前线程
+            Thread t = Thread.currentThread();
+
+            获取当前线程的ThreadLocalMap
+            ThreadLocalMap map = getMap(t);
+
+            if (map != null) {
+                  重新将ThreadLocal和新的value副本放入到map中
+                  map.set(this, value);
+            } else {
+                  创建
+                  createMap(t, value);
+            }
+
+      }
+
+      void createMap (Thread t, T firstValue) {
+            t.threadLocals = new ThreadLocalMap(this, firstValue);
+      }
+}
+```
+
+## ThreadLocal 是什么？
+
+ThreadLocal 不同于 synchronized锁机制，不属于【多线程同步机制】
+
+它为【多线程环境】下，【变量安全】提供了一种new思路
+
+ThreadLocal 为每个`线程`提供`独立的变量副本`，
+
+所以`不同线程`都可以独立地`改变`自己的`副本`，
 
 而不会影响`其它线程`所对应的`副本`。
 
+## ThreadLocal应用场景
+
+连接管理：【一个线程】持有【一个连接】，【线程之间】不共享【同一个连接】
+
 ThreadLocal 的经典使用场景是**数据库连接**和 **session 管理**等。
 
-## threadlocal原理，应用场景
+## threadlocal原理
+
+内部类是：`TreadLocalMap`，是一个`Entry数组`
+
+每个`Thread对象内部`都存储了一个`ThreadLocalMap`
+
+- `Entry`的key为`ThreadLocal对象ref`，指向这个`ThreadLocal对象`
+- `Entry`的value为`需要缓存的值`
 
 <https://www.bilibili.com/video/BV1iZ4y127wm>
 
+他的引用链时这样的：
+
+| stack  | Heap  |
+|---|---|
+| ThreadLocalRef  | TreadLocal  |
+
+
+ → 引用 → Thread → 引用 →  → 引用 → Entry → 引用 → value
+
+## 什么是内存溢出，什么是内存泄露
+
+https://www.bilibili.com/video/BV1BT4y1Y7YS
+
 ## threadlocal oom是为什么
+
+key是一个【弱引用】，在系统GC的时候，这个`ThreadLocal弱引用`是可以被回收的
+
+这样，就出现了key 为 null的Entry，就没有办法通过key找到value。
+
+value是一个【强引用】，如果【线程】一直存在的话，他就会一直存在这个value，不会被GC掉，会导致OOM
+
+## threadlocal oom如何解决？
+
+threadlocal内置了：
+
+- get方法：用来获取【ThreadLocal】在【当前线程】中保存的【变量副本】
+- set方法：用来设置【当前线程】中的【变量副本】
+- remove方法：用来移除【当前线程】中的【变量副本】
+
+能够将key为null的Entry的value置为null，这样就能在下一次GC时，把这个Entry彻底回收掉
+
+我们可以在使用完 ThreadLocal以后，手动调用一下它的`remove方法`
 
 ## 线程的创建方式
 
@@ -427,6 +624,10 @@ Java 内存模型定义了八种操作来实现
 4. `外观模式`：提供一个统一的接口，用来访问子系统中的一群接口，外观定义了一个高层的接口，让子系统更容易使用。
 5. `模版方法模式`：定义了一个算法的骨架，而将一些步骤延迟到`子类`中，模版方法使得`子类`可以在不改变算法结构的情况下，重新定义算法的步骤。
 6. `状态模式`：允许对象在内部状态改变时改变它的行为，对象看起来好像修改了它的类。
+
+## 责任链模式
+
+https://www.bilibili.com/video/BV1UL4y157eH
 
 
 ## 排序算法和时间复杂度

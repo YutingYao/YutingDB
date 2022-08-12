@@ -4,6 +4,8 @@
 
 ## 什么是Redis
 
+https://www.bilibili.com/video/BV1rY4y1G77P
+
 https://www.bilibili.com/video/BV1Th411b7fN
 
 ## Redis和Mysql如何保证数据一致性，如何高分回答？
@@ -167,6 +169,10 @@ master1 (0-5000)       master2 (5001-10000)       master3 (10001-16383)
 
 ## 缓存雪崩和缓存穿透的理解以及如何避免？
 
+https://www.bilibili.com/video/BV1gB4y127eT
+
+https://www.bilibili.com/video/BV1SS4y1a7rf
+
 https://www.bilibili.com/video/BV1P3411H77i
 
 ## Redis主从切换 & 缓存雪崩
@@ -325,6 +331,8 @@ https://www.bilibili.com/video/BV1vT4y1f7T2
 ## 分布式session中用 の 是什么数据结构
 
 ## Redis 单线程 or 多线程？
+
+https://www.bilibili.com/video/BV1Qi4y1m7Vk
 
 Redis 6.0 是指的是：
 

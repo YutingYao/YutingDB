@@ -1,3 +1,7 @@
+## 并行和并发有什么区别？
+
+https://www.bilibili.com/video/BV11R4y1w7iq
+
 ## Java官方提供了哪几种线程池
 
 一共5种：
@@ -36,6 +40,21 @@
 线程池 の 核心是：
 
 ThreadPoolExecutor()：上面创建方式都是对ThreadPoolExecutor の 封装。
+
+## 【程序】开多少【线程】合适？
+
+1. CPU密集型：【IO操作】可以在很短时间内完成，【线程等待时间】趋于0
+   1. 单核CPU：不适合使用多线程
+   2. 多核CPU：`线程数 = CPU核数 + 1`。这样可以确保，即使发生【错误】，CPU也不会中断工作
+2. IO密集型：【线程等待时间】越长，需要的线程越多
+   1. 如果【CPU耗时】趋于0，几乎全是【IO耗时】，则 `线程数 = 2 * CPU核数 + 1`
+
+## 为什么要用线程池？
+
+1. 频繁地【创建、销毁】线程非常低效
+2. 线程池可以解决以下2个问题：
+   1. 调度task。最大限度地【复用】已经创建的线程
+   2. 线程管理。保留了一些基本的【线程统计信息】。比如，`完成的task数、空闲时间`
 
 ## 线程池线程复用的原理是什么？
 
@@ -141,6 +160,10 @@ so，线程池 の 【工作线程】通过同步调用任务 の 【run方法�
 
 消费者只需要消费数据
 
+## 异步和多线程的关系？
+
+https://www.bilibili.com/video/BV1C3411A7Dw
+
 ## 阻塞队列被异步消费怎么保持顺序吗？
 
 阻塞队列是一个符合【FIFO特性】的队列。
@@ -175,6 +198,12 @@ so，线程池 の 【工作线程】通过同步调用任务 の 【run方法�
 
 - 从而避免【任务】进入到【阻塞队列】，而是直接去【启动】【最大线程数量】去处理
 
+## 并发编程3要素？
+
+1. 原子性：【不可分割の多个步骤の操作】，要保证，要么同时成功，要么同时失败
+2. 有序性：【程序执行】的顺序和【代码】的顺序要保持一致
+3. 可用性：一个【线程】对【共享变量】的修改，【another线程】能够立马看到
+
 ## 什么是 AQS
 
 英文全称：AbstractQueuedSynchronizer
@@ -208,6 +237,8 @@ AQS 提供了2种锁机制：
    - 【获得到锁】的【线程】在【释放锁】之后，会从【双向链表】的【头部】唤醒【下一个等待】的线程，再去【竞争锁】。
 
 ## AQS为什么要使用双向链表？
+
+https://www.bilibili.com/video/BV1DW4y127DE
 
 【双向链表】有2个指针：
 
@@ -262,6 +293,10 @@ new Thread(
 ).start();
 ```
 
+## 谈谈你对线程安全性的理解
+
+https://www.bilibili.com/video/BV11f4y1o7MH
+
 ## 如何在不加锁 の 情况下解决线程安全问题？
 
 这个问题有3个方面：
@@ -280,6 +315,27 @@ new Thread(
 1. 自旋锁：指篇【线程】在没有【抢占 の 锁】 の 情况下，先【自旋】指定 の 次数，去尝试获得【锁】。
 2. 乐观锁： 给每个数据增加一个【版本号】，一旦数据发生变化，则去修改这个版本号。CAS の 机制，可以完成【乐观锁】 の 功能。
 3. 在程序设计中，尽量去减少【共享对象】 の 使用。从业务上去实现【隔离】避免【并发】。
+
+## HashMap八连问
+
+https://www.bilibili.com/video/BV1nA4y1d7RX
+
+## 为什么hashmap扩容的时候是2倍？
+
+1. 在存入元素时，用到了& 位运算符。
+2. 当HashMap的容量为2的N次幂的时候，在【位运算】时，不容易发生【hash碰撞】，否则，容易发生【hash碰撞】。
+
+元素的位置，要么在【原位置】，要么在【原位置】再移动2次幂的位置。在扩容HashMap的时候，只需要计算新增的那个bit是0还是1就好了，省去了【重新计算hash值】的时间。
+
+与此同时，新增的bit是0还是1——可以认为是随机的。因此，可以把之前冲突的节点均匀分散到new bucket
+
+## 为什么HashMap会产生死循环？
+
+https://www.bilibili.com/video/BV1yL4y157ta
+
+## 单线程下的HashMap工作原理
+
+https://www.bilibili.com/video/BV1zY4y1H7ak
 
 ## HashMap 和 HashTable の 区别
 
@@ -333,7 +389,33 @@ synchronized的 `monitor`  の 实现，完全是依靠【操作系统】内部 
 
 CAS 实现【多线程】对【共享资源】竞争 の 【互斥性质】
 
-## volatile关键字有什么用？
+## volatiled 的【可见性】和【禁止指令重排序】是如何实现的？
+
+观测【volatile关键字】生成的【汇编码】，会多一个【lock前缀指令】
+
+【lock前缀指令】相当于是一个【内存屏障】，【内存屏障】提供3个功能：
+
+1. 在【指令重排序】时，不会把【前面的指令】排到【屏障后面】，【后面的指令】排到【屏障前面】
+2. 强制将对【缓存の修改】立即写入【主存】
+3. 如果是【写操作】，它会导致【其他CPU】中对应的【缓存】无效
+
+## volatile关键字是如何实现【可见性】的？
+
+就是将【被volatile修饰的变量】在被修改后，立即同步到【主内存】中。本质上，是通过【内存屏障】实现【可见性】
+
+## volatile关键字是如何避免【重排序】的？
+
+如果对【共享变量】增加了【volatile关键字】，那么——
+
+- 【`编译器`层面】就不会触发【`编译器`优化】
+- 就会有【内存屏障】，从而【阻止重排】：
+  - 在读和读之间，会有【读读屏障】
+  - 在读和写之间，会有【读写屏障】
+  - 在写和读之间，会有【写读屏障】
+  - 在写和写之间，会有【写写屏障】
+
+
+## volatile 关键字有什么用？
 
 1. 保证在【多线程环境】下【共享变量】 の 【可见性】
    - volatile 比 synchronized 更轻量级 の 【同步锁】，在访问【volatile变量】时，不会执行【加锁操作】，因此，也就不会执行【线程阻塞】。
@@ -341,7 +423,6 @@ CAS 实现【多线程】对【共享资源】竞争 の 【互斥性质】
    - CopyOnWriteArrayList
 2. 通过增加【内存屏障】防止【多个指令】之间 の 【重排序】
    - 单例模式中
-
 
 
 ## 什么是【可见性】？
@@ -364,6 +445,8 @@ JMM使用了一种 `Happens-Before  の 模型`去描述【多线程】之间【
    - 而在【多线程并行执行】 の 情况下，【缓存一致性】 の 问题就会导致【可见性问题】
 
 ## volatile关键字是如何保证【可见性】的？
+
+https://www.bilibili.com/video/BV1mt4y1b7aj
 
 对于一个增加了【volatile关键字】修饰 の 【共享变量】，
 
@@ -435,16 +518,93 @@ JVM会自动增加一个【Lock汇编指令】，
 
 这些【重排序】会导致【多线程】程序出现【内存可见性】问题。
 
-## volatile关键字是如何避免【重排序】的？
+## 内部静态类单例模式
 
-如果对【共享变量】增加了【volatile关键字】，那么——
+```java
+public class Singleton {
+    private static class Inner {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+    private Singleton() {}
+    public static Singleton getInstance() {
+        return Inner.INSTANCE;
+    }
+}
+```
 
-- 【`编译器`层面】就不会触发【`编译器`优化】
-- 就会有【内存屏障】，从而【阻止重排】：
-  - 在读和读之间，会有【读读屏障】
-  - 在读和写之间，会有【读写屏障】
-  - 在写和读之间，会有【写读屏障】
-  - 在写和写之间，会有【写写屏障】
+## 枚举模式
+
+最简单高效
+
+```java
+public enum Singleton{
+    INSTANCE;
+    public static Singleton getInstance() {
+        return INSTANCE;
+    }
+}
+```
+
+## 饿汉模式
+
+容易产生垃圾，因为一开始就初始化
+
+```java
+public class Singleton {
+    private static Singleton instance = new Singleton();
+    private Singleton(){}
+    public static Singleton getInstance() {
+        return instance;
+    }
+}
+```
+
+## 懒汉模式
+
+不是线程安全的
+
+```java
+public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static Singleton getInstance() {
+        if (instance == null) {
+                instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+## DCL单例模式
+
+DCL全称是Double Check Lock。
+
+线程安全，并且在【多线程】情况下，还能保持【高性能】
+
+```java
+public class Singleton {
+    // volatile是防止指令重排序
+    private static volatile Singleton instance;
+    private Singleton() {}
+    public static Singleton getInstance() {
+        // 第一层判断Singleton是否为null
+        // 如果 Singleton 已经加载，则直接返回
+        if (instance == null) {
+            // 加锁
+            synchronized (Singleton.class) {
+                // 第二层判断
+                // 如果 AB两个线程都在synchronized等待
+                // A创建完对象，B还会再进入，如果不检查一遍，B又会创建一个对象
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
 
 ## 【DCL单例模式】设计为什么需要volatile修饰【实例变量】？
 
@@ -471,6 +631,16 @@ instance = new DCLExample() 构建一个【实例对象】 の 时候，new这�
 解决这个问题 の 办法就是：
 
 - 在这个在【instance变量】上，增加一个 volatile 关键字进行修饰。而volatile底层，使用了一个【内存屏障机制】去避免【指令重排序】
+
+## 单例模式的应用场景
+
+https://www.bilibili.com/video/BV1Ci4y1m7BB
+
+## 哪种情况下的单例对象可能会被破坏？
+
+https://www.bilibili.com/video/BV1zS4y1A7EM
+
+
 
 ## 什么是CAS
 
@@ -542,7 +712,7 @@ volatile 能保证【每次拿到 の 变量】是`主内存`中`最新 の 那�
 
 - 【Runnable】→ sleep、join(T)、wait(T)、locksupport.parkNanos(T)、locksupport.parkUntil(T)→ 【Timed Waiting】→ 时间到、unpark→【Runnable】
 
-- 【Runnable】→ join、wait、locksupport.park→ 【Waiting】→ notify、notifyAll → 【Runnable】
+- 【Runnable】→ join、wait、locksupport.park → 【Waiting】→ notify、notifyAll → 【Runnable】
 
 - Synchronized  → 没有获得`monitor`锁 → 【Blocked】 → 获得`monitor`锁 → 【Runnable】
 
@@ -744,6 +914,34 @@ synchronized 就是锁住【对象头】中【两个锁】【标志位】 の �
 
 - 通过`Callable接口`，这个方法 の `返回值`是`Object`。
 
+```java
+public static void main (String[] args) throws Exception { 
+    ExecutorService es = Executors.newSingleThreadExecutor();
+    Runnable rnb = new Runnable() {
+        @Override
+        public void run() { 逻辑 };
+    }
+    // 1️⃣4️⃣ Runnable + Future 有返回值
+    Future<?> submit1 = es.submit(rnb);
+    submit.get();
+
+    // 2️⃣ Runnable 无返回值
+    es.execute(rnb);
+
+    // 3️⃣ Callable + Future 有返回值
+    Callable<String> sc = new Callable() {
+        @Override
+        public Object call() throws Exception {
+            逻辑
+            return null;
+        }
+    };
+    Future<String> submit2 = es.submit(sc);
+    submit2.get();
+}
+
+```
+
 ## Thread 和 Runnable  の 区别
 
 | Thread  | Runnable  |
@@ -869,6 +1067,8 @@ public class Main {
 
 高性能的原因：只复制【引用】，并不复制【数据本身】，所以，在获取【迭代器】时，速度很快
 
+
+
 ## cow集合如何【增删】元素？
 
 - 不是在【原数组】上【操作】
@@ -974,6 +1174,8 @@ Future 模式是【多线程并发】中常见 の 【设计模式】，
 这就是【Future 设计模式】
 
 ## synchronized 和 Lock 有什么区别？
+
+https://www.bilibili.com/video/BV1sB4y1R7Lw
 
 | synchronized  |  lock |
 |---|---|
@@ -1102,6 +1304,8 @@ t1 run() end
 
 ## ReentrantLock 是如何实现锁公平和非公平性 の ？
 
+https://www.bilibili.com/video/BV1Ka411p7rC
+
 定义：
 
 - 公平：竞争【锁资源】 の 线程，严格按照请求 の 顺序，来分配锁。
@@ -1202,6 +1406,10 @@ try {
 }
 ```
 
+## 为什么ConcurrentHashMap不允许插入null值？
+
+https://www.bilibili.com/video/BV1U94y1d7D7
+
 ## java8  の  ConcurrentHashMap 放弃【分段锁】，采用【node锁】。why？
 
 node锁，粒度更细，提高了性能，并使用 `CAS 算法` 保证 `原子性`
@@ -1255,6 +1463,10 @@ ConcurrentHashMap 在 HashMap 的基础上，提供了【并发安全】的实�
 
 【并发安全】的实现，是通过对【Node节点】加【锁】来保证【数据更新】的【安全性】
 
+## ConcurrentHashMap是如何保证线程安全？
+
+https://www.bilibili.com/video/BV1q541127Bk
+
 ## ConcurrentHashMap 的优化体现在：
 
 1. 在1.8里面，锁的【粒度】是数组中的一个节点；在1.7里面，锁的【粒度】是segment
@@ -1291,6 +1503,8 @@ ConcurrentHashMap 在 HashMap 的基础上，提供了【并发安全】的实�
 
 ## 线程 & 进程 の 区别
 
+https://www.bilibili.com/video/BV19B4y1y7ZF
+
 | 进程  | 线程  |
 |---|---|
 | 在【内存】中存在多个【程序】  | 每个【进程】有多个【线程】  |
@@ -1303,7 +1517,9 @@ ConcurrentHashMap 在 HashMap 的基础上，提供了【并发安全】的实�
 |  进程之间相互隔离，可靠性高 | 一个【线程崩溃】，可能影响程序 の 稳定性  |
 | 创建和销毁，开销大  |  开销小 |
 
+## JVM架构设计
 
+https://www.bilibili.com/video/BV1Qt4y1s7oG
 
 ## JVM性能优化 - 如何排查问题？
 
@@ -1323,6 +1539,10 @@ ConcurrentHashMap 在 HashMap 的基础上，提供了【并发安全】的实�
 - jhat
 - jstack
 - jmap
+
+## 如何理解JMM
+
+https://www.bilibili.com/video/BV1s3411P7rv
 
 ## java内存模型
 
@@ -1398,6 +1618,29 @@ Java の 内存分为5个部分：
 
   - 本地方法栈 🔸 native语言
   - 程序计数器(pc register) 🔸【*当前线程*】执行到 の 【字节码行号】
+
+## 方法区的【实现方式】为什么要从【持久代】变更为【元空间】？
+
+方法区原本设置为【持久代】，是为了【代码的复用】
+
+变更为【元空间】后右如下好处：
+
+1. 【class、相关metadata的生命周期】与【类加载器】一致，每个【加载器】有专门的【存储空间】
+2. 不会单独回收某个class，省掉了GC扫描的时间。【元空间】里面的对象位置是固定的，如果GC发现某个【类加载】不再存活，就把【相关空间】整个回收掉
+
+【方法区】的实现在【永久代】里面，它里面主要存储【运行时常量池，class元信息】。可以通过【PermSize】设置【永久代】大小，当【内存不够】的时候，就会触发【垃圾回收】。
+
+在1.8中，用【元空间】取代了【永久代】。
+
+【元空间】不属于【JVM内存】，而是直接使用【本地内存】，因此，不需要考虑GC的问题。默认情况下，【元空间】可以【无限制】的使用【本地内存】。
+
+取代的原因有3个：
+
+1. 在1.7版本的永久代，内存是有【上限的】，虽然，我们可以通过参数来设置，但是【JVM加载】的【class总数大小】是很难去确定的，容易出现OOM；  【元空间】存储在本地内存里面，内存的上限是比较大的，可以很好地避免这个问题
+2. 【 永久代】通过【Full GC】进行【垃圾回收】，也就是和【老年代】同时进行【垃圾回收】，替换成【元空间】后，简化了Full GC的过程，可以在不暂停的情况下【并发】释放空间
+3. Oracle 要合并【Hotspot】和【JRockit】的代码，而【JRockit】采用的就是【元空间】
+
+
 
 ## 常量池
 
@@ -1562,6 +1805,8 @@ a 指向Class(1)
 
 ## 双亲委派机制
 
+https://www.bilibili.com/video/BV1Ug411R7JA
+
 自底向上地查看，是否加载过这个类
 
 如果没有，再自顶向下，尝试去加载这个类
@@ -1668,20 +1913,20 @@ G1 在【后台】维护了一个【优先列表】
 特点：
 
 - 采用【标记-清除】算法
-- 【内存回收过程】与【用户线程】并发执行
+- 【垃圾回收线程】与【用户线程】并发执行
 
 不需要**stop the world**
 
 它包括4个阶段：
 
 1. 初始标记
-2. 并发标记
+2. **并发标记**
 3. 重新标记
-4. 并发清理
+4. **并发清理**
 
 【初始标记 & 重新标记】 需要 **stop the world**
 
-1. 初始标记：gc ROOT 能链接到哪些对象
+1. 初始标记：`GC Roots` 能链接到哪些对象
 2. 并发标记：递归地查找【all 引用对象】
 3. 重新标记：修正一下标记错误的，因为会存在【对象消失】的问题
 4. 并发清理：清除不用的对象
@@ -1691,6 +1936,13 @@ G1 在【后台】维护了一个【优先列表】
 1. 会有内存碎片。
 2. 在没有办法满足【连续对象分配】的情况下，就要进行【full GC】
 
+## CMS 在【并发收集阶段】再次触发【full GC】怎么处理？
+
+CMS 会存在【上一次垃圾回收】还没有完成，又触发【full GC】。
+
+一般发生在**并发标记**和**并发清理**阶段
+
+也就是 `concurrent mode failure`：此时进入 `stop the world`，用 `serial old 垃圾收集器` 来回收。
 
 ## 什么是【垃圾回收器】？
 
@@ -1729,22 +1981,43 @@ G1 在【后台】维护了一个【优先列表】
 
 ## 引用分为哪四种？
 
+https://www.bilibili.com/video/BV1nB4y1X71T
+
+<https://www.bilibili.com/video/BV1ST411J7Bk>
+
+https://www.bilibili.com/video/BV1FU4y1S7bh
+
 1. 强引用：永远不会被回收
 2. 软引用：OOM时要回收
 3. 弱引用：只要有GC，就一定被回收
-4. 虚引用：在回收时，收到一个通知
+4. 虚引用：随时可以被回收。不是给业务人员用的，用于【堆外内存】，虚引用的用途是在 gc 时返回一个通知。
+
+## GC是什么时候能做的？
+
+GC不是【任何时候】都能做的，必须代码运行到【安全点 or 安全区域】才能做。
+
+【安全区域】是指，在【一段代码】中【引用关系】不会发生变化，在【这个区域内】的【任何地方】开始GC都是安全的。
+
+主要有以下几种：
+
+1. method return 之前
+2. 调用 method 之后
+3. 抛出异常的位置
+4. 循环的末尾
+
+
 
 
 ## 如何确定一个对象是【垃圾】？
 
-引用计数法【被废弃】
+1️⃣ **引用计数法**：【被废弃】
 
-可达性分析算法：每个对象都有自己的引用。没有被GC ROOT引用的对象，会被回收。
+2️⃣ **可达性分析算法**：以`GC Roots`为起点，从`GC Roots`开始向下搜索，所有找到的对象都标记为**非垃圾对象**，其余未标记的对象都是**垃圾对象**。没有被`GC Roots`引用的对象，会被回收。
 
-【被GC ROOT引用的对象】包括：
+【被`GC Roots`引用的对象】包括：
 
 1. 【STACK】中引用的对象
-2. 【方法去】中【类静态属性、常量】引用的对象
+2. 【方法区】中【类静态属性、常量】引用的对象
 3. 【本地方法栈中】JNI引用的对象
 
 如果一个对象，没有【指针】对其引用，它就是垃圾
@@ -1836,6 +2109,10 @@ Java虚拟机被允许对满足上述三个条件的无用类进行回收(只是
 5. 代码优化，及时释放【资源】
 6. 增加集群节点数量
 
+## zk，redis 实现【分布式锁】，哪个更好？
+
+https://www.bilibili.com/video/BV1kG411p7qD
+
 ## 在jvm中【锁对象】由什么组成？
 
 - 对象头，
@@ -1893,6 +2170,8 @@ synchronized 锁升级原理：
 - 重量级锁：在【多线程竞争阻塞】时，线程处于【blocked】，处于【锁等待】状态下 の 线程，需要等待【获得锁】 の 线程【释放】锁以后，才能【触发唤醒】，会进行`用户态`到`内核态` の 切换
 
 ## 【可重入】是什么意思？
+
+https://www.bilibili.com/video/BV1GW4y1z7VH
 
 获得【锁】 の 【线程】在【释放锁】之前，再次去竞争【同一把锁】 の 时候，不需要【加锁】，就可以【直接访问】
 
@@ -2368,6 +2647,10 @@ class Computer implements Cloneable {
 person.arr = this.arr.clone()
 ```
 
+## 谈谈你对深克隆和浅克隆的理解？
+
+https://www.bilibili.com/video/BV1Dt4y1s7cT
+
 ## Java有几种文件拷贝方式，哪一种效率最高？
 
 1. 使用 `java.io 包`里面 の 库，使用 `FileInputStream` 读取，使用 `FileOutputStream` 写出。
@@ -2375,6 +2658,24 @@ person.arr = this.arr.clone()
 3. 使用 `java 标准类库` 本身提供 の  `Files.copy`
 
 其中 nio 里面提供 の  TransferTo 或 TransferFrom，可以实现【零拷贝】。【零拷贝】可以利用【操作系统底层】，避免不必要 の  【copy】和【上下文切换】，因此，在性能上表现比较好。
+
+```java
+public void zeroCopy() throws Exception {
+   long startTime = System.currentTimeMillis(); //记录开始时间
+
+   File srcFile = new File(pathname: "D:\\计算机网络.zip");
+   File descFile = new File(pathname: "E:\\计算机网络.zip");
+
+   FileChannel srcFileChannel = new RandomAccessFile(srcFile, mode: "r").getChannel();
+   FileChannel descFileChannel = new RandomAccessFile(descFile, mode: "rw").getChannel();
+
+   srcFileChannel.transferTo(position:0,srcFile.length(),descFileChannel);
+
+   long endTime = System.currentTimeMillis();
+   float excTime = (float) (endTime - startTime)/1000;
+   System.out.println("执行时间：" + excTime + "s");
+}
+```
 
 ## IO 和 NIO  の 区别?
 
@@ -2395,6 +2696,10 @@ person.arr = this.arr.clone()
 
 [设计源于生活中](https://www.bilibili.com/video/BV1cD4y1X7pN)
 
+https://www.bilibili.com/video/BV1wt4y1W71E
+
+https://www.bilibili.com/video/BV1YR4y1c7VP
+
 `BIO`：Block IO - `同步阻塞式 IO`
 
 - 当server受到【client请求】，需要等到 【client请求】 の 数据处理完毕，才能获取下一个【client请求】。so, BIO 能够连接数量非常少。
@@ -2406,6 +2711,10 @@ person.arr = this.arr.clone()
 `AIO`：Asynchronous IO - `异步非堵塞 IO`
 
 - 是 NIO  の 升级，也叫 NIO2
+
+## Error和Exception有什么区别？
+
+https://www.bilibili.com/video/BV1Dt4y1W7CN
 
 ## 异常 の 两个【子类实现】？java中异常 の 分类？
 
@@ -2747,6 +3056,8 @@ public abstract class Pet extends Animal implements A, B, C{
 4. ④ 循环等待。【线程1】等待【线程2】占有 の 资源，【线程2】等待【线程1】占有 の 资源，形成【头尾相接】 の 【循环等待关系】
 
 ## 如何去避免死锁？
+
+https://www.bilibili.com/video/BV1iS4y1P7MY
 
 只要打破，上述任一条件，就能避免死锁。
 
@@ -3716,14 +4027,7 @@ a最终仍然是1
 
 数组
 
-## Java 中都有哪些引用类型？
 
-<https://www.bilibili.com/video/BV1ST411J7Bk>
-
-强引用：发生 gc 的时候不会被回收。
-软引用：有用但不是必须的对象，在发生内存溢出之前会被回收。
-弱引用：有用但不是必须的对象，在下一次GC时会被回收。
-虚引用（幽灵引用/幻影引用）：无法通过虚引用获得对象，用 PhantomReference 现虚引用，虚引用的用途是在 gc 时返回一个通知。
 
 
 ## 序列化和反序列化的理解?
