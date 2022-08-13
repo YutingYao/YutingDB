@@ -7,7 +7,15 @@
 
 虽然 timestamp 可以 `解决时区问题`，但 还是通过前后端的转换更好，可以减轻数据库的压力。在高并发情况下，可能出现`性能抖动问题`。
 
+## MySQL架构
+
+https://www.bilibili.com/video/BV1W34y1k7yX
+
 ## 数据库锁表 の 相关处理
+
+## exist和in的区别？
+
+https://www.bilibili.com/video/BV1uF41157gm
 
 ## Mysql锁有哪些，如何理解
 
@@ -17,7 +25,9 @@ https://www.bilibili.com/video/BV1ff4y1Z7VQ
 
 https://www.bilibili.com/video/BV1C3411x7yU
 
+## limit500000,10和limit 10速度一样快吗？
 
+https://www.bilibili.com/video/BV1N3411V7yf
 
 ## explain sql 执行计划 の 各列参数
 
@@ -46,7 +56,9 @@ https://www.bilibili.com/video/BV1mh411q7u5
 
 [Explain语句结果中各个字段分表表示什么](https://www.bilibili.com/video/BV1gt4y1a7sE)
 
-## 
+## 索引覆盖
+
+https://www.bilibili.com/video/BV1HF411M7gr
 
 
 ## 【两个线程】去操作【数据库】时，【数据库】发生了【死锁】
@@ -130,6 +142,14 @@ https://www.bilibili.com/video/BV1WY411T79A
 
 <https://www.bilibili.com/video/BV1N34y17715>
 
+## 什么情况下不建索引？
+
+https://www.bilibili.com/video/BV1KU4y1U7TZ
+
+## MySQL索引，给我整不会了！
+
+https://www.bilibili.com/video/BV1KP4y1A7QB
+
 ## 索引 の 设计原则
 
 在进行索引设计的时候，应该：
@@ -154,6 +174,10 @@ https://www.bilibili.com/video/BV1WY411T79A
 ## 事物 の 四个特性，以及各自 の 特点（原子、隔离）等等，项目怎么解决这些问题
 
 ## 浏览器从url输入到返回 の 流程
+
+## MySQL查询语句的执行流程
+
+https://www.bilibili.com/video/BV1gF41157Rx
 
 ## 1T文件，每行是一个数字，机器128G内存，求top10数字
 
@@ -190,6 +214,8 @@ https://www.bilibili.com/video/BV1WY411T79A
 ## 数据库视图
 
 ## 数据库 の 三大范式，都有哪些区别，举例说明
+
+https://www.bilibili.com/video/BV1dB4y117ry
 
 ## Mysql索引的优点和缺点
 
@@ -242,6 +268,22 @@ https://www.bilibili.com/video/BV1sg41197Gm
 
 mysql索引设计原则
 
+## MySQL分区
+
+https://www.bilibili.com/video/BV1Z3411P7XM
+
+## int(1)和int(10)有什么区别？
+
+https://www.bilibili.com/video/BV1dZ4y117sp
+
+## 高度为3的B+树可以存放多少数据？
+
+https://www.bilibili.com/video/BV1aT4y1q7ME
+
+## 索引下推
+
+https://www.bilibili.com/video/BV1VL4y1V7XE
+
 ## 说说 MySQL  の 索引？b树与b+树 の 区别？
 
 https://www.bilibili.com/video/BV1TF411u7f8
@@ -257,6 +299,14 @@ https://www.bilibili.com/video/BV1gB4y1q7dQ
 ## Mysql数据库中，什么情况下设置了索引但⽆法使用
 
 ## 数据库会死锁吗，举一个死锁 の 例子，mysql怎么解决死锁
+
+## 事务的隔离级别
+
+https://www.bilibili.com/video/BV1Ja411J7Jn
+
+## 深分页怎么优化？
+
+https://www.bilibili.com/video/BV1D94y1U7C1
 
 ## 事务 の 特性，隔离 の 级别
 
@@ -300,17 +350,35 @@ I: 由 MVCC 保证
 
 D：由 redolog 来保证。mysql在修改数据时，会在redolog中，记录一份【日志数据】，就算【数据】没有保存成功，只有【log】保存成功了，数据仍然不会丢失
 
+## 什么是分库分表
+
+https://www.bilibili.com/video/BV1MY4y1k7VW
+
 ## 为什么数据量大了，就一定要分库分表？
 
 https://www.bilibili.com/video/BV1Ja411e7dG
+
+## MySQL单表多大考虑进行分库分表？
+
+https://www.bilibili.com/video/BV1d34y1E7zj
+
+## 水平切分和垂直切分
+
+https://www.bilibili.com/video/BV1Hi4y1m7SE
 
 ## 想用数据库“读写分离” 请先明白“读写分离”解决什么问题？
 
 https://www.bilibili.com/video/BV1bA4y1D72W
 
+## truncate、delete与drop有什么异同点？
+
 ## mysql索引
 
-hash索引 + B+树
+## hash索引 + B+树
+
+https://www.bilibili.com/video/BV1DY4y147Wj
+
+https://www.bilibili.com/video/BV17F41177RT
 
 ## mysql の 引擎
 
@@ -332,13 +400,23 @@ https://www.bilibili.com/video/BV18U4y197Dx
 
 ## MySQL 索引，存数据库，还是存磁盘
 
+## count(1)、count(*)和count(字段名)的区别？
+
+https://www.bilibili.com/video/BV1Yd4y1m72z
+
 ## 【聚簇索引】和【非聚簇索引】如何区别？
+
+https://www.bilibili.com/video/BV1x5411m7iy
 
 https://www.bilibili.com/video/BV1Er4y1572y
 
 https://www.bilibili.com/video/BV1o3411J7Mh
 
 只需要判断【数据】和【索引】是否存在一起
+
+## 前缀索引
+
+https://www.bilibili.com/video/BV1WF411L7Mk
 
 ## mySQL是【聚簇索引】，还是【非聚簇索引】？
 
@@ -353,6 +431,10 @@ myisam：只有【非聚簇索引】
 
 - `xxx.myd`包含【数据】
 - `xxx.myi`包含【索引】
+
+## MySQL有哪些存储引擎？
+
+https://www.bilibili.com/video/BV1zr4y1x7o7
 
 ## MyISAM和InnoDB的区别？
 
@@ -380,6 +462,9 @@ https://www.bilibili.com/video/BV1Ba411J7TP
 4. 【从库SQL线程】读取【本地relay-log】，使得数据和【主库】保持一致。
 5. 最后【从库IO线程】和【从库SQL线程】将进入【睡眠状态】，等待下一次被唤醒
 
+## bin log&undo log&redo log
+
+https://www.bilibili.com/video/BV1Lr4y1x7W9
 
 ## 从库读主库 の binlog
 
@@ -554,6 +639,8 @@ b+树中【相邻数据】在物理上，也是【相邻】的。因为【b+树�
 
 ##  mysql的【索引类型】有哪些？
 
+https://www.bilibili.com/video/BV1cR4y1w7dc
+
 - 普通索引
 - 唯一索引
 - 逐渐索引
@@ -574,3 +661,15 @@ b+树中【相邻数据】在物理上，也是【相邻】的。因为【b+树�
 - 当需要新【插入】一个数据的时候，先将这个【操作】存储到【Insert Buffer】，在下一次查询，需要访问这个数据的时候，【存储引擎】才会将其合并到【索引】中。也就是说——
 - 多个【叶子节点】的插入操作，合并到一起，这就大大提高了【辅助索引】的【插入性能】
 - 这个时候【非唯一索引】的性能，要优于唯一索引。
+
+## 回表
+
+https://www.bilibili.com/video/BV1tS4y1A7wJ
+
+## 华为面试，已拿offer！
+
+https://www.bilibili.com/video/BV1BZ4y1r7cU
+
+## 最左匹配原则
+
+https://www.bilibili.com/video/BV1av4y1A7r3

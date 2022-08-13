@@ -16,6 +16,10 @@ https://www.bilibili.com/video/BV1KD4y1U7Rr
 
 虚拟内存：是【计算机内存管理技术】，它让程序认为它具有【连续可用】的【4GB 内存】，而实际上，映射到多个【物理内存碎片】
 
+## 直接new一个线程不好吗？
+
+https://www.bilibili.com/video/BV1VB4y1H7Xf
+
 
 ## 线程和进程切换过程
 
@@ -66,12 +70,16 @@ https://www.bilibili.com/video/BV1yt4y1h7MW
 
 ## 谈谈你对线程安全的理解？
 
+https://www.bilibili.com/video/BV1x541117iZ
+
 <https://www.bilibili.com/video/BV1ei4y1U7HW>
 
 
 
 
 ## 如何保证线程安全
+
+https://www.bilibili.com/video/BV1dY411P7hp
 
 https://www.bilibili.com/video/BV1NF41157t1
 
@@ -131,6 +139,10 @@ public static void main(String[] args) {
 ```
 
 ## arraylist 和linkedlist 区别，为什么arrylist查询快
+
+https://www.bilibili.com/video/BV1UY4y177XM
+
+https://www.bilibili.com/video/BV1gZ4y1R7B8
 
 <https://www.bilibili.com/video/BV1xe4y1973f>
 
@@ -197,6 +209,10 @@ Map:
 反射机制就是通过这个【字节码对象】
 
 看到了这个Class的结构。
+
+## Object的常用方法有哪些？
+
+https://www.bilibili.com/video/BV1E341157wW
 
 
 ## Java如何获取字节码对象
@@ -369,6 +385,8 @@ ThreadLocal 为每个`线程`提供`独立的变量副本`，
 而不会影响`其它线程`所对应的`副本`。
 
 ## ThreadLocal应用场景
+
+https://www.bilibili.com/video/BV1QS4y1s7hi
 
 连接管理：【一个线程】持有【一个连接】，【线程之间】不共享【同一个连接】
 
