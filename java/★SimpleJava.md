@@ -492,14 +492,6 @@ threadlocal内置了：
 
 
 
-## 我们自己定义 の java.lang.String类是否可以被类加载器加载
-
-<https://www.bilibili.com/video/BV1MF411e7zY>
-
-## String类是否可以被继承
-
-<https://www.bilibili.com/video/BV1ev411g7Xk>
-
 
 
 

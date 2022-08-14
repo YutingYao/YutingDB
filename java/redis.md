@@ -235,6 +235,8 @@ slave 开始大量清理【过期的数据】
 DEL key
 ```
 
+
+
 ## Redis keys命令有什么问题？
 
 https://www.bilibili.com/video/BV1oY4y1V7oU
@@ -360,6 +362,8 @@ https://www.bilibili.com/video/BV1194y1Q7Rn
 
 https://www.bilibili.com/video/BV1vT4y1f7T2
 
+https://www.bilibili.com/video/BV1wt4y1W71E
+
 ## 分布式session中用 の 是什么数据结构
 
 ## Redis 单线程 or 多线程？
@@ -390,6 +394,25 @@ https://www.bilibili.com/video/BV1eD4y1o7np
 ## 单线程一定比多线程好吗？为什么新版本的redis还要变成多线程的？
 
 （答 读多写少的时候，加共享锁多线程性能更好）， 
+
+
+
+## redis 实现【分布式锁】原理
+
+setnx + 过期时间参数（防止异常导致锁没有释放）
+
+1. 加锁逻辑：
+   - setnx争抢key的锁，
+   - 如果已经有key存在，则不作操作，过段时间重试
+   - 确保只有一个client持有【锁】
+   - value是requestID，代表这把【锁】是哪个请求加的
+2. 解锁逻辑
+   - 首先，获取【锁】对应的value，是否与【requestId】相等
+   - 如果相等，则删除【锁】
+
+## zk，redis 实现【分布式锁】，哪个更好？
+
+https://www.bilibili.com/video/BV1kG411p7qD
 
 ## 学习下分布式锁 mysql redis zookeeper
 

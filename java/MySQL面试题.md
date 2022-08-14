@@ -193,6 +193,15 @@ https://www.bilibili.com/video/BV1gF41157Rx
 
 <https://www.bilibili.com/video/BV1pr4y1p7Ak>
 
+1. 对于【组合索引】，不使用【组合索引】【最左边的字段】，则【索引失效】
+2. 以%开头的like查询，无法使用索引：比如%abc
+3. 以%结束的like查询，可以使用索引：比如abc%，相当于范围查询
+4. 查询条件中，类型是【字符串类型】，没有使用【引号】，则可能会因为【类型不同】发生【隐式转换】，导致【索引失效】
+5. 判断【索引列】是否【不等于】某个值
+6. 对【索引列】进行运算
+7. 查询条件用【or链接】
+
+
 ## 如何保证MySQL数据库的高可用性？
 
 <https://www.bilibili.com/video/BV1aL4y1G7jT>
