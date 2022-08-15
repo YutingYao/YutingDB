@@ -2,6 +2,32 @@
 
 [Redis学到什么程度，面试不虚心](https://www.bilibili.com/video/BV1Jm4y197xG)
 
+## sentinel哨兵
+
+是一种【特殊模式】。
+
+哨兵是【独立进程】，可以【独立运行】
+
+功能：
+
+- 监控【运行的】多个【Redis实例】
+- client连接Redis时候，先连接【哨兵】。【哨兵】会通知client【Redis主节点】的地址
+- 监测【主节点】宕机，并推选出【某个从节点】为【新的主节点】。然后通过【发布-订阅-模式】通知其他服务器
+
+## sentinel哨兵，如何监测【主节点】宕机
+
+entinel哨兵以每秒1次，向 master、slave、sentinel 发送一个 ping
+
+如果回复ping的时间过长，则这个【Redis实例】会被标记为【主观下线】
+
+如果master被标记为【主观下线】：
+
+- 正在监视这个Master的所有Sentinel要以每秒一次的频率确认，
+- if 有足够数量的Sentinel确认了【主观下线】
+- 则master被标记为【客观下线】
+- if 没有足够数量的Sentinel同意【客观下线】
+- 则【客观下线】状态会被解除
+
 ## Redis为什么这么快？
 
 https://www.bilibili.com/video/BV1va411a7pc
@@ -115,6 +141,10 @@ https://www.bilibili.com/video/BV1kh411x7Jc
 2. 【有序集合】保存的【all 元素长度】小于 64 字节
 
 ## 什么时候采用跳表？
+
+## 什么是跳表
+
+https://www.bilibili.com/video/BV13K4y1G7uD
 
 ## 跳表的时间复杂度
 
@@ -363,6 +393,12 @@ https://www.bilibili.com/video/BV1194y1Q7Rn
 https://www.bilibili.com/video/BV1vT4y1f7T2
 
 https://www.bilibili.com/video/BV1wt4y1W71E
+
+https://www.bilibili.com/video/BV1tB4y1T7bk
+
+https://www.bilibili.com/video/BV1Rv411H7M5
+
+https://www.bilibili.com/video/BV1xh411Y7Qs
 
 ## 分布式session中用 の 是什么数据结构
 

@@ -210,6 +210,10 @@ https://www.bilibili.com/video/BV1gF41157Rx
 
 ## 怎么解决幻读 具体在sql是怎么实现 の
 
+## 幻读
+
+https://www.bilibili.com/video/BV1964y1s7tD
+
 ## 什么是【一致性】读？
 
 事务启动的时候，根据【某个条件】去【读取数据】，直到【事务结束】再去执行【相同的条件】，还是读到【同一份数据】，不会发生变化
@@ -317,6 +321,10 @@ https://www.bilibili.com/video/BV1Ja411J7Jn
 
 https://www.bilibili.com/video/BV1D94y1U7C1
 
+## 垮库分页的问题，有最优解么？
+
+https://www.bilibili.com/video/BV1xS4y1u75r
+
 ## 事务 の 特性，隔离 の 级别
 
 Mysql事务的实现原理：
@@ -360,6 +368,8 @@ I: 由 MVCC 保证
 D：由 redolog 来保证。mysql在修改数据时，会在redolog中，记录一份【日志数据】，就算【数据】没有保存成功，只有【log】保存成功了，数据仍然不会丢失
 
 ## 什么是分库分表
+
+[全面分库分表方案](https://www.bilibili.com/video/BV1RZ4y1m7Q9)
 
 https://www.bilibili.com/video/BV1MY4y1k7VW
 
@@ -493,6 +503,16 @@ https://www.bilibili.com/video/BV1Lr4y1x7W9
 
 ## MySQL InnoDB存储 の 文件结构
 
+## Mysql自增主键一定是连续的吗
+
+https://www.bilibili.com/video/BV1mq4y1W7VS
+
+## Mysql 自增ID用完了怎么办
+
+https://www.bilibili.com/video/BV1tX4y1c7y5
+
+
+
 1.2 索引树是如何维护 の ？
 1.3 数据库自增主键可能 の 问题
 1.4 MySQL の 几种优化
@@ -515,6 +535,8 @@ D 持久性：对数据的【修改】，必须在事务【结束】前，保存
 - 低级别的隔离支持【更 high 的并发处理】
 
 ## Mysql的事务隔离级别
+
+https://www.bilibili.com/video/BV1yh411671h
 
 MySQL定义了4种隔离级别：
 
@@ -655,6 +677,10 @@ https://www.bilibili.com/video/BV1cR4y1w7dc
 - 逐渐索引
 - 联合索引
 - 全文索引
+
+## mysql中普通索引和唯一索引的区别
+
+https://www.bilibili.com/video/BV1354y157oZ
 
 ## 实际项目中，我们选择【唯一索引】还是【普通索引】？
 
