@@ -1,6 +1,8 @@
 
 ## Mysql表时间列用 datetime 还是 timestamp ？
 
+https://www.bilibili.com/video/BV1tW4y1k7Na
+
 个人认为用datetime更好。
 
 虽然 timestamp 是 `四字节`，但一旦存储毫秒就会变成 7 字节，和datetime的8字节相差无几。
@@ -131,6 +133,10 @@ https://www.bilibili.com/video/BV1nY4y1Y7G5
 
 https://www.bilibili.com/video/BV1WY411T79A
 
+## 抖音面试官：如何快速排查系统中的慢sql？
+
+https://www.bilibili.com/video/BV1TS4y1Q77q
+
 ## 一条sql语句运行慢，如何做。怎么处理MySQL的慢查询？
 
 （慢查询，看索引，看orderby和groupby）
@@ -161,6 +167,16 @@ https://www.bilibili.com/video/BV1KP4y1A7QB
 
 <https://www.bilibili.com/video/BV1WB4y1s7kD>
 
+## 为什么大厂不推荐使用 join？
+
+https://www.bilibili.com/video/BV1kW4y1h755
+
+https://www.bilibili.com/video/BV15d4y1K71s
+
+## 为什么大厂不让用外键？
+
+https://www.bilibili.com/video/BV1EF411w7Qy
+
 ## 为什么要有索引？
 
 为了提高查询性能
@@ -187,7 +203,13 @@ https://www.bilibili.com/video/BV1gF41157Rx
 
 ## 怎么数据链运行慢定位问题，对任务进行优化
 
+## 分别谈谈联合索引生效条件和失效条件？
+
+https://www.bilibili.com/video/BV1xd4y1N7Fu
+
 ## 索引失效场景
+
+[【大厂面试题】Mysql索引失效的9种情况？](https://www.bilibili.com/video/BV1rr4y1n7KN)
 
 <https://www.bilibili.com/video/BV1yr4y1E7Xu>
 
@@ -201,6 +223,9 @@ https://www.bilibili.com/video/BV1gF41157Rx
 6. 对【索引列】进行运算
 7. 查询条件用【or链接】
 
+## 【大厂面试题】Mysql中空值和null值的区别？
+
+https://www.bilibili.com/video/BV1PY4y1v7Tj
 
 ## 如何保证MySQL数据库的高可用性？
 
@@ -245,6 +270,14 @@ https://www.bilibili.com/video/BV1HY4y1r7qx
 |   | 读慢，写快  |
 |   | 【一行一行】删除  |
 
+## update语句是行锁还是表锁？
+
+https://www.bilibili.com/video/BV1sa411P7yR
+
+## MySQL中行锁和表锁的含义与区别？
+
+https://www.bilibili.com/video/BV1Ya411V7Uz
+
 ## 说一下你对行锁、临键锁、间隙锁的理解
 
 https://www.bilibili.com/video/BV1rN4y1M7vN
@@ -253,13 +286,14 @@ https://www.bilibili.com/video/BV1rN4y1M7vN
 
 https://www.bilibili.com/video/BV1pS4y1v7ew
 
-4.为什么 选用mongo
-
-7.为什么用mongo
+## 为什么用mongo
 
 
-2. 数据库有哪些类型
+## 数据库有哪些类型
+
 ## SQL和NoSQL区别
+
+https://www.bilibili.com/video/BV1vB4y1L7TN
 
 https://www.bilibili.com/video/BV1HB4y1D7pL
 
@@ -269,6 +303,10 @@ https://www.bilibili.com/video/BV19r4y1L7cZ
 
 https://www.bilibili.com/video/BV1ea411H7RR
 
+https://www.bilibili.com/video/BV1n3411A7dw
+
+https://www.bilibili.com/video/BV1eU4y197EN
+
 ## 什么是事务
 
 https://www.bilibili.com/video/BV1RS4y1d7kr
@@ -276,6 +314,10 @@ https://www.bilibili.com/video/BV1RS4y1d7kr
 ## Mysql事务的实现原理
 
 https://www.bilibili.com/video/BV1sg41197Gm
+
+## 谈谈MySQL中事务实现的原理？
+
+https://www.bilibili.com/video/BV1wa411Z7FB
 
 ## mysql索引是什么结构，索引存储int和字符串有什么区别（不会）
 
@@ -289,9 +331,19 @@ https://www.bilibili.com/video/BV1Z3411P7XM
 
 https://www.bilibili.com/video/BV1dZ4y117sp
 
+https://www.bilibili.com/video/BV1gu411v7Yo
+
+## 拼多多面试官：MySQL索引为什么要用B+树？
+
+## 数据结构和算法-树的优点是什么？
+
+https://www.bilibili.com/video/BV1XR4y1A7tp
+
 ## 高度为3的B+树可以存放多少数据？
 
 https://www.bilibili.com/video/BV1aT4y1q7ME
+
+https://www.bilibili.com/video/BV1fr4y1V7E2
 
 ## 索引下推
 
@@ -316,6 +368,10 @@ https://www.bilibili.com/video/BV1gB4y1q7dQ
 ## 事务的隔离级别
 
 https://www.bilibili.com/video/BV1Ja411J7Jn
+
+## 【大厂面试题】如何解决Mysql深分页问题？
+
+https://www.bilibili.com/video/BV1LY4y1G7Xj
 
 ## 深分页怎么优化？
 
@@ -367,7 +423,13 @@ I: 由 MVCC 保证
 
 D：由 redolog 来保证。mysql在修改数据时，会在redolog中，记录一份【日志数据】，就算【数据】没有保存成功，只有【log】保存成功了，数据仍然不会丢失
 
+## 【大厂面试题】Mysql分表、分库、分表和分区的区别？
+
+https://www.bilibili.com/video/BV1nA4y1D7c4
+
 ## 什么是分库分表
+
+[线上一亿数据，如何分表迁移？](https://www.bilibili.com/video/BV17W4y1a7ku)
 
 [全面分库分表方案](https://www.bilibili.com/video/BV1RZ4y1m7Q9)
 
@@ -388,6 +450,10 @@ https://www.bilibili.com/video/BV1Hi4y1m7SE
 ## 想用数据库“读写分离” 请先明白“读写分离”解决什么问题？
 
 https://www.bilibili.com/video/BV1bA4y1D72W
+
+## 你有没有做过MySQL的读写分离？
+
+https://www.bilibili.com/video/BV1Ya411o7hb
 
 ## truncate、delete与drop有什么异同点？
 
@@ -423,7 +489,13 @@ https://www.bilibili.com/video/BV18U4y197Dx
 
 https://www.bilibili.com/video/BV1Yd4y1m72z
 
+## 【大厂面试题】Mysql的count(*)和count(1)谁更快？
+
+https://www.bilibili.com/video/BV1bU4y117HV
+
 ## 【聚簇索引】和【非聚簇索引】如何区别？
+
+[【大厂面试题】什么是Mysql聚集索引与非聚集索引？](https://www.bilibili.com/video/BV1ES4y1A7L6)
 
 https://www.bilibili.com/video/BV1x5411m7iy
 
@@ -481,9 +553,33 @@ https://www.bilibili.com/video/BV1Ba411J7TP
 4. 【从库SQL线程】读取【本地relay-log】，使得数据和【主库】保持一致。
 5. 最后【从库IO线程】和【从库SQL线程】将进入【睡眠状态】，等待下一次被唤醒
 
+## 谈谈MySQL中的重做日志，回滚日志和二进制日志的作用以及区别？
+
+https://www.bilibili.com/video/BV1DT411L7qn
+
+## 【经验分享】日志最佳实践
+
+https://www.bilibili.com/video/BV1GB4y1D7Zb
+
 ## bin log&undo log&redo log
 
 https://www.bilibili.com/video/BV1Lr4y1x7W9
+
+## 【大厂面试题】Mysql的Redo日志刷盘策略？
+
+https://www.bilibili.com/video/BV1EA4y1S7ro
+
+## 【大厂面试题】Mysql的redo日志工作原理？
+
+https://www.bilibili.com/video/BV1FR4y1A7cd
+
+## 【大厂面试题】什么是Mysql的undo日志？
+
+https://www.bilibili.com/video/BV1Va411J7do
+
+## 【大厂面试题】Mysql的undo日志的回滚段是什么？
+
+https://www.bilibili.com/video/BV1T54y1Z79E
 
 ## 从库读主库 の binlog
 
@@ -494,6 +590,17 @@ https://www.bilibili.com/video/BV1Lr4y1x7W9
 5. 【从库IO线程】接收【binlog】，并放在【本地relay-log】中
 6. 【从库SQL线程】应用【本地relay-log】，并记录到【relay-log.info】中，默认情况下，已经应用过的relay会被自动清理。
 
+## 【大厂面试题】Mysql主从同步的三种模式
+
+https://www.bilibili.com/video/BV1SS4y1N72n
+
+## 【大厂面试题】mysql主从同步延迟解决方案
+
+https://www.bilibili.com/video/BV1Xq4y1h71v
+
+## 【大厂Java面试题】Mysql主从同步原理？
+
+https://www.bilibili.com/video/BV1CY4y1q7DV
 
 ## MySQL 为什么要主从同步？
 
@@ -533,6 +640,10 @@ D 持久性：对数据的【修改】，必须在事务【结束】前，保存
 
 - 具体规则，用于限定【事务】内外，哪些改变是可见的？哪些改变是不可见的？
 - 低级别的隔离支持【更 high 的并发处理】
+
+## 读已提交和可重复读的区别？
+
+https://www.bilibili.com/video/BV1Xu411k75y
 
 ## Mysql的事务隔离级别
 
@@ -584,7 +695,9 @@ https://www.bilibili.com/video/BV1Za411Y7SF
   - 而事务2此时【插入】了一条【value为1】的数据，并完成提交
   - 事务1，发现，居然还有一条【value为1】的数据，没有修改
 
+## 【大厂面试题】如何保证缓存一致性？
 
+https://www.bilibili.com/video/BV1Jq4y1a7wE
 
 ## 基于Redis和MySQL的架构，如何保证数据一致性
 
@@ -708,3 +821,11 @@ https://www.bilibili.com/video/BV1BZ4y1r7cU
 ## 最左匹配原则
 
 https://www.bilibili.com/video/BV1av4y1A7r3
+
+## 项目中是如何处理重复/并发请求的？
+
+https://www.bilibili.com/video/BV1QU4y1k7Qw
+
+## 数据库面试题：为什么要小表驱动大表？
+
+https://www.bilibili.com/video/BV1ZY4y1F7Zt

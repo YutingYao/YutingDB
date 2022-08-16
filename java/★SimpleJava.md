@@ -6,9 +6,17 @@
 
 [Java知识图谱](https://space.bilibili.com/1936685014)
 
+[经典鸡翅](https://space.bilibili.com/386498238) 这些视频比较高级，没有工作经验，看不太懂
+
+[设计源于生活中](https://space.bilibili.com/484405397) 代码题
+
 <http://www.altitude.xin>
 
 [操作系统原理(合集)](https://www.bilibili.com/video/BV13b4y1Q7YD)
+
+[★杨博士Java学院](https://space.bilibili.com/389032749)
+
+
 
 ## 直接new一个线程不好吗？
 
@@ -18,6 +26,22 @@
    - 没有创建线程的【同一标准】，比如，线程名字。
    - 每个人都可以创建线程，导致当系统运行起来，不好管控。
 2. 频繁创建【开销大】
+
+## 说下对象完整创建流程
+
+1. 类加载检查
+   - 在实例化一个对象的时候，JVM首先先检查【目标对象】是否已经【被加载】并【初始化】。如果没有，JVM需要立即去加载【目标类】，然后，调用【目标类】的【构造器】完成初始化。【目标类】是通过【类加载器】来实现的，主要就是把一个【类】加载到【内存】里面，然后是【初始化】，这个步骤主要是对【目标类】的【静态变量、成员变量、静态代码块】进行初始化。当【目标类】被【初始化】以后，就可以从【常量池】里面找到对应的【类元信息】。并且，【目标对象的大小】在【类加载完成】之后，就已经确定了。
+2. 分配内存
+   - 这个时候，就需要为【new创建的对象】根据【目标对象的大小】在【堆内存】中分配内存空间，内存分配的方式有 2 种：指针碰撞 + 空闲列表。JVM会根据【JAVA堆内存】是否【规整】来决定【内存分配方法】。
+3. 初始化0值
+   - 对除了【对象头】以外的内存区域，JVM会将【目标对象】里面的【普通成员变量】初始化为0值，比如说，int类型初始化为【0值】，string类型初始化为null。这步操作主要是保证【对象】里面的【实例字段】，不用【初始化】就可以【直接使用】。
+4. 设置对象头
+   - 包括hashCode、GC分代年龄、锁标记
+   - 指针，用于确定该object是哪个class的实例
+5. 执行init方法
+   - 属性赋值、执行构造方法，完成对象的创建。其中，init方法是【java文件】编译之后，在【字节码文件】里面生成的。它是一个【实例构造器】，完成一系列【初始化动作】
+   - 
+<https://www.bilibili.com/video/BV1J3411G7wA>
 
 ## new Thread() 和 new Object() 的区别？
 
@@ -148,10 +172,6 @@ https://www.bilibili.com/video/BV1Eg411M7zi
 <https://www.bilibili.com/video/BV1WR4y1J7T4>
 
 
-## HashMap的Put方法
-
-<https://www.bilibili.com/video/BV1MR4y1F7Jf>
-
 ## hashmap 是如何解决hash冲突的？
 
 链式寻址法：尾插法
@@ -219,8 +239,6 @@ Vector 线程安全
 
 ## 追问：HashMap在哪个jdk版本使用红黑树，之前 の 实现方法是什么？
 
-## hashmap put过程
-
 ## 集合
 
 Collection:
@@ -233,7 +251,6 @@ Map:
 
 - HashMap (LinkedHashMap)
 
-[java中LinkedHashMap和TreeMap是如何保证顺序的？](https://www.bilibili.com/video/BV1e44y1x7GS)
 
 ## hash算法 の 有哪几种，优缺点，使用场景
 
@@ -354,6 +371,11 @@ public static void main(String[] args) {
 - JDBC链接数据库，使用Class.forName()通过【反射】加载【数据库】的驱动程序
 - Spring AOP
 
+
+## 谈谈你对spring aop的理解？
+
+https://www.bilibili.com/video/BV1LB4y1t7jr
+
 ## 为什么【进程切换】比【线程切换】慢？
 
 为什么要用【虚拟地址】去取代【物理地址】？
@@ -396,13 +418,15 @@ https://www.bilibili.com/video/BV1xb4y1Z761
 
 ## 多线程了解吗？（当时脑子一抽，我以为要写多线程代码，回答了不熟悉，他就没多问了）
 
+## 阿里ThreadLocal-如何在父子线程传递数据？
+
+https://www.bilibili.com/video/BV1MY4y1s7ij
+
 ## 并发场景中，ThreadLocal会造成内存泄漏吗？
 
 https://www.bilibili.com/video/BV1q94y1d7gL
 
 https://space.bilibili.com/22492579
-
-https://www.bilibili.com/video/BV1q94y1d7gL
 
 https://www.bilibili.com/video/BV1FU4y1S7bh
 
@@ -480,6 +504,10 @@ ThreadLocal 为每个`线程`提供`独立的变量副本`，
 
 而不会影响`其它线程`所对应的`副本`。
 
+## 【大厂面试题】ThreadLocal的常用场景？
+
+https://www.bilibili.com/video/BV1KG411x7F2
+
 ## ThreadLocal应用场景
 
 https://www.bilibili.com/video/BV1QS4y1s7hi
@@ -489,6 +517,8 @@ https://www.bilibili.com/video/BV1QS4y1s7hi
 ThreadLocal 的经典使用场景是**数据库连接**和 **session 管理**等。
 
 ## threadlocal原理
+
+每个线程的【读写操作】都是基于线程本身的一个【私有副本】，线程之前的数据是【相互隔离的】，互相不影响。这样一来，基于ThreadLocal  就不存【线程安全问题】了。相当于采用了【空间换时间】的思路
 
 内部类是：`TreadLocalMap`，是一个`Entry数组`
 
@@ -505,12 +535,8 @@ ThreadLocal 的经典使用场景是**数据库连接**和 **session 管理**等
 |---|---|
 | ThreadLocalRef  | TreadLocal  |
 
-
  → 引用 → Thread → 引用 →  → 引用 → Entry → 引用 → value
 
-## 什么是内存溢出，什么是内存泄露
-
-https://www.bilibili.com/video/BV1BT4y1Y7YS
 
 ## threadlocal oom是为什么
 
@@ -518,111 +544,293 @@ key是一个【弱引用】，在系统GC的时候，这个`ThreadLocal弱引用
 
 这样，就出现了key 为 null的Entry，就没有办法通过key找到value。
 
-value是一个【强引用】，如果【线程】一直存在的话，他就会一直存在这个value，不会被GC掉，会导致OOM
+value是一个【强引用】，如果【线程】一直存在的话，他就会一直存在这个value，
 
-## threadlocal oom如何解决？
+即不能【被访问】，也不会【被GC掉】，会导致OOM
+
+-------------------------------------
+
+如果【线程本身】的【生命周期】很短，那么【内存泄漏】能很快得到解决。
+
+只要【线程】被销毁，value也就随之被回收，
+
+但【线程】一般通过【线程池】来使用，很少去频繁的创建和销毁
+
+这就将【线程】的【生命周期大大拉长】，而【内存泄漏】带来的影响也就越来越大
+
+## threadlocal oom 内部如何优化？
 
 threadlocal内置了：
 
 - get方法：用来获取【ThreadLocal】在【当前线程】中保存的【变量副本】
+  - **没有【直接命中】，【向后环形查找】时，会进行清理**
 - set方法：用来设置【当前线程】中的【变量副本】
+  - **会【采样清理、全量清理】，扩容时，还会继续检查**
 - remove方法：用来移除【当前线程】中的【变量副本】
+  - **除了清理当前Entry，还会向后继续清理**
 
-能够将key为null的Entry的value置为null，这样就能在下一次GC时，把这个Entry彻底回收掉
+## threadlocal oom 如何解决？
 
-我们可以在使用完 ThreadLocal以后，手动调用一下它的`remove方法`
+1. 我们可以在使用完 ThreadLocal 以后，手动调用一下它的`remove方法`
+   - 能够将key为null的Entry的value置为null，这样就能在下一次GC时，把这个Entry彻底回收掉
+2. 把【ThreadLocal变量】尽可能地定义为static final
+   - 这样，可以避免【频繁创建】【ThreadLocal实例】，这样能够保证程序一定存在【ThreadLocal强引用】
+   
 
 ## 线程的创建方式
 
-## 请说一下对象的创建过程？
+## 形参 & 实参
 
-<https://www.bilibili.com/video/BV1c44y1P7Xx>
+实参：用于传递给 method 的参数，必须有确定的值
+
+形参：定义method，接收【实参】，不必有确定的值
+
 
 ## java方法是值传递还是对象传递
 
+**在java中只有值传递**
+
+如果参数是：
+
+- 【基本类型】，传递的就是，【`字面量值`的copy】，会创建副本。
+- 【引用类型】，传递的就是，【`实参`所`引用的对象`在`heap中地址值`的copy】，会创建副本。
+
 <https://www.bilibili.com/video/BV1xL4y1w7jy>
 
+```java
+【基本类型】
 
-## Java面向对象三大特性
+public static void main(String[] args) {
+      int n1 = 100;
+      int n2 = 200;
+      swap(n1, n2);
+      System.out.println("n1 = " + n1);
+      System.out.println("n2 = " + n2);
+}
+
+public static void swap(int a, int b) {
+      int temp = a;
+      a = b;
+      b = temp;
+      System.out.println("a = " + a);
+      System.out.println("b = " + b);
+}
+
+a = 200
+b = 100
+n1 = 100
+n2 = 200
+```
+
+```java
+【引用类型】赋值，对方法内部【形参】的修改会影响【实参】
+
+public static void main(String[] args) {
+      int[] arr = {1, 2, 3, 4, 5};
+      System.out.println("arr = " + arr[0]);
+      change(arr);
+      System.out.println("arr = " + arr[0]);
+}
+
+public static void change(int[] array) {
+      array[0] = 0;
+}
+
+arr = 1
+arr = 0
+```
+
+```java
+【引用类型】交换地址
+
+public static class Person {
+      private String name;
+}
+
+public static void main(String[] args) {
+      Person xiaopang = new Person("小胖");
+      Person dapang = new Person("大胖");
+      swap(xiaopang,dapang)
+      System.out.println("xiaopang:" + xiaopang.getName());
+      System.out.println("dapang:" + dapang.getName());
+}
+
+public static void swap(Person person1, Person person2) {
+      Person temp = person1;
+      person1 = person2;
+      person2 = temp
+      System.out.println("person1:" + person1.getName());
+      System.out.println("person2:" + person2.getName());
+}
+
+person1：大胖
+person2：小胖
+// 只是copy了【地址】，并对【地址】进行了交换
+xiaopang：小胖
+dapang：大胖
+```
+
+
+## Java面向对象三大特性？什么是面向对象？
+
+【面向对象】是一种思想，是一种【软件开发方法】
+
+【面向对象】是相对于【面向过程】来讲的，把相关的【数据、方法】组织成一个整体看待
+
+面向对象 の 【三大特性】：封装、继承、多态
 
 <https://www.bilibili.com/video/BV1rf4y1E7u9>
+
+- 封装：就是，隐藏一切可以隐藏的东西，对外只提供【最简单】的编程接口
+- 继承：就是，从【已有类】创建【新类】。从而提高【代码复用性】
+- 多态：就是，【不同子类型】的对象，调用【相同的方法】，但是做了【不同的事情】
 
 ## 面向对象 の 【三大特性】
 
 封装、继承、多态
 
-## 说下对象完整创建流程
+## 【大厂面试题】数据库连接池泄漏如何排查？
 
-<https://www.bilibili.com/video/BV1J3411G7wA>
+https://www.bilibili.com/video/BV1zY4y1k7Jp
 
-## new String("abc")到底创建了几个对象？
+## 数据库连接池有什么用？
 
-<https://www.bilibili.com/video/BV1MS4y1b75Q>
+数据库的连接池是一种【池化技术】。【池化技术】的核心思想是实现【资源的复用】。避免资源的【重复创建、销毁】，带来的开销
 
-## 连接池
+而在【数据库】的应用场景里面：【应用程序】每一次向【数据库】发送【CRUD操作】的时候，都需要去【创建连接】。而在【数据库】访问量比较大的情况下，【频繁创建链接】会带来大的【性能开销】。
+
+而【连接池】的核心思想，就是【应用程序】在【启动】的时候，提前【初始化】一部分【连接】，保存在【连接池】里面。
+
+当【应用程序】需要用【链接】进行【数据操作】的时候，直接去【连接池】里面取出一个已经建立好的【连接】。
+
+连接池的关键参数：
+
+1. 初始化时：
+   - `初始化连接数`：初始化时，创建多少个【连接】
+   - `最大连接数`：同时最多能支持多少连接
+   - `最大空闲连接数`：当【没有请求】的时候，【连接池】中要保留的【空闲连接】
+   - `最小空闲链接数`：当【空闲连接数】小于这个值，就需要【创建new链接】
+
+2. 使用连接：
+   - `最大等待时间`：当【连接】使用完以后，新的请求要等待的时间
+   - `无效连接清除`：清理无效的链接
+
+不同的【连接池框架】除了【核心参数】以外，还有很多【业务型参数】，会不同
 
 <https://www.bilibili.com/video/BV1yR4y1K7Z7>
 
+## 提问：最大连接数如何设置
 
-## 什么是Java虚拟机为什么要使用？
+## 提问：连接池的实现原理
 
-<https://www.bilibili.com/video/BV1Fg411278C>
 
 ## Jvm垃圾回收器:serial
 
-## 垃圾回收
+## 什么样 の 对象会被老年代回收
 
-<https://www.bilibili.com/video/BV1aW41167rS>
+https://www.bilibili.com/video/BV13K4y1G7Bs
 
-<https://www.bilibili.com/video/BV1xK4y197SH>
+1. 【object】的【分代年龄】达到【15】
+2. 【对象超级大】，所占空间，大于Eden区的一半
+3. 【对象大】，所占空间，超过S0 或者 S1的【剩余空间】
+4. 当【年龄为xx，比如5】的对象，所占空间，大于S0的一半，那么【大于5，比如5.6.7】都会移动到【老年代】
 
-[什么样 の 对象会被老年代回收](https://www.bilibili.com/video/BV13K4y1G7Bs)
-
-
-
-
-
+老年代中的对象，如果不能被GC root链接到，就会被回收
 
 
+## CompletableFuture的理解
 
-
-
-
-
-
-
-
-
-## JVM中，哪些是共享区，哪些可以作为gc root
-
-<https://www.bilibili.com/video/BV1Uq4y1e7Kq>
-
-
-
-
-## 【pass💦】Java 中有多少种引用类型？它们 の 都有什么使用场景？
-
-<https://www.bilibili.com/video/BV1e94y1D7ug>
-
-
-
-## Java 内存模型定义了八种操作来实现
-
-Java 内存模型定义了八种操作来实现
-
-## CompletableFuture
+弥补了原本Future的不足，使得程序可以在【非阻塞状态】下，完成【异步】【回调机制】
 
 <https://www.bilibili.com/video/BV1hA4y1d7gU>
 
+是基于【事件驱动】的【异步回调类】。
+
+当前使用【异步线程】去执行任务时，我们希望在这个【任务结束】以后，还能触发一个【后续操作】
+
+它提供了5种方式，把多个【异步任务】组成一个具有【先后关系】的【处理链路】
+
+1. 第一种是：thenCombine
+   - task1 和 task2 并行执行，两个任务执行结束后，触发回调
+2. 第二种是：thenCompose
+   - task1 结果作为 task2 参数
+   - 串行执行
+3. 第三种是：thenAccept
+   - task1 结果作为 task2 参数
+   - 无返回值
+4. 第四种是：thenApply
+   - task1 结果作为 task2 参数
+   - 有返回值
+5. 第五种是：thenRun
+   - task1 完成后，触发【实现 Runnable 接口】的 task
+   - 无返回值
 
 
 
 
+## 【大厂面试题】线上服务内存溢出如何排查定位？
 
-
+https://www.bilibili.com/video/BV1y34y1j7QR
 
 
 ## 内存溢出
+
+本质上是，我们【申请的内存】，超出了java的可用内存，造成了【内存溢出】的问题。内存溢出常见的场景有：
+
+1. 【JVM栈】溢出：stack内存不够用，栈里面存的是【基本数据类型】【方法的引用】，
+2. 【本地方法栈】溢出
+3. 【方法区】溢出：静态、类信息
+4. 【堆】溢出：放的是【对象】
+5. 【运行时常量池】溢出
+6. 【直接内存】溢出
+
+```java
+【JVM栈】溢出
+
+public class JavaStackOOM {
+      private int stackLength = 1;
+      public void stackLeak() {
+            stackLength ++;
+            stackLeak(); // 不停地创建新的方法栈
+      }
+      public static void main(String[] args) throws Throwable {
+            JavaStackOOM oom = new JavaStackOOM();
+            try {
+                  oom.stackLeak(); 
+            } catch (Throwable e) {
+                  System.out.println("stack length:" + oom.stackLength);
+            }
+      }
+
+}
+```
+
+```java
+【堆】溢出
+public class HeapOOM {
+      static class OOMObject{}
+      public static void main(String[] args) {
+            List<OOMObject> list = new ArrayList<HeapOOM.OOMObject>();
+            while (true) {
+                  list.add(new OOMObject()); // 不断添加【实例对象】
+            }
+      }
+}
+```
+
+```java
+【运行时常量池】溢出
+
+public class RuntimeConstantPoolOOM {
+      public static void main(String[] args) {
+            List<String> list = new ArrayList<String>();
+            int i = 0;
+            while (true) {
+                  list.add(String.valueOf(i++).intern()); //使用`intern()方法`就能放入`常量池`
+            }
+      }
+
+```
 
 <https://www.bilibili.com/video/BV1gW411r7By>
 
@@ -638,19 +846,32 @@ getClass方法：返回【类对象】，用于【反射机制】
 
 clone方法：克隆对象的各个属性
 
-## 一个空Object对象的占多大空间
 
-<https://www.bilibili.com/video/BV1SG411h7ju>
 
 ## static
 
-<https://www.bilibili.com/video/BV1nW41167o1>
+静态修饰符，特征：
 
-<https://www.bilibili.com/video/BV1zL411s7h9>
-
-静态修饰符，代表这个类`固有的`，在这个类里面共享，不需要`new一个实例`
+1. 代表这个类`固有的`，在这个类里面共享
+2. 不需要`new一个实例`，可以直接调用
+3. 可以被继承，但不能被重写
+4. 【static 方法、static 代码块】中不能引用【其他 非static 方法、代码块】
 
 `non-static method 非静态方法` = `instance method 实例方法` = new一个实例
+
+可以修饰：
+
+- static 变量
+- static 常量
+- static 方法
+- static 代码块
+- static 成员内部类
+
+## 为什么【static 方法、static 代码块】中不能引用【其他 非static 方法、代码块】？
+
+因为当执行【static 方法、static 代码块】时，【实例对象】尚未创建
+
+【非static 方法、代码块】则必须有【实例对象】才能调用
 
 ## public
 
@@ -664,27 +885,28 @@ clone方法：克隆对象的各个属性
 
 → 在`b包`下的B类无法创建A类的对象。
 
-## 访问修饰符
-
-<https://www.bilibili.com/video/BV1bf4y1c7Pu>
 
 ## final 值 方法 类有什么区别，容器被final修饰会怎样
 
 [2分钟记住final の 使用](https://www.bilibili.com/video/BV19A4y1o7ET)
 
-# java
+- final 放在 class 前面， 该 class 不能被【继承】
+- final 放在 method 前面， 该 method 不能被【重写】，但可以被【重载】
+- final 放在 【变量】前面：分成3种情况：
+  1. 如果 final 放到 【静态变量static final】前面，有2次赋值机会：要么在【static final 声明】赋值，要么在【static {} 静态代码块】赋值
+  2. 如果 final 放到 【成员变量|实例变量 final】前面，有3次赋值机会：要么在【final 声明】赋值，要么在【{} 非静态代码块】赋值，要么在【构造器 {}】赋值
+  3. 如果 final 放到 【局部变量 func (①final xxxx) {②final xxxx}】前面:
+     - ①【方法参数前】，有1次赋值机会：在调用method时，赋值
+     - ②【方法里面局部变量前】，有2次赋值机会：要么在【声明】赋值，要么在【后面代码】赋值
 
-[经典鸡翅](https://space.bilibili.com/386498238) 这些视频比较高级，没有工作经验，看不太懂
+- final基本类型变量，值不能更改
+- final引用变量，值不能更改，引用对象是可以修改的
 
-[设计源于生活中](https://space.bilibili.com/484405397) 代码题
 
-## 强平衡⼆叉树和弱平衡⼆叉树有什么区别
 
-<https://www.bilibili.com/video/BV1oF411M78u>
 
-## ArrayBlockQueue
 
-<https://www.bilibili.com/video/BV17A4y197em>
+
 
 ## 说一下你熟悉的设计模式？
 
@@ -700,12 +922,14 @@ clone方法：克隆对象的各个属性
 
 [【23种设计模式全解析】终于有人用一个项目将23中设计模式全部讲清楚了](https://www.bilibili.com/video/BV19g411N7yx)
 
-1. 创建型：
+按照模式的【应用目标】分类：
+
+1. 创建型：对创建对象时的【各种问题】和【解决方案】的总结
       1. 工厂模式
       2. 单例模式
       3. 建造者模式
       4. 原型模式
-2. 结构型：
+2. 结构型：对【软件设计的结构】的总结。关注【类、对象继承、组合方式】的实践经验的总结
       1. 适配器模式
       2. 桥接模式
       3. 过滤器模式
@@ -713,8 +937,8 @@ clone方法：克隆对象的各个属性
       5. 装饰器模式
       6. 外观模式
       7. 享元模式
-      8. [代理模式](https://www.bilibili.com/video/BV1cz41187Dk)
-3. 行为型：
+      8. 代理模式
+3. 行为型：从 class 或者 object 之间的一个交互、职责划分等角度总结的模式
       1. 责任链模式
       2. 命令模式
       3. 解释器模式
@@ -741,14 +965,204 @@ clone方法：克隆对象的各个属性
 5. `模版方法模式`：定义了一个算法的骨架，而将一些步骤延迟到`子类`中，模版方法使得`子类`可以在不改变算法结构的情况下，重新定义算法的步骤。
 6. `状态模式`：允许对象在内部状态改变时改变它的行为，对象看起来好像修改了它的类。
 
+## 遇到过哪些设计模式？
+
+单例模式主要是避免了一个全局使用的类频繁地创建和销毁。当想要控制实例数据节省系统资源的时候可以使用。
+
+在java中单例模式有很多种写法，比如什么饱汉、饿汉，双重检查等等但是在scala语言中这个完全不需要什么这么多花里胡哨的，仅仅需要一个伴生对象。伴生对象就是单例模式的。
+
+伴生对象采用object声明
+
+```scala
+private[netty] object NettyRpcEnv extends Logging {
+  /**
+   * When deserializing the [[NettyRpcEndpointRef]], it needs a reference to [[NettyRpcEnv]].
+   * Use `currentEnv` to wrap the deserialization codes. E.g.,
+   *
+   * {{{
+   *   NettyRpcEnv.currentEnv.withValue(this) {
+   *     your deserialization codes
+   *   }
+   * }}}
+   */
+  private[netty] val currentEnv = new DynamicVariable[NettyRpcEnv](null)
+
+  /**
+   * Similar to `currentEnv`, this variable references the client instance associated with an
+   * RPC, in case it's needed to find out the remote address during deserialization.
+   */
+  private[netty] val currentClient = new DynamicVariable[TransportClient](null)
+
+}
+```
+
+## 工厂模式
+
+（简单工厂、抽象工厂）：解耦代码。
+
+简单工厂模式（又名【静态方法模式】），
+
+简单工厂模式就是：他的行为就很简单，就是定义【一个接口】用来创建对象。
+
+但是它创建【工厂类】的时候是通过【客户端传入参数】进行决定创建什么工厂的。
+
+这里我们以RPC为参考
+
+1. **工厂接口**
+
+【【工厂方法模式】】肯定是要继承一个【工厂接口】的，在SparkRPC的工厂方法中也不会例外,当然这里的接口是特质，特质和类的不同就是一个子类中可以混入多个特质
+
+```scala
+/**
+ * A factory class to create the [[RpcEnv]]. It must have an empty constructor so that it can be
+ * created using Reflection.
+ */
+private[spark] trait RpcEnvFactory {
+
+  def create(config: RpcEnvConfig): RpcEnv
+}
+
+```
+
+2. **工厂实现**
+
+继承这个特质的类仅有NettyRpcEnvFactory，也就是RpcEnvFactory仅有一个工厂实现
+
+```scala
+private[rpc] class NettyRpcEnvFactory extends RpcEnvFactory with Logging {
+
+  def create(config: RpcEnvConfig): RpcEnv = {
+    val sparkConf = config.conf
+    // Use JavaSerializerInstance in multiple threads is safe. However, if we plan to support
+    // KryoSerializer in future, we have to use ThreadLocal to store SerializerInstance
+    val javaSerializerInstance =
+      new JavaSerializer(sparkConf).newInstance().asInstanceOf[JavaSerializerInstance]
+    val nettyEnv =
+      new NettyRpcEnv(sparkConf, javaSerializerInstance, config.advertiseAddress,
+        config.securityManager, config.numUsableCores)
+    if (!config.clientMode) {
+      val startNettyRpcEnv: Int => (NettyRpcEnv, Int) = { actualPort =>
+        nettyEnv.startServer(config.bindAddress, actualPort)
+        (nettyEnv, nettyEnv.address.port)
+      }
+      try {
+        Utils.startServiceOnPort(config.port, startNettyRpcEnv, sparkConf, config.name)._1
+      } catch {
+        case NonFatal(e) =>
+          nettyEnv.shutdown()
+          throw e
+      }
+    }
+    nettyEnv
+  }
+}
+```
+
+3. **客户端**
+
+有了工厂之后，使用改工厂的类也就是客户端，就可以很方便地就实例化一个RpcEnv的产品。下面看一下具体的客户端代码。也就是最后代码中的new NettyRpcEnvFactory().create(config)，这里创建了一个RpcEnv的Rpc通信环境。
+
+```scala
+private[spark] object RpcEnv {
+
+  def create(
+      name: String,
+      host: String,
+      port: Int,
+      conf: SparkConf,
+      securityManager: SecurityManager,
+      clientMode: Boolean = false): RpcEnv = {
+    create(name, host, host, port, conf, securityManager, 0, clientMode)
+  }
+
+  def create(
+      name: String,
+      bindAddress: String,
+      advertiseAddress: String,
+      port: Int,
+      conf: SparkConf,
+      securityManager: SecurityManager,
+      numUsableCores: Int,
+      clientMode: Boolean): RpcEnv = {
+    val config = RpcEnvConfig(conf, name, bindAddress, advertiseAddress, port, securityManager,
+      numUsableCores, clientMode)
+    new NettyRpcEnvFactory().create(config)
+  }
+}
+```
+
+4. 为什么不用【抽象工厂模式】？
+
+那么思考一下这里为什么使用的是【工厂方法模式】而不是【抽象工厂模式】
+
+这是因为【抽象工厂模式】支持的场景不同。
+
+【抽象工厂模式】的产生是解决了【工厂方法模式】中每个工厂仅仅生产一个产品，如果存在需要两个产品混合的产品那么就需要再次创建工厂如此这样造成的工厂类冗杂问题。但是此例中我们不需要其他的产品。既是是SparkRpc从Akka转移到Netty中时也仅仅需要创建新的实现工厂而不是进行产品的整合。
+
+就需要再次创建工厂如此这样造成的工厂类冗杂问题。但是此例中我们不需要其他的产品。既是是SparkRpc从Akka转移到Netty中时也仅仅需要创建新的实现工厂而不是进行产品的整合。
+
+此场景中NettyRpcEnv的职责就仅仅是生产RpcEnv，而在Spark架构中我们需要的也仅仅是RpcEnv这一个产品并不需要其他的Rpc产品。
+
+## 装饰器模式
+
+
+
+## 代理模式
+
+[代理模式](https://www.bilibili.com/video/BV1cz41187Dk)
+
 ## 责任链模式
+
+Java个体户：https://www.bilibili.com/video/BV1pP4y1M7Vn
+
+[责任链模式，应用场景有哪些？](https://www.bilibili.com/video/BV1VS4y1m7ob)
 
 https://www.bilibili.com/video/BV1UL4y157eH
 
+什么是责任链？
 
-## 排序算法和时间复杂度
+- 将处理不同逻辑的对象连接成一个【链表结构】，每个对象都保存下一个节点的引用
 
-<https://www.bilibili.com/video/BV1Sg411M7Cr>
+包括：
+
+- 单向责任链（容易理解），filter过滤器，Spring的Interceptor拦截器
+- 双向责任链（执行闭环），netty中的管道pipeline
+
+优点：
+
+1. 将【请求】和【处理】解耦
+2. 【请求处理者】将不是自己职责范围内的请求，转发给下一个节点
+3. 【请求发送者】不需要关心【链路结构】，只需要等待【请求处理结果】即可
+4. 【链路结构】灵活，可以动态的增删责任
+
+缺点：
+
+1. 如果【责任链路】太长，它会影响程序的【整体性能】
+2. 如果【节点对象】存在【循环引用】，则会造成【死循环】
+
+```java
+单向责任链
+public class Context {
+      Handler head;
+      Handler tail;
+}
+
+public abstract class Handler {
+      protected Handler next;
+}
+
+双向责任链
+public class Context {
+      Handler head;
+      Handler tail;
+}
+
+public abstract class Handler {
+      protected Handler prev;
+      protected Handler next;
+}
+
+```
 
 ## java执行 の 过程
 
@@ -761,6 +1175,20 @@ https://www.bilibili.com/video/BV1UL4y157eH
 ## 隐含 の 强制类型转换
 
 <https://www.bilibili.com/video/BV1Fb4y1Y7wX>
+
+```java
+public static void main(String[] args) {
+      short s1 = 1;
+      s1 = s1 + 1;
+      // ❌s1 + 1的运算结果是int型，需要【强制类型转换】才能赋值
+}
+
+public static void main(String[] args) {
+      short s1 = 1;
+      s1 += 1;
+      // ✅正确编译，相当于 s1 = (short)(s1 + 1);
+}
+```
 
 ## Java集合 の 框架体系图
 
@@ -776,38 +1204,49 @@ https://www.bilibili.com/video/BV1UL4y157eH
 
 ## linux下 の 调查问题思路：内存、CPU、句柄数、过滤、查找、模拟POST和GET请求等等场景
 
-## 简述 tcp 和 udp的区别？
+## 拼多多面试官：线上CPU飙高如何排查？
 
-tcp 和 udp 是 OSI 模型中的运输层中的协议。tcp 提供可靠的通信传输，而 udp 则常被用于让广播和细节控制交给应用的通信传输。
-两者的区别大致如下：
+https://www.bilibili.com/video/BV15T4y1y7eH
 
-tcp 面向连接，udp 面向非连接即发送数据前不需要建立链接；
-tcp 提供可靠的服务（数据传输），udp 无法保证；
-tcp 面向字节流，udp 面向报文；
-tcp 数据传输慢，udp 数据传输快；
+## 阿里面试官：Jar包冲突如何解决？
 
-## TCP的三次握手和四次挥手
+https://www.bilibili.com/video/BV1GL411w7gw
 
-<https://www.bilibili.com/video/BV1GT4y1r74W>
+## 网络问题排查-套路汇总
 
-## tcp 为什么要三次握手，两次不行吗？为什么？
+https://www.bilibili.com/video/BV1wu411o75x
 
-<https://www.bilibili.com/video/BV1xL4y1F7wL>
+## 线上问题排查套路汇总-CPU篇
 
-　我们假设A和B是通信的双方。我理解的握手实际上就是通信，发一次信息就是进行一次握手。
+https://www.bilibili.com/video/BV1HL4y167Ex
 
-第一次握手：A给B打电话说，你可以听到我说话吗？
-第二次握手：B收到了A的信息，然后对A说：我可以听得到你说话啊，你能听得到我说话吗？
-第三次握手：A收到了B的信息，然后说可以的，我要给你发信息啦！
-在三次握手之后，A和B都能确定这么一件事：我说的话，你能听到；你说的话，我也能听到。这样，就可以开始正常通信了。
-注意：HTTP是基于TCP协议的，所以每次都是客户端发送请求，服务器应答，但是TCP还可以给其他应用层提供服务，即可能A、B在建立链接之后，谁都可能先开始通信。
-
-如果采用两次握手，那么只要服务器发出确认数据包就会建立连接，但由于客户端此时并未响应服务器端的请求，那此时服务器端就会一直在等待客户端，这样服务器端就白白浪费了一定的资源。若采用三次握手，服务器端没有收到来自客户端的再此确认，则就会知道客户端并没有要求建立请求，就不会浪费服务器的资源。
-
-## 外部排序简单应用
+## 外部排序简单应用。有10个500M的日志文件，其中每个日志文件内部按照时间戳已排序，内存只有1G的机器如何对其所有排序合并成一个文件。
 
 https://www.bilibili.com/video/BV1JN411Z7k4
+
+归并排序思路：
+
+内存中维持一个【元素个数为10】的【小顶堆】，
+
+同时维持【10个指针】，指针分别指向【10个日志文件】的【首条记录元素】。
+
+将【10个元素】读取进入到【内存】中之后，对其【进行排序】，
+
+取出【堆顶元素】，写入【新的日志文件】，并移动【该元素对应的文件指针】读取【下一个记录】到小顶堆中，
+
+如此重复，直到所有的日志文件读取完成写入新日志文件。
+
+由于内存为1G，也可以先从每个日志文件一次性读取50M，逐条读取，排序，写入新的日志文件，直到读取完毕。
 
 ## 内存中的Buffer和Cache是一个东西么
 
 https://www.bilibili.com/video/BV1Jh41167Lo
+
+两者的目的都是解决速度匹配的问题，做法也相似，只是思想上略有不同。
+
+| cache  | buffer  |
+|---|---|
+| 为了解决【高速设备】和【低速设备】读写速度之间的【速度差】而引入的，主要利用的是局部性原理  | 缓冲数据的冲击。把小规模的IO整理成平稳的较大规模的IO，较少磁盘的随机读写次数。比如从下载大资料，不可能一次下了一点几兆就写入硬盘，而是积攒到一定的数据量再写入，上传文件也是类似，而buffer的作用就是积攒这个数据。把多次操作进行合并。  |
+| 数据读取具有随机性  | 有顺序的  |
+| 读缓存的时候，如果缓存中没有，则读取实际数据，然后将数据加入到cache，先进入cache中的数据不一定先被读取  | 先进入buffer中的数据一定会被先读取出来，具有顺序访问的特点。  |
+| read cache，提高读性能  | write buffer，提高写性能  |

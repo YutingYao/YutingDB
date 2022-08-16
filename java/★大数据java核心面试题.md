@@ -8,9 +8,34 @@
 
 并行：两个【线程】互不抢占CPU资源，可以同时执行任务
 
+## 为什么大厂禁用Java内置线程池
+
+https://www.bilibili.com/video/BV1Cd4y1m7aD
+
 ## 为什么需要使用线程池
 
 https://www.bilibili.com/video/BV13U4y1G7ET
+
+## 美团面试官：如何手写一个线程池？
+
+https://www.bilibili.com/video/BV1J341157eg
+
+## Java线程池-线程池数量到底是几？
+
+https://www.bilibili.com/video/BV1et4y1V7Bk
+
+[Java线程池源码分析之执行流程](https://www.bilibili.com/video/BV11G411h7SQ)
+
+[Java线程池-源码分析](https://www.bilibili.com/video/BV1NN4y177GV)
+
+## :解释下Java线程池的各个参数的含义？
+
+https://www.bilibili.com/video/BV1Wt4y1V79D
+
+
+## Java有几种实现线程池的方式
+
+https://www.bilibili.com/video/BV1e14y1b7pm
 
 ## Java官方提供了哪几种线程池
 
@@ -49,11 +74,15 @@ https://www.bilibili.com/video/BV13U4y1G7ET
 
 线程池 の 核心是：
 
-ThreadPoolExecutor()：上面创建方式都是对ThreadPoolExecutor の 封装。
+olExecutor()：上面创建方式都是对ThreadPoolExecutor の 封装。
 
 ## 线程调度和同步
 
 https://www.bilibili.com/video/BV1F54y1p7dn
+
+## 【大厂面试题】线程池如何设置最优线程数
+
+https://www.bilibili.com/video/BV1v44y1V7iH
 
 ## 【程序】开多少【线程】合适？线程池的核心线程数如何设置?
 
@@ -74,6 +103,10 @@ https://www.bilibili.com/video/BV1F54y1p7dn
 ## 线程池线程复用的原理是什么？
 
 任务结束后，不会回收线程。
+
+## 【大厂面试题】Java线程池的工作过程
+
+https://www.bilibili.com/video/BV1Ka411i7qC
 
 ## 线程池 の 工作原理
 
@@ -115,6 +148,14 @@ https://www.bilibili.com/video/BV1Q54y1V7ih
    - 如果是【有界队列】，且【队列满了】，且【非核心线程数】没有达到【阈值】
 3. 则创建【非核心线程】增加【处理效率】
 4. 如果【非核心线程数】达到了【阈值】，就触发【拒绝策略】
+
+## 【大厂面试题】Java线程池的拒绝策略有哪些？
+
+https://www.bilibili.com/video/BV1oY4y1z7Yy
+
+## 【大厂面试题】为什么线程池的submit不抛出异常？
+
+https://www.bilibili.com/video/BV1y44y1A7mr
 
 ## 怎么判断线程池的任务是不是执行完了？
 
@@ -160,6 +201,12 @@ volatile的2个作用：
 
 虽然volatile不能保证【原子性】，但是如果在多线程环境下的操作本身就是【原子操作】的话。那么使用【volatile】会优于【synchronized】
 
+## 【大厂面试题】求你了！别再用stop停止线程了！
+
+https://www.bilibili.com/video/BV1Xe4y1Q7dd
+
+https://www.bilibili.com/video/BV1vS4y1E7Ci
+
 ## 【很重要】如何停止一个正在运行的线程？
 
 https://www.bilibili.com/video/BV1NZ4y1v75s
@@ -191,6 +238,10 @@ https://www.bilibili.com/video/BV1NZ4y1v75s
 【线程】最终都是由【操作系统】决定的，JVM只是对【操作系统】层面的【线程】做了一层包装而已。
 
 所以，我们在java里面调用了【Thread.start()方法】。只是去告诉【操作系统】这个线程可以执行。
+
+## 阿里的一套面试题，Thread.Start 两次会怎么样，到底想考察什么呢？
+
+https://www.bilibili.com/video/BV1414y147Sp
 
 ## 面试被问到并发编程中，如何中断一个正在运行中的线程？
 
@@ -295,6 +346,27 @@ so，线程池 の 【工作线程】通过同步调用任务 の 【run方法�
    - 需要考虑并发问题。什么时候阻塞？什么时候唤醒？如 wait() 和 notify()
 3. if 通过【网络】：
    - 同样需要考虑【并发问题】
+
+## ArrayBlockQueue
+
+<https://www.bilibili.com/video/BV17A4y197em>
+
+用到2个关键技术：
+
+1. 【队列元素】的存储
+   - 它是一个【数组结构】的【阻塞队列】
+   - 为了达到【循环生产】【循环消费】的目的，用到了一个【循环数组】
+2. 线程的【阻塞 & 唤醒】
+   - 用到了J.U.C包里面的：
+   - ① ReentrantLock
+   - ② Condition：相当于 wait/notify 在J.U.C包里面的实现
+
+在原本队列的基础上，增加了2个【附加操作】：
+
+1. 在队列为【null】的时候，【获取元素的线程 Thread2.take()】会等待【队列】变为【非null】
+2. 在队列为【Full】的时候，【存储元素的线程 Thread1.put()】会等待【队列】变为【可用】
+
+由于这样一个特性【阻塞队列】非常容易实现【生产者、消费者】模型
 
 ## 线程池是如何实现线程复用 の ？
 
@@ -559,6 +631,13 @@ List —— 基于【数组 or 链表】实现
 
 在【Hash冲突】比较小的时候，即使转化为【红黑树】之后，在【时间复杂度】上所产生的效果也并不是特别大。而且在put的时候，效率会降低。因为在put的时候，可能要进行【红黑树】的【旋转操作】，空间上【红黑树】需要维护【更多的指针】。最后，HashMap之所以选择【红黑树】，而不是【二叉搜索树】，我认为最重要的原因是，【二叉树】在极端情况下，会变成一个【倾斜】的结构，查找效率，就会退化成和【链表】一样。而【红黑树】是一种【平衡树】。它可以防止退化， 所以可以保持【平衡】，因为【红黑树】不像其他的【完全的平衡二叉树】那样有【非常严格】的【平衡条件】，所以【红黑树】的插入效率，要比【完全平衡二叉树】的插入效率要高。综上所述，hashmap之所以选择【红黑树】，既可以避免【极端情况】下的退化，也可以兼顾【查询、插入】的效率
 
+## 强平衡⼆叉树和弱平衡⼆叉树有什么区别
+
+强平衡⼆叉树：AVL树
+
+弱平衡⼆叉树：红黑树（增加了节点颜色的概念）
+
+【AVL树】比【红黑树】对于【平衡程度】更加严格，【旋转操作】更加耗时
 
 ## HashMap是线程安全的吗？
 
@@ -569,6 +648,8 @@ List —— 基于【数组 or 链表】实现
 如果在【多线程并发环境】下，可以使用ConcurrentHashMap
 
 ## ConcurrentHashMap的底层原理：
+
+[【大厂面试题】ConcurrentHashMap的底层实现？](https://www.bilibili.com/video/BV1cN4y137Pz)
 
 [幼麟实验室-同步的本质](https://www.bilibili.com/video/BV1ef4y147vh)
 
@@ -593,6 +674,8 @@ List —— 基于【数组 or 链表】实现
 
 
 ## 为什么hashmap扩容的时候是2倍？
+
+[【大厂面试题】说说HashMap的扩容算法](https://www.bilibili.com/video/BV1Yu411y7Jr)
 
 [单线程下的HashMap工作原理](https://www.bilibili.com/video/BV1zY4y1H7ak)
 
@@ -872,7 +955,9 @@ java平台有2种编译器：
 2. 实例唯一
 3. class变量是static的
 
+## 【大厂面试题】不懂单例模式，面试官让我回家等消息！
 
+https://www.bilibili.com/video/BV1GF411A7VN
 
 ## 内部静态类单例模式
 
@@ -1056,6 +1141,10 @@ https://www.bilibili.com/video/BV1zS4y1A7EM
 
 1. 如果程序【不复杂】，单例对象【不多】，推荐【饿汉式】
 2. 如果有【多线程并发】，推荐【静态内部类】和【枚举式单例】
+
+## 【大厂面试题】乐观锁会导致线上崩盘吗？
+
+https://www.bilibili.com/video/BV1JW4y1S7SL
 
 ## 什么是CAS（无锁同步）（乐观锁的实现）
 
@@ -1321,6 +1410,10 @@ synchronized 就是锁住【对象头】中【两个锁】【标志位】 の �
 
 ## 线程有哪些状态？
 
+[Java中线程的状态包括那哪一些？](https://www.bilibili.com/video/BV1Lr4y1575y)
+
+[【大厂面试题】Java线程有哪六种状态](https://www.bilibili.com/video/BV1V44y137yD)
+
 线程 の 6种状态：
 
 `初始(NEW)`：新创建了一个【线程对象】，但还没有调用`start()方法`。
@@ -1488,6 +1581,10 @@ public class Main {
    }
 }
 ```
+
+## 【大厂面试题】Java线程启动为什么调用start方法而不是run方法？
+
+https://www.bilibili.com/video/BV1YT4y1Y7ez
 
 ## Files线程 の  run() 和 start() 有什么区别？
 
@@ -1858,6 +1955,16 @@ ReentrantLock 内部使用【AQS】来实现【锁资源】 の 一个竞争，�
 - TreeMap
 - TreeSet
 
+[Java TreeSet-demo演示](https://www.bilibili.com/video/BV1bV4y1x7aY)
+
+[Java TreeMap-demo演示](https://www.bilibili.com/video/BV1Jd4y1N7U9)
+
+[Java延迟队列DelayQueue-demo演示](https://www.bilibili.com/video/BV1YV4y1j7jA)
+
+[Java优先级队列PriorityQueue-模拟插队](https://www.bilibili.com/video/BV1AG411a7EV)
+
+[Java优先级队列PriorityQueue-demo演示](https://www.bilibili.com/video/BV1og41117C1)
+
 普通的 安全的 集合类包括：
 
 - Vector 
@@ -2129,9 +2236,9 @@ JVM的定义：
 
 JVM的好处：
 
-可以【屏蔽】操作系统的细节，使得Java可以【一次编写，到处运行】
-
-允许在【编译时检查】潜在【类型不匹配】，保证了程序的可靠性
+1. 可以【屏蔽】操作系统的细节，使得Java可以【一次编写，到处运行】
+2. 允许在【编译时检查】潜在【类型不匹配】，保证了程序的可靠性
+3. 可以实现自动垃圾回收
 
 JVM的厂商：
 
@@ -2340,11 +2447,18 @@ public void stringIntern() {
 
 ## 使用 new String("dabin")会创建几个对象？
 
-如果【字符串常量池】中没有【"dabin"字符串对象】，则会创建2个对象
+1. 如果【字符串常量池】中没有【"dabin"字符串对象】，则会创建2个对象
 
 在【编译时期】会在【字符串常量池】中创建【"dabin"字符串字面量】
 
-使用 new 的方式， 会在heap中创建一个【"dabin"字符串对象】
+使用 new 的方式， 会在heap中创建一个【实例对象】
+
+2. 如果【字符串常量池】中有【"dabin"字符串对象】，则会创建1个对象
+
+会在heap中创建一个【实例对象】
+
+<https://www.bilibili.com/video/BV1MS4y1b75Q>
+
 
 ## 什么是【字符串常量池】
 
@@ -2472,6 +2586,10 @@ a 指向Class(1)
 
 ## 类加载机制
 
+[【大厂面试题】JVM的类加载机制是什么样的？](https://www.bilibili.com/video/BV1WS4y1e7Db)
+
+kate12322：https://www.bilibili.com/video/BV1ma411P7g9
+
 就是：把【Class文件】加载到【内存】，进行【验证、准备、解析】，然后初始化，可以形成JVM可以直接使用的java.lang.Class
 
 - 装载
@@ -2501,6 +2619,10 @@ Java编译器，将【java源文件】编译成【class文件】。再由【JVM�
 | 3️⃣ Ext ClassLoader  | 【拓展】 类加载器 | 加载`\JDK_HOME\lib\ext`的类库  |
 | 2️⃣ App ClassLoader  | 【系统】 类加载器 | 加载`classpath`的类库  |  
 | 1️⃣ Custom ClassLoader  | 继承【java.lang.ClassLoader类】【自定义】 类加载器 | 加载`用户`类库  |  
+
+## 【大厂面试题】双亲委派机制到底是个啥？
+
+https://www.bilibili.com/video/BV1DN4y1M79r
 
 ## 什么是【打破双亲委派机制】
 
@@ -2592,6 +2714,8 @@ java中海油很多被final修饰的类，比如基本类型的【包装类 Inte
 
 ## JVM的运行流程？
 
+
+
 1. 【类加载机制】：把【Class文件】加载到【内存】，进行【验证、准备、解析】，然后初始化，可以形成JVM可以直接使用的java.lang.Class
 
 2. 【运行时数据区】：分为5个部分
@@ -2605,6 +2729,16 @@ java中海油很多被final修饰的类，比如基本类型的【包装类 Inte
 ## 为什么要垃圾回收？
 
 方便程序员管理内存，不需要手动分配内存，释放内存
+
+## 【大厂面试题】Jvm三色标记法缺陷是什么?、
+
+https://www.bilibili.com/video/BV1X94y1R7Yg
+
+https://www.bilibili.com/video/BV1rf4y1Z7Vc
+
+## Jvm的垃圾回收算法有哪些？
+
+https://www.bilibili.com/video/BV1Ga411X75f
 
 ## 【垃圾收集算法】有哪3个：
 
@@ -2717,6 +2851,8 @@ G1 在【后台】维护了一个【优先列表】
 
 ## 什么时候会触发【Full GC】？
 
+[【大厂面试题】JVM什么情况下会触发FullGC？](https://www.bilibili.com/video/BV1Ji4y1m7rJ)
+
 第一种情况：调用 `System.gc()` 
 
 - 可能会发生【Full GC】。但JVM不一定真正去执行。
@@ -2765,6 +2901,10 @@ CMS 会存在【上一次垃圾回收】还没有完成，又触发【full GC】
 1. 当 survivor内存不够用
 2. 当新生代垃圾的年龄达到阈值
 
+## 【大厂面试题】Jvm对象何时会进入老年代？
+
+https://www.bilibili.com/video/BV1q5411D7av
+
 ## 【老年代】中存放了什么？
 
 1. 从【新生代】收集过来的对象
@@ -2787,12 +2927,14 @@ https://www.bilibili.com/video/BV1FU4y1S7bh
 
 不同【引用类型】代表了不同对象的【可达性状态】和【垃圾收集的影响】
 
-1. 强引用：只有有“强引用”指向一个对象，该对象就**永远不会被回收**
-2. 软引用：**【内存不足】时要回收**。用于实现——内存敏感的缓存，从而保证不会耗尽内存
+1. 强引用：只有有“强引用”指向一个对象，该对象就**永远不会被回收**。比如赋值
+2. 软引用：**【内存不足】时要回收**。用于实现——内存敏感的缓存，从而保证不会耗尽内存。比如缓存
 3. 弱引用：**只要有GC，就一定被回收**
 4. 虚引用：不是给业务人员用的，虚引用的用途是在 gc 时返回一个通知。
 
 ## 什么是虚引用？
+
+[【大厂面试题】Java中强应用、弱应用、软引用、虚引用的区别？](https://www.bilibili.com/video/BV1WB4y127wg)
 
 不会决定【对象】的【生命周期】，它提供了一种确保【对象】被【回收】后去【做某些事情】的一种机制。
 
@@ -2893,6 +3035,14 @@ Java虚拟机被允许对满足上述三个条件的无用类进行回收(只是
 
 从而优雅地分析JVM出现的常见问题，并对其进行优雅地调优
 
+## Jvm调优最佳参数（仅供参考）
+
+https://www.bilibili.com/video/BV1kt4y1h7ck
+
+## 【大厂面试题】你进行过JVM调优吗？（亲身经历分享）
+
+https://www.bilibili.com/video/BV13Y411j7Nz
+
 ## JVM性能优化 - 存在哪些问题？
 
 - GC 频繁
@@ -2921,6 +3071,34 @@ Java虚拟机被允许对满足上述三个条件的无用类进行回收(只是
 
 - Mark Word 存储了 锁信息
 - 有【4个bit】来存储【GC年龄】
+
+## 一个空Object对象的占多大空间
+
+<https://www.bilibili.com/video/BV1SG411h7ju>
+
+1. 在开启了【压缩指针】的情况下，Object默认占用12个字节。为了避免【伪共享】的问题：
+   - → JVM 会按照【8个字节的倍数】进行填充
+   - → → 所以填充【4个字节】
+   - → → → 变成【16和字节】
+2. 在关闭【压缩指针】的情况下，Object默认占用16个字节。16个字节正好是8的整数倍，不需要填充。
+
+总的来说，在【开启】【不开启】压缩指针的情况下，空的Object对象都只占用16个字节：
+
+包括【Mark Word - 8字节、类元指针 - 4字节、对齐填充 - 4字节】
+
+------------------------------------------------
+
+在hotSpot虚拟机里面，一个【object】在【heap】里面的布局，使用了一个OOP的结构：包括：
+
+- 对象头
+- 实例数据(存放 object の 字段信息)，
+- 对齐填充
+
+`对象头`中包含了：
+
+- Mark Word 存储了 【锁信息、hashCode、GC分代年龄】占有8个字节
+- 类元指针 【开启压缩占4个字节、不开启压缩占8个字节】
+- 数组长度【数组对象才有的字段、存储数组长度，占有4个字节】
 
 ## java锁机制是怎么设计的?
 
@@ -3065,6 +3243,10 @@ https://www.bilibili.com/video/BV11f4y1o7MH
 1. 自旋锁：指篇【线程】在没有【抢占 の 锁】 の 情况下，先【自旋】指定 の 次数，去尝试获得【锁】。
 2. 乐观锁： 给每个数据增加一个【版本号】，一旦数据发生变化，则去修改这个版本号。CAS の 机制，可以完成【乐观锁】 の 功能。
 3. 在程序设计中，尽量去减少【共享对象】 の 使用。从业务上去实现【隔离】避免【并发】。
+
+## 【大厂面试题】什么是Java自旋锁？
+
+https://www.bilibili.com/video/BV1NY4y1Y7Y9
 
 ## 谈谈你对线程安全的理解？
 
@@ -3712,6 +3894,8 @@ https://www.bilibili.com/video/BV1zB4y127Gm
 
 ## BIO、NIO、AIO 有什么区别？
 
+kate12322：https://www.bilibili.com/video/BV1MW4y1Y7eQ
+
 [设计源于生活中](https://www.bilibili.com/video/BV1cD4y1X7pN)
 
 BIO和NIO的区别、应用场景？
@@ -3846,6 +4030,10 @@ public static void main(String[] args) throws Exception{
     throw 只能在代码块中
 }
 ```
+
+## finally块一定会执行吗？
+
+https://www.bilibili.com/video/BV1wN4y157MX
 
 ## finally 一定会被执行
 
@@ -4454,6 +4642,9 @@ final int compare(Object k1, Object k2) {
 }
 ```
 
+[java中LinkedHashMap和TreeMap是如何保证顺序的？](https://www.bilibili.com/video/BV1e44y1x7GS)
+
+
 ## Comparator比较器的使用
 
 [设计源于生活中](https://www.bilibili.com/video/BV1KT4y1A7no)
@@ -4657,6 +4848,10 @@ hashCode()主要是用来：
 |---|---|
 | 用于确定对象在`hash表`中 の `索引位置` | 用于比较出现`哈希冲突` の 两个值  |
 | 用于`快速比较数值`，容易出现`哈希冲突` |  |
+
+## 【大厂面试题】：为什么重写equals方法，一定要重写hashcode方法？
+
+https://www.bilibili.com/video/BV1QF411L7zV
 
 ## 重写hashCode或equals方法需要注意什么？ 为什么重写equals要重写hashcode？hashcode()方法原理
 
@@ -5305,6 +5500,10 @@ class B {
 
 ```
 
+## 【大厂面试题】Java中的final有啥用？
+
+https://www.bilibili.com/video/BV1Wa411H766
+
 ## final 关键字
 
 ```java
@@ -5841,14 +6040,21 @@ public test(String args...){
 }
 ```
 
-## java中的4种访问权限：
+## java中的4种访问权限：访问修饰符
 
 | 访问权限  | 含义  |
 |---|---|
 | default  | 在同一个`package`可见  |
 | private  | 在同一个`class`可见  |
-| public  | 在`all class`可见  |
+| public  | 在`all class package`都可见  |
 | protected  | 在同一个`package`内的【class、子class】可见  |
+
+| 修饰符  | 当前class  | 当前package  | 子class  | 其他package  |
+|---|---|---|---|---|
+| public  | ✌  | ✌  | ✌  | ✌ |
+| protected  |  ✌ | ✌  | ✌  | ❌  |
+| default  | ✌  | ✌  |  ❌ | ❌  |
+| private  | ✌  |  ❌ |  ❌ | ❌  |
 
 
 ## main方法必须是public static void的？
@@ -5887,20 +6093,18 @@ https://www.bilibili.com/video/BV1Ua411e7Gz
 
 https://www.bilibili.com/video/BV1vT4y1S7Qm
 
-## 使用 `new String("dabin")` 会创建几个对象？
-
-https://www.bilibili.com/video/BV14F411b7Fw
 
 ## 内存溢出vs内存泄露
 
-内存泄露：可以通过【完善代码】来避免
+**内存泄露**：可以通过【完善代码】来避免
 
+- 程序中间【分配了内存】，**但程序结束时，没有释放这部分内存**，从而造成【那部分内存不可用】
 - 比如。【操作数据库、IO、网络连接】时，必须调用`.close()方法`关闭，否则就会【内存泄漏】
-- 程序中间【分配了内存】，但程序结束时，没有释放这部分内存，从而造成【那部分内存不可用】
 - 如果【内存泄露】可以重启【计算机】来解决
 
-内存溢出：可以通过【调整配置】来【减少发生频率】，但无法彻底【避免】
+**内存溢出**：可以通过【调整配置】来【减少发生频率】，但无法彻底【避免】
 
+- 当【创建的object大小】> 【可用的内存容量大小】
 - 程序申请内存时，内存不够用，此时会报错OOM
 
 https://www.bilibili.com/video/BV1rZ4y1a7Jd
@@ -5917,21 +6121,22 @@ https://www.bilibili.com/video/BV1rZ4y1a7Jd
 4. 尽量运用【池化技术】（比如，数据库连接池）以提高性能
 5. 避免在【循环】中创建【过多对象】
 
-## 内存泄漏该怎么办?
+## Boss直聘面试官：内存溢出如何排查？
 
-https://www.bilibili.com/video/BV1ao4y1X7Yr
+https://www.bilibili.com/video/BV1rL4y1u7jN
 
-## 【大厂面试】听说你精通Java？
+## 如何避免内存泄露？
 
-https://www.bilibili.com/video/BV1tr4y1B74G
+一些流对象：
 
-## 【大厂面试】字节跳动二面
+- utputStream
+- Reader
+- BitMap
+- Document
 
-https://www.bilibili.com/video/BV1AL4y177iZ
+很容易就忘记close，
+还要【按顺序回收】，顺序错了，会产生空指针
 
-## 京东到家一面
-
-https://www.bilibili.com/video/BV1rL4y1j7ZC
 
 ## 【海量数据】如何统计不同电话号码的个数？
 
@@ -6034,3 +6239,15 @@ https://www.bilibili.com/video/BV1pu411e7AJ
 4. if【文件输入流】中还有数据，把这个【文件输入流】再次添加到heap中
 5. if【文件输入流】中没有数据，那么可以关闭这个流
 6. 循环这个过程，直到所有【文件输入流】都没有数据为止
+
+## 【大厂面试题】如何实现亿级用户登录态的数据统计？
+
+https://www.bilibili.com/video/BV1yL4y1V7T6
+
+## 【大厂面试题】如何从1000w记录中，找出最热门的10个记录？
+
+https://www.bilibili.com/video/BV1f3411N76G
+
+## 【大厂面试题】如何在一亿个数中找出最大的1万个数？
+
+https://www.bilibili.com/video/BV1zi4y1D7fn
