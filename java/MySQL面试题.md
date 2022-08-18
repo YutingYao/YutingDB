@@ -1,3 +1,6 @@
+## 人丑就该多读书y
+
+https://space.bilibili.com/397020648
 
 ## Mysql表时间列用 datetime 还是 timestamp ？
 
@@ -157,6 +160,8 @@ https://www.bilibili.com/video/BV1KU4y1U7TZ
 https://www.bilibili.com/video/BV1KP4y1A7QB
 
 ## 索引 の 设计原则
+
+[【2分钟搞定八股文面试题】15、讲下索引的底层原理](https://www.bilibili.com/video/BV1QL4y1T7ua)
 
 在进行索引设计的时候，应该：
 
@@ -321,7 +326,9 @@ https://www.bilibili.com/video/BV1wa411Z7FB
 
 ## mysql索引是什么结构，索引存储int和字符串有什么区别（不会）
 
-mysql索引设计原则
+## mysql索引设计原则
+
+https://www.bilibili.com/video/BV1Ab4y1p7uT
 
 ## MySQL分区
 
@@ -414,6 +421,8 @@ D：持久性。也就是说，只要事务【提交成功】，那么，对于�
 也就是说，MySQL用过【MVCC、行锁、表锁、UNDO_LOG、REDO_LOG】保证了这个特性
 
 ## ACID 靠什么来保证？
+
+[【2分钟搞定八股文面试题】17、ACID靠什么保证的](https://www.bilibili.com/video/BV1PS4y1g7RG)
 
 A：由 undolog 来保证：在事务回滚时，撤销已经执行成功的SQL
 
@@ -674,6 +683,8 @@ https://www.bilibili.com/video/BV13t4y1p7Ht
 https://www.bilibili.com/video/BV1Za411Y7SF
 
 ## 脏读、幻读、不可重复读
+
+[【2分钟搞定八股文面试题】20、什么是脏读、幻读、不可重复读](https://www.bilibili.com/video/BV1Wu411q7fn)
 
 脏读：
 

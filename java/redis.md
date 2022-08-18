@@ -32,6 +32,10 @@ entinel哨兵以每秒1次，向 master、slave、sentinel 发送一个 ping
 
 https://www.bilibili.com/video/BV16Y411V7Hr
 
+## 什么是 Redis，有什么优缺点？
+
+https://www.bilibili.com/video/BV17P4y1F7ef
+
 ## Redis为什么这么快？
 
 https://www.bilibili.com/video/BV1va411a7pc
@@ -44,12 +48,7 @@ https://www.bilibili.com/video/BV1S541117v4
 
 https://www.bilibili.com/video/BV1Kr4y1s7eo
 
-## Redis 单线程为什么还能那么快？
 
-1. 基于【内存】
-2. 单线程，没有【线程切换】开销
-3. 基于【IO多路复用机制】，提高了【IO利用率】
-4. 高效的【数据存储结构】，【全局 hash表】 & 【跳表等】
 
 ## 为什么要使用Redis？
 
@@ -69,6 +68,8 @@ https://www.bilibili.com/video/BV1Th411b7fN
 
 https://www.bilibili.com/video/BV1y44y1N7X3
 
+https://www.bilibili.com/video/BV1Pt4y1x727
+
 ## 缓存与数据库数据一致性怎么保证？
 
 https://www.bilibili.com/video/BV1Z3411u7Bh
@@ -76,6 +77,10 @@ https://www.bilibili.com/video/BV1Z3411u7Bh
 ## 项目中为什么要用redis，他和其他数据库的比较，和mongodb的比较
 
 redis value类型，日常使用是命令行还是封装的
+
+## 【2分钟搞定八股文面试题】21、海量数据下如何快速查找一条记录
+
+https://www.bilibili.com/video/BV1BL411w7x6
 
 ## redis的持久化方式，以及项目中用的哪种，为什么？aof和rdb的区别，可以共存吗？redis两种持久化方式分别有什么问题？
 
@@ -86,6 +91,8 @@ https://www.bilibili.com/video/BV1eY411u7F2
 [AOF重写](https://www.bilibili.com/video/BV1eY411u7F2)
 
 https://www.bilibili.com/video/BV1W64y1q7uA
+
+[【2分钟搞定八股文面试题】19、RDB和AOF机制](https://www.bilibili.com/video/BV1NP4y1u7nU)
 
 | RDB  |  AOF |
 |---|---|
@@ -104,7 +111,13 @@ https://www.bilibili.com/video/BV1hZ4y1U7iC
 - master: 最好 not 持久化
 - 某个slave: 开启AOF, 每秒1次
 
+## 讲一下redis持久化方案(RDB,AOF,混合)
+
+https://www.bilibili.com/video/BV1U34y1j7Gr
+
 ## 【非常重要】redis有哪些数据结构？
+
+[【2分钟搞定八股文面试题】23、简述redis九大数据结构](https://www.bilibili.com/video/BV1HF411W7Kh)
 
 https://www.bilibili.com/video/BV1mS4y1175L
 
@@ -155,6 +168,10 @@ https://www.bilibili.com/video/BV1kh411x7Jc
 2. 【有序集合】保存的【all 元素长度】小于 64 字节
 
 ## 什么时候采用跳表？
+
+## 【2分钟搞定java八股文面试题】45、Redis底层数据是如何用跳表来存储的？
+
+https://www.bilibili.com/video/BV1XL4y1K7MT
 
 ## 什么是跳表
 
@@ -238,6 +255,10 @@ https://www.bilibili.com/video/BV1bY4y1V7Vx
 
 ## 缓存雪崩和缓存穿透的理解以及如何避免？
 
+https://www.bilibili.com/video/BV1Zr4y1471Q
+
+[什么是缓存穿透？](https://www.bilibili.com/video/BV1LS4y1z7qo)
+
 [【大厂Java面试题】什么是缓存穿透](https://www.bilibili.com/video/BV1q5411S7eT)
 
 [什么是redis雪崩，穿透和击穿以及应对措施是什么？](https://www.bilibili.com/video/BV1ng411k7gS)
@@ -301,6 +322,8 @@ https://www.bilibili.com/video/BV1oY4y1V7oU
 
 ## 缓存击穿？？
 
+https://www.bilibili.com/video/BV12B4y197Ed
+
 https://www.bilibili.com/video/BV1xS4y1B7Sa
 
 [看高手如何教科书回答，怎么防止缓存击穿的问题？](https://www.bilibili.com/video/BV16S4y1J7LJ)
@@ -334,6 +357,14 @@ https://www.bilibili.com/video/BV1cB4y1v7uH
 https://www.bilibili.com/video/BV1xF411V75c
 
 https://www.bilibili.com/video/BV1iu411v7fp
+
+## 【2分钟搞定八股文面试题】22、Redis如何设置key的过期时间
+
+https://www.bilibili.com/video/BV14Y411n7RY
+
+## 讲一下Redis过期策略
+
+https://www.bilibili.com/video/BV13541197Tx
 
 ## Redis key过期了，为什么内存没释放？
 
@@ -389,6 +420,10 @@ https://www.bilibili.com/video/BV1LA4y1R7bT
 2. 【被动删除】。在访问 key 时，如果发现 key 已经过期，那么会将 key 删除。
 3. 内存不够时清理。maxmemory设置了最大内存，当【使用内存】超过了【最大内存】，就要进行【内存释放】，按照【淘汰策略】，如下：
 
+## 讲一下Redis 内存淘汰机制
+
+https://www.bilibili.com/video/BV1GY4y1B7Xf
+
 ## redis的数据【淘汰策略】
 
 一共8种：
@@ -430,7 +465,11 @@ https://www.bilibili.com/video/BV1xh411Y7Qs
 
 ## 分布式session中用 の 是什么数据结构
 
+https://www.bilibili.com/video/BV1qZ4y1U7Ns
+
 ## Redis 单线程 or 多线程？
+
+https://www.bilibili.com/video/BV1R541117v9
 
 https://www.bilibili.com/video/BV1Qi4y1m7Vk
 
@@ -440,6 +479,30 @@ Redis 6.0 是指的是：
 - 【键值对-读写】仍然是【单线程】
 - so 是【并发安全】的
 
+## Redis 单线程为什么还能那么快？
+
+https://www.bilibili.com/video/BV1RS4y1c7KX
+
+1. 基于【内存】
+2. 单线程，没有【线程切换】开销
+3. 基于【IO多路复用机制】，提高了【IO利用率】
+4. 高效的【数据存储结构】，【全局 hash表】 & 【跳表等】
+
+## 单线程一定比多线程好吗？为什么新版本的redis还要变成多线程的？
+
+（答 读多写少的时候，加共享锁多线程性能更好）， 
+
+## redis是单线程的，为什么这么设计呢？
+
+## 单线程如何实现异步？
+
+https://www.bilibili.com/video/BV1Nv4y1A7EA
+
+1. 基于内存，瓶颈不在cpu，加锁反而会带来性能损失
+2. 实现简单，方便维护
+3. 如果采用【多线程】，那么所有底层的【数据结构设计】必须考虑【线程安全问题】，会很复杂
+4. 如果采用【多线程】，那么必然会引入【同步机制】，导致带来更多的开销
+
 ## MySQL和Redis的双写一致性？
 
 https://www.bilibili.com/video/BV1CD4y1X75a
@@ -448,12 +511,7 @@ https://www.bilibili.com/video/BV1CD4y1X75a
 
 https://www.bilibili.com/video/BV1eD4y1o7np
 
-## redis是单线程的，为什么这么设计呢？
 
-1. 基于内存，瓶颈不在cpu，加锁反而会带来性能损失
-2. 实现简单，方便维护
-3. 如果采用【多线程】，那么所有底层的【数据结构设计】必须考虑【线程安全问题】，会很复杂
-4. 如果采用【多线程】，那么必然会引入【同步机制】，导致带来更多的开销
 
 ## 【大厂面试题】线上Redis的Cpu飙升如何排查？
 
@@ -466,10 +524,6 @@ https://www.bilibili.com/video/BV1Cm4y1972y
 ## 【大厂面试题】你是如何实现限流算法的？
 
 https://www.bilibili.com/video/BV1q34y1L7B8
-
-## 单线程一定比多线程好吗？为什么新版本的redis还要变成多线程的？
-
-（答 读多写少的时候，加共享锁多线程性能更好）， 
 
 
 
