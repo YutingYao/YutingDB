@@ -2454,6 +2454,14 @@ threadlocal内置了：
 
 ## 【大厂面试题】【非常重要】ThreadLocal の 常用场景？
 
+1. 为了【非线程安全的类】在Spark的并发场景中重复利用，一般使用ThreadLocal对其进行缓存
+
+2. 在任务的main方法中，通过 StreamExecutionEnvironment 获取运行环境。 生成运行环境的工厂类放在ThreadLocal中；threadLocalContextEnvironmentFactory 是 StreamExecutionEnvironment类的静态属性 。flink运行环境的获取getExecutionEnvironment()。这是一个ThreadLocal<T>类。 这个类用来将变量存储在对应的线程缓存中，主要用到了ThreadLocalMap类，每一个线程类都会单独维护这个类，变量名称是threadLocals,这是一个map容器，线程的缓存数据存放在这个map中。ThreadLocalMap采用的是数组式存储，而HashMap采用的是拉链式存储，两者是不同的
+
+3. 发现spark，hive，lucene都非常钟爱使用threadlocal来管理临时的session对象，期待SQL执行完毕后这些对象能够自动释放，但是与此同时spark又使用了【线程池】，【线程池】里的线程一直不结束，这些资源一直就不释放，时间久了内存就堆积起来了。
+针对这个问题，可以修改spark关键【线程池】的实现，更改为每1个小时，强制更换【线程池】为新的【线程池】，旧的线程数能够自动释放。
+
+
 连接管理：【一个线程】持有【一个连接】，【线程之间】不共享【同一个连接】
 
 ThreadLocal  の 经典使用场景是**数据库连接**和 **session 管理**等。
