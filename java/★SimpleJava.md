@@ -21,7 +21,7 @@ https://www.bilibili.com/video/BV1C3411A7Dw
 
 同步：【线程】必须先【执行完一个】再执行【下一个】。在发出一个调用时，在没有得到结果时，调用不返回；当调用返回时，立即得到结果。
 
-异步：【主线程】不需要同步等待【另一个线程】 の 完成，也可以继续执行其他任务。在发出一个调用时，调用立即返回，不会立即得到结果，被调用者会通过通知或者回调函数来处理结果。
+异步：【主线程】不需要同步等待【另一个线程】 の 完成，也可以继续执行其他任务。在发出一个调用时，调用立即返回，不会立即得到结果，被调用者会通过通知或者【回调函数】来处理结果。
 
 同步与异步的区别主要在于：调用结果是否跟随调用结束后直接返回
 
@@ -32,7 +32,13 @@ https://www.bilibili.com/video/BV1C3411A7Dw
 -【同步】：连接就一直【等待】
 - 【异步】：我在你那挂了一个钩子，你数据准备好了通过钩子给我。发出结果就立即返回。虽然【client】没有真正拿到返回结果，大表有一个【消息回写的接口】，在结果计算完以后，再把数据给你。
 
-【阻塞】和【非阻塞】往往针对的是【服务端】的【请求线程 + 处理线程】来说的：这些概念一般出现在【网络io模型】中，所谓的【同步阻塞】是指【等待】数据的到达，【同步非阻塞】则需要【轮询】查看数据是否到达
+【阻塞】和【非阻塞】往往针对的是【服务端】的【请求线程 + 处理线程】来说的：
+
+这些概念一般出现在【网络io模型】中，
+
+所谓的【同步阻塞】是指【等待】数据的到达，
+
+【同步非阻塞】则需要【轮询】查看数据是否到达
 
 - 比如，【client】查询一个【大数据】。
 - 【阻塞】：【请求线程】不能做其他事情，要一致处于【等待状态】
@@ -43,13 +49,29 @@ https://www.bilibili.com/video/BV1C3411A7Dw
 - 【同步】和【异步】是针对【客户端】的【请求连接】来说的
 - 【阻塞】和【非阻塞】往往针对的是【服务端】的【请求线程 + 处理线程】来说的
 - 同步和异步是一个逻辑概念。表示一次交互要的结果请求方和处理方是否时钟同源。异步的行为是增加吞吐量。并不能节省结果的处理时间。
-- 阻塞和非阻塞是在线程层面的概念。阻塞和非阻塞是在线程层面说的。阻塞与非阻塞的区别：等待这个结果的过程中，【程序】是去做其他事情，还是傻傻地等
+- 阻塞和非阻塞是在【线程层面】的概念。阻塞和非阻塞是在【线程层面】说的。阻塞与非阻塞的区别：等待这个结果的过程中，【程序】是去做其他事情，还是傻傻地等
 
 两组概念一组合，就出现4种场景，为了解释这4种场景，我们举个栗子：
 
 【顾客|client】到【餐馆吃饭】，【餐馆】有【服务员】和【后端厨师】
 
 对比：【异步】和【多线程】并不是【同等关系】，实现异步 の 方式有很多，【多线程】只是实现异步 の 一种方式
+
+## 【阻塞】&【非阻塞】区别
+
+都是关注【线程状态】
+
+1. 【阻塞】是指：
+   - 【结果返回】之前，当前【线程】会被挂起
+   - 【调用线程】只有在【得到结果】之后才会【恢复运行】
+2. 【非阻塞】是指：
+   - 虽然【结果未返回】，当前【线程】不会被挂起
+
+【同步】是【烧开水】过程中，要自己来看，有没有开
+【异步】是【烧开水】过程中，水壶响了
+
+【阻塞】是【烧开水】过程中，你不能干其他事，必须在旁边等着
+【非阻塞】是【烧开水】过程中，可以干其他事情
 
 ## 多线程的异步调用是怎么实现的?
 
@@ -308,7 +330,7 @@ https://www.bilibili.com/video/BV1oY4y1z7Yy
    - 当【阻塞】队列】里面有【任务】时，这些【消费者】会严格按照FIFO の 顺序被唤醒。
    - 从而保证了【消费者】对于task の 处理顺序
 
-## ArrayBlockQueue
+## 线程池的阻塞队列，用哪个？ArrayBlockQueue
 
 ```java
 import java.util.concurrent.ArrayBlockingQueue;
@@ -1133,6 +1155,28 @@ CAS  の 典型应用场景有2个：
 1. 乐观锁： 给每个数据增加一个【版本号】，一旦数据发生变化，则去修改这个版本号。CAS の 机制，可以完成【乐观锁】 の 功能。
 2. 在【程序】设计中，尽量去减少【共享对象】 の 使用。从业务上去实现【隔离】避免【并发】。 -->
 
+
+## 并发编程3要素？
+
+1. 原子性：【不可分割の多个步骤の操作】，要保证，要么同时成功，要么同时失败
+2. 有序性：【程序执行】 の 顺序和【代码】 の 顺序要保持一致
+3. 可见性：一个【线程】对【共享变量】 の 修改，【another线程】能够立马看到
+
+## 为什么会有【原子性】、【有序性】、【可见性】 の 问题？
+
+本质上，是计算机在设计时，为了：
+
+- 【最大化】地提升【CPU利用率】而导致 の 
+
+比如：
+
+- 【CPU】设计了【三级缓存】
+- 【操作系统】里面设计了【线程模型】
+- 【编译器】里面设计了【优化机制】
+
+https://www.bilibili.com/video/BV11f4y1o7MH
+
+
 ## CAS的ABA问题如何解决？
 
 线程1 和 线程2 同时取出A
@@ -1347,11 +1391,11 @@ Future 模式是【多线程并发】中常见 の 【设计模式】，
 
 ## CompletableFuture の 理解
 
+https://www.bilibili.com/video/BV1nA411g7d2
 
 - 实现了Future和CompletionStage两个接口
 - CompletionStage：定义了【任务编排】的方法
 - CompletableFuture最大的改进：提供了类似于【观察者模式】的【回调监听】功能，也就是当【上一阶段任务】执行结束之后，可以【回调】【下一阶段任务】，而不需要【阻塞，获取结果】之后，再去处理结果
--
 - 可以基于CompletableFuture创建任务和链式处理多个任务，并实现按照`任务完成`的`先后顺序`获取任务的结果
 - 不论`Future.get()方法`还是`CompletableFuture.get()方法`都是【阻塞】的
 
@@ -1789,6 +1833,58 @@ final int compare(Object k1, Object k2) {
 [java中LinkedHashMap和TreeMap是如何保证顺序 の ？](https://www.bilibili.com/video/BV1e44y1x7GS)
 
 
+## Comparator比较器 の 使用
+
+[设计源于生活中](https://www.bilibili.com/video/BV1KT4y1A7no)
+
+```java
+public static class Dog {
+    public String name;
+    public int price;
+
+    public Dog (String name, int price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Dog{" + "name = '" + name + '\'' + ",price = " + price + '}';
+    }
+
+    public static void main(String[] args) {
+        Dog[] dogs = {
+            new Dog(name: "wc001", price: 900),
+            new Dog(name: "wc001", price: 500),
+            new Dog(name: "wc001", price: 200),
+            new Dog(name: "wc001", price: 700),
+            new Dog(name: "wc001", price: 500),
+        }
+
+        第一步：创建【比较器】
+        Comparator<Dog> dogComparator = new Comparator<Dog> {
+            @Override
+            public int compare(Dog o1, Dog o2) {
+                return o1.price - o2.price;
+            }
+        }
+        第二步：用【比较器】排序
+        Arrays.sort(dogs, dogComparator);
+
+        Arrays.asList(dogs).forEach(System.out::println);
+    }
+}
+
+输出：
+
+new Dog(name: "wc001", price: 200)
+new Dog(name: "wc001", price: 500)
+new Dog(name: "wc001", price: 500)
+new Dog(name: "wc001", price: 700)
+new Dog(name: "wc001", price: 900)
+
+```
+
 ## 内存中 の Buffer和Cache是一个东西么
 
 https://www.bilibili.com/video/BV1Jh41167Lo
@@ -2133,8 +2229,13 @@ https://www.bilibili.com/video/BV1kZ4y1v7z8
 4. 如果是【空的】，直接插入
 5. 如果key【一致】，直接覆盖。 如果key【不一致】，判断是【红黑树】or【链表】。然后，插入or覆盖。
 6. 如果【插入链表】后，【链表长度】大于8，则转为【红黑树】，【链表长度】<6，则转为【链表】
-7. 最好判断hash槽的使用率，是否超过3/4，是的话，就【扩容】
+7. 最后判断hash槽的使用率，是否超过3/4，是的话，就【扩容】
 8. 结束
+
+## 扩容、阈值、红黑树的顺序是怎样的？
+
+1. 【链表长度】大于8，则转为【红黑树】，【链表长度】<6，则转为【链表】
+2. 判断hash槽的使用率，是否超过3/4，是的话，就【扩容】
 
 ## HashMap の 工作原理？重点阐述一下HashMap の put()方法
 
@@ -2240,13 +2341,16 @@ ConcurrentHashMap 在 HashMap  の 基础上，提供了【并发安全】 の �
 3. 从一个node到【子孙node】 の 所有路径上包含相同数目 の 【black节点】 (从头到脚黑得“均匀”)
 4. 如果一个node是red，则【子node】必须是black (红的儿子都是黑的)
 
-## 为什么使用【红黑树】？
+## 为什么使用【红黑树】？【红黑树】的效率为什么高？
 
 【红黑树】是【二叉树】 の 一种，它 の 【查找算法】就相当于是【二分查找】。
 
 【红黑树】 の 【时间复杂度 O(logN)】在数据比较多 の 时候，
 
 会比【链表】 の 【时间复杂度 O(N)】要快
+
+- 因为【红黑树】不像其他 の 【完全 の 平衡二叉树】那样有【非常严格】 の 【平衡条件】，
+- 所以【红黑树】 の 插入效率，要比【完全平衡二叉树】 の 插入效率要高。
 
 
 ## 讲一下HashMap底层什么情况下从链表转为红黑树？
@@ -2302,7 +2406,7 @@ https://www.bilibili.com/video/BV1At4y1a7nQ
 
 HashMap每次扩容，都需要重建【hash表】，非常影响性能
 
-## ConcurrentHashMap是如何保证线程安全？
+## 【很重要】ConcurrentHashMap是如何保证线程安全？
 
 https://www.bilibili.com/video/BV1q541127Bk
 
@@ -2349,7 +2453,6 @@ https://www.bilibili.com/video/BV1q541127Bk
 4. ConcurrentHashMap 有一个 【size方法】来获取总 の 元素个数。在【多线程并发场景】下，ConcurrentHashMap 对数组中元素 の 累加做了优化：
    - 当线程【竞争不激烈】时，通过【CAS机制】实现元素个数 の 【累加】
    - 当线程【竞争激烈】时，使用一个【数组】来维护【元素个数】，如果要增加【总元素个数】，直接从数组中【随机选择】一个，再通过【CAS机制】实现元素个数 の 【累加】
-
 
 
 ## 为什么HashMap会产生死循环？HashMap在哪个jdk版本使用红黑树，之前 の 实现方法是什么？
@@ -2698,6 +2801,41 @@ SimpleDateFormat不是线程安全 の ，因为它内部维护了一个【calen
 2. 使用ThreadLocal。把SimpleDateFormat变成【线程私有】
 3. 加`互斥锁`。在【同一时刻】只允许【一个线程】操作SimpleDateFormat
 4. 使用线程安全 の 日期API，比如LocalDateTimer、DateTimeFormatter
+
+## 引用分为哪四种？
+
+不同【引用类型】代表了不同对象 の 【可达性状态】和【垃圾收集 の 影响】
+
+1. 强引用(默认)：只有有“强引用”指向一个对象，该对象就**永远不会被回收**。比如赋值
+2. 软引用：**【内存不足】时要回收**。用于实现——内存敏感 の 缓存，从而保证不会耗尽内存。比如缓存
+3. 弱引用：**只要有GC，就一定被回收**
+4. 虚引用：不是给业务人员用 の ，虚引用 の 用途是在 gc 时返回一个通知。
+
+## 什么是虚引用？
+
+<https://www.bilibili.com/video/BV1ST411J7Bk>
+
+[四种引用类型](https://www.bilibili.com/video/BV1XF411K7nw)
+
+不会决定【对象】 の 【生命周期】，它提供了一种确保【对象】被【GC】后去【做某些事情】 の 一种机制。
+
+当垃圾回收器准备去回收一个对象 の 时候，发现该对象还有【虚引用】，就会在回收对象 の 内存之前，把这个【虚引用】加入到与之关联 の 【引用队列】里面。
+
+程序通过判断【引用队列】是否加入了【虚引用】，来去了解【被引用 の 对象】是否将要进行【垃圾回收】。
+
+然后我们就可以在【对象】 の 【内存回收】之前，采取必要 の 行动。
+
+它必须和【队列】联合使用。它的作用是跟踪【对象】被【垃圾回收】的状态。
+
+比如我们想【监听】这个【String对象】，当它被【垃圾回收】的时候，可以做一个【log记录】
+
+1. 需要new一个队列
+2. new一个【虚引用对象】
+3. 在【虚引用对象】里面放入要监听的【abc字符串】，并指定一个【队列】，当【垃圾回收】的时候，我们就可以通过这个【队列】追踪
+
+虚引用有个重要用途：
+
+- 【堆外内存】的释放，DirectByteBuffer就是通过【虚引用】来实现【堆外内存】的释放
 
 ## 什么是一致性hash
 
@@ -3443,6 +3581,12 @@ https://www.bilibili.com/video/BV1zS4y1A7EM
    1. 如果【CPU耗时】趋于0，几乎全是【IO耗时】，则 `线程数 = 2 * CPU核数 + 1`
 
 也就是说，IO所占时间越长，CPU就越闲。为了不让CPU闲下来，必须增加线程数
+
+## 为什么要用多线程
+
+提高系统 の 【资源利用率】
+
+利用多核CPU，提高并发能力
 
 ## 线程池线程复用 の 原理是什么？
 
@@ -4568,11 +4712,6 @@ JVM の 定义：
 
 通过定义【虚拟机】，能够像真实计算机一样，运行【字节码指令】
 
-JVM の 好处：
-
-1. 可以【屏蔽】操作系统 の 细节，使得Java可以【一次编写，到处运行】
-2. 允许在【编译时检查】潜在【类型不匹配】，保证了程序 の 可靠性
-3. 可以实现自动垃圾回收
 
 JVM の 厂商：
 
@@ -4691,7 +4830,7 @@ JVM设计了【3个类加载器】：
 
 - 加载
 - 链接 (验证、准备、解析)
-- 初始化：【静态变量、成员变量】 赋值。先初始化【父类】、再初始化【子类】
+- 初始化：【静态变量、成员变量】 赋值。**先初始化【父类】、再初始化【子类】**
 - 使用
 - 卸载
 
@@ -4700,6 +4839,56 @@ JVM设计了【3个类加载器】：
 准备：给【变量】分配内存。【静态变量】放在【方法区】，【实例变量】放在【heap】中
 
 解析：将类中的【符号引用】替换为【直接引用】。【直接引用】就是【指针】指向【方法区的内存位置】
+
+
+
+## 父类、子类代码的执行顺序
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("new 第1个Boy：需要创建【静态代码块】");
+        Boy boy1 = new Boy();
+        System.out.println("new 第2个Boy：不需要创建【静态代码块】");
+        Boy boy2 = new Boy();
+    }
+}
+class Person {
+    static {
+        System.out.println("父类【静态代码块】");
+    }
+    {
+        System.out.println("父类【普通代码块】");
+    }
+    Person() {
+        System.out.println("父类【构造代码块】");
+    }
+}
+class Boy extends Person {
+    static {
+        System.out.println("子类【静态代码块】");
+    }
+    {
+        System.out.println("子类【普通代码块】");
+    }
+    Boy() {
+        System.out.println("子类【构造代码块】");
+    }
+}
+
+new 第1个Boy：需要创建【静态代码块】
+父类【静态代码块】
+子类【静态代码块】
+父类【普通代码块】
+父类【构造代码块】
+子类【普通代码块】
+子类【构造代码块】
+new 第2个Boy：不需要创建【静态代码块】
+父类【普通代码块】
+父类【构造代码块】
+子类【普通代码块】
+子类【构造代码块】
+```
 
 ## 双亲委派机制
 
@@ -5007,6 +5196,18 @@ public static void main(String[] args) {
 }
 ```
 
+## 项目中如何规划常量？
+
+通常放到 `Constants类` 中
+
+```java
+public final class Constants {
+    public static final String ApplicationContextXml = "xxxx"
+    public static final String ApplicationWebXml = "xxxx"
+    public static final String WebXml = "xxxx"
+    。。。。。。。。。。。。。。。。。。
+}
+```
 
 ## java 中 就`基本类型`不是`对象`
 
@@ -5040,9 +5241,18 @@ java开发者，不需要专门编写【内存回收】和【垃圾清理】代�
 
 ## 【垃圾收集算法】有哪3个：
 
-1. 标记 - 清除：首先找到，哪些对象需要被回收，标记一下，直接删除。会有碎片。
-2. 标记 - 整理：把可用 の 对象整理到一边，其余 の 对象直接删除。没有碎片。
-3. 复制
+1. 标记 - 清除：效率低
+   - 首先找到，哪些对象需要被回收，标记一下，直接删除。
+   - 缺点：会有碎片。可能导致，当需要分配较大的对象时，无法找到【连续内存】，而不得不提前触发【】另一次垃圾回收动作
+2. 标记 - 整理：效率低
+   - 把可用 の 对象整理到一边，其余 の 对象直接删除。
+   - 优点：没有碎片。
+3. 复制：效率高
+   - 将【内存】按照【容量】划分为【大小相等的2块】，每次只使用其中一块
+   - 当【一块内存】用完了，就将【live对象】复制到【另一块内存】
+   - 把已经使用过的【内存】一次性清理掉
+   - 优点：没有碎片。
+   - 缺点：浪费一半内存。在【live率】高时，要进行较多【复制操作】，效率变低
 
 
 ## 垃圾收集器分类
@@ -5140,6 +5350,62 @@ CMS 会存在【上一次垃圾回收】还没有完成，又触发【full GC】
 
 也就是 `concurrent mode failure`：此时进入 `stop the world`，用 `serial old 垃圾收集器` 来回收。
 
+
+## 【大厂面试题】Jvm三色标记法缺陷是什么?、
+
+https://www.bilibili.com/video/BV1X94y1R7Yg
+
+https://www.bilibili.com/video/BV1rf4y1Z7Vc
+
+- 白色：没有被垃圾收集器访问过。
+- 灰色：被垃圾收集器访问过。但有些引用还没有扫描。
+- 黑色：被垃圾收集器访问过。且所有引用都已经扫描过。
+
+在【可达性分析】刚刚开始的阶段，所有对象都是白色的，只有GC root是黑色的。
+
+并发标记阶段，扫描整个【引用链】。
+
+- 没有【子节点】的话，将【本节点】变为【黑色】
+- 有【子节点】的话，将【本节点】变为【黑色】，子节点变为【灰色】
+
+重复并发标记阶段：
+
+- 直至【灰色对象】没有【其他子节点】引用时【结束】
+- 如果其他对象指向【黑色对象】，无须重新扫描一遍。【黑色对象】不可能直接（不经过灰色对象）指向某个【白色对象】。
+
+在【结束分析】的阶段：
+
+仍然是白色的对象，代表不可达。
+【黑色】代表已经扫描过，是安全存活的。
+
+## 三色标记法的缺陷？ g1回收器、cms の 回收过程，场景
+
+1. 多标与浮动垃圾（不会影响程序正确性，但需要在【下一轮GC】时才会被清除）
+   - 当指向【灰色の对象E】的【引用】【断开】
+   - 【E、F、G对象】不可达，应该要被回收
+   - 但【对象E】是【灰色】，所以仍然alive
+2. 漏标（会影响程序正确性）：  
+    - 当【灰色の对象E】指向的【对象G】【断开】
+    - 当【黑色の对象D】重新指向【对象G】
+    - 所以【对象G】没有被遍历到
+    - 【对象G】一直是【白色】，被当做【垃圾清除】
+    - 简单来讲，需要同时满足2个条件：
+      - 【黑色对象】追加了对【白色对象】的【new引用】
+      - 【灰色对象】断开了对【白色对象】的【old引用】
+
+解决方法：
+
+1. 原始快照G1：写屏障 + 原始快照
+   - 原始快照：思路是：记录【old引用】
+   - 原始快照：相较于【增量更新】效率更高，不需要在【重新标记阶段】再次【深度扫描】被删除的【引用对象】
+2. 增量更新CMS：写屏障 + 增量更新
+   - 增量更新：破坏了【漏标条件】——即【黑色对象】追加了对【白色对象】的【new引用】，从如图保证不漏标
+   - 增量更新：思路是：不保留【原始快照】，只记录【new引用】
+
+| 增量更新CMS  | 原始快照G1  |
+|---|---|
+| 对【增量引用】的【根对象】做【深度扫描】  | 不需要在【重新标记阶段】再次【深度扫描】被删除的【引用对象】，只是【简单标记】，下一次GC再深度扫描  |
+| 就一块【老年代region】  | 很多对象位于【不同region】  |
 
 ## 堆内内存的垃圾回收
 
@@ -5280,3 +5546,2249 @@ GC不是【任何时候】都能做 の ，必须代码运行到【安全点 or 
 这里 の eden区（80%） 和其中 の 一个  S区（10%） 合起来共占据90%，
 
 始终保持着其中一个 `S区`是空留 の ，保证`GC` の 时候复制存活 の 对象有个存储 の 地方。
+
+
+## JVM分代年龄为什么是15次？
+
+在JVM の 【heap内存】里面，分为【Eden Space、Survivor Space、Old generation】，当我们在java里面，去使用【new关键词】去创建一个【对象】 の 时候，java会在【Eden Space】分配一块内存，去存储这个对象。
+
+当【Eden Space】 の 内存空间不足时，会触发【Young GC】进行对象 の 回收，而那些因为存在【引用关系】而无法回收 の 对象，JVM会把它转移到【Survivor Space】。
+
+【Survivor Space】内部存在【From 区】和【To 区】。那么从【Eden 区】转移过来 の 对象，会分配到【From 区】.
+
+每当触发一次【Young GC】，那些没有办法被回收 の 对象，就会在【From 区】和【To 区】来回移动。每移动一次,【GC年龄】就会+1，默认情况下,【GC年龄】达到15 の 时候，这些对象如果还没有办法【回收】，那么JVM会把这些对象移动到【Old Generation】里面。
+
+一个【对象】 の 【GC年龄】是存储在【对象头】里面 の ，而一个【Java对象】在【JVM の 内存】布局，由3个部分组成：
+
+1. 对象头
+2. 实例数据
+3. 对齐填充
+
+而在对象头里面，4个bit位能够存储 の 最大数值是15。所以，从这个角度来说，【JVM分代年龄】之所以设置为15，因为，它最大能存储 の 数值是15。虽然，JVM提供了参数，来去设置【分代年龄】 の 大小，但是这个大小不能超过15。
+
+此外，JVM还引入了【动态对象年龄】 の 判断方式，来决定把对象转移到【old generation】，也就是说，不管这个对象 の 【gc年龄】是否达到了15次，只要满足【动态年龄】 の 判断依据，也会把这个对象转移到【old generation】。
+
+
+
+## Error和Exception有什么区别？
+
+https://www.bilibili.com/video/BV1Dt4y1W7CN
+
+都实现了 `Throwable接口`
+
+| Error  | Exception  |
+|---|---|
+| 是与【虚拟机】相关 の 问题，会导致【程序】处于【非正常 の 、不可恢复 の 】状态  | 【程序运行过程】中，可以预料 の 意外情况，可以被【捕获】并进行相应 の 处理  |
+| 比如，【系统崩溃、虚拟机错误、内存溢出】  | 比如，【空指针异常、IO异常】  |
+| 只能【终止程序】  | 不应该随意【终止程序】  |
+
+## 提问：什么时候应该抛出异常？什么时候应该捕获异常？
+
+当前method需要继续运行下去，就需要用try catch
+
+当前method不需要运行，就可以选择 throws
+
+尽量选择【捕获】，在业界很多人认为【受检异常】是java设计上的一个败笔，需要程序员手动处理。所以，就不要让这个问题继续蔓延下去了。
+
+## 异常 の 两个【子类实现】？java中异常 の 分类？
+
+所有异常，都 派生自 throwable，它有两个【子类实现】：
+
+1. 一个是 error【非受检异常】
+2. 一个是 exception【非受检异常 + 受检异常】
+
+- 1️⃣error 是【程序底层 or 硬件层面】 の 错误，与程序无关，比如，OOM
+- 2️⃣exception 是【程序里面】 の 异常。包括：
+    1. RuntimeException
+    2. 其他
+
+## java中异常 の 分类？对受检异常和非受检异常 の 理解？
+
+- 1️⃣【受检异常】指：`编译异常`
+  - 在【编译阶段】，需要【强制检查】。
+  - 程序无法预判 の 异常，比如，IOException、SQLException
+
+- 有两种处理方式：
+
+    1. 通过 try {} catch {}
+    2. 通过 throw 把异常抛出去
+
+- 2️⃣【非受检异常】指：`运行时异常`
+  - 程序逻辑错误，引起。。。
+  - 在【编译阶段】，不需要【检查】。
+  - 不需要主动捕获，发生在程序运行期间，
+  - 如 RuntimeException (NullPointException, IndexOutOfException)，
+  - 我们可以选择【主动捕获异常】，从而帮助我们快速【定位问题】。
+
+```java
+public static void process(String arg) {
+    if (arg = null) {
+        arg = "默认值";
+    }
+    ...继续执行业务逻辑
+}
+
+public static boolean process(String arg) {
+    if (arg = null) {
+        return false;
+    }
+    ...继续执行业务逻辑
+    return true;
+}
+
+public static void process(String arg) {
+    if (arg = null) {
+        throw new MyException();
+    }
+    ...继续执行业务逻辑
+}
+```
+
+```java
+自定义异常：😀照着父类学习
+
+public class MyException extends RuntimeException {
+    // 非受检异常，发生在程序运行期间
+    public MyException() {
+        // ...
+    }
+
+    public MyException(String message) {
+        super(message);
+    }
+
+    public MyException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public MyException(Throwable cause) {
+        super(cause);
+    }
+}
+```
+
+```java
+
+抛出异常：
+
+public static void main(String[] args) throws Exception{
+    // 如果发生异常，则程序终止
+    throw new MyException();                           // 直接抛出异常
+    throw new MyException("没有一键三连，程序崩溃");     // 抛出异常 の 同时，传递异常信息
+    throw new MyException(new NullPointerException()); // 抛出异常 の 同时，传递其他异常 の 堆栈信息
+    throw 只能在代码块中
+}
+```
+
+
+
+## 【受检异常】 の 两种处理方式
+
+```java
+异常捕获：
+
+try{
+    process();
+} catch (IOException e) {
+    // 发生IO异常，才会执行
+} catch (ClassNotFoundException e) {
+    // 发生异常，才会执行
+} catch (Exception e) {
+    // 发生异常，才会执行
+} finally {
+    // 无论是否异常，都会执行
+}
+// 上面发生异常，这里也能执行
+xxx();
+```
+
+```java
+public static void process() throws IOException, ClassNotFoundException {
+    ////////////////////////////////
+}
+
+正确写法：最好用这个：
+public static void fun1() {
+    try {
+        process(); // 编译成功
+    } catch (IOException | ClassNotFoundException e) {
+        ////////////////////////////////
+    }
+}
+正确写法：其次用这个：
+public static void fun2() throws IOException, ClassNotFoundException {
+        process(); // 编译成功
+}
+错误写法：❌
+public static void fun3() {
+        process(); 
+}
+```
+
+## java异常
+
+```java
+try{
+  
+}catch(RuntimeException e){
+  
+}catch(Exception e){
+  
+}finally{
+  
+}
+```
+
+- 导入一个包中所有 の 类，采用 *
+
+```java
+import java.lang.*
+import java.util.ArrayList
+import java.util.HashMap
+```
+
+- java中 の `常量`：`const`
+- java中`伴生对象`：`static关键字`
+- java中 の `trait`：接口`interface`
+
+## 简单介绍一下arraylist
+
+## ArrayList默认大小，扩容机制？扩容 の 时候如何将旧数组转化为新数组？
+
+ArrayList 是一个【数组结构】 の 【存储容器】，
+
+默认情况下，数组 の 长度是 10 个。
+
+随着 程序不断往【ArrayList】里面添加数据，当添加 の 数据达到10个 の 时候，ArrayList 会触发【自动扩容】。
+
+--------------------------------------------------------
+
+**问：ArrayList如何扩容？**
+
+1. 在【grow方法】里面进行【扩容】，将【数组容量】扩大为【原来 の 1.5倍】
+2. 扩容之后，会调用【Arrays.copyOf方法】进行拷贝
+
+首先，创建一个新 の 数组。这个新数组 の 长度是原来 の 1.5倍
+
+然后，使用`Arrays.copyOf方法`，把老数组里面 の 数据copy到新数组里面。
+
+然后，把当前需要添加 の 元素，加入到新 の 数组里面，从而去完成【动态扩容】 の 过程。
+
+## 怎么在ArrayList中删除一个元素？ArrayList能不能删除元素
+
+1. 如果使用 foreach 删除元素，会导致 `fast-fail问题`
+2. 可以使用 Iterator  の  remove方法，可以避免 `fast-fail问题`
+
+## 为什么arraylist查询快？arraylist的遍历方式是什么？
+
+因为：
+
+- ArrayList 可以**直接通过【数组下标】找到元素**
+- LinkedList 需要【移动指针】从前往后依次查找。
+
+
+## 为什么 linkedlist 增删快
+
+因为：
+
+- ArrayList 在【增删元素】时，可能要【扩容、复制】数组
+- LinkedList 只需要【修改指针】即可Hash
+
+
+## linkedlist实现
+
+```java
+public static void main(String[] args) {
+    用链表实现队列
+    LinkedList queue = new LinkedList(); 
+    queue.add(5);
+    queue.add(7);
+    queue.add(3);
+
+    FIFO 先进先出
+    System.out.println(queue.removeFirst());
+    System.out.println(queue.removeFirst());
+    System.out.println(queue.removeFirst());
+    打印出 573
+
+    FILO 先进后出
+    System.out.println(queue.removeLast());
+    System.out.println(queue.removeLast());
+    System.out.println(queue.removeLast());
+    打印出 375
+}
+```
+
+## Enumeration 和 Iterator 区别？
+
+| Iterator  | Enumeration  |
+|---|---|
+| 支持【fail-fast机制】  | 不支持  |
+| 不仅能【读数据】，而且能【删数据】  | 只能【读数据】，而不能【改数据】 |
+| 常用  |   |
+
+## 为什么`集合`不直接访问 `iterator()接口`，而是先访问 `Iterable()接口`
+
+每次返回一个【new迭代器】，为了保证迭代器 の `独立性`和`隔离性`
+
+- `独立性`指：不同【迭代器】遍历【元素】时【互不影响】。也就是说，【A迭代器】不论是遍历到【第3个元素】还是【第5个元素】都不会影响到【B迭代器】
+
+- `隔离性`指，如果集合【增删】元素，不能影响到【已有 の 迭代器】
+
+但需要完全满足“独立性”和“隔离性”。还需要做其他处理：
+
+1. 方法一：每次获取【迭代器】时，将集合内所有元素，都复制一份到【迭代器】中，这样【集合 の 增删操作】就不会影响到【迭代器】
+
+   - 缺点：有多少个【迭代器】就要复制多少份【数据】，严重浪费资源。此外，【复制数据】本身就是一种比较耗时 の 操作。为了保证【复制】时，不会有其他【线程】对【元素】进行【增删】。还得用上【锁机制】来保证【线程安全】，复制数据就更加耗时了。
+
+2. 方法二：在获取【迭代器】时，让【迭代器】保存一个【int 数值】，这个【int 数值】是【集合 の 成员属性 modCount】，用来记录集合【增删】操作 の 次数，在集合【增删元素】时，该数值就会【+1】。因为【迭代器】是集合 の 【成员内部类】，所以可以【随时访问】集合 の 【成员属性】，【迭代器】在遍历元素时，会检查 modCount 是否和【当初保存 の 数值】一致。
+
+    ```java
+    // Java 源码
+    public class ArrayList implements List {
+        transient int modCount = 0; 
+        public boolean add(Object obj) {
+            modCount ++;
+            // 省略其他
+            return true;
+        }
+        public boolean remove(Object obj) {
+            modCount ++;
+            // 省略其他
+            return true;
+        }
+
+        public Iterator<E> iterator() {
+            return new Itr();
+        }
+
+        private class Itr implements Iterator {
+            // 复制集合 の  modCount
+
+            int exceptedModCount = modCount;
+
+            public Object next() {
+                if (modCount != exceptedModCount) {
+                    throw new ConcurrentModificationException();
+                }
+            }
+        }
+    }
+    ```
+
+   - 如果不一致，就代表集合在获取【迭代器】之后，进行了【增删】操作，此时，迭代器就会【抛出异常】停止迭代。
+
+   - 如果遇到了影响【正常逻辑】 の 情况，自己无法处理时。可以选择【抛出异常，终止逻辑】。这种处理方式称为“fail-fast”，即【快速失败机制】，当【迭代器】发现【集合】进行了【增删】后便选择【抛出异常】
+
+   - [Java里遍历集合出现并发修改异常](https://www.bilibili.com/video/BV1xf4y1i7xS)
+
+    ```java
+    ArrayList list = new ArrayList();
+    list.add("螃蟹哥")
+    Iterator iterator = list.iterator();
+    list.add("一键三连")
+    iterator.next(); // 抛出异常
+    ```
+
+   - 在 for each 循环中，直接对【元素】进行【增删】，也会【抛出异常】。因为【for-each】本质上就是【迭代器】 の 【语法糖】。对集合进行【增删】后再进行【迭代】，自然会触发【快速失败机制fail-fast】。所以想要【遍历】元素 の 同时，进行【增删】操作。。
+
+    ```java
+    ArrayList list = new ArrayList();
+    list.add("螃蟹哥")
+    list.add("一键三连")
+
+    for (Object o : list) {
+        if ("螃蟹哥".equals(o)) {
+            list.remove(o);
+        }
+    }
+    ```
+
+
+## 迭代器 - 迭代器 之间 具有 独立性 和 隔离性
+
+`迭代器-集合` の 关系：
+
+```java
+public interface Iterable {
+    Iterator iterator();
+}
+
+public interface Collection extends Iterable {
+    // ...
+}
+
+迭代器 の 使用：col.iterator()
+Collection col = new ArrayList();
+Iterator iterator = col.iterator();
+while (iterator.hasNext()) {
+    System.out.println(iterator.next());
+}
+```
+
+如果没有迭代器：
+
+- 一个进程遍历完
+- 另一个进程，没有数据了
+
+可以用于 `for 循环`:
+
+```java
+String[] names = {"A", "B", "C", "D"};
+StringJoiner sj = new StringJoiner(",", "[", "]");
+for (String name : names) {
+    sj.add(name);
+}
+System.out.println(sj); // 输出：[A,B,C,D]
+```
+
+`for 循环` 底层 就是 `迭代器`:
+
+```java
+public interface Iterator {
+    boolean hasNext();
+    Object next();
+}
+```
+
+
+## 为什么java中 の 任意对象可以作为锁？
+
+【moniter对象】存在于【每个java对象】 の 【对象头】中
+
+【synchronized锁】便是通过这种方式获取【锁】 の 
+
+
+## 在jvm中【锁对象】由什么组成？
+
+- 对象头，
+- 实例数据(存放类 の 属性数据信息)，
+- 对齐填充
+
+`对象头`中包含了：
+
+- Mark Word 存储了 锁信息
+- 有【4个bit】来存储【GC年龄】
+
+
+## java锁机制是怎么设计 の ?
+
+在谈锁之前，我们需要简单了解【JVM运行时内存结构】。
+
+每个object都有一把锁，这把【锁】存放在【`对象头`】中，
+
+`对象头`中包含了 - Mark Word 存储了 锁信息
+
+锁中记录了，【当前对象】被哪个【线程`threadid 字段`】【占用】。
+
+其中 の 【锁标志位】分别对应了四种状态：
+
+- 无锁
+- 偏向锁
+- 轻量级锁
+- 重量级锁
+
+## 什么是面向对象？
+
+【面向对象】是一种思想，是一种【软件开发方法】
+
+【面向对象】是相对于【面向过程】来讲 の ，把相关 の 【数据、方法】组织成一个整体看待
+
+
+## 面向对象 & 面向过程 の 区别
+
+是【软件开发思想】
+
+面向过程：分析出解决问题所需要 の 【步骤】，然后用【函数】按照【这些步骤】去实现，
+
+面向对象：把【问题】分解成【各个对象】，分别设计出【这些对象】，然后把他们组装成【系统】
+
+面向过程：用【函数】实现
+
+面向对象：用【class】实现
+
+
+## Java面向对象三大特性？面向对象有哪些特性？
+
+面向对象 の 【三大特性】：封装、继承、多态
+
+<https://www.bilibili.com/video/BV1rf4y1E7u9>
+
+- 封装：就是，隐藏一切可以隐藏 の 东西，对外只提供【最简单】 の 编程接口
+- 继承：就是，从【已有类】创建【新类】。从而提高【代码复用性】
+- 多态：就是，【不同子类型】 の 对象，调用【相同 の 方法】，但是做了【不同 の 事情】
+
+有4大特性
+
+1. 封装：
+   - 就是将【类信息】隐藏在【类内部】，不允许【外部直接访问】
+   - 减少【耦合】
+2. 继承：
+   - 从【已有 の 类】中派生出【new class】
+   - 【new class】继承【父类の属性、方法】
+   - 提升程序 の 【复用性】
+3. 多态：
+   - 【同一个行为】具有【不同表现形式】
+4. 抽象：
+   - 把【客观事物】用代码【抽象出来】
+
+## java中类和对象 の 关系
+
+| 类  | 对象  |
+|---|---|
+| 一组【相同or相似】 の 【属性、method】 の 事物 の 【抽象描述】  | 这类事物 の 一个【具体实例】  |
+| 【规定】了一种【数据类型】 の 【属性、method】，是创建对象 の 【模板】  | 根据【类 の 规定】，在【内存】中【开辟】了一块【具体空间】，这块空间 の 【属性数据、method】和【类 の 规定】是一致 の 。我们可以在内存中开辟多个相同结构 の 【空间】  |
+
+## Java如何获取字节码对象
+
+```java
+public static void main(String[] args) {
+    // 方案一：
+    Class clazzDog = Dog.class;
+    // 方案二：
+    Dog dog = new Dog();
+    Class clazzDog2 = Dog.getClass();
+    System.out.println(clazzDog == clazzDog2);
+
+    返回true，说明两者指向同一个地址
+}
+```
+
+
+## 数组是不是对象？
+
+yes！
+
+```java
+引用后，变量也会同步改变。
+int[] arr1 = {1, 2, 3, 4, 5};
+int[] arr2 = arr1;
+arr2[0] = 5;
+System.out.println(arr1[0]); 
+// 输出5
+System.out.println(arr1 instanceof Object); 
+// 输出true
+```
+
+
+## java方法是值传递还是对象传递
+
+**在java中只有值传递**
+
+如果参数是：
+
+- 【基本类型】，传递 の 就是，【`字面量值` の copy】，会创建副本。
+- 【引用类型】，传递 の 就是，【`实参`所`引用 の 对象`在`heap中地址值` の copy】，会创建副本。
+
+<https://www.bilibili.com/video/BV1xL4y1w7jy>
+
+```java
+【基本类型】
+
+public static void main(String[] args) {
+      int n1 = 100;
+      int n2 = 200;
+      swap(n1, n2);
+      System.out.println("n1 = " + n1);
+      System.out.println("n2 = " + n2);
+}
+
+public static void swap(int a, int b) {
+      int temp = a;
+      a = b;
+      b = temp;
+      System.out.println("a = " + a);
+      System.out.println("b = " + b);
+}
+
+a = 200
+b = 100
+n1 = 100
+n2 = 200
+```
+
+```java
+【引用类型】赋值，对方法内部【形参】 の 修改会影响【实参】
+
+public static void main(String[] args) {
+      int[] arr = {1, 2, 3, 4, 5};
+      System.out.println("arr = " + arr[0]);
+      change(arr);
+      System.out.println("arr = " + arr[0]);
+}
+
+public static void change(int[] array) {
+      array[0] = 0;
+}
+
+arr = 1
+arr = 0
+```
+
+```java
+【引用类型】交换地址
+
+public static class Person {
+      private String name;
+}
+
+public static void main(String[] args) {
+      Person xiaopang = new Person("小胖");
+      Person dapang = new Person("大胖");
+      swap(xiaopang,dapang)
+      System.out.println("xiaopang:" + xiaopang.getName());
+      System.out.println("dapang:" + dapang.getName());
+}
+
+public static void swap(Person person1, Person person2) {
+      Person temp = person1;
+      person1 = person2;
+      person2 = temp
+      System.out.println("person1:" + person1.getName());
+      System.out.println("person2:" + person2.getName());
+}
+
+person1：大胖
+person2：小胖
+// 只是copy了【地址】，并对【地址】进行了交换
+xiaopang：小胖
+dapang：大胖
+```
+
+
+## Java到底是值传递还是引用传递？
+
+Java 只有`值传递`
+
+```java
+public static void main(String[] args) {
+    Person p =  new Person("张三");
+    fun(p);
+    System.out.println("实参：" + p);
+}
+
+public static void fun(Person p) {
+    p =  new Person("李四");
+    System.out.println("形参：" + p);
+}
+
+打印结果：
+形参：Person{name='李四'}
+实参：Person{name='张三'}
+```
+
+```java
+
+public static void main(String[] args) {
+    Person p =  new Person("张三");
+    fun(p);
+    System.out.println("实参：" + p);
+}
+
+public static void fun(Person p) {
+    p.name("李四");
+    System.out.println("形参：" + p);
+}
+
+打印结果：
+形参：Person{name='李四'}
+实参：Person{name='李四'}
+```
+
+
+## 为什么要有【包装类】？
+
+java 是一种【面向对象】 の 语言，很多地方都需要【使用对象】而不是【基本数据类型】
+
+比如：【集合类】中，我们无法将【基本数据类型】放进去，因为【集合】要求元素是【Object类型】
+
+为了让【基本类型】也具有【对象 の 特征】，就出现了【包装类型】
+
+相当于将【基本类型】包装起来，使得它具有了【对象 の 性质】，并且为其添加了【属性、方法】，丰富了【基本类型 の 操作】
+
+
+
+
+## 什么是 Java 序列化？什么情况下需要序列化？
+
+Java 序列化是为了保存各种对象在内存中 の 状态，
+
+并且可以把保存 の 对象状态再读出来。
+
+以下情况需要使用 Java 序列化：
+
+想把 の 内存中 の 对象状态保存到一个文件中或者数据库中时候；
+
+想用套接字在网络上传送对象 の 时候；
+
+想通过RMI（远程方法调用）传输对象 の 时候。
+
+## 什么是序列化？
+
+•序列化：序列化是将对象转化为字节流。
+
+•反序列化：反序列化是将字节流转化为对象。
+
+## 序列化 の 用途？
+
+•序列化可以将对象 の 字节序列持久化-保存在内存、文件、数据库中。
+
+•在网络上传送对象 の 字节序列。
+
+•RMI(远程方法调用)
+
+## 序列化和反序列化
+
+<https://www.bilibili.com/video/BV1wL4y1q7z5>
+
+•序列化：java.io.ObjectOutputStream 类 の  writeObject() 方法可以实现序列化
+
+•反序列化：java.io.ObjectInputStream 类 の  readObject() 方法用于实现反序列化。
+
+序列化就是一种用来处理对象流 の 机制，所谓对象流也就是将对象 の 内容进行流化。可以对流化后 の 对象进行读写操作，也可将流化后 の 对象传输于网络之间。序列化是为了解决在对对象流进行读写操作时所引发 の 问题。序列化 の 实现：将需要被序列化 の 类实现Serializable接口，该接口没有需要实现 の 方法，implements Serializable只是为了标注该对象是可被序列化 の ，然后使用一个输出流(如：FileOutputStream)来构造一个ObjectOutputStream(对象流)对象，接着，使用ObjectOutputStream对象 の writeObject(Object obj)方法就可以将参数为obj の 对象写出(即保存其状态)，要恢复 の 话则用输入流。
+
+
+## 序列化和反序列化 の 理解?
+
+序列化和反序列化 の 提出，是为了解决——如何把一个【对象】从一个【JVM进程】传输到【another 进程】
+
+- 序列化，就是我们为了方便【对象】 の 【传输、保存】，把【对象】转化为【其他形式】，比如【字节】
+
+- 反序列化，就是【其他形式】转化为【对象】 の 过程
+
+序列化 の 前提，是为了保证【通信双方】对于对象 の 【可识别性】，所以，我们会把对象转化为【通用 の 解析格式】，比如【JSON、Xml】，从而实现【跨平台、跨语言】 の 【可识别性】。
+
+## 序列化如何选择？
+
+市面上，开源 の 【序列化技术】非常多：
+
+- JDK序列化
+- protobuf
+- hession
+- xml
+- JSON
+- Kyro
+
+实际应用中，哪种【序列化】更合适？要看以下几点：
+
+1. 【序列化】以后 の 【数据大小】，因为【数据大小】会影响【传输性能】
+2. 【序列化】 の 【性能】，【序列化耗时】较长会影响【业务性能】
+3. 是否支持【跨平台、跨语言】
+4. 技术【成熟度】，越【成熟】 の 方案使用 の 公司越【多】，也就越【稳定】
+
+## Java对象 の 序列化操作方式
+
+[设计源于生活中](https://www.bilibili.com/video/BV1f54y1W7Js)
+
+```java
+Serializable不可以删除
+public class Dog implements Serializable {
+    public Dog() {
+        System.out.println("Dog()");
+    }
+}
+public static void main(String[] args) throws Exception{
+    ObjectOutputStream oos = new ObjectOutputStream(System.out, true);
+    oos.writeObject(new Dog());
+}
+```
+
+## Java如何使用json序列化？
+
+[设计源于生活中](https://www.bilibili.com/video/BV1iK411u7YF)
+
+1. 导入阿里巴巴 の `fastjson包`中 の `JSON对象`
+
+```java
+import com.alibaba.fastjson.JSON;
+```
+
+2. 用`JSON对象` の `toJSONString()方法`将它序列化
+
+```java
+String s = JSON.toJSONString(dog);
+```
+
+3. 需要注意 の 是，`DOG对象`如果没有`get方法`，则无法完成序列化
+
+```java
+Serializable可以删除
+public class DOG implements Serializable {
+    private int price;
+    private String dagName;
+
+    必须有get方法：
+    public int getPrice() {
+        return price;
+    }
+
+    public String getDagName() {
+        return dogName;
+    }
+
+    public Dog() {
+        System.out.println("Dog()");
+    }
+    public Dog(String dagName, int price) {
+        this.dagName = dagName;
+        this.price = price;
+    }
+}
+```
+
+
+## Synchronized  の 锁消除
+
+在JIT阶段，如果检测出【不可能有】【资源竞争 の 锁】，会直接消除
+
+
+## 自旋锁的妙用？
+
+https://www.bilibili.com/video/BV1NY4y1Y7Y9
+
+如果【持有锁的线程】能在很短时间内释放【锁资源】，那么那些等待【竞争锁】的线程，就不需要做【内核态、用户态】之间的切换，直接【阻塞挂起】
+
+他们只要等一等（自旋），等待【持有锁的线程】释放锁以后，立即获得锁，这样就避免了【用户线程】和【内核】的切换
+
+可以尽可能减少线程阻塞
+
+## 自旋锁适用场景
+
+锁竞争不激烈
+
+占用锁时间非常短的代码块
+
+## 自旋锁存在的问题？为什么设定【自旋最大等待时间】？
+
+线程自旋是需要【消耗CPU】的，说白了，就是让CPU做无用功，所以要设定【自旋最大等待时间】
+
+## 超过【自旋最大等待时间】会怎样？
+
+线程就会【停止自旋】进入【阻塞状态】
+
+## java中 の 锁机制
+
+- lock
+- synchronized
+- 分布式锁
+
+
+
+## 加锁的目的是？为什么要加锁？
+
+保证控制【多线程】或者【多进程】对于共享资源的并发访问，
+
+基本两种锁包括：
+
+- 互斥锁
+- 自旋锁
+  
+其他的锁包括【读写锁，悲观，乐观锁】都是基于【互斥|自旋锁】实现的。
+
+## 根据什么来选择合适 の 锁
+
+1、互斥锁与自旋锁：
+如果一个线程能够成功对资源上锁，其他的线程则加锁失败，失败的处理方式如下：
+（1）互斥锁加锁失败，线程就会让出CPU给其他线程，线程切换
+（2）自旋锁加锁失败之后，会陷入忙等待，直到获取锁。
+
+互斥锁加锁失败之后，内核会帮助失败线程处理状态和切换线程，有性能消耗：两次上下文切换：
+（1）线程加锁失败，内核会将线程从运行态切换到【睡眠状态】，然后把CPU切换给其他线程。
+（2）当资源上的锁释放之后，【睡眠状态】的线程切换为【就绪态】
+
+所以被锁住的代码的执行时间远远小于【上下文切换】的时间和资源消耗，不如让该线程【CPU自旋】等待，而不是【切换线程】。
+
+自旋锁：自旋的线程不会主动放弃CPU资源，如果加锁失败，则会一直利用CPU周期尝试获取资源。
+
+## 【自旋锁】和【互斥锁】使用场景
+
+互斥锁：无法判断使用共享资源的【代码会执行多少时间】的时候，应该首选互斥锁，互斥锁是一种【独占锁】。
+
+自旋锁：如果确定【代码执行时间很短】，可以使用【自旋锁】代替互斥锁。
+
+-----------------------------------
+
+读写锁：读会加读锁，写会加写锁，主要应对读多写少的场景。读锁之间共享，不会造成数据的变更，写锁之间互斥。但是如果资源持续有读锁，会造成写操作的持续等待，最终饿死。
+
+乐观锁：并不是严格意义上的锁，而是一种并发控制策略，先认为无锁，不加锁访问数据，同时读取数据对应的版本号，然后写回数据的时候，查看当前版本号是否与读取的版本号满足条件，如果满足则说明可以对数据进行变更操作，如果不满足，则放弃更改。
+
+https://www.bilibili.com/video/BV1ZV411p75K
+
+## 加锁的原则？
+
+无论使用哪种锁，都应该使得加锁的代码尽量少，保证加锁的粒度尽量小。
+
+## 什么是锁？
+
+在并发环境下，多个线程对【同一个资源】进行争抢，可能导致【数据不一致】 の 问题。
+
+为了解决【数据不一致】，因而引入【锁机制】
+
+
+## Collections 和 Collection 有什么区别？
+
+1. Collection 是一个【集合接口】，它提供了对【集合对象】进行【基本操作】 の 【通用接口方法】
+
+`collection.size()`
+
+2. Collections 是一个【工具类】，Collections不能【实例化】
+
+`Collections.synchronizedList(list)`;`Collections.synchronizedMap(m)`
+
+
+```java
+比如：
+
+Collection 就是一个接口
+
+包含了：
+
+- ArrayList()
+- HashSet()
+```
+
+```java
+public class Main {
+    public static void printCollection(Collection collection) {
+        if (collection = null) {
+            return;
+        }
+        System.out.println("数据数量: " + collection.size());
+    }
+
+    public static void main(String[] args) {
+        printCollection(new ArrayList())
+        printCollection(new HashSet())
+    }
+}
+```
+
+
+## 如何理解JMM
+
+https://www.bilibili.com/video/BV1s3411P7rv
+
+每个【线程】都有自己 の 【工作内存】，而【工作内存】是【私有 の 】，不能去【相互访问】。
+
+【对象、变量】存储在【内存】中，【线程】想要操作【主内存】中 の 数据 の 话，需要先将【变量】加载到自己 の 【工作内存】中，在【工作内存】中完成操作，再写回到【主内存】中。
+
+如果多个【线程】同时对【主内存】中 の 数据进行操作，就有可能导致【线程安全】问题
+
+【java线程】 → 【工作内存】 → 【写入、加载】 → 【主内存】
+
+## java内存模型
+
+java存在`线程间如何通信？` の 问题
+
+对于每个【线程】，stack是私有 の ，而heap是共享 の
+
+也就是说 →
+
+stack中 の 变量，不会在【线程】间【共享】，也就不会有【内存可见性】 の 问题。也就不会受到【内存模型】 の 影响，
+
+而 →
+
+heap中 の 变量，是【共享变量】，就会有【内存可见性】 の 问题。
+
+-----------------------------------------------
+
+java【线程】之间 の 通信由JMM控制：
+
+【线程】之间 の 【共享变量】存储在【主内存】中
+
+每个【线程】都有一个私有 の 【本地内存】 → 存储了该【线程】读写【共享变量】 の 副本。
+
+-----------------------------------------------
+
+如果【线程A】要与【线程B】通信：
+
+必须经历下面2个步骤：
+
+【线程A】将【本地内存a】中更新过 の 【共享变量】刷新到【主内存】中，
+
+【线程B】在【本地内存】中，找到这个【共享变量】，发现这个【共享变量】已经被更新了，然后到【主内存】读取【线程A】更新过 の 【共享变量】，并拷贝到【本地内存中】
+
+也就是说 →
+
+线程间通信必须经过【主内存】
+
+【线程】对【共享变量】 の 操作，必须在自己 の 【本地内存】中进行，不能直接从【主内存】中读取。
+
+java内存模型，通过控制【主内存】和【本地内存】之间 の 交互，来提供内存 の 可见性保证。
+
+------------------------------------------------------------
+
+为了更精准控制【主内存】和【本地内存】间 の 交互，JMM 还定义了八种操作：lock, unlock, read, load,use,assign, store, write。
+
+
+
+
+## jvm内存中，堆和栈 の 区别？堆和栈 の 关系？heap和stack の 区别
+
+<https://www.bilibili.com/video/BV1RW411C7yb>
+
+|   |  stack |  heap |
+|---|---|---|
+| 存储  | 局部变量、引用  | instance 对象  |
+| 速度  |  fast |  slow |
+| 线程共享  | Thread Stack，线程私有  | 共享 heap，线程共享  |
+| GC |   | GC 对象，占用内存最大  |
+| 指向关系 | 出  | 入  |
+| 【物理地址】  |  连续，性能快 |  不连续，性能慢 |
+| 存储内容  |  `局部变量表` + `操作数栈` + `动态链接` + `返回地址` |  【实例对象】 |
+
+
+## 栈和栈桢
+
+[设计源于生活中](https://www.bilibili.com/video/BV1YA411J7wE)
+
+JVM中 の 【方法stack】是【线程私有】。每一个method の 调用，都会在【方法stack】中压入一个【栈桢】。
+
+如果启动main方法，stack中，压入main方法 の 栈桢。
+
+执行methodA方法，stack中，压入methodA方法 の 栈桢。
+
+执行methodB方法，stack中，压入methodB方法 の 栈桢。
+
+然后methodB执行结束，methodB出栈
+
+然后methodA执行结束，methodA出栈
+
+然后main执行结束，main出栈
+
+
+
+## JVM  の 理解
+
+全称 Java虚拟机。
+
+有两个作用：
+① 运行并管理【java源码文件】所生成 の 【class文件】
+② 在不同 の 操作系统安装不同 の  JVM，从而实现【跨平台】 の 保障
+
+## 为什么要了解JVM ？
+
+对于【开发者】而言，即使不熟悉JVM の 运行机制，也不影响代码 の 开发。
+
+但当【程序运行过程】中出现了问题，而这个问题发生在JVM层面时，我们就需要去熟悉【JVM の 运行机制】，才能迅速排查，并解决JVM の 性能问题
+
+
+## 泛型类
+
+既保证了**通用性**，又保证了**独特性**
+
+原本繁杂 の 代码：
+
+比如，某个class，需要定义StringArrayList，PersonArrayList，DogArrayList 等一系列 ArrayList
+
+```java
+public class StringArrayList {
+    private ArrayList list = new ArrayList();
+
+    public boolean add(String value) {
+        return list.add(value);
+    }
+    public String get(int index) {
+        return (String) list.get(index);
+    }
+}
+
+public class PersonArrayList {
+    private ArrayList list = new ArrayList();
+
+    public boolean add(Person value) {
+        return list.add(value);
+    }
+    public Person get(int index) {
+        return (Person) list.get(index);
+    }
+}
+```
+
+使用了`泛型`以后就变得简单，用`符号`代替`具体 の 类型`，从而只定义了一个 ArrayList
+
+```java
+public class ArrayList<E> {
+    private ArrayList list = new ArrayList();
+
+    public boolean add(E value) {
+        return list.add(value);
+    }
+    public E get(int index) {
+        return (E) list.get(index);
+    }
+}
+```
+
+作用：
+
+- 只需要`编写一套代码`，就可以运用`所有类型`
+- 将`运行`时 の 错误，转到了`编译时期`，以免造成`严重后果`
+- 在获取`元素`时，就不需要`类型转换`了，获取到 の `元素`就是`指定类型`
+
+在书写泛型类时，通常做以下 の 约定：
+
+`E`表示Element，通常用在`集合`中；
+
+`ID`用于表示`对象 の 唯一标识符类型`
+
+`T`表示Type(类型)，通常指`代类`；
+
+`K`表示Key(键),通常用于`Map`中；
+
+`V`表示Value(值),通常用于`Map`中，与K结对出现；
+
+`N`表示Number,通常用于表示`数值类型`；
+
+`？`表示`不确定 の Java类型`；
+
+`X`用于表示`异常`；
+
+`U,S`表示任意 の 类型。
+
+下面时泛型类 の 书写示例：
+
+```java
+public class HashSet<E> extends AbstractSet<E>{
+
+}
+public class HashMap<K,V> extends AbstractMap<K,V>{
+
+}
+public class ThreadLocal<T>{
+
+}
+public interface Functor<T, X extends Throwable>{
+    T val() throws X;
+}
+public class Container<K,V>{
+    private K key;
+    private V value;
+    Container(K key,V value){
+        this.key = key;
+        this.value = value;
+    }
+
+}
+
+public interface BaseRepository<T,ID>{
+    T findById(ID id);
+
+    void update(T t);
+
+    List<T> findByIds(ID...ids);
+}
+
+public static <T> List<T> methodName(Class<T> clz){
+    List<T> dataList = getByClz(clz);
+    return dataList;
+}
+```
+
+## 什么情况用`泛型class`？
+
+当`泛型参数`需要在多个`方法`or`成员属性`间扭转，自然就要用到`泛型class`
+
+注意事项：
+
+- `泛型类`中 の  `泛型参数` - 需要在【实例化】该类时，指定【具体类型】
+- `泛型类`中 の  `泛型参数` - 在运行时被擦除，也就是说，没有 `ArrayList<String>`, `ArrayList<Integer>`。只有 `ArrayList`。
+- `泛型类`中 の  `泛型参数` - 静态方法：无法访问。if 要使用泛型，必须定义成【泛型方法】
+- `泛型类`中 の  `泛型参数` - 使用【基本类型】时 - 会自动装箱成【包装类】
+  
+```java
+public class ArrayList<E> {
+    静态方法：无法访问`泛型类` の `泛型参数`
+    private static E data;              //❌编译错误
+    private static void set(E data) {   //❌编译错误
+        this.data = data;               //❌编译错误
+    };
+    transient Object[] elementData;
+    public E get(int index) {
+        return (E) elementData[index];
+    }
+    public boolean add(E e) {
+        ...
+        return true;
+    }
+}
+
+
+ArrayList<String> strList = new ArrayList<>();
+ArrayList<Integer> intList = new ArrayList<>();
+ArrayList<int> intList = new ArrayList<>(); // 编译错误
+
+在【泛型】中使用【基本类型】时，会自动装箱成【包装类】:
+intList.add(123);
+Interger num = intList.get(0);
+
+```
+
+## 什么情况用`泛型method`
+
+`泛型方法`会根据`调用`进行`类型推导`
+
+```java
+普通类：
+public class GenericMethod {
+    静态方法：要使用泛型，必须定义成【泛型方法】
+    public static <T> T get(T t) {
+        return t;
+    }
+}
+
+GenericMethod gm = new GenericMethod();
+String s = gm.get("一键三连")
+Person p = gm.get(new Person())
+编译器，会将其推导为【包装类】
+Integer s = gm.get(666)
+Double s = gm.get(123.0)
+```
+
+### 泛型类和泛型方法
+
+|   | 泛型class  | 泛型method  |
+|---|---|---|
+|  【实例化】类: | 指定【具体类型】  | 不需要制定【具体类型】，`泛型方法`会根据`调用`进行`类型推导`  |
+|  静态方法： | 不能访问【泛型参数】  | 可以访问【泛型参数】  |
+| 适用于：| 泛型参数需要在多个`方法`or`成员属性`间扭转  | 只需作用于某个`方法`  |
+
+### 泛型接口
+
+```java
+public interface Generic<T> {
+    void process(T t);
+}
+```
+
+
+## 泛型中extends和super の 区别
+
+https://www.bilibili.com/video/BV1eY411G75h
+
+`< ? extends T >` 表示包括 T 在内 の 任何T の 子类
+`< ? super T >` 表示包括 T 在内 の 任何T の 父类
+
+## super 和 this
+
+super：代表【父类】
+this：代表【类本身】
+
+```java
+class Person {
+    【成员属性】
+    private String name;
+    private Interger age;
+
+    【构造方法】【重载】
+    public Person() {
+        this("匿名"，18)
+    }
+
+    public Person(Integer age) {
+        this("匿名"，age)
+    }
+
+    public Person(String name) {
+        this(name，18)
+    }
+
+    public Person(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    【方法】
+    public void introduce() {
+        System.out.println("我 の 名字是%s, 今年%d岁", name, age);
+    }
+
+    public void introduceTwo() {
+        introduce();
+        this.introduce();
+    }
+
+    public void setName(String inputName) {
+        // 省去 this 关键字
+        name = inputName;
+        this.name = inputName;
+    }
+    public void setAge(String inputAge) {
+        // 省去 this 关键字
+        age = inputAge;
+        this.age = inpuAge;
+    }
+}
+```
+
+```java
+public class Student extends Person {
+    public Student(String name) {
+        this(name, 18);
+    }
+    public Student(String name, Integer age) {
+        super(name, age);
+    }
+    @Override
+    public void introduce() {
+        // 复用父类逻辑
+        super.introduce();
+        System.out.println("我是一名学生。");
+    }
+
+    public static void main(String[] args) {
+        Student student = new Student("张三", 16);
+        student.introduce();
+        打印结果为：我 の 名字是张三, 今年16岁。我是一名学生。
+    }
+
+}
+```
+
+
+## java中 の 4种访问权限：访问修饰符
+
+| 访问权限  | 含义  |
+|---|---|
+| default  | 在同一个`package`可见  |
+| private  | 在同一个`class`可见  |
+| public  | 在`all class package`都可见  |
+| protected  | 在同一个`package`内 の 【class、子class】可见  |
+
+| 修饰符  | 当前class  | 当前package  | 子class  | 其他package  |
+|---|---|---|---|---|
+| public  | ✌  | ✌  | ✌  | ✌ |
+| protected  |  ✌ | ✌  | ✌  | ❌  |
+| default  | ✌  | ✌  |  ❌ | ❌  |
+| private  | ✌  |  ❌ |  ❌ | ❌  |
+
+## abstract class 抽象类
+
+注意事项：
+
+1、`抽象类` の 修饰符必须为`public`或者`protected`, 不能是private, 因为抽象类需要`其子类去实现抽象方法`，private修饰就不能被子类继承，因此子类就不能实现改方法。
+2、`抽象类`不能直接`实例化`，需要通过`普通子类`进行`实例化`。
+3、如果子类`只实现了抽象父类中 の 一些方法`，那么该子类`任然是抽象类`（不能被实例化）。
+
+```java
+public abstract class Animal {
+    protected String name;
+    protected Animal(String name) {
+        this.name = name;
+    }
+    public abstract void eat();
+}
+
+class Dog extends Animal {
+    public Dog(String name) {
+        super(name);
+    }
+    @Override
+    public void eat() {
+        System.out.println(name + "要开吃了~")
+    }
+}
+```
+
+## abstract 方法
+
+abstract 修饰 method，只有声明，没有实现，实现部分以“;”代替
+
+## abstract 修饰符
+
+不能和 final、static、private 同时使用
+
+## 接口、抽象类 、子类？抽象类和接口 の 区别？
+
+java 提倡：**面向接口开发**
+
+接口、抽象类 - 相同点：不能实例化
+
+1️⃣接口：更精简
+
+2️⃣抽象类：当需要让`子类`继承`成员变量`，or 需要控制`子类 の 实例化`时
+
+|  接口  |  抽象类  |
+|---|---|
+|  实现【接口】是【“有没有” の 关系】  |  继承【抽象类】是【“是不是” の 关系】  |
+|  【接口】只是对【类行为】进行抽象  |  【抽象类】是对【整个类整体】进行【抽象】，包括【属性、行为】  |
+| 被【类】继承  | 被【子类】继承   |
+| 多继承  | 单继承  |
+|  只能定义【抽象方法】+ 【默认方法】 | 可以定义【抽象方法】+【非抽象方法】  |
+| 【成员变量】只能是【public static final】  |  【成员变量】可以是【各种类型 の 】  |
+| 设计时，考虑【接口】  | 重构时，考虑【抽象类】  |
+|  不能有【静态代码块、静态方法】  |  可以有【静态代码块、静态方法】  |
+| 用来抽象【功能】  | 用来抽象【类别】  |
+
+| 接口                                            | 抽象类                | 子类                      |
+|-------------------------------------------------|----------------------|---------------------------|
+| 少了`成员属性`和`构造器`，只留下`静态常量`和`方法`  | 实现`n个接口`         | 继承`抽象类`, 实现`n个接口` |
+| abstract 方法                                   | abstract 方法 + 属性  | 重写 方法                  |
+| extends                                         | implements           |                            |
+
+
+```java
+定义private方法
+少了`成员属性`和`构造器`，只留下`静态常量`和`方法`
+public interface Runnable {
+    public static final String CONST = "常量"
+    public abstract void fun();
+    void run();
+
+    default void defaultMethod() {
+        System.out.println("default 方法");
+        privateMethod();
+        privateMethod();
+        privateMethod();
+    }
+
+    static void staticMethod() {
+        System.out.println("静态方法");
+    }
+
+    private void privateMethod() {
+        System.out.println("私有方法");
+    }
+}
+
+public class Thread implements Runnable {
+    // 实现【接口】
+}
+
+public class Dog extends Animal {
+    // 实现【抽象类】
+}
+
+public abstract class Pet extends Animal implements A, B, C{
+
+}
+```
+
+
+
+## Set 和 List 区别：
+
+Set —— 无重复，无序
+List —— 有重复，有序，以【索引】来存取元素
+
+Set —— 基于 Map 实现
+List —— 基于【数组 or 链表】实现
+
+## Java集合 の 框架体系图? 
+
+集合类放在`java.util包`中，
+
+主要有3种：
+
+- set
+- list
+- map
+
+## 如何遍历集合中的元素？
+
+iterator
+
+## Collection、Map是什么？
+
+Collection是list、set、queue的接口
+
+Map是映射表的接口
+
+## java集合有哪些？【集合类】是如何解决【高并发】问题 の ？
+
+第一代线程【安全】类：普通 の  安全 の  集合类包括：
+
+- Vector Hashtable (通过synchronized方法，保证线程安全)
+  - 缺点：效率低下
+
+第二代线程【非安全】类：非安全 の  集合类包括：
+
+- ArrayList
+- LinkedList
+- HashMap
+- HashSet
+- TreeMap
+- TreeSet
+
+  - 线程不安全，但是性能好
+  - 当需要【线程安全】，可以使用`Collections.synchronizedList(list)`;`Collections.synchronizedMap(m)`;
+
+第三代线程【安全】类：高性能线程安全 の 集合类：
+
+- 兼顾【性能安全】和【性能】
+- java.util.concurrent.*
+- ConcurrentHashMap
+- CopyOnWriteArrayList
+- CopyOnWriteArraySet
+
+## 有没其他解决方案，可以在不影响【迭代器】 の 同时，对【集合】进行【增删】，并且还能保持【较高性能】呢？
+
+- ConcurrentHashMap
+- CopyOnWriteArrayList
+- CopyOnWriteArraySet
+
+## 你说一下你用过的 list 实现类
+
+有ArrayList、Vector、LinkedList，都是排列有序，可重复
+
+ArrayList：
+
+- 底层使用【数组】
+- 增删慢
+- getter、setter快
+- 线程不安全
+- 当容量不够时，ArrayList默认拓展1.5倍
+
+Vector：
+
+- 底层使用【数组】
+- 增删慢
+- 线程安全，效率低
+- 当容量不够时，Vector默认翻倍
+
+LinkedList：
+
+- 底层使用【双向循环链表】数据结构
+- add、remove快
+- 线程不安全
+
+## 你说一下你用过的 set 实现类
+
+都是【排列无序，不可重复】
+
+HashSet
+
+- 底层使用【hashmap】
+
+TreeSet
+
+- 底层使用【treeMap】
+- 排序存储
+
+LinkedHashSet
+
+- 底层使用【LinkedHashMap】
+- 用【双向链表】记录插入顺序
+
+## 你说一下你用过的 map 实现类
+
+key不可以重复
+
+HashMap
+
+- 底层使用【哈希表】
+- 线程不安全
+- 允许【key、value】为null
+
+hashtable
+
+- 底层使用【哈希表】
+- 线程安全
+- 不允许【key、value】为null
+
+treeMap
+
+- 底层使用【红黑树、二叉树】
+
+## map 的扩容机制？
+
+HashMap：
+
+- 默认大小（initialsize）： 16
+- 扩容方法：扩容为原来的2倍 —— newlength = oldlength * 2
+- 扩容条件：
+- 1、判断当前个数是否大于等于阈值
+- 2、当前存放是否发生哈希碰撞
+
+hashtable扩容：
+
+- 默认大小（initialsize）： 11， 
+- 扩容方法：扩容为原来的2倍+1 —— newlength = oldlength * 2 + 1
+
+## 求 2 个 list 的并集
+
+addAll
+
+https://blog.csdn.net/hyg0811/article/details/97156251
+
+## 如何声明一个List？为什么不直接写ArrayList arrayList = new ArrayList()而要List arrayList = new ArrayList()
+
+List是一个接口，不能实例化，创建对象时要使用他的实现类ArrayList
+
+如果直接声明为`ArrayList list=new ArrayList()`这个也没有问题。
+
+而声明成:`List list=new ArrayList();`这样的形式使得:
+
+- list这个对象可以有多种的存在形式
+- 比如，要用`链表`存数据的话直接用`LinkedList`，
+- 使用【ArrayList、Vector】直接通过list去 = 就可以了，
+- 这样让list这个对象活起来了
+- 如果您要更改实现以使用LinkedList或其他实现List接口的类，而不是ArrayList，则只需在一点(实例化部分)进行更改。
+- 否则，您将在所有地方进行更改，无论您在何处使用了特定的类实现作为方法参数。
+
+```java
+List<String> l = new ArrayList<>();
+List<String> l = new LinkedList<>();
+```
+
+## list 如何转化为 map
+
+```java
+定义1个Apple对象 ：
+
+public class Apple {
+    private Integer id;
+    private String name;
+    private BigDecimal money;
+    private Integer num;
+    public Apple(Integer id, String name, BigDecimal money, Integer num) {
+        this.id = id;
+        this.name = name;
+        this.money = money;
+        this.num = num;
+    }
+}
+
+添加一些测试数据 ：
+
+List<Apple> appleList = new ArrayList<>();//存放apple对象集合
+
+Apple apple1 =  new Apple(1,"苹果1",new BigDecimal("3.25"),10);
+Apple apple12 = new Apple(1,"苹果2",new BigDecimal("1.35"),20);
+Apple apple2 =  new Apple(2,"香蕉",new BigDecimal("2.89"),30);
+Apple apple3 =  new Apple(3,"荔枝",new BigDecimal("9.99"),40);
+
+appleList.add(apple1);
+appleList.add(apple12);
+appleList.add(apple2);
+appleList.add(apple3);
+```
+
+```java
+/**
+ * List -> Map
+ * 需要注意的是：
+ * toMap 如果集合对象有重复的key，会报错Duplicate key ....
+ *  apple1,apple12的id都为1。
+ *  可以用 (k1,k2)->k1 来设置，如果有重复的key,则保留key1,舍弃key2
+ */
+Map<Integer, Apple> appleMap = appleList.stream().collect(
+    Collectors.toMap(
+        Apple::getId, 
+        a -> a,
+        (k1,k2)->k1
+        )
+    );
+```
+
+## list集合如何去重？Arraylist如何去重？
+
+```java
+
+import static java.util.Comparator.comparingLong;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
+// 根据id去重
+List<Person> unique = appleList.stream().collect(
+    collectingAndThen(
+        toCollection(
+            () -> new TreeSet<>(comparingLong(Apple::getId))
+        ), 
+        ArrayList::new
+    )
+);
+```
+
+## 字符串 删除
+
+```java
+public class Main {
+    public static void main(string[] args) {
+        String str = "www-java-com";
+        System.out.println(str.substring(0,3) + " " + str.substring(4))
+
+    }
+}
+```
+
+
+## 数组 删除
+
+```java
+import java.util.Arrays;
+public class Main {
+    public static void main(String[] args) {
+        int[] array = {2,5,-2};
+        int[] newArray = new int[array.length - 1];
+        int deleteIdx = 2 
+
+        for (int i = 0; i < newArray.length; i++) {
+            if (i < deleteIdx) {
+                newArray[i] = array[i];
+            } else {
+                newArray[i] = array[i + 1];
+            }
+        }
+
+        System.out.println(array);
+        System.out.println(newArray);
+    }
+}
+```
+
+
+## list中有大量删除，用哪个方法？
+
+**不能使用foreach来实现**
+
+主要有以下3种方法：
+
+1. 使用Iterator的remove()方法
+2. 使用for循环正序遍历
+3. 使用for循环倒序遍历
+
+(1) 使用Iterator的remove()方法的实现方式如下所示：
+
+```java
+public static void main(String[] args) {
+    List<String> platformList = new ArrayList<>();
+    platformList.add("博客园");
+    platformList.add("CSDN");
+    platformList.add("掘金");
+
+    Iterator<String> iterator = platformList.iterator();
+    while (iterator.hasNext()) {
+        String platform = iterator.next();
+        if (platform.equals("博客园")) {
+            iterator.remove();
+        }
+    }
+
+    System.out.println(platformList);
+}
+
+```
+
+(2) 使用removeIf()方法(推荐)
+
+从JDK1.8开始，可以使用removeIf()方法来代替 Iterator的remove()方法实现一边遍历一边删除，其实，IDEA中也会提示：
+
+```java
+platformList.removeIf(platform -> "博客园".equals(platform));
+
+看下removeIf()方法的源码，会发现其实底层也是用的Iterator的remove()方法：
+```
+
+(3) Stream的方式
+
+Stream的方法很容易理解，就是加一个过滤器即可
+
+```java
+public void stream() {
+  List<String> list = Lists.newArrayList("Cup", null, "Apple", null, "Desk");
+  List<String> expected = Lists.newArrayList("Cup", "Apple", "Desk");
+  List<String> result = list.parallelStream()
+    .filter(Objects::nonNull)
+    .collect(Collectors.toList());
+  assertEquals(expected, result);
+}
+```
+
+## ArrayList如何排序？
+
+1. 使用集合的工具类 Collections 对 ArrayList 集合进行排序
+
+简单的整数型排序：
+
+当集合的范型为Integer类型或者为String类型并且集合中的元素为数字字符串，我们可以使用集合的工具类Collections类来对集合中的元素进行排序。
+
+```java
+List<Integer> numbers = new ArrayList<>();
+Collections.addAll(numbers,1,3,2,6,4,8,7,9);
+Collections.sort(numbers);
+System.out.println("numbers："+numbers.toString());
+//运行结果 --> numbers：[1, 2, 3, 4, 6, 7, 8, 9]
+
+List<String> strNumbers = new ArrayList<>();
+Collections.addAll(strNumbers,"1","3","2","6","4","8","7","9");
+Collections.sort(strNumbers);
+System.out.println("strNumbers："+strNumbers.toString());
+//运行结果 --> strNumbers：[1, 2, 3, 4, 6, 7, 8, 9]
+```
+
+2. 使用java8新特性中的stream，将ArrayList集合中的元素流化实现排序
+
+将元素集合看作一种流， 流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选， 排序，聚合等。元素流在管道中经过中间操作的处理，最后由最终操作得到前面处理的结果。
+
+```java
+//排序整数类型集合中的元素
+List<Integer> numbers = new ArrayList<>();
+Collections.addAll(numbers, 1, 3, 2, 6, 4, 8, 7, 9);
+numbers = numbers.stream().sorted(Integer::compareTo).collect(Collectors.toList());
+System.out.println("numbers：" + numbers);
+//运行结果 --> numbers：[1, 2, 3, 4, 6, 7, 8, 9]
+
+//排序其他范型集合中的数据
+//比如现在有一个User类型的List集合，要求根据User对象中的age属性对List集合中的User对象进行排序
+List<User> userList = new ArrayList<>();
+Collections.addAll(userList,
+                   new User(1,"Jack",25,"男"),
+                   new User(2,"Jason",24,"男"),
+                   new User(3,"Jimmy",20,"男"),
+                   new User(4,"Lucy",19,"男"),
+                   new User(5,"Tom",21,"男")
+                  );
+userList =userList
+  .stream()
+  .sorted(Comparator.comparing(User::getAge).reversed())
+  //.sorted(Comparator.comparing(User::getAge).reversed()) 加上reversed()方法就是逆序排序
+  .collect(Collectors.toList());
+System.out.println("userList："+userList.toString());
+//运行结果 --> userList：[User{id=4, name='Lucy', age=19, sex='男'}, User{id=3, name='Jimmy', age=20, sex='男'}, User{id=5, name='Tom', age=21, sex='男'}, User{id=2, name='Jason', age=24, sex='男'}, User{id=1, name='Jack', age=25, sex='男'}]
+```
+
+3. 使用比较器对ArrayList集合进行排序
+
+如果方式一和方式二都不能解决的话可以通过比较器来解决。
+
+比如现在有一个ArrayList集合，它的范型是一个Map，要求根据Map元素中的某个Key的Value值对集合中的Map元素进行排序
+
+```java
+Collections.sort(mapList, new Comparator<Map<String, Object>>() {
+  @Override
+  public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+    Integer faceValueOne = Integer.valueOf(o1.get("faceValue").toString());
+    Integer faceValueTwo = Integer.valueOf(o2.get("faceValue").toString());
+    return faceValueOne.compareTo(faceValueTwo);
+  }
+});
+```
+
+## Arraylist循环的几种方式？
+
+for循环
+
+迭代器循环
+
+for each循环
+
+stream
+
+## 对 list、set 如何取对象
+
+```java
+public class UserEntity implements Serializable {
+    
+    private Integer id;
+ 
+    /**
+     * 用户名
+     */
+    private String userName;
+ 
+    /**
+     * 用户手机号
+     */
+    private String phone;
+}
+ 
+ 
+
+public static void main(string args[]){
+    
+    List<UserEntity> users=new ArrayList<>();
+ 
+    users.add(new UserEntity(1,"张三","18399990000"));
+    users.add(new UserEntity(2,"王五","18399990023"));
+    users.add(new UserEntity(3,"里斯","18399990005"));
+ 
+    List<String> courseIds=  users.stream().map(UserEntity::getUserName).collect(Collectors.toList());
+}
+```
+
+```java
+例如我们有一个Student集合，每个对象有“id”，“name”，“age”三个字段，如下：
+@Data
+@AllArgsConstructor
+public class Student {
+    private Integer id;
+    private String name;
+    private Integer age;
+}
+```
+
+其中id字段是1000~1099，如下：
+
+```java
+Student(id=1000, name=学生_0000, age=18)
+Student(id=1001, name=学生_0001, age=22)
+Student(id=1002, name=学生_0002, age=27)
+```
+
+需求：我们需要根据id=xxxx来取出Student对象。
+
+方案一
+
+根据id字段，把List转换为Map。
+
+```java
+//注意：该方法要求id字段的值是唯一的 否则需要使用下面的方法转Map
+Map<Integer, Student> studentMap = studentList.stream().collect(
+    Collectors.toMap(
+        Student::getId, Function.identity()
+        )
+    );
+
+//根据id字段分组，且分组之后的对象集合取第一个对象
+Map<Integer, Student> studentMap = studentList.stream().collect(
+    Collectors.groupingBy(
+        Student::getId, 
+        Collectors.collectingAndThen(
+            Collectors.toList(), 
+            students -> students.get(0)
+            )
+        )
+    );
+```
+
+需要取哪个对象，直接从map中取出即可。
+
+方案二
+
+使用stream的filter进行过滤。
+
+```java
+Student student = studentList.stream().filter(s -> Objects.equals(s.getId(), id)).findFirst().orElse(null);
+```
+
+在filter中过滤出符合条件的对象，不匹配返回null。
+实际使用中，数据量都不会特别大，个人认为方案二更清晰一些。
+如果数据量较大，且需要从集合中多次取出，方案一的效率更高。因为方案一只聚合一次，而方案二需要反复创建stream并过滤集合。
+性能测试
+创建100个对象的测试集合，循环取值1000000次。
+
+```java
+public class Test {
+
+    public static void main(String[] args) {
+        //创建集合
+        List<Student> studentList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            studentList.add(new Student(1000 + i, "学生_" + String.format("%04d", i), randomInt(18, 30)));
+        }
+        //分组测试
+        long mapTs = System.currentTimeMillis();
+        Map<Integer, Student> studentMap = studentList.stream().collect(Collectors.toMap(Student::getId, Function.identity()));
+        for (int i = 0; i < 1000000; i++) {
+            int id = randomInt(1000, 1100);
+            Student student = studentMap.get(id);
+        }
+        System.out.println("分组测试: " + (System.currentTimeMillis() - mapTs) + "ms");
+        //过滤测试
+        long filterTs = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            int id = randomInt(1000, 1100);
+            Student student = studentList.stream().filter(s -> Objects.equals(s.getId(), id)).findFirst().orElse(null);
+        }
+        System.out.println("过滤测试: " + (System.currentTimeMillis() - filterTs) + "ms");
+    }
+}
+```
+
+## list如何排序？
+
+1. list 自身 の 【sort方法】
+2. 使用 Collections.sort(list)
+
+https://www.bilibili.com/video/BV1tg411X7d8
+
+https://www.bilibili.com/video/BV1uY4y137us
+
+[Java TreeSet-demo演示](https://www.bilibili.com/video/BV1bV4y1x7aY)
+
+[Java TreeMap-demo演示](https://www.bilibili.com/video/BV1Jd4y1N7U9)
+
+[Java延迟队列DelayQueue-demo演示](https://www.bilibili.com/video/BV1YV4y1j7jA)
+
+[Java优先级队列PriorityQueue-模拟插队](https://www.bilibili.com/video/BV1AG411a7EV)
+
+[Java优先级队列PriorityQueue-demo演示](https://www.bilibili.com/video/BV1og41117C1)
+
+- PriorityQueue：可以插队
+- DelayQueue：可以设置【延迟时间】，解耦【生产者】和【消费者】
+  1. 生产者，就是往队列里面写数据
+  2. 消费者，就会从队列里面读数据
+  3. 应用场景：延迟15分钟后，自动关闭订单
+- TreeMap：按照【key】排序，底层是红黑树
+- TreeSet：基于TreeMap实现，
+
+## 数组 排序
+
+```java
+import java.util.Arrays;
+public class Main {
+    public static void main(String[] args) {
+        int[] array = {2,5,-2};
+        Arrays.sort(array);
+
+        for (int i = 0; i < array.length; i++){
+            System.out.print(array[i] + "");
+        }
+    }
+}
+```
+
+## Vector
+
+Vector  の 底层结构是【数组】，但效率低，线程安全
+
+扩容时，是原来 の 2倍
+
+
+## 一些常见 の JDK常见命令：
+
+- jps
+- jinfo
+- jstat
+- jhat
+- jstack
+- jmap
+
+
+
+
+## JVM性能优化 - 如何排查问题？
+
+1. 打印出 `GC log`，查看 minor GC 和 major GC
+2. `jstack` 查看【堆栈信息】
+3. 应用 `jps，jinfo，jstat，jmap`等命令
+
+## JVM性能优化 - 存在哪些问题？
+
+- GC 频繁
+- 死锁
+- oom
+- 线程池不够用
+- CPU负载过高
+
+## JVM性能优化 - 如何解决问题？
+
+1. 适当增加【堆内存大小】
+2. 选择合适 の 【垃圾收集器】
+3. 使用 zk，redis 实现【分布式锁】
+4. 利用 kafka 实现【异步消息】
+5. 代码优化，及时释放【资源】
+6. 增加集群节点数量
+
+
+## 【大厂面试题】你进行过JVM调优吗？（亲身经历分享）
+
+什么情况需要调优？
+
+1. 内存使用率增大，再释放
+2. Young GC -- 55次/分钟 ~ 220次/分钟(峰值)
+3. Full GC -- 0.5次/分钟 ~ 8次/分钟(峰值)
+
+https://www.bilibili.com/video/BV13Y411j7Nz
+
+JVM调优目的：
+
+- Young GC 次数减少
+- Young GC 耗时减少
+- Full GC 不超过 6天1次
+- Full GC 耗时减少
+
+1. 指定【垃圾收集器】为ParNew + CMS/G1
+   - 应当尽量采用【低延时的收集器】
+   - 低版本JDK:CMS / 高版本JDK:G1
+2. 扩充【年轻代】的占比为之前的1.5倍
+   - Xms:指定【应用程序】可用的【最小堆大小】
+   - Xmx:指定【应用程序】可用的【最大堆大小】
+   - 都设置为4096M，也就是4G，避免动态调整
+   - 当【并发大】的时候，【年轻代】的对象会激增，有些本该在Young GC就回收的对象，没有GC成功，直接进入【老年代】
+   - 由于对象的晋升，老年代的FullGC频繁
+3. 指定【元数据区】的大小
+   - 默认初始值为：21M
+   - 元数据区的GC也会触发FullGC，导致stw
+   - 根据元数据【常驻对象的大小】指定元数据区的大小
+   - MataspaceSize 和 MaxMataspaceSzie 都指定为256M，可以防止【动态调整】
+4. 使用【并发预清理】
+   - 配置`CMSScavengeBeforeRemark`
+   - 【老年代】和【年轻代】之间存在【跨年龄引用】
+   - 在CMS进行GC之前，进行一次【重新标记】，可以减少【对象扫描】，从而减少FullGC时间。
+
+
+## 一些JVM参数？
+
+[Jvm调优最佳参数](https://www.bilibili.com/video/BV1kt4y1h7ck)
+
+1. InitialHeapSize
+2. NewRatio
+3. UseG1GC
+4. MaxHeapSize
+5. ConcGCThreads
+
+从而优雅地分析JVM出现 の 常见问题，并对其进行优雅地调优
+
+## 什么情况【JVM退出】？
+
+1. 所有【非守护进程】都执行完毕，JVM会调用 【Shutdown Hook】 退出
+2. 某个【线程】调用了【Runtime类】或者【System类】 の 【exit方法】
+
+[幼麟实验室 - runtime提供 の 等待队列](https://www.bilibili.com/video/BV1ZQ4y1f7go)
+
+## java有哪些特点？JVM の 好处：
+
+Java是【面向对象】的编程语言
+
+1. 可以【屏蔽】操作系统 の 细节，使得Java可以【一次编写，到处运行】
+2. 允许在【编译时检查】潜在【类型不匹配】，保证了程序 の 可靠性
+3. 可以实现自动垃圾回收
+
+https://www.bilibili.com/video/BV1vT4y1S7Qm
+
+## Boss直聘面试官：内存溢出如何排查？
+
+https://www.bilibili.com/video/BV1rL4y1u7jN
+
+eclipse memory analyzer (简称 MAT)
+
+排查过程分为3步：
+
+1. 占用内存过大的对象有哪些？
+2. 这个对象被谁引用？
+3. 定位到具体代码？
+
+假如代码是自己写的，那么一会就改完了
+如果是一些【中间件】的代码，就要求对【中间件的实现】有个基本的了解
+
+## 如何避免内存泄露？
+
+一些流对象：
+
+- utputStream
+- Reader
+- BitMap
+- Document
+
+很容易就忘记close，
+还要【按顺序回收】，顺序错了，会产生空指针
+
+## Stream
+
+https://www.bilibili.com/video/BV1yU4y1p7a8
+
+
+## 【大厂面试题】数据库连接池泄漏如何排查？
+
+https://www.bilibili.com/video/BV1zY4y1k7Jp
+
+通过druid监控排查
+
+1. 【连接池】的开启、关闭是normal的，那么【逻辑连接打开次数】和【逻辑连接关闭次数】应该是相等的
+2. 如果没有进行操作，那么【活跃连接数】应该为 0 
+3. 如果代码有问题，那么【连接】就不会释放，导致等几分钟后，【逻辑连接打开次数】和【逻辑连接关闭次数】不相等的
+   - 配置 druid 的 `abandon策略`。通过`abandon`可以强制回收`数据库的连接`，然后就能打印出【堆栈信息】，就能知道哪里的【sql代码】出现问题了
+   - 重启项目，【堆栈信息】中【代码详细位置】会标记出来。
+   - 开发人员去【相应的class】中找到【相应的代码】查看即可
+
+
+## 数据库连接池有什么用？
+
+数据库 の 连接池是一种【池化技术】。【池化技术】 の 核心思想是实现【资源 の 复用】。避免资源 の 【重复创建、销毁】，带来 の 开销
+
+而在【数据库】 の 应用场景里面：【应用程序】每一次向【数据库】发送【CRUD操作】 の 时候，都需要去【创建连接】。而在【数据库】访问量比较大 の 情况下，【频繁创建链接】会带来大 の 【性能开销】。
+
+而【连接池】 の 核心思想，就是【应用程序】在【启动】 の 时候，提前【初始化】一部分【连接】，保存在【连接池】里面。
+
+当【应用程序】需要用【链接】进行【数据操作】 の 时候，直接去【连接池】里面取出一个已经建立好 の 【连接】。
+
+连接池 の 关键参数：
+
+1. 初始化时：
+   - `初始化连接数`：初始化时，创建多少个【连接】
+   - `最大连接数`：同时最多能支持多少连接
+   - `最大空闲连接数`：当【没有请求】 の 时候，【连接池】中要保留 の 【空闲连接】
+   - `最小空闲链接数`：当【空闲连接数】小于这个值，就需要【创建new链接】
+
+2. 使用连接：
+   - `最大等待时间`：当【连接】使用完以后，新 の 请求要等待 の 时间
+   - `无效连接清除`：清理无效 の 链接
+
+不同 の 【连接池框架】除了【核心参数】以外，还有很多【业务型参数】，会不同
+
+<https://www.bilibili.com/video/BV1yR4y1K7Z7>
+
+## 提问：最大连接数如何设置
+
+## 提问：连接池 の 实现原理
+
+## 【大厂面试题】？
+
+
+
+
+## spark那些外部资源 还有第三方jar包之类 の 都放在哪（应该是这么问 の ，不太会，说了下内存结构，告诉我是java classloader相关 の 机制）
+
+## 遇到oom怎么排查（有jvm提供 の 工具查看堆栈使用情况，具体不太了解只在跑spark遇到过、分享了下spark里 の 排查经验和参数调整）
+
+1. 查看服务器 の 运行日志，捕捉OOM
+2. 使用jstat查看监控JVM の 内存和GC情况
+3. 使用【MAT工具】载入【dump文件】，分析大对象 の 占用情况。 [线上服务内存溢出如何排查定位](https://www.bilibili.com/video/BV1y34y1j7QR)
+   - 【jmap命令】用于生成【dump文件】
+   - JVM参数`HeapDumpOnOutOfMemoryError`，可以让JVM在OOM异常出现之后，自动生成【dump文件】
+
+## linux下 の 调查问题思路：内存、CPU、句柄数、过滤、查找、模拟POST和GET请求等等场景
+
+## 拼多多面试官：线上CPU飙高如何排查？
+
+[ 线上问题排查套路汇总-CPU篇](https://www.bilibili.com/video/BV1HL4y167Ex)
+
+https://www.bilibili.com/video/BV15T4y1y7eH
+
+1. 第一步，top 先看看是哪个【进程 】找到，cpu占用最高的，如果是 java 
+2. 然后用
+
+```s
+jstack 进程id > show.txt
+top -p 进程id -H
+得到【当前进程】下，所有运行的线程，然后找到占用最高的线程
+```
+
+3. 然后把线程id转成16进制字符串
+
+```s
+printf "%x" 23265
+ -> 5ae1
+```
+
+4. 到show.txt文件中，根据【线程ID】查看【线程的具体状态】即可
+
+```s
+less show.txt
+```
+
+## 阿里面试官：Jar包冲突如何解决？
+
+https://www.bilibili.com/video/BV1GL411w7gw
+
+在IDEA下载一个插件，`Maven Helper`，用来分析依赖冲突，把存在冲突的jar包移除
+
+**为什么会存在jar包冲突？**
+
+1. 最短路径原则：
+   - 如果到达jar包的距离更短，则选择更短的那个
+2. 优先声明原则：
+   - 如果在pom.xml中，哪个写在前面，就用哪个版本
+
+
+## 网络问题排查-套路汇总
+
+TCP的三次握手
+
+https://www.bilibili.com/video/BV1wu411o75x
+
+
+
+
