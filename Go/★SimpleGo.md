@@ -1,30 +1,9 @@
 
 # 精选
 
-### 1. 下面这段代码的输出什么?
 
-```go
-func Test1(t *testing.T) {
- defer func() { fmt.Println("打印前") }()
- defer func() { fmt.Println("打印中") }()
- defer func() { fmt.Println("打印后") }()
- panic("触发异常")
-}
-```
 
-#### 输出
 
->打印后
->
->打印中
->
->打印前
->
->panic: 触发异常
-
-#### 解析
-
-> defer 的执行顺序是先进后出,发生panic后，会先执行defer
 
 ### 2. 下段代码输出什么?
 
@@ -107,25 +86,7 @@ C. not equal
 > 对于数组而言，一个数组是由数组中的值和数组的长度两部分组成的，如果两个数组长度不同，那么两个数组是属于
 > 不同类型的，是不能进行比较的
 
-### 22. 下列代码输出什么？
 
-```go
-func f(i int) {
- fmt.Println(i)
-}
-func Test22(t *testing.T) {
- i := 5
- defer f(i)
- i = i + 10
-}
-```
-
-#### 输出
-
-> 5
->
-> f() 函数的参数在执行 defer 语句的时候会保存一份副本，
-> 在实际调用 f() 函数时用，所以是 5.
 
 ### 23. 下列代码输出什么？
 
@@ -185,39 +146,7 @@ func Test30(t *testing.T) {
 
 > 1 5 1
 
-### 31. 下面代码输出什么？
 
-```go
-type Person struct {
- age int
-}
-
-func Test31(t *testing.T) {
- person := &Person{28}
- // 1
- defer fmt.Println(person.age)
-        // 2
- defer func(p *Person) {
-  fmt.Println(p.age)
- }(person)
- // 3
- defer func() {
-  fmt.Println(person.age)
- }()
- 
- person.age = 29
-}
-```
-
-#### 输出
-
-> 29 29 28
->
-> 1.person.age 此时是将 28 当做 defer 函数的参数，会把 28 缓存在栈中，等到最后执行该 defer 语句的时候取出，即输出 28；
->
-> 2.defer 缓存的是结构体 Person{28} 的地址，最终 Person{28} 的 age 被重新赋值为 29，所以 defer 语句最后执行的时候，依靠缓存的地址取出的 age 便是 29，即输出 29；
->
-> 3.闭包引用，输出 29；
 
 ### 37. 下列代码输出什么？
 
@@ -412,30 +341,7 @@ func Stop(stop <-chan bool) {
 
 # Go面试题及详解
 
-### 1. 下面这段代码的输出什么?
 
-```go
-func Test1(t *testing.T) {
- defer func() { fmt.Println("打印前") }()
- defer func() { fmt.Println("打印中") }()
- defer func() { fmt.Println("打印后") }()
- panic("触发异常")
-}
-```
-
-#### 输出
-
->打印后
->
->打印中
->
->打印前
->
->panic: 触发异常
-
-#### 解析
-
-> defer 的执行顺序是先进后出,发生panic后，会先执行defer
 
 ### 2. 下段代码输出什么?
 
@@ -851,25 +757,7 @@ D. var str = ""
 >
 > B 只支持局部变量声明；C 是赋值，str 必须在这之前已经声明；
 
-### 22. 下列代码输出什么？
 
-```go
-func f(i int) {
- fmt.Println(i)
-}
-func Test22(t *testing.T) {
- i := 5
- defer f(i)
- i = i + 10
-}
-```
-
-#### 输出
-
-> 5
->
-> f() 函数的参数在执行 defer 语句的时候会保存一份副本，
-> 在实际调用 f() 函数时用，所以是 5.
 
 ### 23. 下列代码输出什么？
 
@@ -1076,39 +964,6 @@ func Test30(t *testing.T) {
 
 > 1 5 1
 
-### 31. 下面代码输出什么？
-
-```go
-type Person struct {
- age int
-}
-
-func Test31(t *testing.T) {
- person := &Person{28}
- // 1
- defer fmt.Println(person.age)
- // 2
- defer func(p *Person) {
-  fmt.Println(p.age)
- }(person)
- // 3
- defer func() {
-  fmt.Println(person.age)
- }()
- 
- person.age = 29
-}
-```
-
-#### 输出
-
-> 29 29 28
->
-> 1.person.age 此时是将 28 当做 defer 函数的参数，会把 28 缓存在栈中，等到最后执行该 defer 语句的时候取出，即输出 28；
->
-> 2.defer 缓存的是结构体 Person{28} 的地址，最终 Person{28} 的 age 被重新赋值为 29，所以 defer 语句最后执行的时候，依靠缓存的地址取出的 age 便是 29，即输出 29；
->
-> 3.闭包引用，输出 29；
 
 ### 32. 下面的两个切片声明中有什么区别？哪个更可取？
 
@@ -2257,25 +2112,7 @@ func Test81(t *testing.T) {
 
 > -128, 因为溢出 int8为 -128 ~ 127 之间
 
-### 82. 下列代码输出什么?
 
-```go
-func Test82(t *testing.T) {
- defer func() {
-  fmt.Println(recover())
- }()
- defer func() {
-  defer fmt.Println(recover())
-  panic(1)
- }()
- defer recover()
- panic(2)
-}
-```
-
-### 答案
-
-> 2 1, recover() 必须在 defer函数体内使用才有效，所以 defer recover() 是无效的
 
 ### 83. 关于字符串拼接,下列正确的是?
 
@@ -2325,43 +2162,9 @@ func main() {
 }
 ```
 
-### 85. 下列代码有什么问题?
 
-```go
-func main() {
-    f, err := os.Open("file")
-    defer f.Close()
-    if err != nil {
-        return
-    }
 
-    b, err := ioutil.ReadAll(f)
-    println(string(b))
-}
-```
 
-#### 答案
-
-> 应该先判断 err, 再用defer 关闭文件句柄
-
-### 86. 下列代码有什么问题?
-
-```go
-func main() {
-    var wg sync.WaitGroup
-    wg.Add(1)
-    go func() {
-        fmt.Println("1")
-        wg.Done()
-        wg.Add(1)
-    }()
-    wg.Wait()
-}
-```
-
-#### 答案
-
-> 协程里面，使用 wg.Add(1) 但是没有 wg.Done()，导致 panic()。
 
 ### 87. 下列代码输出什么?
 
@@ -2424,53 +2227,7 @@ type ConfigOne struct {
 > 无限循环，栈溢出, 如果结构体类型定义了 String() 方法，
 > 使用 Printf()、Print() 、 Println() 、 Sprintf() 等格式化输出时会自动使用 String() 方法。
 
-### 90. 下列代码有什么问题?
 
-```go
-func main() {
-
-    wg := sync.WaitGroup{}
-
-    for i := 0; i < 5; i++ {
-        go func(wg sync.WaitGroup, i int) {
-            wg.Add(1)
-            fmt.Printf("i:%d\n", i)
-            wg.Done()
-        }(wg, i)
-    }
-
-    wg.Wait()
-
-    fmt.Println("exit")
-}
-```
-
-#### 答案
->
-> 1. 在协程中使用了 `wg.Add(1)`
->
-> 2. 使用了 sync.WaitGroup 副本
-
-#### 修复
-
-```go
-func main() {
-
-    wg := sync.WaitGroup{}
-
-    for i := 0; i < 5; i++ {
-        wg.Add(1)
-        go func(i int) {
-            fmt.Printf("i:%d\n", i)
-            wg.Done()
-        }(i)
-    }
-
-    wg.Wait()
-
-    fmt.Println("exit")
-}
-```
 
 ### 91. 下列代码输出什么?
 
@@ -2632,37 +2389,7 @@ D. Lock() 操作需要保证有 Unlock() 或 RUnlock() 调用与之对应；
 > * [30\. 下面这段代码输出什么？](#30-%E4%B8%8B%E9%9D%A2%E8%BF%99%E6%AE%B5%E4%BB%A3%E7%A0%81%E8%BE%93%E5%87%BA%E4%BB%80%E4%B9%88)
 > * [31\. 31-60题](https://github.com/yqchilde/Golang-Interview/blob/master/31-60.md)
 
-## 1. 下面这段代码输出的内容
 
-```go
-package main
-
-import "fmt"
-
-func main() {
-    defer_call()
-}
-
-func defer_call()  {
-    defer func() {fmt.Println("打印前")}()
-    defer func() {fmt.Println("打印中")}()
-    defer func() {fmt.Println("打印后")}()
-
-    panic("触发异常")
-}
-```
-
-**答：输出内容为：**
-
-```shell
-打印后
-打印中
-打印前
-panic: 触发异常
-```
-
-**解析：**
-`defer` 的执行顺序是先进后出。出现panic语句的时候，会先按照 `defer` 的后进先出顺序执行，最后才会执行panic。
 
 ## 2. 下面这段代码输出什么，说明原因
 
@@ -3251,14 +2978,7 @@ func main() {
 
 删除 map 不存在的键值对时，不会报错，相当于没有任何作用；获取不存在的减值对时，返回值类型对应的零值，所以返回 0。
 
-## 28. 下面属于关键字的是（）
 
-* A. func
-* B. struct
-* C. class
-* D. defer
-
-**答：A、B、D**
 
 ## 29. 下面这段代码输出什么？
 
